@@ -14,14 +14,14 @@
 
 package com.liferay.vldap.server.handler;
 
-import com.liferay.vldap.server.handler.util.LdapHandlerContext;
-
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.directory.shared.ldap.message.internal.InternalRequest;
-import org.apache.directory.shared.ldap.message.internal.InternalResponse;
+import org.apache.directory.shared.ldap.model.message.Request;
+import org.apache.directory.shared.ldap.model.message.Response;
 import org.apache.mina.core.session.IoSession;
+
+import com.liferay.vldap.server.handler.util.LdapHandlerContext;
 
 /**
  * @author Jonathan Potter
@@ -29,8 +29,8 @@ import org.apache.mina.core.session.IoSession;
  */
 public class UnbindLdapHandler extends BaseLdapHandler {
 
-	public List<InternalResponse> messageReceived(
-		InternalRequest internalRequest, IoSession ioSession,
+	public List<Response> messageReceived(
+		Request request, IoSession ioSession,
 		LdapHandlerContext ldapHandlerContext) {
 
 		return Collections.emptyList();

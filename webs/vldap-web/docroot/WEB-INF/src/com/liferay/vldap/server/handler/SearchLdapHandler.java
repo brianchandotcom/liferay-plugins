@@ -14,38 +14,40 @@
 
 package com.liferay.vldap.server.handler;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.Time;
-import com.liferay.vldap.server.directory.Attribute;
-import com.liferay.vldap.server.directory.Directory;
-import com.liferay.vldap.server.directory.RootDirectory;
-import com.liferay.vldap.server.handler.util.LdapHandlerContext;
-import com.liferay.vldap.util.PortletPropsValues;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.time.StopWatch;
-import org.apache.directory.shared.ldap.entry.Entry;
-import org.apache.directory.shared.ldap.filter.AndNode;
-import org.apache.directory.shared.ldap.filter.BranchNode;
-import org.apache.directory.shared.ldap.filter.EqualityNode;
-import org.apache.directory.shared.ldap.filter.ExprNode;
-import org.apache.directory.shared.ldap.filter.GreaterEqNode;
-import org.apache.directory.shared.ldap.filter.LessEqNode;
-import org.apache.directory.shared.ldap.filter.NotNode;
-import org.apache.directory.shared.ldap.filter.OrNode;
-import org.apache.directory.shared.ldap.filter.PresenceNode;
-import org.apache.directory.shared.ldap.filter.SearchScope;
-import org.apache.directory.shared.ldap.filter.SubstringNode;
-import org.apache.directory.shared.ldap.message.ResultCodeEnum;
-import org.apache.directory.shared.ldap.message.SearchResponseEntryImpl;
-import org.apache.directory.shared.ldap.message.internal.InternalRequest;
-import org.apache.directory.shared.ldap.message.internal.InternalResponse;
-import org.apache.directory.shared.ldap.message.internal.InternalSearchRequest;
-import org.apache.directory.shared.ldap.message.internal.InternalSearchResponseEntry;
+import org.apache.directory.shared.ldap.model.entry.Entry;
+import org.apache.directory.shared.ldap.model.filter.AndNode;
+import org.apache.directory.shared.ldap.model.filter.BranchNode;
+import org.apache.directory.shared.ldap.model.filter.EqualityNode;
+import org.apache.directory.shared.ldap.model.filter.ExprNode;
+import org.apache.directory.shared.ldap.model.filter.GreaterEqNode;
+import org.apache.directory.shared.ldap.model.filter.LessEqNode;
+import org.apache.directory.shared.ldap.model.filter.NotNode;
+import org.apache.directory.shared.ldap.model.filter.OrNode;
+import org.apache.directory.shared.ldap.model.filter.PresenceNode;
+import org.apache.directory.shared.ldap.model.filter.SubstringNode;
+import org.apache.directory.shared.ldap.model.message.Request;
+import org.apache.directory.shared.ldap.model.message.Response;
+import org.apache.directory.shared.ldap.model.message.ResultCodeEnum;
+import org.apache.directory.shared.ldap.model.message.SearchRequest;
+import org.apache.directory.shared.ldap.model.message.SearchResultEntry;
+import org.apache.directory.shared.ldap.model.message.SearchResultEntryImpl;
+import org.apache.directory.shared.ldap.model.message.SearchScope;
+import org.apache.directory.shared.ldap.model.name.Dn;
 import org.apache.mina.core.session.IoSession;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Time;
+import com.liferay.vldap.server.directory.DirectoryTree;
+import com.liferay.vldap.server.directory.SearchBase;
+import com.liferay.vldap.server.directory.ldap.Attribute;
+import com.liferay.vldap.server.directory.ldap.LdapDirectory;
+import com.liferay.vldap.server.handler.util.LdapHandlerContext;
+import com.liferay.vldap.util.PortletPropsValues;
 
 /**
  * @author Jonathan Potter
@@ -53,135 +55,123 @@ import org.apache.mina.core.session.IoSession;
  */
 public class SearchLdapHandler extends BaseLdapHandler {
 
-	public List<InternalResponse> messageReceived(
-		InternalRequest internalRequest, IoSession ioSession,
+	public List<Response> messageReceived(Request request, IoSession ioSession,
 		LdapHandlerContext ldapHandlerContext) {
 
-		InternalSearchRequest internalSearchRequest =
-			(InternalSearchRequest)internalRequest;
+		SearchRequest searchRequest = (SearchRequest) request;
 
-		List<InternalResponse> internalResponses =
-			new ArrayList<InternalResponse>();
+		List<Response> responses = new ArrayList<Response>();
 
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		
 		try {
-			Directory directory = new RootDirectory(internalRequest);
+			Dn baseDn = searchRequest.getBase();
+			SearchScope searchScope = searchRequest.getScope();
+			ExprNode filter = searchRequest.getFilter();
+			
+			DirectoryTree directoryTree = new DirectoryTree();
+			SearchBase base =
+				directoryTree.findBase(baseDn, getSizeLimit(searchRequest));
+			
+			if (base != null) {
+				long sizeLimit = getSizeLimit(searchRequest);
+				base.setSizeLimit(sizeLimit);
+				
+				LdapDirectory baseDirectory = base.getLdapDirectory();
+				
+				if (baseDirectory != null) {
+					if (searchScope.equals(SearchScope.OBJECT) ||
+						searchScope.equals(SearchScope.SUBTREE)) {
+						
+						if (isMatch(filter, baseDirectory)) {
+							addObjectEntry(
+								searchRequest, responses,
+								ldapHandlerContext, baseDirectory, stopWatch);
+							
+							// Decrease size limit by one for the rest of the
+							// search because we've already added the base
+							// directory
+							base.setSizeLimit(base.getSizeLimit() - 1);
+						}
+					}
+					
+					if (searchScope.equals(SearchScope.ONELEVEL) ||
+						searchScope.equals(SearchScope.SUBTREE)) {
+						
+						List<LdapDirectory> rest =
+							directoryTree.findRest(base, filter, searchScope);
 
-			directory = directory.findBase(internalSearchRequest.getBase());
-
-			if (directory != null) {
-				addEntries(
-					internalSearchRequest, internalResponses,
-					ldapHandlerContext, directory);
+						for (LdapDirectory d : rest) {
+							addObjectEntry(
+								searchRequest, responses,
+								ldapHandlerContext, d, stopWatch);
+						}
+					}
+				}
 			}
 
-			internalResponses.add(getInternalResponse(internalRequest));
+			responses.add(getResponse(searchRequest));
 		}
 		catch (SearchSizeLimitException ssle) {
-			internalResponses.add(
-				getInternalResponse(
-					internalRequest, ResultCodeEnum.SIZE_LIMIT_EXCEEDED));
+			responses.add(
+				getResponse(
+					searchRequest, ResultCodeEnum.SIZE_LIMIT_EXCEEDED));
 		}
 		catch (SearchTimeLimitException ssle) {
-			internalResponses.add(
-				getInternalResponse(
-					internalRequest, ResultCodeEnum.TIME_LIMIT_EXCEEDED));
+			responses.add(
+				getResponse(
+					searchRequest, ResultCodeEnum.TIME_LIMIT_EXCEEDED));
 		}
 		catch (Exception e) {
 			_log.error(e, e);
 		}
 
-		return internalResponses;
+		return responses;
 	}
 
-	protected void addEntries(
-			InternalSearchRequest internalSearchRequest,
-			List<InternalResponse> internalResponses,
-			LdapHandlerContext ldapHandlerContext, Directory directory)
+	protected void addObjectEntry(SearchRequest searchRequest,
+			List<Response> responses, LdapHandlerContext ldapHandlerContext,
+			LdapDirectory directory, StopWatch stopWatch)
 		throws Exception {
 
-		SearchScope searchScope = internalSearchRequest.getScope();
+		SearchResultEntry searchResponseEntry =
+			new SearchResultEntryImpl(searchRequest.getMessageId());
+		
+		Entry entry = directory.toEntry(searchRequest.getAttributes());
 
-		StopWatch stopWatch = new StopWatch();
+		searchResponseEntry.setEntry(entry);
 
-		stopWatch.start();
-
-		if (searchScope.equals(SearchScope.OBJECT)) {
-			addObjectEntry(
-				internalSearchRequest, internalResponses, ldapHandlerContext,
-				directory, stopWatch);
-		}
-		else if (searchScope.equals(SearchScope.ONELEVEL)) {
-			for (Directory curDirectory : directory.getDirectories()) {
-				addObjectEntry(
-					internalSearchRequest, internalResponses,
-					ldapHandlerContext, curDirectory, stopWatch);
-			}
-		}
-		else if (searchScope.equals(SearchScope.SUBTREE)) {
-			addSubtreeEntries(
-				internalSearchRequest, internalResponses, ldapHandlerContext,
-				directory, stopWatch);
-		}
-	}
-
-	protected void addObjectEntry(
-			InternalSearchRequest internalSearchRequest,
-			List<InternalResponse> internalResponses,
-			LdapHandlerContext ldapHandlerContext, Directory directory,
-			StopWatch stopWatch)
-		throws Exception {
-
-		InternalSearchResponseEntry internalSearchResponseEntry =
-			new SearchResponseEntryImpl(
-				internalSearchRequest.getMessageId());
-
-		if (directory.getAttribute("objectClass", "groupOfNames") != null) {
-			directory.getDirectories();
-		}
-
-		Entry entry = directory.toEntry(
-			ldapHandlerContext.getSchemaManager(),
-			internalSearchRequest.getAttributes());
-
-		internalSearchResponseEntry.setEntry(entry);
-
-		if (internalResponses.size() > getSizeLimit(internalSearchRequest)) {
+		// Even if we only have the same amount of results as the limit, we
+		// assume that we've exceeded the limit because there's really no way
+		// for us to know if we could have gotten more results with a higher
+		// limit.
+		if (responses.size() >= getSizeLimit(searchRequest)) {
 			throw new SearchSizeLimitException();
 		}
 
 		if ((stopWatch.getTime() / Time.SECOND) >
-				getTimeLimit(internalSearchRequest)) {
+				getTimeLimit(searchRequest)) {
 
 			throw new SearchTimeLimitException();
 		}
 
-		ExprNode exprNode = internalSearchRequest.getFilter();
+		// These are commented out because we probably don't need to filter
+		// the nodes that we got back from the search, because the search
+		// is now efficient enough to return only nodes that would have matched
+		// the filter. However we could still filter them here also just to
+		// make sure. I haven't tried every query, so in some cases we may have
+		// nodes that need to be filtered here. 
+		
+		//ExprNode filter = searchRequest.getFilter();
 
-		if (isMatch(exprNode, directory)) {
-			internalResponses.add(internalSearchResponseEntry);
-		}
+		//if (isMatch(filter, directory)) {
+			responses.add(searchResponseEntry);
+		//}
 	}
 
-	protected void addSubtreeEntries(
-			InternalSearchRequest internalSearchRequest,
-			List<InternalResponse> internalResponses,
-			LdapHandlerContext ldapHandlerContext, Directory directory,
-			StopWatch stopWatch)
-		throws Exception {
-
-		addObjectEntry(
-			internalSearchRequest, internalResponses, ldapHandlerContext,
-			directory, stopWatch);
-
-		for (Directory curDirectory : directory.getDirectories()) {
-			addSubtreeEntries(
-				internalSearchRequest, internalResponses, ldapHandlerContext,
-				curDirectory, stopWatch);
-		}
-	}
-
-	protected long getSizeLimit(InternalSearchRequest internalSearchRequest) {
-		long sizeLimit = internalSearchRequest.getSizeLimit();
+	protected long getSizeLimit(SearchRequest searchRequest) {
+		long sizeLimit = searchRequest.getSizeLimit();
 
 		if ((sizeLimit == 0) ||
 			(sizeLimit > PortletPropsValues.SEARCH_MAX_SIZE)) {
@@ -192,8 +182,8 @@ public class SearchLdapHandler extends BaseLdapHandler {
 		return sizeLimit;
 	}
 
-	protected int getTimeLimit(InternalSearchRequest internalSearchRequest) {
-		int timeLimit = internalSearchRequest.getTimeLimit();
+	protected int getTimeLimit(SearchRequest searchRequest) {
+		int timeLimit = searchRequest.getTimeLimit();
 
 		if ((timeLimit == 0) ||
 			(timeLimit > PortletPropsValues.SEARCH_MAX_TIME)) {
@@ -204,7 +194,7 @@ public class SearchLdapHandler extends BaseLdapHandler {
 		return timeLimit;
 	}
 
-	protected boolean isMatch(ExprNode exprNode, Directory directory) {
+	private boolean isMatch(ExprNode exprNode, LdapDirectory directory) {
 		if (exprNode.isLeaf()) {
 			if (exprNode instanceof EqualityNode<?>) {
 				EqualityNode<?> equalityNode = (EqualityNode<?>)exprNode;
