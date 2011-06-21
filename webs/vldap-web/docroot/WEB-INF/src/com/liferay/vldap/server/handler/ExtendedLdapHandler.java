@@ -14,6 +14,13 @@
 
 package com.liferay.vldap.server.handler;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.vldap.server.handler.util.LdapHandlerContext;
+import com.liferay.vldap.server.handler.util.LdapSslContextFactory;
+import com.liferay.vldap.util.OIDConstants;
+import com.liferay.vldap.util.VLDAPConstants;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,13 +34,6 @@ import org.apache.directory.shared.ldap.model.message.Response;
 import org.apache.mina.core.filterchain.IoFilterChain;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.ssl.SslFilter;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.vldap.server.handler.util.LdapHandlerContext;
-import com.liferay.vldap.server.handler.util.LdapSslContextFactory;
-import com.liferay.vldap.util.OIDConstants;
-import com.liferay.vldap.util.VLDAPConstants;
 
 /**
  * @author Jonathan Potter

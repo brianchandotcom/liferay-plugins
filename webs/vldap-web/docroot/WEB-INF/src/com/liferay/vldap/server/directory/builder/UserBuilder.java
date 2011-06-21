@@ -14,14 +14,6 @@
 
 package com.liferay.vldap.server.directory.builder;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.directory.shared.ldap.model.name.Dn;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -44,6 +36,14 @@ import com.liferay.vldap.server.directory.SearchBase;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 import com.liferay.vldap.server.directory.ldap.UserDirectory;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.directory.shared.ldap.model.name.Dn;
+
 /**
  * @author Jonathan Potter
  */
@@ -55,9 +55,9 @@ public class UserBuilder extends DirectoryBuilder {
 		throws Exception {
 
 		List<User> users = new ArrayList<User>();
-		
+
 		LinkedHashMap<String, Object> params = base.generateParams();
-		
+
 		if (constraints == null) {
 			// No constraints so find all users
 			users =
@@ -70,7 +70,7 @@ public class UserBuilder extends DirectoryBuilder {
 				if (!isValidConstraint(constraint)) {
 					continue;
 				}
-				
+
 				String screenName = constraint.getValue("cn");
 				String memberString = constraint.getValue("member");
 				String lastName = constraint.getValue("sn");
@@ -78,13 +78,13 @@ public class UserBuilder extends DirectoryBuilder {
 				String email = constraint.getValue("mail");
 				String uidString = constraint.getValue("uid");
 				String uuid = constraint.getValue("uuid");
-				
+
 				boolean satisfiable = addMemberParams(memberString, params);
-				
+
 				if (!satisfiable) {
 					continue;
 				}
-				
+
 				if (uidString != null) {
 					long uid = Long.parseLong(uidString);
 					users.add(UserLocalServiceUtil.getUser(uid));
@@ -102,17 +102,17 @@ public class UserBuilder extends DirectoryBuilder {
 				}
 			}
 		}
-		
+
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		for (User user: users) {
 			directories.add(new UserDirectory(
 				base.getTop(), base.getCompany(), user));
 		}
-		
+
 		return directories;
 	}
-	
+
 	@Override
 	public boolean isValidAttribute (String attribute, String value) {
 		if (attribute.equalsIgnoreCase("objectClass")) {
@@ -164,7 +164,7 @@ public class UserBuilder extends DirectoryBuilder {
 
 		return false;
 	}
-	
+
 	protected boolean addMemberParams(
 		String memberFilter, Map<String, Object> params)
 		throws Exception {
@@ -172,15 +172,15 @@ public class UserBuilder extends DirectoryBuilder {
 		if (memberFilter == null) {
 			return true;
 		}
-		
+
 		Dn dn = new Dn(memberFilter);
-		
+
 		String companyWebId = DirectoryTree.getRdnValue(dn, 1);
 		String category = DirectoryTree.getRdnValue(dn, 2);
 		String categoryValue = DirectoryTree.getRdnValue(dn, 3);
 
 		Company company;
-		
+
 		try {
 			company = CompanyLocalServiceUtil.getCompanyByWebId(companyWebId);
 		} catch (Exception e) {
@@ -193,7 +193,7 @@ public class UserBuilder extends DirectoryBuilder {
 		}
 
 		long companyId = company.getCompanyId();
-		
+
 		try {
 			if (category.equalsIgnoreCase("Communities")) {
 				Group group =
@@ -223,10 +223,10 @@ public class UserBuilder extends DirectoryBuilder {
 		} catch (Exception e) {
 			_log.error(e);
 		}
-		
+
 		return true;
 	}
 
 	protected static Log _log = LogFactoryUtil.getLog(UserBuilder.class);
-	
+
 }

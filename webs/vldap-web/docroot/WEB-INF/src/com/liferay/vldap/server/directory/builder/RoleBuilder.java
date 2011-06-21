@@ -14,12 +14,6 @@
 
 package com.liferay.vldap.server.directory.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.directory.shared.ldap.model.name.Dn;
-
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.RoleLocalServiceUtil;
@@ -30,15 +24,24 @@ import com.liferay.vldap.server.directory.SearchBase;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 import com.liferay.vldap.server.directory.ldap.RoleDirectory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.directory.shared.ldap.model.name.Dn;
+
 /**
  * @author Jonathan Potter
  */
 public class RoleBuilder extends DirectoryBuilder {
-	
+
 	@Override
-	public List<LdapDirectory> buildThisLevel(Set<FilterConstraint> constraints, SearchBase base) throws Exception {
+	public List<LdapDirectory> buildThisLevel(
+			Set<FilterConstraint> constraints, SearchBase base)
+		throws Exception {
+
 		List<Role> roles = new ArrayList<Role>();
-		
+
 		if (constraints == null) {
 			// No constraints so find all roles
 			roles =
@@ -49,18 +52,18 @@ public class RoleBuilder extends DirectoryBuilder {
 				if (!isValidConstraint(constraint)) {
 					continue;
 				}
-				
+
 				String name = constraint.getValue("ou");
 				String memberString = constraint.getValue("member");
 				String description = constraint.getValue("description");
-				
+
 				if (name == null) {
 					name = constraint.getValue("cn");
 				}
-				
+
 				String memberScreenName =
 					DirectoryTree.getRdnValue(new Dn(memberString), 3);
-				
+
 				if (memberScreenName == null) {
 					roles.addAll(RoleLocalServiceUtil.search(
 						base.getCompany().getCompanyId(), name, description,
@@ -70,33 +73,33 @@ public class RoleBuilder extends DirectoryBuilder {
 					User memberUser =
 						UserLocalServiceUtil.getUserByScreenName(
 							base.getCompany().getCompanyId(), memberScreenName);
-					
+
 					for (Role role : memberUser.getRoles()) {
 						if (name != null) {
 							if (!name.equals(role.getName())) {
 								continue;
 							}
 						}
-						
+
 						if (description != null) {
 							if (!description.equals(role.getDescription())) {
 								continue;
 							}
 						}
-						
+
 						roles.add(role);
 					}
 				}
 			}
 		}
-		
+
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		for (Role role: roles) {
 			directories.add(new RoleDirectory(
 				base.getTop(), base.getCompany(), role));
 		}
-		
+
 		return directories;
 	}
 

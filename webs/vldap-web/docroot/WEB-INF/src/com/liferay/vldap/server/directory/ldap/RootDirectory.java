@@ -14,36 +14,38 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.vldap.server.handler.BindLdapHandler;
 import com.liferay.vldap.util.OIDConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Jonathan Potter
  */
 public class RootDirectory extends LdapDirectory {
-	
+
 	@Override
 	public List<Attribute> getAttributes() {
 		List<Attribute> attributes = new ArrayList<Attribute>();
-		
+
 		attributes.add(new Attribute("namingcontexts", "o=Liferay"));
 		attributes.add(new Attribute("objectclass", "extensibleObject"));
 		attributes.add(new Attribute("objectclass", "top"));
 		attributes.add(new Attribute(
 			"supportedfeatures", OIDConstants.ALL_OPERATIONAL_ATTRIBUTES));
 		attributes.add(new Attribute("supportedldapversion", "3"));
-		attributes.add(new Attribute("supportedsaslmechanisms", BindLdapHandler.DIGEST_MD5));
+		attributes.add(new Attribute(
+			"supportedsaslmechanisms", BindLdapHandler.DIGEST_MD5));
 		attributes.add(new Attribute("vendorname", "Liferay, Inc."));
-		attributes.add(new Attribute("vendorversion", ReleaseInfo.getVersion()));
-		
+		attributes.add(new Attribute(
+			"vendorversion", ReleaseInfo.getVersion()));
+
 		return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "";

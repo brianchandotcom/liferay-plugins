@@ -14,11 +14,6 @@
 
 package com.liferay.vldap.server.directory.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.vldap.server.directory.FilterConstraint;
@@ -26,31 +21,36 @@ import com.liferay.vldap.server.directory.SearchBase;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 import com.liferay.vldap.server.directory.ldap.RootDirectory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @author Jonathan Potter
  */
 public class DirectoryBuilder {
-	
+
 	public DirectoryBuilder () {
 		_children = new ArrayList<DirectoryBuilder>();
 		_built = false;
 	}
-	
+
 	public List<DirectoryBuilder> getChildren () {
 		return _children;
 	}
-	
+
 	public void addChild (DirectoryBuilder child) {
 		_children.add(child);
 	}
-	
+
 	public List<LdapDirectory> buildDirectories(
 		Set<FilterConstraint> constraints, boolean allLevels, SearchBase base) {
 
 		if (_built) {
 			return new ArrayList<LdapDirectory>();
 		}
-		
+
 		List<LdapDirectory> directories;
 		try {
 			directories = buildThisLevel(constraints, base);
@@ -58,16 +58,16 @@ public class DirectoryBuilder {
 			_log.error(e);
 			return null;
 		}
-		
+
 		if (allLevels) {
 			for (DirectoryBuilder child : _children) {
 				directories.addAll(child.buildDirectories(
 					constraints, allLevels, base));
 			}
 		}
-		
+
 		_built = true;
-		
+
 		return directories;
 	}
 
@@ -76,29 +76,29 @@ public class DirectoryBuilder {
 		throws Exception {
 
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		directories.add(new RootDirectory());
-		
+
 		return directories;
 	}
-	
+
 	public boolean isValidAttribute (String attribute, String value) {
 		return true;
 	}
-	
+
 	public boolean isValidConstraint (FilterConstraint constraint) {
 		for (Map.Entry<String, String> entry : constraint.getMap().entrySet()) {
 			if (!isValidAttribute(entry.getKey(), entry.getValue())) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	protected static Log _log = LogFactoryUtil.getLog(DirectoryBuilder.class);
 
 	protected boolean _built;
 	protected List<DirectoryBuilder> _children;
-	
+
 }

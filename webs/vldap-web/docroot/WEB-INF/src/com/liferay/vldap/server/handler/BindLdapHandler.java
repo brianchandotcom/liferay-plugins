@@ -14,7 +14,24 @@
 
 package com.liferay.vldap.server.handler;
 
+import com.liferay.portal.NoSuchCompanyException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.Authenticator;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.vldap.server.handler.util.LdapHandlerContext;
+import com.liferay.vldap.server.handler.util.SaslCallbackHandler;
+import com.liferay.vldap.util.PortletPropsValues;
+
 import java.net.InetSocketAddress;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,22 +49,6 @@ import org.apache.directory.shared.ldap.model.name.Dn;
 import org.apache.directory.shared.ldap.model.name.Rdn;
 import org.apache.directory.shared.util.StringConstants;
 import org.apache.mina.core.session.IoSession;
-
-import com.liferay.portal.NoSuchCompanyException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Company;
-import com.liferay.portal.model.User;
-import com.liferay.portal.security.auth.Authenticator;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.util.PortalUtil;
-import com.liferay.vldap.server.handler.util.LdapHandlerContext;
-import com.liferay.vldap.server.handler.util.SaslCallbackHandler;
-import com.liferay.vldap.util.PortletPropsValues;
 
 /**
  * @author Jonathan Potter
@@ -196,11 +197,11 @@ public class BindLdapHandler extends BaseLdapHandler {
 		Map<String, String[]> headerMap = new HashMap<String, String[]>();
 		Map<String, String[]> parameterMap = new HashMap<String, String[]>();
 		Map<String, Object> resultsMap = new HashMap<String, Object>();
-		
+
 		int authResult = UserLocalServiceUtil.authenticateByScreenName(
 			company.getCompanyId(), screenName, password, headerMap,
 			parameterMap, resultsMap);
-		
+
 		if (authResult != Authenticator.SUCCESS) {
 			return getResponse(
 				bindRequest, ResultCodeEnum.INVALID_CREDENTIALS);

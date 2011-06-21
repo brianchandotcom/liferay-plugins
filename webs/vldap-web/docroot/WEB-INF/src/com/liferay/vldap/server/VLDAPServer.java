@@ -14,8 +14,13 @@
 
 package com.liferay.vldap.server;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.vldap.util.PortletPropsValues;
+
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+
 import java.util.Map;
 
 import org.apache.directory.shared.ldap.codec.protocol.mina.LdapProtocolCodecFactory;
@@ -27,10 +32,6 @@ import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.vldap.util.PortletPropsValues;
 
 /**
  * @author Jonathan Potter
@@ -64,7 +65,7 @@ public class VLDAPServer {
 	protected void initCodec() {
 		DefaultIoFilterChainBuilder defaultIoFilterChainBuilder =
 			_ioAcceptor.getFilterChain();
-		
+
 		ProtocolCodecFactory protocolCodecFactory =
 			new LdapProtocolCodecFactory();
 

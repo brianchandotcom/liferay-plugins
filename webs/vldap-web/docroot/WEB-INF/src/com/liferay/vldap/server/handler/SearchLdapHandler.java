@@ -14,6 +14,16 @@
 
 package com.liferay.vldap.server.handler;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Time;
+import com.liferay.vldap.server.directory.DirectoryTree;
+import com.liferay.vldap.server.directory.SearchBase;
+import com.liferay.vldap.server.directory.ldap.Attribute;
+import com.liferay.vldap.server.directory.ldap.LdapDirectory;
+import com.liferay.vldap.server.handler.util.LdapHandlerContext;
+import com.liferay.vldap.util.PortletPropsValues;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,16 +49,6 @@ import org.apache.directory.shared.ldap.model.message.SearchScope;
 import org.apache.directory.shared.ldap.model.name.Dn;
 import org.apache.mina.core.session.IoSession;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.Time;
-import com.liferay.vldap.server.directory.DirectoryTree;
-import com.liferay.vldap.server.directory.SearchBase;
-import com.liferay.vldap.server.directory.ldap.Attribute;
-import com.liferay.vldap.server.directory.ldap.LdapDirectory;
-import com.liferay.vldap.server.handler.util.LdapHandlerContext;
-import com.liferay.vldap.util.PortletPropsValues;
-
 /**
  * @author Jonathan Potter
  * @author Brian Wing Shun Chan
@@ -64,41 +64,41 @@ public class SearchLdapHandler extends BaseLdapHandler {
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		
+
 		try {
 			Dn baseDn = searchRequest.getBase();
 			SearchScope searchScope = searchRequest.getScope();
 			ExprNode filter = searchRequest.getFilter();
-			
+
 			DirectoryTree directoryTree = new DirectoryTree();
 			SearchBase base =
 				directoryTree.findBase(baseDn, getSizeLimit(searchRequest));
-			
+
 			if (base != null) {
 				long sizeLimit = getSizeLimit(searchRequest);
 				base.setSizeLimit(sizeLimit);
-				
+
 				LdapDirectory baseDirectory = base.getLdapDirectory();
-				
+
 				if (baseDirectory != null) {
 					if (searchScope.equals(SearchScope.OBJECT) ||
 						searchScope.equals(SearchScope.SUBTREE)) {
-						
+
 						if (isMatch(filter, baseDirectory)) {
 							addObjectEntry(
 								searchRequest, responses,
 								ldapHandlerContext, baseDirectory, stopWatch);
-							
+
 							// Decrease size limit by one for the rest of the
 							// search because we've already added the base
 							// directory
 							base.setSizeLimit(base.getSizeLimit() - 1);
 						}
 					}
-					
+
 					if (searchScope.equals(SearchScope.ONELEVEL) ||
 						searchScope.equals(SearchScope.SUBTREE)) {
-						
+
 						List<LdapDirectory> rest =
 							directoryTree.findRest(base, filter, searchScope);
 
@@ -137,7 +137,7 @@ public class SearchLdapHandler extends BaseLdapHandler {
 
 		SearchResultEntry searchResponseEntry =
 			new SearchResultEntryImpl(searchRequest.getMessageId());
-		
+
 		Entry entry = directory.toEntry(searchRequest.getAttributes());
 
 		searchResponseEntry.setEntry(entry);
@@ -161,8 +161,8 @@ public class SearchLdapHandler extends BaseLdapHandler {
 		// is now efficient enough to return only nodes that would have matched
 		// the filter. However we could still filter them here also just to
 		// make sure. I haven't tried every query, so in some cases we may have
-		// nodes that need to be filtered here. 
-		
+		// nodes that need to be filtered here.
+
 		//ExprNode filter = searchRequest.getFilter();
 
 		//if (isMatch(filter, directory)) {

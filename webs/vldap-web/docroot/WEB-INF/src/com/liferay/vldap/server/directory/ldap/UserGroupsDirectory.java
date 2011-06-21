@@ -14,10 +14,10 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
+import com.liferay.portal.model.Company;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.liferay.portal.model.Company;
 
 /**
  * @author Raymond Augé
@@ -37,10 +37,10 @@ public class UserGroupsDirectory extends LdapDirectory {
 		attributes.add(new Attribute("objectclass", "organizationalUnit"));
 		attributes.add(new Attribute("objectclass", "top"));
 		attributes.add(new Attribute("ou", "UserGroups"));
-		
+
 		return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ou=User Groups,ou=" +
@@ -50,5 +50,5 @@ public class UserGroupsDirectory extends LdapDirectory {
 
 	protected Company _company;
 	protected String _top;
-	
+
 }

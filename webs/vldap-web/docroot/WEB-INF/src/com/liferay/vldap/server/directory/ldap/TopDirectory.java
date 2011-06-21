@@ -22,7 +22,7 @@ import java.util.List;
  * @author Jonathan Potter
  */
 public class TopDirectory extends LdapDirectory {
-	
+
 	public TopDirectory(String top) {
 		_top = top;
 	}
@@ -30,19 +30,19 @@ public class TopDirectory extends LdapDirectory {
 	@Override
 	public List<Attribute> getAttributes() {
 		List<Attribute> attributes = new ArrayList<Attribute>();
-		
+
 		attributes.add(new Attribute("objectclass", "organizationalUnit"));
 		attributes.add(new Attribute("objectclass", "top"));
 		attributes.add(new Attribute("o", "Liferay"));
-		
+
 		return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "o=" + LdapDirectory.escape(_top);
 	}
 
 	protected String _top;
-	
+
 }

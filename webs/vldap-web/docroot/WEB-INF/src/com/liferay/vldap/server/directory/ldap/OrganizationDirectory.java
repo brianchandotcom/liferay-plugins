@@ -14,19 +14,19 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.Organization;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.liferay.portal.model.Company;
-import com.liferay.portal.model.Organization;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Jonathan Potter
  */
 public class OrganizationDirectory extends LdapDirectory {
-	
+
 	public OrganizationDirectory(
 		String top, Company company, Organization organization) {
 
@@ -44,16 +44,16 @@ public class OrganizationDirectory extends LdapDirectory {
 		attributes.add(new Attribute("objectclass", "organizationalUnit"));
 		attributes.add(new Attribute("objectclass", "top"));
 		attributes.add(new Attribute("ou", _organization.getName()));
-		
+
 		LinkedHashMap<String, Object> params =
 			new LinkedHashMap<String, Object>();
 		params.put("usersOrgs", _organization.getOrganizationId());
-		
+
 		attributes.addAll(getMemberAttributes(_top, _company, params));
-		
+
 		return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ou=" + LdapDirectory.escape(_organization.getName()) +
@@ -61,7 +61,7 @@ public class OrganizationDirectory extends LdapDirectory {
 			LdapDirectory.escape(_company.getWebId()) + ",o=" +
 			LdapDirectory.escape(_top);
 	}
-	
+
 	protected Company _company;
 	protected Organization _organization;
 	protected String _top;

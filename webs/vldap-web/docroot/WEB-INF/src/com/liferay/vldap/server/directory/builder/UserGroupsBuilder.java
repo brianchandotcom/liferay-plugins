@@ -14,14 +14,14 @@
 
 package com.liferay.vldap.server.directory.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.liferay.vldap.server.directory.FilterConstraint;
 import com.liferay.vldap.server.directory.SearchBase;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 import com.liferay.vldap.server.directory.ldap.UserGroupsDirectory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Jonathan Potter
@@ -34,7 +34,7 @@ public class UserGroupsBuilder extends DirectoryBuilder {
 		throws Exception {
 
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		if (constraints == null) {
 			directories.add(new UserGroupsDirectory(
 				base.getTop(), base.getCompany()));
@@ -48,10 +48,10 @@ public class UserGroupsBuilder extends DirectoryBuilder {
 				}
 			}
 		}
-		
+
 		return directories;
 	}
-	
+
 	@Override
 	public boolean isValidAttribute (String attribute, String value) {
 		if (attribute.equalsIgnoreCase("objectClass")) {

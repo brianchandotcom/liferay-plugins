@@ -14,12 +14,6 @@
 
 package com.liferay.vldap.server.directory.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.directory.shared.ldap.model.name.Dn;
-
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -30,18 +24,24 @@ import com.liferay.vldap.server.directory.SearchBase;
 import com.liferay.vldap.server.directory.ldap.CommunityDirectory;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.directory.shared.ldap.model.name.Dn;
+
 /**
  * @author Jonathan Potter
  */
 public class CommunityBuilder extends DirectoryBuilder {
-	
+
 	@Override
 	public List<LdapDirectory> buildThisLevel(
 		Set<FilterConstraint> constraints, SearchBase base)
 		throws Exception {
 
 		List<Group> communities = new ArrayList<Group>();
-		
+
 		if (constraints == null) {
 			// No constraints, so find all communities
 			communities =
@@ -54,15 +54,15 @@ public class CommunityBuilder extends DirectoryBuilder {
 				if (!isValidConstraint(constraint)) {
 					continue;
 				}
-				
+
 				String name = constraint.getValue("ou");
 				String memberString = constraint.getValue("member");
 				String description = constraint.getValue("description");
-				
+
 				if (name == null) {
 					name = constraint.getValue("cn");
 				}
-				
+
 				String memberScreenName =
 					DirectoryTree.getRdnValue(new Dn(memberString), 3);
 
@@ -88,20 +88,20 @@ public class CommunityBuilder extends DirectoryBuilder {
 								continue;
 							}
 						}
-						
+
 						communities.add(community);
 					}
 				}
 			}
 		}
-		
+
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		for (Group community: communities) {
 			directories.add(new CommunityDirectory(
 				base.getTop(), base.getCompany(), community));
 		}
-		
+
 		return directories;
 	}
 

@@ -14,6 +14,18 @@
 
 package com.liferay.vldap.server;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.vldap.server.handler.AbandonLdapHandler;
+import com.liferay.vldap.server.handler.BindLdapHandler;
+import com.liferay.vldap.server.handler.CompareLdapHandler;
+import com.liferay.vldap.server.handler.ExtendedLdapHandler;
+import com.liferay.vldap.server.handler.LdapHandler;
+import com.liferay.vldap.server.handler.SearchLdapHandler;
+import com.liferay.vldap.server.handler.UnbindLdapHandler;
+import com.liferay.vldap.server.handler.util.LdapHandlerContext;
+import com.liferay.vldap.util.VLDAPConstants;
+
 import java.util.List;
 import java.util.Map;
 
@@ -29,24 +41,12 @@ import org.apache.mina.core.service.IoHandler;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.vldap.server.handler.AbandonLdapHandler;
-import com.liferay.vldap.server.handler.BindLdapHandler;
-import com.liferay.vldap.server.handler.CompareLdapHandler;
-import com.liferay.vldap.server.handler.ExtendedLdapHandler;
-import com.liferay.vldap.server.handler.LdapHandler;
-import com.liferay.vldap.server.handler.SearchLdapHandler;
-import com.liferay.vldap.server.handler.UnbindLdapHandler;
-import com.liferay.vldap.server.handler.util.LdapHandlerContext;
-import com.liferay.vldap.util.VLDAPConstants;
-
 /**
  * @author Jonathan Potter
  * @author Brian Wing Shun Chan
  */
 public class DispatchIoHandler implements IoHandler {
-	
+
 	public DispatchIoHandler() {
 		_abandonLdapHandler = new AbandonLdapHandler();
 		_bindLdapHandler = new BindLdapHandler();
@@ -55,7 +55,7 @@ public class DispatchIoHandler implements IoHandler {
 		_searchLdapHandler = new SearchLdapHandler();
 		_unbindLdapHandler = new UnbindLdapHandler();
 	}
-	
+
 	public void exceptionCaught(IoSession ioSession, Throwable cause) {
 	}
 
@@ -103,12 +103,12 @@ public class DispatchIoHandler implements IoHandler {
 		// the Apache LdapProtocolDecoder needs it
 		try {
 			LdapApiService las = new StandaloneLdapApiService();
-			
+
 			LdapMessageContainer
-				<MessageDecorator<? extends Message>> container = 
+				<MessageDecorator<? extends Message>> container =
 					new LdapMessageContainer
 						<MessageDecorator<? extends Message>>(las);
-			
+
 			ioSession.setAttribute("messageContainer", container);
 		}
 		catch (Exception e) {

@@ -14,19 +14,19 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.Role;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.liferay.portal.model.Company;
-import com.liferay.portal.model.Role;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Jonathan Potter
  */
 public class RoleDirectory extends LdapDirectory {
-	
+
 	public RoleDirectory(String top, Company company, Role role) {
 		_top = top;
 		_company = company;
@@ -44,16 +44,16 @@ public class RoleDirectory extends LdapDirectory {
 		attributes.add(new Attribute("objectclass", "organizationalUnit"));
 		attributes.add(new Attribute("objectclass", "top"));
 		attributes.add(new Attribute("ou", _role.getName()));
-		
+
 		LinkedHashMap<String, Object> params =
 			new LinkedHashMap<String, Object>();
 		params.put("usersRoles", _role.getRoleId());
-		
+
 		attributes.addAll(getMemberAttributes(_top, _company, params));
-		
+
 		return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ou=" + LdapDirectory.escape(_role.getName()) + ",ou=Roles,ou=" +

@@ -14,10 +14,10 @@
 
 package com.liferay.vldap.server.directory;
 
-import java.util.Map;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jonathan Potter
@@ -45,7 +45,7 @@ public class FilterConstraint {
 	}
 
 	@Override
-	public boolean equals (Object other){
+	public boolean equals (Object other) {
 		if (this == other) {
 			return true;
 		}

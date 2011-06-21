@@ -14,11 +14,11 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
+import com.liferay.portal.model.Company;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.liferay.portal.model.Company;
 
 /**
  * @author Jonathan Potter
@@ -37,14 +37,14 @@ public class UsersDirectory extends LdapDirectory {
 
 		attributes.add(new Attribute("cn", "Users"));
 		attributes.add(new Attribute("objectClass", "groupOfNames"));
-		
+
 		LinkedHashMap<String, Object> params =
 			new LinkedHashMap<String, Object>();
 		attributes.addAll(getMemberAttributes(_top, _company, params));
-		
+
 		 return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ou=Users,ou=" + LdapDirectory.escape(_company.getWebId()) +

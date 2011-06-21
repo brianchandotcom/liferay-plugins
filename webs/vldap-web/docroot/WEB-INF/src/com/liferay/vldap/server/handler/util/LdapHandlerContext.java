@@ -14,10 +14,10 @@
 
 package com.liferay.vldap.server.handler.util;
 
-import javax.security.sasl.SaslServer;
-
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
+
+import javax.security.sasl.SaslServer;
 
 /**
  * @author Jonathan Potter

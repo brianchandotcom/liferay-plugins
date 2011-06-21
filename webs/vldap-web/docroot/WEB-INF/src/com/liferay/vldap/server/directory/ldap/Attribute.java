@@ -14,13 +14,12 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
-
 /**
  * @author Jonathan Potter
  * @author Brian Wing Shun Chan
  */
 public class Attribute {
-	
+
 	public Attribute (String name, String value) {
 		setAttributeId(name);
 		setValue(value);

@@ -14,26 +14,6 @@
 
 package com.liferay.vldap.server.directory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.directory.shared.ldap.model.filter.AndNode;
-import org.apache.directory.shared.ldap.model.filter.BranchNode;
-import org.apache.directory.shared.ldap.model.filter.EqualityNode;
-import org.apache.directory.shared.ldap.model.filter.ExprNode;
-import org.apache.directory.shared.ldap.model.filter.GreaterEqNode;
-import org.apache.directory.shared.ldap.model.filter.LessEqNode;
-import org.apache.directory.shared.ldap.model.filter.NotNode;
-import org.apache.directory.shared.ldap.model.filter.OrNode;
-import org.apache.directory.shared.ldap.model.filter.PresenceNode;
-import org.apache.directory.shared.ldap.model.filter.SubstringNode;
-import org.apache.directory.shared.ldap.model.message.SearchScope;
-import org.apache.directory.shared.ldap.model.name.Dn;
-import org.apache.directory.shared.ldap.model.name.Rdn;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -79,6 +59,26 @@ import com.liferay.vldap.server.directory.ldap.UserDirectory;
 import com.liferay.vldap.server.directory.ldap.UserGroupDirectory;
 import com.liferay.vldap.server.directory.ldap.UserGroupsDirectory;
 import com.liferay.vldap.server.directory.ldap.UsersDirectory;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.directory.shared.ldap.model.filter.AndNode;
+import org.apache.directory.shared.ldap.model.filter.BranchNode;
+import org.apache.directory.shared.ldap.model.filter.EqualityNode;
+import org.apache.directory.shared.ldap.model.filter.ExprNode;
+import org.apache.directory.shared.ldap.model.filter.GreaterEqNode;
+import org.apache.directory.shared.ldap.model.filter.LessEqNode;
+import org.apache.directory.shared.ldap.model.filter.NotNode;
+import org.apache.directory.shared.ldap.model.filter.OrNode;
+import org.apache.directory.shared.ldap.model.filter.PresenceNode;
+import org.apache.directory.shared.ldap.model.filter.SubstringNode;
+import org.apache.directory.shared.ldap.model.message.SearchScope;
+import org.apache.directory.shared.ldap.model.name.Dn;
+import org.apache.directory.shared.ldap.model.name.Rdn;
 
 /**
  * @author Jonathan Potter
@@ -152,7 +152,7 @@ public class DirectoryTree {
 		String category = getRdnValue(dn, 2);
 		String categoryValue = getRdnValue(dn, 3);
 		String screenName = getRdnValue(dn, 4);
-		
+
 		if (top == null || top.equals("")) {
 			return new SearchBase(new RootDirectory(), _rootBuilder);
 		}
@@ -227,7 +227,8 @@ public class DirectoryTree {
 		}
 		else if (category.equalsIgnoreCase("User Groups")) {
 			userGroup =
-				UserGroupLocalServiceUtil.getUserGroup(companyId, categoryValue);
+				UserGroupLocalServiceUtil.getUserGroup(
+					companyId, categoryValue);
 		}
 
 		if (screenName == null) {
@@ -301,7 +302,7 @@ public class DirectoryTree {
 		Set<FilterConstraint> constraints = toConstraints(filter);
 		boolean allLevels = scope.equals(SearchScope.SUBTREE);
 
-		for (DirectoryBuilder child : 
+		for (DirectoryBuilder child :
 			base.getDirectoryBuilder().getChildren()) {
 
 			directories.addAll(child.buildDirectories(
@@ -399,7 +400,7 @@ public class DirectoryTree {
 	public static String getRdnValue(Dn dn, int rdnIndex) {
 		try {
 			rdnIndex = dn.size() - 1 - rdnIndex;
-			
+
 			if (rdnIndex < dn.size()) {
 				Rdn rdn = dn.getRdn(rdnIndex);
 				return rdn.getValue(rdn.getNormType()).toString();

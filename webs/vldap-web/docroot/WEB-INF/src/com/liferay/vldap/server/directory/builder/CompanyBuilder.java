@@ -14,16 +14,16 @@
 
 package com.liferay.vldap.server.directory.builder;
 
+import com.liferay.portal.model.Company;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.vldap.server.directory.FilterConstraint;
+import com.liferay.vldap.server.directory.SearchBase;
+import com.liferay.vldap.server.directory.ldap.CompanyDirectory;
+import com.liferay.vldap.server.directory.ldap.LdapDirectory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import com.liferay.portal.model.Company;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.vldap.server.directory.ldap.CompanyDirectory;
-import com.liferay.vldap.server.directory.FilterConstraint;
-import com.liferay.vldap.server.directory.SearchBase;
-import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 
 /**
  * @author Jonathan Potter
@@ -36,7 +36,7 @@ public class CompanyBuilder extends DirectoryBuilder {
 		throws Exception {
 
 		List<Company> companies = new ArrayList<Company>();
-		
+
 		if (constraints == null) {
 			// No constraints so find all companies
 			companies = CompanyLocalServiceUtil.getCompanies();
@@ -46,9 +46,9 @@ public class CompanyBuilder extends DirectoryBuilder {
 				if (!isValidConstraint(constraint)) {
 					continue;
 				}
-				
+
 				String companyWebId = constraint.getValue("ou");
-				
+
 				if (companyWebId == null) {
 					companies.addAll(
 						CompanyLocalServiceUtil.getCompanies(false));
@@ -59,16 +59,16 @@ public class CompanyBuilder extends DirectoryBuilder {
 				}
 			}
 		}
-		
+
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		for (Company c: companies) {
 			directories.add(new CompanyDirectory(base.getTop(), c));
 		}
-		
+
 		return directories;
 	}
-	
+
 	@Override
 	public boolean isValidAttribute (String attribute, String value) {
 		if (attribute.equalsIgnoreCase("objectClass")) {
@@ -83,8 +83,7 @@ public class CompanyBuilder extends DirectoryBuilder {
 			return true;
 		}
 
-
 		return false;
 	}
-	
+
 }

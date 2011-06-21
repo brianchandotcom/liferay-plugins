@@ -14,11 +14,6 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
-import java.text.Format;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.model.Company;
@@ -29,6 +24,12 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+
+import java.text.Format;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author Jonathan Potter
@@ -67,19 +68,19 @@ public class UserDirectory extends LdapDirectory {
 		} catch (Exception e) {
 			_log.error(e, e);
 		}
-		
+
 		return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "cn=" + LdapDirectory.escape(_user.getScreenName()) +
 			",ou=Users," + getNamePrefix();
 	}
-	
+
 	protected void addMemberAttributes(List<Attribute> attributes)
 		throws Exception {
-		
+
 		String prefix = getNamePrefix();
 
 		long groupClassNameId = PortalUtil.getClassNameId(
@@ -123,7 +124,7 @@ public class UserDirectory extends LdapDirectory {
 					",ou=User Groups," + prefix));
 		}
 	}
-	
+
 	private String getNamePrefix() {
 		return "ou=" + LdapDirectory.escape(_company.getWebId()) + ",o=" +
 			LdapDirectory.escape(_top);
@@ -132,8 +133,8 @@ public class UserDirectory extends LdapDirectory {
 	protected Company _company;
 	protected String _top;
 	protected User _user;
-	
+
 	private Format _format =
 		FastDateFormatFactoryUtil.getSimpleDateFormat("yyyyMMddHHmmss.SZ");
-	
+
 }

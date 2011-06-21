@@ -14,19 +14,19 @@
 
 package com.liferay.vldap.server.directory.ldap;
 
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.UserGroup;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.liferay.portal.model.Company;
-import com.liferay.portal.model.UserGroup;
 
 /**
  * @author Raymond Augé
  * @author Jonathan Potter
  */
 public class UserGroupDirectory extends LdapDirectory {
-	
+
 	public UserGroupDirectory(
 		String top, Company company, UserGroup userGroup) {
 
@@ -46,16 +46,16 @@ public class UserGroupDirectory extends LdapDirectory {
 		attributes.add(new Attribute("objectclass", "organizationalUnit"));
 		attributes.add(new Attribute("objectclass", "top"));
 		attributes.add(new Attribute("ou", _userGroup.getName()));
-		
+
 		LinkedHashMap<String, Object> params =
 			new LinkedHashMap<String, Object>();
 		params.put("usersUserGroups", _userGroup.getUserGroupId());
-		
+
 		attributes.addAll(getMemberAttributes(_top, _company, params));
-		
+
 		return attributes;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ou=" + LdapDirectory.escape(_userGroup.getName()) +
@@ -66,5 +66,5 @@ public class UserGroupDirectory extends LdapDirectory {
 	protected Company _company;
 	protected String _top;
 	protected UserGroup _userGroup;
-	
+
 }

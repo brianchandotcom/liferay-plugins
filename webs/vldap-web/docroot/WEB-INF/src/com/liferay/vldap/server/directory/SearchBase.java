@@ -14,8 +14,6 @@
 
 package com.liferay.vldap.server.directory;
 
-import java.util.LinkedHashMap;
-
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
@@ -24,6 +22,8 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.vldap.server.directory.builder.DirectoryBuilder;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
+
+import java.util.LinkedHashMap;
 
 /**
  * @author Jonathan Potter
@@ -120,11 +120,11 @@ public class SearchBase {
 	public Role getRole() {
 		return _role;
 	}
-	
+
 	public long getSizeLimit() {
 		return _sizeLimit;
 	}
-	
+
 	public void setSizeLimit(long sizeLimit) {
 		_sizeLimit = sizeLimit;
 	}
@@ -167,7 +167,7 @@ public class SearchBase {
 
 	protected DirectoryBuilder _directoryBuilder;
 	protected LdapDirectory _ldapDirectory;
-	
+
 	protected long _sizeLimit;
 
 }

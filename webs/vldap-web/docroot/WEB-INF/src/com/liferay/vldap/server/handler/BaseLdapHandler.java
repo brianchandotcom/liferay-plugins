@@ -31,10 +31,10 @@ public abstract class BaseLdapHandler implements LdapHandler {
 
 	protected <R extends ResultResponse, T extends ResultResponseRequest<R>> R
 		getResponse(T request) {
-		
+
 		return getResponse(request, ResultCodeEnum.SUCCESS);
 	}
-	
+
 	protected <R extends ResultResponse, T extends ResultResponseRequest<R>> R
 		getResponse(T request, ResultCodeEnum resultCode) {
 
@@ -46,7 +46,7 @@ public abstract class BaseLdapHandler implements LdapHandler {
 
 		return response;
 	}
-	
+
 	protected List<Response> toList(Response response) {
 		List<Response> responses = new ArrayList<Response>();
 

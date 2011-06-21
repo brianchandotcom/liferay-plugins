@@ -14,12 +14,6 @@
 
 package com.liferay.vldap.server.directory.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.directory.shared.ldap.model.name.Dn;
-
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.OrganizationConstants;
 import com.liferay.portal.model.User;
@@ -31,18 +25,24 @@ import com.liferay.vldap.server.directory.SearchBase;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 import com.liferay.vldap.server.directory.ldap.OrganizationDirectory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.directory.shared.ldap.model.name.Dn;
+
 /**
  * @author Jonathan Potter
  */
 public class OrganizationBuilder extends DirectoryBuilder {
-	
+
 	@Override
 	public List<LdapDirectory> buildThisLevel(
 		Set<FilterConstraint> constraints, SearchBase base)
 		throws Exception {
 
 		List<Organization> organizations = new ArrayList<Organization>();
-		
+
 		if (constraints == null) {
 			// No constraints so find all organizations
 			organizations =
@@ -55,17 +55,17 @@ public class OrganizationBuilder extends DirectoryBuilder {
 				if (!isValidConstraint(constraint)) {
 					continue;
 				}
-				
+
 				String name = constraint.getValue("ou");
 				String memberString = constraint.getValue("member");
-				
+
 				if (name == null) {
 					name = constraint.getValue("cn");
 				}
-				
+
 				String memberScreenName =
 					DirectoryTree.getRdnValue(new Dn(memberString), 3);
-				
+
 				if (memberScreenName == null) {
 					organizations.addAll(OrganizationLocalServiceUtil.search(
 						base.getCompany().getCompanyId(),
@@ -77,9 +77,9 @@ public class OrganizationBuilder extends DirectoryBuilder {
 					User memberUser =
 						UserLocalServiceUtil.getUserByScreenName(
 							base.getCompany().getCompanyId(), memberScreenName);
-					for (Organization organization : 
+					for (Organization organization :
 						memberUser.getOrganizations()) {
-						
+
 						if (name != null) {
 							if (!name.equals(organization.getName())) {
 								continue;
@@ -91,14 +91,14 @@ public class OrganizationBuilder extends DirectoryBuilder {
 				}
 			}
 		}
-		
+
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		for (Organization organization: organizations) {
 			directories.add(new OrganizationDirectory(
 				base.getTop(), base.getCompany(), organization));
 		}
-		
+
 		return directories;
 	}
 

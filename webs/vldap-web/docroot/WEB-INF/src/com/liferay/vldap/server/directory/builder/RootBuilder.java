@@ -14,28 +14,28 @@
 
 package com.liferay.vldap.server.directory.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import com.liferay.vldap.server.directory.FilterConstraint;
 import com.liferay.vldap.server.directory.SearchBase;
 import com.liferay.vldap.server.directory.ldap.LdapDirectory;
 import com.liferay.vldap.server.directory.ldap.RootDirectory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author Jonathan Potter
  */
 public class RootBuilder extends DirectoryBuilder {
-	
+
 	@Override
 	public List<LdapDirectory> buildThisLevel(
 		Set<FilterConstraint> constraints, SearchBase base) {
 
 		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
-		
+
 		directories.add(new RootDirectory());
-		
+
 		return directories;
 	}
 
