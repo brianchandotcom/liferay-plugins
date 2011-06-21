@@ -186,6 +186,8 @@ public class SitesPortlet extends MVCPortlet {
 		String keywords = DAOParamUtil.getLike(resourceRequest, "keywords");
 		boolean userGroups = ParamUtil.getBoolean(
 			resourceRequest, "userGroups");
+		int maxResultSize = ParamUtil.getInteger(
+			resourceRequest, "maxResultSize", 10);
 		int start = ParamUtil.getInteger(resourceRequest, "start");
 		int end = ParamUtil.getInteger(resourceRequest, "end");
 
@@ -196,6 +198,7 @@ public class SitesPortlet extends MVCPortlet {
 		optionsJSONObject.put("directory", directory);
 		optionsJSONObject.put("keywords", keywords);
 		optionsJSONObject.put("userGroups", userGroups);
+		optionsJSONObject.put("maxResultSize", maxResultSize);
 		optionsJSONObject.put("start", start);
 		optionsJSONObject.put("end", end);
 
@@ -233,7 +236,7 @@ public class SitesPortlet extends MVCPortlet {
 		else {
 			groups = SitesUtil.getVisibleSites(
 				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
-				keywords);
+				keywords, maxResultSize);
 
 			count = SitesUtil.getVisibleSitesCount(
 				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
