@@ -1,0 +1,12 @@
+/docroot/WEB-INF/lib/commons-beanutils.jar
+/docroot/WEB-INF/lib/commons-collections.jar
+/docroot/WEB-INF/lib/commons-digester.jar
+/docroot/WEB-INF/lib/commons-fileupload.jar
+/docroot/WEB-INF/lib/commons-lang.jar
+/docroot/WEB-INF/lib/commons-logging.jar
+/docroot/WEB-INF/lib/commons-validator.jar
+/docroot/WEB-INF/lib/log4j.jar
+/docroot/WEB-INF/lib/oro.jar
+/docroot/WEB-INF/lib/util-bridges.jar
+/docroot/WEB-INF/lib/util-java.jar
+/docroot/WEB-INF/lib/util-taglib.jar

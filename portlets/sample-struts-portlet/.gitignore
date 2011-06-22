@@ -1,0 +1,10 @@
+/docroot/WEB-INF/lib
+/docroot/WEB-INF/tld/struts-bean-el.tld
+/docroot/WEB-INF/tld/struts-bean.tld
+/docroot/WEB-INF/tld/struts-html-el.tld
+/docroot/WEB-INF/tld/struts-html.tld
+/docroot/WEB-INF/tld/struts-logic-el.tld
+/docroot/WEB-INF/tld/struts-logic.tld
+/docroot/WEB-INF/tld/struts-nested.tld
+/docroot/WEB-INF/tld/struts-tiles-el.tld
+/docroot/WEB-INF/tld/struts-tiles.tld
