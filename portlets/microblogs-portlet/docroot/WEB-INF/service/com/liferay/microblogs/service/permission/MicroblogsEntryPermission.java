@@ -76,18 +76,19 @@ public class MicroblogsEntryPermission {
 			return true;
 		}
 
-		if ((microblogsEntry.getSocialRelationType() != 0) &&
-			(microblogsEntry.getUserId() != permissionChecker.getUserId()) &&
-			!SocialRelationLocalServiceUtil.hasRelation(
+		if (microblogsEntry.getSocialRelationType() == 0) {
+			return true;
+		}
+
+		if ((microblogsEntry.getUserId() != permissionChecker.getUserId()) &&
+			SocialRelationLocalServiceUtil.hasRelation(
 				permissionChecker.getUserId(), microblogsEntry.getUserId(),
 				microblogsEntry.getSocialRelationType())) {
 
-			return false;
+			return true;
 		}
 
-		return permissionChecker.hasPermission(
-			0, MicroblogsEntry.class.getName(),
-			microblogsEntry.getMicroblogsEntryId(), actionId);
+		return false;
 	}
 
 }
