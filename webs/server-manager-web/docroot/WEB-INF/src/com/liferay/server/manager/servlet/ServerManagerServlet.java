@@ -1,6 +1,9 @@
 
 package com.liferay.server.manager.servlet;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,10 +25,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.tomcat.util.modeler.Registry;
-
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 public class ServerManagerServlet extends HttpServlet {
 
@@ -63,6 +62,22 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 
 		if (path[0].equals("is-alive")) {
+			// Test JMX
+//			ArrayList<?> list = MBeanServerFactory.findMBeanServer(null);
+//			MBeanServer mbeanServer = (MBeanServer) list.get(0);
+//			System.out.println("MBeanServer: " + mbeanServer);
+//			String domain = mbeanServer.getDefaultDomain();
+//			System.out.println("Default domain: " + domain);
+//			Set<?> namesSet = mbeanServer.queryNames(null, null);
+//			Object[] objectNames = namesSet.toArray();
+//			System.out.println("mbean object names:");
+//
+//			for (int x = 0; x < objectNames.length; x++) {
+//				System.out.println(objectNames[x]);
+//			}
+
+
+
 			isAliveHandler(request, response);
 		}
 	}
@@ -172,13 +187,26 @@ public class ServerManagerServlet extends HttpServlet {
 							Manager manager = host.getManager();
 							HostConfig hc = new HostConfig();
 
-							MBeanServer mBeanServer = Registry.getRegistry(null, null).getMBeanServer();
+							System.out.println("DEBUG: appbase: " + host.getAppBase());
+							System.out.println("DEBUG: working dir: " + System.getProperty("user.dir"));
+							System.out.println("DEBUG: context path: " + request.getContextPath());
 
-							File file = new File("test.war");
+							// Strip off the current context
+							String webappsDir = this.getServletContext().getRealPath("").replaceFirst("[^/]+/?$", "");
+
+
+//							MBeanServer mBeanServer = Registry.getRegistry(null, null).getMBeanServer();
+
+							File file = new File(webappsDir + "/test.war");
 
 							System.out.println("DEBUG: war file location: " + file.getAbsolutePath());
 
 							uploadWar(is, file);
+
+//							List<String> wars = new ArrayList<String>();
+//							wars.add(file.getAbsolutePath());
+//							BaseDeployer bd = new BaseDeployer(wars, null);
+//							bd.deploy();
 						}
 					}
 				}
