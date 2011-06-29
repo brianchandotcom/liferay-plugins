@@ -22,7 +22,5 @@
 	<classpathentry kind="lib" path="/portal-trunk/util-taglib/util-taglib.jar"/>
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/commons-fileupload-1.2.2.jar"/>
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/commons-io-2.0.1.jar"/>
-	<classpathentry kind="lib" path="docroot/WEB-INF/lib/development/catalina.jar"/>
-	<classpathentry kind="lib" path="docroot/WEB-INF/lib/development/tomcat-coyote.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
