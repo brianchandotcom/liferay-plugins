@@ -336,6 +336,7 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 		kaleoNodeImpl.setModifiedDate(kaleoNode.getModifiedDate());
 		kaleoNodeImpl.setKaleoDefinitionId(kaleoNode.getKaleoDefinitionId());
 		kaleoNodeImpl.setName(kaleoNode.getName());
+		kaleoNodeImpl.setMetadata(kaleoNode.getMetadata());
 		kaleoNodeImpl.setDescription(kaleoNode.getDescription());
 		kaleoNodeImpl.setType(kaleoNode.getType());
 		kaleoNodeImpl.setInitial(kaleoNode.isInitial());
@@ -407,8 +408,14 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 		KaleoNode kaleoNode = (KaleoNode)EntityCacheUtil.getResult(KaleoNodeModelImpl.ENTITY_CACHE_ENABLED,
 				KaleoNodeImpl.class, kaleoNodeId, this);
 
+		if (kaleoNode == _nullKaleoNode) {
+			return null;
+		}
+
 		if (kaleoNode == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -417,10 +424,16 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 						Long.valueOf(kaleoNodeId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
-				if (kaleoNode != null) {
+				if (!hasException && (kaleoNode == null)) {
+					EntityCacheUtil.putResult(KaleoNodeModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoNodeImpl.class, kaleoNodeId, _nullKaleoNode);
+				}
+				else {
 					cacheResult(kaleoNode);
 				}
 
@@ -2016,7 +2029,7 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Determines if the kaleo action is associated with the kaleo node.
+	 * Returns <code>true</code> if the kaleo action is associated with the kaleo node.
 	 *
 	 * @param pk the primary key of the kaleo node
 	 * @param kaleoActionPK the primary key of the kaleo action
@@ -2052,7 +2065,7 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 	}
 
 	/**
-	 * Determines if the kaleo node has any kaleo actions associated with it.
+	 * Returns <code>true</code> if the kaleo node has any kaleo actions associated with it.
 	 *
 	 * @param pk the primary key of the kaleo node to check for associations with kaleo actions
 	 * @return <code>true</code> if the kaleo node has any kaleo actions associated with it; <code>false</code> otherwise
@@ -2241,7 +2254,7 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Determines if the kaleo transition is associated with the kaleo node.
+	 * Returns <code>true</code> if the kaleo transition is associated with the kaleo node.
 	 *
 	 * @param pk the primary key of the kaleo node
 	 * @param kaleoTransitionPK the primary key of the kaleo transition
@@ -2277,7 +2290,7 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 	}
 
 	/**
-	 * Determines if the kaleo node has any kaleo transitions associated with it.
+	 * Returns <code>true</code> if the kaleo node has any kaleo transitions associated with it.
 	 *
 	 * @param pk the primary key of the kaleo node to check for associations with kaleo transitions
 	 * @return <code>true</code> if the kaleo node has any kaleo transitions associated with it; <code>false</code> otherwise
@@ -2446,4 +2459,5 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(KaleoNodePersistenceImpl.class);
+	private static KaleoNode _nullKaleoNode = new KaleoNodeImpl();
 }

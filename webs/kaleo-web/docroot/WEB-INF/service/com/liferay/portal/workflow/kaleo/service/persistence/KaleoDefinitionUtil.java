@@ -1028,7 +1028,7 @@ public class KaleoDefinitionUtil {
 	}
 
 	/**
-	* Determines if the kaleo node is associated with the kaleo definition.
+	* Returns <code>true</code> if the kaleo node is associated with the kaleo definition.
 	*
 	* @param pk the primary key of the kaleo definition
 	* @param kaleoNodePK the primary key of the kaleo node
@@ -1041,7 +1041,7 @@ public class KaleoDefinitionUtil {
 	}
 
 	/**
-	* Determines if the kaleo definition has any kaleo nodes associated with it.
+	* Returns <code>true</code> if the kaleo definition has any kaleo nodes associated with it.
 	*
 	* @param pk the primary key of the kaleo definition to check for associations with kaleo nodes
 	* @return <code>true</code> if the kaleo definition has any kaleo nodes associated with it; <code>false</code> otherwise

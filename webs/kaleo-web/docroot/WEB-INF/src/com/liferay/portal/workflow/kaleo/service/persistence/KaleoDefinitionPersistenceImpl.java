@@ -506,8 +506,14 @@ public class KaleoDefinitionPersistenceImpl extends BasePersistenceImpl<KaleoDef
 		KaleoDefinition kaleoDefinition = (KaleoDefinition)EntityCacheUtil.getResult(KaleoDefinitionModelImpl.ENTITY_CACHE_ENABLED,
 				KaleoDefinitionImpl.class, kaleoDefinitionId, this);
 
+		if (kaleoDefinition == _nullKaleoDefinition) {
+			return null;
+		}
+
 		if (kaleoDefinition == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -516,10 +522,17 @@ public class KaleoDefinitionPersistenceImpl extends BasePersistenceImpl<KaleoDef
 						Long.valueOf(kaleoDefinitionId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
-				if (kaleoDefinition != null) {
+				if (!hasException && (kaleoDefinition == null)) {
+					EntityCacheUtil.putResult(KaleoDefinitionModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoDefinitionImpl.class, kaleoDefinitionId,
+						_nullKaleoDefinition);
+				}
+				else {
 					cacheResult(kaleoDefinition);
 				}
 
@@ -2931,7 +2944,7 @@ public class KaleoDefinitionPersistenceImpl extends BasePersistenceImpl<KaleoDef
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Determines if the kaleo node is associated with the kaleo definition.
+	 * Returns <code>true</code> if the kaleo node is associated with the kaleo definition.
 	 *
 	 * @param pk the primary key of the kaleo definition
 	 * @param kaleoNodePK the primary key of the kaleo node
@@ -2967,7 +2980,7 @@ public class KaleoDefinitionPersistenceImpl extends BasePersistenceImpl<KaleoDef
 	}
 
 	/**
-	 * Determines if the kaleo definition has any kaleo nodes associated with it.
+	 * Returns <code>true</code> if the kaleo definition has any kaleo nodes associated with it.
 	 *
 	 * @param pk the primary key of the kaleo definition to check for associations with kaleo nodes
 	 * @return <code>true</code> if the kaleo definition has any kaleo nodes associated with it; <code>false</code> otherwise
@@ -3113,4 +3126,5 @@ public class KaleoDefinitionPersistenceImpl extends BasePersistenceImpl<KaleoDef
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(KaleoDefinitionPersistenceImpl.class);
+	private static KaleoDefinition _nullKaleoDefinition = new KaleoDefinitionImpl();
 }

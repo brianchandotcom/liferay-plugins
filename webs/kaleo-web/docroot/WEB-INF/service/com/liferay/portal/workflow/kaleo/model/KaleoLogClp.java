@@ -153,12 +153,20 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		_kaleoTaskInstanceTokenId = kaleoTaskInstanceTokenId;
 	}
 
-	public long getKaleoNodeId() {
-		return _kaleoNodeId;
+	public String getKaleoClassName() {
+		return _kaleoClassName;
 	}
 
-	public void setKaleoNodeId(long kaleoNodeId) {
-		_kaleoNodeId = kaleoNodeId;
+	public void setKaleoClassName(String kaleoClassName) {
+		_kaleoClassName = kaleoClassName;
+	}
+
+	public long getKaleoClassPK() {
+		return _kaleoClassPK;
+	}
+
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoClassPK = kaleoClassPK;
 	}
 
 	public String getKaleoNodeName() {
@@ -301,7 +309,6 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		_workflowContext = workflowContext;
 	}
 
-	@Override
 	public KaleoLog toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -312,7 +319,6 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		}
 	}
 
-	@Override
 	public Object clone() {
 		KaleoLogClp clone = new KaleoLogClp();
 
@@ -327,7 +333,8 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		clone.setKaleoInstanceId(getKaleoInstanceId());
 		clone.setKaleoInstanceTokenId(getKaleoInstanceTokenId());
 		clone.setKaleoTaskInstanceTokenId(getKaleoTaskInstanceTokenId());
-		clone.setKaleoNodeId(getKaleoNodeId());
+		clone.setKaleoClassName(getKaleoClassName());
+		clone.setKaleoClassPK(getKaleoClassPK());
 		clone.setKaleoNodeName(getKaleoNodeName());
 		clone.setTerminalKaleoNode(getTerminalKaleoNode());
 		clone.setKaleoActionId(getKaleoActionId());
@@ -369,7 +376,6 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		return 0;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -394,14 +400,12 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		}
 	}
 
-	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
-	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(59);
+		StringBundler sb = new StringBundler(61);
 
 		sb.append("{kaleoLogId=");
 		sb.append(getKaleoLogId());
@@ -425,8 +429,10 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		sb.append(getKaleoInstanceTokenId());
 		sb.append(", kaleoTaskInstanceTokenId=");
 		sb.append(getKaleoTaskInstanceTokenId());
-		sb.append(", kaleoNodeId=");
-		sb.append(getKaleoNodeId());
+		sb.append(", kaleoClassName=");
+		sb.append(getKaleoClassName());
+		sb.append(", kaleoClassPK=");
+		sb.append(getKaleoClassPK());
 		sb.append(", kaleoNodeName=");
 		sb.append(getKaleoNodeName());
 		sb.append(", terminalKaleoNode=");
@@ -467,7 +473,7 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(91);
+		StringBundler sb = new StringBundler(94);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.workflow.kaleo.model.KaleoLog");
@@ -518,8 +524,12 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		sb.append(getKaleoTaskInstanceTokenId());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>kaleoNodeId</column-name><column-value><![CDATA[");
-		sb.append(getKaleoNodeId());
+			"<column><column-name>kaleoClassName</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassName());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>kaleoClassPK</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassPK());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>kaleoNodeName</column-name><column-value><![CDATA[");
@@ -607,7 +617,8 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 	private long _kaleoInstanceId;
 	private long _kaleoInstanceTokenId;
 	private long _kaleoTaskInstanceTokenId;
-	private long _kaleoNodeId;
+	private String _kaleoClassName;
+	private long _kaleoClassPK;
 	private String _kaleoNodeName;
 	private boolean _terminalKaleoNode;
 	private long _kaleoActionId;

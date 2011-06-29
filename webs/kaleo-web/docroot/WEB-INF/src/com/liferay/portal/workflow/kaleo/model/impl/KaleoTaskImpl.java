@@ -41,7 +41,7 @@ public class KaleoTaskImpl extends KaleoTaskModelImpl implements KaleoTask {
 		throws SystemException {
 
 		return KaleoTaskAssignmentLocalServiceUtil.getKaleoTaskAssignments(
-			getKaleoNodeId(), getKaleoTaskId());
+			KaleoTask.class.getName(), getKaleoTaskId());
 	}
 
 }

@@ -522,8 +522,14 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		KaleoTransition kaleoTransition = (KaleoTransition)EntityCacheUtil.getResult(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 				KaleoTransitionImpl.class, kaleoTransitionId, this);
 
+		if (kaleoTransition == _nullKaleoTransition) {
+			return null;
+		}
+
 		if (kaleoTransition == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -532,10 +538,17 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 						Long.valueOf(kaleoTransitionId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
-				if (kaleoTransition != null) {
+				if (!hasException && (kaleoTransition == null)) {
+					EntityCacheUtil.putResult(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoTransitionImpl.class, kaleoTransitionId,
+						_nullKaleoTransition);
+				}
+				else {
 					cacheResult(kaleoTransition);
 				}
 
@@ -2474,4 +2487,5 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(KaleoTransitionPersistenceImpl.class);
+	private static KaleoTransition _nullKaleoTransition = new KaleoTransitionImpl();
 }
