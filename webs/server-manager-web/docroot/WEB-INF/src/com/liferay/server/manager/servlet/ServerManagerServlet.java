@@ -180,12 +180,6 @@ public class ServerManagerServlet extends HttpServlet {
 	}
 
 	protected void logHandler (HttpServletRequest request, HttpServletResponse response) throws IOException {
-//		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        Date date = new Date();
-//
-//        String dateString = dateFormat.format(date);
-//
-//		File log = new File(System.getProperty("catalina.base") + "/logs/catalina." + dateString + ".log");
 		File log = new File(System.getProperty("catalina.base") + "/logs/catalina.out");
 
 		if (!log.exists()) {
