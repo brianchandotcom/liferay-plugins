@@ -7,18 +7,20 @@ import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.ServerDetector;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +32,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 public class ServerManagerServlet extends HttpServlet {
 
@@ -38,7 +41,7 @@ public class ServerManagerServlet extends HttpServlet {
 	@Override
 	protected void service(
 		HttpServletRequest request, HttpServletResponse response)
-		throws ServletException, IOException {
+						throws ServletException, IOException {
 
 		PrintWriter out = response.getWriter();
 		String path = request.getServletPath().toLowerCase();
@@ -75,7 +78,7 @@ public class ServerManagerServlet extends HttpServlet {
 
 	protected void handleGet(
 		HttpServletRequest request, HttpServletResponse response, String[] path)
-		throws IOException {
+						throws IOException {
 
 		if (path.length == 0) {
 			return;
@@ -92,7 +95,7 @@ public class ServerManagerServlet extends HttpServlet {
 
 	protected void handlePost(
 		HttpServletRequest request, HttpServletResponse response, String[] path)
-		throws Exception {
+						throws Exception {
 
 		if (path.length == 0) {
 			return;
@@ -106,6 +109,10 @@ public class ServerManagerServlet extends HttpServlet {
 	protected void handlePut (HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
 		if (path.length == 0) {
 			return;
+		}
+
+		if (path[0].equals("deploy")) {
+			deployUpdateHandler(request, response, path);
 		}
 	}
 
@@ -121,20 +128,20 @@ public class ServerManagerServlet extends HttpServlet {
 
 	protected void isAliveHandler(
 		HttpServletRequest request, HttpServletResponse response)
-		throws IOException {
+						throws IOException {
 
 		response.getWriter().print("1");
 	}
 
 	protected void deployHandler(
-			HttpServletRequest request, HttpServletResponse response, String[] path)
-		throws Exception {
+		HttpServletRequest request, HttpServletResponse response, String[] path)
+						throws Exception {
 
-//		if (path.length < 2) {
-//			return;
-//		}
-//
-//		String contextName = path[1];
+		//		if (path.length < 2) {
+		//			return;
+		//		}
+		//
+		//		String contextName = path[1];
 
 		List<FileItem> fileItems = getFileItems(request);
 
@@ -147,16 +154,61 @@ public class ServerManagerServlet extends HttpServlet {
 				return;
 			}
 
-			File target =
-				new File(deployDir + "/" + fileItem.getName());
+			File target = new File(deployDir, fileItem.getName());
 
-			uploadWar(is, target);
+			toFile(is, target);
 
 			response.getWriter().print("deployed " + fileItem.getName());
 
 			break;
 		}
+	}
 
+	protected void deployUpdateHandler (HttpServletRequest request, HttpServletResponse response, String[] path) throws IOException {
+		if (path.length < 2) {
+			return;
+		}
+
+		String context = path[1];
+		String webappsDirectory = getWebappsDirectory();
+		File contextDirectory = new File(webappsDirectory, context);
+
+		List<FileItem> fileItems = getFileItems(request);
+
+		for (FileItem fileItem : fileItems) {
+			InputStream is = fileItem.getInputStream();
+
+			ZipInputStream zis = new ZipInputStream(is);
+
+			// unzip over current files
+			decompressToDirectory(zis, contextDirectory);
+
+			// delete uneeded files
+			File deleteInfo = new File(contextDirectory, "META-INF/liferay-partialapp-delete.props");
+			BufferedReader reader = new BufferedReader(new FileReader(deleteInfo));
+
+			while (true) {
+				String line = reader.readLine();
+
+				if (line == null) {
+					break;
+				}
+
+				File f = new File(contextDirectory, line.trim());
+
+				boolean success = FileUtils.deleteQuietly(f);
+
+				if (!success) {
+					_log.info("Could not delete file: " + f.getAbsolutePath());
+				}
+			}
+
+			FileUtils.deleteQuietly(deleteInfo);
+
+			response.getWriter().print("updated deployment " + context);
+
+			break;
+		}
 	}
 
 	protected void undeployHandler(
@@ -169,7 +221,7 @@ public class ServerManagerServlet extends HttpServlet {
 		String context = path[1];
 		String webappsDirectory = getWebappsDirectory();
 
-		File directory = new File(webappsDirectory + "/" + context);
+		File directory = new File(webappsDirectory, context);
 
 		if (directory.exists()) {
 			boolean success = FileUtils.deleteQuietly(directory);
@@ -219,7 +271,7 @@ public class ServerManagerServlet extends HttpServlet {
 		response.getWriter().write(debugPort);
 	}
 
-	protected String getWebappsDirectory() {
+	protected static String getWebappsDirectory() {
 		try {
 			if (ServerDetector.isGeronimo()) {
 				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_GERONIMO_DEST_DIR);
@@ -253,7 +305,7 @@ public class ServerManagerServlet extends HttpServlet {
 		return null;
 	}
 
-	protected List<FileItem> getFileItems (HttpServletRequest request) {
+	protected static List<FileItem> getFileItems (HttpServletRequest request) {
 		List<FileItem> results = new ArrayList<FileItem>();
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -275,59 +327,28 @@ public class ServerManagerServlet extends HttpServlet {
 		return results;
 	}
 
-	protected void uploadWar(InputStream istream, File war)
-		throws IOException {
+	public static void decompressToDirectory (ZipInputStream is, File directory) throws IOException {
+		while (true) {
+			ZipEntry entry = is.getNextEntry();
 
-		if (war.exists() && !war.delete()) {
-			throw new IOException("Failed to delete file: " + war);
-		}
-		BufferedOutputStream ostream = null;
-		try {
-			ostream = new BufferedOutputStream(new FileOutputStream(war), 1024);
-			byte buffer[] = new byte[1024];
-			while (true) {
-				int n = istream.read(buffer);
+			if (entry == null) {
+				break;
+			}
 
-				if (n < 0) {
-					break;
-				}
-				ostream.write(buffer, 0, n);
-			}
-			ostream.flush();
-			ostream.close();
-			ostream = null;
-			istream.close();
-			istream = null;
-		}
-		catch (IOException e) {
-			if (war.exists() && !war.delete()) {
-				throw new IOException("Failed to delete file: " + war);
-			}
-			throw e;
-		}
-		finally {
-			if (ostream != null) {
-				try {
-					ostream.close();
-				}
-				catch (Throwable t) {
-					_log.error(t);
-				}
-				ostream = null;
-			}
-			if (istream != null) {
-				try {
-					istream.close();
-				}
-				catch (Throwable t) {
-					_log.error(t);
-				}
-				istream = null;
+			if (!entry.isDirectory()) {
+				toFile(is, new File(directory, entry.getName()));
 			}
 		}
 	}
 
+	public static void toFile (InputStream is, File f) throws IOException {
+		FileUtils.touch(f);
+		OutputStream os = new FileOutputStream(f);
+
+		IOUtils.copy(is, os);
+	}
+
 	protected static Log _log =
-		LogFactoryUtil.getLog(ServerManagerServlet.class);
+					LogFactoryUtil.getLog(ServerManagerServlet.class);
 
 }
