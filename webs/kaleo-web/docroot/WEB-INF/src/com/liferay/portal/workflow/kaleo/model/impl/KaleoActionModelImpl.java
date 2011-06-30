@@ -66,7 +66,8 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "kaleoDefinitionId", Types.BIGINT },
-			{ "kaleoNodeId", Types.BIGINT },
+			{ "kaleoClassName", Types.VARCHAR },
+			{ "kaleoClassPK", Types.BIGINT },
 			{ "kaleoNodeName", Types.VARCHAR },
 			{ "name", Types.VARCHAR },
 			{ "description", Types.VARCHAR },
@@ -75,7 +76,7 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 			{ "scriptLanguage", Types.VARCHAR },
 			{ "priority", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table KaleoAction (kaleoActionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(200) null,createDate DATE null,modifiedDate DATE null,kaleoDefinitionId LONG,kaleoNodeId LONG,kaleoNodeName VARCHAR(200) null,name VARCHAR(200) null,description STRING null,executionType VARCHAR(20) null,script TEXT null,scriptLanguage VARCHAR(75) null,priority INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table KaleoAction (kaleoActionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(200) null,createDate DATE null,modifiedDate DATE null,kaleoDefinitionId LONG,kaleoClassName VARCHAR(200) null,kaleoClassPK LONG,kaleoNodeName VARCHAR(200) null,name VARCHAR(200) null,description STRING null,executionType VARCHAR(20) null,script TEXT null,scriptLanguage VARCHAR(75) null,priority INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table KaleoAction";
 	public static final String ORDER_BY_JPQL = " ORDER BY kaleoAction.priority ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY KaleoAction.priority ASC";
@@ -196,12 +197,25 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 		_kaleoDefinitionId = kaleoDefinitionId;
 	}
 
-	public long getKaleoNodeId() {
-		return _kaleoNodeId;
+	public String getKaleoClassName() {
+		if (_kaleoClassName == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _kaleoClassName;
+		}
 	}
 
-	public void setKaleoNodeId(long kaleoNodeId) {
-		_kaleoNodeId = kaleoNodeId;
+	public void setKaleoClassName(String kaleoClassName) {
+		_kaleoClassName = kaleoClassName;
+	}
+
+	public long getKaleoClassPK() {
+		return _kaleoClassPK;
+	}
+
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoClassPK = kaleoClassPK;
 	}
 
 	public String getKaleoNodeName() {
@@ -296,8 +310,13 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 			return (KaleoAction)this;
 		}
 		else {
-			return (KaleoAction)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (KaleoAction)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -328,7 +347,8 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 		kaleoActionImpl.setCreateDate(getCreateDate());
 		kaleoActionImpl.setModifiedDate(getModifiedDate());
 		kaleoActionImpl.setKaleoDefinitionId(getKaleoDefinitionId());
-		kaleoActionImpl.setKaleoNodeId(getKaleoNodeId());
+		kaleoActionImpl.setKaleoClassName(getKaleoClassName());
+		kaleoActionImpl.setKaleoClassPK(getKaleoClassPK());
 		kaleoActionImpl.setKaleoNodeName(getKaleoNodeName());
 		kaleoActionImpl.setName(getName());
 		kaleoActionImpl.setDescription(getDescription());
@@ -398,7 +418,7 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{kaleoActionId=");
 		sb.append(getKaleoActionId());
@@ -416,8 +436,10 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 		sb.append(getModifiedDate());
 		sb.append(", kaleoDefinitionId=");
 		sb.append(getKaleoDefinitionId());
-		sb.append(", kaleoNodeId=");
-		sb.append(getKaleoNodeId());
+		sb.append(", kaleoClassName=");
+		sb.append(getKaleoClassName());
+		sb.append(", kaleoClassPK=");
+		sb.append(getKaleoClassPK());
 		sb.append(", kaleoNodeName=");
 		sb.append(getKaleoNodeName());
 		sb.append(", name=");
@@ -438,7 +460,7 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(52);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.workflow.kaleo.model.KaleoAction");
@@ -477,8 +499,12 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 		sb.append(getKaleoDefinitionId());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>kaleoNodeId</column-name><column-value><![CDATA[");
-		sb.append(getKaleoNodeId());
+			"<column><column-name>kaleoClassName</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassName());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>kaleoClassPK</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassPK());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>kaleoNodeName</column-name><column-value><![CDATA[");
@@ -527,7 +553,8 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 	private Date _createDate;
 	private Date _modifiedDate;
 	private long _kaleoDefinitionId;
-	private long _kaleoNodeId;
+	private String _kaleoClassName;
+	private long _kaleoClassPK;
 	private String _kaleoNodeName;
 	private String _name;
 	private String _description;
@@ -536,4 +563,5 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 	private String _scriptLanguage;
 	private int _priority;
 	private transient ExpandoBridge _expandoBridge;
+	private KaleoAction _escapedModelProxy;
 }

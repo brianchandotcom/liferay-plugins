@@ -161,7 +161,6 @@ public class KaleoTaskClp extends BaseModelImpl<KaleoTask> implements KaleoTask 
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public KaleoTask toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -172,7 +171,6 @@ public class KaleoTaskClp extends BaseModelImpl<KaleoTask> implements KaleoTask 
 		}
 	}
 
-	@Override
 	public Object clone() {
 		KaleoTaskClp clone = new KaleoTaskClp();
 
@@ -211,7 +209,6 @@ public class KaleoTaskClp extends BaseModelImpl<KaleoTask> implements KaleoTask 
 		return 0;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -236,12 +233,10 @@ public class KaleoTaskClp extends BaseModelImpl<KaleoTask> implements KaleoTask 
 		}
 	}
 
-	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
-	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(23);
 

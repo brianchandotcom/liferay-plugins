@@ -171,7 +171,6 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		_address = address;
 	}
 
-	@Override
 	public KaleoNotificationRecipient toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -183,7 +182,6 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		}
 	}
 
-	@Override
 	public Object clone() {
 		KaleoNotificationRecipientClp clone = new KaleoNotificationRecipientClp();
 
@@ -224,7 +222,6 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		return 0;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -249,12 +246,10 @@ public class KaleoNotificationRecipientClp extends BaseModelImpl<KaleoNotificati
 		}
 	}
 
-	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
-	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(27);
 

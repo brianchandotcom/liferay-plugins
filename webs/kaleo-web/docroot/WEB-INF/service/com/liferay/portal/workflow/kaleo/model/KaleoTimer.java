@@ -29,4 +29,8 @@ public interface KaleoTimer extends KaleoTimerModel {
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoTimerImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment> getKaleoTaskReassignments()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public boolean isRecurring();
 }

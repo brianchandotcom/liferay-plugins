@@ -137,6 +137,14 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		_name = name;
 	}
 
+	public String getMetadata() {
+		return _metadata;
+	}
+
+	public void setMetadata(String metadata) {
+		_metadata = metadata;
+	}
+
 	public String getDescription() {
 		return _description;
 	}
@@ -194,7 +202,6 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public KaleoNode toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -205,7 +212,6 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		}
 	}
 
-	@Override
 	public Object clone() {
 		KaleoNodeClp clone = new KaleoNodeClp();
 
@@ -218,6 +224,7 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		clone.setModifiedDate(getModifiedDate());
 		clone.setKaleoDefinitionId(getKaleoDefinitionId());
 		clone.setName(getName());
+		clone.setMetadata(getMetadata());
 		clone.setDescription(getDescription());
 		clone.setType(getType());
 		clone.setInitial(getInitial());
@@ -246,7 +253,6 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		return 0;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -271,14 +277,12 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		}
 	}
 
-	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
-	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{kaleoNodeId=");
 		sb.append(getKaleoNodeId());
@@ -298,6 +302,8 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		sb.append(getKaleoDefinitionId());
 		sb.append(", name=");
 		sb.append(getName());
+		sb.append(", metadata=");
+		sb.append(getMetadata());
 		sb.append(", description=");
 		sb.append(getDescription());
 		sb.append(", type=");
@@ -312,7 +318,7 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(46);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.workflow.kaleo.model.KaleoNode");
@@ -355,6 +361,10 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 		sb.append(getName());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>metadata</column-name><column-value><![CDATA[");
+		sb.append(getMetadata());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>description</column-name><column-value><![CDATA[");
 		sb.append(getDescription());
 		sb.append("]]></column-value></column>");
@@ -386,6 +396,7 @@ public class KaleoNodeClp extends BaseModelImpl<KaleoNode> implements KaleoNode 
 	private Date _modifiedDate;
 	private long _kaleoDefinitionId;
 	private String _name;
+	private String _metadata;
 	private String _description;
 	private String _type;
 	private boolean _initial;

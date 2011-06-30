@@ -432,8 +432,14 @@ public class KaleoInstancePersistenceImpl extends BasePersistenceImpl<KaleoInsta
 		KaleoInstance kaleoInstance = (KaleoInstance)EntityCacheUtil.getResult(KaleoInstanceModelImpl.ENTITY_CACHE_ENABLED,
 				KaleoInstanceImpl.class, kaleoInstanceId, this);
 
+		if (kaleoInstance == _nullKaleoInstance) {
+			return null;
+		}
+
 		if (kaleoInstance == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -442,10 +448,17 @@ public class KaleoInstancePersistenceImpl extends BasePersistenceImpl<KaleoInsta
 						Long.valueOf(kaleoInstanceId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
-				if (kaleoInstance != null) {
+				if (!hasException && (kaleoInstance == null)) {
+					EntityCacheUtil.putResult(KaleoInstanceModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoInstanceImpl.class, kaleoInstanceId,
+						_nullKaleoInstance);
+				}
+				else {
 					cacheResult(kaleoInstance);
 				}
 
@@ -2530,4 +2543,5 @@ public class KaleoInstancePersistenceImpl extends BasePersistenceImpl<KaleoInsta
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(KaleoInstancePersistenceImpl.class);
+	private static KaleoInstance _nullKaleoInstance = new KaleoInstanceImpl();
 }

@@ -206,7 +206,6 @@ public class KaleoTransitionClp extends BaseModelImpl<KaleoTransition>
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
 	public KaleoTransition toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -218,7 +217,6 @@ public class KaleoTransitionClp extends BaseModelImpl<KaleoTransition>
 		}
 	}
 
-	@Override
 	public Object clone() {
 		KaleoTransitionClp clone = new KaleoTransitionClp();
 
@@ -262,7 +260,6 @@ public class KaleoTransitionClp extends BaseModelImpl<KaleoTransition>
 		return 0;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -287,12 +284,10 @@ public class KaleoTransitionClp extends BaseModelImpl<KaleoTransition>
 		}
 	}
 
-	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
-	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(33);
 

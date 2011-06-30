@@ -425,8 +425,14 @@ public class KaleoNotificationRecipientPersistenceImpl
 				KaleoNotificationRecipientImpl.class,
 				kaleoNotificationRecipientId, this);
 
+		if (kaleoNotificationRecipient == _nullKaleoNotificationRecipient) {
+			return null;
+		}
+
 		if (kaleoNotificationRecipient == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -435,10 +441,18 @@ public class KaleoNotificationRecipientPersistenceImpl
 						Long.valueOf(kaleoNotificationRecipientId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
-				if (kaleoNotificationRecipient != null) {
+				if (!hasException && (kaleoNotificationRecipient == null)) {
+					EntityCacheUtil.putResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoNotificationRecipientImpl.class,
+						kaleoNotificationRecipientId,
+						_nullKaleoNotificationRecipient);
+				}
+				else {
 					cacheResult(kaleoNotificationRecipient);
 				}
 
@@ -1932,4 +1946,5 @@ public class KaleoNotificationRecipientPersistenceImpl
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(KaleoNotificationRecipientPersistenceImpl.class);
+	private static KaleoNotificationRecipient _nullKaleoNotificationRecipient = new KaleoNotificationRecipientImpl();
 }

@@ -207,7 +207,6 @@ public class KaleoTaskAssignmentInstanceClp extends BaseModelImpl<KaleoTaskAssig
 		_completionDate = completionDate;
 	}
 
-	@Override
 	public KaleoTaskAssignmentInstance toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -219,7 +218,6 @@ public class KaleoTaskAssignmentInstanceClp extends BaseModelImpl<KaleoTaskAssig
 		}
 	}
 
-	@Override
 	public Object clone() {
 		KaleoTaskAssignmentInstanceClp clone = new KaleoTaskAssignmentInstanceClp();
 
@@ -265,7 +263,6 @@ public class KaleoTaskAssignmentInstanceClp extends BaseModelImpl<KaleoTaskAssig
 		return 0;
 	}
 
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -290,12 +287,10 @@ public class KaleoTaskAssignmentInstanceClp extends BaseModelImpl<KaleoTaskAssig
 		}
 	}
 
-	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
-	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(35);
 
