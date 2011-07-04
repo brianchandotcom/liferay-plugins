@@ -3,3 +3,8 @@
 
 /build.*.properties
 /dist
+
+/themes/*/docroot/css
+/themes/*/docroot/images
+/themes/*/docroot/js
+/themes/*/docroot/templates

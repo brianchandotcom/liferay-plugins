@@ -1,0 +1,5 @@
+docroot/WEB-INF/tld
+docroot/WEB-INF/lib/commons-logging.jar
+docroot/WEB-INF/lib/log4j.jar
+docroot/WEB-INF/lib/util-*
+tmp
