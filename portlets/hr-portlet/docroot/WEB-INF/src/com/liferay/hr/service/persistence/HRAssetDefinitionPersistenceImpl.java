@@ -74,9 +74,10 @@ public class HRAssetDefinitionPersistenceImpl extends BasePersistenceImpl<HRAsse
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRAssetDefinitionModelImpl.ENTITY_CACHE_ENABLED,
 			HRAssetDefinitionModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRAssetDefinitionImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRAssetDefinitionModelImpl.ENTITY_CACHE_ENABLED,
-			HRAssetDefinitionModelImpl.FINDER_CACHE_ENABLED,
+			HRAssetDefinitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -374,8 +375,14 @@ public class HRAssetDefinitionPersistenceImpl extends BasePersistenceImpl<HRAsse
 		HRAssetDefinition hrAssetDefinition = (HRAssetDefinition)EntityCacheUtil.getResult(HRAssetDefinitionModelImpl.ENTITY_CACHE_ENABLED,
 				HRAssetDefinitionImpl.class, hrAssetDefinitionId, this);
 
+		if (hrAssetDefinition == _nullHRAssetDefinition) {
+			return null;
+		}
+
 		if (hrAssetDefinition == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -384,11 +391,18 @@ public class HRAssetDefinitionPersistenceImpl extends BasePersistenceImpl<HRAsse
 						Long.valueOf(hrAssetDefinitionId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrAssetDefinition != null) {
 					cacheResult(hrAssetDefinition);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRAssetDefinitionModelImpl.ENTITY_CACHE_ENABLED,
+						HRAssetDefinitionImpl.class, hrAssetDefinitionId,
+						_nullHRAssetDefinition);
 				}
 
 				closeSession(session);
@@ -676,4 +690,9 @@ public class HRAssetDefinitionPersistenceImpl extends BasePersistenceImpl<HRAsse
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRAssetDefinitionPersistenceImpl.class);
+	private static HRAssetDefinition _nullHRAssetDefinition = new HRAssetDefinitionImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

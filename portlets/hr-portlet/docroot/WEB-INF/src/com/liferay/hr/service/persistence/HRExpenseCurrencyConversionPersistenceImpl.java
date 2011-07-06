@@ -80,24 +80,26 @@ public class HRExpenseCurrencyConversionPersistenceImpl
 		".List";
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_F_T_C = new FinderPath(HRExpenseCurrencyConversionModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseCurrencyConversionModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_F_T_C",
+			HRExpenseCurrencyConversionImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByG_F_T_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Date.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_F_T_C = new FinderPath(HRExpenseCurrencyConversionModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseCurrencyConversionModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "countByG_F_T_C",
+			Long.class, FINDER_CLASS_NAME_LIST, "countByG_F_T_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName(),
 				Date.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRExpenseCurrencyConversionModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseCurrencyConversionModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRExpenseCurrencyConversionImpl.class, FINDER_CLASS_NAME_LIST,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRExpenseCurrencyConversionModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseCurrencyConversionModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
+			Long.class, FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r expense currency conversion in the entity cache if it is enabled.
@@ -483,8 +485,14 @@ public class HRExpenseCurrencyConversionPersistenceImpl
 				HRExpenseCurrencyConversionImpl.class,
 				hrExpenseCurrencyConversionId, this);
 
+		if (hrExpenseCurrencyConversion == _nullHRExpenseCurrencyConversion) {
+			return null;
+		}
+
 		if (hrExpenseCurrencyConversion == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -493,11 +501,19 @@ public class HRExpenseCurrencyConversionPersistenceImpl
 						Long.valueOf(hrExpenseCurrencyConversionId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrExpenseCurrencyConversion != null) {
 					cacheResult(hrExpenseCurrencyConversion);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRExpenseCurrencyConversionModelImpl.ENTITY_CACHE_ENABLED,
+						HRExpenseCurrencyConversionImpl.class,
+						hrExpenseCurrencyConversionId,
+						_nullHRExpenseCurrencyConversion);
 				}
 
 				closeSession(session);
@@ -578,6 +594,7 @@ public class HRExpenseCurrencyConversionPersistenceImpl
 	 * @param fromHRExpenseCurrencyId the from h r expense currency ID
 	 * @param toHRExpenseCurrencyId the to h r expense currency ID
 	 * @param conversionDate the conversion date
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching h r expense currency conversion, or <code>null</code> if a matching h r expense currency conversion could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -1074,4 +1091,9 @@ public class HRExpenseCurrencyConversionPersistenceImpl
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRExpenseCurrencyConversionPersistenceImpl.class);
+	private static HRExpenseCurrencyConversion _nullHRExpenseCurrencyConversion = new HRExpenseCurrencyConversionImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

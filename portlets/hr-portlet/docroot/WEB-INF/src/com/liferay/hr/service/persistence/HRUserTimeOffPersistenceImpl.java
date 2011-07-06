@@ -74,9 +74,10 @@ public class HRUserTimeOffPersistenceImpl extends BasePersistenceImpl<HRUserTime
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRUserTimeOffModelImpl.ENTITY_CACHE_ENABLED,
 			HRUserTimeOffModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRUserTimeOffImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRUserTimeOffModelImpl.ENTITY_CACHE_ENABLED,
-			HRUserTimeOffModelImpl.FINDER_CACHE_ENABLED,
+			HRUserTimeOffModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -371,8 +372,14 @@ public class HRUserTimeOffPersistenceImpl extends BasePersistenceImpl<HRUserTime
 		HRUserTimeOff hrUserTimeOff = (HRUserTimeOff)EntityCacheUtil.getResult(HRUserTimeOffModelImpl.ENTITY_CACHE_ENABLED,
 				HRUserTimeOffImpl.class, hrUserTimeOffId, this);
 
+		if (hrUserTimeOff == _nullHRUserTimeOff) {
+			return null;
+		}
+
 		if (hrUserTimeOff == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -381,11 +388,18 @@ public class HRUserTimeOffPersistenceImpl extends BasePersistenceImpl<HRUserTime
 						Long.valueOf(hrUserTimeOffId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrUserTimeOff != null) {
 					cacheResult(hrUserTimeOff);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRUserTimeOffModelImpl.ENTITY_CACHE_ENABLED,
+						HRUserTimeOffImpl.class, hrUserTimeOffId,
+						_nullHRUserTimeOff);
 				}
 
 				closeSession(session);
@@ -673,4 +687,9 @@ public class HRUserTimeOffPersistenceImpl extends BasePersistenceImpl<HRUserTime
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRUserTimeOffPersistenceImpl.class);
+	private static HRUserTimeOff _nullHRUserTimeOff = new HRUserTimeOffImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

@@ -74,9 +74,10 @@ public class HRProjectRolePersistenceImpl extends BasePersistenceImpl<HRProjectR
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRProjectRoleModelImpl.ENTITY_CACHE_ENABLED,
 			HRProjectRoleModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRProjectRoleImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRProjectRoleModelImpl.ENTITY_CACHE_ENABLED,
-			HRProjectRoleModelImpl.FINDER_CACHE_ENABLED,
+			HRProjectRoleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -366,8 +367,14 @@ public class HRProjectRolePersistenceImpl extends BasePersistenceImpl<HRProjectR
 		HRProjectRole hrProjectRole = (HRProjectRole)EntityCacheUtil.getResult(HRProjectRoleModelImpl.ENTITY_CACHE_ENABLED,
 				HRProjectRoleImpl.class, hrProjectRoleId, this);
 
+		if (hrProjectRole == _nullHRProjectRole) {
+			return null;
+		}
+
 		if (hrProjectRole == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -376,11 +383,18 @@ public class HRProjectRolePersistenceImpl extends BasePersistenceImpl<HRProjectR
 						Long.valueOf(hrProjectRoleId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrProjectRole != null) {
 					cacheResult(hrProjectRole);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRProjectRoleModelImpl.ENTITY_CACHE_ENABLED,
+						HRProjectRoleImpl.class, hrProjectRoleId,
+						_nullHRProjectRole);
 				}
 
 				closeSession(session);
@@ -668,4 +682,9 @@ public class HRProjectRolePersistenceImpl extends BasePersistenceImpl<HRProjectR
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRProjectRolePersistenceImpl.class);
+	private static HRProjectRole _nullHRProjectRole = new HRProjectRoleImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

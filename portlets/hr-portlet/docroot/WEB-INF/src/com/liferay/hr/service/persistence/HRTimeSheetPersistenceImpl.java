@@ -73,11 +73,11 @@ public class HRTimeSheetPersistenceImpl extends BasePersistenceImpl<HRTimeSheet>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRTimeSheetModelImpl.ENTITY_CACHE_ENABLED,
-			HRTimeSheetModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRTimeSheetModelImpl.FINDER_CACHE_ENABLED, HRTimeSheetImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRTimeSheetModelImpl.ENTITY_CACHE_ENABLED,
-			HRTimeSheetModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRTimeSheetModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r time sheet in the entity cache if it is enabled.
@@ -368,8 +368,14 @@ public class HRTimeSheetPersistenceImpl extends BasePersistenceImpl<HRTimeSheet>
 		HRTimeSheet hrTimeSheet = (HRTimeSheet)EntityCacheUtil.getResult(HRTimeSheetModelImpl.ENTITY_CACHE_ENABLED,
 				HRTimeSheetImpl.class, hrTimeSheetId, this);
 
+		if (hrTimeSheet == _nullHRTimeSheet) {
+			return null;
+		}
+
 		if (hrTimeSheet == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -378,11 +384,17 @@ public class HRTimeSheetPersistenceImpl extends BasePersistenceImpl<HRTimeSheet>
 						Long.valueOf(hrTimeSheetId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrTimeSheet != null) {
 					cacheResult(hrTimeSheet);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRTimeSheetModelImpl.ENTITY_CACHE_ENABLED,
+						HRTimeSheetImpl.class, hrTimeSheetId, _nullHRTimeSheet);
 				}
 
 				closeSession(session);
@@ -670,4 +682,9 @@ public class HRTimeSheetPersistenceImpl extends BasePersistenceImpl<HRTimeSheet>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRTimeSheetPersistenceImpl.class);
+	private static HRTimeSheet _nullHRTimeSheet = new HRTimeSheetImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

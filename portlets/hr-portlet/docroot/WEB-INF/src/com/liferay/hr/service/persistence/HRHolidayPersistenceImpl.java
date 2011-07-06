@@ -82,11 +82,11 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRHolidayModelImpl.ENTITY_CACHE_ENABLED,
-			HRHolidayModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRHolidayModelImpl.FINDER_CACHE_ENABLED, HRHolidayImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRHolidayModelImpl.ENTITY_CACHE_ENABLED,
-			HRHolidayModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRHolidayModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r holiday in the entity cache if it is enabled.
@@ -382,8 +382,14 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 		HRHoliday hrHoliday = (HRHoliday)EntityCacheUtil.getResult(HRHolidayModelImpl.ENTITY_CACHE_ENABLED,
 				HRHolidayImpl.class, hrHolidayId, this);
 
+		if (hrHoliday == _nullHRHoliday) {
+			return null;
+		}
+
 		if (hrHoliday == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -392,11 +398,17 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 						Long.valueOf(hrHolidayId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrHoliday != null) {
 					cacheResult(hrHoliday);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRHolidayModelImpl.ENTITY_CACHE_ENABLED,
+						HRHolidayImpl.class, hrHolidayId, _nullHRHoliday);
 				}
 
 				closeSession(session);
@@ -598,6 +610,7 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 
 	public static final FinderPath FINDER_PATH_GET_HROFFICES = new FinderPath(com.liferay.hr.model.impl.HROfficeModelImpl.ENTITY_CACHE_ENABLED,
 			HRHolidayModelImpl.FINDER_CACHE_ENABLED_HRHOLIDAYS_HROFFICES,
+			com.liferay.hr.model.impl.HROfficeImpl.class,
 			HRHolidayModelImpl.MAPPING_TABLE_HRHOLIDAYS_HROFFICES_NAME,
 			"getHROffices",
 			new String[] {
@@ -681,6 +694,7 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 
 	public static final FinderPath FINDER_PATH_GET_HROFFICES_SIZE = new FinderPath(com.liferay.hr.model.impl.HROfficeModelImpl.ENTITY_CACHE_ENABLED,
 			HRHolidayModelImpl.FINDER_CACHE_ENABLED_HRHOLIDAYS_HROFFICES,
+			Long.class,
 			HRHolidayModelImpl.MAPPING_TABLE_HRHOLIDAYS_HROFFICES_NAME,
 			"getHROfficesSize", new String[] { Long.class.getName() });
 
@@ -734,12 +748,13 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 
 	public static final FinderPath FINDER_PATH_CONTAINS_HROFFICE = new FinderPath(com.liferay.hr.model.impl.HROfficeModelImpl.ENTITY_CACHE_ENABLED,
 			HRHolidayModelImpl.FINDER_CACHE_ENABLED_HRHOLIDAYS_HROFFICES,
+			Boolean.class,
 			HRHolidayModelImpl.MAPPING_TABLE_HRHOLIDAYS_HROFFICES_NAME,
 			"containsHROffice",
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Determines if the h r office is associated with the h r holiday.
+	 * Returns <code>true</code> if the h r office is associated with the h r holiday.
 	 *
 	 * @param pk the primary key of the h r holiday
 	 * @param hrOfficePK the primary key of the h r office
@@ -774,7 +789,7 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 	}
 
 	/**
-	 * Determines if the h r holiday has any h r offices associated with it.
+	 * Returns <code>true</code> if the h r holiday has any h r offices associated with it.
 	 *
 	 * @param pk the primary key of the h r holiday to check for associations with h r offices
 	 * @return <code>true</code> if the h r holiday has any h r offices associated with it; <code>false</code> otherwise
@@ -1342,4 +1357,9 @@ public class HRHolidayPersistenceImpl extends BasePersistenceImpl<HRHoliday>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRHolidayPersistenceImpl.class);
+	private static HRHoliday _nullHRHoliday = new HRHolidayImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

@@ -77,17 +77,18 @@ public class HRExpenseTypePersistenceImpl extends BasePersistenceImpl<HRExpenseT
 		".List";
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_N = new FinderPath(HRExpenseTypeModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseTypeModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
+			HRExpenseTypeImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(HRExpenseTypeModelImpl.ENTITY_CACHE_ENABLED,
-			HRExpenseTypeModelImpl.FINDER_CACHE_ENABLED,
+			HRExpenseTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByG_N",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRExpenseTypeModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseTypeModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRExpenseTypeImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRExpenseTypeModelImpl.ENTITY_CACHE_ENABLED,
-			HRExpenseTypeModelImpl.FINDER_CACHE_ENABLED,
+			HRExpenseTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -428,8 +429,14 @@ public class HRExpenseTypePersistenceImpl extends BasePersistenceImpl<HRExpenseT
 		HRExpenseType hrExpenseType = (HRExpenseType)EntityCacheUtil.getResult(HRExpenseTypeModelImpl.ENTITY_CACHE_ENABLED,
 				HRExpenseTypeImpl.class, hrExpenseTypeId, this);
 
+		if (hrExpenseType == _nullHRExpenseType) {
+			return null;
+		}
+
 		if (hrExpenseType == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -438,11 +445,18 @@ public class HRExpenseTypePersistenceImpl extends BasePersistenceImpl<HRExpenseT
 						Long.valueOf(hrExpenseTypeId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrExpenseType != null) {
 					cacheResult(hrExpenseType);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRExpenseTypeModelImpl.ENTITY_CACHE_ENABLED,
+						HRExpenseTypeImpl.class, hrExpenseTypeId,
+						_nullHRExpenseType);
 				}
 
 				closeSession(session);
@@ -506,6 +520,7 @@ public class HRExpenseTypePersistenceImpl extends BasePersistenceImpl<HRExpenseT
 	 *
 	 * @param groupId the group ID
 	 * @param name the name
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching h r expense type, or <code>null</code> if a matching h r expense type could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -972,4 +987,9 @@ public class HRExpenseTypePersistenceImpl extends BasePersistenceImpl<HRExpenseT
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRExpenseTypePersistenceImpl.class);
+	private static HRExpenseType _nullHRExpenseType = new HRExpenseTypeImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

@@ -76,19 +76,19 @@ public class HRWageTypePersistenceImpl extends BasePersistenceImpl<HRWageType>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_C = new FinderPath(HRWageTypeModelImpl.ENTITY_CACHE_ENABLED,
-			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_ENTITY,
-			"fetchByG_C",
+			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, HRWageTypeImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByG_C",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(HRWageTypeModelImpl.ENTITY_CACHE_ENABLED,
-			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_C",
+			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_C",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRWageTypeModelImpl.ENTITY_CACHE_ENABLED,
-			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, HRWageTypeImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRWageTypeModelImpl.ENTITY_CACHE_ENABLED,
-			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRWageTypeModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r wage type in the entity cache if it is enabled.
@@ -423,8 +423,14 @@ public class HRWageTypePersistenceImpl extends BasePersistenceImpl<HRWageType>
 		HRWageType hrWageType = (HRWageType)EntityCacheUtil.getResult(HRWageTypeModelImpl.ENTITY_CACHE_ENABLED,
 				HRWageTypeImpl.class, hrWageTypeId, this);
 
+		if (hrWageType == _nullHRWageType) {
+			return null;
+		}
+
 		if (hrWageType == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -433,11 +439,17 @@ public class HRWageTypePersistenceImpl extends BasePersistenceImpl<HRWageType>
 						Long.valueOf(hrWageTypeId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrWageType != null) {
 					cacheResult(hrWageType);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRWageTypeModelImpl.ENTITY_CACHE_ENABLED,
+						HRWageTypeImpl.class, hrWageTypeId, _nullHRWageType);
 				}
 
 				closeSession(session);
@@ -501,6 +513,7 @@ public class HRWageTypePersistenceImpl extends BasePersistenceImpl<HRWageType>
 	 *
 	 * @param groupId the group ID
 	 * @param code the code
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching h r wage type, or <code>null</code> if a matching h r wage type could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -967,4 +980,9 @@ public class HRWageTypePersistenceImpl extends BasePersistenceImpl<HRWageType>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRWageTypePersistenceImpl.class);
+	private static HRWageType _nullHRWageType = new HRWageTypeImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

@@ -73,11 +73,11 @@ public class HRTaskPersistenceImpl extends BasePersistenceImpl<HRTask>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRTaskModelImpl.ENTITY_CACHE_ENABLED,
-			HRTaskModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRTaskModelImpl.FINDER_CACHE_ENABLED, HRTaskImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRTaskModelImpl.ENTITY_CACHE_ENABLED,
-			HRTaskModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRTaskModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r task in the entity cache if it is enabled.
@@ -376,8 +376,14 @@ public class HRTaskPersistenceImpl extends BasePersistenceImpl<HRTask>
 		HRTask hrTask = (HRTask)EntityCacheUtil.getResult(HRTaskModelImpl.ENTITY_CACHE_ENABLED,
 				HRTaskImpl.class, hrTaskId, this);
 
+		if (hrTask == _nullHRTask) {
+			return null;
+		}
+
 		if (hrTask == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -386,11 +392,17 @@ public class HRTaskPersistenceImpl extends BasePersistenceImpl<HRTask>
 						Long.valueOf(hrTaskId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrTask != null) {
 					cacheResult(hrTask);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRTaskModelImpl.ENTITY_CACHE_ENABLED,
+						HRTaskImpl.class, hrTaskId, _nullHRTask);
 				}
 
 				closeSession(session);
@@ -677,4 +689,9 @@ public class HRTaskPersistenceImpl extends BasePersistenceImpl<HRTask>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRTaskPersistenceImpl.class);
+	private static HRTask _nullHRTask = new HRTaskImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }

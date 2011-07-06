@@ -74,9 +74,10 @@ public class HRAssetCheckoutPersistenceImpl extends BasePersistenceImpl<HRAssetC
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRAssetCheckoutModelImpl.ENTITY_CACHE_ENABLED,
 			HRAssetCheckoutModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRAssetCheckoutImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRAssetCheckoutModelImpl.ENTITY_CACHE_ENABLED,
-			HRAssetCheckoutModelImpl.FINDER_CACHE_ENABLED,
+			HRAssetCheckoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -369,8 +370,14 @@ public class HRAssetCheckoutPersistenceImpl extends BasePersistenceImpl<HRAssetC
 		HRAssetCheckout hrAssetCheckout = (HRAssetCheckout)EntityCacheUtil.getResult(HRAssetCheckoutModelImpl.ENTITY_CACHE_ENABLED,
 				HRAssetCheckoutImpl.class, hrAssetCheckoutId, this);
 
+		if (hrAssetCheckout == _nullHRAssetCheckout) {
+			return null;
+		}
+
 		if (hrAssetCheckout == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -379,11 +386,18 @@ public class HRAssetCheckoutPersistenceImpl extends BasePersistenceImpl<HRAssetC
 						Long.valueOf(hrAssetCheckoutId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrAssetCheckout != null) {
 					cacheResult(hrAssetCheckout);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRAssetCheckoutModelImpl.ENTITY_CACHE_ENABLED,
+						HRAssetCheckoutImpl.class, hrAssetCheckoutId,
+						_nullHRAssetCheckout);
 				}
 
 				closeSession(session);
@@ -671,4 +685,9 @@ public class HRAssetCheckoutPersistenceImpl extends BasePersistenceImpl<HRAssetC
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRAssetCheckoutPersistenceImpl.class);
+	private static HRAssetCheckout _nullHRAssetCheckout = new HRAssetCheckoutImpl() {
+			public Object clone() {
+				return this;
+			}
+		};
 }
