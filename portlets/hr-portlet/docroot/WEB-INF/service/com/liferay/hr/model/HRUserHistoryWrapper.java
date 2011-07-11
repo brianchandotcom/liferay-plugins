@@ -354,7 +354,7 @@ public class HRUserHistoryWrapper implements HRUserHistory {
 	}
 
 	/**
-	* Determines if this h r user history is benefits exempt.
+	* Returns <code>true</code> if this h r user history is benefits exempt.
 	*
 	* @return <code>true</code> if this h r user history is benefits exempt; <code>false</code> otherwise
 	*/
@@ -381,7 +381,7 @@ public class HRUserHistoryWrapper implements HRUserHistory {
 	}
 
 	/**
-	* Determines if this h r user history is overtime exempt.
+	* Returns <code>true</code> if this h r user history is overtime exempt.
 	*
 	* @return <code>true</code> if this h r user history is overtime exempt; <code>false</code> otherwise
 	*/
@@ -451,6 +451,10 @@ public class HRUserHistoryWrapper implements HRUserHistory {
 	@Override
 	public int hashCode() {
 		return _hrUserHistory.hashCode();
+	}
+
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRUserHistory> toCacheModel() {
+		return _hrUserHistory.toCacheModel();
 	}
 
 	public com.liferay.hr.model.HRUserHistory toEscapedModel() {

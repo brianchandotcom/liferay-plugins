@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRProjectBillingRate;
-
 /**
  * @author Wesley Gong
  */
 public class HRProjectBillingRateImpl
-	extends HRProjectBillingRateModelImpl implements HRProjectBillingRate {
+	extends HRProjectBillingRateBaseImpl {
 
 	public HRProjectBillingRateImpl() {
 	}

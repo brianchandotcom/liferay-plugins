@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -192,8 +193,13 @@ public class JIRAChangeItemModelImpl extends BaseModelImpl<JIRAChangeItem>
 			return (JIRAChangeItem)this;
 		}
 		else {
-			return (JIRAChangeItem)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (JIRAChangeItem)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -278,6 +284,57 @@ public class JIRAChangeItemModelImpl extends BaseModelImpl<JIRAChangeItem>
 	}
 
 	@Override
+	public CacheModel<JIRAChangeItem> toCacheModel() {
+		JIRAChangeItemCacheModel jiraChangeItemCacheModel = new JIRAChangeItemCacheModel();
+
+		jiraChangeItemCacheModel.jiraChangeItemId = getJiraChangeItemId();
+
+		jiraChangeItemCacheModel.jiraChangeGroupId = getJiraChangeGroupId();
+
+		jiraChangeItemCacheModel.field = getField();
+
+		String field = jiraChangeItemCacheModel.field;
+
+		if ((field != null) && (field.length() == 0)) {
+			jiraChangeItemCacheModel.field = null;
+		}
+
+		jiraChangeItemCacheModel.oldValue = getOldValue();
+
+		String oldValue = jiraChangeItemCacheModel.oldValue;
+
+		if ((oldValue != null) && (oldValue.length() == 0)) {
+			jiraChangeItemCacheModel.oldValue = null;
+		}
+
+		jiraChangeItemCacheModel.oldString = getOldString();
+
+		String oldString = jiraChangeItemCacheModel.oldString;
+
+		if ((oldString != null) && (oldString.length() == 0)) {
+			jiraChangeItemCacheModel.oldString = null;
+		}
+
+		jiraChangeItemCacheModel.newValue = getNewValue();
+
+		String newValue = jiraChangeItemCacheModel.newValue;
+
+		if ((newValue != null) && (newValue.length() == 0)) {
+			jiraChangeItemCacheModel.newValue = null;
+		}
+
+		jiraChangeItemCacheModel.newString = getNewString();
+
+		String newString = jiraChangeItemCacheModel.newString;
+
+		if ((newString != null) && (newString.length() == 0)) {
+			jiraChangeItemCacheModel.newString = null;
+		}
+
+		return jiraChangeItemCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(15);
 
@@ -353,4 +410,5 @@ public class JIRAChangeItemModelImpl extends BaseModelImpl<JIRAChangeItem>
 	private String _newValue;
 	private String _newString;
 	private transient ExpandoBridge _expandoBridge;
+	private JIRAChangeItem _escapedModelProxy;
 }

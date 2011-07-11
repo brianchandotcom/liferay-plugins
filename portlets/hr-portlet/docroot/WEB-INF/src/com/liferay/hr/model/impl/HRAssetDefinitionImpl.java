@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRAssetDefinition;
-
 /**
  * @author Wesley Gong
  */
 public class HRAssetDefinitionImpl
-	extends HRAssetDefinitionModelImpl implements HRAssetDefinition {
+	extends HRAssetDefinitionBaseImpl {
 
 	public HRAssetDefinitionImpl() {
 	}

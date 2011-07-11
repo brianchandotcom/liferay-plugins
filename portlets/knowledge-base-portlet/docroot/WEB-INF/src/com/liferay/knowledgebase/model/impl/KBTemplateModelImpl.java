@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -327,8 +328,13 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 			return (KBTemplate)this;
 		}
 		else {
-			return (KBTemplate)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (KBTemplate)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -423,6 +429,69 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 		kbTemplateModelImpl._originalGroupId = kbTemplateModelImpl._groupId;
 
 		kbTemplateModelImpl._setOriginalGroupId = false;
+	}
+
+	@Override
+	public CacheModel<KBTemplate> toCacheModel() {
+		KBTemplateCacheModel kbTemplateCacheModel = new KBTemplateCacheModel();
+
+		kbTemplateCacheModel.uuid = getUuid();
+
+		String uuid = kbTemplateCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			kbTemplateCacheModel.uuid = null;
+		}
+
+		kbTemplateCacheModel.kbTemplateId = getKbTemplateId();
+
+		kbTemplateCacheModel.groupId = getGroupId();
+
+		kbTemplateCacheModel.companyId = getCompanyId();
+
+		kbTemplateCacheModel.userId = getUserId();
+
+		kbTemplateCacheModel.userName = getUserName();
+
+		String userName = kbTemplateCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			kbTemplateCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			kbTemplateCacheModel.createDate = createDate.getTime();
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			kbTemplateCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+
+		kbTemplateCacheModel.title = getTitle();
+
+		String title = kbTemplateCacheModel.title;
+
+		if ((title != null) && (title.length() == 0)) {
+			kbTemplateCacheModel.title = null;
+		}
+
+		kbTemplateCacheModel.content = getContent();
+
+		String content = kbTemplateCacheModel.content;
+
+		if ((content != null) && (content.length() == 0)) {
+			kbTemplateCacheModel.content = null;
+		}
+
+		kbTemplateCacheModel.engineType = getEngineType();
+
+		kbTemplateCacheModel.cacheable = getCacheable();
+
+		return kbTemplateCacheModel;
 	}
 
 	@Override
@@ -540,4 +609,5 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 	private int _engineType;
 	private boolean _cacheable;
 	private transient ExpandoBridge _expandoBridge;
+	private KBTemplate _escapedModelProxy;
 }

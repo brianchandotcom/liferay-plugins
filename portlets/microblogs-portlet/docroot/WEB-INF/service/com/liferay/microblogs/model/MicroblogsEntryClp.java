@@ -14,6 +14,8 @@
 
 package com.liferay.microblogs.model;
 
+import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
+
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
@@ -164,6 +166,11 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		_socialRelationType = socialRelationType;
 	}
 
+	public void save() throws SystemException {
+		MicroblogsEntryLocalServiceUtil.updateMicroblogsEntry(this);
+	}
+
+	@Override
 	public MicroblogsEntry toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -175,6 +182,7 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		}
 	}
 
+	@Override
 	public Object clone() {
 		MicroblogsEntryClp clone = new MicroblogsEntryClp();
 
@@ -208,6 +216,7 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		return 0;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -232,10 +241,12 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(23);
 

@@ -779,7 +779,7 @@ public class CalendarBookingWrapper implements CalendarBooking {
 	}
 
 	/**
-	* Determines if this calendar booking is required.
+	* Returns <code>true</code> if this calendar booking is required.
 	*
 	* @return <code>true</code> if this calendar booking is required; <code>false</code> otherwise
 	*/
@@ -896,7 +896,7 @@ public class CalendarBookingWrapper implements CalendarBooking {
 	}
 
 	/**
-	* Determines if this calendar booking is approved.
+	* Returns <code>true</code> if this calendar booking is approved.
 	*
 	* @return <code>true</code> if this calendar booking is approved; <code>false</code> otherwise
 	*/
@@ -905,7 +905,7 @@ public class CalendarBookingWrapper implements CalendarBooking {
 	}
 
 	/**
-	* Determines if this calendar booking is a draft.
+	* Returns <code>true</code> if this calendar booking is a draft.
 	*
 	* @return <code>true</code> if this calendar booking is a draft; <code>false</code> otherwise
 	*/
@@ -914,7 +914,7 @@ public class CalendarBookingWrapper implements CalendarBooking {
 	}
 
 	/**
-	* Determines if this calendar booking is expired.
+	* Returns <code>true</code> if this calendar booking is expired.
 	*
 	* @return <code>true</code> if this calendar booking is expired; <code>false</code> otherwise
 	*/
@@ -923,7 +923,7 @@ public class CalendarBookingWrapper implements CalendarBooking {
 	}
 
 	/**
-	* Determines if this calendar booking is pending.
+	* Returns <code>true</code> if this calendar booking is pending.
 	*
 	* @return <code>true</code> if this calendar booking is pending; <code>false</code> otherwise
 	*/
@@ -972,6 +972,7 @@ public class CalendarBookingWrapper implements CalendarBooking {
 		_calendarBooking.setExpandoBridgeAttributes(serviceContext);
 	}
 
+	@Override
 	public java.lang.Object clone() {
 		return new CalendarBookingWrapper((CalendarBooking)_calendarBooking.clone());
 	}
@@ -981,20 +982,31 @@ public class CalendarBookingWrapper implements CalendarBooking {
 		return _calendarBooking.compareTo(calendarBooking);
 	}
 
+	@Override
 	public int hashCode() {
 		return _calendarBooking.hashCode();
+	}
+
+	public com.liferay.portal.model.CacheModel<com.liferay.calendar.model.CalendarBooking> toCacheModel() {
+		return _calendarBooking.toCacheModel();
 	}
 
 	public com.liferay.calendar.model.CalendarBooking toEscapedModel() {
 		return new CalendarBookingWrapper(_calendarBooking.toEscapedModel());
 	}
 
+	@Override
 	public java.lang.String toString() {
 		return _calendarBooking.toString();
 	}
 
 	public java.lang.String toXmlString() {
 		return _calendarBooking.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_calendarBooking.save();
 	}
 
 	public com.liferay.calendar.model.CalendarEvent getCalendarEvent()

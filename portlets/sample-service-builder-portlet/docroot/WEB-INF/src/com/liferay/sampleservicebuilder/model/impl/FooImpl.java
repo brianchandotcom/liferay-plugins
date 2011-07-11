@@ -14,12 +14,10 @@
 
 package com.liferay.sampleservicebuilder.model.impl;
 
-import com.liferay.sampleservicebuilder.model.Foo;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class FooImpl extends FooModelImpl implements Foo {
+public class FooImpl extends FooBaseImpl {
 
 	public FooImpl() {
 	}

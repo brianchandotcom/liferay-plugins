@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -230,8 +231,13 @@ public class OAuthConsumerModelImpl extends BaseModelImpl<OAuthConsumer>
 			return (OAuthConsumer)this;
 		}
 		else {
-			return (OAuthConsumer)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (OAuthConsumer)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -318,6 +324,69 @@ public class OAuthConsumerModelImpl extends BaseModelImpl<OAuthConsumer>
 		oAuthConsumerModelImpl._originalGadgetKey = oAuthConsumerModelImpl._gadgetKey;
 
 		oAuthConsumerModelImpl._originalServiceName = oAuthConsumerModelImpl._serviceName;
+	}
+
+	@Override
+	public CacheModel<OAuthConsumer> toCacheModel() {
+		OAuthConsumerCacheModel oAuthConsumerCacheModel = new OAuthConsumerCacheModel();
+
+		oAuthConsumerCacheModel.oAuthConsumerId = getOAuthConsumerId();
+
+		oAuthConsumerCacheModel.companyId = getCompanyId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			oAuthConsumerCacheModel.createDate = createDate.getTime();
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			oAuthConsumerCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+
+		oAuthConsumerCacheModel.gadgetKey = getGadgetKey();
+
+		String gadgetKey = oAuthConsumerCacheModel.gadgetKey;
+
+		if ((gadgetKey != null) && (gadgetKey.length() == 0)) {
+			oAuthConsumerCacheModel.gadgetKey = null;
+		}
+
+		oAuthConsumerCacheModel.serviceName = getServiceName();
+
+		String serviceName = oAuthConsumerCacheModel.serviceName;
+
+		if ((serviceName != null) && (serviceName.length() == 0)) {
+			oAuthConsumerCacheModel.serviceName = null;
+		}
+
+		oAuthConsumerCacheModel.consumerKey = getConsumerKey();
+
+		String consumerKey = oAuthConsumerCacheModel.consumerKey;
+
+		if ((consumerKey != null) && (consumerKey.length() == 0)) {
+			oAuthConsumerCacheModel.consumerKey = null;
+		}
+
+		oAuthConsumerCacheModel.consumerSecret = getConsumerSecret();
+
+		String consumerSecret = oAuthConsumerCacheModel.consumerSecret;
+
+		if ((consumerSecret != null) && (consumerSecret.length() == 0)) {
+			oAuthConsumerCacheModel.consumerSecret = null;
+		}
+
+		oAuthConsumerCacheModel.keyType = getKeyType();
+
+		String keyType = oAuthConsumerCacheModel.keyType;
+
+		if ((keyType != null) && (keyType.length() == 0)) {
+			oAuthConsumerCacheModel.keyType = null;
+		}
+
+		return oAuthConsumerCacheModel;
 	}
 
 	@Override
@@ -412,4 +481,5 @@ public class OAuthConsumerModelImpl extends BaseModelImpl<OAuthConsumer>
 	private String _consumerSecret;
 	private String _keyType;
 	private transient ExpandoBridge _expandoBridge;
+	private OAuthConsumer _escapedModelProxy;
 }

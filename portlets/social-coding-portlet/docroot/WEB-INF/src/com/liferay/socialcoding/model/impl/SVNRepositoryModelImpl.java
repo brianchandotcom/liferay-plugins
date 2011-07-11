@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -146,8 +147,13 @@ public class SVNRepositoryModelImpl extends BaseModelImpl<SVNRepository>
 			return (SVNRepository)this;
 		}
 		else {
-			return (SVNRepository)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (SVNRepository)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -229,6 +235,25 @@ public class SVNRepositoryModelImpl extends BaseModelImpl<SVNRepository>
 	}
 
 	@Override
+	public CacheModel<SVNRepository> toCacheModel() {
+		SVNRepositoryCacheModel svnRepositoryCacheModel = new SVNRepositoryCacheModel();
+
+		svnRepositoryCacheModel.svnRepositoryId = getSvnRepositoryId();
+
+		svnRepositoryCacheModel.url = getUrl();
+
+		String url = svnRepositoryCacheModel.url;
+
+		if ((url != null) && (url.length() == 0)) {
+			svnRepositoryCacheModel.url = null;
+		}
+
+		svnRepositoryCacheModel.revisionNumber = getRevisionNumber();
+
+		return svnRepositoryCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(7);
 
@@ -277,4 +302,5 @@ public class SVNRepositoryModelImpl extends BaseModelImpl<SVNRepository>
 	private String _originalUrl;
 	private long _revisionNumber;
 	private transient ExpandoBridge _expandoBridge;
+	private SVNRepository _escapedModelProxy;
 }

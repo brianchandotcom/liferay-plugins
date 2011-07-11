@@ -291,7 +291,7 @@ public class KBCommentWrapper implements KBComment {
 	}
 
 	/**
-	* Determines if this k b comment is helpful.
+	* Returns <code>true</code> if this k b comment is helpful.
 	*
 	* @return <code>true</code> if this k b comment is helpful; <code>false</code> otherwise
 	*/
@@ -363,6 +363,10 @@ public class KBCommentWrapper implements KBComment {
 		return _kbComment.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.knowledgebase.model.KBComment> toCacheModel() {
+		return _kbComment.toCacheModel();
+	}
+
 	public com.liferay.knowledgebase.model.KBComment toEscapedModel() {
 		return new KBCommentWrapper(_kbComment.toEscapedModel());
 	}
@@ -374,6 +378,11 @@ public class KBCommentWrapper implements KBComment {
 
 	public java.lang.String toXmlString() {
 		return _kbComment.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kbComment.save();
 	}
 
 	public KBComment getWrappedKBComment() {

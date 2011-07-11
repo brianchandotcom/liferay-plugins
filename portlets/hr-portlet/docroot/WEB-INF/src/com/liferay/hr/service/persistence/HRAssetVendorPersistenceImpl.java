@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -74,9 +75,10 @@ public class HRAssetVendorPersistenceImpl extends BasePersistenceImpl<HRAssetVen
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRAssetVendorModelImpl.ENTITY_CACHE_ENABLED,
 			HRAssetVendorModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRAssetVendorImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRAssetVendorModelImpl.ENTITY_CACHE_ENABLED,
-			HRAssetVendorModelImpl.FINDER_CACHE_ENABLED,
+			HRAssetVendorModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -366,8 +368,14 @@ public class HRAssetVendorPersistenceImpl extends BasePersistenceImpl<HRAssetVen
 		HRAssetVendor hrAssetVendor = (HRAssetVendor)EntityCacheUtil.getResult(HRAssetVendorModelImpl.ENTITY_CACHE_ENABLED,
 				HRAssetVendorImpl.class, hrAssetVendorId, this);
 
+		if (hrAssetVendor == _nullHRAssetVendor) {
+			return null;
+		}
+
 		if (hrAssetVendor == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -376,11 +384,18 @@ public class HRAssetVendorPersistenceImpl extends BasePersistenceImpl<HRAssetVen
 						Long.valueOf(hrAssetVendorId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrAssetVendor != null) {
 					cacheResult(hrAssetVendor);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRAssetVendorModelImpl.ENTITY_CACHE_ENABLED,
+						HRAssetVendorImpl.class, hrAssetVendorId,
+						_nullHRAssetVendor);
 				}
 
 				closeSession(session);
@@ -668,4 +683,19 @@ public class HRAssetVendorPersistenceImpl extends BasePersistenceImpl<HRAssetVen
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRAssetVendorPersistenceImpl.class);
+	private static HRAssetVendor _nullHRAssetVendor = new HRAssetVendorImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRAssetVendor> toCacheModel() {
+				return _nullHRAssetVendorCacheModel;
+			}
+		};
+
+	private static CacheModel<HRAssetVendor> _nullHRAssetVendorCacheModel = new CacheModel<HRAssetVendor>() {
+			public HRAssetVendor toEntityModel() {
+				return _nullHRAssetVendor;
+			}
+		};
 }

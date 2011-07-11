@@ -14,12 +14,10 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRProject;
-
 /**
  * @author Wesley Gong
  */
-public class HRProjectImpl extends HRProjectModelImpl implements HRProject {
+public class HRProjectImpl extends HRProjectBaseImpl {
 
 	public HRProjectImpl() {
 	}

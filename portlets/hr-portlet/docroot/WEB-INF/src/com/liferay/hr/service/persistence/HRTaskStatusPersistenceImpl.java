@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -76,19 +77,19 @@ public class HRTaskStatusPersistenceImpl extends BasePersistenceImpl<HRTaskStatu
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_C = new FinderPath(HRTaskStatusModelImpl.ENTITY_CACHE_ENABLED,
-			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED,
+			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED, HRTaskStatusImpl.class,
 			FINDER_CLASS_NAME_ENTITY, "fetchByG_C",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_C = new FinderPath(HRTaskStatusModelImpl.ENTITY_CACHE_ENABLED,
-			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_C",
+			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_C",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRTaskStatusModelImpl.ENTITY_CACHE_ENABLED,
-			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED, HRTaskStatusImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRTaskStatusModelImpl.ENTITY_CACHE_ENABLED,
-			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRTaskStatusModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r task status in the entity cache if it is enabled.
@@ -427,8 +428,14 @@ public class HRTaskStatusPersistenceImpl extends BasePersistenceImpl<HRTaskStatu
 		HRTaskStatus hrTaskStatus = (HRTaskStatus)EntityCacheUtil.getResult(HRTaskStatusModelImpl.ENTITY_CACHE_ENABLED,
 				HRTaskStatusImpl.class, hrTaskStatusId, this);
 
+		if (hrTaskStatus == _nullHRTaskStatus) {
+			return null;
+		}
+
 		if (hrTaskStatus == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -437,11 +444,18 @@ public class HRTaskStatusPersistenceImpl extends BasePersistenceImpl<HRTaskStatu
 						Long.valueOf(hrTaskStatusId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrTaskStatus != null) {
 					cacheResult(hrTaskStatus);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRTaskStatusModelImpl.ENTITY_CACHE_ENABLED,
+						HRTaskStatusImpl.class, hrTaskStatusId,
+						_nullHRTaskStatus);
 				}
 
 				closeSession(session);
@@ -505,6 +519,7 @@ public class HRTaskStatusPersistenceImpl extends BasePersistenceImpl<HRTaskStatu
 	 *
 	 * @param groupId the group ID
 	 * @param code the code
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching h r task status, or <code>null</code> if a matching h r task status could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -971,4 +986,19 @@ public class HRTaskStatusPersistenceImpl extends BasePersistenceImpl<HRTaskStatu
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRTaskStatusPersistenceImpl.class);
+	private static HRTaskStatus _nullHRTaskStatus = new HRTaskStatusImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRTaskStatus> toCacheModel() {
+				return _nullHRTaskStatusCacheModel;
+			}
+		};
+
+	private static CacheModel<HRTaskStatus> _nullHRTaskStatusCacheModel = new CacheModel<HRTaskStatus>() {
+			public HRTaskStatus toEntityModel() {
+				return _nullHRTaskStatus;
+			}
+		};
 }

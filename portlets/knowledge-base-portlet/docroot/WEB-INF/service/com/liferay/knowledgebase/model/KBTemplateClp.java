@@ -14,6 +14,8 @@
 
 package com.liferay.knowledgebase.model;
 
+import com.liferay.knowledgebase.service.KBTemplateLocalServiceUtil;
+
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
@@ -175,6 +177,11 @@ public class KBTemplateClp extends BaseModelImpl<KBTemplate>
 		throw new UnsupportedOperationException();
 	}
 
+	public void save() throws SystemException {
+		KBTemplateLocalServiceUtil.updateKBTemplate(this);
+	}
+
+	@Override
 	public KBTemplate toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -186,6 +193,7 @@ public class KBTemplateClp extends BaseModelImpl<KBTemplate>
 		}
 	}
 
+	@Override
 	public Object clone() {
 		KBTemplateClp clone = new KBTemplateClp();
 
@@ -220,6 +228,7 @@ public class KBTemplateClp extends BaseModelImpl<KBTemplate>
 		return 0;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -244,10 +253,12 @@ public class KBTemplateClp extends BaseModelImpl<KBTemplate>
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(25);
 

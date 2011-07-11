@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -73,11 +74,11 @@ public class CheckoutPersistenceImpl extends BasePersistenceImpl<Checkout>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(CheckoutModelImpl.ENTITY_CACHE_ENABLED,
-			CheckoutModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			CheckoutModelImpl.FINDER_CACHE_ENABLED, CheckoutImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CheckoutModelImpl.ENTITY_CACHE_ENABLED,
-			CheckoutModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			CheckoutModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the checkout in the entity cache if it is enabled.
@@ -360,8 +361,14 @@ public class CheckoutPersistenceImpl extends BasePersistenceImpl<Checkout>
 		Checkout checkout = (Checkout)EntityCacheUtil.getResult(CheckoutModelImpl.ENTITY_CACHE_ENABLED,
 				CheckoutImpl.class, checkoutId, this);
 
+		if (checkout == _nullCheckout) {
+			return null;
+		}
+
 		if (checkout == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -370,11 +377,17 @@ public class CheckoutPersistenceImpl extends BasePersistenceImpl<Checkout>
 						Long.valueOf(checkoutId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (checkout != null) {
 					cacheResult(checkout);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(CheckoutModelImpl.ENTITY_CACHE_ENABLED,
+						CheckoutImpl.class, checkoutId, _nullCheckout);
 				}
 
 				closeSession(session);
@@ -593,4 +606,19 @@ public class CheckoutPersistenceImpl extends BasePersistenceImpl<Checkout>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(CheckoutPersistenceImpl.class);
+	private static Checkout _nullCheckout = new CheckoutImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<Checkout> toCacheModel() {
+				return _nullCheckoutCacheModel;
+			}
+		};
+
+	private static CacheModel<Checkout> _nullCheckoutCacheModel = new CacheModel<Checkout>() {
+			public Checkout toEntityModel() {
+				return _nullCheckout;
+			}
+		};
 }

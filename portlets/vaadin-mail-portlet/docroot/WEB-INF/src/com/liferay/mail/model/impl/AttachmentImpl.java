@@ -14,12 +14,10 @@
 
 package com.liferay.mail.model.impl;
 
-import com.liferay.mail.model.Attachment;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class AttachmentImpl extends AttachmentModelImpl implements Attachment {
+public class AttachmentImpl extends AttachmentBaseImpl {
 
 	public AttachmentImpl() {
 	}

@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -76,7 +77,7 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_USERID = new FinderPath(ProjectsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			ProjectsEntryModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findByUserId",
+			ProjectsEntryImpl.class, FINDER_CLASS_NAME_LIST, "findByUserId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -84,14 +85,15 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(ProjectsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			ProjectsEntryModelImpl.FINDER_CACHE_ENABLED,
+			ProjectsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByUserId",
 			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(ProjectsEntryModelImpl.ENTITY_CACHE_ENABLED,
 			ProjectsEntryModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			ProjectsEntryImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ProjectsEntryModelImpl.ENTITY_CACHE_ENABLED,
-			ProjectsEntryModelImpl.FINDER_CACHE_ENABLED,
+			ProjectsEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -383,8 +385,14 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 		ProjectsEntry projectsEntry = (ProjectsEntry)EntityCacheUtil.getResult(ProjectsEntryModelImpl.ENTITY_CACHE_ENABLED,
 				ProjectsEntryImpl.class, projectsEntryId, this);
 
+		if (projectsEntry == _nullProjectsEntry) {
+			return null;
+		}
+
 		if (projectsEntry == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -393,11 +401,18 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 						Long.valueOf(projectsEntryId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (projectsEntry != null) {
 					cacheResult(projectsEntry);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(ProjectsEntryModelImpl.ENTITY_CACHE_ENABLED,
+						ProjectsEntryImpl.class, projectsEntryId,
+						_nullProjectsEntry);
 				}
 
 				closeSession(session);
@@ -1021,4 +1036,19 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(ProjectsEntryPersistenceImpl.class);
+	private static ProjectsEntry _nullProjectsEntry = new ProjectsEntryImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<ProjectsEntry> toCacheModel() {
+				return _nullProjectsEntryCacheModel;
+			}
+		};
+
+	private static CacheModel<ProjectsEntry> _nullProjectsEntryCacheModel = new CacheModel<ProjectsEntry>() {
+			public ProjectsEntry toEntityModel() {
+				return _nullProjectsEntry;
+			}
+		};
 }

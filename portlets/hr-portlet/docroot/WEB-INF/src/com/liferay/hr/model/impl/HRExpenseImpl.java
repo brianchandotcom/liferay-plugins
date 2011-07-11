@@ -14,12 +14,10 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRExpense;
-
 /**
  * @author Wesley Gong
  */
-public class HRExpenseImpl extends HRExpenseModelImpl implements HRExpense {
+public class HRExpenseImpl extends HRExpenseBaseImpl {
 
 	public HRExpenseImpl() {
 	}

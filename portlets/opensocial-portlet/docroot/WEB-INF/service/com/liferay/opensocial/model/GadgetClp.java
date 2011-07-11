@@ -14,7 +14,10 @@
 
 package com.liferay.opensocial.model;
 
+import com.liferay.opensocial.service.GadgetLocalServiceUtil;
+
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.impl.BaseModelImpl;
 
@@ -119,6 +122,11 @@ public class GadgetClp extends BaseModelImpl<Gadget> implements Gadget {
 		_portletCategoryNames = portletCategoryNames;
 	}
 
+	public void save() throws SystemException {
+		GadgetLocalServiceUtil.updateGadget(this);
+	}
+
+	@Override
 	public Gadget toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -129,6 +137,7 @@ public class GadgetClp extends BaseModelImpl<Gadget> implements Gadget {
 		}
 	}
 
+	@Override
 	public Object clone() {
 		GadgetClp clone = new GadgetClp();
 
@@ -156,6 +165,7 @@ public class GadgetClp extends BaseModelImpl<Gadget> implements Gadget {
 		return 0;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -180,10 +190,12 @@ public class GadgetClp extends BaseModelImpl<Gadget> implements Gadget {
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(17);
 

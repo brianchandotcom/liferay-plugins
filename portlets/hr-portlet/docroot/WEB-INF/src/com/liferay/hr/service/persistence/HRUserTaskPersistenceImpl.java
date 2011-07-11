@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -73,11 +74,11 @@ public class HRUserTaskPersistenceImpl extends BasePersistenceImpl<HRUserTask>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRUserTaskModelImpl.ENTITY_CACHE_ENABLED,
-			HRUserTaskModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRUserTaskModelImpl.FINDER_CACHE_ENABLED, HRUserTaskImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRUserTaskModelImpl.ENTITY_CACHE_ENABLED,
-			HRUserTaskModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRUserTaskModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r user task in the entity cache if it is enabled.
@@ -362,8 +363,14 @@ public class HRUserTaskPersistenceImpl extends BasePersistenceImpl<HRUserTask>
 		HRUserTask hrUserTask = (HRUserTask)EntityCacheUtil.getResult(HRUserTaskModelImpl.ENTITY_CACHE_ENABLED,
 				HRUserTaskImpl.class, hrUserTaskId, this);
 
+		if (hrUserTask == _nullHRUserTask) {
+			return null;
+		}
+
 		if (hrUserTask == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -372,11 +379,17 @@ public class HRUserTaskPersistenceImpl extends BasePersistenceImpl<HRUserTask>
 						Long.valueOf(hrUserTaskId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrUserTask != null) {
 					cacheResult(hrUserTask);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRUserTaskModelImpl.ENTITY_CACHE_ENABLED,
+						HRUserTaskImpl.class, hrUserTaskId, _nullHRUserTask);
 				}
 
 				closeSession(session);
@@ -664,4 +677,19 @@ public class HRUserTaskPersistenceImpl extends BasePersistenceImpl<HRUserTask>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRUserTaskPersistenceImpl.class);
+	private static HRUserTask _nullHRUserTask = new HRUserTaskImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRUserTask> toCacheModel() {
+				return _nullHRUserTaskCacheModel;
+			}
+		};
+
+	private static CacheModel<HRUserTask> _nullHRUserTaskCacheModel = new CacheModel<HRUserTask>() {
+			public HRUserTask toEntityModel() {
+				return _nullHRUserTask;
+			}
+		};
 }

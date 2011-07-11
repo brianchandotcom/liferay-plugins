@@ -282,7 +282,7 @@ public class KBTemplateWrapper implements KBTemplate {
 	}
 
 	/**
-	* Determines if this k b template is cacheable.
+	* Returns <code>true</code> if this k b template is cacheable.
 	*
 	* @return <code>true</code> if this k b template is cacheable; <code>false</code> otherwise
 	*/
@@ -354,6 +354,10 @@ public class KBTemplateWrapper implements KBTemplate {
 		return _kbTemplate.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.knowledgebase.model.KBTemplate> toCacheModel() {
+		return _kbTemplate.toCacheModel();
+	}
+
 	public com.liferay.knowledgebase.model.KBTemplate toEscapedModel() {
 		return new KBTemplateWrapper(_kbTemplate.toEscapedModel());
 	}
@@ -365,6 +369,11 @@ public class KBTemplateWrapper implements KBTemplate {
 
 	public java.lang.String toXmlString() {
 		return _kbTemplate.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kbTemplate.save();
 	}
 
 	public boolean isFreeMarker() {

@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -78,8 +79,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_PROJECTID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByProjectId",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByProjectId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -87,17 +88,20 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_PROJECTID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByProjectId", new String[] { Long.class.getName() });
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByProjectId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_KEY = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_ENTITY,
-			"fetchByKey", new String[] { String.class.getName() });
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
+			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByKey", new String[] { String.class.getName() });
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByKey",
+			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_REPORTERJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByReporterJiraUserId",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByReporterJiraUserId",
 			new String[] {
 				String.class.getName(),
 				
@@ -105,11 +109,12 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByReporterJiraUserId", new String[] { String.class.getName() });
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByReporterJiraUserId",
+			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_ASSIGNEEJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByAssigneeJiraUserId",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByAssigneeJiraUserId",
 			new String[] {
 				String.class.getName(),
 				
@@ -117,11 +122,12 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByAssigneeJiraUserId", new String[] { String.class.getName() });
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByAssigneeJiraUserId",
+			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_MD_P = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByMD_P",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByMD_P",
 			new String[] {
 				Date.class.getName(), Long.class.getName(),
 				
@@ -129,12 +135,12 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_MD_P = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByMD_P",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByMD_P",
 			new String[] { Date.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByP_RJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByP_RJUI",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
@@ -142,12 +148,12 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByP_RJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByP_RJUI",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByP_AJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByP_AJUI",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				
@@ -155,12 +161,12 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByP_AJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByP_AJUI",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_MD_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByMD_P_RJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByMD_P_RJUI",
 			new String[] {
 				Date.class.getName(), Long.class.getName(),
 				String.class.getName(),
@@ -169,15 +175,15 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_MD_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByMD_P_RJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByMD_P_RJUI",
 			new String[] {
 				Date.class.getName(), Long.class.getName(),
 				String.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_MD_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByMD_P_AJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByMD_P_AJUI",
 			new String[] {
 				Date.class.getName(), Long.class.getName(),
 				String.class.getName(),
@@ -186,15 +192,15 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_MD_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByMD_P_AJUI",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByMD_P_AJUI",
 			new String[] {
 				Date.class.getName(), Long.class.getName(),
 				String.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_P_RJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByP_RJUI_S",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByP_RJUI_S",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(),
@@ -203,15 +209,15 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_RJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByP_RJUI_S",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByP_RJUI_S",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_P_AJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByP_AJUI_S",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByP_AJUI_S",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName(),
@@ -220,18 +226,18 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_AJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByP_AJUI_S",
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByP_AJUI_S",
 			new String[] {
 				Long.class.getName(), String.class.getName(),
 				String.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the j i r a issue in the entity cache if it is enabled.
@@ -546,8 +552,14 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 		JIRAIssue jiraIssue = (JIRAIssue)EntityCacheUtil.getResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
 				JIRAIssueImpl.class, jiraIssueId, this);
 
+		if (jiraIssue == _nullJIRAIssue) {
+			return null;
+		}
+
 		if (jiraIssue == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -556,11 +568,17 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 						Long.valueOf(jiraIssueId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (jiraIssue != null) {
 					cacheResult(jiraIssue);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+						JIRAIssueImpl.class, jiraIssueId, _nullJIRAIssue);
 				}
 
 				closeSession(session);
@@ -958,6 +976,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns the j i r a issue where key = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param key the key
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching j i r a issue, or <code>null</code> if a matching j i r a issue could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -5889,4 +5908,19 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(JIRAIssuePersistenceImpl.class);
+	private static JIRAIssue _nullJIRAIssue = new JIRAIssueImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<JIRAIssue> toCacheModel() {
+				return _nullJIRAIssueCacheModel;
+			}
+		};
+
+	private static CacheModel<JIRAIssue> _nullJIRAIssueCacheModel = new CacheModel<JIRAIssue>() {
+			public JIRAIssue toEntityModel() {
+				return _nullJIRAIssue;
+			}
+		};
 }

@@ -14,12 +14,10 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRHoliday;
-
 /**
  * @author Wesley Gong
  */
-public class HRHolidayImpl extends HRHolidayModelImpl implements HRHoliday {
+public class HRHolidayImpl extends HRHolidayBaseImpl {
 
 	public HRHolidayImpl() {
 	}

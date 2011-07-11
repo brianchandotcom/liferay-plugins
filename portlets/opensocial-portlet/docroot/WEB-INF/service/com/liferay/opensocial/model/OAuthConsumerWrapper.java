@@ -272,6 +272,10 @@ public class OAuthConsumerWrapper implements OAuthConsumer {
 		return _oAuthConsumer.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.opensocial.model.OAuthConsumer> toCacheModel() {
+		return _oAuthConsumer.toCacheModel();
+	}
+
 	public com.liferay.opensocial.model.OAuthConsumer toEscapedModel() {
 		return new OAuthConsumerWrapper(_oAuthConsumer.toEscapedModel());
 	}
@@ -283,6 +287,11 @@ public class OAuthConsumerWrapper implements OAuthConsumer {
 
 	public java.lang.String toXmlString() {
 		return _oAuthConsumer.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_oAuthConsumer.save();
 	}
 
 	public java.lang.String getKeyName() {

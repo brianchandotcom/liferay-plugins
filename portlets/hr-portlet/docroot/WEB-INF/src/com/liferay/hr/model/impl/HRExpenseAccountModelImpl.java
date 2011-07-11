@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -230,8 +231,13 @@ public class HRExpenseAccountModelImpl extends BaseModelImpl<HRExpenseAccount>
 			return (HRExpenseAccount)this;
 		}
 		else {
-			return (HRExpenseAccount)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRExpenseAccount)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -322,6 +328,57 @@ public class HRExpenseAccountModelImpl extends BaseModelImpl<HRExpenseAccount>
 		hrExpenseAccountModelImpl._setOriginalGroupId = false;
 
 		hrExpenseAccountModelImpl._originalName = hrExpenseAccountModelImpl._name;
+	}
+
+	@Override
+	public CacheModel<HRExpenseAccount> toCacheModel() {
+		HRExpenseAccountCacheModel hrExpenseAccountCacheModel = new HRExpenseAccountCacheModel();
+
+		hrExpenseAccountCacheModel.hrExpenseAccountId = getHrExpenseAccountId();
+
+		hrExpenseAccountCacheModel.groupId = getGroupId();
+
+		hrExpenseAccountCacheModel.companyId = getCompanyId();
+
+		hrExpenseAccountCacheModel.userId = getUserId();
+
+		hrExpenseAccountCacheModel.userName = getUserName();
+
+		String userName = hrExpenseAccountCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrExpenseAccountCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrExpenseAccountCacheModel.createDate = createDate.getTime();
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrExpenseAccountCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+
+		hrExpenseAccountCacheModel.name = getName();
+
+		String name = hrExpenseAccountCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			hrExpenseAccountCacheModel.name = null;
+		}
+
+		hrExpenseAccountCacheModel.description = getDescription();
+
+		String description = hrExpenseAccountCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			hrExpenseAccountCacheModel.description = null;
+		}
+
+		return hrExpenseAccountCacheModel;
 	}
 
 	@Override
@@ -418,4 +475,5 @@ public class HRExpenseAccountModelImpl extends BaseModelImpl<HRExpenseAccount>
 	private String _originalName;
 	private String _description;
 	private transient ExpandoBridge _expandoBridge;
+	private HRExpenseAccount _escapedModelProxy;
 }

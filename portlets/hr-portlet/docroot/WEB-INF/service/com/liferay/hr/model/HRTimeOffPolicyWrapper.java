@@ -322,7 +322,7 @@ public class HRTimeOffPolicyWrapper implements HRTimeOffPolicy {
 	}
 
 	/**
-	* Determines if this h r time off policy is inactive.
+	* Returns <code>true</code> if this h r time off policy is inactive.
 	*
 	* @return <code>true</code> if this h r time off policy is inactive; <code>false</code> otherwise
 	*/
@@ -464,6 +464,10 @@ public class HRTimeOffPolicyWrapper implements HRTimeOffPolicy {
 	@Override
 	public int hashCode() {
 		return _hrTimeOffPolicy.hashCode();
+	}
+
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRTimeOffPolicy> toCacheModel() {
+		return _hrTimeOffPolicy.toCacheModel();
 	}
 
 	public com.liferay.hr.model.HRTimeOffPolicy toEscapedModel() {

@@ -282,7 +282,7 @@ public class HRHolidayWrapper implements HRHoliday {
 	}
 
 	/**
-	* Determines if this h r holiday is paid.
+	* Returns <code>true</code> if this h r holiday is paid.
 	*
 	* @return <code>true</code> if this h r holiday is paid; <code>false</code> otherwise
 	*/
@@ -352,6 +352,10 @@ public class HRHolidayWrapper implements HRHoliday {
 	@Override
 	public int hashCode() {
 		return _hrHoliday.hashCode();
+	}
+
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRHoliday> toCacheModel() {
+		return _hrHoliday.toCacheModel();
 	}
 
 	public com.liferay.hr.model.HRHoliday toEscapedModel() {

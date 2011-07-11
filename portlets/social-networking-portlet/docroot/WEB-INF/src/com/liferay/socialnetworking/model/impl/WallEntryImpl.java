@@ -14,12 +14,10 @@
 
 package com.liferay.socialnetworking.model.impl;
 
-import com.liferay.socialnetworking.model.WallEntry;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class WallEntryImpl extends WallEntryModelImpl implements WallEntry {
+public class WallEntryImpl extends WallEntryBaseImpl {
 
 	public WallEntryImpl() {
 	}

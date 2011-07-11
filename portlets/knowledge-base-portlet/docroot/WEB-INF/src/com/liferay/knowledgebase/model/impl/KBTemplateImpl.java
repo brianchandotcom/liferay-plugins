@@ -14,14 +14,13 @@
 
 package com.liferay.knowledgebase.model.impl;
 
-import com.liferay.knowledgebase.model.KBTemplate;
 import com.liferay.knowledgebase.model.KBTemplateConstants;
 
 /**
  * @author Peter Shin
  * @author Brian Wing Shun Chan
  */
-public class KBTemplateImpl extends KBTemplateModelImpl implements KBTemplate {
+public class KBTemplateImpl extends KBTemplateBaseImpl {
 
 	public KBTemplateImpl() {
 	}

@@ -17,6 +17,7 @@ package com.liferay.hr.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -240,7 +241,7 @@ public interface HRHolidayModel extends BaseModel<HRHoliday>, GroupedModel {
 	public boolean getPaid();
 
 	/**
-	 * Determines if this h r holiday is paid.
+	 * Returns <code>true</code> if this h r holiday is paid.
 	 *
 	 * @return <code>true</code> if this h r holiday is paid; <code>false</code> otherwise
 	 */
@@ -278,6 +279,8 @@ public interface HRHolidayModel extends BaseModel<HRHoliday>, GroupedModel {
 	public int compareTo(HRHoliday hrHoliday);
 
 	public int hashCode();
+
+	public CacheModel<HRHoliday> toCacheModel();
 
 	public HRHoliday toEscapedModel();
 

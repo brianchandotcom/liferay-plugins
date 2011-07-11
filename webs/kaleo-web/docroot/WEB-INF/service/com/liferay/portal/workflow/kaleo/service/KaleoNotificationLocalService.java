@@ -187,7 +187,7 @@ public interface KaleoNotificationLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the kaleo notification in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo notification in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoNotification the kaleo notification
 	* @return the kaleo notification that was updated
@@ -198,7 +198,7 @@ public interface KaleoNotificationLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the kaleo notification in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo notification in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoNotification the kaleo notification
 	* @param merge whether to merge the kaleo notification with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -225,8 +225,8 @@ public interface KaleoNotificationLocalService {
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoNotification addKaleoNotification(
-		long kaleoDefinitionId, long kaleoNodeId,
-		java.lang.String kaleoNodeName,
+		java.lang.String kaleoClassName, long kaleoClassPK,
+		long kaleoDefinitionId, java.lang.String kaleoNodeName,
 		com.liferay.portal.workflow.kaleo.definition.Notification notification,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -240,6 +240,7 @@ public interface KaleoNotificationLocalService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoNotification> getKaleoNotifications(
-		long kaleoNodeId, java.lang.String executionType)
+		java.lang.String kaleoClassName, long kaleoClassPK,
+		java.lang.String executionType)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }

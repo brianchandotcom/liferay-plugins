@@ -16,8 +16,6 @@ package com.liferay.knowledgebase.service.base;
 
 import com.liferay.counter.service.CounterLocalService;
 
-import com.liferay.documentlibrary.service.DLLocalService;
-
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.service.KBArticleLocalService;
 import com.liferay.knowledgebase.service.KBArticleService;
@@ -309,7 +307,7 @@ public abstract class KBArticleLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the k b article in the database. Also notifies the appropriate model listeners.
+	 * Updates the k b article in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kbArticle the k b article
 	 * @return the k b article that was updated
@@ -321,7 +319,7 @@ public abstract class KBArticleLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the k b article in the database. Also notifies the appropriate model listeners.
+	 * Updates the k b article in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kbArticle the k b article
 	 * @param merge whether to merge the k b article with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -572,24 +570,6 @@ public abstract class KBArticleLocalServiceBaseImpl
 	 */
 	public void setCounterLocalService(CounterLocalService counterLocalService) {
 		this.counterLocalService = counterLocalService;
-	}
-
-	/**
-	 * Returns the d l local service.
-	 *
-	 * @return the d l local service
-	 */
-	public DLLocalService getDLLocalService() {
-		return dlLocalService;
-	}
-
-	/**
-	 * Sets the d l local service.
-	 *
-	 * @param dlLocalService the d l local service
-	 */
-	public void setDLLocalService(DLLocalService dlLocalService) {
-		this.dlLocalService = dlLocalService;
 	}
 
 	/**
@@ -1197,8 +1177,6 @@ public abstract class KBArticleLocalServiceBaseImpl
 	protected KBTemplatePersistence kbTemplatePersistence;
 	@BeanReference(type = CounterLocalService.class)
 	protected CounterLocalService counterLocalService;
-	@BeanReference(type = DLLocalService.class)
-	protected DLLocalService dlLocalService;
 	@BeanReference(type = CompanyLocalService.class)
 	protected CompanyLocalService companyLocalService;
 	@BeanReference(type = CompanyService.class)

@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -76,8 +77,8 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_USERID = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
-			AccountModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByUserId",
+			AccountModelImpl.FINDER_CACHE_ENABLED, AccountImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByUserId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -85,22 +86,23 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
-			AccountModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByUserId", new String[] { Long.class.getName() });
+			AccountModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByUserId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_U_A = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
-			AccountModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_ENTITY,
-			"fetchByU_A",
+			AccountModelImpl.FINDER_CACHE_ENABLED, AccountImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByU_A",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_A = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
-			AccountModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByU_A",
+			AccountModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByU_A",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
-			AccountModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			AccountModelImpl.FINDER_CACHE_ENABLED, AccountImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AccountModelImpl.ENTITY_CACHE_ENABLED,
-			AccountModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			AccountModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the account in the entity cache if it is enabled.
@@ -442,8 +444,14 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		Account account = (Account)EntityCacheUtil.getResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
 				AccountImpl.class, accountId, this);
 
+		if (account == _nullAccount) {
+			return null;
+		}
+
 		if (account == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -452,11 +460,17 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 						Long.valueOf(accountId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (account != null) {
 					cacheResult(account);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(AccountModelImpl.ENTITY_CACHE_ENABLED,
+						AccountImpl.class, accountId, _nullAccount);
 				}
 
 				closeSession(session);
@@ -856,6 +870,7 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	 *
 	 * @param userId the user ID
 	 * @param address the address
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching account, or <code>null</code> if a matching account could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -1322,4 +1337,19 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(AccountPersistenceImpl.class);
+	private static Account _nullAccount = new AccountImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<Account> toCacheModel() {
+				return _nullAccountCacheModel;
+			}
+		};
+
+	private static CacheModel<Account> _nullAccountCacheModel = new CacheModel<Account>() {
+			public Account toEntityModel() {
+				return _nullAccount;
+			}
+		};
 }

@@ -22,7 +22,7 @@ import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 public interface NotificationMessageGenerator {
 
 	public String generateMessage(
-			long kaleoNodeId, String notificationName,
+			String kaleoClassName, long kaleoClassPK, String notificationName,
 			String notificationTemplate, ExecutionContext executionContext)
 		throws NotificationMessageGenerationException;
 

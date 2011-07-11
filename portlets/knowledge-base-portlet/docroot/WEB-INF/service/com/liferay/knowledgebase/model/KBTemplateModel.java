@@ -17,6 +17,7 @@ package com.liferay.knowledgebase.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -241,7 +242,7 @@ public interface KBTemplateModel extends BaseModel<KBTemplate>, GroupedModel {
 	public boolean getCacheable();
 
 	/**
-	 * Determines if this k b template is cacheable.
+	 * Returns <code>true</code> if this k b template is cacheable.
 	 *
 	 * @return <code>true</code> if this k b template is cacheable; <code>false</code> otherwise
 	 */
@@ -279,6 +280,8 @@ public interface KBTemplateModel extends BaseModel<KBTemplate>, GroupedModel {
 	public int compareTo(KBTemplate kbTemplate);
 
 	public int hashCode();
+
+	public CacheModel<KBTemplate> toCacheModel();
 
 	public KBTemplate toEscapedModel();
 

@@ -14,6 +14,8 @@
 
 package com.liferay.knowledgebase.model;
 
+import com.liferay.knowledgebase.service.KBStructureLocalServiceUtil;
+
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -251,6 +253,11 @@ public class KBStructureClp extends BaseModelImpl<KBStructure>
 		throw new UnsupportedOperationException();
 	}
 
+	public void save() throws SystemException {
+		KBStructureLocalServiceUtil.updateKBStructure(this);
+	}
+
+	@Override
 	public KBStructure toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -262,6 +269,7 @@ public class KBStructureClp extends BaseModelImpl<KBStructure>
 		}
 	}
 
+	@Override
 	public Object clone() {
 		KBStructureClp clone = new KBStructureClp();
 
@@ -294,6 +302,7 @@ public class KBStructureClp extends BaseModelImpl<KBStructure>
 		return 0;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -318,10 +327,12 @@ public class KBStructureClp extends BaseModelImpl<KBStructure>
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(21);
 

@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRAssetCheckout;
-
 /**
  * @author Wesley Gong
  */
 public class HRAssetCheckoutImpl
-	extends HRAssetCheckoutModelImpl implements HRAssetCheckout {
+	extends HRAssetCheckoutBaseImpl {
 
 	public HRAssetCheckoutImpl() {
 	}

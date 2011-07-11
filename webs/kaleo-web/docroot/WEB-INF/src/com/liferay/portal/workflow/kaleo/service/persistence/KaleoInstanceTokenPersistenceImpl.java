@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -77,7 +78,8 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findByCompanyId",
+			KaleoInstanceTokenImpl.class, FINDER_CLASS_NAME_LIST,
+			"findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -85,12 +87,13 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
+			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByCompanyId",
 			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_KALEODEFINITIONID = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findByKaleoDefinitionId",
+			KaleoInstanceTokenImpl.class, FINDER_CLASS_NAME_LIST,
+			"findByKaleoDefinitionId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -98,12 +101,13 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_KALEODEFINITIONID = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
+			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByKaleoDefinitionId",
 			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_KALEOINSTANCEID = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findByKaleoInstanceId",
+			KaleoInstanceTokenImpl.class, FINDER_CLASS_NAME_LIST,
+			"findByKaleoInstanceId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -111,12 +115,13 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_KALEOINSTANCEID = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
+			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByKaleoInstanceId",
 			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_C_PKITI = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findByC_PKITI",
+			KaleoInstanceTokenImpl.class, FINDER_CLASS_NAME_LIST,
+			"findByC_PKITI",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
@@ -124,12 +129,13 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_PKITI = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
+			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByC_PKITI",
 			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_C_PKITI_CD = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findByC_PKITI_CD",
+			KaleoInstanceTokenImpl.class, FINDER_CLASS_NAME_LIST,
+			"findByC_PKITI_CD",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Date.class.getName(),
 				
@@ -137,16 +143,17 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_PKITI_CD = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
+			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByC_PKITI_CD",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Date.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			KaleoInstanceTokenImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED,
+			KaleoInstanceTokenModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -445,8 +452,14 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 		KaleoInstanceToken kaleoInstanceToken = (KaleoInstanceToken)EntityCacheUtil.getResult(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
 				KaleoInstanceTokenImpl.class, kaleoInstanceTokenId, this);
 
+		if (kaleoInstanceToken == _nullKaleoInstanceToken) {
+			return null;
+		}
+
 		if (kaleoInstanceToken == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -455,11 +468,18 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 						Long.valueOf(kaleoInstanceTokenId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (kaleoInstanceToken != null) {
 					cacheResult(kaleoInstanceToken);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(KaleoInstanceTokenModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoInstanceTokenImpl.class, kaleoInstanceTokenId,
+						_nullKaleoInstanceToken);
 				}
 
 				closeSession(session);
@@ -2895,4 +2915,20 @@ public class KaleoInstanceTokenPersistenceImpl extends BasePersistenceImpl<Kaleo
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(KaleoInstanceTokenPersistenceImpl.class);
+	private static KaleoInstanceToken _nullKaleoInstanceToken = new KaleoInstanceTokenImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<KaleoInstanceToken> toCacheModel() {
+				return _nullKaleoInstanceTokenCacheModel;
+			}
+		};
+
+	private static CacheModel<KaleoInstanceToken> _nullKaleoInstanceTokenCacheModel =
+		new CacheModel<KaleoInstanceToken>() {
+			public KaleoInstanceToken toEntityModel() {
+				return _nullKaleoInstanceToken;
+			}
+		};
 }

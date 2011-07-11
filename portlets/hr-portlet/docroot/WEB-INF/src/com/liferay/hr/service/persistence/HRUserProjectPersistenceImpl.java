@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -74,9 +75,10 @@ public class HRUserProjectPersistenceImpl extends BasePersistenceImpl<HRUserProj
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRUserProjectModelImpl.ENTITY_CACHE_ENABLED,
 			HRUserProjectModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRUserProjectImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRUserProjectModelImpl.ENTITY_CACHE_ENABLED,
-			HRUserProjectModelImpl.FINDER_CACHE_ENABLED,
+			HRUserProjectModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -369,8 +371,14 @@ public class HRUserProjectPersistenceImpl extends BasePersistenceImpl<HRUserProj
 		HRUserProject hrUserProject = (HRUserProject)EntityCacheUtil.getResult(HRUserProjectModelImpl.ENTITY_CACHE_ENABLED,
 				HRUserProjectImpl.class, hrUserProjectId, this);
 
+		if (hrUserProject == _nullHRUserProject) {
+			return null;
+		}
+
 		if (hrUserProject == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -379,11 +387,18 @@ public class HRUserProjectPersistenceImpl extends BasePersistenceImpl<HRUserProj
 						Long.valueOf(hrUserProjectId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrUserProject != null) {
 					cacheResult(hrUserProject);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRUserProjectModelImpl.ENTITY_CACHE_ENABLED,
+						HRUserProjectImpl.class, hrUserProjectId,
+						_nullHRUserProject);
 				}
 
 				closeSession(session);
@@ -671,4 +686,19 @@ public class HRUserProjectPersistenceImpl extends BasePersistenceImpl<HRUserProj
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRUserProjectPersistenceImpl.class);
+	private static HRUserProject _nullHRUserProject = new HRUserProjectImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRUserProject> toCacheModel() {
+				return _nullHRUserProjectCacheModel;
+			}
+		};
+
+	private static CacheModel<HRUserProject> _nullHRUserProjectCacheModel = new CacheModel<HRUserProject>() {
+			public HRUserProject toEntityModel() {
+				return _nullHRUserProject;
+			}
+		};
 }

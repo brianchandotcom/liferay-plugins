@@ -37,9 +37,10 @@ public class KaleoTaskAssignmentSoap implements Serializable {
 		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
+		soapModel.setKaleoClassName(model.getKaleoClassName());
+		soapModel.setKaleoClassPK(model.getKaleoClassPK());
 		soapModel.setKaleoDefinitionId(model.getKaleoDefinitionId());
 		soapModel.setKaleoNodeId(model.getKaleoNodeId());
-		soapModel.setKaleoTaskId(model.getKaleoTaskId());
 		soapModel.setAssigneeClassName(model.getAssigneeClassName());
 		soapModel.setAssigneeClassPK(model.getAssigneeClassPK());
 		soapModel.setAssigneeActionId(model.getAssigneeActionId());
@@ -156,6 +157,22 @@ public class KaleoTaskAssignmentSoap implements Serializable {
 		_modifiedDate = modifiedDate;
 	}
 
+	public String getKaleoClassName() {
+		return _kaleoClassName;
+	}
+
+	public void setKaleoClassName(String kaleoClassName) {
+		_kaleoClassName = kaleoClassName;
+	}
+
+	public long getKaleoClassPK() {
+		return _kaleoClassPK;
+	}
+
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoClassPK = kaleoClassPK;
+	}
+
 	public long getKaleoDefinitionId() {
 		return _kaleoDefinitionId;
 	}
@@ -170,14 +187,6 @@ public class KaleoTaskAssignmentSoap implements Serializable {
 
 	public void setKaleoNodeId(long kaleoNodeId) {
 		_kaleoNodeId = kaleoNodeId;
-	}
-
-	public long getKaleoTaskId() {
-		return _kaleoTaskId;
-	}
-
-	public void setKaleoTaskId(long kaleoTaskId) {
-		_kaleoTaskId = kaleoTaskId;
 	}
 
 	public String getAssigneeClassName() {
@@ -227,9 +236,10 @@ public class KaleoTaskAssignmentSoap implements Serializable {
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
+	private String _kaleoClassName;
+	private long _kaleoClassPK;
 	private long _kaleoDefinitionId;
 	private long _kaleoNodeId;
-	private long _kaleoTaskId;
 	private String _assigneeClassName;
 	private long _assigneeClassPK;
 	private String _assigneeActionId;

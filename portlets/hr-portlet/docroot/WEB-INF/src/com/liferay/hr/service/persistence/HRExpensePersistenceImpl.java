@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -73,11 +74,11 @@ public class HRExpensePersistenceImpl extends BasePersistenceImpl<HRExpense>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRExpenseModelImpl.ENTITY_CACHE_ENABLED,
-			HRExpenseModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRExpenseModelImpl.FINDER_CACHE_ENABLED, HRExpenseImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRExpenseModelImpl.ENTITY_CACHE_ENABLED,
-			HRExpenseModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRExpenseModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r expense in the entity cache if it is enabled.
@@ -370,8 +371,14 @@ public class HRExpensePersistenceImpl extends BasePersistenceImpl<HRExpense>
 		HRExpense hrExpense = (HRExpense)EntityCacheUtil.getResult(HRExpenseModelImpl.ENTITY_CACHE_ENABLED,
 				HRExpenseImpl.class, hrExpenseId, this);
 
+		if (hrExpense == _nullHRExpense) {
+			return null;
+		}
+
 		if (hrExpense == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -380,11 +387,17 @@ public class HRExpensePersistenceImpl extends BasePersistenceImpl<HRExpense>
 						Long.valueOf(hrExpenseId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrExpense != null) {
 					cacheResult(hrExpense);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRExpenseModelImpl.ENTITY_CACHE_ENABLED,
+						HRExpenseImpl.class, hrExpenseId, _nullHRExpense);
 				}
 
 				closeSession(session);
@@ -672,4 +685,19 @@ public class HRExpensePersistenceImpl extends BasePersistenceImpl<HRExpense>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRExpensePersistenceImpl.class);
+	private static HRExpense _nullHRExpense = new HRExpenseImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRExpense> toCacheModel() {
+				return _nullHRExpenseCacheModel;
+			}
+		};
+
+	private static CacheModel<HRExpense> _nullHRExpenseCacheModel = new CacheModel<HRExpense>() {
+			public HRExpense toEntityModel() {
+				return _nullHRExpense;
+			}
+		};
 }

@@ -17,6 +17,7 @@ package com.liferay.hr.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -324,7 +325,7 @@ public interface HRUserModel extends BaseModel<HRUser>, GroupedModel {
 	public boolean getBenefitsExempt();
 
 	/**
-	 * Determines if this h r user is benefits exempt.
+	 * Returns <code>true</code> if this h r user is benefits exempt.
 	 *
 	 * @return <code>true</code> if this h r user is benefits exempt; <code>false</code> otherwise
 	 */
@@ -345,7 +346,7 @@ public interface HRUserModel extends BaseModel<HRUser>, GroupedModel {
 	public boolean getOvertimeExempt();
 
 	/**
-	 * Determines if this h r user is overtime exempt.
+	 * Returns <code>true</code> if this h r user is overtime exempt.
 	 *
 	 * @return <code>true</code> if this h r user is overtime exempt; <code>false</code> otherwise
 	 */
@@ -383,6 +384,8 @@ public interface HRUserModel extends BaseModel<HRUser>, GroupedModel {
 	public int compareTo(HRUser hrUser);
 
 	public int hashCode();
+
+	public CacheModel<HRUser> toCacheModel();
 
 	public HRUser toEscapedModel();
 

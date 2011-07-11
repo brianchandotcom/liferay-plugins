@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -566,8 +567,13 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 			return (KBArticle)this;
 		}
 		else {
-			return (KBArticle)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (KBArticle)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -683,6 +689,117 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		kbArticleModelImpl._originalVersion = kbArticleModelImpl._version;
 
 		kbArticleModelImpl._setOriginalVersion = false;
+	}
+
+	@Override
+	public CacheModel<KBArticle> toCacheModel() {
+		KBArticleCacheModel kbArticleCacheModel = new KBArticleCacheModel();
+
+		kbArticleCacheModel.uuid = getUuid();
+
+		String uuid = kbArticleCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			kbArticleCacheModel.uuid = null;
+		}
+
+		kbArticleCacheModel.kbArticleId = getKbArticleId();
+
+		kbArticleCacheModel.resourcePrimKey = getResourcePrimKey();
+
+		kbArticleCacheModel.groupId = getGroupId();
+
+		kbArticleCacheModel.companyId = getCompanyId();
+
+		kbArticleCacheModel.userId = getUserId();
+
+		kbArticleCacheModel.userName = getUserName();
+
+		String userName = kbArticleCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			kbArticleCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			kbArticleCacheModel.createDate = createDate.getTime();
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			kbArticleCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+
+		kbArticleCacheModel.rootResourcePrimKey = getRootResourcePrimKey();
+
+		kbArticleCacheModel.parentResourcePrimKey = getParentResourcePrimKey();
+
+		kbArticleCacheModel.version = getVersion();
+
+		kbArticleCacheModel.title = getTitle();
+
+		String title = kbArticleCacheModel.title;
+
+		if ((title != null) && (title.length() == 0)) {
+			kbArticleCacheModel.title = null;
+		}
+
+		kbArticleCacheModel.content = getContent();
+
+		String content = kbArticleCacheModel.content;
+
+		if ((content != null) && (content.length() == 0)) {
+			kbArticleCacheModel.content = null;
+		}
+
+		kbArticleCacheModel.description = getDescription();
+
+		String description = kbArticleCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			kbArticleCacheModel.description = null;
+		}
+
+		kbArticleCacheModel.kbTemplateId = getKbTemplateId();
+
+		kbArticleCacheModel.priority = getPriority();
+
+		kbArticleCacheModel.sections = getSections();
+
+		String sections = kbArticleCacheModel.sections;
+
+		if ((sections != null) && (sections.length() == 0)) {
+			kbArticleCacheModel.sections = null;
+		}
+
+		kbArticleCacheModel.viewCount = getViewCount();
+
+		kbArticleCacheModel.latest = getLatest();
+
+		kbArticleCacheModel.main = getMain();
+
+		kbArticleCacheModel.status = getStatus();
+
+		kbArticleCacheModel.statusByUserId = getStatusByUserId();
+
+		kbArticleCacheModel.statusByUserName = getStatusByUserName();
+
+		String statusByUserName = kbArticleCacheModel.statusByUserName;
+
+		if ((statusByUserName != null) && (statusByUserName.length() == 0)) {
+			kbArticleCacheModel.statusByUserName = null;
+		}
+
+		Date statusDate = getStatusDate();
+
+		if (statusDate != null) {
+			kbArticleCacheModel.statusDate = statusDate.getTime();
+		}
+
+		return kbArticleCacheModel;
 	}
 
 	@Override
@@ -896,4 +1013,5 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private transient ExpandoBridge _expandoBridge;
+	private KBArticle _escapedModelProxy;
 }

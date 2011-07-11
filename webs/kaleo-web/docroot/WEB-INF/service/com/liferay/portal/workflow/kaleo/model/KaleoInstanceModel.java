@@ -17,6 +17,7 @@ package com.liferay.portal.workflow.kaleo.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -269,7 +270,7 @@ public interface KaleoInstanceModel extends BaseModel<KaleoInstance>,
 	public boolean getCompleted();
 
 	/**
-	 * Determines if this kaleo instance is completed.
+	 * Returns <code>true</code> if this kaleo instance is completed.
 	 *
 	 * @return <code>true</code> if this kaleo instance is completed; <code>false</code> otherwise
 	 */
@@ -336,6 +337,8 @@ public interface KaleoInstanceModel extends BaseModel<KaleoInstance>,
 	public int compareTo(KaleoInstance kaleoInstance);
 
 	public int hashCode();
+
+	public CacheModel<KaleoInstance> toCacheModel();
 
 	public KaleoInstance toEscapedModel();
 

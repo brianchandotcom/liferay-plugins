@@ -14,13 +14,11 @@
 
 package com.liferay.wsrp.model.impl;
 
-import com.liferay.wsrp.model.WSRPProducer;
-
 /**
  * @author Brian Wing Shun Chan
  */
 public class WSRPProducerImpl
-	extends WSRPProducerModelImpl implements WSRPProducer {
+	extends WSRPProducerBaseImpl {
 
 	public WSRPProducerImpl() {
 	}

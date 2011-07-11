@@ -40,13 +40,22 @@ public class Transition {
 		return _targetNode;
 	}
 
+	public Timer getTimer() {
+		return _timer;
+	}
+
 	public boolean isDefault() {
 		return _default;
+	}
+
+	public void setTimers(Timer timer) {
+		_timer = timer;
 	}
 
 	private boolean _default;
 	private String _name;
 	private Node _sourceNode;
 	private Node _targetNode;
+	private Timer _timer;
 
 }

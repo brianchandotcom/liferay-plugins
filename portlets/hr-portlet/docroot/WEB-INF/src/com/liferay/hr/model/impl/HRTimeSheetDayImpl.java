@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRTimeSheetDay;
-
 /**
  * @author Wesley Gong
  */
 public class HRTimeSheetDayImpl
-	extends HRTimeSheetDayModelImpl implements HRTimeSheetDay {
+	extends HRTimeSheetDayBaseImpl {
 
 	public HRTimeSheetDayImpl() {
 	}

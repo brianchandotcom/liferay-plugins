@@ -14,6 +14,8 @@
 
 package com.liferay.opensocial.model;
 
+import com.liferay.opensocial.service.OAuthTokenLocalServiceUtil;
+
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -178,6 +180,11 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		_expiration = expiration;
 	}
 
+	public void save() throws SystemException {
+		OAuthTokenLocalServiceUtil.updateOAuthToken(this);
+	}
+
+	@Override
 	public OAuthToken toEscapedModel() {
 		if (isEscapedModel()) {
 			return this;
@@ -189,6 +196,7 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public Object clone() {
 		OAuthTokenClp clone = new OAuthTokenClp();
 
@@ -224,6 +232,7 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
@@ -248,10 +257,12 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		}
 	}
 
+	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
 	}
 
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(29);
 
