@@ -67,37 +67,6 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class SolrIndexSearcherImpl implements IndexSearcher {
 
-	public Hits search(
-			long companyId, Query query, Sort[] sorts, int start, int end)
-		throws SearchException {
-
-		try {
-			SolrQuery solrQuery = translateQuery(
-				companyId, query, sorts, start, end);
-
-			QueryResponse queryResponse = _solrServer.query(solrQuery);
-
-			boolean allResults = false;
-
-			if (solrQuery.getRows() == 0) {
-				allResults = true;
-			}
-
-			return subset(
-				solrQuery, query, query.getQueryConfig(), queryResponse,
-				allResults);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			if (!_swallowException) {
-				throw new SearchException(e.getMessage());
-			}
-
-			return new HitsImpl();
-		}
-	}
-
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
 
