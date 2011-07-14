@@ -17,7 +17,6 @@ package com.liferay.knowledgebase.service.impl;
 import com.liferay.knowledgebase.KBTemplateContentException;
 import com.liferay.knowledgebase.KBTemplateTitleException;
 import com.liferay.knowledgebase.NoSuchTemplateException;
-import com.liferay.knowledgebase.RequiredKBTemplateException;
 import com.liferay.knowledgebase.admin.social.AdminActivityKeys;
 import com.liferay.knowledgebase.model.KBTemplate;
 import com.liferay.knowledgebase.service.base.KBTemplateLocalServiceBaseImpl;
@@ -53,8 +52,8 @@ import java.util.Map;
 public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 
 	public KBTemplate addKBTemplate(
-			long userId, String title, String content, int engineType,
-			boolean cacheable, ServiceContext serviceContext)
+			long userId, String title, String content,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// KB template
@@ -78,8 +77,6 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		kbTemplate.setModifiedDate(serviceContext.getModifiedDate(now));
 		kbTemplate.setTitle(title);
 		kbTemplate.setContent(content);
-		kbTemplate.setEngineType(engineType);
-		kbTemplate.setCacheable(cacheable);
 
 		kbTemplatePersistence.update(kbTemplate, false);
 
@@ -108,27 +105,26 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 	}
 
 	public void addKBTemplateResources(
-			KBTemplate kbTemplate, boolean addCommunityPermissions,
+			KBTemplate kbTemplate, boolean addGroupPermissions,
 			boolean addGuestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.addResources(
 			kbTemplate.getCompanyId(), kbTemplate.getGroupId(),
 			kbTemplate.getUserId(), KBTemplate.class.getName(),
-			kbTemplate.getKbTemplateId(), false, addCommunityPermissions,
+			kbTemplate.getKbTemplateId(), false, addGroupPermissions,
 			addGuestPermissions);
 	}
 
 	public void addKBTemplateResources(
-			KBTemplate kbTemplate, String[] communityPermissions,
+			KBTemplate kbTemplate, String[] groupPermissions,
 			String[] guestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.addModelResources(
 			kbTemplate.getCompanyId(), kbTemplate.getGroupId(),
 			kbTemplate.getUserId(), KBTemplate.class.getName(),
-			kbTemplate.getKbTemplateId(), communityPermissions,
-			guestPermissions);
+			kbTemplate.getKbTemplateId(), groupPermissions, guestPermissions);
 	}
 
 	public void deleteGroupKBTemplates(long groupId)
@@ -145,13 +141,6 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 	@Override
 	public void deleteKBTemplate(KBTemplate kbTemplate)
 		throws PortalException, SystemException {
-
-		int count = kbArticleLocalService.getKBTemplateKBArticlesCount(
-			kbTemplate.getKbTemplateId());
-
-		if (count > 0) {
-			throw new RequiredKBTemplateException(kbTemplate);
-		}
 
 		// KB template
 
@@ -228,8 +217,8 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 	}
 
 	public KBTemplate updateKBTemplate(
-			long kbTemplateId, String title, String content, int engineType,
-			boolean cacheable, ServiceContext serviceContext)
+			long kbTemplateId, String title, String content,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// KB template
@@ -242,8 +231,6 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		kbTemplate.setModifiedDate(serviceContext.getModifiedDate(null));
 		kbTemplate.setTitle(title);
 		kbTemplate.setContent(content);
-		kbTemplate.setEngineType(engineType);
-		kbTemplate.setCacheable(cacheable);
 
 		kbTemplatePersistence.update(kbTemplate, false);
 
@@ -268,14 +255,14 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 	}
 
 	public void updateKBTemplateResources(
-			KBTemplate kbTemplate, String[] communityPermissions,
+			KBTemplate kbTemplate, String[] groupPermissions,
 			String[] guestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.updateResources(
 			kbTemplate.getCompanyId(), kbTemplate.getGroupId(),
 			KBTemplate.class.getName(), kbTemplate.getKbTemplateId(),
-			communityPermissions, guestPermissions);
+			groupPermissions, guestPermissions);
 	}
 
 	protected DynamicQuery buildDynamicQuery(

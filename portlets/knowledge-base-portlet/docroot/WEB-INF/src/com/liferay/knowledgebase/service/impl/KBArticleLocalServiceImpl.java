@@ -16,9 +16,7 @@ package com.liferay.knowledgebase.service.impl;
 
 import com.liferay.knowledgebase.KBArticleContentException;
 import com.liferay.knowledgebase.KBArticlePriorityException;
-import com.liferay.knowledgebase.KBArticleSectionException;
 import com.liferay.knowledgebase.KBArticleTitleException;
-import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.admin.social.AdminActivityKeys;
 import com.liferay.knowledgebase.admin.util.AdminSubscriptionSender;
 import com.liferay.knowledgebase.admin.util.AdminUtil;
@@ -102,8 +100,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 	public KBArticle addKBArticle(
 			long userId, long parentResourcePrimKey, String title,
-			String content, String description, long kbTemplateId,
-			String[] sections, String dirName, ServiceContext serviceContext)
+			String content, String description, String[] sections,
+			String dirName, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// KB article
@@ -113,7 +111,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		double priority = getPriority(groupId, parentResourcePrimKey);
 		Date now = new Date();
 
-		validate(title, content, sections);
+		validate(title, content);
 
 		long kbArticleId = counterLocalService.increment();
 
@@ -138,7 +136,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setTitle(title);
 		kbArticle.setContent(content);
 		kbArticle.setDescription(description);
-		kbArticle.setKbTemplateId(kbTemplateId);
 		kbArticle.setPriority(priority);
 		kbArticle.setSections(
 			StringUtil.merge(AdminUtil.escapeSections(sections)));
@@ -184,27 +181,26 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	public void addKBArticleResources(
-			KBArticle kbArticle, boolean addCommunityPermissions,
+			KBArticle kbArticle, boolean addGroupPermissions,
 			boolean addGuestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.addResources(
 			kbArticle.getCompanyId(), kbArticle.getGroupId(),
 			kbArticle.getUserId(), KBArticle.class.getName(),
-			kbArticle.getResourcePrimKey(), false, addCommunityPermissions,
+			kbArticle.getResourcePrimKey(), false, addGroupPermissions,
 			addGuestPermissions);
 	}
 
 	public void addKBArticleResources(
-			KBArticle kbArticle, String[] communityPermissions,
+			KBArticle kbArticle, String[] groupPermissions,
 			String[] guestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.addModelResources(
 			kbArticle.getCompanyId(), kbArticle.getGroupId(),
 			kbArticle.getUserId(), KBArticle.class.getName(),
-			kbArticle.getResourcePrimKey(), communityPermissions,
-			guestPermissions);
+			kbArticle.getResourcePrimKey(), groupPermissions, guestPermissions);
 	}
 
 	public void checkAttachments() throws PortalException, SystemException {
@@ -509,21 +505,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		return kbArticlePersistence.countByR_S(resourcePrimKey, status);
 	}
 
-	public List<KBArticle> getKBTemplateKBArticles(
-			long kbTemplateId, int start, int end,
-			OrderByComparator orderByComparator)
-		throws SystemException {
-
-		return kbTemplatePersistence.getKBArticles(
-			kbTemplateId, start, end, orderByComparator);
-	}
-
-	public int getKBTemplateKBArticlesCount(long kbTemplateId)
-		throws SystemException {
-
-		return kbTemplatePersistence.getKBArticlesSize(kbTemplateId);
-	}
-
 	public KBArticle getLatestKBArticle(long resourcePrimKey, int status)
 		throws PortalException, SystemException {
 
@@ -738,8 +719,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 	public KBArticle updateKBArticle(
 			long userId, long resourcePrimKey, String title, String content,
-			String description, long kbTemplateId, String[] sections,
-			String dirName, ServiceContext serviceContext)
+			String description, String[] sections, String dirName,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// KB article
@@ -748,7 +729,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		int version = KBArticleConstants.DEFAULT_VERSION;
 		int status = WorkflowConstants.STATUS_DRAFT;
 
-		validate(title, content, sections);
+		validate(title, content);
 
 		KBArticle oldKBArticle = getLatestKBArticle(
 			resourcePrimKey, WorkflowConstants.STATUS_ANY);
@@ -793,7 +774,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setTitle(title);
 		kbArticle.setContent(content);
 		kbArticle.setDescription(description);
-		kbArticle.setKbTemplateId(kbTemplateId);
 		kbArticle.setPriority(oldPriority);
 		kbArticle.setSections(
 			StringUtil.merge(AdminUtil.escapeSections(sections)));
@@ -855,34 +835,14 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	public void updateKBArticleResources(
-			KBArticle kbArticle, String[] communityPermissions,
+			KBArticle kbArticle, String[] groupPermissions,
 			String[] guestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.updateResources(
 			kbArticle.getCompanyId(), kbArticle.getGroupId(),
 			KBArticle.class.getName(), kbArticle.getResourcePrimKey(),
-			communityPermissions, guestPermissions);
-	}
-
-	public void updateKBArticlesKBTemplates(long[] kbArticleIds)
-		throws SystemException {
-
-		for (long kbArticleId : kbArticleIds) {
-			KBArticle kbArticle = null;
-
-			try {
-				kbArticle = kbArticlePersistence.findByPrimaryKey(kbArticleId);
-			}
-			catch (NoSuchArticleException nsae) {
-				continue;
-			}
-
-			kbArticle.setKbTemplateId(
-				KBArticleConstants.DEFAULT_KB_TEMPLATE_ID);
-
-			kbArticlePersistence.update(kbArticle, false);
-		}
+			groupPermissions, guestPermissions);
 	}
 
 	public void updateKBArticlesPriorities(
@@ -1474,7 +1434,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 	}
 
-	protected void validate(String title, String content, String[] sections)
+	protected void validate(String title, String content)
 		throws PortalException {
 
 		if (Validator.isNull(title)) {
@@ -1483,10 +1443,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		if (Validator.isNull(content)) {
 			throw new KBArticleContentException();
-		}
-
-		if (Validator.isNull(sections)) {
-			throw new KBArticleSectionException();
 		}
 	}
 
