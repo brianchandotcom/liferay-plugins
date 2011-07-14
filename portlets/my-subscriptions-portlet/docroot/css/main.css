@@ -1,0 +1,28 @@
+/* ---------- Portal ---------- */
+
+.my-subscriptions-portlet .aui-fieldset {
+	padding: 0px;
+}
+
+.my-subscriptions-portlet .aui-button-holder {
+	margin: 10px 0;
+}
+
+.my-subscriptions-portlet .asset-name {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.my-subscriptions-portlet .asset-name input {
+	display: none;
+}
+
+.my-subscriptions-portlet .results-row td, 
+.my-subscriptions-portlet .results-row.hover td {
+	border-style: none;
+}
+
+.my-subscriptions-portlet .results-row.asset-name td,
+.my-subscriptions-portlet .results-row.asset-name.alt td {
+	background: #dcdcdc;
+}
