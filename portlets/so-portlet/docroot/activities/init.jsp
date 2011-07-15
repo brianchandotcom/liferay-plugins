@@ -32,7 +32,9 @@ String defaultTabs1 = preferences.getValue("defaultTabs1", "friends");
 
 String tabs1 = ParamUtil.getString(request, "tabs1", defaultTabs1);
 
-preferences.setValue("defaultTabs1", tabs1);
+if (!defaultTabs1.equals(tabs1)) {
+	preferences.setValue("defaultTabs1", tabs1);
 
-preferences.store();
+	preferences.store();
+}
 %>
