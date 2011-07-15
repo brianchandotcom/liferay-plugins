@@ -17,6 +17,7 @@ package com.liferay.chat.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -122,7 +123,7 @@ public interface StatusModel extends BaseModel<Status> {
 	public boolean getOnline();
 
 	/**
-	 * Determines if this status is online.
+	 * Returns <code>true</code> if this status is online.
 	 *
 	 * @return <code>true</code> if this status is online; <code>false</code> otherwise
 	 */
@@ -143,7 +144,7 @@ public interface StatusModel extends BaseModel<Status> {
 	public boolean getAwake();
 
 	/**
-	 * Determines if this status is awake.
+	 * Returns <code>true</code> if this status is awake.
 	 *
 	 * @return <code>true</code> if this status is awake; <code>false</code> otherwise
 	 */
@@ -194,7 +195,7 @@ public interface StatusModel extends BaseModel<Status> {
 	public boolean getPlaySound();
 
 	/**
-	 * Determines if this status is play sound.
+	 * Returns <code>true</code> if this status is play sound.
 	 *
 	 * @return <code>true</code> if this status is play sound; <code>false</code> otherwise
 	 */
@@ -232,6 +233,8 @@ public interface StatusModel extends BaseModel<Status> {
 	public int compareTo(Status status);
 
 	public int hashCode();
+
+	public CacheModel<Status> toCacheModel();
 
 	public Status toEscapedModel();
 

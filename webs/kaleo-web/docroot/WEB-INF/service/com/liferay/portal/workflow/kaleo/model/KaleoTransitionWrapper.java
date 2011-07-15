@@ -354,7 +354,7 @@ public class KaleoTransitionWrapper implements KaleoTransition {
 	}
 
 	/**
-	* Determines if this kaleo transition is default transition.
+	* Returns <code>true</code> if this kaleo transition is default transition.
 	*
 	* @return <code>true</code> if this kaleo transition is default transition; <code>false</code> otherwise
 	*/
@@ -427,6 +427,10 @@ public class KaleoTransitionWrapper implements KaleoTransition {
 		return _kaleoTransition.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoTransition> toCacheModel() {
+		return _kaleoTransition.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoTransition toEscapedModel() {
 		return new KaleoTransitionWrapper(_kaleoTransition.toEscapedModel());
 	}
@@ -438,6 +442,11 @@ public class KaleoTransitionWrapper implements KaleoTransition {
 
 	public java.lang.String toXmlString() {
 		return _kaleoTransition.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoTransition.save();
 	}
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode getSourceKaleoNode()

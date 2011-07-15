@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -150,8 +151,13 @@ public class JIRAChangeGroupModelImpl extends BaseModelImpl<JIRAChangeGroup>
 			return (JIRAChangeGroup)this;
 		}
 		else {
-			return (JIRAChangeGroup)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (JIRAChangeGroup)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -234,6 +240,34 @@ public class JIRAChangeGroupModelImpl extends BaseModelImpl<JIRAChangeGroup>
 	}
 
 	@Override
+	public CacheModel<JIRAChangeGroup> toCacheModel() {
+		JIRAChangeGroupCacheModel jiraChangeGroupCacheModel = new JIRAChangeGroupCacheModel();
+
+		jiraChangeGroupCacheModel.jiraChangeGroupId = getJiraChangeGroupId();
+
+		jiraChangeGroupCacheModel.jiraUserId = getJiraUserId();
+
+		String jiraUserId = jiraChangeGroupCacheModel.jiraUserId;
+
+		if ((jiraUserId != null) && (jiraUserId.length() == 0)) {
+			jiraChangeGroupCacheModel.jiraUserId = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			jiraChangeGroupCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			jiraChangeGroupCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		jiraChangeGroupCacheModel.jiraIssueId = getJiraIssueId();
+
+		return jiraChangeGroupCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(9);
 
@@ -288,4 +322,5 @@ public class JIRAChangeGroupModelImpl extends BaseModelImpl<JIRAChangeGroup>
 	private Date _createDate;
 	private long _jiraIssueId;
 	private transient ExpandoBridge _expandoBridge;
+	private JIRAChangeGroup _escapedModelProxy;
 }

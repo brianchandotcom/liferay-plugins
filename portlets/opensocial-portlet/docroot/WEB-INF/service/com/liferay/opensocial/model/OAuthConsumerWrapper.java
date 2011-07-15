@@ -127,21 +127,21 @@ public class OAuthConsumerWrapper implements OAuthConsumer {
 	}
 
 	/**
-	* Returns the gadget ID of this o auth consumer.
+	* Returns the gadget key of this o auth consumer.
 	*
-	* @return the gadget ID of this o auth consumer
+	* @return the gadget key of this o auth consumer
 	*/
-	public long getGadgetId() {
-		return _oAuthConsumer.getGadgetId();
+	public java.lang.String getGadgetKey() {
+		return _oAuthConsumer.getGadgetKey();
 	}
 
 	/**
-	* Sets the gadget ID of this o auth consumer.
+	* Sets the gadget key of this o auth consumer.
 	*
-	* @param gadgetId the gadget ID of this o auth consumer
+	* @param gadgetKey the gadget key of this o auth consumer
 	*/
-	public void setGadgetId(long gadgetId) {
-		_oAuthConsumer.setGadgetId(gadgetId);
+	public void setGadgetKey(java.lang.String gadgetKey) {
+		_oAuthConsumer.setGadgetKey(gadgetKey);
 	}
 
 	/**
@@ -272,6 +272,10 @@ public class OAuthConsumerWrapper implements OAuthConsumer {
 		return _oAuthConsumer.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.opensocial.model.OAuthConsumer> toCacheModel() {
+		return _oAuthConsumer.toCacheModel();
+	}
+
 	public com.liferay.opensocial.model.OAuthConsumer toEscapedModel() {
 		return new OAuthConsumerWrapper(_oAuthConsumer.toEscapedModel());
 	}
@@ -283,6 +287,11 @@ public class OAuthConsumerWrapper implements OAuthConsumer {
 
 	public java.lang.String toXmlString() {
 		return _oAuthConsumer.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_oAuthConsumer.save();
 	}
 
 	public java.lang.String getKeyName() {

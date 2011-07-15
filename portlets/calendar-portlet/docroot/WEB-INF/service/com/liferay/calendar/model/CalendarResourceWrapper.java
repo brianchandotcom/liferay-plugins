@@ -521,7 +521,7 @@ public class CalendarResourceWrapper implements CalendarResource {
 	}
 
 	/**
-	* Determines if this calendar resource is active.
+	* Returns <code>true</code> if this calendar resource is active.
 	*
 	* @return <code>true</code> if this calendar resource is active; <code>false</code> otherwise
 	*/
@@ -594,6 +594,10 @@ public class CalendarResourceWrapper implements CalendarResource {
 		return _calendarResource.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.calendar.model.CalendarResource> toCacheModel() {
+		return _calendarResource.toCacheModel();
+	}
+
 	public com.liferay.calendar.model.CalendarResource toEscapedModel() {
 		return new CalendarResourceWrapper(_calendarResource.toEscapedModel());
 	}
@@ -605,6 +609,11 @@ public class CalendarResourceWrapper implements CalendarResource {
 
 	public java.lang.String toXmlString() {
 		return _calendarResource.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_calendarResource.save();
 	}
 
 	public CalendarResource getWrappedCalendarResource() {

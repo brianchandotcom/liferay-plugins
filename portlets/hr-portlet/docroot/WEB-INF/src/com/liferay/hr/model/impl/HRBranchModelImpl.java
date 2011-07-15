@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -202,8 +203,13 @@ public class HRBranchModelImpl extends BaseModelImpl<HRBranch>
 			return (HRBranch)this;
 		}
 		else {
-			return (HRBranch)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRBranch)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -286,6 +292,49 @@ public class HRBranchModelImpl extends BaseModelImpl<HRBranch>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRBranch> toCacheModel() {
+		HRBranchCacheModel hrBranchCacheModel = new HRBranchCacheModel();
+
+		hrBranchCacheModel.hrBranchId = getHrBranchId();
+
+		hrBranchCacheModel.groupId = getGroupId();
+
+		hrBranchCacheModel.companyId = getCompanyId();
+
+		hrBranchCacheModel.userId = getUserId();
+
+		hrBranchCacheModel.userName = getUserName();
+
+		String userName = hrBranchCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrBranchCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrBranchCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrBranchCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrBranchCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrBranchCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrBranchCacheModel.organizationId = getOrganizationId();
+
+		return hrBranchCacheModel;
 	}
 
 	@Override
@@ -372,4 +421,5 @@ public class HRBranchModelImpl extends BaseModelImpl<HRBranch>
 	private Date _modifiedDate;
 	private long _organizationId;
 	private transient ExpandoBridge _expandoBridge;
+	private HRBranch _escapedModelProxy;
 }

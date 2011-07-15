@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -76,8 +77,8 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_ACCOUNTID = new FinderPath(FolderModelImpl.ENTITY_CACHE_ENABLED,
-			FolderModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByAccountId",
+			FolderModelImpl.FINDER_CACHE_ENABLED, FolderImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByAccountId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -85,22 +86,23 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_ACCOUNTID = new FinderPath(FolderModelImpl.ENTITY_CACHE_ENABLED,
-			FolderModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByAccountId", new String[] { Long.class.getName() });
+			FolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByAccountId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_A_F = new FinderPath(FolderModelImpl.ENTITY_CACHE_ENABLED,
-			FolderModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_ENTITY,
-			"fetchByA_F",
+			FolderModelImpl.FINDER_CACHE_ENABLED, FolderImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByA_F",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_A_F = new FinderPath(FolderModelImpl.ENTITY_CACHE_ENABLED,
-			FolderModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByA_F",
+			FolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByA_F",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(FolderModelImpl.ENTITY_CACHE_ENABLED,
-			FolderModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			FolderModelImpl.FINDER_CACHE_ENABLED, FolderImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(FolderModelImpl.ENTITY_CACHE_ENABLED,
-			FolderModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			FolderModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the folder in the entity cache if it is enabled.
@@ -433,8 +435,14 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 		Folder folder = (Folder)EntityCacheUtil.getResult(FolderModelImpl.ENTITY_CACHE_ENABLED,
 				FolderImpl.class, folderId, this);
 
+		if (folder == _nullFolder) {
+			return null;
+		}
+
 		if (folder == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -443,11 +451,17 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 						Long.valueOf(folderId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (folder != null) {
 					cacheResult(folder);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(FolderModelImpl.ENTITY_CACHE_ENABLED,
+						FolderImpl.class, folderId, _nullFolder);
 				}
 
 				closeSession(session);
@@ -849,6 +863,7 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 	 *
 	 * @param accountId the account ID
 	 * @param fullName the full name
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching folder, or <code>null</code> if a matching folder could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -1315,4 +1330,19 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(FolderPersistenceImpl.class);
+	private static Folder _nullFolder = new FolderImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<Folder> toCacheModel() {
+				return _nullFolderCacheModel;
+			}
+		};
+
+	private static CacheModel<Folder> _nullFolderCacheModel = new CacheModel<Folder>() {
+			public Folder toEntityModel() {
+				return _nullFolder;
+			}
+		};
 }

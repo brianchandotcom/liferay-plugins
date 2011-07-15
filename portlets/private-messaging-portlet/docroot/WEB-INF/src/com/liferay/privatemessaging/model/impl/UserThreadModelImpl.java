@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -227,8 +228,13 @@ public class UserThreadModelImpl extends BaseModelImpl<UserThread>
 			return (UserThread)this;
 		}
 		else {
-			return (UserThread)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (UserThread)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -322,6 +328,45 @@ public class UserThreadModelImpl extends BaseModelImpl<UserThread>
 		userThreadModelImpl._originalMbThreadId = userThreadModelImpl._mbThreadId;
 
 		userThreadModelImpl._setOriginalMbThreadId = false;
+	}
+
+	@Override
+	public CacheModel<UserThread> toCacheModel() {
+		UserThreadCacheModel userThreadCacheModel = new UserThreadCacheModel();
+
+		userThreadCacheModel.userThreadId = getUserThreadId();
+
+		userThreadCacheModel.companyId = getCompanyId();
+
+		userThreadCacheModel.userId = getUserId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			userThreadCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			userThreadCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			userThreadCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			userThreadCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		userThreadCacheModel.mbThreadId = getMbThreadId();
+
+		userThreadCacheModel.topMBMessageId = getTopMBMessageId();
+
+		userThreadCacheModel.read = getRead();
+
+		userThreadCacheModel.deleted = getDeleted();
+
+		return userThreadCacheModel;
 	}
 
 	@Override
@@ -419,4 +464,5 @@ public class UserThreadModelImpl extends BaseModelImpl<UserThread>
 	private boolean _read;
 	private boolean _deleted;
 	private transient ExpandoBridge _expandoBridge;
+	private UserThread _escapedModelProxy;
 }

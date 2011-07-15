@@ -17,6 +17,7 @@ package com.liferay.portal.workflow.kaleo.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -298,7 +299,7 @@ public interface KaleoTaskAssignmentInstanceModel extends BaseModel<KaleoTaskAss
 	public boolean getCompleted();
 
 	/**
-	 * Determines if this kaleo task assignment instance is completed.
+	 * Returns <code>true</code> if this kaleo task assignment instance is completed.
 	 *
 	 * @return <code>true</code> if this kaleo task assignment instance is completed; <code>false</code> otherwise
 	 */
@@ -351,6 +352,8 @@ public interface KaleoTaskAssignmentInstanceModel extends BaseModel<KaleoTaskAss
 		KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance);
 
 	public int hashCode();
+
+	public CacheModel<KaleoTaskAssignmentInstance> toCacheModel();
 
 	public KaleoTaskAssignmentInstance toEscapedModel();
 

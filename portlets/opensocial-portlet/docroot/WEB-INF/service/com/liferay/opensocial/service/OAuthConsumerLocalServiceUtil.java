@@ -204,7 +204,7 @@ public class OAuthConsumerLocalServiceUtil {
 	}
 
 	/**
-	* Updates the o auth consumer in the database. Also notifies the appropriate model listeners.
+	* Updates the o auth consumer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param oAuthConsumer the o auth consumer
 	* @return the o auth consumer that was updated
@@ -217,7 +217,7 @@ public class OAuthConsumerLocalServiceUtil {
 	}
 
 	/**
-	* Updates the o auth consumer in the database. Also notifies the appropriate model listeners.
+	* Updates the o auth consumer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param oAuthConsumer the o auth consumer
 	* @param merge whether to merge the o auth consumer with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -249,42 +249,48 @@ public class OAuthConsumerLocalServiceUtil {
 	}
 
 	public static com.liferay.opensocial.model.OAuthConsumer addOAuthConsumer(
-		long companyId, long gadgetId, java.lang.String serviceName,
-		java.lang.String consumerKey, java.lang.String consumerSecret,
-		java.lang.String keyType)
+		long companyId, java.lang.String gadgetKey,
+		java.lang.String serviceName, java.lang.String consumerKey,
+		java.lang.String consumerSecret, java.lang.String keyType)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .addOAuthConsumer(companyId, gadgetId, serviceName,
+				   .addOAuthConsumer(companyId, gadgetKey, serviceName,
 			consumerKey, consumerSecret, keyType);
 	}
 
-	public static void deleteOAuthConsumers(long gadgetId)
+	public static void deleteOAuthConsumers(java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteOAuthConsumers(gadgetId);
+		getService().deleteOAuthConsumers(gadgetKey);
+	}
+
+	public static com.liferay.opensocial.model.OAuthConsumer fetchOAuthConsumer(
+		java.lang.String gadgetKey, java.lang.String serviceName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchOAuthConsumer(gadgetKey, serviceName);
 	}
 
 	public static com.liferay.opensocial.model.OAuthConsumer getOAuthConsumer(
-		long gadgetId, java.lang.String serviceName)
+		java.lang.String gadgetKey, java.lang.String serviceName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getOAuthConsumer(gadgetId, serviceName);
+		return getService().getOAuthConsumer(gadgetKey, serviceName);
 	}
 
 	public static java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
-		long gadgetId)
+		java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getOAuthConsumers(gadgetId);
+		return getService().getOAuthConsumers(gadgetKey);
 	}
 
 	public static java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
-		long gadgetId, int start, int end)
+		java.lang.String gadgetKey, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getOAuthConsumers(gadgetId, start, end);
+		return getService().getOAuthConsumers(gadgetKey, start, end);
 	}
 
-	public static int getOAuthConsumersCount(long gadgetId)
+	public static int getOAuthConsumersCount(java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getOAuthConsumersCount(gadgetId);
+		return getService().getOAuthConsumersCount(gadgetKey);
 	}
 
 	public static com.liferay.opensocial.model.OAuthConsumer updateOAuthConsumer(

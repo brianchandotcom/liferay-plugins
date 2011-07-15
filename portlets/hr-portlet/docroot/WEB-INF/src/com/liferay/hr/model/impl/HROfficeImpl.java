@@ -14,12 +14,10 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HROffice;
-
 /**
  * @author Wesley Gong
  */
-public class HROfficeImpl extends HROfficeModelImpl implements HROffice {
+public class HROfficeImpl extends HROfficeBaseImpl {
 
 	public HROfficeImpl() {
 	}

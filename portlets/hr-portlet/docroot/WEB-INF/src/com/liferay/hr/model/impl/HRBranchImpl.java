@@ -14,12 +14,10 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRBranch;
-
 /**
  * @author Wesley Gong
  */
-public class HRBranchImpl extends HRBranchModelImpl implements HRBranch {
+public class HRBranchImpl extends HRBranchBaseImpl {
 
 	public HRBranchImpl() {
 	}

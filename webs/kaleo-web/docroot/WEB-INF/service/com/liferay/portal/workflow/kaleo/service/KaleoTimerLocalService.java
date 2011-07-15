@@ -187,7 +187,7 @@ public interface KaleoTimerLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the kaleo timer in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo timer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTimer the kaleo timer
 	* @return the kaleo timer that was updated
@@ -198,7 +198,7 @@ public interface KaleoTimerLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the kaleo timer in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo timer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTimer the kaleo timer
 	* @param merge whether to merge the kaleo timer with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -225,20 +225,20 @@ public interface KaleoTimerLocalService {
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoTimer addKaleoTimer(
-		long kaleoDefinitionId, long kaleoNodeId, long parentKaleoNodeId,
+		java.lang.String kaleoClassName, long kaleoClassPK,
+		long kaleoDefinitionId,
 		com.liferay.portal.workflow.kaleo.definition.Timer timer,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimer getDefaultKaleoTimer(
-		long parentKaleoNodeId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> getKaleoTimers(
+		java.lang.String kaleoClassName, long kaleoClassPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> getKaleoTimers(
-		long parentKaleoNodeId)
+		java.lang.String kaleoClassName, long kaleoClassPK, boolean blocking)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }

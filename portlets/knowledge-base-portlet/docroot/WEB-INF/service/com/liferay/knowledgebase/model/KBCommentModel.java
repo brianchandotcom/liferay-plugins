@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.AttachedModel;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -249,7 +250,7 @@ public interface KBCommentModel extends AttachedModel, BaseModel<KBComment>,
 	public boolean getHelpful();
 
 	/**
-	 * Determines if this k b comment is helpful.
+	 * Returns <code>true</code> if this k b comment is helpful.
 	 *
 	 * @return <code>true</code> if this k b comment is helpful; <code>false</code> otherwise
 	 */
@@ -287,6 +288,8 @@ public interface KBCommentModel extends AttachedModel, BaseModel<KBComment>,
 	public int compareTo(KBComment kbComment);
 
 	public int hashCode();
+
+	public CacheModel<KBComment> toCacheModel();
 
 	public KBComment toEscapedModel();
 

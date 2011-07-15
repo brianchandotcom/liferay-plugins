@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -128,8 +129,13 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 			return (Bar)this;
 		}
 		else {
-			return (Bar)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (Bar)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -207,6 +213,23 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 	}
 
 	@Override
+	public CacheModel<Bar> toCacheModel() {
+		BarCacheModel barCacheModel = new BarCacheModel();
+
+		barCacheModel.barId = getBarId();
+
+		barCacheModel.text = getText();
+
+		String text = barCacheModel.text;
+
+		if ((text != null) && (text.length() == 0)) {
+			barCacheModel.text = null;
+		}
+
+		return barCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(5);
 
@@ -247,4 +270,5 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 	private long _barId;
 	private String _text;
 	private transient ExpandoBridge _expandoBridge;
+	private Bar _escapedModelProxy;
 }

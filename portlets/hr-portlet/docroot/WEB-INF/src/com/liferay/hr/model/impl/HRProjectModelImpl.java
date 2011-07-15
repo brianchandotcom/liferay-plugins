@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -374,8 +375,13 @@ public class HRProjectModelImpl extends BaseModelImpl<HRProject>
 			return (HRProject)this;
 		}
 		else {
-			return (HRProject)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRProject)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -475,6 +481,144 @@ public class HRProjectModelImpl extends BaseModelImpl<HRProject>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRProject> toCacheModel() {
+		HRProjectCacheModel hrProjectCacheModel = new HRProjectCacheModel();
+
+		hrProjectCacheModel.hrProjectId = getHrProjectId();
+
+		hrProjectCacheModel.groupId = getGroupId();
+
+		hrProjectCacheModel.companyId = getCompanyId();
+
+		hrProjectCacheModel.userId = getUserId();
+
+		hrProjectCacheModel.userName = getUserName();
+
+		String userName = hrProjectCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrProjectCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrProjectCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrProjectCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrProjectCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrProjectCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrProjectCacheModel.hrClientId = getHrClientId();
+
+		hrProjectCacheModel.hrProjectStatusId = getHrProjectStatusId();
+
+		hrProjectCacheModel.name = getName();
+
+		String name = hrProjectCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			hrProjectCacheModel.name = null;
+		}
+
+		hrProjectCacheModel.description = getDescription();
+
+		String description = hrProjectCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			hrProjectCacheModel.description = null;
+		}
+
+		Date estimatedStartDate = getEstimatedStartDate();
+
+		if (estimatedStartDate != null) {
+			hrProjectCacheModel.estimatedStartDate = estimatedStartDate.getTime();
+		}
+		else {
+			hrProjectCacheModel.estimatedStartDate = Long.MIN_VALUE;
+		}
+
+		Date estimatedEndDate = getEstimatedEndDate();
+
+		if (estimatedEndDate != null) {
+			hrProjectCacheModel.estimatedEndDate = estimatedEndDate.getTime();
+		}
+		else {
+			hrProjectCacheModel.estimatedEndDate = Long.MIN_VALUE;
+		}
+
+		hrProjectCacheModel.estimatedHours = getEstimatedHours();
+
+		hrProjectCacheModel.estimatedHoursCost = getEstimatedHoursCost();
+
+		hrProjectCacheModel.estimatedHoursCostCurrencyCode = getEstimatedHoursCostCurrencyCode();
+
+		String estimatedHoursCostCurrencyCode = hrProjectCacheModel.estimatedHoursCostCurrencyCode;
+
+		if ((estimatedHoursCostCurrencyCode != null) &&
+				(estimatedHoursCostCurrencyCode.length() == 0)) {
+			hrProjectCacheModel.estimatedHoursCostCurrencyCode = null;
+		}
+
+		hrProjectCacheModel.estimatedExpenses = getEstimatedExpenses();
+
+		hrProjectCacheModel.estimatedExpensesCurrencyCode = getEstimatedExpensesCurrencyCode();
+
+		String estimatedExpensesCurrencyCode = hrProjectCacheModel.estimatedExpensesCurrencyCode;
+
+		if ((estimatedExpensesCurrencyCode != null) &&
+				(estimatedExpensesCurrencyCode.length() == 0)) {
+			hrProjectCacheModel.estimatedExpensesCurrencyCode = null;
+		}
+
+		Date actualStartDate = getActualStartDate();
+
+		if (actualStartDate != null) {
+			hrProjectCacheModel.actualStartDate = actualStartDate.getTime();
+		}
+		else {
+			hrProjectCacheModel.actualStartDate = Long.MIN_VALUE;
+		}
+
+		Date actualEndDate = getActualEndDate();
+
+		if (actualEndDate != null) {
+			hrProjectCacheModel.actualEndDate = actualEndDate.getTime();
+		}
+		else {
+			hrProjectCacheModel.actualEndDate = Long.MIN_VALUE;
+		}
+
+		hrProjectCacheModel.actualHours = getActualHours();
+
+		hrProjectCacheModel.actualHoursCost = getActualHoursCost();
+
+		hrProjectCacheModel.actualHoursCostCurrencyCode = getActualHoursCostCurrencyCode();
+
+		String actualHoursCostCurrencyCode = hrProjectCacheModel.actualHoursCostCurrencyCode;
+
+		if ((actualHoursCostCurrencyCode != null) &&
+				(actualHoursCostCurrencyCode.length() == 0)) {
+			hrProjectCacheModel.actualHoursCostCurrencyCode = null;
+		}
+
+		hrProjectCacheModel.actualExpenses = getActualExpenses();
+
+		hrProjectCacheModel.actualExpensesCurrencyCode = getActualExpensesCurrencyCode();
+
+		return hrProjectCacheModel;
 	}
 
 	@Override
@@ -680,4 +824,5 @@ public class HRProjectModelImpl extends BaseModelImpl<HRProject>
 	private double _actualExpenses;
 	private double _actualExpensesCurrencyCode;
 	private transient ExpandoBridge _expandoBridge;
+	private HRProject _escapedModelProxy;
 }

@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -75,8 +76,8 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_MESSAGEID = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByMessageId",
+			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByMessageId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -84,14 +85,15 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_MESSAGEID = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByMessageId", new String[] { Long.class.getName() });
+			AttachmentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByMessageId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			AttachmentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the attachment in the entity cache if it is enabled.
@@ -374,8 +376,14 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 		Attachment attachment = (Attachment)EntityCacheUtil.getResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
 				AttachmentImpl.class, attachmentId, this);
 
+		if (attachment == _nullAttachment) {
+			return null;
+		}
+
 		if (attachment == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -384,11 +392,17 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 						Long.valueOf(attachmentId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (attachment != null) {
 					cacheResult(attachment);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+						AttachmentImpl.class, attachmentId, _nullAttachment);
 				}
 
 				closeSession(session);
@@ -1010,4 +1024,19 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(AttachmentPersistenceImpl.class);
+	private static Attachment _nullAttachment = new AttachmentImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<Attachment> toCacheModel() {
+				return _nullAttachmentCacheModel;
+			}
+		};
+
+	private static CacheModel<Attachment> _nullAttachmentCacheModel = new CacheModel<Attachment>() {
+			public Attachment toEntityModel() {
+				return _nullAttachment;
+			}
+		};
 }

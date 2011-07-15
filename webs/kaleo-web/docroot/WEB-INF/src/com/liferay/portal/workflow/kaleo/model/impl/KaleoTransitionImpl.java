@@ -17,14 +17,13 @@ package com.liferay.portal.workflow.kaleo.model.impl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
-import com.liferay.portal.workflow.kaleo.model.KaleoTransition;
 import com.liferay.portal.workflow.kaleo.service.KaleoNodeLocalServiceUtil;
 
 /**
  * @author Brian Wing Shun Chan
  */
 public class KaleoTransitionImpl
-	extends KaleoTransitionModelImpl implements KaleoTransition {
+	extends KaleoTransitionBaseImpl {
 
 	public KaleoTransitionImpl() {
 	}

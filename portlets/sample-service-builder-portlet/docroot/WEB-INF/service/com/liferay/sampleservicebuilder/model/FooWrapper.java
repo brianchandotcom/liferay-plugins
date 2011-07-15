@@ -246,7 +246,7 @@ public class FooWrapper implements Foo {
 	}
 
 	/**
-	* Determines if this foo is field2.
+	* Returns <code>true</code> if this foo is field2.
 	*
 	* @return <code>true</code> if this foo is field2; <code>false</code> otherwise
 	*/
@@ -372,6 +372,10 @@ public class FooWrapper implements Foo {
 		return _foo.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.sampleservicebuilder.model.Foo> toCacheModel() {
+		return _foo.toCacheModel();
+	}
+
 	public com.liferay.sampleservicebuilder.model.Foo toEscapedModel() {
 		return new FooWrapper(_foo.toEscapedModel());
 	}
@@ -383,6 +387,11 @@ public class FooWrapper implements Foo {
 
 	public java.lang.String toXmlString() {
 		return _foo.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_foo.save();
 	}
 
 	public Foo getWrappedFoo() {

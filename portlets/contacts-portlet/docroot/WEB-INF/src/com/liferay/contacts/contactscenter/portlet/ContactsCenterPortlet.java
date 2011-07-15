@@ -63,7 +63,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 
 		if (type == SocialRelationConstants.TYPE_UNI_ENEMY) {
 			SocialRelationLocalServiceUtil.deleteRelations(
-				themeDisplay.getUserId());
+				themeDisplay.getUserId(), userId);
 		}
 		else if (blocked) {
 			return;

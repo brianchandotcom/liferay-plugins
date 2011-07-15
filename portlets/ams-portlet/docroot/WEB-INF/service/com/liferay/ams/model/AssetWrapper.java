@@ -246,7 +246,7 @@ public class AssetWrapper implements Asset {
 	}
 
 	/**
-	* Determines if this asset is active.
+	* Returns <code>true</code> if this asset is active.
 	*
 	* @return <code>true</code> if this asset is active; <code>false</code> otherwise
 	*/
@@ -318,6 +318,10 @@ public class AssetWrapper implements Asset {
 		return _asset.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.ams.model.Asset> toCacheModel() {
+		return _asset.toCacheModel();
+	}
+
 	public com.liferay.ams.model.Asset toEscapedModel() {
 		return new AssetWrapper(_asset.toEscapedModel());
 	}
@@ -329,6 +333,11 @@ public class AssetWrapper implements Asset {
 
 	public java.lang.String toXmlString() {
 		return _asset.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_asset.save();
 	}
 
 	public Asset getWrappedAsset() {

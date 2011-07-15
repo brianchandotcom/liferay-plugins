@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -244,8 +245,13 @@ public class HRProjectStatusModelImpl extends BaseModelImpl<HRProjectStatus>
 			return (HRProjectStatus)this;
 		}
 		else {
-			return (HRProjectStatus)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRProjectStatus)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -337,6 +343,71 @@ public class HRProjectStatusModelImpl extends BaseModelImpl<HRProjectStatus>
 		hrProjectStatusModelImpl._setOriginalGroupId = false;
 
 		hrProjectStatusModelImpl._originalCode = hrProjectStatusModelImpl._code;
+	}
+
+	@Override
+	public CacheModel<HRProjectStatus> toCacheModel() {
+		HRProjectStatusCacheModel hrProjectStatusCacheModel = new HRProjectStatusCacheModel();
+
+		hrProjectStatusCacheModel.hrProjectStatusId = getHrProjectStatusId();
+
+		hrProjectStatusCacheModel.groupId = getGroupId();
+
+		hrProjectStatusCacheModel.companyId = getCompanyId();
+
+		hrProjectStatusCacheModel.userId = getUserId();
+
+		hrProjectStatusCacheModel.userName = getUserName();
+
+		String userName = hrProjectStatusCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrProjectStatusCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrProjectStatusCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrProjectStatusCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrProjectStatusCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrProjectStatusCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrProjectStatusCacheModel.code = getCode();
+
+		String code = hrProjectStatusCacheModel.code;
+
+		if ((code != null) && (code.length() == 0)) {
+			hrProjectStatusCacheModel.code = null;
+		}
+
+		hrProjectStatusCacheModel.name = getName();
+
+		String name = hrProjectStatusCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			hrProjectStatusCacheModel.name = null;
+		}
+
+		hrProjectStatusCacheModel.description = getDescription();
+
+		String description = hrProjectStatusCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			hrProjectStatusCacheModel.description = null;
+		}
+
+		return hrProjectStatusCacheModel;
 	}
 
 	@Override
@@ -440,4 +511,5 @@ public class HRProjectStatusModelImpl extends BaseModelImpl<HRProjectStatus>
 	private String _name;
 	private String _description;
 	private transient ExpandoBridge _expandoBridge;
+	private HRProjectStatus _escapedModelProxy;
 }

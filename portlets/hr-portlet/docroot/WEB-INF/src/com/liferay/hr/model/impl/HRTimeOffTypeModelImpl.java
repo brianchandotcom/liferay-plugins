@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -212,8 +213,13 @@ public class HRTimeOffTypeModelImpl extends BaseModelImpl<HRTimeOffType>
 			return (HRTimeOffType)this;
 		}
 		else {
-			return (HRTimeOffType)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRTimeOffType)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -297,6 +303,63 @@ public class HRTimeOffTypeModelImpl extends BaseModelImpl<HRTimeOffType>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRTimeOffType> toCacheModel() {
+		HRTimeOffTypeCacheModel hrTimeOffTypeCacheModel = new HRTimeOffTypeCacheModel();
+
+		hrTimeOffTypeCacheModel.hrTimeOffTypeId = getHrTimeOffTypeId();
+
+		hrTimeOffTypeCacheModel.groupId = getGroupId();
+
+		hrTimeOffTypeCacheModel.companyId = getCompanyId();
+
+		hrTimeOffTypeCacheModel.userId = getUserId();
+
+		hrTimeOffTypeCacheModel.userName = getUserName();
+
+		String userName = hrTimeOffTypeCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrTimeOffTypeCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrTimeOffTypeCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrTimeOffTypeCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrTimeOffTypeCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrTimeOffTypeCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrTimeOffTypeCacheModel.name = getName();
+
+		String name = hrTimeOffTypeCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			hrTimeOffTypeCacheModel.name = null;
+		}
+
+		hrTimeOffTypeCacheModel.description = getDescription();
+
+		String description = hrTimeOffTypeCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			hrTimeOffTypeCacheModel.description = null;
+		}
+
+		return hrTimeOffTypeCacheModel;
 	}
 
 	@Override
@@ -390,4 +453,5 @@ public class HRTimeOffTypeModelImpl extends BaseModelImpl<HRTimeOffType>
 	private String _name;
 	private String _description;
 	private transient ExpandoBridge _expandoBridge;
+	private HRTimeOffType _escapedModelProxy;
 }

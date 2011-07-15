@@ -138,7 +138,7 @@ public class StatusWrapper implements Status {
 	}
 
 	/**
-	* Determines if this status is online.
+	* Returns <code>true</code> if this status is online.
 	*
 	* @return <code>true</code> if this status is online; <code>false</code> otherwise
 	*/
@@ -165,7 +165,7 @@ public class StatusWrapper implements Status {
 	}
 
 	/**
-	* Determines if this status is awake.
+	* Returns <code>true</code> if this status is awake.
 	*
 	* @return <code>true</code> if this status is awake; <code>false</code> otherwise
 	*/
@@ -228,7 +228,7 @@ public class StatusWrapper implements Status {
 	}
 
 	/**
-	* Determines if this status is play sound.
+	* Returns <code>true</code> if this status is play sound.
 	*
 	* @return <code>true</code> if this status is play sound; <code>false</code> otherwise
 	*/
@@ -300,6 +300,10 @@ public class StatusWrapper implements Status {
 		return _status.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.chat.model.Status> toCacheModel() {
+		return _status.toCacheModel();
+	}
+
 	public com.liferay.chat.model.Status toEscapedModel() {
 		return new StatusWrapper(_status.toEscapedModel());
 	}
@@ -311,6 +315,11 @@ public class StatusWrapper implements Status {
 
 	public java.lang.String toXmlString() {
 		return _status.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_status.save();
 	}
 
 	public Status getWrappedStatus() {

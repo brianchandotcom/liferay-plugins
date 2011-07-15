@@ -465,7 +465,7 @@ public class HRExpenseWrapper implements HRExpense {
 	}
 
 	/**
-	* Determines if this h r expense is approved.
+	* Returns <code>true</code> if this h r expense is approved.
 	*
 	* @return <code>true</code> if this h r expense is approved; <code>false</code> otherwise
 	*/
@@ -474,7 +474,7 @@ public class HRExpenseWrapper implements HRExpense {
 	}
 
 	/**
-	* Determines if this h r expense is a draft.
+	* Returns <code>true</code> if this h r expense is a draft.
 	*
 	* @return <code>true</code> if this h r expense is a draft; <code>false</code> otherwise
 	*/
@@ -483,7 +483,7 @@ public class HRExpenseWrapper implements HRExpense {
 	}
 
 	/**
-	* Determines if this h r expense is expired.
+	* Returns <code>true</code> if this h r expense is expired.
 	*
 	* @return <code>true</code> if this h r expense is expired; <code>false</code> otherwise
 	*/
@@ -492,7 +492,7 @@ public class HRExpenseWrapper implements HRExpense {
 	}
 
 	/**
-	* Determines if this h r expense is pending.
+	* Returns <code>true</code> if this h r expense is pending.
 	*
 	* @return <code>true</code> if this h r expense is pending; <code>false</code> otherwise
 	*/
@@ -555,6 +555,10 @@ public class HRExpenseWrapper implements HRExpense {
 		return _hrExpense.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRExpense> toCacheModel() {
+		return _hrExpense.toCacheModel();
+	}
+
 	public com.liferay.hr.model.HRExpense toEscapedModel() {
 		return new HRExpenseWrapper(_hrExpense.toEscapedModel());
 	}
@@ -566,6 +570,11 @@ public class HRExpenseWrapper implements HRExpense {
 
 	public java.lang.String toXmlString() {
 		return _hrExpense.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_hrExpense.save();
 	}
 
 	public HRExpense getWrappedHRExpense() {

@@ -183,21 +183,21 @@ public class OAuthTokenWrapper implements OAuthToken {
 	}
 
 	/**
-	* Returns the gadget ID of this o auth token.
+	* Returns the gadget key of this o auth token.
 	*
-	* @return the gadget ID of this o auth token
+	* @return the gadget key of this o auth token
 	*/
-	public long getGadgetId() {
-		return _oAuthToken.getGadgetId();
+	public java.lang.String getGadgetKey() {
+		return _oAuthToken.getGadgetKey();
 	}
 
 	/**
-	* Sets the gadget ID of this o auth token.
+	* Sets the gadget key of this o auth token.
 	*
-	* @param gadgetId the gadget ID of this o auth token
+	* @param gadgetKey the gadget key of this o auth token
 	*/
-	public void setGadgetId(long gadgetId) {
-		_oAuthToken.setGadgetId(gadgetId);
+	public void setGadgetKey(java.lang.String gadgetKey) {
+		_oAuthToken.setGadgetKey(gadgetKey);
 	}
 
 	/**
@@ -381,6 +381,10 @@ public class OAuthTokenWrapper implements OAuthToken {
 		return _oAuthToken.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.opensocial.model.OAuthToken> toCacheModel() {
+		return _oAuthToken.toCacheModel();
+	}
+
 	public com.liferay.opensocial.model.OAuthToken toEscapedModel() {
 		return new OAuthTokenWrapper(_oAuthToken.toEscapedModel());
 	}
@@ -392,6 +396,11 @@ public class OAuthTokenWrapper implements OAuthToken {
 
 	public java.lang.String toXmlString() {
 		return _oAuthToken.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_oAuthToken.save();
 	}
 
 	public OAuthToken getWrappedOAuthToken() {

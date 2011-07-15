@@ -186,7 +186,7 @@ public interface GadgetLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the gadget in the database. Also notifies the appropriate model listeners.
+	* Updates the gadget in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param gadget the gadget
 	* @return the gadget that was updated
@@ -197,7 +197,7 @@ public interface GadgetLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the gadget in the database. Also notifies the appropriate model listeners.
+	* Updates the gadget in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param gadget the gadget
 	* @param merge whether to merge the gadget with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -236,6 +236,15 @@ public interface GadgetLocalService {
 	public void destroyGadgets()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.opensocial.model.Gadget fetchGadget(long gadgetId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.opensocial.model.Gadget fetchGadget(long companyId,
+		java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.opensocial.model.Gadget getGadget(java.lang.String uuid)

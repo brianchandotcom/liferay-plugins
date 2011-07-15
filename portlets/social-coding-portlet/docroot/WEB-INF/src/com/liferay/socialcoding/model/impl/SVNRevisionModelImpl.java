@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -172,8 +173,13 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 			return (SVNRevision)this;
 		}
 		else {
-			return (SVNRevision)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (SVNRevision)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -265,6 +271,44 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 	}
 
 	@Override
+	public CacheModel<SVNRevision> toCacheModel() {
+		SVNRevisionCacheModel svnRevisionCacheModel = new SVNRevisionCacheModel();
+
+		svnRevisionCacheModel.svnRevisionId = getSvnRevisionId();
+
+		svnRevisionCacheModel.svnUserId = getSvnUserId();
+
+		String svnUserId = svnRevisionCacheModel.svnUserId;
+
+		if ((svnUserId != null) && (svnUserId.length() == 0)) {
+			svnRevisionCacheModel.svnUserId = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			svnRevisionCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			svnRevisionCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		svnRevisionCacheModel.svnRepositoryId = getSvnRepositoryId();
+
+		svnRevisionCacheModel.revisionNumber = getRevisionNumber();
+
+		svnRevisionCacheModel.comments = getComments();
+
+		String comments = svnRevisionCacheModel.comments;
+
+		if ((comments != null) && (comments.length() == 0)) {
+			svnRevisionCacheModel.comments = null;
+		}
+
+		return svnRevisionCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(13);
 
@@ -333,4 +377,5 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 	private long _revisionNumber;
 	private String _comments;
 	private transient ExpandoBridge _expandoBridge;
+	private SVNRevision _escapedModelProxy;
 }

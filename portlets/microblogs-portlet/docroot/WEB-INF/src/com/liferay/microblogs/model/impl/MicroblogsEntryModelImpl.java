@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -294,8 +295,13 @@ public class MicroblogsEntryModelImpl extends BaseModelImpl<MicroblogsEntry>
 			return (MicroblogsEntry)this;
 		}
 		else {
-			return (MicroblogsEntry)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (MicroblogsEntry)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -382,6 +388,61 @@ public class MicroblogsEntryModelImpl extends BaseModelImpl<MicroblogsEntry>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<MicroblogsEntry> toCacheModel() {
+		MicroblogsEntryCacheModel microblogsEntryCacheModel = new MicroblogsEntryCacheModel();
+
+		microblogsEntryCacheModel.microblogsEntryId = getMicroblogsEntryId();
+
+		microblogsEntryCacheModel.companyId = getCompanyId();
+
+		microblogsEntryCacheModel.userId = getUserId();
+
+		microblogsEntryCacheModel.userName = getUserName();
+
+		String userName = microblogsEntryCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			microblogsEntryCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			microblogsEntryCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			microblogsEntryCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			microblogsEntryCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			microblogsEntryCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		microblogsEntryCacheModel.content = getContent();
+
+		String content = microblogsEntryCacheModel.content;
+
+		if ((content != null) && (content.length() == 0)) {
+			microblogsEntryCacheModel.content = null;
+		}
+
+		microblogsEntryCacheModel.type = getType();
+
+		microblogsEntryCacheModel.receiverUserId = getReceiverUserId();
+
+		microblogsEntryCacheModel.receiverMicroblogsEntryId = getReceiverMicroblogsEntryId();
+
+		microblogsEntryCacheModel.socialRelationType = getSocialRelationType();
+
+		return microblogsEntryCacheModel;
 	}
 
 	@Override
@@ -490,4 +551,5 @@ public class MicroblogsEntryModelImpl extends BaseModelImpl<MicroblogsEntry>
 	private long _receiverMicroblogsEntryId;
 	private int _socialRelationType;
 	private transient ExpandoBridge _expandoBridge;
+	private MicroblogsEntry _escapedModelProxy;
 }

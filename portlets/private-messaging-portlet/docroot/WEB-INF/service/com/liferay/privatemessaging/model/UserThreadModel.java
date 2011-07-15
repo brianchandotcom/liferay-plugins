@@ -16,6 +16,7 @@ package com.liferay.privatemessaging.model;
 
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -179,7 +180,7 @@ public interface UserThreadModel extends BaseModel<UserThread> {
 	public boolean getRead();
 
 	/**
-	 * Determines if this user thread is read.
+	 * Returns <code>true</code> if this user thread is read.
 	 *
 	 * @return <code>true</code> if this user thread is read; <code>false</code> otherwise
 	 */
@@ -200,7 +201,7 @@ public interface UserThreadModel extends BaseModel<UserThread> {
 	public boolean getDeleted();
 
 	/**
-	 * Determines if this user thread is deleted.
+	 * Returns <code>true</code> if this user thread is deleted.
 	 *
 	 * @return <code>true</code> if this user thread is deleted; <code>false</code> otherwise
 	 */
@@ -238,6 +239,8 @@ public interface UserThreadModel extends BaseModel<UserThread> {
 	public int compareTo(UserThread userThread);
 
 	public int hashCode();
+
+	public CacheModel<UserThread> toCacheModel();
 
 	public UserThread toEscapedModel();
 

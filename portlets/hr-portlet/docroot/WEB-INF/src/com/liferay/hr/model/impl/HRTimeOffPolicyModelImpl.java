@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -288,8 +289,13 @@ public class HRTimeOffPolicyModelImpl extends BaseModelImpl<HRTimeOffPolicy>
 			return (HRTimeOffPolicy)this;
 		}
 		else {
-			return (HRTimeOffPolicy)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRTimeOffPolicy)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -381,6 +387,74 @@ public class HRTimeOffPolicyModelImpl extends BaseModelImpl<HRTimeOffPolicy>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRTimeOffPolicy> toCacheModel() {
+		HRTimeOffPolicyCacheModel hrTimeOffPolicyCacheModel = new HRTimeOffPolicyCacheModel();
+
+		hrTimeOffPolicyCacheModel.hrTimeOffPolicyId = getHrTimeOffPolicyId();
+
+		hrTimeOffPolicyCacheModel.groupId = getGroupId();
+
+		hrTimeOffPolicyCacheModel.companyId = getCompanyId();
+
+		hrTimeOffPolicyCacheModel.userId = getUserId();
+
+		hrTimeOffPolicyCacheModel.userName = getUserName();
+
+		String userName = hrTimeOffPolicyCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrTimeOffPolicyCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrTimeOffPolicyCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrTimeOffPolicyCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrTimeOffPolicyCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrTimeOffPolicyCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrTimeOffPolicyCacheModel.hrTimeOffTypeId = getHrTimeOffTypeId();
+
+		hrTimeOffPolicyCacheModel.hrUserId = getHrUserId();
+
+		hrTimeOffPolicyCacheModel.accrueHRTimeOffFrequencyTypeId = getAccrueHRTimeOffFrequencyTypeId();
+
+		hrTimeOffPolicyCacheModel.resetHRTimeOffFrequencyTypeId = getResetHRTimeOffFrequencyTypeId();
+
+		Date effectiveDate = getEffectiveDate();
+
+		if (effectiveDate != null) {
+			hrTimeOffPolicyCacheModel.effectiveDate = effectiveDate.getTime();
+		}
+		else {
+			hrTimeOffPolicyCacheModel.effectiveDate = Long.MIN_VALUE;
+		}
+
+		hrTimeOffPolicyCacheModel.inactive = getInactive();
+
+		hrTimeOffPolicyCacheModel.hoursAllowed = getHoursAllowed();
+
+		hrTimeOffPolicyCacheModel.hoursBaseAmount = getHoursBaseAmount();
+
+		hrTimeOffPolicyCacheModel.hoursToAccrue = getHoursToAccrue();
+
+		hrTimeOffPolicyCacheModel.carryOverHoursAllowed = getCarryOverHoursAllowed();
+
+		return hrTimeOffPolicyCacheModel;
 	}
 
 	@Override
@@ -531,4 +605,5 @@ public class HRTimeOffPolicyModelImpl extends BaseModelImpl<HRTimeOffPolicy>
 	private double _hoursToAccrue;
 	private double _carryOverHoursAllowed;
 	private transient ExpandoBridge _expandoBridge;
+	private HRTimeOffPolicy _escapedModelProxy;
 }

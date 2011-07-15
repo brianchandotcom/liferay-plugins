@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -228,8 +229,13 @@ public class HRUserTaskModelImpl extends BaseModelImpl<HRUserTask>
 			return (HRUserTask)this;
 		}
 		else {
-			return (HRUserTask)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRUserTask)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -315,6 +321,55 @@ public class HRUserTaskModelImpl extends BaseModelImpl<HRUserTask>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRUserTask> toCacheModel() {
+		HRUserTaskCacheModel hrUserTaskCacheModel = new HRUserTaskCacheModel();
+
+		hrUserTaskCacheModel.hrUserTaskId = getHrUserTaskId();
+
+		hrUserTaskCacheModel.groupId = getGroupId();
+
+		hrUserTaskCacheModel.companyId = getCompanyId();
+
+		hrUserTaskCacheModel.userId = getUserId();
+
+		hrUserTaskCacheModel.userName = getUserName();
+
+		String userName = hrUserTaskCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrUserTaskCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrUserTaskCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrUserTaskCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrUserTaskCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrUserTaskCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrUserTaskCacheModel.hrBillabilityId = getHrBillabilityId();
+
+		hrUserTaskCacheModel.hrTaskId = getHrTaskId();
+
+		hrUserTaskCacheModel.hrTimesheetId = getHrTimesheetId();
+
+		hrUserTaskCacheModel.hrUserId = getHrUserId();
+
+		return hrUserTaskCacheModel;
 	}
 
 	@Override
@@ -423,4 +478,5 @@ public class HRUserTaskModelImpl extends BaseModelImpl<HRUserTask>
 	private long _hrUserId;
 	private String _hrUserUuid;
 	private transient ExpandoBridge _expandoBridge;
+	private HRUserTask _escapedModelProxy;
 }

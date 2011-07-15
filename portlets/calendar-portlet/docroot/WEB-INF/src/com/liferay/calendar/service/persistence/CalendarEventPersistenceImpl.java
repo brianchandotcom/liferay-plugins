@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -80,7 +81,7 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarEventModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findByUuid",
+			CalendarEventImpl.class, FINDER_CLASS_NAME_LIST, "findByUuid",
 			new String[] {
 				String.class.getName(),
 				
@@ -88,22 +89,23 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalendarEventModelImpl.FINDER_CACHE_ENABLED,
+			CalendarEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByUuid",
 			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarEventModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			CalendarEventImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalendarEventModelImpl.FINDER_CACHE_ENABLED,
+			CalendarEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarEventModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			CalendarEventImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
-			CalendarEventModelImpl.FINDER_CACHE_ENABLED,
+			CalendarEventModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -461,8 +463,14 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 		CalendarEvent calendarEvent = (CalendarEvent)EntityCacheUtil.getResult(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
 				CalendarEventImpl.class, calendarEventId, this);
 
+		if (calendarEvent == _nullCalendarEvent) {
+			return null;
+		}
+
 		if (calendarEvent == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -471,11 +479,18 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 						Long.valueOf(calendarEventId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (calendarEvent != null) {
 					cacheResult(calendarEvent);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(CalendarEventModelImpl.ENTITY_CACHE_ENABLED,
+						CalendarEventImpl.class, calendarEventId,
+						_nullCalendarEvent);
 				}
 
 				closeSession(session);
@@ -902,6 +917,7 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching calendar event, or <code>null</code> if a matching calendar event could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -1383,4 +1399,19 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(CalendarEventPersistenceImpl.class);
+	private static CalendarEvent _nullCalendarEvent = new CalendarEventImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<CalendarEvent> toCacheModel() {
+				return _nullCalendarEventCacheModel;
+			}
+		};
+
+	private static CacheModel<CalendarEvent> _nullCalendarEventCacheModel = new CacheModel<CalendarEvent>() {
+			public CalendarEvent toEntityModel() {
+				return _nullCalendarEvent;
+			}
+		};
 }

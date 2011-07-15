@@ -17,6 +17,7 @@ package com.liferay.hr.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.model.WorkflowedModel;
 import com.liferay.portal.service.ServiceContext;
@@ -382,28 +383,28 @@ public interface HRExpenseModel extends BaseModel<HRExpense>, GroupedModel,
 	public boolean getApproved();
 
 	/**
-	 * Determines if this h r expense is approved.
+	 * Returns <code>true</code> if this h r expense is approved.
 	 *
 	 * @return <code>true</code> if this h r expense is approved; <code>false</code> otherwise
 	 */
 	public boolean isApproved();
 
 	/**
-	 * Determines if this h r expense is a draft.
+	 * Returns <code>true</code> if this h r expense is a draft.
 	 *
 	 * @return <code>true</code> if this h r expense is a draft; <code>false</code> otherwise
 	 */
 	public boolean isDraft();
 
 	/**
-	 * Determines if this h r expense is expired.
+	 * Returns <code>true</code> if this h r expense is expired.
 	 *
 	 * @return <code>true</code> if this h r expense is expired; <code>false</code> otherwise
 	 */
 	public boolean isExpired();
 
 	/**
-	 * Determines if this h r expense is pending.
+	 * Returns <code>true</code> if this h r expense is pending.
 	 *
 	 * @return <code>true</code> if this h r expense is pending; <code>false</code> otherwise
 	 */
@@ -434,6 +435,8 @@ public interface HRExpenseModel extends BaseModel<HRExpense>, GroupedModel,
 	public int compareTo(HRExpense hrExpense);
 
 	public int hashCode();
+
+	public CacheModel<HRExpense> toCacheModel();
 
 	public HRExpense toEscapedModel();
 

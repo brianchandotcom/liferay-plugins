@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -201,8 +202,13 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 			return (WallEntry)this;
 		}
 		else {
-			return (WallEntry)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (WallEntry)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -285,6 +291,55 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<WallEntry> toCacheModel() {
+		WallEntryCacheModel wallEntryCacheModel = new WallEntryCacheModel();
+
+		wallEntryCacheModel.wallEntryId = getWallEntryId();
+
+		wallEntryCacheModel.groupId = getGroupId();
+
+		wallEntryCacheModel.companyId = getCompanyId();
+
+		wallEntryCacheModel.userId = getUserId();
+
+		wallEntryCacheModel.userName = getUserName();
+
+		String userName = wallEntryCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			wallEntryCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			wallEntryCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			wallEntryCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			wallEntryCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			wallEntryCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		wallEntryCacheModel.comments = getComments();
+
+		String comments = wallEntryCacheModel.comments;
+
+		if ((comments != null) && (comments.length() == 0)) {
+			wallEntryCacheModel.comments = null;
+		}
+
+		return wallEntryCacheModel;
 	}
 
 	@Override
@@ -371,4 +426,5 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 	private Date _modifiedDate;
 	private String _comments;
 	private transient ExpandoBridge _expandoBridge;
+	private WallEntry _escapedModelProxy;
 }

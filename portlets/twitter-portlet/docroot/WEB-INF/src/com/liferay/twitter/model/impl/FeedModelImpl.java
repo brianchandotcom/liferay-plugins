@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -243,8 +244,13 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 			return (Feed)this;
 		}
 		else {
-			return (Feed)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (Feed)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -339,6 +345,57 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 		feedModelImpl._setOriginalTwitterUserId = false;
 
 		feedModelImpl._originalTwitterScreenName = feedModelImpl._twitterScreenName;
+	}
+
+	@Override
+	public CacheModel<Feed> toCacheModel() {
+		FeedCacheModel feedCacheModel = new FeedCacheModel();
+
+		feedCacheModel.feedId = getFeedId();
+
+		feedCacheModel.companyId = getCompanyId();
+
+		feedCacheModel.userId = getUserId();
+
+		feedCacheModel.userName = getUserName();
+
+		String userName = feedCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			feedCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			feedCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			feedCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			feedCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			feedCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		feedCacheModel.twitterUserId = getTwitterUserId();
+
+		feedCacheModel.twitterScreenName = getTwitterScreenName();
+
+		String twitterScreenName = feedCacheModel.twitterScreenName;
+
+		if ((twitterScreenName != null) && (twitterScreenName.length() == 0)) {
+			feedCacheModel.twitterScreenName = null;
+		}
+
+		feedCacheModel.lastStatusId = getLastStatusId();
+
+		return feedCacheModel;
 	}
 
 	@Override
@@ -438,4 +495,5 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	private String _originalTwitterScreenName;
 	private long _lastStatusId;
 	private transient ExpandoBridge _expandoBridge;
+	private Feed _escapedModelProxy;
 }

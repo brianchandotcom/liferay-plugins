@@ -392,7 +392,7 @@ public class HRUserWrapper implements HRUser {
 	}
 
 	/**
-	* Determines if this h r user is benefits exempt.
+	* Returns <code>true</code> if this h r user is benefits exempt.
 	*
 	* @return <code>true</code> if this h r user is benefits exempt; <code>false</code> otherwise
 	*/
@@ -419,7 +419,7 @@ public class HRUserWrapper implements HRUser {
 	}
 
 	/**
-	* Determines if this h r user is overtime exempt.
+	* Returns <code>true</code> if this h r user is overtime exempt.
 	*
 	* @return <code>true</code> if this h r user is overtime exempt; <code>false</code> otherwise
 	*/
@@ -489,6 +489,10 @@ public class HRUserWrapper implements HRUser {
 	@Override
 	public int hashCode() {
 		return _hrUser.hashCode();
+	}
+
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRUser> toCacheModel() {
+		return _hrUser.toCacheModel();
 	}
 
 	public com.liferay.hr.model.HRUser toEscapedModel() {

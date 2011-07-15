@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -262,8 +263,13 @@ public class HRExpenseCurrencyConversionModelImpl extends BaseModelImpl<HRExpens
 			return (HRExpenseCurrencyConversion)this;
 		}
 		else {
-			return (HRExpenseCurrencyConversion)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRExpenseCurrencyConversion)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -367,6 +373,63 @@ public class HRExpenseCurrencyConversionModelImpl extends BaseModelImpl<HRExpens
 		hrExpenseCurrencyConversionModelImpl._setOriginalToHRExpenseCurrencyId = false;
 
 		hrExpenseCurrencyConversionModelImpl._originalConversionDate = hrExpenseCurrencyConversionModelImpl._conversionDate;
+	}
+
+	@Override
+	public CacheModel<HRExpenseCurrencyConversion> toCacheModel() {
+		HRExpenseCurrencyConversionCacheModel hrExpenseCurrencyConversionCacheModel =
+			new HRExpenseCurrencyConversionCacheModel();
+
+		hrExpenseCurrencyConversionCacheModel.hrExpenseCurrencyConversionId = getHrExpenseCurrencyConversionId();
+
+		hrExpenseCurrencyConversionCacheModel.groupId = getGroupId();
+
+		hrExpenseCurrencyConversionCacheModel.companyId = getCompanyId();
+
+		hrExpenseCurrencyConversionCacheModel.userId = getUserId();
+
+		hrExpenseCurrencyConversionCacheModel.userName = getUserName();
+
+		String userName = hrExpenseCurrencyConversionCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrExpenseCurrencyConversionCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrExpenseCurrencyConversionCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrExpenseCurrencyConversionCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrExpenseCurrencyConversionCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrExpenseCurrencyConversionCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrExpenseCurrencyConversionCacheModel.fromHRExpenseCurrencyId = getFromHRExpenseCurrencyId();
+
+		hrExpenseCurrencyConversionCacheModel.toHRExpenseCurrencyId = getToHRExpenseCurrencyId();
+
+		Date conversionDate = getConversionDate();
+
+		if (conversionDate != null) {
+			hrExpenseCurrencyConversionCacheModel.conversionDate = conversionDate.getTime();
+		}
+		else {
+			hrExpenseCurrencyConversionCacheModel.conversionDate = Long.MIN_VALUE;
+		}
+
+		hrExpenseCurrencyConversionCacheModel.conversionValue = getConversionValue();
+
+		return hrExpenseCurrencyConversionCacheModel;
 	}
 
 	@Override
@@ -481,4 +544,5 @@ public class HRExpenseCurrencyConversionModelImpl extends BaseModelImpl<HRExpens
 	private Date _originalConversionDate;
 	private double _conversionValue;
 	private transient ExpandoBridge _expandoBridge;
+	private HRExpenseCurrencyConversion _escapedModelProxy;
 }

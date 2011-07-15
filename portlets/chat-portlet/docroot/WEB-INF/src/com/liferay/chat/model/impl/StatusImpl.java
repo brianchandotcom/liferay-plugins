@@ -14,12 +14,10 @@
 
 package com.liferay.chat.model.impl;
 
-import com.liferay.chat.model.Status;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class StatusImpl extends StatusModelImpl implements Status {
+public class StatusImpl extends StatusBaseImpl {
 
 	public StatusImpl() {
 	}

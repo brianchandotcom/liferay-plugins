@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -244,8 +245,13 @@ public class HRBillabilityModelImpl extends BaseModelImpl<HRBillability>
 			return (HRBillability)this;
 		}
 		else {
-			return (HRBillability)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRBillability)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -337,6 +343,71 @@ public class HRBillabilityModelImpl extends BaseModelImpl<HRBillability>
 		hrBillabilityModelImpl._setOriginalGroupId = false;
 
 		hrBillabilityModelImpl._originalCode = hrBillabilityModelImpl._code;
+	}
+
+	@Override
+	public CacheModel<HRBillability> toCacheModel() {
+		HRBillabilityCacheModel hrBillabilityCacheModel = new HRBillabilityCacheModel();
+
+		hrBillabilityCacheModel.hrBillabilityId = getHrBillabilityId();
+
+		hrBillabilityCacheModel.groupId = getGroupId();
+
+		hrBillabilityCacheModel.companyId = getCompanyId();
+
+		hrBillabilityCacheModel.userId = getUserId();
+
+		hrBillabilityCacheModel.userName = getUserName();
+
+		String userName = hrBillabilityCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrBillabilityCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrBillabilityCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrBillabilityCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrBillabilityCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrBillabilityCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrBillabilityCacheModel.code = getCode();
+
+		String code = hrBillabilityCacheModel.code;
+
+		if ((code != null) && (code.length() == 0)) {
+			hrBillabilityCacheModel.code = null;
+		}
+
+		hrBillabilityCacheModel.name = getName();
+
+		String name = hrBillabilityCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			hrBillabilityCacheModel.name = null;
+		}
+
+		hrBillabilityCacheModel.description = getDescription();
+
+		String description = hrBillabilityCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			hrBillabilityCacheModel.description = null;
+		}
+
+		return hrBillabilityCacheModel;
 	}
 
 	@Override
@@ -440,4 +511,5 @@ public class HRBillabilityModelImpl extends BaseModelImpl<HRBillability>
 	private String _name;
 	private String _description;
 	private transient ExpandoBridge _expandoBridge;
+	private HRBillability _escapedModelProxy;
 }

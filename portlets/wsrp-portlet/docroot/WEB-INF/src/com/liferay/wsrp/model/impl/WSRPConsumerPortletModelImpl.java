@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -213,8 +214,13 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 			return (WSRPConsumerPortlet)this;
 		}
 		else {
-			return (WSRPConsumerPortlet)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (WSRPConsumerPortlet)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -305,6 +311,61 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 	}
 
 	@Override
+	public CacheModel<WSRPConsumerPortlet> toCacheModel() {
+		WSRPConsumerPortletCacheModel wsrpConsumerPortletCacheModel = new WSRPConsumerPortletCacheModel();
+
+		wsrpConsumerPortletCacheModel.uuid = getUuid();
+
+		String uuid = wsrpConsumerPortletCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			wsrpConsumerPortletCacheModel.uuid = null;
+		}
+
+		wsrpConsumerPortletCacheModel.wsrpConsumerPortletId = getWsrpConsumerPortletId();
+
+		wsrpConsumerPortletCacheModel.companyId = getCompanyId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			wsrpConsumerPortletCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			wsrpConsumerPortletCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			wsrpConsumerPortletCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			wsrpConsumerPortletCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		wsrpConsumerPortletCacheModel.wsrpConsumerId = getWsrpConsumerId();
+
+		wsrpConsumerPortletCacheModel.name = getName();
+
+		String name = wsrpConsumerPortletCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			wsrpConsumerPortletCacheModel.name = null;
+		}
+
+		wsrpConsumerPortletCacheModel.portletHandle = getPortletHandle();
+
+		String portletHandle = wsrpConsumerPortletCacheModel.portletHandle;
+
+		if ((portletHandle != null) && (portletHandle.length() == 0)) {
+			wsrpConsumerPortletCacheModel.portletHandle = null;
+		}
+
+		return wsrpConsumerPortletCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(17);
 
@@ -390,4 +451,5 @@ public class WSRPConsumerPortletModelImpl extends BaseModelImpl<WSRPConsumerPort
 	private String _portletHandle;
 	private String _originalPortletHandle;
 	private transient ExpandoBridge _expandoBridge;
+	private WSRPConsumerPortlet _escapedModelProxy;
 }

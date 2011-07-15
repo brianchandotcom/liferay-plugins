@@ -14,12 +14,10 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRClient;
-
 /**
  * @author Wesley Gong
  */
-public class HRClientImpl extends HRClientModelImpl implements HRClient {
+public class HRClientImpl extends HRClientBaseImpl {
 
 	public HRClientImpl() {
 	}

@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -302,8 +303,13 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 			return (KBComment)this;
 		}
 		else {
-			return (KBComment)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (KBComment)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -410,6 +416,63 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 		kbCommentModelImpl._originalClassPK = kbCommentModelImpl._classPK;
 
 		kbCommentModelImpl._setOriginalClassPK = false;
+	}
+
+	@Override
+	public CacheModel<KBComment> toCacheModel() {
+		KBCommentCacheModel kbCommentCacheModel = new KBCommentCacheModel();
+
+		kbCommentCacheModel.uuid = getUuid();
+
+		String uuid = kbCommentCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			kbCommentCacheModel.uuid = null;
+		}
+
+		kbCommentCacheModel.kbCommentId = getKbCommentId();
+
+		kbCommentCacheModel.groupId = getGroupId();
+
+		kbCommentCacheModel.companyId = getCompanyId();
+
+		kbCommentCacheModel.userId = getUserId();
+
+		kbCommentCacheModel.userName = getUserName();
+
+		String userName = kbCommentCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			kbCommentCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			kbCommentCacheModel.createDate = createDate.getTime();
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			kbCommentCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+
+		kbCommentCacheModel.classNameId = getClassNameId();
+
+		kbCommentCacheModel.classPK = getClassPK();
+
+		kbCommentCacheModel.content = getContent();
+
+		String content = kbCommentCacheModel.content;
+
+		if ((content != null) && (content.length() == 0)) {
+			kbCommentCacheModel.content = null;
+		}
+
+		kbCommentCacheModel.helpful = getHelpful();
+
+		return kbCommentCacheModel;
 	}
 
 	@Override
@@ -533,4 +596,5 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 	private String _content;
 	private boolean _helpful;
 	private transient ExpandoBridge _expandoBridge;
+	private KBComment _escapedModelProxy;
 }

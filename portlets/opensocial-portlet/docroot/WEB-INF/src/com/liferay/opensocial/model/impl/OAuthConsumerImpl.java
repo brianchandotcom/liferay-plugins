@@ -14,14 +14,13 @@
 
 package com.liferay.opensocial.model.impl;
 
-import com.liferay.opensocial.model.OAuthConsumer;
 import com.liferay.portal.kernel.util.GetterUtil;
 
 /**
  * @author Michael Young
  */
 public class OAuthConsumerImpl
-	extends OAuthConsumerModelImpl implements OAuthConsumer {
+	extends OAuthConsumerBaseImpl {
 
 	public OAuthConsumerImpl() {
 	}

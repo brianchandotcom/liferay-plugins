@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -73,11 +74,11 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
-			DefinitionModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			DefinitionModelImpl.FINDER_CACHE_ENABLED, DefinitionImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
-			DefinitionModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			DefinitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the definition in the entity cache if it is enabled.
@@ -364,8 +365,14 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 		Definition definition = (Definition)EntityCacheUtil.getResult(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
 				DefinitionImpl.class, definitionId, this);
 
+		if (definition == _nullDefinition) {
+			return null;
+		}
+
 		if (definition == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -374,11 +381,17 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 						Long.valueOf(definitionId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (definition != null) {
 					cacheResult(definition);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
+						DefinitionImpl.class, definitionId, _nullDefinition);
 				}
 
 				closeSession(session);
@@ -598,4 +611,19 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(DefinitionPersistenceImpl.class);
+	private static Definition _nullDefinition = new DefinitionImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<Definition> toCacheModel() {
+				return _nullDefinitionCacheModel;
+			}
+		};
+
+	private static CacheModel<Definition> _nullDefinitionCacheModel = new CacheModel<Definition>() {
+			public Definition toEntityModel() {
+				return _nullDefinition;
+			}
+		};
 }

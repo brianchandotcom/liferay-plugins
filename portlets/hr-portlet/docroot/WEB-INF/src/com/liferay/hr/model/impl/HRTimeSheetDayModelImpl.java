@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -237,8 +238,13 @@ public class HRTimeSheetDayModelImpl extends BaseModelImpl<HRTimeSheetDay>
 			return (HRTimeSheetDay)this;
 		}
 		else {
-			return (HRTimeSheetDay)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRTimeSheetDay)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -325,6 +331,57 @@ public class HRTimeSheetDayModelImpl extends BaseModelImpl<HRTimeSheetDay>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRTimeSheetDay> toCacheModel() {
+		HRTimeSheetDayCacheModel hrTimeSheetDayCacheModel = new HRTimeSheetDayCacheModel();
+
+		hrTimeSheetDayCacheModel.hrTimeSheetDayId = getHrTimeSheetDayId();
+
+		hrTimeSheetDayCacheModel.groupId = getGroupId();
+
+		hrTimeSheetDayCacheModel.companyId = getCompanyId();
+
+		hrTimeSheetDayCacheModel.userId = getUserId();
+
+		hrTimeSheetDayCacheModel.userName = getUserName();
+
+		String userName = hrTimeSheetDayCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrTimeSheetDayCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrTimeSheetDayCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrTimeSheetDayCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrTimeSheetDayCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrTimeSheetDayCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrTimeSheetDayCacheModel.hrTimeSheetId = getHrTimeSheetId();
+
+		hrTimeSheetDayCacheModel.hrUserId = getHrUserId();
+
+		hrTimeSheetDayCacheModel.dayOfYear = getDayOfYear();
+
+		hrTimeSheetDayCacheModel.year = getYear();
+
+		hrTimeSheetDayCacheModel.hours = getHours();
+
+		return hrTimeSheetDayCacheModel;
 	}
 
 	@Override
@@ -440,4 +497,5 @@ public class HRTimeSheetDayModelImpl extends BaseModelImpl<HRTimeSheetDay>
 	private int _year;
 	private double _hours;
 	private transient ExpandoBridge _expandoBridge;
+	private HRTimeSheetDay _escapedModelProxy;
 }

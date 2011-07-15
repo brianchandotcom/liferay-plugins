@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -137,8 +138,13 @@ public class TypeModelImpl extends BaseModelImpl<Type> implements TypeModel {
 			return (Type)this;
 		}
 		else {
-			return (Type)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (Type)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -217,6 +223,25 @@ public class TypeModelImpl extends BaseModelImpl<Type> implements TypeModel {
 	}
 
 	@Override
+	public CacheModel<Type> toCacheModel() {
+		TypeCacheModel typeCacheModel = new TypeCacheModel();
+
+		typeCacheModel.typeId = getTypeId();
+
+		typeCacheModel.groupId = getGroupId();
+
+		typeCacheModel.name = getName();
+
+		String name = typeCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			typeCacheModel.name = null;
+		}
+
+		return typeCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(7);
 
@@ -264,4 +289,5 @@ public class TypeModelImpl extends BaseModelImpl<Type> implements TypeModel {
 	private long _groupId;
 	private String _name;
 	private transient ExpandoBridge _expandoBridge;
+	private Type _escapedModelProxy;
 }

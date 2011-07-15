@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -248,8 +249,13 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 			return (Definition)this;
 		}
 		else {
-			return (Definition)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (Definition)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -337,6 +343,78 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<Definition> toCacheModel() {
+		DefinitionCacheModel definitionCacheModel = new DefinitionCacheModel();
+
+		definitionCacheModel.definitionId = getDefinitionId();
+
+		definitionCacheModel.groupId = getGroupId();
+
+		definitionCacheModel.companyId = getCompanyId();
+
+		definitionCacheModel.userId = getUserId();
+
+		definitionCacheModel.userName = getUserName();
+
+		String userName = definitionCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			definitionCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			definitionCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			definitionCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			definitionCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			definitionCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		definitionCacheModel.typeId = getTypeId();
+
+		definitionCacheModel.manufacturer = getManufacturer();
+
+		String manufacturer = definitionCacheModel.manufacturer;
+
+		if ((manufacturer != null) && (manufacturer.length() == 0)) {
+			definitionCacheModel.manufacturer = null;
+		}
+
+		definitionCacheModel.model = getModel();
+
+		String model = definitionCacheModel.model;
+
+		if ((model != null) && (model.length() == 0)) {
+			definitionCacheModel.model = null;
+		}
+
+		Date orderDate = getOrderDate();
+
+		if (orderDate != null) {
+			definitionCacheModel.orderDate = orderDate.getTime();
+		}
+		else {
+			definitionCacheModel.orderDate = Long.MIN_VALUE;
+		}
+
+		definitionCacheModel.quantity = getQuantity();
+
+		definitionCacheModel.price = getPrice();
+
+		return definitionCacheModel;
 	}
 
 	@Override
@@ -458,4 +536,5 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 	private int _quantity;
 	private double _price;
 	private transient ExpandoBridge _expandoBridge;
+	private Definition _escapedModelProxy;
 }

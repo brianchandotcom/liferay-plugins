@@ -17,6 +17,7 @@ package com.liferay.sampleservicebuilder.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -212,7 +213,7 @@ public interface FooModel extends BaseModel<Foo>, GroupedModel {
 	public boolean getField2();
 
 	/**
-	 * Determines if this foo is field2.
+	 * Returns <code>true</code> if this foo is field2.
 	 *
 	 * @return <code>true</code> if this foo is field2; <code>false</code> otherwise
 	 */
@@ -293,6 +294,8 @@ public interface FooModel extends BaseModel<Foo>, GroupedModel {
 	public int compareTo(Foo foo);
 
 	public int hashCode();
+
+	public CacheModel<Foo> toCacheModel();
 
 	public Foo toEscapedModel();
 

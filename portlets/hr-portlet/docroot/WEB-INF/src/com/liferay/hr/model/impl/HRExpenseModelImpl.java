@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -359,8 +360,13 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 			return (HRExpense)this;
 		}
 		else {
-			return (HRExpense)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRExpense)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -454,6 +460,91 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRExpense> toCacheModel() {
+		HRExpenseCacheModel hrExpenseCacheModel = new HRExpenseCacheModel();
+
+		hrExpenseCacheModel.hrExpenseId = getHrExpenseId();
+
+		hrExpenseCacheModel.groupId = getGroupId();
+
+		hrExpenseCacheModel.companyId = getCompanyId();
+
+		hrExpenseCacheModel.userId = getUserId();
+
+		hrExpenseCacheModel.userName = getUserName();
+
+		String userName = hrExpenseCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrExpenseCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrExpenseCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrExpenseCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrExpenseCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrExpenseCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrExpenseCacheModel.hrExpenseAccountId = getHrExpenseAccountId();
+
+		hrExpenseCacheModel.hrExpenseTypeId = getHrExpenseTypeId();
+
+		hrExpenseCacheModel.hrUserId = getHrUserId();
+
+		Date expenseDate = getExpenseDate();
+
+		if (expenseDate != null) {
+			hrExpenseCacheModel.expenseDate = expenseDate.getTime();
+		}
+		else {
+			hrExpenseCacheModel.expenseDate = Long.MIN_VALUE;
+		}
+
+		hrExpenseCacheModel.expenseAmount = getExpenseAmount();
+
+		hrExpenseCacheModel.expenseHRExpenseCurrencyId = getExpenseHRExpenseCurrencyId();
+
+		hrExpenseCacheModel.reimbursementAmount = getReimbursementAmount();
+
+		hrExpenseCacheModel.reimbursementHRExpenseCurrencyId = getReimbursementHRExpenseCurrencyId();
+
+		hrExpenseCacheModel.status = getStatus();
+
+		hrExpenseCacheModel.statusByUserId = getStatusByUserId();
+
+		hrExpenseCacheModel.statusByUserName = getStatusByUserName();
+
+		String statusByUserName = hrExpenseCacheModel.statusByUserName;
+
+		if ((statusByUserName != null) && (statusByUserName.length() == 0)) {
+			hrExpenseCacheModel.statusByUserName = null;
+		}
+
+		Date statusDate = getStatusDate();
+
+		if (statusDate != null) {
+			hrExpenseCacheModel.statusDate = statusDate.getTime();
+		}
+		else {
+			hrExpenseCacheModel.statusDate = Long.MIN_VALUE;
+		}
+
+		return hrExpenseCacheModel;
 	}
 
 	@Override
@@ -619,4 +710,5 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private transient ExpandoBridge _expandoBridge;
+	private HRExpense _escapedModelProxy;
 }

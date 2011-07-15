@@ -187,7 +187,7 @@ public interface KaleoTaskAssignmentLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the kaleo task assignment in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo task assignment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTaskAssignment the kaleo task assignment
 	* @return the kaleo task assignment that was updated
@@ -198,7 +198,7 @@ public interface KaleoTaskAssignmentLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the kaleo task assignment in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo task assignment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTaskAssignment the kaleo task assignment
 	* @param merge whether to merge the kaleo task assignment with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -225,7 +225,8 @@ public interface KaleoTaskAssignmentLocalService {
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment addKaleoTaskAssignment(
-		long kaleoDefinitionId, long kaleoNodeId, long kaleoTaskId,
+		java.lang.String kaleoClassName, long kaleoClassPK,
+		long kaleoDefinitionId,
 		com.liferay.portal.workflow.kaleo.definition.Assignment assignment,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -245,12 +246,12 @@ public interface KaleoTaskAssignmentLocalService {
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment> getKaleoTaskAssignments(
-		long kaleoNodeId, long kaleoTaskId)
+		long kaleoTaskId, java.lang.String assigneeClassName)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment> getKaleoTaskAssignments(
-		long kaleoTaskId, java.lang.String assigneeClassName)
+		java.lang.String kaleoClassName, long kaleoClassPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

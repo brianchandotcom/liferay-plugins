@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -219,8 +220,13 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 			return (Asset)this;
 		}
 		else {
-			return (Asset)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (Asset)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -305,6 +311,66 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<Asset> toCacheModel() {
+		AssetCacheModel assetCacheModel = new AssetCacheModel();
+
+		assetCacheModel.assetId = getAssetId();
+
+		assetCacheModel.companyId = getCompanyId();
+
+		assetCacheModel.userId = getUserId();
+
+		assetCacheModel.userName = getUserName();
+
+		String userName = assetCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			assetCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			assetCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			assetCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			assetCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			assetCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		assetCacheModel.definitionId = getDefinitionId();
+
+		assetCacheModel.serialNumber = getSerialNumber();
+
+		String serialNumber = assetCacheModel.serialNumber;
+
+		if ((serialNumber != null) && (serialNumber.length() == 0)) {
+			assetCacheModel.serialNumber = null;
+		}
+
+		Date inactiveDate = getInactiveDate();
+
+		if (inactiveDate != null) {
+			assetCacheModel.inactiveDate = inactiveDate.getTime();
+		}
+		else {
+			assetCacheModel.inactiveDate = Long.MIN_VALUE;
+		}
+
+		assetCacheModel.active = getActive();
+
+		return assetCacheModel;
 	}
 
 	@Override
@@ -405,4 +471,5 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 	private Date _inactiveDate;
 	private boolean _active;
 	private transient ExpandoBridge _expandoBridge;
+	private Asset _escapedModelProxy;
 }

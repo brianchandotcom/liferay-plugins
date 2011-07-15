@@ -43,6 +43,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
@@ -89,8 +90,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByUuid",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByUuid",
 			new String[] {
 				String.class.getName(),
 				
@@ -98,19 +99,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByUuid", new String[] { String.class.getName() });
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByUuid",
+			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_ENTITY,
-			"fetchByUUID_G",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByUUID_G",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByUUID_G",
 			new String[] { String.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_RESOURCEPRIMKEY = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByResourcePrimKey",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByResourcePrimKey",
 			new String[] {
 				Long.class.getName(),
 				
@@ -118,11 +120,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByResourcePrimKey", new String[] { Long.class.getName() });
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByResourcePrimKey",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByR_G",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByR_G",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
@@ -130,20 +133,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_G",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_G",
 			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_R_V = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_ENTITY,
-			"fetchByR_V",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByR_V",
 			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_V = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_V",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_V",
 			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByR_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByR_L",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -151,12 +154,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_L",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByR_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByR_M",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -164,12 +167,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_M",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByR_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByR_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
@@ -177,12 +180,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_S",
 			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_L",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -190,12 +193,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_L",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_M",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -203,12 +206,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_M",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
@@ -216,12 +219,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_S",
 			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByC_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByC_L",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -229,12 +232,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByC_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByC_L",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByC_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByC_M",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -242,12 +245,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByC_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByC_M",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByC_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByC_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
@@ -255,12 +258,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByC_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByC_S",
 			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByP_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByP_L",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -268,12 +271,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByP_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByP_L",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByP_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByP_M",
 			new String[] {
 				Long.class.getName(), Boolean.class.getName(),
 				
@@ -281,12 +284,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByP_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByP_M",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByP_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByP_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				
@@ -294,12 +297,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByP_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByP_S",
 			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByR_G_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByR_G_L",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -308,15 +311,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_G_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_G_L",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByR_G_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByR_G_M",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -325,15 +328,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_G_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_G_M",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByR_G_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByR_G_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(),
@@ -342,15 +345,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByR_G_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByR_G_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_P_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_P_L",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -359,15 +362,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_P_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_P_L",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_P_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_P_M",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName(),
@@ -376,15 +379,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_P_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_P_M",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Boolean.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_P_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_P_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName(),
@@ -393,15 +396,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_P_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_P_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				Integer.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_G_P_S_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_P_S_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_P_S_L",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Boolean.class.getName(),
@@ -410,15 +413,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_S_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_P_S_L",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_P_S_L",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Boolean.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_G_P_S_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_P_S_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_P_S_M",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Boolean.class.getName(),
@@ -427,15 +430,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_S_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_P_S_M",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_P_S_M",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Boolean.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_BY_G_P_S_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_P_S_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_P_S_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Integer.class.getName(),
@@ -444,18 +447,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_S_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_P_S_S",
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_P_S_S",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				String.class.getName(), Integer.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the k b article in the entity cache if it is enabled.
@@ -770,7 +773,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		kbArticleImpl.setTitle(kbArticle.getTitle());
 		kbArticleImpl.setContent(kbArticle.getContent());
 		kbArticleImpl.setDescription(kbArticle.getDescription());
-		kbArticleImpl.setKbTemplateId(kbArticle.getKbTemplateId());
 		kbArticleImpl.setPriority(kbArticle.getPriority());
 		kbArticleImpl.setSections(kbArticle.getSections());
 		kbArticleImpl.setViewCount(kbArticle.getViewCount());
@@ -847,8 +849,14 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		KBArticle kbArticle = (KBArticle)EntityCacheUtil.getResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
 				KBArticleImpl.class, kbArticleId, this);
 
+		if (kbArticle == _nullKBArticle) {
+			return null;
+		}
+
 		if (kbArticle == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -857,11 +865,17 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 						Long.valueOf(kbArticleId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (kbArticle != null) {
 					cacheResult(kbArticle);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+						KBArticleImpl.class, kbArticleId, _nullKBArticle);
 				}
 
 				closeSession(session);
@@ -1287,6 +1301,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 *
 	 * @param uuid the uuid
 	 * @param groupId the group ID
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching k b article, or <code>null</code> if a matching k b article could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -2156,13 +2171,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(4);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2);
 
 		query.append(_FINDER_COLUMN_R_G_GROUPID_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -2185,7 +2207,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -2276,13 +2299,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2);
 
 		query.append(_FINDER_COLUMN_R_G_GROUPID_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -2360,7 +2390,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -2452,6 +2483,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 *
 	 * @param resourcePrimKey the resource prim key
 	 * @param version the version
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching k b article, or <code>null</code> if a matching k b article could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -4504,13 +4536,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(4);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_L_GROUPID_2);
 
 		query.append(_FINDER_COLUMN_G_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -4533,7 +4572,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -4624,13 +4664,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_L_GROUPID_2);
 
 		query.append(_FINDER_COLUMN_G_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -4708,7 +4755,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -5171,13 +5219,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(4);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_M_GROUPID_2);
 
 		query.append(_FINDER_COLUMN_G_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -5200,7 +5255,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -5291,13 +5347,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_M_GROUPID_2);
 
 		query.append(_FINDER_COLUMN_G_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -5375,7 +5438,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -5838,13 +5902,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(4);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_S_GROUPID_2);
 
 		query.append(_FINDER_COLUMN_G_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -5867,7 +5938,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -5958,13 +6030,20 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_S_GROUPID_2);
 
 		query.append(_FINDER_COLUMN_G_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -6042,7 +6121,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -9326,7 +9406,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(5);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2);
 
@@ -9334,7 +9419,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_R_G_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -9357,7 +9444,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -9452,7 +9540,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2);
 
@@ -9460,7 +9553,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_R_G_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -9538,7 +9633,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -9641,7 +9737,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -9681,7 +9782,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -9704,7 +9807,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -10358,7 +10462,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(5);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2);
 
@@ -10366,7 +10475,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_R_G_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -10389,7 +10500,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -10484,7 +10596,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2);
 
@@ -10492,7 +10609,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_R_G_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -10570,7 +10689,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -10673,7 +10793,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -10713,7 +10838,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -10736,7 +10863,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -11389,7 +11517,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(5);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2);
 
@@ -11397,7 +11530,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_R_G_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -11420,7 +11555,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -11515,7 +11651,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2);
 
@@ -11523,7 +11664,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_R_G_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -11601,7 +11744,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -11703,7 +11847,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -11743,7 +11892,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -11766,7 +11917,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -12427,7 +12579,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(5);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_L_GROUPID_2);
 
@@ -12435,7 +12592,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -12458,7 +12617,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -12555,7 +12715,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_L_GROUPID_2);
 
@@ -12563,7 +12728,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -12641,7 +12808,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -12745,7 +12913,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -12786,7 +12959,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -12809,7 +12984,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -13469,7 +13645,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(5);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_M_GROUPID_2);
 
@@ -13477,7 +13658,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -13500,7 +13683,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -13597,7 +13781,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_M_GROUPID_2);
 
@@ -13605,7 +13794,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -13683,7 +13874,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -13786,7 +13978,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -13827,7 +14024,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -13850,7 +14049,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -14510,7 +14710,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(5);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_GROUPID_2);
 
@@ -14518,7 +14723,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -14541,7 +14748,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -14638,7 +14846,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_GROUPID_2);
 
@@ -14646,7 +14859,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -14724,7 +14939,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -14827,7 +15043,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -14868,7 +15089,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -14891,7 +15114,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -15632,7 +15856,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(6);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_2);
 
@@ -15652,7 +15881,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -15675,7 +15906,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -15778,7 +16010,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_2);
 
@@ -15798,7 +16035,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -15876,7 +16115,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -15988,7 +16228,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -16048,7 +16293,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -16071,7 +16318,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -16814,7 +17062,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(6);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_2);
 
@@ -16834,7 +17087,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -16857,7 +17112,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -16960,7 +17216,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_2);
 
@@ -16980,7 +17241,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -17058,7 +17321,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -17170,7 +17434,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -17230,7 +17499,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -17253,7 +17524,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -17995,7 +18267,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(6);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_S_GROUPID_2);
 
@@ -18015,7 +18292,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -18038,7 +18317,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -18141,7 +18421,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			query = new StringBundler(3);
 		}
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		query.append(_FINDER_COLUMN_G_P_S_S_GROUPID_2);
 
@@ -18161,7 +18446,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			String[] orderByFields = orderByComparator.getOrderByFields();
@@ -18239,7 +18526,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		SQLQuery q = session.createSQLQuery(sql);
 
@@ -18350,7 +18638,12 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		StringBundler query = new StringBundler();
 
-		query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		if (getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_WHERE);
+		}
+		else {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1);
+		}
 
 		boolean conjunctionable = false;
 
@@ -18410,7 +18703,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		conjunctionable = true;
 
-		appendGroupByComparator(query, _FILTER_COLUMN_PK);
+		if (!getDB().isSupportsInlineDistinct()) {
+			query.append(_FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2);
+		}
 
 		if (orderByComparator != null) {
 			if (getDB().isSupportsInlineDistinct()) {
@@ -18433,7 +18728,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -19241,7 +19537,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_R_G_GROUPID_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -19856,7 +20153,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_L_LATEST_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -19967,7 +20265,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_M_MAIN_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -20078,7 +20377,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_S_STATUS_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -20921,7 +21221,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_R_G_L_LATEST_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -21011,7 +21312,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -21235,7 +21537,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_R_G_M_MAIN_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -21325,7 +21628,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -21549,7 +21853,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_R_G_S_STATUS_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -21639,7 +21944,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -21866,7 +22172,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_P_L_LATEST_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -21957,7 +22264,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -22182,7 +22490,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_P_M_MAIN_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -22273,7 +22582,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -22500,7 +22810,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_P_S_STATUS_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -22591,7 +22902,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -22872,7 +23184,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -22988,7 +23301,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -23270,7 +23584,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -23386,7 +23701,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -23669,7 +23985,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -23785,7 +24102,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		conjunctionable = true;
 
 		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(), _FILTER_COLUMN_PK, groupId);
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
 
 		Session session = null;
 
@@ -23896,8 +24214,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	protected KBArticlePersistence kbArticlePersistence;
 	@BeanReference(type = KBCommentPersistence.class)
 	protected KBCommentPersistence kbCommentPersistence;
-	@BeanReference(type = KBStructurePersistence.class)
-	protected KBStructurePersistence kbStructurePersistence;
 	@BeanReference(type = KBTemplatePersistence.class)
 	protected KBTemplatePersistence kbTemplatePersistence;
 	@BeanReference(type = CompanyPersistence.class)
@@ -24109,11 +24425,15 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		return sql;
 	}
 
-	private static final String _FILTER_SQL_SELECT_KBARTICLE_WHERE = "SELECT {kbArticle.*} FROM KBArticle kbArticle WHERE ";
+	private static final String _FILTER_SQL_SELECT_KBARTICLE_WHERE = "SELECT DISTINCT {kbArticle.*} FROM KBArticle kbArticle WHERE ";
+	private static final String _FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1 =
+		"SELECT {KBArticle.*} FROM (SELECT DISTINCT kbArticle.kbArticleId FROM KBArticle kbArticle WHERE ";
+	private static final String _FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_2 =
+		") TEMP_TABLE INNER JOIN KBArticle ON TEMP_TABLE.kbArticleId = KBArticle.kbArticleId";
 	private static final String _FILTER_SQL_COUNT_KBARTICLE_WHERE = "SELECT COUNT(DISTINCT kbArticle.kbArticleId) AS COUNT_VALUE FROM KBArticle kbArticle WHERE ";
-	private static final String _FILTER_COLUMN_PK = "kbArticle.rootResourcePrimKey";
 	private static final String _FILTER_ENTITY_ALIAS = "kbArticle";
 	private static final String _FILTER_ENTITY_TABLE = "KBArticle";
+	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "kbArticle.rootResourcePrimKey";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "kbArticle.";
 	private static final String _ORDER_BY_ENTITY_TABLE = "KBArticle.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No KBArticle exists with the primary key ";
@@ -24121,4 +24441,19 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(KBArticlePersistenceImpl.class);
+	private static KBArticle _nullKBArticle = new KBArticleImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<KBArticle> toCacheModel() {
+				return _nullKBArticleCacheModel;
+			}
+		};
+
+	private static CacheModel<KBArticle> _nullKBArticleCacheModel = new CacheModel<KBArticle>() {
+			public KBArticle toEntityModel() {
+				return _nullKBArticle;
+			}
+		};
 }

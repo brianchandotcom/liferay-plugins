@@ -17,6 +17,7 @@ package com.liferay.portal.workflow.kaleo.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -176,6 +177,35 @@ public interface KaleoTimerInstanceTokenModel extends BaseModel<KaleoTimerInstan
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the kaleo class name of this kaleo timer instance token.
+	 *
+	 * @return the kaleo class name of this kaleo timer instance token
+	 */
+	@AutoEscape
+	public String getKaleoClassName();
+
+	/**
+	 * Sets the kaleo class name of this kaleo timer instance token.
+	 *
+	 * @param kaleoClassName the kaleo class name of this kaleo timer instance token
+	 */
+	public void setKaleoClassName(String kaleoClassName);
+
+	/**
+	 * Returns the kaleo class p k of this kaleo timer instance token.
+	 *
+	 * @return the kaleo class p k of this kaleo timer instance token
+	 */
+	public long getKaleoClassPK();
+
+	/**
+	 * Sets the kaleo class p k of this kaleo timer instance token.
+	 *
+	 * @param kaleoClassPK the kaleo class p k of this kaleo timer instance token
+	 */
+	public void setKaleoClassPK(long kaleoClassPK);
+
+	/**
 	 * Returns the kaleo definition ID of this kaleo timer instance token.
 	 *
 	 * @return the kaleo definition ID of this kaleo timer instance token
@@ -218,6 +248,20 @@ public interface KaleoTimerInstanceTokenModel extends BaseModel<KaleoTimerInstan
 	public void setKaleoInstanceTokenId(long kaleoInstanceTokenId);
 
 	/**
+	 * Returns the kaleo task instance token ID of this kaleo timer instance token.
+	 *
+	 * @return the kaleo task instance token ID of this kaleo timer instance token
+	 */
+	public long getKaleoTaskInstanceTokenId();
+
+	/**
+	 * Sets the kaleo task instance token ID of this kaleo timer instance token.
+	 *
+	 * @param kaleoTaskInstanceTokenId the kaleo task instance token ID of this kaleo timer instance token
+	 */
+	public void setKaleoTaskInstanceTokenId(long kaleoTaskInstanceTokenId);
+
+	/**
 	 * Returns the kaleo timer ID of this kaleo timer instance token.
 	 *
 	 * @return the kaleo timer ID of this kaleo timer instance token
@@ -245,6 +289,27 @@ public interface KaleoTimerInstanceTokenModel extends BaseModel<KaleoTimerInstan
 	 * @param kaleoTimerName the kaleo timer name of this kaleo timer instance token
 	 */
 	public void setKaleoTimerName(String kaleoTimerName);
+
+	/**
+	 * Returns the blocking of this kaleo timer instance token.
+	 *
+	 * @return the blocking of this kaleo timer instance token
+	 */
+	public boolean getBlocking();
+
+	/**
+	 * Returns <code>true</code> if this kaleo timer instance token is blocking.
+	 *
+	 * @return <code>true</code> if this kaleo timer instance token is blocking; <code>false</code> otherwise
+	 */
+	public boolean isBlocking();
+
+	/**
+	 * Sets whether this kaleo timer instance token is blocking.
+	 *
+	 * @param blocking the blocking of this kaleo timer instance token
+	 */
+	public void setBlocking(boolean blocking);
 
 	/**
 	 * Returns the completion user ID of this kaleo timer instance token.
@@ -283,7 +348,7 @@ public interface KaleoTimerInstanceTokenModel extends BaseModel<KaleoTimerInstan
 	public boolean getCompleted();
 
 	/**
-	 * Determines if this kaleo timer instance token is completed.
+	 * Returns <code>true</code> if this kaleo timer instance token is completed.
 	 *
 	 * @return <code>true</code> if this kaleo timer instance token is completed; <code>false</code> otherwise
 	 */
@@ -350,6 +415,8 @@ public interface KaleoTimerInstanceTokenModel extends BaseModel<KaleoTimerInstan
 	public int compareTo(KaleoTimerInstanceToken kaleoTimerInstanceToken);
 
 	public int hashCode();
+
+	public CacheModel<KaleoTimerInstanceToken> toCacheModel();
 
 	public KaleoTimerInstanceToken toEscapedModel();
 

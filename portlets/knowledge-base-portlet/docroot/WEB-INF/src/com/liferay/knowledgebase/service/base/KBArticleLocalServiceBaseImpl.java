@@ -20,13 +20,10 @@ import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.service.KBArticleLocalService;
 import com.liferay.knowledgebase.service.KBArticleService;
 import com.liferay.knowledgebase.service.KBCommentLocalService;
-import com.liferay.knowledgebase.service.KBStructureLocalService;
-import com.liferay.knowledgebase.service.KBStructureService;
 import com.liferay.knowledgebase.service.KBTemplateLocalService;
 import com.liferay.knowledgebase.service.KBTemplateService;
 import com.liferay.knowledgebase.service.persistence.KBArticlePersistence;
 import com.liferay.knowledgebase.service.persistence.KBCommentPersistence;
-import com.liferay.knowledgebase.service.persistence.KBStructurePersistence;
 import com.liferay.knowledgebase.service.persistence.KBTemplatePersistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -68,7 +65,6 @@ import com.liferay.portal.service.persistence.WorkflowInstanceLinkPersistence;
 import com.liferay.portlet.asset.service.AssetEntryLocalService;
 import com.liferay.portlet.asset.service.AssetEntryService;
 import com.liferay.portlet.asset.service.persistence.AssetEntryPersistence;
-import com.liferay.portlet.documentlibrary.store.DLStore;
 import com.liferay.portlet.ratings.service.RatingsStatsLocalService;
 import com.liferay.portlet.ratings.service.persistence.RatingsStatsPersistence;
 import com.liferay.portlet.social.service.SocialActivityLocalService;
@@ -308,7 +304,7 @@ public abstract class KBArticleLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the k b article in the database. Also notifies the appropriate model listeners.
+	 * Updates the k b article in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kbArticle the k b article
 	 * @return the k b article that was updated
@@ -320,7 +316,7 @@ public abstract class KBArticleLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the k b article in the database. Also notifies the appropriate model listeners.
+	 * Updates the k b article in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kbArticle the k b article
 	 * @param merge whether to merge the k b article with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -444,62 +440,6 @@ public abstract class KBArticleLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the k b structure local service.
-	 *
-	 * @return the k b structure local service
-	 */
-	public KBStructureLocalService getKBStructureLocalService() {
-		return kbStructureLocalService;
-	}
-
-	/**
-	 * Sets the k b structure local service.
-	 *
-	 * @param kbStructureLocalService the k b structure local service
-	 */
-	public void setKBStructureLocalService(
-		KBStructureLocalService kbStructureLocalService) {
-		this.kbStructureLocalService = kbStructureLocalService;
-	}
-
-	/**
-	 * Returns the k b structure remote service.
-	 *
-	 * @return the k b structure remote service
-	 */
-	public KBStructureService getKBStructureService() {
-		return kbStructureService;
-	}
-
-	/**
-	 * Sets the k b structure remote service.
-	 *
-	 * @param kbStructureService the k b structure remote service
-	 */
-	public void setKBStructureService(KBStructureService kbStructureService) {
-		this.kbStructureService = kbStructureService;
-	}
-
-	/**
-	 * Returns the k b structure persistence.
-	 *
-	 * @return the k b structure persistence
-	 */
-	public KBStructurePersistence getKBStructurePersistence() {
-		return kbStructurePersistence;
-	}
-
-	/**
-	 * Sets the k b structure persistence.
-	 *
-	 * @param kbStructurePersistence the k b structure persistence
-	 */
-	public void setKBStructurePersistence(
-		KBStructurePersistence kbStructurePersistence) {
-		this.kbStructurePersistence = kbStructurePersistence;
-	}
-
-	/**
 	 * Returns the k b template local service.
 	 *
 	 * @return the k b template local service
@@ -571,24 +511,6 @@ public abstract class KBArticleLocalServiceBaseImpl
 	 */
 	public void setCounterLocalService(CounterLocalService counterLocalService) {
 		this.counterLocalService = counterLocalService;
-	}
-
-	/**
-	 * Returns the d l local service.
-	 *
-	 * @return the d l local service
-	 */
-	public DLStore getDLStore() {
-		return dlStore;
-	}
-
-	/**
-	 * Sets the d l local service.
-	 *
-	 * @param dlStore the d l local service
-	 */
-	public void setDLStore(DLStore dlStore) {
-		this.dlStore = dlStore;
 	}
 
 	/**
@@ -1182,12 +1104,6 @@ public abstract class KBArticleLocalServiceBaseImpl
 	protected KBCommentLocalService kbCommentLocalService;
 	@BeanReference(type = KBCommentPersistence.class)
 	protected KBCommentPersistence kbCommentPersistence;
-	@BeanReference(type = KBStructureLocalService.class)
-	protected KBStructureLocalService kbStructureLocalService;
-	@BeanReference(type = KBStructureService.class)
-	protected KBStructureService kbStructureService;
-	@BeanReference(type = KBStructurePersistence.class)
-	protected KBStructurePersistence kbStructurePersistence;
 	@BeanReference(type = KBTemplateLocalService.class)
 	protected KBTemplateLocalService kbTemplateLocalService;
 	@BeanReference(type = KBTemplateService.class)
@@ -1196,8 +1112,6 @@ public abstract class KBArticleLocalServiceBaseImpl
 	protected KBTemplatePersistence kbTemplatePersistence;
 	@BeanReference(type = CounterLocalService.class)
 	protected CounterLocalService counterLocalService;
-	@BeanReference(type = DLStore.class)
-	protected DLStore dlStore;
 	@BeanReference(type = CompanyLocalService.class)
 	protected CompanyLocalService companyLocalService;
 	@BeanReference(type = CompanyService.class)

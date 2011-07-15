@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -75,8 +76,8 @@ public class WallEntryPersistenceImpl extends BasePersistenceImpl<WallEntry>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_GROUPID = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByGroupId",
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, WallEntryImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByGroupId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -84,11 +85,12 @@ public class WallEntryPersistenceImpl extends BasePersistenceImpl<WallEntry>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByGroupId", new String[] { Long.class.getName() });
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByGroupId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_USERID = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByUserId",
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, WallEntryImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByUserId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -96,11 +98,12 @@ public class WallEntryPersistenceImpl extends BasePersistenceImpl<WallEntry>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_USERID = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByUserId", new String[] { Long.class.getName() });
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByUserId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_G_U = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByG_U",
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, WallEntryImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByG_U",
 			new String[] {
 				Long.class.getName(), Long.class.getName(),
 				
@@ -108,15 +111,15 @@ public class WallEntryPersistenceImpl extends BasePersistenceImpl<WallEntry>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_U = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByG_U",
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByG_U",
 			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, WallEntryImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
-			WallEntryModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			WallEntryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the wall entry in the entity cache if it is enabled.
@@ -399,8 +402,14 @@ public class WallEntryPersistenceImpl extends BasePersistenceImpl<WallEntry>
 		WallEntry wallEntry = (WallEntry)EntityCacheUtil.getResult(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
 				WallEntryImpl.class, wallEntryId, this);
 
+		if (wallEntry == _nullWallEntry) {
+			return null;
+		}
+
 		if (wallEntry == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -409,11 +418,17 @@ public class WallEntryPersistenceImpl extends BasePersistenceImpl<WallEntry>
 						Long.valueOf(wallEntryId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (wallEntry != null) {
 					cacheResult(wallEntry);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(WallEntryModelImpl.ENTITY_CACHE_ENABLED,
+						WallEntryImpl.class, wallEntryId, _nullWallEntry);
 				}
 
 				closeSession(session);
@@ -1878,4 +1893,19 @@ public class WallEntryPersistenceImpl extends BasePersistenceImpl<WallEntry>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(WallEntryPersistenceImpl.class);
+	private static WallEntry _nullWallEntry = new WallEntryImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<WallEntry> toCacheModel() {
+				return _nullWallEntryCacheModel;
+			}
+		};
+
+	private static CacheModel<WallEntry> _nullWallEntryCacheModel = new CacheModel<WallEntry>() {
+			public WallEntry toEntityModel() {
+				return _nullWallEntry;
+			}
+		};
 }

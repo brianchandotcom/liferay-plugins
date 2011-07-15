@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.AuditedModel;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -161,18 +162,19 @@ public interface OAuthTokenModel extends AuditedModel, BaseModel<OAuthToken> {
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the gadget ID of this o auth token.
+	 * Returns the gadget key of this o auth token.
 	 *
-	 * @return the gadget ID of this o auth token
+	 * @return the gadget key of this o auth token
 	 */
-	public long getGadgetId();
+	@AutoEscape
+	public String getGadgetKey();
 
 	/**
-	 * Sets the gadget ID of this o auth token.
+	 * Sets the gadget key of this o auth token.
 	 *
-	 * @param gadgetId the gadget ID of this o auth token
+	 * @param gadgetKey the gadget key of this o auth token
 	 */
-	public void setGadgetId(long gadgetId);
+	public void setGadgetKey(String gadgetKey);
 
 	/**
 	 * Returns the service name of this o auth token.
@@ -302,6 +304,8 @@ public interface OAuthTokenModel extends AuditedModel, BaseModel<OAuthToken> {
 	public int compareTo(OAuthToken oAuthToken);
 
 	public int hashCode();
+
+	public CacheModel<OAuthToken> toCacheModel();
 
 	public OAuthToken toEscapedModel();
 

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -284,8 +285,13 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 			return (MemberRequest)this;
 		}
 		else {
-			return (MemberRequest)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (MemberRequest)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -388,6 +394,63 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 		memberRequestModelImpl._originalStatus = memberRequestModelImpl._status;
 
 		memberRequestModelImpl._setOriginalStatus = false;
+	}
+
+	@Override
+	public CacheModel<MemberRequest> toCacheModel() {
+		MemberRequestCacheModel memberRequestCacheModel = new MemberRequestCacheModel();
+
+		memberRequestCacheModel.memberRequestId = getMemberRequestId();
+
+		memberRequestCacheModel.groupId = getGroupId();
+
+		memberRequestCacheModel.companyId = getCompanyId();
+
+		memberRequestCacheModel.userId = getUserId();
+
+		memberRequestCacheModel.userName = getUserName();
+
+		String userName = memberRequestCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			memberRequestCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			memberRequestCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			memberRequestCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			memberRequestCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			memberRequestCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		memberRequestCacheModel.key = getKey();
+
+		String key = memberRequestCacheModel.key;
+
+		if ((key != null) && (key.length() == 0)) {
+			memberRequestCacheModel.key = null;
+		}
+
+		memberRequestCacheModel.receiverUserId = getReceiverUserId();
+
+		memberRequestCacheModel.invitedRoleId = getInvitedRoleId();
+
+		memberRequestCacheModel.invitedTeamId = getInvitedTeamId();
+
+		memberRequestCacheModel.status = getStatus();
+
+		return memberRequestCacheModel;
 	}
 
 	@Override
@@ -510,4 +573,5 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 	private int _originalStatus;
 	private boolean _setOriginalStatus;
 	private transient ExpandoBridge _expandoBridge;
+	private MemberRequest _escapedModelProxy;
 }

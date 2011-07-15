@@ -378,7 +378,7 @@ public class KaleoDefinitionWrapper implements KaleoDefinition {
 	}
 
 	/**
-	* Determines if this kaleo definition is active.
+	* Returns <code>true</code> if this kaleo definition is active.
 	*
 	* @return <code>true</code> if this kaleo definition is active; <code>false</code> otherwise
 	*/
@@ -469,6 +469,10 @@ public class KaleoDefinitionWrapper implements KaleoDefinition {
 		return _kaleoDefinition.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoDefinition> toCacheModel() {
+		return _kaleoDefinition.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoDefinition toEscapedModel() {
 		return new KaleoDefinitionWrapper(_kaleoDefinition.toEscapedModel());
 	}
@@ -480,6 +484,11 @@ public class KaleoDefinitionWrapper implements KaleoDefinition {
 
 	public java.lang.String toXmlString() {
 		return _kaleoDefinition.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoDefinition.save();
 	}
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode getKaleoStartNode()

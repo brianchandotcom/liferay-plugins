@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -75,8 +76,8 @@ public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_BY_COMPANYID = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByCompanyId",
+			MessageModelImpl.FINDER_CACHE_ENABLED, MessageImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByCompanyId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -84,11 +85,12 @@ public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByCompanyId", new String[] { Long.class.getName() });
+			MessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByCompanyId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_BY_FOLDERID = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findByFolderId",
+			MessageModelImpl.FINDER_CACHE_ENABLED, MessageImpl.class,
+			FINDER_CLASS_NAME_LIST, "findByFolderId",
 			new String[] {
 				Long.class.getName(),
 				
@@ -96,22 +98,23 @@ public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
 	public static final FinderPath FINDER_PATH_COUNT_BY_FOLDERID = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByFolderId", new String[] { Long.class.getName() });
+			MessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByFolderId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_F_R = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_ENTITY,
-			"fetchByF_R",
+			MessageModelImpl.FINDER_CACHE_ENABLED, MessageImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByF_R",
 			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_F_R = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countByF_R",
+			MessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countByF_R",
 			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			MessageModelImpl.FINDER_CACHE_ENABLED, MessageImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MessageModelImpl.ENTITY_CACHE_ENABLED,
-			MessageModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			MessageModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the message in the entity cache if it is enabled.
@@ -446,8 +449,14 @@ public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 		Message message = (Message)EntityCacheUtil.getResult(MessageModelImpl.ENTITY_CACHE_ENABLED,
 				MessageImpl.class, messageId, this);
 
+		if (message == _nullMessage) {
+			return null;
+		}
+
 		if (message == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -456,11 +465,17 @@ public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 						Long.valueOf(messageId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (message != null) {
 					cacheResult(message);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(MessageModelImpl.ENTITY_CACHE_ENABLED,
+						MessageImpl.class, messageId, _nullMessage);
 				}
 
 				closeSession(session);
@@ -1202,6 +1217,7 @@ public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 	 *
 	 * @param folderId the folder ID
 	 * @param remoteMessageId the remote message ID
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching message, or <code>null</code> if a matching message could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -1707,4 +1723,19 @@ public class MessagePersistenceImpl extends BasePersistenceImpl<Message>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(MessagePersistenceImpl.class);
+	private static Message _nullMessage = new MessageImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<Message> toCacheModel() {
+				return _nullMessageCacheModel;
+			}
+		};
+
+	private static CacheModel<Message> _nullMessageCacheModel = new CacheModel<Message>() {
+			public Message toEntityModel() {
+				return _nullMessage;
+			}
+		};
 }

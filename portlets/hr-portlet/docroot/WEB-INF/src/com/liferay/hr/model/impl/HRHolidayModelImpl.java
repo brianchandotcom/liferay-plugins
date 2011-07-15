@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -251,8 +252,13 @@ public class HRHolidayModelImpl extends BaseModelImpl<HRHoliday>
 			return (HRHoliday)this;
 		}
 		else {
-			return (HRHoliday)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRHoliday)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -339,6 +345,69 @@ public class HRHolidayModelImpl extends BaseModelImpl<HRHoliday>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRHoliday> toCacheModel() {
+		HRHolidayCacheModel hrHolidayCacheModel = new HRHolidayCacheModel();
+
+		hrHolidayCacheModel.hrHolidayId = getHrHolidayId();
+
+		hrHolidayCacheModel.groupId = getGroupId();
+
+		hrHolidayCacheModel.companyId = getCompanyId();
+
+		hrHolidayCacheModel.userId = getUserId();
+
+		hrHolidayCacheModel.userName = getUserName();
+
+		String userName = hrHolidayCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrHolidayCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrHolidayCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrHolidayCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrHolidayCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrHolidayCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrHolidayCacheModel.name = getName();
+
+		String name = hrHolidayCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			hrHolidayCacheModel.name = null;
+		}
+
+		hrHolidayCacheModel.description = getDescription();
+
+		String description = hrHolidayCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			hrHolidayCacheModel.description = null;
+		}
+
+		hrHolidayCacheModel.dayOfYear = getDayOfYear();
+
+		hrHolidayCacheModel.year = getYear();
+
+		hrHolidayCacheModel.paid = getPaid();
+
+		return hrHolidayCacheModel;
 	}
 
 	@Override
@@ -453,4 +522,5 @@ public class HRHolidayModelImpl extends BaseModelImpl<HRHoliday>
 	private int _year;
 	private boolean _paid;
 	private transient ExpandoBridge _expandoBridge;
+	private HRHoliday _escapedModelProxy;
 }

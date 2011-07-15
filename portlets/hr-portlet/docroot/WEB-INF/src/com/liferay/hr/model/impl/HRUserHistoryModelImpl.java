@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -287,8 +288,13 @@ public class HRUserHistoryModelImpl extends BaseModelImpl<HRUserHistory>
 			return (HRUserHistory)this;
 		}
 		else {
-			return (HRUserHistory)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRUserHistory)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -380,6 +386,80 @@ public class HRUserHistoryModelImpl extends BaseModelImpl<HRUserHistory>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRUserHistory> toCacheModel() {
+		HRUserHistoryCacheModel hrUserHistoryCacheModel = new HRUserHistoryCacheModel();
+
+		hrUserHistoryCacheModel.hrUserHistoryId = getHrUserHistoryId();
+
+		hrUserHistoryCacheModel.groupId = getGroupId();
+
+		hrUserHistoryCacheModel.companyId = getCompanyId();
+
+		hrUserHistoryCacheModel.userId = getUserId();
+
+		hrUserHistoryCacheModel.userName = getUserName();
+
+		String userName = hrUserHistoryCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrUserHistoryCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrUserHistoryCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrUserHistoryCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		hrUserHistoryCacheModel.hrEmploymentTypeId = getHrEmploymentTypeId();
+
+		hrUserHistoryCacheModel.hrJobTitleId = getHrJobTitleId();
+
+		hrUserHistoryCacheModel.hrOfficeId = getHrOfficeId();
+
+		hrUserHistoryCacheModel.hrTerminationTypeId = getHrTerminationTypeId();
+
+		hrUserHistoryCacheModel.hrWageTypeId = getHrWageTypeId();
+
+		Date hireDate = getHireDate();
+
+		if (hireDate != null) {
+			hrUserHistoryCacheModel.hireDate = hireDate.getTime();
+		}
+		else {
+			hrUserHistoryCacheModel.hireDate = Long.MIN_VALUE;
+		}
+
+		Date terminationDate = getTerminationDate();
+
+		if (terminationDate != null) {
+			hrUserHistoryCacheModel.terminationDate = terminationDate.getTime();
+		}
+		else {
+			hrUserHistoryCacheModel.terminationDate = Long.MIN_VALUE;
+		}
+
+		hrUserHistoryCacheModel.wageAmount = getWageAmount();
+
+		hrUserHistoryCacheModel.wageCurrencyCode = getWageCurrencyCode();
+
+		String wageCurrencyCode = hrUserHistoryCacheModel.wageCurrencyCode;
+
+		if ((wageCurrencyCode != null) && (wageCurrencyCode.length() == 0)) {
+			hrUserHistoryCacheModel.wageCurrencyCode = null;
+		}
+
+		hrUserHistoryCacheModel.benefitsExempt = getBenefitsExempt();
+
+		hrUserHistoryCacheModel.overtimeExempt = getOvertimeExempt();
+
+		return hrUserHistoryCacheModel;
 	}
 
 	@Override
@@ -529,4 +609,5 @@ public class HRUserHistoryModelImpl extends BaseModelImpl<HRUserHistory>
 	private boolean _benefitsExempt;
 	private boolean _overtimeExempt;
 	private transient ExpandoBridge _expandoBridge;
+	private HRUserHistory _escapedModelProxy;
 }

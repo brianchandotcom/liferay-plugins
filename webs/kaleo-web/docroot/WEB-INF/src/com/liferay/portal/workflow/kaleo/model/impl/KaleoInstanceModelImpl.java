@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -285,8 +286,13 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 			return (KaleoInstance)this;
 		}
 		else {
-			return (KaleoInstance)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (KaleoInstance)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -383,6 +389,91 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<KaleoInstance> toCacheModel() {
+		KaleoInstanceCacheModel kaleoInstanceCacheModel = new KaleoInstanceCacheModel();
+
+		kaleoInstanceCacheModel.kaleoInstanceId = getKaleoInstanceId();
+
+		kaleoInstanceCacheModel.groupId = getGroupId();
+
+		kaleoInstanceCacheModel.companyId = getCompanyId();
+
+		kaleoInstanceCacheModel.userId = getUserId();
+
+		kaleoInstanceCacheModel.userName = getUserName();
+
+		String userName = kaleoInstanceCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			kaleoInstanceCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			kaleoInstanceCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			kaleoInstanceCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			kaleoInstanceCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			kaleoInstanceCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		kaleoInstanceCacheModel.kaleoDefinitionId = getKaleoDefinitionId();
+
+		kaleoInstanceCacheModel.kaleoDefinitionName = getKaleoDefinitionName();
+
+		String kaleoDefinitionName = kaleoInstanceCacheModel.kaleoDefinitionName;
+
+		if ((kaleoDefinitionName != null) &&
+				(kaleoDefinitionName.length() == 0)) {
+			kaleoInstanceCacheModel.kaleoDefinitionName = null;
+		}
+
+		kaleoInstanceCacheModel.kaleoDefinitionVersion = getKaleoDefinitionVersion();
+
+		kaleoInstanceCacheModel.rootKaleoInstanceTokenId = getRootKaleoInstanceTokenId();
+
+		kaleoInstanceCacheModel.className = getClassName();
+
+		String className = kaleoInstanceCacheModel.className;
+
+		if ((className != null) && (className.length() == 0)) {
+			kaleoInstanceCacheModel.className = null;
+		}
+
+		kaleoInstanceCacheModel.classPK = getClassPK();
+
+		kaleoInstanceCacheModel.completed = getCompleted();
+
+		Date completionDate = getCompletionDate();
+
+		if (completionDate != null) {
+			kaleoInstanceCacheModel.completionDate = completionDate.getTime();
+		}
+		else {
+			kaleoInstanceCacheModel.completionDate = Long.MIN_VALUE;
+		}
+
+		kaleoInstanceCacheModel.workflowContext = getWorkflowContext();
+
+		String workflowContext = kaleoInstanceCacheModel.workflowContext;
+
+		if ((workflowContext != null) && (workflowContext.length() == 0)) {
+			kaleoInstanceCacheModel.workflowContext = null;
+		}
+
+		return kaleoInstanceCacheModel;
 	}
 
 	@Override
@@ -525,4 +616,5 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 	private Date _completionDate;
 	private String _workflowContext;
 	private transient ExpandoBridge _expandoBridge;
+	private KaleoInstance _escapedModelProxy;
 }

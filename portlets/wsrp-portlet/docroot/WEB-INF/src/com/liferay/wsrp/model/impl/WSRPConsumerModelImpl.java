@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -243,8 +244,13 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			return (WSRPConsumer)this;
 		}
 		else {
-			return (WSRPConsumer)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (WSRPConsumer)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -328,6 +334,93 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<WSRPConsumer> toCacheModel() {
+		WSRPConsumerCacheModel wsrpConsumerCacheModel = new WSRPConsumerCacheModel();
+
+		wsrpConsumerCacheModel.uuid = getUuid();
+
+		String uuid = wsrpConsumerCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			wsrpConsumerCacheModel.uuid = null;
+		}
+
+		wsrpConsumerCacheModel.wsrpConsumerId = getWsrpConsumerId();
+
+		wsrpConsumerCacheModel.companyId = getCompanyId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			wsrpConsumerCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			wsrpConsumerCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			wsrpConsumerCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			wsrpConsumerCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		wsrpConsumerCacheModel.name = getName();
+
+		String name = wsrpConsumerCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			wsrpConsumerCacheModel.name = null;
+		}
+
+		wsrpConsumerCacheModel.url = getUrl();
+
+		String url = wsrpConsumerCacheModel.url;
+
+		if ((url != null) && (url.length() == 0)) {
+			wsrpConsumerCacheModel.url = null;
+		}
+
+		wsrpConsumerCacheModel.wsdl = getWsdl();
+
+		String wsdl = wsrpConsumerCacheModel.wsdl;
+
+		if ((wsdl != null) && (wsdl.length() == 0)) {
+			wsrpConsumerCacheModel.wsdl = null;
+		}
+
+		wsrpConsumerCacheModel.registrationContextString = getRegistrationContextString();
+
+		String registrationContextString = wsrpConsumerCacheModel.registrationContextString;
+
+		if ((registrationContextString != null) &&
+				(registrationContextString.length() == 0)) {
+			wsrpConsumerCacheModel.registrationContextString = null;
+		}
+
+		wsrpConsumerCacheModel.registrationPropertiesString = getRegistrationPropertiesString();
+
+		String registrationPropertiesString = wsrpConsumerCacheModel.registrationPropertiesString;
+
+		if ((registrationPropertiesString != null) &&
+				(registrationPropertiesString.length() == 0)) {
+			wsrpConsumerCacheModel.registrationPropertiesString = null;
+		}
+
+		wsrpConsumerCacheModel.forwardCookies = getForwardCookies();
+
+		String forwardCookies = wsrpConsumerCacheModel.forwardCookies;
+
+		if ((forwardCookies != null) && (forwardCookies.length() == 0)) {
+			wsrpConsumerCacheModel.forwardCookies = null;
+		}
+
+		return wsrpConsumerCacheModel;
 	}
 
 	@Override
@@ -434,4 +527,5 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 	private String _registrationPropertiesString;
 	private String _forwardCookies;
 	private transient ExpandoBridge _expandoBridge;
+	private WSRPConsumer _escapedModelProxy;
 }

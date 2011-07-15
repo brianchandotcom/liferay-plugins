@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -241,8 +242,13 @@ public class FolderModelImpl extends BaseModelImpl<Folder>
 			return (Folder)this;
 		}
 		else {
-			return (Folder)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (Folder)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -332,6 +338,65 @@ public class FolderModelImpl extends BaseModelImpl<Folder>
 		folderModelImpl._setOriginalAccountId = false;
 
 		folderModelImpl._originalFullName = folderModelImpl._fullName;
+	}
+
+	@Override
+	public CacheModel<Folder> toCacheModel() {
+		FolderCacheModel folderCacheModel = new FolderCacheModel();
+
+		folderCacheModel.folderId = getFolderId();
+
+		folderCacheModel.companyId = getCompanyId();
+
+		folderCacheModel.userId = getUserId();
+
+		folderCacheModel.userName = getUserName();
+
+		String userName = folderCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			folderCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			folderCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			folderCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			folderCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			folderCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		folderCacheModel.accountId = getAccountId();
+
+		folderCacheModel.fullName = getFullName();
+
+		String fullName = folderCacheModel.fullName;
+
+		if ((fullName != null) && (fullName.length() == 0)) {
+			folderCacheModel.fullName = null;
+		}
+
+		folderCacheModel.displayName = getDisplayName();
+
+		String displayName = folderCacheModel.displayName;
+
+		if ((displayName != null) && (displayName.length() == 0)) {
+			folderCacheModel.displayName = null;
+		}
+
+		folderCacheModel.remoteMessageCount = getRemoteMessageCount();
+
+		return folderCacheModel;
 	}
 
 	@Override
@@ -435,4 +500,5 @@ public class FolderModelImpl extends BaseModelImpl<Folder>
 	private String _displayName;
 	private int _remoteMessageCount;
 	private transient ExpandoBridge _expandoBridge;
+	private Folder _escapedModelProxy;
 }

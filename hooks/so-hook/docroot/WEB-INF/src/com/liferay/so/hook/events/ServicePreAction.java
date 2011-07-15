@@ -8,7 +8,7 @@
  *
  * Liferay Social Office is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
  * for more details.
  *
  * You should have received a copy of the GNU General Public License along with
@@ -134,7 +134,8 @@ public class ServicePreAction extends Action {
 		throws Exception {
 
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-			groupId, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, 0, 1);
+			groupId, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, false,
+			0, 1);
 
 		if (layouts.size() > 0) {
 			Layout layout = layouts.get(0);

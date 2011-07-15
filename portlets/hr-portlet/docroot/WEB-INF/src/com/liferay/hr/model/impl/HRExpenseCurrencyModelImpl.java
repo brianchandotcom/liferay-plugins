@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -226,8 +227,13 @@ public class HRExpenseCurrencyModelImpl extends BaseModelImpl<HRExpenseCurrency>
 			return (HRExpenseCurrency)this;
 		}
 		else {
-			return (HRExpenseCurrency)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRExpenseCurrency)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -312,6 +318,71 @@ public class HRExpenseCurrencyModelImpl extends BaseModelImpl<HRExpenseCurrency>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRExpenseCurrency> toCacheModel() {
+		HRExpenseCurrencyCacheModel hrExpenseCurrencyCacheModel = new HRExpenseCurrencyCacheModel();
+
+		hrExpenseCurrencyCacheModel.hrExpenseCurrencyId = getHrExpenseCurrencyId();
+
+		hrExpenseCurrencyCacheModel.groupId = getGroupId();
+
+		hrExpenseCurrencyCacheModel.companyId = getCompanyId();
+
+		hrExpenseCurrencyCacheModel.userId = getUserId();
+
+		hrExpenseCurrencyCacheModel.userName = getUserName();
+
+		String userName = hrExpenseCurrencyCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrExpenseCurrencyCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrExpenseCurrencyCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrExpenseCurrencyCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrExpenseCurrencyCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrExpenseCurrencyCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrExpenseCurrencyCacheModel.code = getCode();
+
+		String code = hrExpenseCurrencyCacheModel.code;
+
+		if ((code != null) && (code.length() == 0)) {
+			hrExpenseCurrencyCacheModel.code = null;
+		}
+
+		hrExpenseCurrencyCacheModel.name = getName();
+
+		String name = hrExpenseCurrencyCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			hrExpenseCurrencyCacheModel.name = null;
+		}
+
+		hrExpenseCurrencyCacheModel.description = getDescription();
+
+		String description = hrExpenseCurrencyCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			hrExpenseCurrencyCacheModel.description = null;
+		}
+
+		return hrExpenseCurrencyCacheModel;
 	}
 
 	@Override
@@ -412,4 +483,5 @@ public class HRExpenseCurrencyModelImpl extends BaseModelImpl<HRExpenseCurrency>
 	private String _name;
 	private String _description;
 	private transient ExpandoBridge _expandoBridge;
+	private HRExpenseCurrency _escapedModelProxy;
 }

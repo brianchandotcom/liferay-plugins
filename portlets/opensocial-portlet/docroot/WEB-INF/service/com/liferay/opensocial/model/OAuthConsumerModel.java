@@ -16,6 +16,7 @@ package com.liferay.opensocial.model;
 
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -115,18 +116,19 @@ public interface OAuthConsumerModel extends BaseModel<OAuthConsumer> {
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the gadget ID of this o auth consumer.
+	 * Returns the gadget key of this o auth consumer.
 	 *
-	 * @return the gadget ID of this o auth consumer
+	 * @return the gadget key of this o auth consumer
 	 */
-	public long getGadgetId();
+	@AutoEscape
+	public String getGadgetKey();
 
 	/**
-	 * Sets the gadget ID of this o auth consumer.
+	 * Sets the gadget key of this o auth consumer.
 	 *
-	 * @param gadgetId the gadget ID of this o auth consumer
+	 * @param gadgetKey the gadget key of this o auth consumer
 	 */
-	public void setGadgetId(long gadgetId);
+	public void setGadgetKey(String gadgetKey);
 
 	/**
 	 * Returns the service name of this o auth consumer.
@@ -213,6 +215,8 @@ public interface OAuthConsumerModel extends BaseModel<OAuthConsumer> {
 	public int compareTo(OAuthConsumer oAuthConsumer);
 
 	public int hashCode();
+
+	public CacheModel<OAuthConsumer> toCacheModel();
 
 	public OAuthConsumer toEscapedModel();
 

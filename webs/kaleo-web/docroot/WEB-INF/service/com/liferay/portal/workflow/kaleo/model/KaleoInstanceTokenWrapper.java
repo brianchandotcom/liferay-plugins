@@ -336,7 +336,7 @@ public class KaleoInstanceTokenWrapper implements KaleoInstanceToken {
 	}
 
 	/**
-	* Determines if this kaleo instance token is completed.
+	* Returns <code>true</code> if this kaleo instance token is completed.
 	*
 	* @return <code>true</code> if this kaleo instance token is completed; <code>false</code> otherwise
 	*/
@@ -427,6 +427,10 @@ public class KaleoInstanceTokenWrapper implements KaleoInstanceToken {
 		return _kaleoInstanceToken.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken> toCacheModel() {
+		return _kaleoInstanceToken.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken toEscapedModel() {
 		return new KaleoInstanceTokenWrapper(_kaleoInstanceToken.toEscapedModel());
 	}
@@ -438,6 +442,11 @@ public class KaleoInstanceTokenWrapper implements KaleoInstanceToken {
 
 	public java.lang.String toXmlString() {
 		return _kaleoInstanceToken.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoInstanceToken.save();
 	}
 
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken> getChildrenKaleoInstanceTokens()

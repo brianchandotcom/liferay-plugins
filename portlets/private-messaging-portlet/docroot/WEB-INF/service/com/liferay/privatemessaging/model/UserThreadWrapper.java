@@ -210,7 +210,7 @@ public class UserThreadWrapper implements UserThread {
 	}
 
 	/**
-	* Determines if this user thread is read.
+	* Returns <code>true</code> if this user thread is read.
 	*
 	* @return <code>true</code> if this user thread is read; <code>false</code> otherwise
 	*/
@@ -237,7 +237,7 @@ public class UserThreadWrapper implements UserThread {
 	}
 
 	/**
-	* Determines if this user thread is deleted.
+	* Returns <code>true</code> if this user thread is deleted.
 	*
 	* @return <code>true</code> if this user thread is deleted; <code>false</code> otherwise
 	*/
@@ -310,6 +310,10 @@ public class UserThreadWrapper implements UserThread {
 		return _userThread.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.privatemessaging.model.UserThread> toCacheModel() {
+		return _userThread.toCacheModel();
+	}
+
 	public com.liferay.privatemessaging.model.UserThread toEscapedModel() {
 		return new UserThreadWrapper(_userThread.toEscapedModel());
 	}
@@ -321,6 +325,11 @@ public class UserThreadWrapper implements UserThread {
 
 	public java.lang.String toXmlString() {
 		return _userThread.toXmlString();
+	}
+
+	public void save()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_userThread.save();
 	}
 
 	public UserThread getWrappedUserThread() {

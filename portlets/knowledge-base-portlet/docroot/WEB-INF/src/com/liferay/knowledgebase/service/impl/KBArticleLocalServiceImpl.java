@@ -16,9 +16,7 @@ package com.liferay.knowledgebase.service.impl;
 
 import com.liferay.knowledgebase.KBArticleContentException;
 import com.liferay.knowledgebase.KBArticlePriorityException;
-import com.liferay.knowledgebase.KBArticleSectionException;
 import com.liferay.knowledgebase.KBArticleTitleException;
-import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.admin.social.AdminActivityKeys;
 import com.liferay.knowledgebase.admin.util.AdminSubscriptionSender;
 import com.liferay.knowledgebase.admin.util.AdminUtil;
@@ -72,6 +70,7 @@ import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,17 +92,16 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		dlStore.addFile(
+		DLStoreUtil.addFile(
 			serviceContext.getCompanyId(), CompanyConstants.SYSTEM_STRING,
 			GroupConstants.DEFAULT_PARENT_GROUP_ID, CompanyConstants.SYSTEM,
-			dirName + StringPool.SLASH + shortFileName, 0, StringPool.BLANK,
-			serviceContext.getModifiedDate(null), serviceContext, bytes);
+			dirName + StringPool.SLASH + shortFileName, serviceContext, bytes);
 	}
 
 	public KBArticle addKBArticle(
 			long userId, long parentResourcePrimKey, String title,
-			String content, String description, long kbTemplateId,
-			String[] sections, String dirName, ServiceContext serviceContext)
+			String content, String description, String[] sections,
+			String dirName, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// KB article
@@ -113,7 +111,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		double priority = getPriority(groupId, parentResourcePrimKey);
 		Date now = new Date();
 
-		validate(title, content, sections);
+		validate(title, content);
 
 		long kbArticleId = counterLocalService.increment();
 
@@ -138,7 +136,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setTitle(title);
 		kbArticle.setContent(content);
 		kbArticle.setDescription(description);
-		kbArticle.setKbTemplateId(kbTemplateId);
 		kbArticle.setPriority(priority);
 		kbArticle.setSections(
 			StringUtil.merge(AdminUtil.escapeSections(sections)));
@@ -184,27 +181,26 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	public void addKBArticleResources(
-			KBArticle kbArticle, boolean addCommunityPermissions,
+			KBArticle kbArticle, boolean addGroupPermissions,
 			boolean addGuestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.addResources(
 			kbArticle.getCompanyId(), kbArticle.getGroupId(),
 			kbArticle.getUserId(), KBArticle.class.getName(),
-			kbArticle.getResourcePrimKey(), false, addCommunityPermissions,
+			kbArticle.getResourcePrimKey(), false, addGroupPermissions,
 			addGuestPermissions);
 	}
 
 	public void addKBArticleResources(
-			KBArticle kbArticle, String[] communityPermissions,
+			KBArticle kbArticle, String[] groupPermissions,
 			String[] guestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.addModelResources(
 			kbArticle.getCompanyId(), kbArticle.getGroupId(),
 			kbArticle.getUserId(), KBArticle.class.getName(),
-			kbArticle.getResourcePrimKey(), communityPermissions,
-			guestPermissions);
+			kbArticle.getResourcePrimKey(), groupPermissions, guestPermissions);
 	}
 
 	public void checkAttachments() throws PortalException, SystemException {
@@ -216,7 +212,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	public void deleteAttachment(long companyId, String fileName)
 		throws PortalException, SystemException {
 
-		dlStore.deleteFile(
+		DLStoreUtil.deleteFile(
 			companyId, CompanyConstants.SYSTEM_STRING, CompanyConstants.SYSTEM,
 			fileName);
 	}
@@ -509,21 +505,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		return kbArticlePersistence.countByR_S(resourcePrimKey, status);
 	}
 
-	public List<KBArticle> getKBTemplateKBArticles(
-			long kbTemplateId, int start, int end,
-			OrderByComparator orderByComparator)
-		throws SystemException {
-
-		return kbTemplatePersistence.getKBArticles(
-			kbTemplateId, start, end, orderByComparator);
-	}
-
-	public int getKBTemplateKBArticlesCount(long kbTemplateId)
-		throws SystemException {
-
-		return kbTemplatePersistence.getKBArticlesSize(kbTemplateId);
-	}
-
 	public KBArticle getLatestKBArticle(long resourcePrimKey, int status)
 		throws PortalException, SystemException {
 
@@ -714,7 +695,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		dirName =
 			"knowledgebase/temp/attachments/" + counterLocalService.increment();
 
-		dlStore.addDirectory(
+		DLStoreUtil.addDirectory(
 			serviceContext.getCompanyId(), CompanyConstants.SYSTEM, dirName);
 
 		if (resourcePrimKey <= 0) {
@@ -727,7 +708,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		for (String fileName : kbArticle.getAttachmentsFileNames()) {
 			String shortFileName = FileUtil.getShortFileName(fileName);
 
-			byte[] bytes = dlStore.getFile(
+			byte[] bytes = DLStoreUtil.getFile(
 				kbArticle.getCompanyId(), CompanyConstants.SYSTEM, fileName);
 
 			addAttachment(dirName, shortFileName, bytes, serviceContext);
@@ -738,8 +719,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 	public KBArticle updateKBArticle(
 			long userId, long resourcePrimKey, String title, String content,
-			String description, long kbTemplateId, String[] sections,
-			String dirName, ServiceContext serviceContext)
+			String description, String[] sections, String dirName,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// KB article
@@ -748,7 +729,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		int version = KBArticleConstants.DEFAULT_VERSION;
 		int status = WorkflowConstants.STATUS_DRAFT;
 
-		validate(title, content, sections);
+		validate(title, content);
 
 		KBArticle oldKBArticle = getLatestKBArticle(
 			resourcePrimKey, WorkflowConstants.STATUS_ANY);
@@ -793,7 +774,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setTitle(title);
 		kbArticle.setContent(content);
 		kbArticle.setDescription(description);
-		kbArticle.setKbTemplateId(kbTemplateId);
 		kbArticle.setPriority(oldPriority);
 		kbArticle.setSections(
 			StringUtil.merge(AdminUtil.escapeSections(sections)));
@@ -855,34 +835,14 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	public void updateKBArticleResources(
-			KBArticle kbArticle, String[] communityPermissions,
+			KBArticle kbArticle, String[] groupPermissions,
 			String[] guestPermissions)
 		throws PortalException, SystemException {
 
 		resourceLocalService.updateResources(
 			kbArticle.getCompanyId(), kbArticle.getGroupId(),
 			KBArticle.class.getName(), kbArticle.getResourcePrimKey(),
-			communityPermissions, guestPermissions);
-	}
-
-	public void updateKBArticlesKBTemplates(long[] kbArticleIds)
-		throws SystemException {
-
-		for (long kbArticleId : kbArticleIds) {
-			KBArticle kbArticle = null;
-
-			try {
-				kbArticle = kbArticlePersistence.findByPrimaryKey(kbArticleId);
-			}
-			catch (NoSuchArticleException nsae) {
-				continue;
-			}
-
-			kbArticle.setKbTemplateId(
-				KBArticleConstants.DEFAULT_KB_TEMPLATE_ID);
-
-			kbArticlePersistence.update(kbArticle, false);
-		}
+			groupPermissions, guestPermissions);
 	}
 
 	public void updateKBArticlesPriorities(
@@ -1039,7 +999,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		try {
-			dlStore.addDirectory(
+			DLStoreUtil.addDirectory(
 				serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
 				kbArticle.getAttachmentsDirName());
 		}
@@ -1051,11 +1011,11 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			return;
 		}
 
-		String[] fileNames = dlStore.getFileNames(
+		String[] fileNames = DLStoreUtil.getFileNames(
 			serviceContext.getCompanyId(), CompanyConstants.SYSTEM, dirName);
 
 		for (String fileName : fileNames) {
-			byte[] bytes = dlStore.getFile(
+			byte[] bytes = DLStoreUtil.getFile(
 				serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
 				fileName);
 
@@ -1163,21 +1123,21 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		String dirName =
 			"knowledgebase/temp/attachments/" + counterLocalService.increment();
 
-		dlStore.addDirectory(companyId, CompanyConstants.SYSTEM, dirName);
+		DLStoreUtil.addDirectory(companyId, CompanyConstants.SYSTEM, dirName);
 
-		String[] fileNames = dlStore.getFileNames(
+		String[] fileNames = DLStoreUtil.getFileNames(
 			companyId, CompanyConstants.SYSTEM,
 			"knowledgebase/temp/attachments");
 
 		Arrays.sort(fileNames);
 
 		for (int i = 0; i < fileNames.length - 50; i++) {
-			dlStore.deleteDirectory(
+			DLStoreUtil.deleteDirectory(
 				companyId, CompanyConstants.SYSTEM_STRING,
 				CompanyConstants.SYSTEM, fileNames[i]);
 		}
 
-		dlStore.deleteDirectory(
+		DLStoreUtil.deleteDirectory(
 			companyId, CompanyConstants.SYSTEM_STRING, CompanyConstants.SYSTEM,
 			dirName);
 	}
@@ -1210,7 +1170,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		try {
-			dlStore.deleteDirectory(
+			DLStoreUtil.deleteDirectory(
 				kbArticle.getCompanyId(), CompanyConstants.SYSTEM_STRING,
 				CompanyConstants.SYSTEM,
 				KBArticleConstants.DIR_NAME_PREFIX + folderId);
@@ -1474,7 +1434,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 	}
 
-	protected void validate(String title, String content, String[] sections)
+	protected void validate(String title, String content)
 		throws PortalException {
 
 		if (Validator.isNull(title)) {
@@ -1483,10 +1443,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		if (Validator.isNull(content)) {
 			throw new KBArticleContentException();
-		}
-
-		if (Validator.isNull(sections)) {
-			throw new KBArticleSectionException();
 		}
 	}
 

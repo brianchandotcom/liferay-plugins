@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -73,11 +74,11 @@ public class HRClientPersistenceImpl extends BasePersistenceImpl<HRClient>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRClientModelImpl.ENTITY_CACHE_ENABLED,
-			HRClientModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRClientModelImpl.FINDER_CACHE_ENABLED, HRClientImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRClientModelImpl.ENTITY_CACHE_ENABLED,
-			HRClientModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRClientModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r client in the entity cache if it is enabled.
@@ -359,8 +360,14 @@ public class HRClientPersistenceImpl extends BasePersistenceImpl<HRClient>
 		HRClient hrClient = (HRClient)EntityCacheUtil.getResult(HRClientModelImpl.ENTITY_CACHE_ENABLED,
 				HRClientImpl.class, hrClientId, this);
 
+		if (hrClient == _nullHRClient) {
+			return null;
+		}
+
 		if (hrClient == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -369,11 +376,17 @@ public class HRClientPersistenceImpl extends BasePersistenceImpl<HRClient>
 						Long.valueOf(hrClientId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrClient != null) {
 					cacheResult(hrClient);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRClientModelImpl.ENTITY_CACHE_ENABLED,
+						HRClientImpl.class, hrClientId, _nullHRClient);
 				}
 
 				closeSession(session);
@@ -660,4 +673,19 @@ public class HRClientPersistenceImpl extends BasePersistenceImpl<HRClient>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRClientPersistenceImpl.class);
+	private static HRClient _nullHRClient = new HRClientImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRClient> toCacheModel() {
+				return _nullHRClientCacheModel;
+			}
+		};
+
+	private static CacheModel<HRClient> _nullHRClientCacheModel = new CacheModel<HRClient>() {
+			public HRClient toEntityModel() {
+				return _nullHRClient;
+			}
+		};
 }

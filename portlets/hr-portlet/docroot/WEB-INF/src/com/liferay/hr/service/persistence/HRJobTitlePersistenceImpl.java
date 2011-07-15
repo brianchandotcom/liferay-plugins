@@ -46,6 +46,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -82,11 +83,11 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 	public static final String FINDER_CLASS_NAME_LIST = FINDER_CLASS_NAME_ENTITY +
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRJobTitleModelImpl.ENTITY_CACHE_ENABLED,
-			HRJobTitleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"findAll", new String[0]);
+			HRJobTitleModelImpl.FINDER_CACHE_ENABLED, HRJobTitleImpl.class,
+			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRJobTitleModelImpl.ENTITY_CACHE_ENABLED,
-			HRJobTitleModelImpl.FINDER_CACHE_ENABLED, FINDER_CLASS_NAME_LIST,
-			"countAll", new String[0]);
+			HRJobTitleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
 	 * Caches the h r job title in the entity cache if it is enabled.
@@ -379,8 +380,14 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 		HRJobTitle hrJobTitle = (HRJobTitle)EntityCacheUtil.getResult(HRJobTitleModelImpl.ENTITY_CACHE_ENABLED,
 				HRJobTitleImpl.class, hrJobTitleId, this);
 
+		if (hrJobTitle == _nullHRJobTitle) {
+			return null;
+		}
+
 		if (hrJobTitle == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -389,11 +396,17 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 						Long.valueOf(hrJobTitleId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrJobTitle != null) {
 					cacheResult(hrJobTitle);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRJobTitleModelImpl.ENTITY_CACHE_ENABLED,
+						HRJobTitleImpl.class, hrJobTitleId, _nullHRJobTitle);
 				}
 
 				closeSession(session);
@@ -595,6 +608,7 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 
 	public static final FinderPath FINDER_PATH_GET_HRBRANCHS = new FinderPath(com.liferay.hr.model.impl.HRBranchModelImpl.ENTITY_CACHE_ENABLED,
 			HRJobTitleModelImpl.FINDER_CACHE_ENABLED_HRBRANCHES_HRJOBTITLES,
+			com.liferay.hr.model.impl.HRBranchImpl.class,
 			HRJobTitleModelImpl.MAPPING_TABLE_HRBRANCHES_HRJOBTITLES_NAME,
 			"getHRBranchs",
 			new String[] {
@@ -678,6 +692,7 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 
 	public static final FinderPath FINDER_PATH_GET_HRBRANCHS_SIZE = new FinderPath(com.liferay.hr.model.impl.HRBranchModelImpl.ENTITY_CACHE_ENABLED,
 			HRJobTitleModelImpl.FINDER_CACHE_ENABLED_HRBRANCHES_HRJOBTITLES,
+			Long.class,
 			HRJobTitleModelImpl.MAPPING_TABLE_HRBRANCHES_HRJOBTITLES_NAME,
 			"getHRBranchsSize", new String[] { Long.class.getName() });
 
@@ -731,12 +746,13 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 
 	public static final FinderPath FINDER_PATH_CONTAINS_HRBRANCH = new FinderPath(com.liferay.hr.model.impl.HRBranchModelImpl.ENTITY_CACHE_ENABLED,
 			HRJobTitleModelImpl.FINDER_CACHE_ENABLED_HRBRANCHES_HRJOBTITLES,
+			Boolean.class,
 			HRJobTitleModelImpl.MAPPING_TABLE_HRBRANCHES_HRJOBTITLES_NAME,
 			"containsHRBranch",
 			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
-	 * Determines if the h r branch is associated with the h r job title.
+	 * Returns <code>true</code> if the h r branch is associated with the h r job title.
 	 *
 	 * @param pk the primary key of the h r job title
 	 * @param hrBranchPK the primary key of the h r branch
@@ -771,7 +787,7 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 	}
 
 	/**
-	 * Determines if the h r job title has any h r branchs associated with it.
+	 * Returns <code>true</code> if the h r job title has any h r branchs associated with it.
 	 *
 	 * @param pk the primary key of the h r job title to check for associations with h r branchs
 	 * @return <code>true</code> if the h r job title has any h r branchs associated with it; <code>false</code> otherwise
@@ -1339,4 +1355,19 @@ public class HRJobTitlePersistenceImpl extends BasePersistenceImpl<HRJobTitle>
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRJobTitlePersistenceImpl.class);
+	private static HRJobTitle _nullHRJobTitle = new HRJobTitleImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRJobTitle> toCacheModel() {
+				return _nullHRJobTitleCacheModel;
+			}
+		};
+
+	private static CacheModel<HRJobTitle> _nullHRJobTitleCacheModel = new CacheModel<HRJobTitle>() {
+			public HRJobTitle toEntityModel() {
+				return _nullHRJobTitle;
+			}
+		};
 }

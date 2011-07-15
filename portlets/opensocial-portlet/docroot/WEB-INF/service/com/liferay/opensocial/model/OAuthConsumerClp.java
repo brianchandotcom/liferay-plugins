@@ -14,7 +14,10 @@
 
 package com.liferay.opensocial.model;
 
+import com.liferay.opensocial.service.OAuthConsumerLocalServiceUtil;
+
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.impl.BaseModelImpl;
 
@@ -88,12 +91,12 @@ public class OAuthConsumerClp extends BaseModelImpl<OAuthConsumer>
 		_modifiedDate = modifiedDate;
 	}
 
-	public long getGadgetId() {
-		return _gadgetId;
+	public String getGadgetKey() {
+		return _gadgetKey;
 	}
 
-	public void setGadgetId(long gadgetId) {
-		_gadgetId = gadgetId;
+	public void setGadgetKey(String gadgetKey) {
+		_gadgetKey = gadgetKey;
 	}
 
 	public String getServiceName() {
@@ -136,6 +139,10 @@ public class OAuthConsumerClp extends BaseModelImpl<OAuthConsumer>
 		throw new UnsupportedOperationException();
 	}
 
+	public void save() throws SystemException {
+		OAuthConsumerLocalServiceUtil.updateOAuthConsumer(this);
+	}
+
 	@Override
 	public OAuthConsumer toEscapedModel() {
 		if (isEscapedModel()) {
@@ -156,7 +163,7 @@ public class OAuthConsumerClp extends BaseModelImpl<OAuthConsumer>
 		clone.setCompanyId(getCompanyId());
 		clone.setCreateDate(getCreateDate());
 		clone.setModifiedDate(getModifiedDate());
-		clone.setGadgetId(getGadgetId());
+		clone.setGadgetKey(getGadgetKey());
 		clone.setServiceName(getServiceName());
 		clone.setConsumerKey(getConsumerKey());
 		clone.setConsumerSecret(getConsumerSecret());
@@ -219,8 +226,8 @@ public class OAuthConsumerClp extends BaseModelImpl<OAuthConsumer>
 		sb.append(getCreateDate());
 		sb.append(", modifiedDate=");
 		sb.append(getModifiedDate());
-		sb.append(", gadgetId=");
-		sb.append(getGadgetId());
+		sb.append(", gadgetKey=");
+		sb.append(getGadgetKey());
 		sb.append(", serviceName=");
 		sb.append(getServiceName());
 		sb.append(", consumerKey=");
@@ -258,8 +265,8 @@ public class OAuthConsumerClp extends BaseModelImpl<OAuthConsumer>
 		sb.append(getModifiedDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>gadgetId</column-name><column-value><![CDATA[");
-		sb.append(getGadgetId());
+			"<column><column-name>gadgetKey</column-name><column-value><![CDATA[");
+		sb.append(getGadgetKey());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>serviceName</column-name><column-value><![CDATA[");
@@ -287,7 +294,7 @@ public class OAuthConsumerClp extends BaseModelImpl<OAuthConsumer>
 	private long _companyId;
 	private Date _createDate;
 	private Date _modifiedDate;
-	private long _gadgetId;
+	private String _gadgetKey;
 	private String _serviceName;
 	private String _consumerKey;
 	private String _consumerSecret;

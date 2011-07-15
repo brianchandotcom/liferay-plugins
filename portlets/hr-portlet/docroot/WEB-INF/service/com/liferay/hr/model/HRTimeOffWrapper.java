@@ -446,7 +446,7 @@ public class HRTimeOffWrapper implements HRTimeOff {
 	}
 
 	/**
-	* Determines if this h r time off is approved.
+	* Returns <code>true</code> if this h r time off is approved.
 	*
 	* @return <code>true</code> if this h r time off is approved; <code>false</code> otherwise
 	*/
@@ -455,7 +455,7 @@ public class HRTimeOffWrapper implements HRTimeOff {
 	}
 
 	/**
-	* Determines if this h r time off is a draft.
+	* Returns <code>true</code> if this h r time off is a draft.
 	*
 	* @return <code>true</code> if this h r time off is a draft; <code>false</code> otherwise
 	*/
@@ -464,7 +464,7 @@ public class HRTimeOffWrapper implements HRTimeOff {
 	}
 
 	/**
-	* Determines if this h r time off is expired.
+	* Returns <code>true</code> if this h r time off is expired.
 	*
 	* @return <code>true</code> if this h r time off is expired; <code>false</code> otherwise
 	*/
@@ -473,7 +473,7 @@ public class HRTimeOffWrapper implements HRTimeOff {
 	}
 
 	/**
-	* Determines if this h r time off is pending.
+	* Returns <code>true</code> if this h r time off is pending.
 	*
 	* @return <code>true</code> if this h r time off is pending; <code>false</code> otherwise
 	*/
@@ -534,6 +534,10 @@ public class HRTimeOffWrapper implements HRTimeOff {
 	@Override
 	public int hashCode() {
 		return _hrTimeOff.hashCode();
+	}
+
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRTimeOff> toCacheModel() {
+		return _hrTimeOff.toCacheModel();
 	}
 
 	public com.liferay.hr.model.HRTimeOff toEscapedModel() {

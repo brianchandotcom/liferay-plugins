@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -74,9 +75,10 @@ public class HRAssetProductPersistenceImpl extends BasePersistenceImpl<HRAssetPr
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRAssetProductModelImpl.ENTITY_CACHE_ENABLED,
 			HRAssetProductModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRAssetProductImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRAssetProductModelImpl.ENTITY_CACHE_ENABLED,
-			HRAssetProductModelImpl.FINDER_CACHE_ENABLED,
+			HRAssetProductModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -367,8 +369,14 @@ public class HRAssetProductPersistenceImpl extends BasePersistenceImpl<HRAssetPr
 		HRAssetProduct hrAssetProduct = (HRAssetProduct)EntityCacheUtil.getResult(HRAssetProductModelImpl.ENTITY_CACHE_ENABLED,
 				HRAssetProductImpl.class, hrAssetProductId, this);
 
+		if (hrAssetProduct == _nullHRAssetProduct) {
+			return null;
+		}
+
 		if (hrAssetProduct == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -377,11 +385,18 @@ public class HRAssetProductPersistenceImpl extends BasePersistenceImpl<HRAssetPr
 						Long.valueOf(hrAssetProductId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrAssetProduct != null) {
 					cacheResult(hrAssetProduct);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRAssetProductModelImpl.ENTITY_CACHE_ENABLED,
+						HRAssetProductImpl.class, hrAssetProductId,
+						_nullHRAssetProduct);
 				}
 
 				closeSession(session);
@@ -669,4 +684,19 @@ public class HRAssetProductPersistenceImpl extends BasePersistenceImpl<HRAssetPr
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRAssetProductPersistenceImpl.class);
+	private static HRAssetProduct _nullHRAssetProduct = new HRAssetProductImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRAssetProduct> toCacheModel() {
+				return _nullHRAssetProductCacheModel;
+			}
+		};
+
+	private static CacheModel<HRAssetProduct> _nullHRAssetProductCacheModel = new CacheModel<HRAssetProduct>() {
+			public HRAssetProduct toEntityModel() {
+				return _nullHRAssetProduct;
+			}
+		};
 }

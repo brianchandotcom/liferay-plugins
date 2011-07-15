@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -74,9 +75,10 @@ public class HRTimeSheetHoursPerDayPersistenceImpl extends BasePersistenceImpl<H
 		".List";
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRTimeSheetHoursPerDayModelImpl.ENTITY_CACHE_ENABLED,
 			HRTimeSheetHoursPerDayModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRTimeSheetHoursPerDayImpl.class, FINDER_CLASS_NAME_LIST,
+			"findAll", new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRTimeSheetHoursPerDayModelImpl.ENTITY_CACHE_ENABLED,
-			HRTimeSheetHoursPerDayModelImpl.FINDER_CACHE_ENABLED,
+			HRTimeSheetHoursPerDayModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -374,8 +376,14 @@ public class HRTimeSheetHoursPerDayPersistenceImpl extends BasePersistenceImpl<H
 		HRTimeSheetHoursPerDay hrTimeSheetHoursPerDay = (HRTimeSheetHoursPerDay)EntityCacheUtil.getResult(HRTimeSheetHoursPerDayModelImpl.ENTITY_CACHE_ENABLED,
 				HRTimeSheetHoursPerDayImpl.class, hrTimeSheetHoursPerDayId, this);
 
+		if (hrTimeSheetHoursPerDay == _nullHRTimeSheetHoursPerDay) {
+			return null;
+		}
+
 		if (hrTimeSheetHoursPerDay == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -384,11 +392,18 @@ public class HRTimeSheetHoursPerDayPersistenceImpl extends BasePersistenceImpl<H
 						Long.valueOf(hrTimeSheetHoursPerDayId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrTimeSheetHoursPerDay != null) {
 					cacheResult(hrTimeSheetHoursPerDay);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRTimeSheetHoursPerDayModelImpl.ENTITY_CACHE_ENABLED,
+						HRTimeSheetHoursPerDayImpl.class,
+						hrTimeSheetHoursPerDayId, _nullHRTimeSheetHoursPerDay);
 				}
 
 				closeSession(session);
@@ -676,4 +691,20 @@ public class HRTimeSheetHoursPerDayPersistenceImpl extends BasePersistenceImpl<H
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRTimeSheetHoursPerDayPersistenceImpl.class);
+	private static HRTimeSheetHoursPerDay _nullHRTimeSheetHoursPerDay = new HRTimeSheetHoursPerDayImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRTimeSheetHoursPerDay> toCacheModel() {
+				return _nullHRTimeSheetHoursPerDayCacheModel;
+			}
+		};
+
+	private static CacheModel<HRTimeSheetHoursPerDay> _nullHRTimeSheetHoursPerDayCacheModel =
+		new CacheModel<HRTimeSheetHoursPerDay>() {
+			public HRTimeSheetHoursPerDay toEntityModel() {
+				return _nullHRTimeSheetHoursPerDay;
+			}
+		};
 }

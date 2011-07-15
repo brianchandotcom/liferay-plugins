@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -65,16 +66,18 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 			{ "userName", Types.VARCHAR },
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP },
+			{ "kaleoClassName", Types.VARCHAR },
+			{ "kaleoClassPK", Types.BIGINT },
 			{ "kaleoDefinitionId", Types.BIGINT },
-			{ "kaleoNodeId", Types.BIGINT },
-			{ "parentKaleoNodeId", Types.BIGINT },
 			{ "name", Types.VARCHAR },
-			{ "defaultTimer", Types.BOOLEAN },
+			{ "blocking", Types.BOOLEAN },
 			{ "description", Types.VARCHAR },
 			{ "duration", Types.DOUBLE },
-			{ "scale", Types.VARCHAR }
+			{ "scale", Types.VARCHAR },
+			{ "recurrenceDuration", Types.DOUBLE },
+			{ "recurrenceScale", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table KaleoTimer (kaleoTimerId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(200) null,createDate DATE null,modifiedDate DATE null,kaleoDefinitionId LONG,kaleoNodeId LONG,parentKaleoNodeId LONG,name VARCHAR(75) null,defaultTimer BOOLEAN,description STRING null,duration DOUBLE,scale VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table KaleoTimer (kaleoTimerId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(200) null,createDate DATE null,modifiedDate DATE null,kaleoClassName VARCHAR(200) null,kaleoClassPK LONG,kaleoDefinitionId LONG,name VARCHAR(75) null,blocking BOOLEAN,description STRING null,duration DOUBLE,scale VARCHAR(75) null,recurrenceDuration DOUBLE,recurrenceScale VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table KaleoTimer";
 	public static final String ORDER_BY_JPQL = " ORDER BY kaleoTimer.kaleoTimerId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY KaleoTimer.kaleoTimerId ASC";
@@ -187,28 +190,33 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 		_modifiedDate = modifiedDate;
 	}
 
+	public String getKaleoClassName() {
+		if (_kaleoClassName == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _kaleoClassName;
+		}
+	}
+
+	public void setKaleoClassName(String kaleoClassName) {
+		_kaleoClassName = kaleoClassName;
+	}
+
+	public long getKaleoClassPK() {
+		return _kaleoClassPK;
+	}
+
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoClassPK = kaleoClassPK;
+	}
+
 	public long getKaleoDefinitionId() {
 		return _kaleoDefinitionId;
 	}
 
 	public void setKaleoDefinitionId(long kaleoDefinitionId) {
 		_kaleoDefinitionId = kaleoDefinitionId;
-	}
-
-	public long getKaleoNodeId() {
-		return _kaleoNodeId;
-	}
-
-	public void setKaleoNodeId(long kaleoNodeId) {
-		_kaleoNodeId = kaleoNodeId;
-	}
-
-	public long getParentKaleoNodeId() {
-		return _parentKaleoNodeId;
-	}
-
-	public void setParentKaleoNodeId(long parentKaleoNodeId) {
-		_parentKaleoNodeId = parentKaleoNodeId;
 	}
 
 	public String getName() {
@@ -224,16 +232,16 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 		_name = name;
 	}
 
-	public boolean getDefaultTimer() {
-		return _defaultTimer;
+	public boolean getBlocking() {
+		return _blocking;
 	}
 
-	public boolean isDefaultTimer() {
-		return _defaultTimer;
+	public boolean isBlocking() {
+		return _blocking;
 	}
 
-	public void setDefaultTimer(boolean defaultTimer) {
-		_defaultTimer = defaultTimer;
+	public void setBlocking(boolean blocking) {
+		_blocking = blocking;
 	}
 
 	public String getDescription() {
@@ -270,14 +278,40 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 		_scale = scale;
 	}
 
+	public double getRecurrenceDuration() {
+		return _recurrenceDuration;
+	}
+
+	public void setRecurrenceDuration(double recurrenceDuration) {
+		_recurrenceDuration = recurrenceDuration;
+	}
+
+	public String getRecurrenceScale() {
+		if (_recurrenceScale == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _recurrenceScale;
+		}
+	}
+
+	public void setRecurrenceScale(String recurrenceScale) {
+		_recurrenceScale = recurrenceScale;
+	}
+
 	@Override
 	public KaleoTimer toEscapedModel() {
 		if (isEscapedModel()) {
 			return (KaleoTimer)this;
 		}
 		else {
-			return (KaleoTimer)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (KaleoTimer)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -307,14 +341,16 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 		kaleoTimerImpl.setUserName(getUserName());
 		kaleoTimerImpl.setCreateDate(getCreateDate());
 		kaleoTimerImpl.setModifiedDate(getModifiedDate());
+		kaleoTimerImpl.setKaleoClassName(getKaleoClassName());
+		kaleoTimerImpl.setKaleoClassPK(getKaleoClassPK());
 		kaleoTimerImpl.setKaleoDefinitionId(getKaleoDefinitionId());
-		kaleoTimerImpl.setKaleoNodeId(getKaleoNodeId());
-		kaleoTimerImpl.setParentKaleoNodeId(getParentKaleoNodeId());
 		kaleoTimerImpl.setName(getName());
-		kaleoTimerImpl.setDefaultTimer(getDefaultTimer());
+		kaleoTimerImpl.setBlocking(getBlocking());
 		kaleoTimerImpl.setDescription(getDescription());
 		kaleoTimerImpl.setDuration(getDuration());
 		kaleoTimerImpl.setScale(getScale());
+		kaleoTimerImpl.setRecurrenceDuration(getRecurrenceDuration());
+		kaleoTimerImpl.setRecurrenceScale(getRecurrenceScale());
 
 		kaleoTimerImpl.resetOriginalValues();
 
@@ -376,8 +412,99 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 	}
 
 	@Override
+	public CacheModel<KaleoTimer> toCacheModel() {
+		KaleoTimerCacheModel kaleoTimerCacheModel = new KaleoTimerCacheModel();
+
+		kaleoTimerCacheModel.kaleoTimerId = getKaleoTimerId();
+
+		kaleoTimerCacheModel.groupId = getGroupId();
+
+		kaleoTimerCacheModel.companyId = getCompanyId();
+
+		kaleoTimerCacheModel.userId = getUserId();
+
+		kaleoTimerCacheModel.userName = getUserName();
+
+		String userName = kaleoTimerCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			kaleoTimerCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			kaleoTimerCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			kaleoTimerCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			kaleoTimerCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			kaleoTimerCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		kaleoTimerCacheModel.kaleoClassName = getKaleoClassName();
+
+		String kaleoClassName = kaleoTimerCacheModel.kaleoClassName;
+
+		if ((kaleoClassName != null) && (kaleoClassName.length() == 0)) {
+			kaleoTimerCacheModel.kaleoClassName = null;
+		}
+
+		kaleoTimerCacheModel.kaleoClassPK = getKaleoClassPK();
+
+		kaleoTimerCacheModel.kaleoDefinitionId = getKaleoDefinitionId();
+
+		kaleoTimerCacheModel.name = getName();
+
+		String name = kaleoTimerCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			kaleoTimerCacheModel.name = null;
+		}
+
+		kaleoTimerCacheModel.blocking = getBlocking();
+
+		kaleoTimerCacheModel.description = getDescription();
+
+		String description = kaleoTimerCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			kaleoTimerCacheModel.description = null;
+		}
+
+		kaleoTimerCacheModel.duration = getDuration();
+
+		kaleoTimerCacheModel.scale = getScale();
+
+		String scale = kaleoTimerCacheModel.scale;
+
+		if ((scale != null) && (scale.length() == 0)) {
+			kaleoTimerCacheModel.scale = null;
+		}
+
+		kaleoTimerCacheModel.recurrenceDuration = getRecurrenceDuration();
+
+		kaleoTimerCacheModel.recurrenceScale = getRecurrenceScale();
+
+		String recurrenceScale = kaleoTimerCacheModel.recurrenceScale;
+
+		if ((recurrenceScale != null) && (recurrenceScale.length() == 0)) {
+			kaleoTimerCacheModel.recurrenceScale = null;
+		}
+
+		return kaleoTimerCacheModel;
+	}
+
+	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{kaleoTimerId=");
 		sb.append(getKaleoTimerId());
@@ -393,29 +520,33 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 		sb.append(getCreateDate());
 		sb.append(", modifiedDate=");
 		sb.append(getModifiedDate());
+		sb.append(", kaleoClassName=");
+		sb.append(getKaleoClassName());
+		sb.append(", kaleoClassPK=");
+		sb.append(getKaleoClassPK());
 		sb.append(", kaleoDefinitionId=");
 		sb.append(getKaleoDefinitionId());
-		sb.append(", kaleoNodeId=");
-		sb.append(getKaleoNodeId());
-		sb.append(", parentKaleoNodeId=");
-		sb.append(getParentKaleoNodeId());
 		sb.append(", name=");
 		sb.append(getName());
-		sb.append(", defaultTimer=");
-		sb.append(getDefaultTimer());
+		sb.append(", blocking=");
+		sb.append(getBlocking());
 		sb.append(", description=");
 		sb.append(getDescription());
 		sb.append(", duration=");
 		sb.append(getDuration());
 		sb.append(", scale=");
 		sb.append(getScale());
+		sb.append(", recurrenceDuration=");
+		sb.append(getRecurrenceDuration());
+		sb.append(", recurrenceScale=");
+		sb.append(getRecurrenceScale());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.workflow.kaleo.model.KaleoTimer");
@@ -450,24 +581,24 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 		sb.append(getModifiedDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>kaleoClassName</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassName());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>kaleoClassPK</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassPK());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>kaleoDefinitionId</column-name><column-value><![CDATA[");
 		sb.append(getKaleoDefinitionId());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>kaleoNodeId</column-name><column-value><![CDATA[");
-		sb.append(getKaleoNodeId());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>parentKaleoNodeId</column-name><column-value><![CDATA[");
-		sb.append(getParentKaleoNodeId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>name</column-name><column-value><![CDATA[");
 		sb.append(getName());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>defaultTimer</column-name><column-value><![CDATA[");
-		sb.append(getDefaultTimer());
+			"<column><column-name>blocking</column-name><column-value><![CDATA[");
+		sb.append(getBlocking());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>description</column-name><column-value><![CDATA[");
@@ -480,6 +611,14 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 		sb.append(
 			"<column><column-name>scale</column-name><column-value><![CDATA[");
 		sb.append(getScale());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>recurrenceDuration</column-name><column-value><![CDATA[");
+		sb.append(getRecurrenceDuration());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>recurrenceScale</column-name><column-value><![CDATA[");
+		sb.append(getRecurrenceScale());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -499,13 +638,16 @@ public class KaleoTimerModelImpl extends BaseModelImpl<KaleoTimer>
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
+	private String _kaleoClassName;
+	private long _kaleoClassPK;
 	private long _kaleoDefinitionId;
-	private long _kaleoNodeId;
-	private long _parentKaleoNodeId;
 	private String _name;
-	private boolean _defaultTimer;
+	private boolean _blocking;
 	private String _description;
 	private double _duration;
 	private String _scale;
+	private double _recurrenceDuration;
+	private String _recurrenceScale;
 	private transient ExpandoBridge _expandoBridge;
+	private KaleoTimer _escapedModelProxy;
 }

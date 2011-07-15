@@ -41,6 +41,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -77,17 +78,18 @@ public class HRExpenseAccountPersistenceImpl extends BasePersistenceImpl<HRExpen
 		".List";
 	public static final FinderPath FINDER_PATH_FETCH_BY_G_N = new FinderPath(HRExpenseAccountModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseAccountModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
+			HRExpenseAccountImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByG_N",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_N = new FinderPath(HRExpenseAccountModelImpl.ENTITY_CACHE_ENABLED,
-			HRExpenseAccountModelImpl.FINDER_CACHE_ENABLED,
+			HRExpenseAccountModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countByG_N",
 			new String[] { Long.class.getName(), String.class.getName() });
 	public static final FinderPath FINDER_PATH_FIND_ALL = new FinderPath(HRExpenseAccountModelImpl.ENTITY_CACHE_ENABLED,
 			HRExpenseAccountModelImpl.FINDER_CACHE_ENABLED,
-			FINDER_CLASS_NAME_LIST, "findAll", new String[0]);
+			HRExpenseAccountImpl.class, FINDER_CLASS_NAME_LIST, "findAll",
+			new String[0]);
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(HRExpenseAccountModelImpl.ENTITY_CACHE_ENABLED,
-			HRExpenseAccountModelImpl.FINDER_CACHE_ENABLED,
+			HRExpenseAccountModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST, "countAll", new String[0]);
 
 	/**
@@ -430,8 +432,14 @@ public class HRExpenseAccountPersistenceImpl extends BasePersistenceImpl<HRExpen
 		HRExpenseAccount hrExpenseAccount = (HRExpenseAccount)EntityCacheUtil.getResult(HRExpenseAccountModelImpl.ENTITY_CACHE_ENABLED,
 				HRExpenseAccountImpl.class, hrExpenseAccountId, this);
 
+		if (hrExpenseAccount == _nullHRExpenseAccount) {
+			return null;
+		}
+
 		if (hrExpenseAccount == null) {
 			Session session = null;
+
+			boolean hasException = false;
 
 			try {
 				session = openSession();
@@ -440,11 +448,18 @@ public class HRExpenseAccountPersistenceImpl extends BasePersistenceImpl<HRExpen
 						Long.valueOf(hrExpenseAccountId));
 			}
 			catch (Exception e) {
+				hasException = true;
+
 				throw processException(e);
 			}
 			finally {
 				if (hrExpenseAccount != null) {
 					cacheResult(hrExpenseAccount);
+				}
+				else if (!hasException) {
+					EntityCacheUtil.putResult(HRExpenseAccountModelImpl.ENTITY_CACHE_ENABLED,
+						HRExpenseAccountImpl.class, hrExpenseAccountId,
+						_nullHRExpenseAccount);
 				}
 
 				closeSession(session);
@@ -508,6 +523,7 @@ public class HRExpenseAccountPersistenceImpl extends BasePersistenceImpl<HRExpen
 	 *
 	 * @param groupId the group ID
 	 * @param name the name
+	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching h r expense account, or <code>null</code> if a matching h r expense account could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
@@ -974,4 +990,19 @@ public class HRExpenseAccountPersistenceImpl extends BasePersistenceImpl<HRExpen
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(HRExpenseAccountPersistenceImpl.class);
+	private static HRExpenseAccount _nullHRExpenseAccount = new HRExpenseAccountImpl() {
+			public Object clone() {
+				return this;
+			}
+
+			public CacheModel<HRExpenseAccount> toCacheModel() {
+				return _nullHRExpenseAccountCacheModel;
+			}
+		};
+
+	private static CacheModel<HRExpenseAccount> _nullHRExpenseAccountCacheModel = new CacheModel<HRExpenseAccount>() {
+			public HRExpenseAccount toEntityModel() {
+				return _nullHRExpenseAccount;
+			}
+		};
 }

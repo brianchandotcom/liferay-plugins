@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -211,8 +212,13 @@ public class HRProjectBillingRateModelImpl extends BaseModelImpl<HRProjectBillin
 			return (HRProjectBillingRate)this;
 		}
 		else {
-			return (HRProjectBillingRate)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (HRProjectBillingRate)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -297,6 +303,53 @@ public class HRProjectBillingRateModelImpl extends BaseModelImpl<HRProjectBillin
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRProjectBillingRate> toCacheModel() {
+		HRProjectBillingRateCacheModel hrProjectBillingRateCacheModel = new HRProjectBillingRateCacheModel();
+
+		hrProjectBillingRateCacheModel.hrProjectBillingRateId = getHrProjectBillingRateId();
+
+		hrProjectBillingRateCacheModel.groupId = getGroupId();
+
+		hrProjectBillingRateCacheModel.companyId = getCompanyId();
+
+		hrProjectBillingRateCacheModel.userId = getUserId();
+
+		hrProjectBillingRateCacheModel.userName = getUserName();
+
+		String userName = hrProjectBillingRateCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrProjectBillingRateCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrProjectBillingRateCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrProjectBillingRateCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrProjectBillingRateCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrProjectBillingRateCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrProjectBillingRateCacheModel.hrProjectId = getHrProjectId();
+
+		hrProjectBillingRateCacheModel.hrProjectRoleId = getHrProjectRoleId();
+
+		hrProjectBillingRateCacheModel.rate = getRate();
+
+		return hrProjectBillingRateCacheModel;
 	}
 
 	@Override
@@ -397,4 +450,5 @@ public class HRProjectBillingRateModelImpl extends BaseModelImpl<HRProjectBillin
 	private long _hrProjectRoleId;
 	private double _rate;
 	private transient ExpandoBridge _expandoBridge;
+	private HRProjectBillingRate _escapedModelProxy;
 }

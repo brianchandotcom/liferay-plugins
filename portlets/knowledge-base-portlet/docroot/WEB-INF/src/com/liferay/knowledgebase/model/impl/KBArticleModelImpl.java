@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -81,7 +82,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 			{ "title", Types.VARCHAR },
 			{ "content", Types.CLOB },
 			{ "description", Types.VARCHAR },
-			{ "kbTemplateId", Types.BIGINT },
 			{ "priority", Types.DOUBLE },
 			{ "sections", Types.VARCHAR },
 			{ "viewCount", Types.INTEGER },
@@ -92,7 +92,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table KBArticle (uuid_ VARCHAR(75) null,kbArticleId LONG not null primary key,resourcePrimKey LONG,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,rootResourcePrimKey LONG,parentResourcePrimKey LONG,version INTEGER,title STRING null,content TEXT null,description STRING null,kbTemplateId LONG,priority DOUBLE,sections STRING null,viewCount INTEGER,latest BOOLEAN,main BOOLEAN,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table KBArticle (uuid_ VARCHAR(75) null,kbArticleId LONG not null primary key,resourcePrimKey LONG,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,rootResourcePrimKey LONG,parentResourcePrimKey LONG,version INTEGER,title STRING null,content TEXT null,description STRING null,priority DOUBLE,sections STRING null,viewCount INTEGER,latest BOOLEAN,main BOOLEAN,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table KBArticle";
 	public static final String ORDER_BY_JPQL = " ORDER BY kbArticle.modifiedDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY KBArticle.modifiedDate DESC";
@@ -130,7 +130,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		model.setTitle(soapModel.getTitle());
 		model.setContent(soapModel.getContent());
 		model.setDescription(soapModel.getDescription());
-		model.setKbTemplateId(soapModel.getKbTemplateId());
 		model.setPriority(soapModel.getPriority());
 		model.setSections(soapModel.getSections());
 		model.setViewCount(soapModel.getViewCount());
@@ -401,15 +400,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	@JSON
-	public long getKbTemplateId() {
-		return _kbTemplateId;
-	}
-
-	public void setKbTemplateId(long kbTemplateId) {
-		_kbTemplateId = kbTemplateId;
-	}
-
-	@JSON
 	public double getPriority() {
 		return _priority;
 	}
@@ -566,8 +556,13 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 			return (KBArticle)this;
 		}
 		else {
-			return (KBArticle)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (KBArticle)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -605,7 +600,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		kbArticleImpl.setTitle(getTitle());
 		kbArticleImpl.setContent(getContent());
 		kbArticleImpl.setDescription(getDescription());
-		kbArticleImpl.setKbTemplateId(getKbTemplateId());
 		kbArticleImpl.setPriority(getPriority());
 		kbArticleImpl.setSections(getSections());
 		kbArticleImpl.setViewCount(getViewCount());
@@ -686,8 +680,117 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	@Override
+	public CacheModel<KBArticle> toCacheModel() {
+		KBArticleCacheModel kbArticleCacheModel = new KBArticleCacheModel();
+
+		kbArticleCacheModel.uuid = getUuid();
+
+		String uuid = kbArticleCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			kbArticleCacheModel.uuid = null;
+		}
+
+		kbArticleCacheModel.kbArticleId = getKbArticleId();
+
+		kbArticleCacheModel.resourcePrimKey = getResourcePrimKey();
+
+		kbArticleCacheModel.groupId = getGroupId();
+
+		kbArticleCacheModel.companyId = getCompanyId();
+
+		kbArticleCacheModel.userId = getUserId();
+
+		kbArticleCacheModel.userName = getUserName();
+
+		String userName = kbArticleCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			kbArticleCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			kbArticleCacheModel.createDate = createDate.getTime();
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			kbArticleCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+
+		kbArticleCacheModel.rootResourcePrimKey = getRootResourcePrimKey();
+
+		kbArticleCacheModel.parentResourcePrimKey = getParentResourcePrimKey();
+
+		kbArticleCacheModel.version = getVersion();
+
+		kbArticleCacheModel.title = getTitle();
+
+		String title = kbArticleCacheModel.title;
+
+		if ((title != null) && (title.length() == 0)) {
+			kbArticleCacheModel.title = null;
+		}
+
+		kbArticleCacheModel.content = getContent();
+
+		String content = kbArticleCacheModel.content;
+
+		if ((content != null) && (content.length() == 0)) {
+			kbArticleCacheModel.content = null;
+		}
+
+		kbArticleCacheModel.description = getDescription();
+
+		String description = kbArticleCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			kbArticleCacheModel.description = null;
+		}
+
+		kbArticleCacheModel.priority = getPriority();
+
+		kbArticleCacheModel.sections = getSections();
+
+		String sections = kbArticleCacheModel.sections;
+
+		if ((sections != null) && (sections.length() == 0)) {
+			kbArticleCacheModel.sections = null;
+		}
+
+		kbArticleCacheModel.viewCount = getViewCount();
+
+		kbArticleCacheModel.latest = getLatest();
+
+		kbArticleCacheModel.main = getMain();
+
+		kbArticleCacheModel.status = getStatus();
+
+		kbArticleCacheModel.statusByUserId = getStatusByUserId();
+
+		kbArticleCacheModel.statusByUserName = getStatusByUserName();
+
+		String statusByUserName = kbArticleCacheModel.statusByUserName;
+
+		if ((statusByUserName != null) && (statusByUserName.length() == 0)) {
+			kbArticleCacheModel.statusByUserName = null;
+		}
+
+		Date statusDate = getStatusDate();
+
+		if (statusDate != null) {
+			kbArticleCacheModel.statusDate = statusDate.getTime();
+		}
+
+		return kbArticleCacheModel;
+	}
+
+	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(51);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -719,8 +822,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		sb.append(getContent());
 		sb.append(", description=");
 		sb.append(getDescription());
-		sb.append(", kbTemplateId=");
-		sb.append(getKbTemplateId());
 		sb.append(", priority=");
 		sb.append(getPriority());
 		sb.append(", sections=");
@@ -745,7 +846,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(79);
+		StringBundler sb = new StringBundler(76);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.knowledgebase.model.KBArticle");
@@ -810,10 +911,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		sb.append(
 			"<column><column-name>description</column-name><column-value><![CDATA[");
 		sb.append(getDescription());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>kbTemplateId</column-name><column-value><![CDATA[");
-		sb.append(getKbTemplateId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>priority</column-name><column-value><![CDATA[");
@@ -884,7 +981,6 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	private String _title;
 	private String _content;
 	private String _description;
-	private long _kbTemplateId;
 	private double _priority;
 	private String _sections;
 	private int _viewCount;
@@ -896,4 +992,5 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private transient ExpandoBridge _expandoBridge;
+	private KBArticle _escapedModelProxy;
 }

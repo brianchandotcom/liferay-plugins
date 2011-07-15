@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -602,8 +603,13 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 			return (CalendarEvent)this;
 		}
 		else {
-			return (CalendarEvent)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (CalendarEvent)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -711,6 +717,125 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 		calendarEventModelImpl._originalGroupId = calendarEventModelImpl._groupId;
 
 		calendarEventModelImpl._setOriginalGroupId = false;
+	}
+
+	@Override
+	public CacheModel<CalendarEvent> toCacheModel() {
+		CalendarEventCacheModel calendarEventCacheModel = new CalendarEventCacheModel();
+
+		calendarEventCacheModel.uuid = getUuid();
+
+		String uuid = calendarEventCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			calendarEventCacheModel.uuid = null;
+		}
+
+		calendarEventCacheModel.calendarEventId = getCalendarEventId();
+
+		calendarEventCacheModel.groupId = getGroupId();
+
+		calendarEventCacheModel.companyId = getCompanyId();
+
+		calendarEventCacheModel.userId = getUserId();
+
+		calendarEventCacheModel.userName = getUserName();
+
+		String userName = calendarEventCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			calendarEventCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			calendarEventCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			calendarEventCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			calendarEventCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			calendarEventCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		calendarEventCacheModel.title = getTitle();
+
+		String title = calendarEventCacheModel.title;
+
+		if ((title != null) && (title.length() == 0)) {
+			calendarEventCacheModel.title = null;
+		}
+
+		calendarEventCacheModel.description = getDescription();
+
+		String description = calendarEventCacheModel.description;
+
+		if ((description != null) && (description.length() == 0)) {
+			calendarEventCacheModel.description = null;
+		}
+
+		calendarEventCacheModel.location = getLocation();
+
+		String location = calendarEventCacheModel.location;
+
+		if ((location != null) && (location.length() == 0)) {
+			calendarEventCacheModel.location = null;
+		}
+
+		Date startDate = getStartDate();
+
+		if (startDate != null) {
+			calendarEventCacheModel.startDate = startDate.getTime();
+		}
+		else {
+			calendarEventCacheModel.startDate = Long.MIN_VALUE;
+		}
+
+		Date endDate = getEndDate();
+
+		if (endDate != null) {
+			calendarEventCacheModel.endDate = endDate.getTime();
+		}
+		else {
+			calendarEventCacheModel.endDate = Long.MIN_VALUE;
+		}
+
+		calendarEventCacheModel.durationHour = getDurationHour();
+
+		calendarEventCacheModel.durationMinute = getDurationMinute();
+
+		calendarEventCacheModel.allDay = getAllDay();
+
+		calendarEventCacheModel.recurrence = getRecurrence();
+
+		String recurrence = calendarEventCacheModel.recurrence;
+
+		if ((recurrence != null) && (recurrence.length() == 0)) {
+			calendarEventCacheModel.recurrence = null;
+		}
+
+		calendarEventCacheModel.type = getType();
+
+		String type = calendarEventCacheModel.type;
+
+		if ((type != null) && (type.length() == 0)) {
+			calendarEventCacheModel.type = null;
+		}
+
+		calendarEventCacheModel.remindBy = getRemindBy();
+
+		calendarEventCacheModel.firstReminder = getFirstReminder();
+
+		calendarEventCacheModel.secondReminder = getSecondReminder();
+
+		return calendarEventCacheModel;
 	}
 
 	@Override
@@ -891,4 +1016,5 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 	private int _firstReminder;
 	private int _secondReminder;
 	private transient ExpandoBridge _expandoBridge;
+	private CalendarEvent _escapedModelProxy;
 }

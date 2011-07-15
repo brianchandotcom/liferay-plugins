@@ -204,7 +204,7 @@ public interface KBTemplateLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the k b template in the database. Also notifies the appropriate model listeners.
+	* Updates the k b template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbTemplate the k b template
 	* @return the k b template that was updated
@@ -215,7 +215,7 @@ public interface KBTemplateLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Updates the k b template in the database. Also notifies the appropriate model listeners.
+	* Updates the k b template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbTemplate the k b template
 	* @param merge whether to merge the k b template with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -242,21 +242,19 @@ public interface KBTemplateLocalService {
 
 	public com.liferay.knowledgebase.model.KBTemplate addKBTemplate(
 		long userId, java.lang.String title, java.lang.String content,
-		int engineType, boolean cacheable,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void addKBTemplateResources(
 		com.liferay.knowledgebase.model.KBTemplate kbTemplate,
-		boolean addCommunityPermissions, boolean addGuestPermissions)
+		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void addKBTemplateResources(
 		com.liferay.knowledgebase.model.KBTemplate kbTemplate,
-		java.lang.String[] communityPermissions,
-		java.lang.String[] guestPermissions)
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -288,15 +286,13 @@ public interface KBTemplateLocalService {
 
 	public com.liferay.knowledgebase.model.KBTemplate updateKBTemplate(
 		long kbTemplateId, java.lang.String title, java.lang.String content,
-		int engineType, boolean cacheable,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void updateKBTemplateResources(
 		com.liferay.knowledgebase.model.KBTemplate kbTemplate,
-		java.lang.String[] communityPermissions,
-		java.lang.String[] guestPermissions)
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 }

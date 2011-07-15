@@ -17,6 +17,7 @@ package com.liferay.knowledgebase.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.model.ResourcedModel;
 import com.liferay.portal.model.WorkflowedModel;
@@ -296,20 +297,6 @@ public interface KBArticleModel extends BaseModel<KBArticle>, GroupedModel,
 	public void setDescription(String description);
 
 	/**
-	 * Returns the kb template ID of this k b article.
-	 *
-	 * @return the kb template ID of this k b article
-	 */
-	public long getKbTemplateId();
-
-	/**
-	 * Sets the kb template ID of this k b article.
-	 *
-	 * @param kbTemplateId the kb template ID of this k b article
-	 */
-	public void setKbTemplateId(long kbTemplateId);
-
-	/**
 	 * Returns the priority of this k b article.
 	 *
 	 * @return the priority of this k b article
@@ -360,7 +347,7 @@ public interface KBArticleModel extends BaseModel<KBArticle>, GroupedModel,
 	public boolean getLatest();
 
 	/**
-	 * Determines if this k b article is latest.
+	 * Returns <code>true</code> if this k b article is latest.
 	 *
 	 * @return <code>true</code> if this k b article is latest; <code>false</code> otherwise
 	 */
@@ -381,7 +368,7 @@ public interface KBArticleModel extends BaseModel<KBArticle>, GroupedModel,
 	public boolean getMain();
 
 	/**
-	 * Determines if this k b article is main.
+	 * Returns <code>true</code> if this k b article is main.
 	 *
 	 * @return <code>true</code> if this k b article is main; <code>false</code> otherwise
 	 */
@@ -472,28 +459,28 @@ public interface KBArticleModel extends BaseModel<KBArticle>, GroupedModel,
 	public boolean getApproved();
 
 	/**
-	 * Determines if this k b article is approved.
+	 * Returns <code>true</code> if this k b article is approved.
 	 *
 	 * @return <code>true</code> if this k b article is approved; <code>false</code> otherwise
 	 */
 	public boolean isApproved();
 
 	/**
-	 * Determines if this k b article is a draft.
+	 * Returns <code>true</code> if this k b article is a draft.
 	 *
 	 * @return <code>true</code> if this k b article is a draft; <code>false</code> otherwise
 	 */
 	public boolean isDraft();
 
 	/**
-	 * Determines if this k b article is expired.
+	 * Returns <code>true</code> if this k b article is expired.
 	 *
 	 * @return <code>true</code> if this k b article is expired; <code>false</code> otherwise
 	 */
 	public boolean isExpired();
 
 	/**
-	 * Determines if this k b article is pending.
+	 * Returns <code>true</code> if this k b article is pending.
 	 *
 	 * @return <code>true</code> if this k b article is pending; <code>false</code> otherwise
 	 */
@@ -524,6 +511,8 @@ public interface KBArticleModel extends BaseModel<KBArticle>, GroupedModel,
 	public int compareTo(KBArticle kbArticle);
 
 	public int hashCode();
+
+	public CacheModel<KBArticle> toCacheModel();
 
 	public KBArticle toEscapedModel();
 

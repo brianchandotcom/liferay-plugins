@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -268,8 +269,13 @@ public class GadgetModelImpl extends BaseModelImpl<Gadget>
 			return (Gadget)this;
 		}
 		else {
-			return (Gadget)Proxy.newProxyInstance(_classLoader,
-				_escapedModelProxyInterfaces, new AutoEscapeBeanHandler(this));
+			if (_escapedModelProxy == null) {
+				_escapedModelProxy = (Gadget)Proxy.newProxyInstance(_classLoader,
+						_escapedModelProxyInterfaces,
+						new AutoEscapeBeanHandler(this));
+			}
+
+			return _escapedModelProxy;
 		}
 	}
 
@@ -360,6 +366,68 @@ public class GadgetModelImpl extends BaseModelImpl<Gadget>
 	}
 
 	@Override
+	public CacheModel<Gadget> toCacheModel() {
+		GadgetCacheModel gadgetCacheModel = new GadgetCacheModel();
+
+		gadgetCacheModel.uuid = getUuid();
+
+		String uuid = gadgetCacheModel.uuid;
+
+		if ((uuid != null) && (uuid.length() == 0)) {
+			gadgetCacheModel.uuid = null;
+		}
+
+		gadgetCacheModel.gadgetId = getGadgetId();
+
+		gadgetCacheModel.companyId = getCompanyId();
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			gadgetCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			gadgetCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			gadgetCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			gadgetCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		gadgetCacheModel.name = getName();
+
+		String name = gadgetCacheModel.name;
+
+		if ((name != null) && (name.length() == 0)) {
+			gadgetCacheModel.name = null;
+		}
+
+		gadgetCacheModel.url = getUrl();
+
+		String url = gadgetCacheModel.url;
+
+		if ((url != null) && (url.length() == 0)) {
+			gadgetCacheModel.url = null;
+		}
+
+		gadgetCacheModel.portletCategoryNames = getPortletCategoryNames();
+
+		String portletCategoryNames = gadgetCacheModel.portletCategoryNames;
+
+		if ((portletCategoryNames != null) &&
+				(portletCategoryNames.length() == 0)) {
+			gadgetCacheModel.portletCategoryNames = null;
+		}
+
+		return gadgetCacheModel;
+	}
+
+	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(17);
 
@@ -445,4 +513,5 @@ public class GadgetModelImpl extends BaseModelImpl<Gadget>
 	private String _originalUrl;
 	private String _portletCategoryNames;
 	private transient ExpandoBridge _expandoBridge;
+	private Gadget _escapedModelProxy;
 }
