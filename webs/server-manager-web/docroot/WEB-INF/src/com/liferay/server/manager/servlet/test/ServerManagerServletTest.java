@@ -3,9 +3,10 @@ package com.liferay.server.manager.servlet.test;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 
-import org.apache.http.HttpEntity;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -53,7 +54,7 @@ public class ServerManagerServletTest {
 		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy/vldap-web"));
 
 		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("vldap-web-6.1.0.1.war"));
+		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "vldap-web-6.1.0.1.war"));
 		entity.addPart("payload", contentBody);
 		request.setEntity(entity);
 
@@ -70,7 +71,7 @@ public class ServerManagerServletTest {
 		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy/vldap-web"));
 
 		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("vldap-web-6.1.0.2.war"));
+		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "vldap-web-6.1.0.2.war"));
 		entity.addPart("payload", contentBody);
 		request.setEntity(entity);
 
@@ -92,15 +93,49 @@ public class ServerManagerServletTest {
 	}
 
 	@Test
-	public void log () throws Exception {
+	public void logLiferay () throws Exception {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet request = new HttpGet();
 
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/log"));
+		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/log/sysout"));
 
 		HttpResponse response = httpClient.execute(request);
 
 		printResponse(response);
+	}
+
+	@Test
+	public void logAppServer () throws Exception {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet request = new HttpGet();
+
+		int offset = 0;
+
+		// Loop forever and read the log, this will need to be terminated
+		// manually
+		while (true) {
+			request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/log/syserr/" + offset));
+			HttpResponse response = httpClient.execute(request);
+
+			Reader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+			char[] buffer = new char[1024 * 4];
+			int numRead = 0;
+
+			while ((numRead = reader.read(buffer)) != -1) {
+				String s = new String(buffer, 0, numRead);
+
+				System.out.print(s);
+
+				offset += numRead;
+			}
+
+			Thread.sleep(1 * 1000);
+		}
+
+//		IOUtils.copy(reader, System.out);
+//		printResponse(response);
+
 	}
 
 	@Test
@@ -115,20 +150,13 @@ public class ServerManagerServletTest {
 		printResponse(response);
 	}
 
+	public Reader getReader(HttpResponse response) throws Exception {
+		return new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+	}
+
 	public void printResponse (HttpResponse response) throws Exception {
-		HttpEntity entity = response.getEntity();
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
-
-		while (true) {
-			String line = reader.readLine();
-
-			if (line == null) {
-				break;
-			}
-
-			System.out.println(line);
-		}
+		Reader reader = getReader(response);
+		IOUtils.copy(reader, System.out);
 	}
 
 	protected String _host;

@@ -1,11 +1,12 @@
 
 package com.liferay.server.manager.servlet;
 
+import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.ServerDetector;
+import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.util.SystemProperties;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,8 +16,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -87,7 +92,7 @@ public class ServerManagerServlet extends HttpServlet {
 		if (path[0].equals("is-alive")) {
 			isAliveHandler(request, response);
 		} else if (path[0].equals("log")) {
-			logHandler(request, response);
+			logHandler(request, response, path);
 		} else if (path[0].equals("debug-port")) {
 			debugPortHandler(request, response);
 		}
@@ -106,7 +111,7 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 	}
 
-	protected void handlePut (HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
+	protected void handlePut(HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
 		if (path.length == 0) {
 			return;
 		}
@@ -116,7 +121,7 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 	}
 
-	protected void handleDelete (HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
+	protected void handleDelete(HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
 		if (path.length == 0) {
 			return;
 		}
@@ -135,56 +140,57 @@ public class ServerManagerServlet extends HttpServlet {
 
 	protected void deployHandler(
 		HttpServletRequest request, HttpServletResponse response, String[] path)
-						throws Exception {
+		throws Exception {
 
-		//		if (path.length < 2) {
-		//			return;
-		//		}
-		//
-		//		String contextName = path[1];
+		String context = null;
 
-		List<FileItem> fileItems = getFileItems(request);
-
-		for (FileItem fileItem : fileItems) {
-			InputStream is = fileItem.getInputStream();
-
-			String deployDir = PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_DEPLOY_DIR);
-
-			if (deployDir == null) {
-				return;
-			}
-
-			File target = new File(deployDir, fileItem.getName());
-
-			toFile(is, target);
-
-			response.getWriter().print("deployed " + fileItem.getName());
-
-			break;
+		if (path.length >= 2) {
+			context = path[1];
 		}
+
+		FileItem fileItem = getFileItem(request);
+
+		if (fileItem == null) {
+			return;
+		}
+
+		File tempDirectory = new File(SystemProperties.get(SystemProperties.TMP_DIR));
+		UUID uuid = UUID.randomUUID();
+		File tempFile = new File(tempDirectory, uuid.toString() + "-" + fileItem.getName());
+
+		fileItem.write(tempFile);
+
+		DeployManagerUtil.deploy(tempFile, context);
+
+		FileUtils.deleteQuietly(tempFile);
 	}
 
-	protected void deployUpdateHandler (HttpServletRequest request, HttpServletResponse response, String[] path) throws IOException {
+	protected void deployUpdateHandler(HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
 		if (path.length < 2) {
 			return;
 		}
 
 		String context = path[1];
-		String webappsDirectory = getWebappsDirectory();
+		String webappsDirectory = DeployManagerUtil.getDeployDir();
 		File contextDirectory = new File(webappsDirectory, context);
 
-		List<FileItem> fileItems = getFileItems(request);
+		FileItem fileItem = getFileItem(request);
 
-		for (FileItem fileItem : fileItems) {
-			InputStream is = fileItem.getInputStream();
+		if (fileItem == null) {
+			return;
+		}
 
-			ZipInputStream zis = new ZipInputStream(is);
+		InputStream is = fileItem.getInputStream();
 
-			// unzip over current files
-			decompressToDirectory(zis, contextDirectory);
+		ZipInputStream zis = new ZipInputStream(is);
 
-			// delete uneeded files
-			File deleteInfo = new File(contextDirectory, "META-INF/liferay-partialapp-delete.props");
+		// unzip over current files
+		decompressToDirectory(zis, contextDirectory);
+
+		// delete uneeded files
+		File deleteInfo = new File(contextDirectory, "META-INF/liferay-partialapp-delete.props");
+
+		if (deleteInfo.exists()) {
 			BufferedReader reader = new BufferedReader(new FileReader(deleteInfo));
 
 			while (true) {
@@ -204,54 +210,67 @@ public class ServerManagerServlet extends HttpServlet {
 			}
 
 			FileUtils.deleteQuietly(deleteInfo);
-
-			response.getWriter().print("updated deployment " + context);
-
-			break;
 		}
+
+		DeployManagerUtil.redeploy(context);
 	}
 
 	protected void undeployHandler(
-		HttpServletRequest request, HttpServletResponse response, String[] path) {
+		HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
 
 		if (path.length < 2) {
 			return;
 		}
 
 		String context = path[1];
-		String webappsDirectory = getWebappsDirectory();
 
-		File directory = new File(webappsDirectory, context);
+		DeployManagerUtil.undeploy(context);
 
-		if (directory.exists()) {
-			boolean success = FileUtils.deleteQuietly(directory);
-			if (!success) {
-				_log.info("Could not remove " + context);
-			}
-		}
+		response.getWriter().print("Successfully undeployed " + context);
 	}
 
-	protected void logHandler (HttpServletRequest request, HttpServletResponse response) throws IOException {
-		File log = new File(System.getProperty("catalina.base") + "/logs/catalina.out");
+	protected void logHandler(HttpServletRequest request, HttpServletResponse response, String[] path) throws IOException {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String dateString = dateFormat.format(date);
+
+		if (path.length < 2) {
+			return;
+		}
+
+		File log = null;
+
+		if (path[1].equalsIgnoreCase("sysout")) {
+			log = new File(PropsUtil.get(PropsKeys.LIFERAY_HOME) +
+				"/logs/liferay." + dateString + ".log");
+		} else if (path[1].equalsIgnoreCase("syserr")) {
+			log = new File(System.getProperty("catalina.base") +
+				"/logs/catalina." + dateString + ".log");
+		} else {
+			return;
+		}
 
 		if (!log.exists()) {
 			return;
 		}
 
-		BufferedReader reader = new BufferedReader(new FileReader(log));
+		int offset = 0;
 
-		while (true) {
-			String line = reader.readLine();
-
-			if (line == null) {
-				break;
+		try {
+			if (path.length >= 3) {
+				offset = Integer.parseInt(path[2]);
 			}
-
-			response.getWriter().write(line + "\n");
+		} catch (NumberFormatException e) {
+			// Just use default offset
 		}
+
+		BufferedReader reader = new BufferedReader(new FileReader(log));
+		reader.skip(offset);
+
+		IOUtils.copy(reader, response.getWriter());
 	}
 
-	protected void debugPortHandler (HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void debugPortHandler(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String debugPort = "";
 
 		String catalinaOptionString = System.getProperty("env.CATALINA_OPTS");
@@ -271,41 +290,27 @@ public class ServerManagerServlet extends HttpServlet {
 		response.getWriter().write(debugPort);
 	}
 
-	protected static String getWebappsDirectory() {
+	protected static FileItem getFileItem(HttpServletRequest request) {
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload uploader = new ServletFileUpload(factory);
+
 		try {
-			if (ServerDetector.isGeronimo()) {
-				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_GERONIMO_DEST_DIR);
+			@SuppressWarnings("unchecked")
+			List<FileItem> fileItems = uploader.parseRequest(request);
+
+			for (FileItem fileItem : fileItems) {
+				if (!fileItem.isFormField()) {
+					return fileItem;
+				}
 			}
-			else if (ServerDetector.isGlassfish()) {
-				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_GLASSFISH_DEST_DIR);
-			}
-			else if (ServerDetector.isJBoss()) {
-				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_JBOSS_DEST_DIR);
-			}
-			else if (ServerDetector.isJetty()) {
-				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_JETTY_DEST_DIR);
-			}
-			else if (ServerDetector.isJOnAS()) {
-				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_JONAS_DEST_DIR);
-			}
-			else if (ServerDetector.isResin()) {
-				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_RESIN_DEST_DIR);
-			}
-			else if (ServerDetector.isTomcat()) {
-				return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_TOMCAT_DEST_DIR);
-			}
-			else if (ServerDetector.isWebLogic()) {
-				// return PrefsPropsUtil.getString(PropsKeys.AUTO_DEPLOY_WEBLOGIC_DEST_DIR);
-			}
-		}
-		catch (Exception e) {
+		} catch (FileUploadException e) {
 			_log.error(e);
 		}
 
 		return null;
 	}
 
-	protected static List<FileItem> getFileItems (HttpServletRequest request) {
+	protected static List<FileItem> getFileItems(HttpServletRequest request) {
 		List<FileItem> results = new ArrayList<FileItem>();
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -327,7 +332,7 @@ public class ServerManagerServlet extends HttpServlet {
 		return results;
 	}
 
-	public static void decompressToDirectory (ZipInputStream is, File directory) throws IOException {
+	public static void decompressToDirectory(ZipInputStream is, File directory) throws IOException {
 		while (true) {
 			ZipEntry entry = is.getNextEntry();
 
@@ -341,7 +346,7 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 	}
 
-	public static void toFile (InputStream is, File f) throws IOException {
+	public static void toFile(InputStream is, File f) throws IOException {
 		FileUtils.touch(f);
 		OutputStream os = new FileOutputStream(f);
 
