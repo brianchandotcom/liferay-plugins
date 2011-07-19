@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/development/httpcore-4.1.1.jar"/>
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/development/httpmime-4.1.1.jar"/>
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/development/junit-4.9b2.jar"/>
+	<classpathentry kind="lib" path="docroot/WEB-INF/lib/gson-1.7.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

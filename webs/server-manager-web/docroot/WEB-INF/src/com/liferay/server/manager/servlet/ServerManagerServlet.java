@@ -1,9 +1,11 @@
 
 package com.liferay.server.manager.servlet;
 
+import com.google.gson.Gson;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.util.SystemProperties;
@@ -16,11 +18,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,17 +45,21 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 public class ServerManagerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	private static final String JSON_OUTPUT_STREAM_KEY = "output-stream";
+	private static final String JSON_SUCCESS_KEY = "success";
+	private static final String JSON_ERROR_STREAM_KEY = "error-stream";
 
 	@Override
 	protected void service(
-		HttpServletRequest request, HttpServletResponse response)
+		HttpServletRequest request, HttpServletResponse httpResponse)
 						throws ServletException, IOException {
 
-		PrintWriter out = response.getWriter();
+		PrintWriter out = httpResponse.getWriter();
 		String path = request.getServletPath().toLowerCase();
 
 		// Remove first / so that split won't have empty strings
@@ -58,31 +69,44 @@ public class ServerManagerServlet extends HttpServlet {
 
 		String[] pathPieces = path.split("/");
 
-		response.setContentType("application/json");
+		httpResponse.setContentType("application/json");
+
+		// Set up Json
+		Gson gson = new Gson();
+		Map<String, String> jsonResponse = new HashMap<String, String>();
+		jsonResponse.put(JSON_ERROR_STREAM_KEY, "");
+		jsonResponse.put(JSON_SUCCESS_KEY, "1");
+		jsonResponse.put(JSON_OUTPUT_STREAM_KEY, "");
 
 		try {
 			if (request.getMethod().equalsIgnoreCase("get")) {
-				handleGet(request, response, pathPieces);
+				handleGet(request, httpResponse, pathPieces, jsonResponse);
 			}
 			else if (request.getMethod().equalsIgnoreCase("post")) {
-				handlePost(request, response, pathPieces);
+				handlePost(request, httpResponse, pathPieces, jsonResponse);
 			}
 			else if (request.getMethod().equalsIgnoreCase("put")) {
-				handlePut(request, response, pathPieces);
+				handlePut(request, httpResponse, pathPieces, jsonResponse);
 			}
 			else if (request.getMethod().equalsIgnoreCase("delete")) {
-				handleDelete(request, response, pathPieces);
+				handleDelete(request, httpResponse, pathPieces, jsonResponse);
 			}
 		} catch (Exception e) {
 			_log.error(e);
+
+			jsonResponse.put(
+				JSON_ERROR_STREAM_KEY, ExceptionUtils.getFullStackTrace(e));
+			jsonResponse.put(
+				JSON_SUCCESS_KEY, "0");
 		}
 
+		out.write(gson.toJson(jsonResponse));
 		out.flush();
 		out.close();
 	}
 
 	protected void handleGet(
-		HttpServletRequest request, HttpServletResponse response, String[] path)
+		HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse)
 						throws IOException {
 
 		if (path.length == 0) {
@@ -90,16 +114,16 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 
 		if (path[0].equals("is-alive")) {
-			isAliveHandler(request, response);
+			isAliveHandler(request, httpResponse, jsonResponse);
 		} else if (path[0].equals("log")) {
-			logHandler(request, response, path);
+			logHandler(request, httpResponse, path, jsonResponse);
 		} else if (path[0].equals("debug-port")) {
-			debugPortHandler(request, response);
+			debugPortHandler(request, httpResponse, jsonResponse);
 		}
 	}
 
 	protected void handlePost(
-		HttpServletRequest request, HttpServletResponse response, String[] path)
+		HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse)
 						throws Exception {
 
 		if (path.length == 0) {
@@ -107,39 +131,38 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 
 		if (path[0].equals("deploy")) {
-			deployHandler(request, response, path);
+			deployHandler(request, httpResponse, path, jsonResponse);
 		}
 	}
 
-	protected void handlePut(HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
+	protected void handlePut(HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse) throws Exception {
 		if (path.length == 0) {
 			return;
 		}
 
 		if (path[0].equals("deploy")) {
-			deployUpdateHandler(request, response, path);
+			deployUpdateHandler(request, httpResponse, path, jsonResponse);
 		}
 	}
 
-	protected void handleDelete(HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
+	protected void handleDelete(HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse) throws Exception {
 		if (path.length == 0) {
 			return;
 		}
 
 		if (path[0].equals("undeploy")) {
-			undeployHandler(request, response, path);
+			undeployHandler(request, httpResponse, path, jsonResponse);
 		}
 	}
 
 	protected void isAliveHandler(
-		HttpServletRequest request, HttpServletResponse response)
-						throws IOException {
+		HttpServletRequest request, HttpServletResponse httpResponse, Map<String, String> jsonResponse) {
 
-		response.getWriter().print("1");
+		// Nothing to do, because we assume success unless otherwise specified
 	}
 
 	protected void deployHandler(
-		HttpServletRequest request, HttpServletResponse response, String[] path)
+		HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse)
 		throws Exception {
 
 		String context = null;
@@ -154,18 +177,25 @@ public class ServerManagerServlet extends HttpServlet {
 			return;
 		}
 
-		File tempDirectory = new File(SystemProperties.get(SystemProperties.TMP_DIR));
 		UUID uuid = UUID.randomUUID();
-		File tempFile = new File(tempDirectory, uuid.toString() + "-" + fileItem.getName());
+		File systemTempDirectory = new File(SystemProperties.get(SystemProperties.TMP_DIR));
+		File tempDirectory = new File(systemTempDirectory, uuid.toString());
+		File tempFile = new File(tempDirectory, fileItem.getName());
+
+		FileUtil.touch(tempFile);
 
 		fileItem.write(tempFile);
 
 		DeployManagerUtil.deploy(tempFile, context);
 
-		FileUtils.deleteQuietly(tempFile);
+		boolean success = FileUtils.deleteQuietly(tempFile);
+
+		if (!success) {
+			jsonResponse.put(JSON_SUCCESS_KEY, "0");
+		}
 	}
 
-	protected void deployUpdateHandler(HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
+	protected void deployUpdateHandler(HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse) throws Exception {
 		if (path.length < 2) {
 			return;
 		}
@@ -206,17 +236,18 @@ public class ServerManagerServlet extends HttpServlet {
 
 				if (!success) {
 					_log.info("Could not delete file: " + f.getAbsolutePath());
+					jsonResponse.put(JSON_SUCCESS_KEY, "0");
 				}
 			}
 
 			FileUtils.deleteQuietly(deleteInfo);
 		}
 
-		DeployManagerUtil.redeploy(context);
+		// Eclipse plugin handles redeploy so we don't worry about it
 	}
 
 	protected void undeployHandler(
-		HttpServletRequest request, HttpServletResponse response, String[] path) throws Exception {
+		HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse) throws Exception {
 
 		if (path.length < 2) {
 			return;
@@ -227,7 +258,7 @@ public class ServerManagerServlet extends HttpServlet {
 		DeployManagerUtil.undeploy(context);
 	}
 
-	protected void logHandler(HttpServletRequest request, HttpServletResponse response, String[] path) throws IOException {
+	protected void logHandler(HttpServletRequest request, HttpServletResponse httpResponse, String[] path, Map<String, String> jsonResponse) throws IOException {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String dateString = dateFormat.format(date);
@@ -265,14 +296,25 @@ public class ServerManagerServlet extends HttpServlet {
 		BufferedReader reader = new BufferedReader(new FileReader(log));
 		reader.skip(offset);
 
-		IOUtils.copy(reader, response.getWriter());
+		StringWriter sw = new StringWriter();
+		IOUtils.copy(reader, sw);
+
+		jsonResponse.put(JSON_OUTPUT_STREAM_KEY, sw.toString());
 	}
 
-	protected void debugPortHandler(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String debugPort = "";
+	protected void debugPortHandler(HttpServletRequest request, HttpServletResponse httpResponse, Map<String, String> jsonResponse) throws IOException {
+		String debugPort = null;
 
-		String catalinaOptionString = System.getProperty("env.CATALINA_OPTS");
-		String[] options = catalinaOptionString.split("\\s*-D?");
+		// Get JVM arguments
+		RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+		List<String> options = runtimeMXBean.getInputArguments();
+
+		if (options == null) {
+			// Server was not started in debug mode
+			jsonResponse.put(JSON_SUCCESS_KEY, "0");
+			jsonResponse.put(JSON_ERROR_STREAM_KEY, "Server was not started in debug mode.");
+			return;
+		}
 
 		for (String option : options) {
 			if (option.contains("agentlib:jdwp")) {
@@ -285,7 +327,11 @@ public class ServerManagerServlet extends HttpServlet {
 			}
 		}
 
-		response.getWriter().write(debugPort);
+		if (debugPort == null) {
+			jsonResponse.put(JSON_SUCCESS_KEY, "0");
+		} else {
+			jsonResponse.put(JSON_OUTPUT_STREAM_KEY, debugPort);
+		}
 	}
 
 	protected static FileItem getFileItem(HttpServletRequest request) {

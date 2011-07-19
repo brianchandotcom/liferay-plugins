@@ -1,0 +1,57 @@
+Server Manager User Guide
+=========================
+
+Introduction
+------------
+
+The Server Manager allows managing an application server running Liferay remotely. It follows a RESTful URL pattern, and specific functionality is documented below.
+
+URLs
+----
+
+Each url has a request type which is the type of the HTTP request (GET, POST, UPDATE, or DELETE), and arguments as specified. Square brackets '[]' denote optional arguments, and dollar signs '$' denote variable arguments. 
+
+
+### debug-port
+
+URL:               http://localhost/server-manager-web/debug-port
+Request Type:      GET
+Description:       Returns the debug port of the applications server
+Supported Servers: Tomcat
+
+
+### deploy
+
+URL:               http://localhost/server-manager-web/deploy[/$context]
+Request Type:      POST
+Description:       Deploys the war file attached to the body of this POST request to $context if specified. If $context is not specified, the context will be based on the file name.
+
+URL:               http://localhost/server-manager-web/deploy/$context
+Request Type:      PUT
+Description:       Updates the deployed $context with the files from the delta war that is attached to the body of this PUT request.
+
+
+### is-alive
+
+URL:          http://localhost/server-manager-web/is-alive
+Request Type: GET
+Description:  Successful if the server is up and running, otherwise this request fails
+
+
+### log
+
+URL:               http://localhost/server-manager-web/log/sysout[/$offset]
+Request Type:      GET
+Description:       Returns Liferay's log since midnight starting at the optional $offset of the file. $offset is a number. 
+
+URL:               http://localhost/server-manager-web/log/syserr[/$offset]
+Request Type:      GET
+Description:       Returns the application server's log since midnight starting at the optional $offset of the file. $offset is a number. 
+Supported Servers: Tomcat
+
+
+### undeploy
+
+URL:               http://localhost/server-manager-web/deploy/$context
+Request Type:      DELETE
+Description:       Undeploys $context.

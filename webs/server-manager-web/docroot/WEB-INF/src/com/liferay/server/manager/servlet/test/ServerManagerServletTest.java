@@ -47,11 +47,79 @@ public class ServerManagerServletTest {
 	}
 
 	@Test
-	public void deploy () throws Exception {
+	public void deployHook () throws Exception {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost request = new HttpPost();
 
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy/vldap-web"));
+		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
+
+		MultipartEntity entity = new MultipartEntity();
+		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "sample-wrapper-hook-6.1.0.1.war"));
+		entity.addPart("payload", contentBody);
+		request.setEntity(entity);
+
+		HttpResponse response = httpClient.execute(request);
+
+		printResponse(response);
+	}
+
+	@Test
+	public void deployLayout () throws Exception {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost request = new HttpPost();
+
+		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
+
+		MultipartEntity entity = new MultipartEntity();
+		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "1-2-1-columns-layouttpl-6.1.0.1.war"));
+		entity.addPart("payload", contentBody);
+		request.setEntity(entity);
+
+		HttpResponse response = httpClient.execute(request);
+
+		printResponse(response);
+	}
+
+	@Test
+	public void deployPortlet () throws Exception {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost request = new HttpPost();
+
+		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
+
+		MultipartEntity entity = new MultipartEntity();
+		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "hr-portlet-6.1.0.1.war"));
+		entity.addPart("payload", contentBody);
+		request.setEntity(entity);
+
+		HttpResponse response = httpClient.execute(request);
+
+		printResponse(response);
+	}
+
+	@Test
+	public void deployTheme () throws Exception {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost request = new HttpPost();
+
+		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
+
+		MultipartEntity entity = new MultipartEntity();
+		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "beautiful-day-theme-6.1.0.1.war"));
+		entity.addPart("payload", contentBody);
+		request.setEntity(entity);
+
+		HttpResponse response = httpClient.execute(request);
+
+		printResponse(response);
+	}
+
+	@Test
+	public void deployWeb () throws Exception {
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpPost request = new HttpPost();
+
+		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
 
 		MultipartEntity entity = new MultipartEntity();
 		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "vldap-web-6.1.0.1.war"));
