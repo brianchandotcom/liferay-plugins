@@ -225,8 +225,6 @@ public class ServerManagerServlet extends HttpServlet {
 		String context = path[1];
 
 		DeployManagerUtil.undeploy(context);
-
-		response.getWriter().print("Successfully undeployed " + context);
 	}
 
 	protected void logHandler(HttpServletRequest request, HttpServletResponse response, String[] path) throws IOException {
