@@ -6,8 +6,8 @@ Introduction
 
 The Server Manager allows managing an application server running Liferay remotely. It follows a RESTful URL pattern, and specific functionality is documented below.
 
-URLs
-----
+Request
+-------
 
 Each url has a request type which is the type of the HTTP request (GET, POST, UPDATE, or DELETE), and arguments as specified. Square brackets '[]' denote optional arguments, and dollar signs '$' denote variable arguments. 
 
@@ -16,7 +16,8 @@ Each url has a request type which is the type of the HTTP request (GET, POST, UP
 
 URL:               http://localhost/server-manager-web/debug-port
 Request Type:      GET
-Description:       Returns the debug port of the applications server
+Description:       Provides the debug port of the application server.
+Response:          A number denoting the debug port of the application server.
 Supported Servers: Tomcat
 
 
@@ -35,18 +36,21 @@ Description:       Updates the deployed $context with the files from the delta w
 
 URL:          http://localhost/server-manager-web/is-alive
 Request Type: GET
-Description:  Successful if the server is up and running, otherwise this request fails
+Description:  Successful if the server is up and running, otherwise this request fails.
+Response:     Empty. This operation will use the success field of the JSON response. The server is alive if the operation is successful, otherwise not.
 
 
 ### log
 
 URL:               http://localhost/server-manager-web/log/sysout[/$offset]
 Request Type:      GET
-Description:       Returns Liferay's log since midnight starting at the optional $offset of the file. $offset is a number. 
+Description:       Returns Liferay's log since midnight starting at the optional $offset of the file. If $offset is not specified then we start at the beginning of the file. $offset is a number. 
+Response:          The log for Liferay as described above.
 
 URL:               http://localhost/server-manager-web/log/syserr[/$offset]
 Request Type:      GET
-Description:       Returns the application server's log since midnight starting at the optional $offset of the file. $offset is a number. 
+Description:       Returns the application server's log since midnight starting at the optional $offset of the file. If $offset is not specified then we start at the beginning of the file. $offset is a number. 
+Response:          The log for the application server as described above.
 Supported Servers: Tomcat
 
 
@@ -55,3 +59,15 @@ Supported Servers: Tomcat
 URL:               http://localhost/server-manager-web/deploy/$context
 Request Type:      DELETE
 Description:       Undeploys $context.
+
+
+Response
+--------
+
+The response for any request will be a JSON string containing three fields:
+
+ - output-stream: This will contain the requested data, if any. For example it could contain the log or the debug port. The Response field in the above section will be placed into this field unless otherwise specified. If a response is not specified above, then this field will be empty.
+ - error-stream: This will contain an error message or a stack trace if any error occurred during the request.
+ - success: One of the following success codes for the operation.
+    - 0 for success, everything finished with no problems
+    - 1 something went wrong, the operation may have completed successfully anyway, but it may not have.

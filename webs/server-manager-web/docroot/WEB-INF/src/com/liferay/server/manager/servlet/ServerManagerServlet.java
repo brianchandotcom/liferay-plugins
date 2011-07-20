@@ -75,7 +75,7 @@ public class ServerManagerServlet extends HttpServlet {
 		Gson gson = new Gson();
 		Map<String, String> jsonResponse = new HashMap<String, String>();
 		jsonResponse.put(JSON_ERROR_STREAM_KEY, "");
-		jsonResponse.put(JSON_SUCCESS_KEY, "1");
+		jsonResponse.put(JSON_SUCCESS_KEY, "0");
 		jsonResponse.put(JSON_OUTPUT_STREAM_KEY, "");
 
 		try {
@@ -97,7 +97,7 @@ public class ServerManagerServlet extends HttpServlet {
 			jsonResponse.put(
 				JSON_ERROR_STREAM_KEY, ExceptionUtils.getFullStackTrace(e));
 			jsonResponse.put(
-				JSON_SUCCESS_KEY, "0");
+				JSON_SUCCESS_KEY, "1");
 		}
 
 		out.write(gson.toJson(jsonResponse));
@@ -191,7 +191,7 @@ public class ServerManagerServlet extends HttpServlet {
 		boolean success = FileUtils.deleteQuietly(tempFile);
 
 		if (!success) {
-			jsonResponse.put(JSON_SUCCESS_KEY, "0");
+			jsonResponse.put(JSON_SUCCESS_KEY, "1");
 		}
 	}
 
@@ -236,7 +236,7 @@ public class ServerManagerServlet extends HttpServlet {
 
 				if (!success) {
 					_log.info("Could not delete file: " + f.getAbsolutePath());
-					jsonResponse.put(JSON_SUCCESS_KEY, "0");
+					jsonResponse.put(JSON_SUCCESS_KEY, "1");
 				}
 			}
 
@@ -311,7 +311,7 @@ public class ServerManagerServlet extends HttpServlet {
 
 		if (options == null) {
 			// Server was not started in debug mode
-			jsonResponse.put(JSON_SUCCESS_KEY, "0");
+			jsonResponse.put(JSON_SUCCESS_KEY, "1");
 			jsonResponse.put(JSON_ERROR_STREAM_KEY, "Server was not started in debug mode.");
 			return;
 		}
@@ -328,7 +328,7 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 
 		if (debugPort == null) {
-			jsonResponse.put(JSON_SUCCESS_KEY, "0");
+			jsonResponse.put(JSON_SUCCESS_KEY, "1");
 		} else {
 			jsonResponse.put(JSON_OUTPUT_STREAM_KEY, debugPort);
 		}
