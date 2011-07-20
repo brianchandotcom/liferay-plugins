@@ -166,6 +166,13 @@ public class KaleoDefinitionLocalServiceWrapper
 		return _kaleoDefinitionLocalService.getKaleoDefinition(kaleoDefinitionId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _kaleoDefinitionLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the kaleo definitions.
 	*
@@ -196,7 +203,7 @@ public class KaleoDefinitionLocalServiceWrapper
 	}
 
 	/**
-	* Updates the kaleo definition in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo definition in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoDefinition the kaleo definition
 	* @return the kaleo definition that was updated
@@ -209,7 +216,7 @@ public class KaleoDefinitionLocalServiceWrapper
 	}
 
 	/**
-	* Updates the kaleo definition in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo definition in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoDefinition the kaleo definition
 	* @param merge whether to merge the kaleo definition with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

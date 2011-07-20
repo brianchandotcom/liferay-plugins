@@ -555,6 +555,10 @@ public class HRExpenseWrapper implements HRExpense {
 		return _hrExpense.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRExpense> toCacheModel() {
+		return _hrExpense.toCacheModel();
+	}
+
 	public com.liferay.hr.model.HRExpense toEscapedModel() {
 		return new HRExpenseWrapper(_hrExpense.toEscapedModel());
 	}
@@ -566,6 +570,11 @@ public class HRExpenseWrapper implements HRExpense {
 
 	public java.lang.String toXmlString() {
 		return _hrExpense.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_hrExpense.persist();
 	}
 
 	public HRExpense getWrappedHRExpense() {

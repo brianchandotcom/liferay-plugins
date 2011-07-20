@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRUserProject;
-
 /**
  * @author Wesley Gong
  */
 public class HRUserProjectImpl
-	extends HRUserProjectModelImpl implements HRUserProject {
+	extends HRUserProjectBaseImpl {
 
 	public HRUserProjectImpl() {
 	}

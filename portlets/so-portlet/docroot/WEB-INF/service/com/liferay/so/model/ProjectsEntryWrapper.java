@@ -327,6 +327,10 @@ public class ProjectsEntryWrapper implements ProjectsEntry {
 		return _projectsEntry.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.so.model.ProjectsEntry> toCacheModel() {
+		return _projectsEntry.toCacheModel();
+	}
+
 	public com.liferay.so.model.ProjectsEntry toEscapedModel() {
 		return new ProjectsEntryWrapper(_projectsEntry.toEscapedModel());
 	}
@@ -338,6 +342,11 @@ public class ProjectsEntryWrapper implements ProjectsEntry {
 
 	public java.lang.String toXmlString() {
 		return _projectsEntry.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_projectsEntry.persist();
 	}
 
 	public ProjectsEntry getWrappedProjectsEntry() {

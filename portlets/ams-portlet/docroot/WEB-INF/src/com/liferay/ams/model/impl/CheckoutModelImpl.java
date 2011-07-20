@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -302,6 +303,74 @@ public class CheckoutModelImpl extends BaseModelImpl<Checkout>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<Checkout> toCacheModel() {
+		CheckoutCacheModel checkoutCacheModel = new CheckoutCacheModel();
+
+		checkoutCacheModel.checkoutId = getCheckoutId();
+
+		checkoutCacheModel.companyId = getCompanyId();
+
+		checkoutCacheModel.userId = getUserId();
+
+		checkoutCacheModel.userName = getUserName();
+
+		String userName = checkoutCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			checkoutCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			checkoutCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			checkoutCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			checkoutCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			checkoutCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		checkoutCacheModel.assetId = getAssetId();
+
+		Date checkOutDate = getCheckOutDate();
+
+		if (checkOutDate != null) {
+			checkoutCacheModel.checkOutDate = checkOutDate.getTime();
+		}
+		else {
+			checkoutCacheModel.checkOutDate = Long.MIN_VALUE;
+		}
+
+		Date expectedCheckInDate = getExpectedCheckInDate();
+
+		if (expectedCheckInDate != null) {
+			checkoutCacheModel.expectedCheckInDate = expectedCheckInDate.getTime();
+		}
+		else {
+			checkoutCacheModel.expectedCheckInDate = Long.MIN_VALUE;
+		}
+
+		Date actualCheckInDate = getActualCheckInDate();
+
+		if (actualCheckInDate != null) {
+			checkoutCacheModel.actualCheckInDate = actualCheckInDate.getTime();
+		}
+		else {
+			checkoutCacheModel.actualCheckInDate = Long.MIN_VALUE;
+		}
+
+		return checkoutCacheModel;
 	}
 
 	@Override

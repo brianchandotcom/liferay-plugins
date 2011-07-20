@@ -14,8 +14,10 @@
 
 package com.liferay.portal.workflow.kaleo.model;
 
+import com.liferay.portal.model.PersistedModel;
+
 /**
- * The model interface for the KaleoTimerInstanceToken service. Represents a row in the &quot;KaleoTimerInstanceToken&quot; database table, with each column mapped to a property of this class.
+ * The extended model interface for the KaleoTimerInstanceToken service. Represents a row in the &quot;KaleoTimerInstanceToken&quot; database table, with each column mapped to a property of this class.
  *
  * @author Brian Wing Shun Chan
  * @see KaleoTimerInstanceTokenModel
@@ -23,7 +25,8 @@ package com.liferay.portal.workflow.kaleo.model;
  * @see com.liferay.portal.workflow.kaleo.model.impl.KaleoTimerInstanceTokenModelImpl
  * @generated
  */
-public interface KaleoTimerInstanceToken extends KaleoTimerInstanceTokenModel {
+public interface KaleoTimerInstanceToken extends KaleoTimerInstanceTokenModel,
+	PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -32,6 +35,9 @@ public interface KaleoTimerInstanceToken extends KaleoTimerInstanceTokenModel {
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken getKaleoInstanceToken()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken getKaleoTaskInstanceToken()
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoTimer getKaleoTimer()
 		throws com.liferay.portal.kernel.exception.PortalException,

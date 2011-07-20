@@ -25,7 +25,6 @@ long resourcePrimKey = BeanParamUtil.getLong(kbArticle, request, "resourcePrimKe
 
 long parentResourcePrimKey = BeanParamUtil.getLong(kbArticle, request, "parentResourcePrimKey", KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY);
 String content = BeanParamUtil.getString(kbArticle, request, "content", BeanPropertiesUtil.getString(kbTemplate, "content"));
-long kbTemplateId = BeanParamUtil.getLong(kbArticle, request, "kbTemplateId", KBArticleConstants.DEFAULT_KB_TEMPLATE_ID);
 String[] sections = AdminUtil.unescapeSections(BeanPropertiesUtil.getString(kbArticle, "sections", StringUtil.merge(PortletPropsValues.ADMIN_KB_ARTICLE_DEFAULT_SECTIONS)));
 
 String dirName = ParamUtil.getString(request, "dirName");
@@ -46,12 +45,10 @@ String dirName = ParamUtil.getString(request, "dirName");
 <aui:form action="<%= updateKBArticleURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "updateKBArticle();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="parentResourcePrimKey" type="hidden" value="<%= parentResourcePrimKey %>" />
-	<aui:input name="kbTemplateId" type="hidden" value="<%= kbTemplateId %>" />
 	<aui:input name="dirName" type="hidden" value="<%= dirName %>" />
 	<aui:input name="workflowAction" type="hidden" value="<%= WorkflowConstants.ACTION_SAVE_DRAFT %>" />
 
 	<liferay-ui:error exception="<%= KBArticleContentException.class %>" message="please-enter-valid-content" />
-	<liferay-ui:error exception="<%= KBArticleSectionException.class %>" message="please-select-at-least-one-section" />
 	<liferay-ui:error exception="<%= KBArticleTitleException.class %>" message="please-enter-a-valid-title" />
 
 	<liferay-ui:asset-categories-error />
@@ -90,33 +87,6 @@ String dirName = ParamUtil.getString(request, "dirName");
 			<aui:input name="description" />
 		</c:if>
 
-		<aui:field-wrapper label="template">
-			<div id="<portlet:namespace />kbTemplate">
-				<c:if test="<%= kbTemplateId != KBArticleConstants.DEFAULT_KB_TEMPLATE_ID %>">
-					<liferay-ui:icon
-						cssClass="kb-selected-template"
-						image="../file_system/small/xml"
-						label="<%= true %>"
-						message='<%= BeanPropertiesUtil.getString(KBTemplateLocalServiceUtil.getKBTemplate(kbTemplateId), "title") %>'
-						method="get"
-					/>
-				</c:if>
-			</div>
-
-			<liferay-portlet:renderURL var="selectKBTemplateURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-				<portlet:param name="jspPage" value='<%= jspPath + "select_template.jsp" %>' />
-				<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
-			</liferay-portlet:renderURL>
-
-			<%
-			String taglibOnClick = "var selectKBTemplateWindow = window.open('" + selectKBTemplateURL + "&" + renderResponse.getNamespace() + "kbTemplateId=' + document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "kbTemplateId.value, 'selectKBTemplate', 'directories=no,height=640,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=680'); void(''); selectKBTemplateWindow.focus();";
-			%>
-
-			<div class="kb-edit-link">
-				<aui:a href="javascript:;" onClick="<%= taglibOnClick %>"><liferay-ui:message key="select-template" /> &raquo;</aui:a>
-			</div>
-		</aui:field-wrapper>
-
 		<aui:field-wrapper label="attachments">
 			<div id="<portlet:namespace />attachments">
 				<liferay-util:include page="/admin/attachments.jsp" servletContext="<%= application %>">
@@ -125,37 +95,35 @@ String dirName = ParamUtil.getString(request, "dirName");
 			</div>
 		</aui:field-wrapper>
 
-		<aui:model-context bean="<%= null %>" model="<%= KBArticle.class %>" />
+		<c:if test="<%= Validator.isNotNull(PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) %>">
+			<aui:model-context bean="<%= null %>" model="<%= KBArticle.class %>" />
 
-		<aui:select cssClass='<%= (parentResourcePrimKey != KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) ? "aui-helper-hidden" : StringPool.BLANK %>' ignoreRequestValue="<%= true %>" multiple="<%= true %>" name="sections">
+			<aui:select cssClass='<%= (parentResourcePrimKey != KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) ? "aui-helper-hidden" : StringPool.BLANK %>' ignoreRequestValue="<%= true %>" multiple="<%= true %>" name="sections">
 
-			<%
-			Map<String, String> sectionsMap = new TreeMap<String, String>();
+				<%
+				Map<String, String> sectionsMap = new TreeMap<String, String>();
 
-			for (String section : PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) {
-				sectionsMap.put(LanguageUtil.get(pageContext, section), section);
-			}
+				for (String section : PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) {
+					sectionsMap.put(LanguageUtil.get(pageContext, section), section);
+				}
 
-			for (Map.Entry<String, String> entry : sectionsMap.entrySet()) {
-			%>
+				for (Map.Entry<String, String> entry : sectionsMap.entrySet()) {
+				%>
 
-				<aui:option label="<%= entry.getKey() %>" selected="<%= ArrayUtil.contains(sections, entry.getValue()) %>" value="<%= entry.getValue() %>" />
+					<aui:option label="<%= entry.getKey() %>" selected="<%= ArrayUtil.contains(sections, entry.getValue()) %>" value="<%= entry.getValue() %>" />
 
-			<%
-			}
-			%>
+				<%
+				}
+				%>
 
-		</aui:select>
+			</aui:select>
 
-		<aui:model-context bean="<%= kbArticle %>" model="<%= KBArticle.class %>" />
-
-		<c:if test="<%= enableKBArticleAssetCategories %>">
-			<aui:input classPK="<%= (kbArticle != null) ? kbArticle.getClassPK() : 0 %>" name="categories" type="assetCategories" />
+			<aui:model-context bean="<%= kbArticle %>" model="<%= KBArticle.class %>" />
 		</c:if>
 
-		<c:if test="<%= enableKBArticleAssetTags %>">
-			<aui:input classPK="<%= (kbArticle != null) ? kbArticle.getClassPK() : 0 %>" name="tags" type="assetTags" />
-		</c:if>
+		<aui:input classPK="<%= (kbArticle != null) ? kbArticle.getClassPK() : 0 %>" name="categories" type="assetCategories" />
+
+		<aui:input classPK="<%= (kbArticle != null) ? kbArticle.getClassPK() : 0 %>" name="tags" type="assetTags" />
 
 		<c:if test="<%= kbArticle == null %>">
 			<aui:field-wrapper cssClass='<%= (parentResourcePrimKey != KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) ? "aui-helper-hidden" : StringPool.BLANK %>' label="permissions">
@@ -185,11 +153,6 @@ String dirName = ParamUtil.getString(request, "dirName");
 	function <portlet:namespace />publishKBArticle() {
 		document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = "<%= WorkflowConstants.ACTION_PUBLISH %>";
 		<portlet:namespace />updateKBArticle();
-	}
-
-	function <portlet:namespace />selectKBTemplate(kbTemplateId, html) {
-		document.<portlet:namespace />fm.<portlet:namespace />kbTemplateId.value = kbTemplateId;
-		document.getElementById("<portlet:namespace />kbTemplate").innerHTML = html;
 	}
 
 	function <portlet:namespace />updateAttachments(dirName, html) {

@@ -40,6 +40,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -50,6 +52,8 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portlet.expando.service.ExpandoValueLocalService;
 import com.liferay.portlet.expando.service.ExpandoValueService;
 import com.liferay.portlet.expando.service.persistence.ExpandoValuePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -244,6 +248,11 @@ public abstract class CalendarResourceLocalServiceBaseImpl
 		return calendarResourcePersistence.findByPrimaryKey(calendarResourceId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return calendarResourcePersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the calendar resource with the UUID in the group.
 	 *
@@ -286,7 +295,7 @@ public abstract class CalendarResourceLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the calendar resource in the database. Also notifies the appropriate model listeners.
+	 * Updates the calendar resource in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param calendarResource the calendar resource
 	 * @return the calendar resource that was updated
@@ -298,7 +307,7 @@ public abstract class CalendarResourceLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the calendar resource in the database. Also notifies the appropriate model listeners.
+	 * Updates the calendar resource in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param calendarResource the calendar resource
 	 * @param merge whether to merge the calendar resource with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -681,6 +690,16 @@ public abstract class CalendarResourceLocalServiceBaseImpl
 	public void setExpandoValuePersistence(
 		ExpandoValuePersistence expandoValuePersistence) {
 		this.expandoValuePersistence = expandoValuePersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.calendar.model.CalendarResource",
+			calendarResourceLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.calendar.model.CalendarResource");
 	}
 
 	/**

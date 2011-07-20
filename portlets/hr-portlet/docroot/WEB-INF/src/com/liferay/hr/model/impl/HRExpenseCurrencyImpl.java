@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRExpenseCurrency;
-
 /**
  * @author Wesley Gong
  */
 public class HRExpenseCurrencyImpl
-	extends HRExpenseCurrencyModelImpl implements HRExpenseCurrency {
+	extends HRExpenseCurrencyBaseImpl {
 
 	public HRExpenseCurrencyImpl() {
 	}

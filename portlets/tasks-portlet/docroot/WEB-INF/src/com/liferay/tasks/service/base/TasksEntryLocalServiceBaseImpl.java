@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -41,6 +43,8 @@ import com.liferay.tasks.service.TasksEntryLocalService;
 import com.liferay.tasks.service.TasksEntryService;
 import com.liferay.tasks.service.persistence.TasksEntryFinder;
 import com.liferay.tasks.service.persistence.TasksEntryPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -234,6 +238,11 @@ public abstract class TasksEntryLocalServiceBaseImpl
 		return tasksEntryPersistence.findByPrimaryKey(tasksEntryId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return tasksEntryPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the tasks entries.
 	 *
@@ -262,7 +271,7 @@ public abstract class TasksEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the tasks entry in the database. Also notifies the appropriate model listeners.
+	 * Updates the tasks entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param tasksEntry the tasks entry
 	 * @return the tasks entry that was updated
@@ -274,7 +283,7 @@ public abstract class TasksEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the tasks entry in the database. Also notifies the appropriate model listeners.
+	 * Updates the tasks entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param tasksEntry the tasks entry
 	 * @param merge whether to merge the tasks entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -502,6 +511,16 @@ public abstract class TasksEntryLocalServiceBaseImpl
 	 */
 	public void setUserPersistence(UserPersistence userPersistence) {
 		this.userPersistence = userPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.tasks.model.TasksEntry",
+			tasksEntryLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.tasks.model.TasksEntry");
 	}
 
 	/**

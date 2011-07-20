@@ -298,10 +298,6 @@ else if (tabs2.equals("article-updated-email")) {
 					<c:when test='<%= tabs3.equals("article") %>'>
 						<aui:input label="enable-description" name="preferences--enableKBArticleDescription--" type="checkbox" value="<%= enableKBArticleDescription %>" />
 
-						<aui:input label="enable-categories" name="preferences--enableKBArticleAssetCategories--" type="checkbox" value="<%= enableKBArticleAssetCategories %>" />
-
-						<aui:input label="enable-tags" name="preferences--enableKBArticleAssetTags--" type="checkbox" value="<%= enableKBArticleAssetTags %>" />
-
 						<aui:input label="enable-ratings" name="preferences--enableKBArticleRatings--" type="checkbox" value="<%= enableKBArticleRatings %>" />
 
 						<aui:input label="show-asset-entries" name="preferences--showKBArticleAssetEntries--" type="checkbox" value="<%= showKBArticleAssetEntries %>" />
@@ -316,11 +312,6 @@ else if (tabs2.equals("article-updated-email")) {
 						<aui:input label="enable-comments" name="preferences--enableKBTemplateKBComments--" type="checkbox" value="<%= enableKBTemplateKBComments %>" />
 
 						<aui:input label="show-comments" name="preferences--showKBTemplateKBComments--" type="checkbox" value="<%= showKBTemplateKBComments %>" />
-					</c:when>
-					<c:when test='<%= tabs3.equals("structure") %>'>
-						<aui:input label="enable-comments" name="preferences--enableKBStructureKBComments--" type="checkbox" value="<%= enableKBStructureKBComments %>" />
-
-						<aui:input label="show-comments" name="preferences--showKBStructureKBComments--" type="checkbox" value="<%= showKBStructureKBComments %>" />
 					</c:when>
 				</c:choose>
 			</c:when>

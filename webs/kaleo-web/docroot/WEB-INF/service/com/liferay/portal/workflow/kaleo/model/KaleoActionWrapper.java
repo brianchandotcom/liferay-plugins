@@ -201,6 +201,42 @@ public class KaleoActionWrapper implements KaleoAction {
 	}
 
 	/**
+	* Returns the kaleo class name of this kaleo action.
+	*
+	* @return the kaleo class name of this kaleo action
+	*/
+	public java.lang.String getKaleoClassName() {
+		return _kaleoAction.getKaleoClassName();
+	}
+
+	/**
+	* Sets the kaleo class name of this kaleo action.
+	*
+	* @param kaleoClassName the kaleo class name of this kaleo action
+	*/
+	public void setKaleoClassName(java.lang.String kaleoClassName) {
+		_kaleoAction.setKaleoClassName(kaleoClassName);
+	}
+
+	/**
+	* Returns the kaleo class p k of this kaleo action.
+	*
+	* @return the kaleo class p k of this kaleo action
+	*/
+	public long getKaleoClassPK() {
+		return _kaleoAction.getKaleoClassPK();
+	}
+
+	/**
+	* Sets the kaleo class p k of this kaleo action.
+	*
+	* @param kaleoClassPK the kaleo class p k of this kaleo action
+	*/
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoAction.setKaleoClassPK(kaleoClassPK);
+	}
+
+	/**
 	* Returns the kaleo definition ID of this kaleo action.
 	*
 	* @return the kaleo definition ID of this kaleo action
@@ -216,24 +252,6 @@ public class KaleoActionWrapper implements KaleoAction {
 	*/
 	public void setKaleoDefinitionId(long kaleoDefinitionId) {
 		_kaleoAction.setKaleoDefinitionId(kaleoDefinitionId);
-	}
-
-	/**
-	* Returns the kaleo node ID of this kaleo action.
-	*
-	* @return the kaleo node ID of this kaleo action
-	*/
-	public long getKaleoNodeId() {
-		return _kaleoAction.getKaleoNodeId();
-	}
-
-	/**
-	* Sets the kaleo node ID of this kaleo action.
-	*
-	* @param kaleoNodeId the kaleo node ID of this kaleo action
-	*/
-	public void setKaleoNodeId(long kaleoNodeId) {
-		_kaleoAction.setKaleoNodeId(kaleoNodeId);
 	}
 
 	/**
@@ -418,6 +436,10 @@ public class KaleoActionWrapper implements KaleoAction {
 		return _kaleoAction.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoAction> toCacheModel() {
+		return _kaleoAction.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoAction toEscapedModel() {
 		return new KaleoActionWrapper(_kaleoAction.toEscapedModel());
 	}
@@ -429,6 +451,11 @@ public class KaleoActionWrapper implements KaleoAction {
 
 	public java.lang.String toXmlString() {
 		return _kaleoAction.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoAction.persist();
 	}
 
 	public KaleoAction getWrappedKaleoAction() {

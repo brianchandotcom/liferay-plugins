@@ -29,8 +29,10 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.ClassNameLocalService;
 import com.liferay.portal.service.ClassNameService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -42,6 +44,8 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.testtransaction.model.Bar;
 import com.liferay.testtransaction.service.BarLocalService;
 import com.liferay.testtransaction.service.persistence.BarPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -229,6 +233,11 @@ public abstract class BarLocalServiceBaseImpl implements BarLocalService,
 		return barPersistence.findByPrimaryKey(barId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return barPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the bars.
 	 *
@@ -256,7 +265,7 @@ public abstract class BarLocalServiceBaseImpl implements BarLocalService,
 	}
 
 	/**
-	 * Updates the bar in the database. Also notifies the appropriate model listeners.
+	 * Updates the bar in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param bar the bar
 	 * @return the bar that was updated
@@ -267,7 +276,7 @@ public abstract class BarLocalServiceBaseImpl implements BarLocalService,
 	}
 
 	/**
-	 * Updates the bar in the database. Also notifies the appropriate model listeners.
+	 * Updates the bar in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param bar the bar
 	 * @param merge whether to merge the bar with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -512,6 +521,16 @@ public abstract class BarLocalServiceBaseImpl implements BarLocalService,
 	 */
 	public void setUserPersistence(UserPersistence userPersistence) {
 		this.userPersistence = userPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.testtransaction.model.Bar",
+			barLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.testtransaction.model.Bar");
 	}
 
 	/**

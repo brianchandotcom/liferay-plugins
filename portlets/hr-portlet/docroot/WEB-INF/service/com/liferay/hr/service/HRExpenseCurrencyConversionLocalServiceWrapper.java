@@ -167,6 +167,13 @@ public class HRExpenseCurrencyConversionLocalServiceWrapper
 		return _hrExpenseCurrencyConversionLocalService.getHRExpenseCurrencyConversion(hrExpenseCurrencyConversionId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _hrExpenseCurrencyConversionLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the h r expense currency conversions.
 	*
@@ -198,7 +205,7 @@ public class HRExpenseCurrencyConversionLocalServiceWrapper
 	}
 
 	/**
-	* Updates the h r expense currency conversion in the database. Also notifies the appropriate model listeners.
+	* Updates the h r expense currency conversion in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param hrExpenseCurrencyConversion the h r expense currency conversion
 	* @return the h r expense currency conversion that was updated
@@ -211,7 +218,7 @@ public class HRExpenseCurrencyConversionLocalServiceWrapper
 	}
 
 	/**
-	* Updates the h r expense currency conversion in the database. Also notifies the appropriate model listeners.
+	* Updates the h r expense currency conversion in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param hrExpenseCurrencyConversion the h r expense currency conversion
 	* @param merge whether to merge the h r expense currency conversion with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRExpenseType;
-
 /**
  * @author Wesley Gong
  */
 public class HRExpenseTypeImpl
-	extends HRExpenseTypeModelImpl implements HRExpenseType {
+	extends HRExpenseTypeBaseImpl {
 
 	public HRExpenseTypeImpl() {
 	}

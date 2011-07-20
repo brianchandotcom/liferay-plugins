@@ -161,6 +161,13 @@ public class HRExpenseLocalServiceWrapper implements HRExpenseLocalService {
 		return _hrExpenseLocalService.getHRExpense(hrExpenseId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _hrExpenseLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the h r expenses.
 	*
@@ -191,7 +198,7 @@ public class HRExpenseLocalServiceWrapper implements HRExpenseLocalService {
 	}
 
 	/**
-	* Updates the h r expense in the database. Also notifies the appropriate model listeners.
+	* Updates the h r expense in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param hrExpense the h r expense
 	* @return the h r expense that was updated
@@ -204,7 +211,7 @@ public class HRExpenseLocalServiceWrapper implements HRExpenseLocalService {
 	}
 
 	/**
-	* Updates the h r expense in the database. Also notifies the appropriate model listeners.
+	* Updates the h r expense in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param hrExpense the h r expense
 	* @param merge whether to merge the h r expense with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

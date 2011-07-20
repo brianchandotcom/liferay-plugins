@@ -165,6 +165,13 @@ public class OAuthConsumerLocalServiceWrapper
 		return _oAuthConsumerLocalService.getOAuthConsumer(oAuthConsumerId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _oAuthConsumerLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the o auth consumers.
 	*
@@ -195,7 +202,7 @@ public class OAuthConsumerLocalServiceWrapper
 	}
 
 	/**
-	* Updates the o auth consumer in the database. Also notifies the appropriate model listeners.
+	* Updates the o auth consumer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param oAuthConsumer the o auth consumer
 	* @return the o auth consumer that was updated
@@ -208,7 +215,7 @@ public class OAuthConsumerLocalServiceWrapper
 	}
 
 	/**
-	* Updates the o auth consumer in the database. Also notifies the appropriate model listeners.
+	* Updates the o auth consumer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param oAuthConsumer the o auth consumer
 	* @param merge whether to merge the o auth consumer with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

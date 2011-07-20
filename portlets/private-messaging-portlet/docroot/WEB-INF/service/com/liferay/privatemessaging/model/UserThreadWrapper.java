@@ -310,6 +310,10 @@ public class UserThreadWrapper implements UserThread {
 		return _userThread.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.privatemessaging.model.UserThread> toCacheModel() {
+		return _userThread.toCacheModel();
+	}
+
 	public com.liferay.privatemessaging.model.UserThread toEscapedModel() {
 		return new UserThreadWrapper(_userThread.toEscapedModel());
 	}
@@ -321,6 +325,11 @@ public class UserThreadWrapper implements UserThread {
 
 	public java.lang.String toXmlString() {
 		return _userThread.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_userThread.persist();
 	}
 
 	public UserThread getWrappedUserThread() {

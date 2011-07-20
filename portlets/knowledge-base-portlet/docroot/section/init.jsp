@@ -37,8 +37,6 @@ int kbArticlesDelta = GetterUtil.getInteger(preferences.getValue("kbArticlesDelt
 boolean showKBArticlesPagination = GetterUtil.getBoolean(preferences.getValue("showKBArticlesPagination", null));
 
 boolean enableKBArticleDescription = GetterUtil.getBoolean(preferences.getValue("enableKBArticleDescription", null));
-boolean enableKBArticleAssetCategories = GetterUtil.getBoolean(preferences.getValue("enableKBArticleAssetCategories", null));
-boolean enableKBArticleAssetTags = GetterUtil.getBoolean(preferences.getValue("enableKBArticleAssetTags", null));
 boolean enableKBArticleRatings = GetterUtil.getBoolean(preferences.getValue("enableKBArticleRatings", null));
 boolean showKBArticleAssetEntries = GetterUtil.getBoolean(preferences.getValue("showKBArticleAssetEntries", null));
 boolean enableKBArticleKBComments = GetterUtil.getBoolean(preferences.getValue("enableKBArticleKBComments", null));
@@ -48,13 +46,4 @@ boolean enableKBArticleViewCountIncrement = GetterUtil.getBoolean(preferences.ge
 int rssDelta = GetterUtil.getInteger(preferences.getValue("rssDelta", null));
 String rssDisplayStyle = preferences.getValue("rssDisplayStyle", StringPool.BLANK);
 String rssFormat = preferences.getValue("rssFormat", StringPool.BLANK);
-
-if (kbArticleWindowState.equals(WindowState.MAXIMIZED.toString()) && windowState.equals(WindowState.MAXIMIZED)) {
-	PortletURL portletURL = renderResponse.createRenderURL();
-
-	portletURL.setWindowState(WindowState.NORMAL);
-	portletURL.setPortletMode(PortletMode.VIEW);
-
-	portletDisplay.setURLBack(portletURL.toString());
-}
 %>

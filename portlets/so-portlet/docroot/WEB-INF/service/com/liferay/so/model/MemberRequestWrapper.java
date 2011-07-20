@@ -365,6 +365,10 @@ public class MemberRequestWrapper implements MemberRequest {
 		return _memberRequest.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.so.model.MemberRequest> toCacheModel() {
+		return _memberRequest.toCacheModel();
+	}
+
 	public com.liferay.so.model.MemberRequest toEscapedModel() {
 		return new MemberRequestWrapper(_memberRequest.toEscapedModel());
 	}
@@ -376,6 +380,11 @@ public class MemberRequestWrapper implements MemberRequest {
 
 	public java.lang.String toXmlString() {
 		return _memberRequest.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_memberRequest.persist();
 	}
 
 	public MemberRequest getWrappedMemberRequest() {

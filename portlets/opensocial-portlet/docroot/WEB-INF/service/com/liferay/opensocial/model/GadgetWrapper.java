@@ -253,6 +253,10 @@ public class GadgetWrapper implements Gadget {
 		return _gadget.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.opensocial.model.Gadget> toCacheModel() {
+		return _gadget.toCacheModel();
+	}
+
 	public com.liferay.opensocial.model.Gadget toEscapedModel() {
 		return new GadgetWrapper(_gadget.toEscapedModel());
 	}
@@ -264,6 +268,11 @@ public class GadgetWrapper implements Gadget {
 
 	public java.lang.String toXmlString() {
 		return _gadget.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_gadget.persist();
 	}
 
 	public Gadget getWrappedGadget() {

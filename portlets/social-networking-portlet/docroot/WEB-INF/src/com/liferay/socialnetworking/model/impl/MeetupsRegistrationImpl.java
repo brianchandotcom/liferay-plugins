@@ -14,13 +14,11 @@
 
 package com.liferay.socialnetworking.model.impl;
 
-import com.liferay.socialnetworking.model.MeetupsRegistration;
-
 /**
  * @author Brian Wing Shun Chan
  */
 public class MeetupsRegistrationImpl
-	extends MeetupsRegistrationModelImpl implements MeetupsRegistration {
+	extends MeetupsRegistrationBaseImpl {
 
 	public MeetupsRegistrationImpl() {
 	}

@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRExpenseAccount;
-
 /**
  * @author Wesley Gong
  */
 public class HRExpenseAccountImpl
-	extends HRExpenseAccountModelImpl implements HRExpenseAccount {
+	extends HRExpenseAccountBaseImpl {
 
 	public HRExpenseAccountImpl() {
 	}

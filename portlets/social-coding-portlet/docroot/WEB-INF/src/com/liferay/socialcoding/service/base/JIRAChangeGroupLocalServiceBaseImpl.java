@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -52,6 +54,8 @@ import com.liferay.socialcoding.service.persistence.JIRAIssueFinder;
 import com.liferay.socialcoding.service.persistence.JIRAIssuePersistence;
 import com.liferay.socialcoding.service.persistence.SVNRepositoryPersistence;
 import com.liferay.socialcoding.service.persistence.SVNRevisionPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -245,6 +249,11 @@ public abstract class JIRAChangeGroupLocalServiceBaseImpl
 		return jiraChangeGroupPersistence.findByPrimaryKey(jiraChangeGroupId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return jiraChangeGroupPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the j i r a change groups.
 	 *
@@ -273,7 +282,7 @@ public abstract class JIRAChangeGroupLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the j i r a change group in the database. Also notifies the appropriate model listeners.
+	 * Updates the j i r a change group in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param jiraChangeGroup the j i r a change group
 	 * @return the j i r a change group that was updated
@@ -285,7 +294,7 @@ public abstract class JIRAChangeGroupLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the j i r a change group in the database. Also notifies the appropriate model listeners.
+	 * Updates the j i r a change group in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param jiraChangeGroup the j i r a change group
 	 * @param merge whether to merge the j i r a change group with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -724,6 +733,16 @@ public abstract class JIRAChangeGroupLocalServiceBaseImpl
 	 */
 	public void setUserPersistence(UserPersistence userPersistence) {
 		this.userPersistence = userPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.socialcoding.model.JIRAChangeGroup",
+			jiraChangeGroupLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.socialcoding.model.JIRAChangeGroup");
 	}
 
 	/**

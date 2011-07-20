@@ -17,13 +17,12 @@ package com.liferay.tasks.model.impl;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.tasks.model.TasksEntry;
 import com.liferay.tasks.model.TasksEntryConstants;
 
 /**
  * @author Ryan Park
  */
-public class TasksEntryImpl extends TasksEntryModelImpl implements TasksEntry {
+public class TasksEntryImpl extends TasksEntryBaseImpl {
 
 	public TasksEntryImpl() {
 	}

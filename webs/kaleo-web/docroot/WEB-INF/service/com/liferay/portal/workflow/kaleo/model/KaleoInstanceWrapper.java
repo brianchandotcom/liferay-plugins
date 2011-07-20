@@ -427,6 +427,10 @@ public class KaleoInstanceWrapper implements KaleoInstance {
 		return _kaleoInstance.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoInstance> toCacheModel() {
+		return _kaleoInstance.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstance toEscapedModel() {
 		return new KaleoInstanceWrapper(_kaleoInstance.toEscapedModel());
 	}
@@ -438,6 +442,11 @@ public class KaleoInstanceWrapper implements KaleoInstance {
 
 	public java.lang.String toXmlString() {
 		return _kaleoInstance.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoInstance.persist();
 	}
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoDefinition getKaleoDefinition()

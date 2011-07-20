@@ -14,8 +14,10 @@
 
 package com.liferay.hr.model;
 
+import com.liferay.portal.model.PersistedModel;
+
 /**
- * The model interface for the HRExpenseType service. Represents a row in the &quot;HRExpenseType&quot; database table, with each column mapped to a property of this class.
+ * The extended model interface for the HRExpenseType service. Represents a row in the &quot;HRExpenseType&quot; database table, with each column mapped to a property of this class.
  *
  * @author Wesley Gong
  * @see HRExpenseTypeModel
@@ -23,7 +25,7 @@ package com.liferay.hr.model;
  * @see com.liferay.hr.model.impl.HRExpenseTypeModelImpl
  * @generated
  */
-public interface HRExpenseType extends HRExpenseTypeModel {
+public interface HRExpenseType extends HRExpenseTypeModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *

@@ -17,6 +17,7 @@ package com.liferay.portal.workflow.kaleo.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -175,6 +176,35 @@ public interface KaleoActionModel extends BaseModel<KaleoAction>, GroupedModel {
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the kaleo class name of this kaleo action.
+	 *
+	 * @return the kaleo class name of this kaleo action
+	 */
+	@AutoEscape
+	public String getKaleoClassName();
+
+	/**
+	 * Sets the kaleo class name of this kaleo action.
+	 *
+	 * @param kaleoClassName the kaleo class name of this kaleo action
+	 */
+	public void setKaleoClassName(String kaleoClassName);
+
+	/**
+	 * Returns the kaleo class p k of this kaleo action.
+	 *
+	 * @return the kaleo class p k of this kaleo action
+	 */
+	public long getKaleoClassPK();
+
+	/**
+	 * Sets the kaleo class p k of this kaleo action.
+	 *
+	 * @param kaleoClassPK the kaleo class p k of this kaleo action
+	 */
+	public void setKaleoClassPK(long kaleoClassPK);
+
+	/**
 	 * Returns the kaleo definition ID of this kaleo action.
 	 *
 	 * @return the kaleo definition ID of this kaleo action
@@ -187,20 +217,6 @@ public interface KaleoActionModel extends BaseModel<KaleoAction>, GroupedModel {
 	 * @param kaleoDefinitionId the kaleo definition ID of this kaleo action
 	 */
 	public void setKaleoDefinitionId(long kaleoDefinitionId);
-
-	/**
-	 * Returns the kaleo node ID of this kaleo action.
-	 *
-	 * @return the kaleo node ID of this kaleo action
-	 */
-	public long getKaleoNodeId();
-
-	/**
-	 * Sets the kaleo node ID of this kaleo action.
-	 *
-	 * @param kaleoNodeId the kaleo node ID of this kaleo action
-	 */
-	public void setKaleoNodeId(long kaleoNodeId);
 
 	/**
 	 * Returns the kaleo node name of this kaleo action.
@@ -331,6 +347,8 @@ public interface KaleoActionModel extends BaseModel<KaleoAction>, GroupedModel {
 	public int compareTo(KaleoAction kaleoAction);
 
 	public int hashCode();
+
+	public CacheModel<KaleoAction> toCacheModel();
 
 	public KaleoAction toEscapedModel();
 

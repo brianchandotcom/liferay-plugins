@@ -987,6 +987,10 @@ public class CalendarBookingWrapper implements CalendarBooking {
 		return _calendarBooking.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.calendar.model.CalendarBooking> toCacheModel() {
+		return _calendarBooking.toCacheModel();
+	}
+
 	public com.liferay.calendar.model.CalendarBooking toEscapedModel() {
 		return new CalendarBookingWrapper(_calendarBooking.toEscapedModel());
 	}
@@ -998,6 +1002,11 @@ public class CalendarBookingWrapper implements CalendarBooking {
 
 	public java.lang.String toXmlString() {
 		return _calendarBooking.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_calendarBooking.persist();
 	}
 
 	public com.liferay.calendar.model.CalendarEvent getCalendarEvent()

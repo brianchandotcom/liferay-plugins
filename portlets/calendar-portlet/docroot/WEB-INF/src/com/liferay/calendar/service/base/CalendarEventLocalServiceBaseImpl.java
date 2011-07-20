@@ -40,6 +40,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -50,6 +52,8 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portlet.expando.service.ExpandoValueLocalService;
 import com.liferay.portlet.expando.service.ExpandoValueService;
 import com.liferay.portlet.expando.service.persistence.ExpandoValuePersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -243,6 +247,11 @@ public abstract class CalendarEventLocalServiceBaseImpl
 		return calendarEventPersistence.findByPrimaryKey(calendarEventId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return calendarEventPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the calendar event with the UUID in the group.
 	 *
@@ -285,7 +294,7 @@ public abstract class CalendarEventLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the calendar event in the database. Also notifies the appropriate model listeners.
+	 * Updates the calendar event in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param calendarEvent the calendar event
 	 * @return the calendar event that was updated
@@ -297,7 +306,7 @@ public abstract class CalendarEventLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the calendar event in the database. Also notifies the appropriate model listeners.
+	 * Updates the calendar event in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param calendarEvent the calendar event
 	 * @param merge whether to merge the calendar event with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -678,6 +687,16 @@ public abstract class CalendarEventLocalServiceBaseImpl
 	public void setExpandoValuePersistence(
 		ExpandoValuePersistence expandoValuePersistence) {
 		this.expandoValuePersistence = expandoValuePersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.calendar.model.CalendarEvent",
+			calendarEventLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.calendar.model.CalendarEvent");
 	}
 
 	/**

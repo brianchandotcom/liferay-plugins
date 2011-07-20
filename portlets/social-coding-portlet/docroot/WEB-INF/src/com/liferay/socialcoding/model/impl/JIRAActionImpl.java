@@ -14,12 +14,10 @@
 
 package com.liferay.socialcoding.model.impl;
 
-import com.liferay.socialcoding.model.JIRAAction;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class JIRAActionImpl extends JIRAActionModelImpl implements JIRAAction {
+public class JIRAActionImpl extends JIRAActionBaseImpl {
 
 	public JIRAActionImpl() {
 	}

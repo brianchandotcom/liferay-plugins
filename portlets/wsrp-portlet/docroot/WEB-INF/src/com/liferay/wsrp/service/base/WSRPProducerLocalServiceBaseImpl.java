@@ -29,10 +29,12 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.GroupService;
 import com.liferay.portal.service.LayoutLocalService;
 import com.liferay.portal.service.LayoutService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -49,6 +51,8 @@ import com.liferay.wsrp.service.WSRPProducerLocalService;
 import com.liferay.wsrp.service.persistence.WSRPConsumerPersistence;
 import com.liferay.wsrp.service.persistence.WSRPConsumerPortletPersistence;
 import com.liferay.wsrp.service.persistence.WSRPProducerPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -242,6 +246,11 @@ public abstract class WSRPProducerLocalServiceBaseImpl
 		return wsrpProducerPersistence.findByPrimaryKey(wsrpProducerId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return wsrpProducerPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the w s r p producer with the UUID in the group.
 	 *
@@ -284,7 +293,7 @@ public abstract class WSRPProducerLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the w s r p producer in the database. Also notifies the appropriate model listeners.
+	 * Updates the w s r p producer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wsrpProducer the w s r p producer
 	 * @return the w s r p producer that was updated
@@ -296,7 +305,7 @@ public abstract class WSRPProducerLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the w s r p producer in the database. Also notifies the appropriate model listeners.
+	 * Updates the w s r p producer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wsrpProducer the w s r p producer
 	 * @param merge whether to merge the w s r p producer with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -672,6 +681,16 @@ public abstract class WSRPProducerLocalServiceBaseImpl
 	 */
 	public void setUserPersistence(UserPersistence userPersistence) {
 		this.userPersistence = userPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.wsrp.model.WSRPProducer",
+			wsrpProducerLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.wsrp.model.WSRPProducer");
 	}
 
 	/**

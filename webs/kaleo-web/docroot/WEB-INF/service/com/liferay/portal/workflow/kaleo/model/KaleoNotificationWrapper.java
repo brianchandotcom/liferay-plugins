@@ -201,6 +201,42 @@ public class KaleoNotificationWrapper implements KaleoNotification {
 	}
 
 	/**
+	* Returns the kaleo class name of this kaleo notification.
+	*
+	* @return the kaleo class name of this kaleo notification
+	*/
+	public java.lang.String getKaleoClassName() {
+		return _kaleoNotification.getKaleoClassName();
+	}
+
+	/**
+	* Sets the kaleo class name of this kaleo notification.
+	*
+	* @param kaleoClassName the kaleo class name of this kaleo notification
+	*/
+	public void setKaleoClassName(java.lang.String kaleoClassName) {
+		_kaleoNotification.setKaleoClassName(kaleoClassName);
+	}
+
+	/**
+	* Returns the kaleo class p k of this kaleo notification.
+	*
+	* @return the kaleo class p k of this kaleo notification
+	*/
+	public long getKaleoClassPK() {
+		return _kaleoNotification.getKaleoClassPK();
+	}
+
+	/**
+	* Sets the kaleo class p k of this kaleo notification.
+	*
+	* @param kaleoClassPK the kaleo class p k of this kaleo notification
+	*/
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoNotification.setKaleoClassPK(kaleoClassPK);
+	}
+
+	/**
 	* Returns the kaleo definition ID of this kaleo notification.
 	*
 	* @return the kaleo definition ID of this kaleo notification
@@ -216,24 +252,6 @@ public class KaleoNotificationWrapper implements KaleoNotification {
 	*/
 	public void setKaleoDefinitionId(long kaleoDefinitionId) {
 		_kaleoNotification.setKaleoDefinitionId(kaleoDefinitionId);
-	}
-
-	/**
-	* Returns the kaleo node ID of this kaleo notification.
-	*
-	* @return the kaleo node ID of this kaleo notification
-	*/
-	public long getKaleoNodeId() {
-		return _kaleoNotification.getKaleoNodeId();
-	}
-
-	/**
-	* Sets the kaleo node ID of this kaleo notification.
-	*
-	* @param kaleoNodeId the kaleo node ID of this kaleo notification
-	*/
-	public void setKaleoNodeId(long kaleoNodeId) {
-		_kaleoNotification.setKaleoNodeId(kaleoNodeId);
 	}
 
 	/**
@@ -418,6 +436,10 @@ public class KaleoNotificationWrapper implements KaleoNotification {
 		return _kaleoNotification.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoNotification> toCacheModel() {
+		return _kaleoNotification.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoNotification toEscapedModel() {
 		return new KaleoNotificationWrapper(_kaleoNotification.toEscapedModel());
 	}
@@ -429,6 +451,11 @@ public class KaleoNotificationWrapper implements KaleoNotification {
 
 	public java.lang.String toXmlString() {
 		return _kaleoNotification.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoNotification.persist();
 	}
 
 	public KaleoNotification getWrappedKaleoNotification() {

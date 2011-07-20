@@ -14,7 +14,6 @@
 
 package com.liferay.calendar.model.impl;
 
-import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarEvent;
 import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.service.CalendarEventLocalServiceUtil;
@@ -26,7 +25,7 @@ import com.liferay.portal.kernel.exception.SystemException;
  * @author Eduardo Lundgren
  */
 public class CalendarBookingImpl
-	extends CalendarBookingModelImpl implements CalendarBooking {
+	extends CalendarBookingBaseImpl {
 
 	public CalendarBookingImpl() {
 	}

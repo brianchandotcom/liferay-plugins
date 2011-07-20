@@ -331,6 +331,10 @@ public class HRExpenseCurrencyConversionWrapper
 		return _hrExpenseCurrencyConversion.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRExpenseCurrencyConversion> toCacheModel() {
+		return _hrExpenseCurrencyConversion.toCacheModel();
+	}
+
 	public com.liferay.hr.model.HRExpenseCurrencyConversion toEscapedModel() {
 		return new HRExpenseCurrencyConversionWrapper(_hrExpenseCurrencyConversion.toEscapedModel());
 	}
@@ -342,6 +346,11 @@ public class HRExpenseCurrencyConversionWrapper
 
 	public java.lang.String toXmlString() {
 		return _hrExpenseCurrencyConversion.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_hrExpenseCurrencyConversion.persist();
 	}
 
 	public HRExpenseCurrencyConversion getWrappedHRExpenseCurrencyConversion() {

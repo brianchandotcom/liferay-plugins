@@ -17,6 +17,7 @@ package com.liferay.portal.workflow.kaleo.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -204,6 +205,21 @@ public interface KaleoNodeModel extends BaseModel<KaleoNode>, GroupedModel {
 	public void setName(String name);
 
 	/**
+	 * Returns the metadata of this kaleo node.
+	 *
+	 * @return the metadata of this kaleo node
+	 */
+	@AutoEscape
+	public String getMetadata();
+
+	/**
+	 * Sets the metadata of this kaleo node.
+	 *
+	 * @param metadata the metadata of this kaleo node
+	 */
+	public void setMetadata(String metadata);
+
+	/**
 	 * Returns the description of this kaleo node.
 	 *
 	 * @return the description of this kaleo node
@@ -300,6 +316,8 @@ public interface KaleoNodeModel extends BaseModel<KaleoNode>, GroupedModel {
 	public int compareTo(KaleoNode kaleoNode);
 
 	public int hashCode();
+
+	public CacheModel<KaleoNode> toCacheModel();
 
 	public KaleoNode toEscapedModel();
 

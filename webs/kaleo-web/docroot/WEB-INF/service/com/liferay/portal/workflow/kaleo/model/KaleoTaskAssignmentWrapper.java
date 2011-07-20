@@ -201,6 +201,42 @@ public class KaleoTaskAssignmentWrapper implements KaleoTaskAssignment {
 	}
 
 	/**
+	* Returns the kaleo class name of this kaleo task assignment.
+	*
+	* @return the kaleo class name of this kaleo task assignment
+	*/
+	public java.lang.String getKaleoClassName() {
+		return _kaleoTaskAssignment.getKaleoClassName();
+	}
+
+	/**
+	* Sets the kaleo class name of this kaleo task assignment.
+	*
+	* @param kaleoClassName the kaleo class name of this kaleo task assignment
+	*/
+	public void setKaleoClassName(java.lang.String kaleoClassName) {
+		_kaleoTaskAssignment.setKaleoClassName(kaleoClassName);
+	}
+
+	/**
+	* Returns the kaleo class p k of this kaleo task assignment.
+	*
+	* @return the kaleo class p k of this kaleo task assignment
+	*/
+	public long getKaleoClassPK() {
+		return _kaleoTaskAssignment.getKaleoClassPK();
+	}
+
+	/**
+	* Sets the kaleo class p k of this kaleo task assignment.
+	*
+	* @param kaleoClassPK the kaleo class p k of this kaleo task assignment
+	*/
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoTaskAssignment.setKaleoClassPK(kaleoClassPK);
+	}
+
+	/**
 	* Returns the kaleo definition ID of this kaleo task assignment.
 	*
 	* @return the kaleo definition ID of this kaleo task assignment
@@ -234,24 +270,6 @@ public class KaleoTaskAssignmentWrapper implements KaleoTaskAssignment {
 	*/
 	public void setKaleoNodeId(long kaleoNodeId) {
 		_kaleoTaskAssignment.setKaleoNodeId(kaleoNodeId);
-	}
-
-	/**
-	* Returns the kaleo task ID of this kaleo task assignment.
-	*
-	* @return the kaleo task ID of this kaleo task assignment
-	*/
-	public long getKaleoTaskId() {
-		return _kaleoTaskAssignment.getKaleoTaskId();
-	}
-
-	/**
-	* Sets the kaleo task ID of this kaleo task assignment.
-	*
-	* @param kaleoTaskId the kaleo task ID of this kaleo task assignment
-	*/
-	public void setKaleoTaskId(long kaleoTaskId) {
-		_kaleoTaskAssignment.setKaleoTaskId(kaleoTaskId);
 	}
 
 	/**
@@ -401,6 +419,10 @@ public class KaleoTaskAssignmentWrapper implements KaleoTaskAssignment {
 		return _kaleoTaskAssignment.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment> toCacheModel() {
+		return _kaleoTaskAssignment.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment toEscapedModel() {
 		return new KaleoTaskAssignmentWrapper(_kaleoTaskAssignment.toEscapedModel());
 	}
@@ -412,6 +434,11 @@ public class KaleoTaskAssignmentWrapper implements KaleoTaskAssignment {
 
 	public java.lang.String toXmlString() {
 		return _kaleoTaskAssignment.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoTaskAssignment.persist();
 	}
 
 	public KaleoTaskAssignment getWrappedKaleoTaskAssignment() {

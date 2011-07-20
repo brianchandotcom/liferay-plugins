@@ -174,6 +174,13 @@ public class WallEntryLocalServiceUtil {
 		return getService().getWallEntry(wallEntryId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the wall entries.
 	*
@@ -204,7 +211,7 @@ public class WallEntryLocalServiceUtil {
 	}
 
 	/**
-	* Updates the wall entry in the database. Also notifies the appropriate model listeners.
+	* Updates the wall entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param wallEntry the wall entry
 	* @return the wall entry that was updated
@@ -217,7 +224,7 @@ public class WallEntryLocalServiceUtil {
 	}
 
 	/**
-	* Updates the wall entry in the database. Also notifies the appropriate model listeners.
+	* Updates the wall entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param wallEntry the wall entry
 	* @param merge whether to merge the wall entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -418,6 +419,76 @@ public class HRTimeSheetModelImpl extends BaseModelImpl<HRTimeSheet>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRTimeSheet> toCacheModel() {
+		HRTimeSheetCacheModel hrTimeSheetCacheModel = new HRTimeSheetCacheModel();
+
+		hrTimeSheetCacheModel.hrTimeSheetId = getHrTimeSheetId();
+
+		hrTimeSheetCacheModel.groupId = getGroupId();
+
+		hrTimeSheetCacheModel.companyId = getCompanyId();
+
+		hrTimeSheetCacheModel.userId = getUserId();
+
+		hrTimeSheetCacheModel.userName = getUserName();
+
+		String userName = hrTimeSheetCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrTimeSheetCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrTimeSheetCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrTimeSheetCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrTimeSheetCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrTimeSheetCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrTimeSheetCacheModel.hrUserId = getHrUserId();
+
+		hrTimeSheetCacheModel.startDayOfYear = getStartDayOfYear();
+
+		hrTimeSheetCacheModel.endDayOfYear = getEndDayOfYear();
+
+		hrTimeSheetCacheModel.year = getYear();
+
+		hrTimeSheetCacheModel.status = getStatus();
+
+		hrTimeSheetCacheModel.statusByUserId = getStatusByUserId();
+
+		hrTimeSheetCacheModel.statusByUserName = getStatusByUserName();
+
+		String statusByUserName = hrTimeSheetCacheModel.statusByUserName;
+
+		if ((statusByUserName != null) && (statusByUserName.length() == 0)) {
+			hrTimeSheetCacheModel.statusByUserName = null;
+		}
+
+		Date statusDate = getStatusDate();
+
+		if (statusDate != null) {
+			hrTimeSheetCacheModel.statusDate = statusDate.getTime();
+		}
+		else {
+			hrTimeSheetCacheModel.statusDate = Long.MIN_VALUE;
+		}
+
+		return hrTimeSheetCacheModel;
 	}
 
 	@Override

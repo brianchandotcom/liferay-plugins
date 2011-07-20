@@ -163,6 +163,10 @@ public class TypeWrapper implements Type {
 		return _type.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.ams.model.Type> toCacheModel() {
+		return _type.toCacheModel();
+	}
+
 	public com.liferay.ams.model.Type toEscapedModel() {
 		return new TypeWrapper(_type.toEscapedModel());
 	}
@@ -174,6 +178,11 @@ public class TypeWrapper implements Type {
 
 	public java.lang.String toXmlString() {
 		return _type.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_type.persist();
 	}
 
 	public Type getWrappedType() {

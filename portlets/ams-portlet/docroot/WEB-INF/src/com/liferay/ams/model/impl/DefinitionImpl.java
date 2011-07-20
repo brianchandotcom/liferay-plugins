@@ -14,12 +14,10 @@
 
 package com.liferay.ams.model.impl;
 
-import com.liferay.ams.model.Definition;
-
 /**
  * @author Brian Wing Shun Chan
  */
-public class DefinitionImpl extends DefinitionModelImpl implements Definition {
+public class DefinitionImpl extends DefinitionBaseImpl {
 
 	public DefinitionImpl() {
 	}

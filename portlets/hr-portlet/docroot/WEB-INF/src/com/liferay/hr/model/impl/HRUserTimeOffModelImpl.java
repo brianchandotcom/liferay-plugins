@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -350,6 +351,61 @@ public class HRUserTimeOffModelImpl extends BaseModelImpl<HRUserTimeOff>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<HRUserTimeOff> toCacheModel() {
+		HRUserTimeOffCacheModel hrUserTimeOffCacheModel = new HRUserTimeOffCacheModel();
+
+		hrUserTimeOffCacheModel.hrUserTimeOffId = getHrUserTimeOffId();
+
+		hrUserTimeOffCacheModel.groupId = getGroupId();
+
+		hrUserTimeOffCacheModel.companyId = getCompanyId();
+
+		hrUserTimeOffCacheModel.userId = getUserId();
+
+		hrUserTimeOffCacheModel.userName = getUserName();
+
+		String userName = hrUserTimeOffCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			hrUserTimeOffCacheModel.userName = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			hrUserTimeOffCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			hrUserTimeOffCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			hrUserTimeOffCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			hrUserTimeOffCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		hrUserTimeOffCacheModel.hrTimeOffTypeId = getHrTimeOffTypeId();
+
+		hrUserTimeOffCacheModel.hrUserId = getHrUserId();
+
+		hrUserTimeOffCacheModel.year = getYear();
+
+		hrUserTimeOffCacheModel.hoursAllowed = getHoursAllowed();
+
+		hrUserTimeOffCacheModel.hoursAccrued = getHoursAccrued();
+
+		hrUserTimeOffCacheModel.hoursCarriedOver = getHoursCarriedOver();
+
+		hrUserTimeOffCacheModel.hoursUsed = getHoursUsed();
+
+		return hrUserTimeOffCacheModel;
 	}
 
 	@Override

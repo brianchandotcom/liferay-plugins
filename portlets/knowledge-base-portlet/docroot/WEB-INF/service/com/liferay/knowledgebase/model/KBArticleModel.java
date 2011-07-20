@@ -17,6 +17,7 @@ package com.liferay.knowledgebase.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
 import com.liferay.portal.model.ResourcedModel;
 import com.liferay.portal.model.WorkflowedModel;
@@ -296,20 +297,6 @@ public interface KBArticleModel extends BaseModel<KBArticle>, GroupedModel,
 	public void setDescription(String description);
 
 	/**
-	 * Returns the kb template ID of this k b article.
-	 *
-	 * @return the kb template ID of this k b article
-	 */
-	public long getKbTemplateId();
-
-	/**
-	 * Sets the kb template ID of this k b article.
-	 *
-	 * @param kbTemplateId the kb template ID of this k b article
-	 */
-	public void setKbTemplateId(long kbTemplateId);
-
-	/**
 	 * Returns the priority of this k b article.
 	 *
 	 * @return the priority of this k b article
@@ -524,6 +511,8 @@ public interface KBArticleModel extends BaseModel<KBArticle>, GroupedModel,
 	public int compareTo(KBArticle kbArticle);
 
 	public int hashCode();
+
+	public CacheModel<KBArticle> toCacheModel();
 
 	public KBArticle toEscapedModel();
 

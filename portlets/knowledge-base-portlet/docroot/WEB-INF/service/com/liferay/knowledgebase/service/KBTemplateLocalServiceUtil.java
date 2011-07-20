@@ -176,6 +176,13 @@ public class KBTemplateLocalServiceUtil {
 		return getService().getKBTemplate(kbTemplateId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the k b template with the UUID in the group.
 	*
@@ -222,7 +229,7 @@ public class KBTemplateLocalServiceUtil {
 	}
 
 	/**
-	* Updates the k b template in the database. Also notifies the appropriate model listeners.
+	* Updates the k b template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbTemplate the k b template
 	* @return the k b template that was updated
@@ -235,7 +242,7 @@ public class KBTemplateLocalServiceUtil {
 	}
 
 	/**
-	* Updates the k b template in the database. Also notifies the appropriate model listeners.
+	* Updates the k b template in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbTemplate the k b template
 	* @param merge whether to merge the k b template with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -268,33 +275,29 @@ public class KBTemplateLocalServiceUtil {
 
 	public static com.liferay.knowledgebase.model.KBTemplate addKBTemplate(
 		long userId, java.lang.String title, java.lang.String content,
-		int engineType, boolean cacheable,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addKBTemplate(userId, title, content, engineType,
-			cacheable, serviceContext);
+		return getService().addKBTemplate(userId, title, content, serviceContext);
 	}
 
 	public static void addKBTemplateResources(
 		com.liferay.knowledgebase.model.KBTemplate kbTemplate,
-		boolean addCommunityPermissions, boolean addGuestPermissions)
+		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
-			.addKBTemplateResources(kbTemplate, addCommunityPermissions,
+			.addKBTemplateResources(kbTemplate, addGroupPermissions,
 			addGuestPermissions);
 	}
 
 	public static void addKBTemplateResources(
 		com.liferay.knowledgebase.model.KBTemplate kbTemplate,
-		java.lang.String[] communityPermissions,
-		java.lang.String[] guestPermissions)
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
-			.addKBTemplateResources(kbTemplate, communityPermissions,
+			.addKBTemplateResources(kbTemplate, groupPermissions,
 			guestPermissions);
 	}
 
@@ -336,23 +339,21 @@ public class KBTemplateLocalServiceUtil {
 
 	public static com.liferay.knowledgebase.model.KBTemplate updateKBTemplate(
 		long kbTemplateId, java.lang.String title, java.lang.String content,
-		int engineType, boolean cacheable,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .updateKBTemplate(kbTemplateId, title, content, engineType,
-			cacheable, serviceContext);
+				   .updateKBTemplate(kbTemplateId, title, content,
+			serviceContext);
 	}
 
 	public static void updateKBTemplateResources(
 		com.liferay.knowledgebase.model.KBTemplate kbTemplate,
-		java.lang.String[] communityPermissions,
-		java.lang.String[] guestPermissions)
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
-			.updateKBTemplateResources(kbTemplate, communityPermissions,
+			.updateKBTemplateResources(kbTemplate, groupPermissions,
 			guestPermissions);
 	}
 

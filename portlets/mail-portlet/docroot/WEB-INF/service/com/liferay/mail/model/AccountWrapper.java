@@ -642,6 +642,10 @@ public class AccountWrapper implements Account {
 		return _account.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.mail.model.Account> toCacheModel() {
+		return _account.toCacheModel();
+	}
+
 	public com.liferay.mail.model.Account toEscapedModel() {
 		return new AccountWrapper(_account.toEscapedModel());
 	}
@@ -653,6 +657,11 @@ public class AccountWrapper implements Account {
 
 	public java.lang.String toXmlString() {
 		return _account.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_account.persist();
 	}
 
 	public java.lang.String getPasswordDecrypted() {

@@ -254,51 +254,6 @@ public class KBTemplateWrapper implements KBTemplate {
 		_kbTemplate.setContent(content);
 	}
 
-	/**
-	* Returns the engine type of this k b template.
-	*
-	* @return the engine type of this k b template
-	*/
-	public int getEngineType() {
-		return _kbTemplate.getEngineType();
-	}
-
-	/**
-	* Sets the engine type of this k b template.
-	*
-	* @param engineType the engine type of this k b template
-	*/
-	public void setEngineType(int engineType) {
-		_kbTemplate.setEngineType(engineType);
-	}
-
-	/**
-	* Returns the cacheable of this k b template.
-	*
-	* @return the cacheable of this k b template
-	*/
-	public boolean getCacheable() {
-		return _kbTemplate.getCacheable();
-	}
-
-	/**
-	* Returns <code>true</code> if this k b template is cacheable.
-	*
-	* @return <code>true</code> if this k b template is cacheable; <code>false</code> otherwise
-	*/
-	public boolean isCacheable() {
-		return _kbTemplate.isCacheable();
-	}
-
-	/**
-	* Sets whether this k b template is cacheable.
-	*
-	* @param cacheable the cacheable of this k b template
-	*/
-	public void setCacheable(boolean cacheable) {
-		_kbTemplate.setCacheable(cacheable);
-	}
-
 	public boolean isNew() {
 		return _kbTemplate.isNew();
 	}
@@ -354,6 +309,10 @@ public class KBTemplateWrapper implements KBTemplate {
 		return _kbTemplate.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.knowledgebase.model.KBTemplate> toCacheModel() {
+		return _kbTemplate.toCacheModel();
+	}
+
 	public com.liferay.knowledgebase.model.KBTemplate toEscapedModel() {
 		return new KBTemplateWrapper(_kbTemplate.toEscapedModel());
 	}
@@ -367,12 +326,9 @@ public class KBTemplateWrapper implements KBTemplate {
 		return _kbTemplate.toXmlString();
 	}
 
-	public boolean isFreeMarker() {
-		return _kbTemplate.isFreeMarker();
-	}
-
-	public boolean isVelocity() {
-		return _kbTemplate.isVelocity();
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kbTemplate.persist();
 	}
 
 	public KBTemplate getWrappedKBTemplate() {

@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -2952,8 +2953,6 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 	protected KBArticlePersistence kbArticlePersistence;
 	@BeanReference(type = KBCommentPersistence.class)
 	protected KBCommentPersistence kbCommentPersistence;
-	@BeanReference(type = KBStructurePersistence.class)
-	protected KBStructurePersistence kbStructurePersistence;
 	@BeanReference(type = KBTemplatePersistence.class)
 	protected KBTemplatePersistence kbTemplatePersistence;
 	@BeanReference(type = ResourcePersistence.class)
@@ -2990,6 +2989,16 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 	private static KBComment _nullKBComment = new KBCommentImpl() {
 			public Object clone() {
 				return this;
+			}
+
+			public CacheModel<KBComment> toCacheModel() {
+				return _nullKBCommentCacheModel;
+			}
+		};
+
+	private static CacheModel<KBComment> _nullKBCommentCacheModel = new CacheModel<KBComment>() {
+			public KBComment toEntityModel() {
+				return _nullKBComment;
 			}
 		};
 }

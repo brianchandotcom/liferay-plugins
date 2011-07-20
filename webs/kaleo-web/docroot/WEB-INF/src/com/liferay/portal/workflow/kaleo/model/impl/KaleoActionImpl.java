@@ -14,13 +14,11 @@
 
 package com.liferay.portal.workflow.kaleo.model.impl;
 
-import com.liferay.portal.workflow.kaleo.model.KaleoAction;
-
 /**
  * @author Brian Wing Shun Chan
  */
 public class KaleoActionImpl
-	extends KaleoActionModelImpl implements KaleoAction {
+	extends KaleoActionBaseImpl {
 
 	public KaleoActionImpl() {
 	}

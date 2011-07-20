@@ -14,7 +14,6 @@
 
 package com.liferay.mail.model.impl;
 
-import com.liferay.mail.model.Message;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -26,7 +25,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 /**
  * @author Brian Wing Shun Chan
  */
-public class MessageImpl extends MessageModelImpl implements Message {
+public class MessageImpl extends MessageBaseImpl {
 
 	public MessageImpl() {
 	}

@@ -14,13 +14,11 @@
 
 package com.liferay.socialcoding.model.impl;
 
-import com.liferay.socialcoding.model.JIRAChangeItem;
-
 /**
  * @author Brian Wing Shun Chan
  */
 public class JIRAChangeItemImpl
-	extends JIRAChangeItemModelImpl implements JIRAChangeItem {
+	extends JIRAChangeItemBaseImpl {
 
 	public JIRAChangeItemImpl() {
 	}

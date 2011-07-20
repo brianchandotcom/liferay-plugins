@@ -14,8 +14,10 @@
 
 package com.liferay.knowledgebase.model;
 
+import com.liferay.portal.model.PersistedModel;
+
 /**
- * The model interface for the KBArticle service. Represents a row in the &quot;KBArticle&quot; database table, with each column mapped to a property of this class.
+ * The extended model interface for the KBArticle service. Represents a row in the &quot;KBArticle&quot; database table, with each column mapped to a property of this class.
  *
  * @author Brian Wing Shun Chan
  * @see KBArticleModel
@@ -23,7 +25,7 @@ package com.liferay.knowledgebase.model;
  * @see com.liferay.knowledgebase.model.impl.KBArticleModelImpl
  * @generated
  */
-public interface KBArticle extends KBArticleModel {
+public interface KBArticle extends KBArticleModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -36,12 +38,6 @@ public interface KBArticle extends KBArticleModel {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public long getClassPK();
-
-	public com.liferay.knowledgebase.model.KBTemplate getKBTemplate()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public boolean hasKBTemplate();
 
 	public boolean isFirstVersion();
 

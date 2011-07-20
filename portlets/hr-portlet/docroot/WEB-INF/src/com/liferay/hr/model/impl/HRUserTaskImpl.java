@@ -14,12 +14,10 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRUserTask;
-
 /**
  * @author Wesley Gong
  */
-public class HRUserTaskImpl extends HRUserTaskModelImpl implements HRUserTask {
+public class HRUserTaskImpl extends HRUserTaskBaseImpl {
 
 	public HRUserTaskImpl() {
 	}

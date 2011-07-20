@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRTimeOffPolicy;
-
 /**
  * @author Wesley Gong
  */
 public class HRTimeOffPolicyImpl
-	extends HRTimeOffPolicyModelImpl implements HRTimeOffPolicy {
+	extends HRTimeOffPolicyBaseImpl {
 
 	public HRTimeOffPolicyImpl() {
 	}

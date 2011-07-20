@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.workflow.kaleo.service.KaleoNotificationLocalServiceUtil;
 
 import java.io.Serializable;
 
@@ -122,20 +123,28 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 		_modifiedDate = modifiedDate;
 	}
 
+	public String getKaleoClassName() {
+		return _kaleoClassName;
+	}
+
+	public void setKaleoClassName(String kaleoClassName) {
+		_kaleoClassName = kaleoClassName;
+	}
+
+	public long getKaleoClassPK() {
+		return _kaleoClassPK;
+	}
+
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoClassPK = kaleoClassPK;
+	}
+
 	public long getKaleoDefinitionId() {
 		return _kaleoDefinitionId;
 	}
 
 	public void setKaleoDefinitionId(long kaleoDefinitionId) {
 		_kaleoDefinitionId = kaleoDefinitionId;
-	}
-
-	public long getKaleoNodeId() {
-		return _kaleoNodeId;
-	}
-
-	public void setKaleoNodeId(long kaleoNodeId) {
-		_kaleoNodeId = kaleoNodeId;
 	}
 
 	public String getKaleoNodeName() {
@@ -194,6 +203,10 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 		_notificationTypes = notificationTypes;
 	}
 
+	public void persist() throws SystemException {
+		KaleoNotificationLocalServiceUtil.updateKaleoNotification(this);
+	}
+
 	@Override
 	public KaleoNotification toEscapedModel() {
 		if (isEscapedModel()) {
@@ -217,8 +230,9 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 		clone.setUserName(getUserName());
 		clone.setCreateDate(getCreateDate());
 		clone.setModifiedDate(getModifiedDate());
+		clone.setKaleoClassName(getKaleoClassName());
+		clone.setKaleoClassPK(getKaleoClassPK());
 		clone.setKaleoDefinitionId(getKaleoDefinitionId());
-		clone.setKaleoNodeId(getKaleoNodeId());
 		clone.setKaleoNodeName(getKaleoNodeName());
 		clone.setName(getName());
 		clone.setDescription(getDescription());
@@ -282,7 +296,7 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{kaleoNotificationId=");
 		sb.append(getKaleoNotificationId());
@@ -298,10 +312,12 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 		sb.append(getCreateDate());
 		sb.append(", modifiedDate=");
 		sb.append(getModifiedDate());
+		sb.append(", kaleoClassName=");
+		sb.append(getKaleoClassName());
+		sb.append(", kaleoClassPK=");
+		sb.append(getKaleoClassPK());
 		sb.append(", kaleoDefinitionId=");
 		sb.append(getKaleoDefinitionId());
-		sb.append(", kaleoNodeId=");
-		sb.append(getKaleoNodeId());
 		sb.append(", kaleoNodeName=");
 		sb.append(getKaleoNodeName());
 		sb.append(", name=");
@@ -322,7 +338,7 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(52);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.workflow.kaleo.model.KaleoNotification");
@@ -357,12 +373,16 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 		sb.append(getModifiedDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>kaleoDefinitionId</column-name><column-value><![CDATA[");
-		sb.append(getKaleoDefinitionId());
+			"<column><column-name>kaleoClassName</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassName());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>kaleoNodeId</column-name><column-value><![CDATA[");
-		sb.append(getKaleoNodeId());
+			"<column><column-name>kaleoClassPK</column-name><column-value><![CDATA[");
+		sb.append(getKaleoClassPK());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>kaleoDefinitionId</column-name><column-value><![CDATA[");
+		sb.append(getKaleoDefinitionId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>kaleoNodeName</column-name><column-value><![CDATA[");
@@ -406,8 +426,9 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
+	private String _kaleoClassName;
+	private long _kaleoClassPK;
 	private long _kaleoDefinitionId;
-	private long _kaleoNodeId;
 	private String _kaleoNodeName;
 	private String _name;
 	private String _description;

@@ -20,7 +20,6 @@ import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskAssignmentInstanceLocalServiceUtil;
-import com.liferay.portal.workflow.kaleo.service.KaleoTaskAssignmentLocalServiceUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,29 +31,20 @@ import java.util.List;
 public class TaskAssignerUtil {
 
 	public static void reassignKaleoTask(
-			long kaleoNodeId, long parentKaleoNodeId,
+			List<KaleoTaskAssignment> kaleoTaskAssignments,
 			ExecutionContext executionContext)
 		throws PortalException, SystemException {
 
-		List<KaleoTaskAssignment> kaleoTaskReassignments =
-			KaleoTaskAssignmentLocalServiceUtil.getKaleoTaskAssignments(
-				kaleoNodeId, parentKaleoNodeId);
-
-		if (kaleoTaskReassignments.isEmpty()) {
-			return;
-		}
-
-		List<KaleoTaskAssignment> kaleoTaskAssignments =
+		List<KaleoTaskAssignment> reassignedKaleoTaskAssignments =
 			new ArrayList<KaleoTaskAssignment>();
 
-		for (KaleoTaskAssignment kaleoTaskReassignment :
-				kaleoTaskReassignments) {
-
+		for (KaleoTaskAssignment kaleoTaskAssignment : kaleoTaskAssignments) {
 			Collection<KaleoTaskAssignment> calculatedKaleoTaskAssignments =
 				_taskAssignmentSelector.calculateTaskAssignments(
-					kaleoTaskReassignment, executionContext);
+					kaleoTaskAssignment, executionContext);
 
-			kaleoTaskAssignments.addAll(calculatedKaleoTaskAssignments);
+			reassignedKaleoTaskAssignments.addAll(
+				calculatedKaleoTaskAssignments);
 		}
 
 		KaleoTaskInstanceToken kaleoTaskInstanceToken =
@@ -64,7 +54,7 @@ public class TaskAssignerUtil {
 			deleteKaleoTaskAssignmentInstances(kaleoTaskInstanceToken);
 
 		KaleoTaskAssignmentInstanceLocalServiceUtil.addTaskAssignmentInstances(
-			kaleoTaskInstanceToken, kaleoTaskAssignments,
+			kaleoTaskInstanceToken, reassignedKaleoTaskAssignments,
 			executionContext.getWorkflowContext(),
 			executionContext.getServiceContext());
 	}

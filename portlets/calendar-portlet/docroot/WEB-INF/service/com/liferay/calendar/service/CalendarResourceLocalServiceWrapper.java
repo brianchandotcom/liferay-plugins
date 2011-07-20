@@ -168,6 +168,13 @@ public class CalendarResourceLocalServiceWrapper
 		return _calendarResourceLocalService.getCalendarResource(calendarResourceId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _calendarResourceLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the calendar resource with the UUID in the group.
 	*
@@ -215,7 +222,7 @@ public class CalendarResourceLocalServiceWrapper
 	}
 
 	/**
-	* Updates the calendar resource in the database. Also notifies the appropriate model listeners.
+	* Updates the calendar resource in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param calendarResource the calendar resource
 	* @return the calendar resource that was updated
@@ -228,7 +235,7 @@ public class CalendarResourceLocalServiceWrapper
 	}
 
 	/**
-	* Updates the calendar resource in the database. Also notifies the appropriate model listeners.
+	* Updates the calendar resource in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param calendarResource the calendar resource
 	* @param merge whether to merge the calendar resource with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

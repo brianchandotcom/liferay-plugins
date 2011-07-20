@@ -201,6 +201,42 @@ public class KaleoLogWrapper implements KaleoLog {
 	}
 
 	/**
+	* Returns the kaleo class name of this kaleo log.
+	*
+	* @return the kaleo class name of this kaleo log
+	*/
+	public java.lang.String getKaleoClassName() {
+		return _kaleoLog.getKaleoClassName();
+	}
+
+	/**
+	* Sets the kaleo class name of this kaleo log.
+	*
+	* @param kaleoClassName the kaleo class name of this kaleo log
+	*/
+	public void setKaleoClassName(java.lang.String kaleoClassName) {
+		_kaleoLog.setKaleoClassName(kaleoClassName);
+	}
+
+	/**
+	* Returns the kaleo class p k of this kaleo log.
+	*
+	* @return the kaleo class p k of this kaleo log
+	*/
+	public long getKaleoClassPK() {
+		return _kaleoLog.getKaleoClassPK();
+	}
+
+	/**
+	* Sets the kaleo class p k of this kaleo log.
+	*
+	* @param kaleoClassPK the kaleo class p k of this kaleo log
+	*/
+	public void setKaleoClassPK(long kaleoClassPK) {
+		_kaleoLog.setKaleoClassPK(kaleoClassPK);
+	}
+
+	/**
 	* Returns the kaleo definition ID of this kaleo log.
 	*
 	* @return the kaleo definition ID of this kaleo log
@@ -270,24 +306,6 @@ public class KaleoLogWrapper implements KaleoLog {
 	*/
 	public void setKaleoTaskInstanceTokenId(long kaleoTaskInstanceTokenId) {
 		_kaleoLog.setKaleoTaskInstanceTokenId(kaleoTaskInstanceTokenId);
-	}
-
-	/**
-	* Returns the kaleo node ID of this kaleo log.
-	*
-	* @return the kaleo node ID of this kaleo log
-	*/
-	public long getKaleoNodeId() {
-		return _kaleoLog.getKaleoNodeId();
-	}
-
-	/**
-	* Sets the kaleo node ID of this kaleo log.
-	*
-	* @param kaleoNodeId the kaleo node ID of this kaleo log
-	*/
-	public void setKaleoNodeId(long kaleoNodeId) {
-		_kaleoLog.setKaleoNodeId(kaleoNodeId);
 	}
 
 	/**
@@ -664,6 +682,10 @@ public class KaleoLogWrapper implements KaleoLog {
 		return _kaleoLog.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.portal.workflow.kaleo.model.KaleoLog> toCacheModel() {
+		return _kaleoLog.toCacheModel();
+	}
+
 	public com.liferay.portal.workflow.kaleo.model.KaleoLog toEscapedModel() {
 		return new KaleoLogWrapper(_kaleoLog.toEscapedModel());
 	}
@@ -675,6 +697,11 @@ public class KaleoLogWrapper implements KaleoLog {
 
 	public java.lang.String toXmlString() {
 		return _kaleoLog.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kaleoLog.persist();
 	}
 
 	public KaleoLog getWrappedKaleoLog() {

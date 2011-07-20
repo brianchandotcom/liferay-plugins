@@ -311,6 +311,10 @@ public class FeedWrapper implements Feed {
 		return _feed.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.twitter.model.Feed> toCacheModel() {
+		return _feed.toCacheModel();
+	}
+
 	public com.liferay.twitter.model.Feed toEscapedModel() {
 		return new FeedWrapper(_feed.toEscapedModel());
 	}
@@ -322,6 +326,11 @@ public class FeedWrapper implements Feed {
 
 	public java.lang.String toXmlString() {
 		return _feed.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_feed.persist();
 	}
 
 	public Feed getWrappedFeed() {

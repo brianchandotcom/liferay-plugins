@@ -20,13 +20,10 @@ import com.liferay.knowledgebase.model.KBComment;
 import com.liferay.knowledgebase.service.KBArticleLocalService;
 import com.liferay.knowledgebase.service.KBArticleService;
 import com.liferay.knowledgebase.service.KBCommentLocalService;
-import com.liferay.knowledgebase.service.KBStructureLocalService;
-import com.liferay.knowledgebase.service.KBStructureService;
 import com.liferay.knowledgebase.service.KBTemplateLocalService;
 import com.liferay.knowledgebase.service.KBTemplateService;
 import com.liferay.knowledgebase.service.persistence.KBArticlePersistence;
 import com.liferay.knowledgebase.service.persistence.KBCommentPersistence;
-import com.liferay.knowledgebase.service.persistence.KBStructurePersistence;
 import com.liferay.knowledgebase.service.persistence.KBTemplatePersistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -42,6 +39,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -51,6 +50,8 @@ import com.liferay.portal.service.persistence.UserPersistence;
 
 import com.liferay.portlet.social.service.SocialActivityLocalService;
 import com.liferay.portlet.social.service.persistence.SocialActivityPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -242,6 +243,11 @@ public abstract class KBCommentLocalServiceBaseImpl
 		return kbCommentPersistence.findByPrimaryKey(kbCommentId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return kbCommentPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the k b comment with the UUID in the group.
 	 *
@@ -284,7 +290,7 @@ public abstract class KBCommentLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the k b comment in the database. Also notifies the appropriate model listeners.
+	 * Updates the k b comment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kbComment the k b comment
 	 * @return the k b comment that was updated
@@ -296,7 +302,7 @@ public abstract class KBCommentLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the k b comment in the database. Also notifies the appropriate model listeners.
+	 * Updates the k b comment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kbComment the k b comment
 	 * @param merge whether to merge the k b comment with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -417,62 +423,6 @@ public abstract class KBCommentLocalServiceBaseImpl
 	public void setKBCommentPersistence(
 		KBCommentPersistence kbCommentPersistence) {
 		this.kbCommentPersistence = kbCommentPersistence;
-	}
-
-	/**
-	 * Returns the k b structure local service.
-	 *
-	 * @return the k b structure local service
-	 */
-	public KBStructureLocalService getKBStructureLocalService() {
-		return kbStructureLocalService;
-	}
-
-	/**
-	 * Sets the k b structure local service.
-	 *
-	 * @param kbStructureLocalService the k b structure local service
-	 */
-	public void setKBStructureLocalService(
-		KBStructureLocalService kbStructureLocalService) {
-		this.kbStructureLocalService = kbStructureLocalService;
-	}
-
-	/**
-	 * Returns the k b structure remote service.
-	 *
-	 * @return the k b structure remote service
-	 */
-	public KBStructureService getKBStructureService() {
-		return kbStructureService;
-	}
-
-	/**
-	 * Sets the k b structure remote service.
-	 *
-	 * @param kbStructureService the k b structure remote service
-	 */
-	public void setKBStructureService(KBStructureService kbStructureService) {
-		this.kbStructureService = kbStructureService;
-	}
-
-	/**
-	 * Returns the k b structure persistence.
-	 *
-	 * @return the k b structure persistence
-	 */
-	public KBStructurePersistence getKBStructurePersistence() {
-		return kbStructurePersistence;
-	}
-
-	/**
-	 * Sets the k b structure persistence.
-	 *
-	 * @param kbStructurePersistence the k b structure persistence
-	 */
-	public void setKBStructurePersistence(
-		KBStructurePersistence kbStructurePersistence) {
-		this.kbStructurePersistence = kbStructurePersistence;
 	}
 
 	/**
@@ -696,6 +646,16 @@ public abstract class KBCommentLocalServiceBaseImpl
 		this.socialActivityPersistence = socialActivityPersistence;
 	}
 
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.knowledgebase.model.KBComment",
+			kbCommentLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.knowledgebase.model.KBComment");
+	}
+
 	/**
 	 * Returns the Spring bean ID for this bean.
 	 *
@@ -751,12 +711,6 @@ public abstract class KBCommentLocalServiceBaseImpl
 	protected KBCommentLocalService kbCommentLocalService;
 	@BeanReference(type = KBCommentPersistence.class)
 	protected KBCommentPersistence kbCommentPersistence;
-	@BeanReference(type = KBStructureLocalService.class)
-	protected KBStructureLocalService kbStructureLocalService;
-	@BeanReference(type = KBStructureService.class)
-	protected KBStructureService kbStructureService;
-	@BeanReference(type = KBStructurePersistence.class)
-	protected KBStructurePersistence kbStructurePersistence;
 	@BeanReference(type = KBTemplateLocalService.class)
 	protected KBTemplateLocalService kbTemplateLocalService;
 	@BeanReference(type = KBTemplateService.class)

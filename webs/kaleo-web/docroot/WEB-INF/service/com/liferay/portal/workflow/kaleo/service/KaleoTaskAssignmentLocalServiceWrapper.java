@@ -166,6 +166,13 @@ public class KaleoTaskAssignmentLocalServiceWrapper
 		return _kaleoTaskAssignmentLocalService.getKaleoTaskAssignment(kaleoTaskAssignmentId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _kaleoTaskAssignmentLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the kaleo task assignments.
 	*
@@ -197,7 +204,7 @@ public class KaleoTaskAssignmentLocalServiceWrapper
 	}
 
 	/**
-	* Updates the kaleo task assignment in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo task assignment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTaskAssignment the kaleo task assignment
 	* @return the kaleo task assignment that was updated
@@ -210,7 +217,7 @@ public class KaleoTaskAssignmentLocalServiceWrapper
 	}
 
 	/**
-	* Updates the kaleo task assignment in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo task assignment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTaskAssignment the kaleo task assignment
 	* @param merge whether to merge the kaleo task assignment with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -244,13 +251,14 @@ public class KaleoTaskAssignmentLocalServiceWrapper
 	}
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment addKaleoTaskAssignment(
-		long kaleoDefinitionId, long kaleoNodeId, long kaleoTaskId,
+		java.lang.String kaleoClassName, long kaleoClassPK,
+		long kaleoDefinitionId,
 		com.liferay.portal.workflow.kaleo.definition.Assignment assignment,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _kaleoTaskAssignmentLocalService.addKaleoTaskAssignment(kaleoDefinitionId,
-			kaleoNodeId, kaleoTaskId, assignment, serviceContext);
+		return _kaleoTaskAssignmentLocalService.addKaleoTaskAssignment(kaleoClassName,
+			kaleoClassPK, kaleoDefinitionId, assignment, serviceContext);
 	}
 
 	public void deleteCompanyKaleoTaskAssignments(long companyId)
@@ -271,17 +279,17 @@ public class KaleoTaskAssignmentLocalServiceWrapper
 	}
 
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment> getKaleoTaskAssignments(
-		long kaleoNodeId, long kaleoTaskId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _kaleoTaskAssignmentLocalService.getKaleoTaskAssignments(kaleoNodeId,
-			kaleoTaskId);
-	}
-
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment> getKaleoTaskAssignments(
 		long kaleoTaskId, java.lang.String assigneeClassName)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _kaleoTaskAssignmentLocalService.getKaleoTaskAssignments(kaleoTaskId,
 			assigneeClassName);
+	}
+
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment> getKaleoTaskAssignments(
+		java.lang.String kaleoClassName, long kaleoClassPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _kaleoTaskAssignmentLocalService.getKaleoTaskAssignments(kaleoClassName,
+			kaleoClassPK);
 	}
 
 	public int getKaleoTaskAssignmentsCount(long kaleoTaskId)

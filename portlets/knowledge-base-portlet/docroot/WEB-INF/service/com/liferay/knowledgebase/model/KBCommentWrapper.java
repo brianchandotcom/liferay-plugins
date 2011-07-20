@@ -363,6 +363,10 @@ public class KBCommentWrapper implements KBComment {
 		return _kbComment.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.knowledgebase.model.KBComment> toCacheModel() {
+		return _kbComment.toCacheModel();
+	}
+
 	public com.liferay.knowledgebase.model.KBComment toEscapedModel() {
 		return new KBCommentWrapper(_kbComment.toEscapedModel());
 	}
@@ -374,6 +378,11 @@ public class KBCommentWrapper implements KBComment {
 
 	public java.lang.String toXmlString() {
 		return _kbComment.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kbComment.persist();
 	}
 
 	public KBComment getWrappedKBComment() {

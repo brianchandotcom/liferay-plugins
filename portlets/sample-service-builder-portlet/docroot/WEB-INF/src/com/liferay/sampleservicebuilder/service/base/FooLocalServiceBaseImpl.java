@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -47,6 +49,8 @@ import com.liferay.sampleservicebuilder.model.Foo;
 import com.liferay.sampleservicebuilder.service.FooLocalService;
 import com.liferay.sampleservicebuilder.service.FooService;
 import com.liferay.sampleservicebuilder.service.persistence.FooPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -234,6 +238,11 @@ public abstract class FooLocalServiceBaseImpl implements FooLocalService,
 		return fooPersistence.findByPrimaryKey(fooId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return fooPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns the foo with the UUID in the group.
 	 *
@@ -275,7 +284,7 @@ public abstract class FooLocalServiceBaseImpl implements FooLocalService,
 	}
 
 	/**
-	 * Updates the foo in the database. Also notifies the appropriate model listeners.
+	 * Updates the foo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param foo the foo
 	 * @return the foo that was updated
@@ -286,7 +295,7 @@ public abstract class FooLocalServiceBaseImpl implements FooLocalService,
 	}
 
 	/**
-	 * Updates the foo in the database. Also notifies the appropriate model listeners.
+	 * Updates the foo in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param foo the foo
 	 * @param merge whether to merge the foo with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -604,6 +613,16 @@ public abstract class FooLocalServiceBaseImpl implements FooLocalService,
 	 */
 	public void setAssetTagPersistence(AssetTagPersistence assetTagPersistence) {
 		this.assetTagPersistence = assetTagPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.sampleservicebuilder.model.Foo",
+			fooLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.sampleservicebuilder.model.Foo");
 	}
 
 	/**

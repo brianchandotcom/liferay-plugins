@@ -164,6 +164,13 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService {
 		return _kbCommentLocalService.getKBComment(kbCommentId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _kbCommentLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the k b comment with the UUID in the group.
 	*
@@ -210,7 +217,7 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService {
 	}
 
 	/**
-	* Updates the k b comment in the database. Also notifies the appropriate model listeners.
+	* Updates the k b comment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbComment the k b comment
 	* @return the k b comment that was updated
@@ -223,7 +230,7 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService {
 	}
 
 	/**
-	* Updates the k b comment in the database. Also notifies the appropriate model listeners.
+	* Updates the k b comment in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbComment the k b comment
 	* @param merge whether to merge the k b comment with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

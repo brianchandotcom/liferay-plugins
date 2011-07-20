@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
 
@@ -291,6 +292,67 @@ public class JIRAActionModelImpl extends BaseModelImpl<JIRAAction>
 
 	@Override
 	public void resetOriginalValues() {
+	}
+
+	@Override
+	public CacheModel<JIRAAction> toCacheModel() {
+		JIRAActionCacheModel jiraActionCacheModel = new JIRAActionCacheModel();
+
+		jiraActionCacheModel.jiraActionId = getJiraActionId();
+
+		jiraActionCacheModel.jiraUserId = getJiraUserId();
+
+		String jiraUserId = jiraActionCacheModel.jiraUserId;
+
+		if ((jiraUserId != null) && (jiraUserId.length() == 0)) {
+			jiraActionCacheModel.jiraUserId = null;
+		}
+
+		Date createDate = getCreateDate();
+
+		if (createDate != null) {
+			jiraActionCacheModel.createDate = createDate.getTime();
+		}
+		else {
+			jiraActionCacheModel.createDate = Long.MIN_VALUE;
+		}
+
+		Date modifiedDate = getModifiedDate();
+
+		if (modifiedDate != null) {
+			jiraActionCacheModel.modifiedDate = modifiedDate.getTime();
+		}
+		else {
+			jiraActionCacheModel.modifiedDate = Long.MIN_VALUE;
+		}
+
+		jiraActionCacheModel.jiraIssueId = getJiraIssueId();
+
+		jiraActionCacheModel.type = getType();
+
+		String type = jiraActionCacheModel.type;
+
+		if ((type != null) && (type.length() == 0)) {
+			jiraActionCacheModel.type = null;
+		}
+
+		jiraActionCacheModel.body = getBody();
+
+		String body = jiraActionCacheModel.body;
+
+		if ((body != null) && (body.length() == 0)) {
+			jiraActionCacheModel.body = null;
+		}
+
+		jiraActionCacheModel.jiraGroupName = getJiraGroupName();
+
+		String jiraGroupName = jiraActionCacheModel.jiraGroupName;
+
+		if ((jiraGroupName != null) && (jiraGroupName.length() == 0)) {
+			jiraActionCacheModel.jiraGroupName = null;
+		}
+
+		return jiraActionCacheModel;
 	}
 
 	@Override

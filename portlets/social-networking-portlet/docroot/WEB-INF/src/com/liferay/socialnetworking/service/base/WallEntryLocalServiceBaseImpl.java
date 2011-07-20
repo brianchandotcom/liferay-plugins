@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -44,6 +46,8 @@ import com.liferay.socialnetworking.service.persistence.MeetupsEntryPersistence;
 import com.liferay.socialnetworking.service.persistence.MeetupsRegistrationPersistence;
 import com.liferay.socialnetworking.service.persistence.WallEntryFinder;
 import com.liferay.socialnetworking.service.persistence.WallEntryPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -235,6 +239,11 @@ public abstract class WallEntryLocalServiceBaseImpl
 		return wallEntryPersistence.findByPrimaryKey(wallEntryId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return wallEntryPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the wall entries.
 	 *
@@ -263,7 +272,7 @@ public abstract class WallEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the wall entry in the database. Also notifies the appropriate model listeners.
+	 * Updates the wall entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wallEntry the wall entry
 	 * @return the wall entry that was updated
@@ -275,7 +284,7 @@ public abstract class WallEntryLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the wall entry in the database. Also notifies the appropriate model listeners.
+	 * Updates the wall entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param wallEntry the wall entry
 	 * @param merge whether to merge the wall entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -561,6 +570,16 @@ public abstract class WallEntryLocalServiceBaseImpl
 	 */
 	public void setUserPersistence(UserPersistence userPersistence) {
 		this.userPersistence = userPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.socialnetworking.model.WallEntry",
+			wallEntryLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.socialnetworking.model.WallEntry");
 	}
 
 	/**

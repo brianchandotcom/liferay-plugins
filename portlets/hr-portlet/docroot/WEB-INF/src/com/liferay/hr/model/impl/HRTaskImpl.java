@@ -14,14 +14,12 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRTask;
-
 /**
  * * @author Wesley Gong
  *
  * @author Brian Wing Shun Chan
  */
-public class HRTaskImpl extends HRTaskModelImpl implements HRTask {
+public class HRTaskImpl extends HRTaskBaseImpl {
 
 	public HRTaskImpl() {
 	}

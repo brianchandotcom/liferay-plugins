@@ -164,6 +164,13 @@ public class OAuthTokenLocalServiceWrapper implements OAuthTokenLocalService {
 		return _oAuthTokenLocalService.getOAuthToken(oAuthTokenId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _oAuthTokenLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the o auth tokens.
 	*
@@ -194,7 +201,7 @@ public class OAuthTokenLocalServiceWrapper implements OAuthTokenLocalService {
 	}
 
 	/**
-	* Updates the o auth token in the database. Also notifies the appropriate model listeners.
+	* Updates the o auth token in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param oAuthToken the o auth token
 	* @return the o auth token that was updated
@@ -207,7 +214,7 @@ public class OAuthTokenLocalServiceWrapper implements OAuthTokenLocalService {
 	}
 
 	/**
-	* Updates the o auth token in the database. Also notifies the appropriate model listeners.
+	* Updates the o auth token in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param oAuthToken the o auth token
 	* @param merge whether to merge the o auth token with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

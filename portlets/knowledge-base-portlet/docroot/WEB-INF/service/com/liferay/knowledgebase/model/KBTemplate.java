@@ -14,8 +14,10 @@
 
 package com.liferay.knowledgebase.model;
 
+import com.liferay.portal.model.PersistedModel;
+
 /**
- * The model interface for the KBTemplate service. Represents a row in the &quot;KBTemplate&quot; database table, with each column mapped to a property of this class.
+ * The extended model interface for the KBTemplate service. Represents a row in the &quot;KBTemplate&quot; database table, with each column mapped to a property of this class.
  *
  * @author Brian Wing Shun Chan
  * @see KBTemplateModel
@@ -23,13 +25,10 @@ package com.liferay.knowledgebase.model;
  * @see com.liferay.knowledgebase.model.impl.KBTemplateModelImpl
  * @generated
  */
-public interface KBTemplate extends KBTemplateModel {
+public interface KBTemplate extends KBTemplateModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.knowledgebase.model.impl.KBTemplateImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public boolean isFreeMarker();
-
-	public boolean isVelocity();
 }

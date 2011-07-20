@@ -176,6 +176,13 @@ public class KaleoTimerInstanceTokenLocalServiceUtil {
 		return getService().getKaleoTimerInstanceToken(kaleoTimerInstanceTokenId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the kaleo timer instance tokens.
 	*
@@ -206,7 +213,7 @@ public class KaleoTimerInstanceTokenLocalServiceUtil {
 	}
 
 	/**
-	* Updates the kaleo timer instance token in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo timer instance token in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTimerInstanceToken the kaleo timer instance token
 	* @return the kaleo timer instance token that was updated
@@ -220,7 +227,7 @@ public class KaleoTimerInstanceTokenLocalServiceUtil {
 	}
 
 	/**
-	* Updates the kaleo timer instance token in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo timer instance token in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoTimerInstanceToken the kaleo timer instance token
 	* @param merge whether to merge the kaleo timer instance token with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -254,19 +261,21 @@ public class KaleoTimerInstanceTokenLocalServiceUtil {
 	}
 
 	public static com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken addKaleoTimerInstanceToken(
-		long kaleoInstanceTokenId, long kaleoTimerId,
-		java.lang.String kaleoTimerName,
+		long kaleoInstanceTokenId, long kaleoTaskInstanceTokenId,
+		long kaleoTimerId, java.lang.String kaleoTimerName,
 		java.util.Map<java.lang.String, java.io.Serializable> workflowContext,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .addKaleoTimerInstanceToken(kaleoInstanceTokenId,
-			kaleoTimerId, kaleoTimerName, workflowContext, serviceContext);
+			kaleoTaskInstanceTokenId, kaleoTimerId, kaleoTimerName,
+			workflowContext, serviceContext);
 	}
 
 	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> addKaleoTimerInstanceTokens(
 		com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken kaleoInstanceToken,
+		com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken kaleoTaskInstanceToken,
 		java.util.Collection<com.liferay.portal.workflow.kaleo.model.KaleoTimer> kaleoTimers,
 		java.util.Map<java.lang.String, java.io.Serializable> workflowContext,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -274,17 +283,7 @@ public class KaleoTimerInstanceTokenLocalServiceUtil {
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .addKaleoTimerInstanceTokens(kaleoInstanceToken,
-			kaleoTimers, workflowContext, serviceContext);
-	}
-
-	public static void completeKaleoTimerInstanceTokens(long kaleoInstanceId,
-		java.util.Collection<com.liferay.portal.workflow.kaleo.model.KaleoTimer> kaleoTimers,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService()
-			.completeKaleoTimerInstanceTokens(kaleoInstanceId, kaleoTimers,
-			serviceContext);
+			kaleoTaskInstanceToken, kaleoTimers, workflowContext, serviceContext);
 	}
 
 	public static com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken completeKaleoTimerInstanceToken(
@@ -297,28 +296,64 @@ public class KaleoTimerInstanceTokenLocalServiceUtil {
 			serviceContext);
 	}
 
-	public static void deleteKaleoTimerInstanceToken(long kaleoInstanceId,
-		long kaleoTimerId)
+	public static void completeKaleoTimerInstanceTokens(
+		java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> kaleoTimerInstanceTokens,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteKaleoTimerInstanceToken(kaleoInstanceId, kaleoTimerId);
+		getService()
+			.completeKaleoTimerInstanceTokens(kaleoTimerInstanceTokens,
+			serviceContext);
+	}
+
+	public static void completeKaleoTimerInstanceTokens(
+		long kaleoInstanceTokenId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.completeKaleoTimerInstanceTokens(kaleoInstanceTokenId,
+			serviceContext);
+	}
+
+	public static void deleteKaleoTimerInstanceToken(
+		long kaleoInstanceTokenId, long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.deleteKaleoTimerInstanceToken(kaleoInstanceTokenId, kaleoTimerId);
+	}
+
+	public static void deleteKaleoTimerInstanceTokens(long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteKaleoTimerInstanceTokens(kaleoInstanceId);
 	}
 
 	public static com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken getKaleoTimerInstanceToken(
-		long kaleoInstanceId, long kaleoTimerId)
+		long kaleoInstanceTokenId, long kaleoTimerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .getKaleoTimerInstanceToken(kaleoInstanceId, kaleoTimerId);
+				   .getKaleoTimerInstanceToken(kaleoInstanceTokenId,
+			kaleoTimerId);
 	}
 
-	public static int getKaleoTimerInstanceTokensCount(long kaleoInstanceId,
-		java.lang.Boolean completed,
+	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> getKaleoTimerInstanceTokens(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .getKaleoTimerInstanceTokensCount(kaleoInstanceId,
-			completed, serviceContext);
+				   .getKaleoTimerInstanceTokens(kaleoInstanceTokenId,
+			completed, blocking, serviceContext);
+	}
+
+	public static int getKaleoTimerInstanceTokensCount(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getKaleoTimerInstanceTokensCount(kaleoInstanceTokenId,
+			completed, blocking, serviceContext);
 	}
 
 	public static void clearService() {

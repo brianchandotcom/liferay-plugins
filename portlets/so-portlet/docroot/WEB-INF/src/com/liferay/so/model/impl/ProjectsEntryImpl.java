@@ -8,7 +8,7 @@
  *
  * Liferay Social Office is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
  * for more details.
  *
  * You should have received a copy of the GNU General Public License along with
@@ -17,13 +17,11 @@
 
 package com.liferay.so.model.impl;
 
-import com.liferay.so.model.ProjectsEntry;
-
 /**
  * @author Brian Wing Shun Chan
  */
 public class ProjectsEntryImpl
-	extends ProjectsEntryModelImpl implements ProjectsEntry {
+	extends ProjectsEntryBaseImpl {
 
 	public ProjectsEntryImpl() {
 	}

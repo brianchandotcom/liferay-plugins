@@ -217,6 +217,10 @@ public class SVNRevisionWrapper implements SVNRevision {
 		return _svnRevision.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.socialcoding.model.SVNRevision> toCacheModel() {
+		return _svnRevision.toCacheModel();
+	}
+
 	public com.liferay.socialcoding.model.SVNRevision toEscapedModel() {
 		return new SVNRevisionWrapper(_svnRevision.toEscapedModel());
 	}
@@ -228,6 +232,11 @@ public class SVNRevisionWrapper implements SVNRevision {
 
 	public java.lang.String toXmlString() {
 		return _svnRevision.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_svnRevision.persist();
 	}
 
 	public com.liferay.socialcoding.model.SVNRepository getSVNRepository() {

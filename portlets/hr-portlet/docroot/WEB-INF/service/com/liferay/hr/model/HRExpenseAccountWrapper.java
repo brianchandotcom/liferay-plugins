@@ -291,6 +291,10 @@ public class HRExpenseAccountWrapper implements HRExpenseAccount {
 		return _hrExpenseAccount.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRExpenseAccount> toCacheModel() {
+		return _hrExpenseAccount.toCacheModel();
+	}
+
 	public com.liferay.hr.model.HRExpenseAccount toEscapedModel() {
 		return new HRExpenseAccountWrapper(_hrExpenseAccount.toEscapedModel());
 	}
@@ -302,6 +306,11 @@ public class HRExpenseAccountWrapper implements HRExpenseAccount {
 
 	public java.lang.String toXmlString() {
 		return _hrExpenseAccount.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_hrExpenseAccount.persist();
 	}
 
 	public HRExpenseAccount getWrappedHRExpenseAccount() {

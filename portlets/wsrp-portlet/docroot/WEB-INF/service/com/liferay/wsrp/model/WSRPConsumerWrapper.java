@@ -309,6 +309,10 @@ public class WSRPConsumerWrapper implements WSRPConsumer {
 		return _wsrpConsumer.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.wsrp.model.WSRPConsumer> toCacheModel() {
+		return _wsrpConsumer.toCacheModel();
+	}
+
 	public com.liferay.wsrp.model.WSRPConsumer toEscapedModel() {
 		return new WSRPConsumerWrapper(_wsrpConsumer.toEscapedModel());
 	}
@@ -320,6 +324,11 @@ public class WSRPConsumerWrapper implements WSRPConsumer {
 
 	public java.lang.String toXmlString() {
 		return _wsrpConsumer.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_wsrpConsumer.persist();
 	}
 
 	public oasis.names.tc.wsrp.v2.types.RegistrationContext getRegistrationContext() {

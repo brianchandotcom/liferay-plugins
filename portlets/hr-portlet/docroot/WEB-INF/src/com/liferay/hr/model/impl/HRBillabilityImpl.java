@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRBillability;
-
 /**
  * @author Wesley Gong
  */
 public class HRBillabilityImpl
-	extends HRBillabilityModelImpl implements HRBillability {
+	extends HRBillabilityBaseImpl {
 
 	public HRBillabilityImpl() {
 	}

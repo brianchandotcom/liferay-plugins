@@ -37,12 +37,16 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.service.UserService;
 import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -232,6 +236,11 @@ public abstract class StatusLocalServiceBaseImpl implements StatusLocalService,
 		return statusPersistence.findByPrimaryKey(statusId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return statusPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the statuses.
 	 *
@@ -260,7 +269,7 @@ public abstract class StatusLocalServiceBaseImpl implements StatusLocalService,
 	}
 
 	/**
-	 * Updates the status in the database. Also notifies the appropriate model listeners.
+	 * Updates the status in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param status the status
 	 * @return the status that was updated
@@ -271,7 +280,7 @@ public abstract class StatusLocalServiceBaseImpl implements StatusLocalService,
 	}
 
 	/**
-	 * Updates the status in the database. Also notifies the appropriate model listeners.
+	 * Updates the status in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param status the status
 	 * @param merge whether to merge the status with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -533,6 +542,16 @@ public abstract class StatusLocalServiceBaseImpl implements StatusLocalService,
 	 */
 	public void setUserPersistence(UserPersistence userPersistence) {
 		this.userPersistence = userPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.chat.model.Status",
+			statusLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.chat.model.Status");
 	}
 
 	/**

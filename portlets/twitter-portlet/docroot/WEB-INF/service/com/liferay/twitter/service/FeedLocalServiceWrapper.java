@@ -160,6 +160,13 @@ public class FeedLocalServiceWrapper implements FeedLocalService {
 		return _feedLocalService.getFeed(feedId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _feedLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the feeds.
 	*
@@ -189,7 +196,7 @@ public class FeedLocalServiceWrapper implements FeedLocalService {
 	}
 
 	/**
-	* Updates the feed in the database. Also notifies the appropriate model listeners.
+	* Updates the feed in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param feed the feed
 	* @return the feed that was updated
@@ -202,7 +209,7 @@ public class FeedLocalServiceWrapper implements FeedLocalService {
 	}
 
 	/**
-	* Updates the feed in the database. Also notifies the appropriate model listeners.
+	* Updates the feed in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param feed the feed
 	* @param merge whether to merge the feed with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

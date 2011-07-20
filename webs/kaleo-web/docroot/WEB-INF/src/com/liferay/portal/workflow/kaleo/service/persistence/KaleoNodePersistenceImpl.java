@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ResourcePersistence;
@@ -338,6 +339,7 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 		kaleoNodeImpl.setModifiedDate(kaleoNode.getModifiedDate());
 		kaleoNodeImpl.setKaleoDefinitionId(kaleoNode.getKaleoDefinitionId());
 		kaleoNodeImpl.setName(kaleoNode.getName());
+		kaleoNodeImpl.setMetadata(kaleoNode.getMetadata());
 		kaleoNodeImpl.setDescription(kaleoNode.getDescription());
 		kaleoNodeImpl.setType(kaleoNode.getType());
 		kaleoNodeImpl.setInitial(kaleoNode.isInitial());
@@ -2469,6 +2471,16 @@ public class KaleoNodePersistenceImpl extends BasePersistenceImpl<KaleoNode>
 	private static KaleoNode _nullKaleoNode = new KaleoNodeImpl() {
 			public Object clone() {
 				return this;
+			}
+
+			public CacheModel<KaleoNode> toCacheModel() {
+				return _nullKaleoNodeCacheModel;
+			}
+		};
+
+	private static CacheModel<KaleoNode> _nullKaleoNodeCacheModel = new CacheModel<KaleoNode>() {
+			public KaleoNode toEntityModel() {
+				return _nullKaleoNode;
 			}
 		};
 }

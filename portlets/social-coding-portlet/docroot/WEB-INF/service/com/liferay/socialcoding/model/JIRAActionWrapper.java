@@ -253,6 +253,10 @@ public class JIRAActionWrapper implements JIRAAction {
 		return _jiraAction.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.socialcoding.model.JIRAAction> toCacheModel() {
+		return _jiraAction.toCacheModel();
+	}
+
 	public com.liferay.socialcoding.model.JIRAAction toEscapedModel() {
 		return new JIRAActionWrapper(_jiraAction.toEscapedModel());
 	}
@@ -264,6 +268,11 @@ public class JIRAActionWrapper implements JIRAAction {
 
 	public java.lang.String toXmlString() {
 		return _jiraAction.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_jiraAction.persist();
 	}
 
 	public JIRAAction getWrappedJIRAAction() {

@@ -307,6 +307,10 @@ public class JIRAIssueWrapper implements JIRAIssue {
 		return _jiraIssue.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.socialcoding.model.JIRAIssue> toCacheModel() {
+		return _jiraIssue.toCacheModel();
+	}
+
 	public com.liferay.socialcoding.model.JIRAIssue toEscapedModel() {
 		return new JIRAIssueWrapper(_jiraIssue.toEscapedModel());
 	}
@@ -318,6 +322,11 @@ public class JIRAIssueWrapper implements JIRAIssue {
 
 	public java.lang.String toXmlString() {
 		return _jiraIssue.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_jiraIssue.persist();
 	}
 
 	public JIRAIssue getWrappedJIRAIssue() {

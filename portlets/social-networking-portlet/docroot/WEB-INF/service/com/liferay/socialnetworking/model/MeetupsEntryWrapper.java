@@ -382,6 +382,10 @@ public class MeetupsEntryWrapper implements MeetupsEntry {
 		return _meetupsEntry.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.socialnetworking.model.MeetupsEntry> toCacheModel() {
+		return _meetupsEntry.toCacheModel();
+	}
+
 	public com.liferay.socialnetworking.model.MeetupsEntry toEscapedModel() {
 		return new MeetupsEntryWrapper(_meetupsEntry.toEscapedModel());
 	}
@@ -393,6 +397,11 @@ public class MeetupsEntryWrapper implements MeetupsEntry {
 
 	public java.lang.String toXmlString() {
 		return _meetupsEntry.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_meetupsEntry.persist();
 	}
 
 	public MeetupsEntry getWrappedMeetupsEntry() {

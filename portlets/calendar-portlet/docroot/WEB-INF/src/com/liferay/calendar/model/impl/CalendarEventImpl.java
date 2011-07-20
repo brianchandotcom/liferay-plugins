@@ -14,13 +14,11 @@
 
 package com.liferay.calendar.model.impl;
 
-import com.liferay.calendar.model.CalendarEvent;
-
 /**
  * @author Eduardo Lundgren
  */
 public class CalendarEventImpl
-	extends CalendarEventModelImpl implements CalendarEvent {
+	extends CalendarEventBaseImpl {
 
 	public CalendarEventImpl() {
 	}

@@ -309,6 +309,10 @@ public class CheckoutWrapper implements Checkout {
 		return _checkout.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.ams.model.Checkout> toCacheModel() {
+		return _checkout.toCacheModel();
+	}
+
 	public com.liferay.ams.model.Checkout toEscapedModel() {
 		return new CheckoutWrapper(_checkout.toEscapedModel());
 	}
@@ -320,6 +324,11 @@ public class CheckoutWrapper implements Checkout {
 
 	public java.lang.String toXmlString() {
 		return _checkout.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_checkout.persist();
 	}
 
 	public Checkout getWrappedCheckout() {

@@ -14,13 +14,11 @@
 
 package com.liferay.portal.workflow.kaleo.model.impl;
 
-import com.liferay.portal.workflow.kaleo.model.KaleoCondition;
-
 /**
  * @author Brian Wing Shun Chan
  */
 public class KaleoConditionImpl
-	extends KaleoConditionModelImpl implements KaleoCondition {
+	extends KaleoConditionBaseImpl {
 
 	public KaleoConditionImpl() {
 	}

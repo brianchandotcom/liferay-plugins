@@ -29,6 +29,8 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
@@ -69,6 +71,8 @@ import com.liferay.portal.workflow.kaleo.service.persistence.KaleoTaskPersistenc
 import com.liferay.portal.workflow.kaleo.service.persistence.KaleoTimerInstanceTokenPersistence;
 import com.liferay.portal.workflow.kaleo.service.persistence.KaleoTimerPersistence;
 import com.liferay.portal.workflow.kaleo.service.persistence.KaleoTransitionPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -262,6 +266,11 @@ public abstract class KaleoNotificationLocalServiceBaseImpl
 		return kaleoNotificationPersistence.findByPrimaryKey(kaleoNotificationId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return kaleoNotificationPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the kaleo notifications.
 	 *
@@ -290,7 +299,7 @@ public abstract class KaleoNotificationLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the kaleo notification in the database. Also notifies the appropriate model listeners.
+	 * Updates the kaleo notification in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kaleoNotification the kaleo notification
 	 * @return the kaleo notification that was updated
@@ -302,7 +311,7 @@ public abstract class KaleoNotificationLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the kaleo notification in the database. Also notifies the appropriate model listeners.
+	 * Updates the kaleo notification in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param kaleoNotification the kaleo notification
 	 * @param merge whether to merge the kaleo notification with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -1084,6 +1093,16 @@ public abstract class KaleoNotificationLocalServiceBaseImpl
 	 */
 	public void setUserPersistence(UserPersistence userPersistence) {
 		this.userPersistence = userPersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.portal.workflow.kaleo.model.KaleoNotification",
+			kaleoNotificationLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.portal.workflow.kaleo.model.KaleoNotification");
 	}
 
 	/**

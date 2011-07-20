@@ -174,6 +174,13 @@ public class JIRAIssueLocalServiceUtil {
 		return getService().getJIRAIssue(jiraIssueId);
 	}
 
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the j i r a issues.
 	*
@@ -204,7 +211,7 @@ public class JIRAIssueLocalServiceUtil {
 	}
 
 	/**
-	* Updates the j i r a issue in the database. Also notifies the appropriate model listeners.
+	* Updates the j i r a issue in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param jiraIssue the j i r a issue
 	* @return the j i r a issue that was updated
@@ -217,7 +224,7 @@ public class JIRAIssueLocalServiceUtil {
 	}
 
 	/**
-	* Updates the j i r a issue in the database. Also notifies the appropriate model listeners.
+	* Updates the j i r a issue in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param jiraIssue the j i r a issue
 	* @param merge whether to merge the j i r a issue with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

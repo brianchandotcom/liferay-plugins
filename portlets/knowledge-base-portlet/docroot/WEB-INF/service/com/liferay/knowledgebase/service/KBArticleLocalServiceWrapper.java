@@ -166,6 +166,13 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService {
 		return _kbArticleLocalService.getKBArticle(kbArticleId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _kbArticleLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the k b article with the UUID in the group.
 	*
@@ -212,7 +219,7 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService {
 	}
 
 	/**
-	* Updates the k b article in the database. Also notifies the appropriate model listeners.
+	* Updates the k b article in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbArticle the k b article
 	* @return the k b article that was updated
@@ -225,7 +232,7 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService {
 	}
 
 	/**
-	* Updates the k b article in the database. Also notifies the appropriate model listeners.
+	* Updates the k b article in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kbArticle the k b article
 	* @param merge whether to merge the k b article with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -268,33 +275,31 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService {
 	public com.liferay.knowledgebase.model.KBArticle addKBArticle(long userId,
 		long parentResourcePrimKey, java.lang.String title,
 		java.lang.String content, java.lang.String description,
-		long kbTemplateId, java.lang.String[] sections,
-		java.lang.String dirName,
+		java.lang.String[] sections, java.lang.String dirName,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _kbArticleLocalService.addKBArticle(userId,
-			parentResourcePrimKey, title, content, description, kbTemplateId,
-			sections, dirName, serviceContext);
+			parentResourcePrimKey, title, content, description, sections,
+			dirName, serviceContext);
 	}
 
 	public void addKBArticleResources(
 		com.liferay.knowledgebase.model.KBArticle kbArticle,
-		boolean addCommunityPermissions, boolean addGuestPermissions)
+		boolean addGroupPermissions, boolean addGuestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_kbArticleLocalService.addKBArticleResources(kbArticle,
-			addCommunityPermissions, addGuestPermissions);
+			addGroupPermissions, addGuestPermissions);
 	}
 
 	public void addKBArticleResources(
 		com.liferay.knowledgebase.model.KBArticle kbArticle,
-		java.lang.String[] communityPermissions,
-		java.lang.String[] guestPermissions)
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_kbArticleLocalService.addKBArticleResources(kbArticle,
-			communityPermissions, guestPermissions);
+			groupPermissions, guestPermissions);
 	}
 
 	public void checkAttachments()
@@ -383,19 +388,6 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _kbArticleLocalService.getKBArticleVersionsCount(resourcePrimKey,
 			status);
-	}
-
-	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBTemplateKBArticles(
-		long kbTemplateId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _kbArticleLocalService.getKBTemplateKBArticles(kbTemplateId,
-			start, end, orderByComparator);
-	}
-
-	public int getKBTemplateKBArticlesCount(long kbTemplateId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _kbArticleLocalService.getKBTemplateKBArticlesCount(kbTemplateId);
 	}
 
 	public com.liferay.knowledgebase.model.KBArticle getLatestKBArticle(
@@ -493,14 +485,12 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService {
 	public com.liferay.knowledgebase.model.KBArticle updateKBArticle(
 		long userId, long resourcePrimKey, java.lang.String title,
 		java.lang.String content, java.lang.String description,
-		long kbTemplateId, java.lang.String[] sections,
-		java.lang.String dirName,
+		java.lang.String[] sections, java.lang.String dirName,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _kbArticleLocalService.updateKBArticle(userId, resourcePrimKey,
-			title, content, description, kbTemplateId, sections, dirName,
-			serviceContext);
+			title, content, description, sections, dirName, serviceContext);
 	}
 
 	public void updateKBArticleAsset(long userId,
@@ -514,17 +504,11 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService {
 
 	public void updateKBArticleResources(
 		com.liferay.knowledgebase.model.KBArticle kbArticle,
-		java.lang.String[] communityPermissions,
-		java.lang.String[] guestPermissions)
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_kbArticleLocalService.updateKBArticleResources(kbArticle,
-			communityPermissions, guestPermissions);
-	}
-
-	public void updateKBArticlesKBTemplates(long[] kbArticleIds)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		_kbArticleLocalService.updateKBArticlesKBTemplates(kbArticleIds);
+			groupPermissions, guestPermissions);
 	}
 
 	public void updateKBArticlesPriorities(

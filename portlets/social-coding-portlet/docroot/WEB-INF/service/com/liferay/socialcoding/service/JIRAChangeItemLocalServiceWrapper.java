@@ -165,6 +165,13 @@ public class JIRAChangeItemLocalServiceWrapper
 		return _jiraChangeItemLocalService.getJIRAChangeItem(jiraChangeItemId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _jiraChangeItemLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the j i r a change items.
 	*
@@ -195,7 +202,7 @@ public class JIRAChangeItemLocalServiceWrapper
 	}
 
 	/**
-	* Updates the j i r a change item in the database. Also notifies the appropriate model listeners.
+	* Updates the j i r a change item in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param jiraChangeItem the j i r a change item
 	* @return the j i r a change item that was updated
@@ -208,7 +215,7 @@ public class JIRAChangeItemLocalServiceWrapper
 	}
 
 	/**
-	* Updates the j i r a change item in the database. Also notifies the appropriate model listeners.
+	* Updates the j i r a change item in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param jiraChangeItem the j i r a change item
 	* @param merge whether to merge the j i r a change item with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

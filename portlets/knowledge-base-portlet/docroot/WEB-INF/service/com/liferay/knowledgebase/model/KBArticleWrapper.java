@@ -349,24 +349,6 @@ public class KBArticleWrapper implements KBArticle {
 	}
 
 	/**
-	* Returns the kb template ID of this k b article.
-	*
-	* @return the kb template ID of this k b article
-	*/
-	public long getKbTemplateId() {
-		return _kbArticle.getKbTemplateId();
-	}
-
-	/**
-	* Sets the kb template ID of this k b article.
-	*
-	* @param kbTemplateId the kb template ID of this k b article
-	*/
-	public void setKbTemplateId(long kbTemplateId) {
-		_kbArticle.setKbTemplateId(kbTemplateId);
-	}
-
-	/**
 	* Returns the priority of this k b article.
 	*
 	* @return the priority of this k b article
@@ -664,6 +646,10 @@ public class KBArticleWrapper implements KBArticle {
 		return _kbArticle.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.knowledgebase.model.KBArticle> toCacheModel() {
+		return _kbArticle.toCacheModel();
+	}
+
 	public com.liferay.knowledgebase.model.KBArticle toEscapedModel() {
 		return new KBArticleWrapper(_kbArticle.toEscapedModel());
 	}
@@ -675,6 +661,11 @@ public class KBArticleWrapper implements KBArticle {
 
 	public java.lang.String toXmlString() {
 		return _kbArticle.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_kbArticle.persist();
 	}
 
 	public java.lang.String getAttachmentsDirName() {
@@ -689,16 +680,6 @@ public class KBArticleWrapper implements KBArticle {
 
 	public long getClassPK() {
 		return _kbArticle.getClassPK();
-	}
-
-	public com.liferay.knowledgebase.model.KBTemplate getKBTemplate()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _kbArticle.getKBTemplate();
-	}
-
-	public boolean hasKBTemplate() {
-		return _kbArticle.hasKBTemplate();
 	}
 
 	public boolean isFirstVersion() {

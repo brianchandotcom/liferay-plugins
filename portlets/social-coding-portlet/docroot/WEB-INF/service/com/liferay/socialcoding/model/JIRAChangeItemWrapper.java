@@ -236,6 +236,10 @@ public class JIRAChangeItemWrapper implements JIRAChangeItem {
 		return _jiraChangeItem.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.socialcoding.model.JIRAChangeItem> toCacheModel() {
+		return _jiraChangeItem.toCacheModel();
+	}
+
 	public com.liferay.socialcoding.model.JIRAChangeItem toEscapedModel() {
 		return new JIRAChangeItemWrapper(_jiraChangeItem.toEscapedModel());
 	}
@@ -247,6 +251,11 @@ public class JIRAChangeItemWrapper implements JIRAChangeItem {
 
 	public java.lang.String toXmlString() {
 		return _jiraChangeItem.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_jiraChangeItem.persist();
 	}
 
 	public JIRAChangeItem getWrappedJIRAChangeItem() {

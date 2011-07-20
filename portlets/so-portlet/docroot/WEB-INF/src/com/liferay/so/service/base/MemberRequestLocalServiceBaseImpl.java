@@ -29,10 +29,12 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.GroupLocalService;
 import com.liferay.portal.service.GroupService;
 import com.liferay.portal.service.LayoutLocalService;
 import com.liferay.portal.service.LayoutService;
+import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserGroupRoleLocalService;
@@ -50,6 +52,8 @@ import com.liferay.so.service.MemberRequestLocalService;
 import com.liferay.so.service.ProjectsEntryLocalService;
 import com.liferay.so.service.persistence.MemberRequestPersistence;
 import com.liferay.so.service.persistence.ProjectsEntryPersistence;
+
+import java.io.Serializable;
 
 import java.util.List;
 
@@ -242,6 +246,11 @@ public abstract class MemberRequestLocalServiceBaseImpl
 		return memberRequestPersistence.findByPrimaryKey(memberRequestId);
 	}
 
+	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
+		throws PortalException, SystemException {
+		return memberRequestPersistence.findByPrimaryKey(primaryKeyObj);
+	}
+
 	/**
 	 * Returns a range of all the member requests.
 	 *
@@ -270,7 +279,7 @@ public abstract class MemberRequestLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the member request in the database. Also notifies the appropriate model listeners.
+	 * Updates the member request in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param memberRequest the member request
 	 * @return the member request that was updated
@@ -282,7 +291,7 @@ public abstract class MemberRequestLocalServiceBaseImpl
 	}
 
 	/**
-	 * Updates the member request in the database. Also notifies the appropriate model listeners.
+	 * Updates the member request in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *
 	 * @param memberRequest the member request
 	 * @param merge whether to merge the member request with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
@@ -677,6 +686,16 @@ public abstract class MemberRequestLocalServiceBaseImpl
 	public void setUserGroupRolePersistence(
 		UserGroupRolePersistence userGroupRolePersistence) {
 		this.userGroupRolePersistence = userGroupRolePersistence;
+	}
+
+	public void afterPropertiesSet() {
+		PersistedModelLocalServiceRegistryUtil.register("com.liferay.so.model.MemberRequest",
+			memberRequestLocalService);
+	}
+
+	public void destroy() {
+		PersistedModelLocalServiceRegistryUtil.unregister(
+			"com.liferay.so.model.MemberRequest");
 	}
 
 	/**

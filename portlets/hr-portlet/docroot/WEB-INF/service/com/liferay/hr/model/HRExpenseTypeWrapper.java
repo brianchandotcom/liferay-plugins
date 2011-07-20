@@ -291,6 +291,10 @@ public class HRExpenseTypeWrapper implements HRExpenseType {
 		return _hrExpenseType.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.hr.model.HRExpenseType> toCacheModel() {
+		return _hrExpenseType.toCacheModel();
+	}
+
 	public com.liferay.hr.model.HRExpenseType toEscapedModel() {
 		return new HRExpenseTypeWrapper(_hrExpenseType.toEscapedModel());
 	}
@@ -302,6 +306,11 @@ public class HRExpenseTypeWrapper implements HRExpenseType {
 
 	public java.lang.String toXmlString() {
 		return _hrExpenseType.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_hrExpenseType.persist();
 	}
 
 	public HRExpenseType getWrappedHRExpenseType() {

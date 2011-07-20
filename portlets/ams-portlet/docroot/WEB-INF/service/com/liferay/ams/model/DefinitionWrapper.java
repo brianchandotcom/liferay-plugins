@@ -363,6 +363,10 @@ public class DefinitionWrapper implements Definition {
 		return _definition.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.ams.model.Definition> toCacheModel() {
+		return _definition.toCacheModel();
+	}
+
 	public com.liferay.ams.model.Definition toEscapedModel() {
 		return new DefinitionWrapper(_definition.toEscapedModel());
 	}
@@ -374,6 +378,11 @@ public class DefinitionWrapper implements Definition {
 
 	public java.lang.String toXmlString() {
 		return _definition.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_definition.persist();
 	}
 
 	public Definition getWrappedDefinition() {

@@ -164,6 +164,13 @@ public class KaleoLogLocalServiceWrapper implements KaleoLogLocalService {
 		return _kaleoLogLocalService.getKaleoLog(kaleoLogId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _kaleoLogLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the kaleo logs.
 	*
@@ -194,7 +201,7 @@ public class KaleoLogLocalServiceWrapper implements KaleoLogLocalService {
 	}
 
 	/**
-	* Updates the kaleo log in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo log in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoLog the kaleo log
 	* @return the kaleo log that was updated
@@ -207,7 +214,7 @@ public class KaleoLogLocalServiceWrapper implements KaleoLogLocalService {
 	}
 
 	/**
-	* Updates the kaleo log in the database. Also notifies the appropriate model listeners.
+	* Updates the kaleo log in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param kaleoLog the kaleo log
 	* @param merge whether to merge the kaleo log with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

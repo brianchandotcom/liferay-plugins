@@ -14,13 +14,11 @@
 
 package com.liferay.hr.model.impl;
 
-import com.liferay.hr.model.HRAssetVendor;
-
 /**
  * @author Wesley Gong
  */
 public class HRAssetVendorImpl
-	extends HRAssetVendorModelImpl implements HRAssetVendor {
+	extends HRAssetVendorBaseImpl {
 
 	public HRAssetVendorImpl() {
 	}

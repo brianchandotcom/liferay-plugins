@@ -271,6 +271,10 @@ public class WSRPProducerWrapper implements WSRPProducer {
 		return _wsrpProducer.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.wsrp.model.WSRPProducer> toCacheModel() {
+		return _wsrpProducer.toCacheModel();
+	}
+
 	public com.liferay.wsrp.model.WSRPProducer toEscapedModel() {
 		return new WSRPProducerWrapper(_wsrpProducer.toEscapedModel());
 	}
@@ -282,6 +286,11 @@ public class WSRPProducerWrapper implements WSRPProducer {
 
 	public java.lang.String toXmlString() {
 		return _wsrpProducer.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_wsrpProducer.persist();
 	}
 
 	public java.lang.String getURL(java.lang.String portalURL) {

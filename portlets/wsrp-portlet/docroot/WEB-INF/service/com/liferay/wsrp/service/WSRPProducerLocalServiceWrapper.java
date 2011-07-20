@@ -166,6 +166,13 @@ public class WSRPProducerLocalServiceWrapper implements WSRPProducerLocalService
 		return _wsrpProducerLocalService.getWSRPProducer(wsrpProducerId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _wsrpProducerLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the w s r p producer with the UUID in the group.
 	*
@@ -213,7 +220,7 @@ public class WSRPProducerLocalServiceWrapper implements WSRPProducerLocalService
 	}
 
 	/**
-	* Updates the w s r p producer in the database. Also notifies the appropriate model listeners.
+	* Updates the w s r p producer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param wsrpProducer the w s r p producer
 	* @return the w s r p producer that was updated
@@ -226,7 +233,7 @@ public class WSRPProducerLocalServiceWrapper implements WSRPProducerLocalService
 	}
 
 	/**
-	* Updates the w s r p producer in the database. Also notifies the appropriate model listeners.
+	* Updates the w s r p producer in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param wsrpProducer the w s r p producer
 	* @param merge whether to merge the w s r p producer with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

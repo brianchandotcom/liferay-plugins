@@ -161,6 +161,13 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService {
 		return _definitionLocalService.getDefinition(definitionId);
 	}
 
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _definitionLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns a range of all the definitions.
 	*
@@ -191,7 +198,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService {
 	}
 
 	/**
-	* Updates the definition in the database. Also notifies the appropriate model listeners.
+	* Updates the definition in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param definition the definition
 	* @return the definition that was updated
@@ -204,7 +211,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService {
 	}
 
 	/**
-	* Updates the definition in the database. Also notifies the appropriate model listeners.
+	* Updates the definition in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	*
 	* @param definition the definition
 	* @param merge whether to merge the definition with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.

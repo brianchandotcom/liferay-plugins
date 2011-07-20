@@ -45,25 +45,10 @@ public class PortletPropsKeys {
 	public static final String ADMIN_KB_ARTICLE_DEFAULT_SECTIONS =
 		"admin.kb.article.default.sections";
 
+	public static final String ADMIN_KB_ARTICLE_INCREMENT_PRIORITY_ENABLED =
+		"admin.kb.article.increment.priority.enabled";
+
 	public static final String ADMIN_KB_ARTICLE_SECTIONS =
 		"admin.kb.article.sections";
-
-	public static final String ADMIN_KB_STRUCTURE_CONTENT =
-		"admin.kb.structure.content";
-
-	public static final String ADMIN_KB_TEMPLATE_CONTENT_FREEMARKER =
-		"admin.kb.template.content.freemarker";
-
-	public static final String ADMIN_KB_TEMPLATE_CONTENT_VELOCITY =
-		"admin.kb.template.content.velocity";
-
-	public static final String ADMIN_KB_TEMPLATE_ERROR_FREEMARKER =
-		"admin.kb.template.error.freemarker";
-
-	public static final String ADMIN_KB_TEMPLATE_ERROR_VELOCITY =
-		"admin.kb.template.error.velocity";
-
-	public static final String ADMIN_KB_TEMPLATE_RESTRICTED_VARIABLES =
-		"admin.kb.template.restricted.variables";
 
 }

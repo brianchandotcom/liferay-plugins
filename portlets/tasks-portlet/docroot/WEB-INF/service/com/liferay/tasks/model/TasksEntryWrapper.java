@@ -421,6 +421,10 @@ public class TasksEntryWrapper implements TasksEntry {
 		return _tasksEntry.hashCode();
 	}
 
+	public com.liferay.portal.model.CacheModel<com.liferay.tasks.model.TasksEntry> toCacheModel() {
+		return _tasksEntry.toCacheModel();
+	}
+
 	public com.liferay.tasks.model.TasksEntry toEscapedModel() {
 		return new TasksEntryWrapper(_tasksEntry.toEscapedModel());
 	}
@@ -432,6 +436,11 @@ public class TasksEntryWrapper implements TasksEntry {
 
 	public java.lang.String toXmlString() {
 		return _tasksEntry.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_tasksEntry.persist();
 	}
 
 	public java.lang.String getAssigneeFullName() {
