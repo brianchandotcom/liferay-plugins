@@ -1,4 +1,21 @@
+/**
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.server.manager.servlet.test;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,9 +27,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -20,14 +39,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
+/**
+ * @author Jonathan Potter
+ */
 public class ServerManagerServletTest {
 
 	@Before
 	public void setUp() {
 		_host = "localhost";
-		_port = "8080";
 		_pluginName = "server-manager-web";
+		_port = "8080";
+
+		_urlPrefix = "http://" + _host + ":" + _port + "/" + _pluginName;
 	}
 
 	@After
@@ -35,145 +58,86 @@ public class ServerManagerServletTest {
 	}
 
 	@Test
-	public void isAlive () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet request = new HttpGet();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/is-alive"));
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void isAlive() throws Exception {
+		doRequest(
+			new HttpGet(),
+			new URI(_urlPrefix + "/is-alive"));
 	}
 
 	@Test
-	public void deployHook () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost request = new HttpPost();
+	public void deployHook() throws Exception {
+		doRequest(
+			new HttpPost(),
+			new URI(_urlPrefix + "/deploy"),
+			new File(
+				"/Users/liferay/Data/application-data/eclipse/zTest",
+				"sample-wrapper-hook-6.1.0.1.war"));
 
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
-
-		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "sample-wrapper-hook-6.1.0.1.war"));
-		entity.addPart("payload", contentBody);
-		request.setEntity(entity);
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
 	}
 
 	@Test
-	public void deployLayout () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost request = new HttpPost();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
-
-		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "1-2-1-columns-layouttpl-6.1.0.1.war"));
-		entity.addPart("payload", contentBody);
-		request.setEntity(entity);
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void deployLayout() throws Exception {
+		doRequest(
+			new HttpPost(),
+			new URI(_urlPrefix + "/deploy"),
+			new File(
+				"/Users/liferay/Data/application-data/eclipse/zTest",
+				"1-2-1-columns-layouttpl-6.1.0.1.war"));
 	}
 
 	@Test
-	public void deployPortlet () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost request = new HttpPost();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
-
-		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "hr-portlet-6.1.0.1.war"));
-		entity.addPart("payload", contentBody);
-		request.setEntity(entity);
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void deployPortlet() throws Exception {
+		doRequest(
+			new HttpPost(),
+			new URI(_urlPrefix + "/deploy"),
+			new File(
+				"/Users/liferay/Data/application-data/eclipse/zTest",
+				"hr-portlet-6.1.0.1.war"));
 	}
 
 	@Test
-	public void deployTheme () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost request = new HttpPost();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
-
-		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "beautiful-day-theme-6.1.0.1.war"));
-		entity.addPart("payload", contentBody);
-		request.setEntity(entity);
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void deployTheme() throws Exception {
+		doRequest(
+			new HttpPost(),
+			new URI(_urlPrefix + "/deploy"),
+			new File(
+				"/Users/liferay/Data/application-data/eclipse/zTest",
+				"beautiful-day-theme-6.1.0.1.war"));
 	}
 
 	@Test
-	public void deployWeb () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost request = new HttpPost();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy"));
-
-		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "vldap-web-6.1.0.1.war"));
-		entity.addPart("payload", contentBody);
-		request.setEntity(entity);
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void deployWeb() throws Exception {
+		doRequest(
+			new HttpPost(),
+			new URI(_urlPrefix + "/deploy"),
+			new File(
+				"/Users/liferay/Data/application-data/eclipse/zTest",
+				"vldap-web-6.1.0.1.war"));
 	}
 
 	@Test
-	public void deployUpdate () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPut request = new HttpPut();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/deploy/vldap-web"));
-
-		MultipartEntity entity = new MultipartEntity();
-		FileBody contentBody = new FileBody(new File("/Users/liferay/Data/application-data/eclipse/zTest", "vldap-web-6.1.0.2.war"));
-		entity.addPart("payload", contentBody);
-		request.setEntity(entity);
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void deployUpdate() throws Exception {
+		doRequest(
+			new HttpPut(),
+			new URI(_urlPrefix + "/deploy/vldap-web"),
+			new File(
+				"/Users/liferay/Data/application-data/eclipse/zTest",
+				"vldap-web-6.1.0.2.war"));
 	}
 
 	@Test
-	public void undeploy () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpDelete request = new HttpDelete();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/undeploy/vldap-web"));
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void undeploy() throws Exception {
+		doRequest(
+			new HttpDelete(), new URI(_urlPrefix + "/undeploy/vldap-web"));
 	}
 
 	@Test
-	public void logLiferay () throws Exception {
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet request = new HttpGet();
-
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/log/sysout"));
-
-		HttpResponse response = httpClient.execute(request);
-
-		printResponse(response);
+	public void logLiferay() throws Exception {
+		doRequest(new HttpGet(), new URI(_urlPrefix + "/log/sysout"));
 	}
 
 	@Test
-	public void logAppServer () throws Exception {
+	public void logAppServer() throws Exception {
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet request = new HttpGet();
 
@@ -182,10 +146,12 @@ public class ServerManagerServletTest {
 		// Loop forever and read the log, this will need to be terminated
 		// manually
 		while (true) {
-			request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/log/syserr/" + offset));
+			request.setURI(new URI(_urlPrefix + "/log/syserr/" + offset));
 			HttpResponse response = httpClient.execute(request);
 
-			Reader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+			Reader reader =
+				new BufferedReader(new InputStreamReader(
+					response.getEntity().getContent()));
 
 			char[] buffer = new char[1024 * 4];
 			int numRead = 0;
@@ -207,28 +173,64 @@ public class ServerManagerServletTest {
 	}
 
 	@Test
-	public void debugPort () throws Exception {
+	public void debugPort() throws Exception {
+		doRequest(new HttpGet(), new URI(_urlPrefix + "/debug-port"));
+	}
+
+	public void doRequest(HttpRequestBase request, URI uri) {
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet request = new HttpGet();
 
-		request.setURI(new URI("http://" + _host + ":" + _port + "/" + _pluginName + "/debug-port"));
+		request.setURI(uri);
 
-		HttpResponse response = httpClient.execute(request);
+		try {
+			HttpResponse response = httpClient.execute(request);
+			printResponse(response);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+	}
 
-		printResponse(response);
+	public void doRequest(
+		HttpEntityEnclosingRequestBase request, URI uri, File file) {
+
+		HttpClient httpClient = new DefaultHttpClient();
+
+		request.setURI(uri);
+
+		if (file != null) {
+			MultipartEntity entity = new MultipartEntity();
+			FileBody contentBody = new FileBody(file);
+			entity.addPart("payload", contentBody);
+			request.setEntity(entity);
+		}
+
+		try {
+			HttpResponse response = httpClient.execute(request);
+			printResponse(response);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
 	}
 
 	public Reader getReader(HttpResponse response) throws Exception {
-		return new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+		return new BufferedReader(new InputStreamReader(
+			response.getEntity().getContent()));
 	}
 
-	public void printResponse (HttpResponse response) throws Exception {
+	public void printResponse(HttpResponse response) throws Exception {
 		Reader reader = getReader(response);
 		IOUtils.copy(reader, System.out);
 	}
 
 	protected String _host;
-	protected String _port;
 	protected String _pluginName;
+	protected String _port;
+	protected String _urlPrefix;
+	protected enum RequestType {DELETE, GET, POST, PUT};
+
+	private static Log _log =
+		LogFactoryUtil.getLog(ServerManagerServletTest.class);
 
 }

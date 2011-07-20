@@ -1,64 +1,93 @@
-Server Manager User Guide
-=========================
+# Server Manager User Guide
 
-Introduction
-------------
+## Introduction
 
 The Server Manager allows managing an application server running Liferay remotely. It follows a RESTful URL pattern, and specific functionality is documented below.
 
-Request
--------
+## Request
 
 Each url has a request type which is the type of the HTTP request (GET, POST, UPDATE, or DELETE), and arguments as specified. Square brackets '[]' denote optional arguments, and dollar signs '$' denote variable arguments. 
 
 
 ### debug-port
 
-URL:               http://localhost/server-manager-web/debug-port
-Request Type:      GET
-Description:       Provides the debug port of the application server.
-Response:          A number denoting the debug port of the application server.
-Supported Servers: Tomcat
+GET <http://localhost/server-manager-web/debug-port>
+
+ - **Description:**       Provides the debug port of the application server.
+ - **Response:**          A number denoting the debug port of the application server.
+ - **Supported Servers:** Tomcat
 
 
 ### deploy
 
-URL:               http://localhost/server-manager-web/deploy[/$context]
-Request Type:      POST
-Description:       Deploys the war file attached to the body of this POST request to $context if specified. If $context is not specified, the context will be based on the file name.
+POST <http://localhost/server-manager-web/deploy[/$context]>
 
-URL:               http://localhost/server-manager-web/deploy/$context
-Request Type:      PUT
-Description:       Updates the deployed $context with the files from the delta war that is attached to the body of this PUT request.
+ - **Description:** Deploys the war file attached to the body of this POST request to _$context_ if specified. If _$context_ is not specified, the context will be based on the file name.
+ - **Response:**    None
+
+
+PUT <http://localhost/server-manager-web/deploy/$context>
+
+ - **Description:** Updates the deployed _$context_ with the files from the delta war that is attached to the body of this PUT request.
+ - **Response:**    None
 
 
 ### is-alive
 
-URL:          http://localhost/server-manager-web/is-alive
-Request Type: GET
-Description:  Successful if the server is up and running, otherwise this request fails.
-Response:     Empty. This operation will use the success field of the JSON response. The server is alive if the operation is successful, otherwise not.
+GET <http://localhost/server-manager-web/is-alive>
+
+ - **Description:**  Successful if the server is up and running, otherwise this request fails.
+ - **Response:**     None. This operation will use the success field of the JSON response. The server is alive if the operation is successful, otherwise not.
 
 
 ### log
 
-URL:               http://localhost/server-manager-web/log/sysout[/$offset]
-Request Type:      GET
-Description:       Returns Liferay's log since midnight starting at the optional $offset of the file. If $offset is not specified then we start at the beginning of the file. $offset is a number. 
-Response:          The log for Liferay as described above.
+GET <http://localhost/server-manager-web/log/sysout[/$offset]>
 
-URL:               http://localhost/server-manager-web/log/syserr[/$offset]
-Request Type:      GET
-Description:       Returns the application server's log since midnight starting at the optional $offset of the file. If $offset is not specified then we start at the beginning of the file. $offset is a number. 
-Response:          The log for the application server as described above.
-Supported Servers: Tomcat
+ - **Description:** Returns Liferay's log since midnight starting at the optional _$offset_ of the file. If _$offset_ is not specified then we start at the beginning of the file. _$offset_ is a number. 
+ - **Response:**    The log for Liferay as described above.
+
+
+GET <http://localhost/server-manager-web/log/syserr[/$offset]>
+
+ - **Description:**       Returns the application server's log since midnight starting at the optional _$offset_ of the file. If _$offset_ is not specified then we start at the beginning of the file. _$offset_ is a number. 
+ - **Response:**          The log for the application server as described above.
+ - **Supported Servers:** Tomcat
+
+
+### plugins
+
+GET <http://localhost/server-manager-web/plugins[/$context]>
+
+ - **Description:** Returns a list of contexts of all the installed plugins.
+ - **Response:**    A JSON array of all the installed plugins. For example:
+ 
+		[
+			 "1-2-1-columns-layouttpl",
+			 "beautiful-day-theme",
+			 "hr-portlet","server-manager-web",
+			 "sample-wrapper-hook",
+			 "vldap-web"
+		]
+
+GET <http://localhost/server-manager-web/plugins/$context>
+
+ - **Description:** Gives information about the plugin installed at context _$context_. This includes whether or not it is installed (true if this is a valid context), whether or not it is started, and the type of plugin, etc.
+ - **Response:**    JSON containing the following information.
+
+		{
+			"installed": true,
+			"started": true,
+			"types": ["theme"]
+		}
 
 
 ### undeploy
 
-URL:               http://localhost/server-manager-web/deploy/$context
-Request Type:      DELETE
-Description:       Undeploys $context.
+DELETE <http://localhost/server-manager-web/deploy/$context>
+
+ - **Description:** Undeploys _$context_.
+ - **Response:**    None
 
 
 Response
