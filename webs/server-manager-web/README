@@ -8,6 +8,12 @@ The Server Manager allows managing an application server running Liferay remotel
 
 Each url has a request type which is the type of the HTTP request (GET, POST, UPDATE, or DELETE), and arguments as specified. Square brackets '[]' denote optional arguments, and dollar signs '$' denote variable arguments. 
 
+### Global Request Parameters
+
+These parameters can be set on any GET request and are passed as GET parameters in the URL with ?name=value. If multiple values are possible they will be separated by a '|' and the first one will be the default value.
+
+ - `format=json|raw` This specifies the format of the response. The default is a JSON response with an output-stream, error-stream, and success flag. If raw is set, however, the output-stream is returned as a string, without its JSON wrapping.
+
 
 ### debug-port
 
