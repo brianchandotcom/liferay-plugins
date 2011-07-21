@@ -26,11 +26,8 @@ import com.liferay.util.SystemProperties;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
@@ -45,8 +42,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,17 +59,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  * @author Jonathan Potter
  */
 public class ServerManagerServlet extends HttpServlet {
-
-	protected static void decompressToDirectory(
-		ZipInputStream zipInputStream, File directory) throws IOException {
-
-		ZipEntry entry;
-		while ((entry = zipInputStream.getNextEntry()) != null) {
-			if (!entry.isDirectory()) {
-				toFile(zipInputStream, new File(directory, entry.getName()));
-			}
-		}
-	}
 
 	protected static FileItem getFileItem(HttpServletRequest request) {
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -142,14 +126,6 @@ public class ServerManagerServlet extends HttpServlet {
 		}
 
 		return fileItems;
-	}
-
-	protected static void toFile(InputStream is, File f) throws IOException {
-		f.getParentFile().mkdirs();
-
-		OutputStream os = new FileOutputStream(f);
-
-		IOUtils.copy(is, os);
 	}
 
 	protected void debugPortHandler(
