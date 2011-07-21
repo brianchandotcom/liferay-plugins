@@ -97,6 +97,30 @@ public class ServerManagerServlet extends HttpServlet {
 		return null;
 	}
 
+	protected static File getFileItemTemp(HttpServletRequest request)
+		throws Exception {
+
+		FileItem fileItem = getFileItem(request);
+
+		if (fileItem == null) {
+			return null;
+		}
+
+		UUID uuid = UUID.randomUUID();
+		File systemTempDirectory =
+			new File(SystemProperties.get(SystemProperties.TMP_DIR));
+		File tempDirectory = new File(systemTempDirectory, uuid.toString());
+		File tempFile = new File(tempDirectory, fileItem.getName());
+
+		if (!tempFile.getParentFile().mkdirs()) {
+			return null;
+		}
+
+		fileItem.write(tempFile);
+
+		return tempFile;
+	}
+
 	protected static List<FileItem> getFileItems(HttpServletRequest request) {
 		List<FileItem> fileItems = new ArrayList<FileItem>();
 
@@ -121,7 +145,8 @@ public class ServerManagerServlet extends HttpServlet {
 	}
 
 	protected static void toFile(InputStream is, File f) throws IOException {
-		FileUtil.touch(f);
+		f.getParentFile().mkdirs();
+
 		OutputStream os = new FileOutputStream(f);
 
 		IOUtils.copy(is, os);
@@ -173,21 +198,11 @@ public class ServerManagerServlet extends HttpServlet {
 			context = path[1];
 		}
 
-		FileItem fileItem = getFileItem(request);
+		File tempFile = getFileItemTemp(request);
 
-		if (fileItem == null) {
+		if (tempFile == null) {
 			return;
 		}
-
-		UUID uuid = UUID.randomUUID();
-		File systemTempDirectory =
-			new File(SystemProperties.get(SystemProperties.TMP_DIR));
-		File tempDirectory = new File(systemTempDirectory, uuid.toString());
-		File tempFile = new File(tempDirectory, fileItem.getName());
-
-		FileUtil.touch(tempFile);
-
-		fileItem.write(tempFile);
 
 		DeployManagerUtil.deploy(tempFile, context);
 
@@ -210,17 +225,14 @@ public class ServerManagerServlet extends HttpServlet {
 		String webappsDirectory = DeployManagerUtil.getDeployDir();
 		File contextDirectory = new File(webappsDirectory, context);
 
-		FileItem fileItem = getFileItem(request);
+		File tempFile = getFileItemTemp(request);
 
-		if (fileItem == null) {
+		if (tempFile == null) {
 			return;
 		}
 
-		InputStream is = fileItem.getInputStream();
-		ZipInputStream zis = new ZipInputStream(is);
-
-		// unzip over current files
-		decompressToDirectory(zis, contextDirectory);
+		// Unzip over current files
+		FileUtil.unzip(tempFile, contextDirectory);
 
 		// delete uneeded files
 		File deleteInfo = new File(

@@ -92,7 +92,7 @@ public class ServerManagerServletTest {
 			new URI(_urlPrefix + "/deploy"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
-				"hr-portlet-6.1.0.1.war"));
+				"remote-fox-portlet.war"));
 	}
 
 	@Test
@@ -119,10 +119,10 @@ public class ServerManagerServletTest {
 	public void deployUpdate() throws Exception {
 		doRequest(
 			new HttpPut(),
-			new URI(_urlPrefix + "/deploy/vldap-web"),
+			new URI(_urlPrefix + "/deploy/remote-fox-portlet"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
-				"vldap-web-6.1.0.2.war"));
+				"remote-fox-portlet-delta.war"));
 	}
 
 	@Test
