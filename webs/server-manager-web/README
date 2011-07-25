@@ -14,54 +14,61 @@ These parameters can be set on any GET request and are passed as GET parameters 
 
  - `format=json|raw` This specifies the format of the response. The default is a JSON response with an output-stream, error-stream, and success flag. If raw is set, however, the output-stream is returned as a string, without its JSON wrapping.
 
+### Global Methods
 
-### debug-port
+#### debug-port
 
 GET <http://localhost/server-manager-web/debug-port>
 
  - **Description:**       Provides the debug port of the application server.
  - **Response:**          A number denoting the debug port of the application server.
- - **Supported Servers:** Tomcat
+ - **Supported Servers:** JBoss, Tomcat
 
 
-### deploy
-
-POST <http://localhost/server-manager-web/deploy[/$context]>
-
- - **Description:** Deploys the war file attached to the body of this POST request to _$context_ if specified. If _$context_ is not specified, the context will be based on the file name.
- - **Response:**    None
-
-
-PUT <http://localhost/server-manager-web/deploy/$context>
-
- - **Description:** Updates the deployed _$context_ with the files from the delta war that is attached to the body of this PUT request.
- - **Response:**    None
-
-
-### is-alive
+#### is-alive
 
 GET <http://localhost/server-manager-web/is-alive>
 
  - **Description:**  Successful if the server is up and running, otherwise this request fails.
  - **Response:**     None. This operation will use the success field of the JSON response. The server is alive if the operation is successful, otherwise not.
+ - **Supported Servers:** All (hypothetically)
 
 
-### log
+#### log
 
 GET <http://localhost/server-manager-web/log/sysout[/$offset]>
 
  - **Description:** Returns Liferay's log since midnight starting at the optional _$offset_ of the file. If _$offset_ is not specified then we start at the beginning of the file. _$offset_ is a number. 
  - **Response:**    The log for Liferay as described above.
+ - **Supported Servers:** JBoss, Tomcat (_Note: for JBoss this method gives the combined output of Liferay and the app server for everything after the server boots._)
 
 
 GET <http://localhost/server-manager-web/log/syserr[/$offset]>
 
  - **Description:**       Returns the application server's log since midnight starting at the optional _$offset_ of the file. If _$offset_ is not specified then we start at the beginning of the file. _$offset_ is a number. 
  - **Response:**          The log for the application server as described above.
- - **Supported Servers:** Tomcat
+ - **Supported Servers:** JBoss, Tomcat (_Note: for JBoss this method gives the output of the boot process._)
 
 
-### plugins
+### Plugin Methods
+
+#### deploy
+
+POST <http://localhost/server-manager-web/plugins/[/$context]>
+
+ - **Description:** Deploys the war file attached to the body of this POST request to _$context_ if specified. If _$context_ is not specified, the context will be based on the file name.
+ - **Response:**    None
+ - **Supported Servers:** All (hypothetically)
+
+
+PUT <http://localhost/server-manager-web/$context>
+
+ - **Description:** Updates the deployed _$context_ with the files from the delta war that is attached to the body of this PUT request.
+ - **Response:**    None
+ - **Supported Servers:** All (hypothetically)
+
+
+#### list
 
 GET <http://localhost/server-manager-web/plugins[/$context]>
 
@@ -75,6 +82,7 @@ GET <http://localhost/server-manager-web/plugins[/$context]>
 			 "sample-wrapper-hook",
 			 "vldap-web"
 		]
+ - **Supported Servers:** All (hypothetically)
 
 GET <http://localhost/server-manager-web/plugins/$context>
 
@@ -86,18 +94,19 @@ GET <http://localhost/server-manager-web/plugins/$context>
 			"started": true,
 			"types": ["theme"]
 		}
+ - **Supported Servers:** All (hypothetically)
 
 
-### undeploy
+#### undeploy
 
-DELETE <http://localhost/server-manager-web/deploy/$context>
+DELETE <http://localhost/server-manager-web/$context>
 
  - **Description:** Undeploys _$context_.
  - **Response:**    None
+ - **Supported Servers:** All (hypothetically)
 
 
-Response
---------
+## Response
 
 The response for any request will be a JSON string containing three fields:
 

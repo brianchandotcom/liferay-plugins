@@ -68,7 +68,7 @@ public class ServerManagerServletTest {
 	public void deployHook() throws Exception {
 		doRequest(
 			new HttpPost(),
-			new URI(_urlPrefix + "/deploy"),
+			new URI(_urlPrefix + "/plugins"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
 				"sample-wrapper-hook-6.1.0.1.war"));
@@ -79,7 +79,7 @@ public class ServerManagerServletTest {
 	public void deployLayout() throws Exception {
 		doRequest(
 			new HttpPost(),
-			new URI(_urlPrefix + "/deploy"),
+			new URI(_urlPrefix + "/plugins"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
 				"1-2-1-columns-layouttpl-6.1.0.1.war"));
@@ -89,7 +89,7 @@ public class ServerManagerServletTest {
 	public void deployPortlet() throws Exception {
 		doRequest(
 			new HttpPost(),
-			new URI(_urlPrefix + "/deploy"),
+			new URI(_urlPrefix + "/plugins"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
 				"remote-fox-portlet.war"));
@@ -99,7 +99,7 @@ public class ServerManagerServletTest {
 	public void deployTheme() throws Exception {
 		doRequest(
 			new HttpPost(),
-			new URI(_urlPrefix + "/deploy"),
+			new URI(_urlPrefix + "/plugins"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
 				"beautiful-day-theme-6.1.0.1.war"));
@@ -109,7 +109,7 @@ public class ServerManagerServletTest {
 	public void deployWeb() throws Exception {
 		doRequest(
 			new HttpPost(),
-			new URI(_urlPrefix + "/deploy"),
+			new URI(_urlPrefix + "/plugins"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
 				"vldap-web-6.1.0.1.war"));
@@ -119,7 +119,7 @@ public class ServerManagerServletTest {
 	public void deployUpdate() throws Exception {
 		doRequest(
 			new HttpPut(),
-			new URI(_urlPrefix + "/deploy/remote-fox-portlet"),
+			new URI(_urlPrefix + "/plugins/remote-fox-portlet"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
 				"remote-fox-portlet-delta.war"));
@@ -128,7 +128,7 @@ public class ServerManagerServletTest {
 	@Test
 	public void undeploy() throws Exception {
 		doRequest(
-			new HttpDelete(), new URI(_urlPrefix + "/undeploy/vldap-web"));
+			new HttpDelete(), new URI(_urlPrefix + "/plugins/vldap-web"));
 	}
 
 	@Test
@@ -146,7 +146,7 @@ public class ServerManagerServletTest {
 		// Loop forever and read the log, this will need to be terminated
 		// manually
 		while (true) {
-			request.setURI(new URI(_urlPrefix + "/log/syserr/" + offset));
+			request.setURI(new URI(_urlPrefix + "/log/syserr/" + offset + "?format=raw"));
 			HttpResponse response = httpClient.execute(request);
 
 			Reader reader =

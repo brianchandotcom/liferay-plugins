@@ -18,30 +18,17 @@ import com.google.gson.Gson;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.plugin.PluginPackage;
-import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.util.SystemProperties;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,7 +39,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
@@ -60,7 +46,23 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  */
 public class ServerManagerServlet extends HttpServlet {
 
-	protected static FileItem getFileItem(HttpServletRequest request) {
+	public static File getDeployDirectory (String context) throws Exception {
+		String webappsDirectory = DeployManagerUtil.getDeployDir();
+		File deployDirectory = new File(webappsDirectory, context);
+
+		if (!deployDirectory.exists()) {
+			File deployWarDirectory =
+				new File(webappsDirectory, context + ".war");
+
+			if (deployWarDirectory.exists()) {
+				return deployWarDirectory;
+			}
+		}
+
+		return deployDirectory;
+	}
+
+	public static FileItem getFileItem(HttpServletRequest request) {
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload uploader = new ServletFileUpload(factory);
 
@@ -81,31 +83,7 @@ public class ServerManagerServlet extends HttpServlet {
 		return null;
 	}
 
-	protected static File getFileItemTemp(HttpServletRequest request)
-		throws Exception {
-
-		FileItem fileItem = getFileItem(request);
-
-		if (fileItem == null) {
-			return null;
-		}
-
-		UUID uuid = UUID.randomUUID();
-		File systemTempDirectory =
-			new File(SystemProperties.get(SystemProperties.TMP_DIR));
-		File tempDirectory = new File(systemTempDirectory, uuid.toString());
-		File tempFile = new File(tempDirectory, fileItem.getName());
-
-		if (!tempFile.getParentFile().mkdirs()) {
-			return null;
-		}
-
-		fileItem.write(tempFile);
-
-		return tempFile;
-	}
-
-	protected static List<FileItem> getFileItems(HttpServletRequest request) {
+	public static List<FileItem> getFileItems(HttpServletRequest request) {
 		List<FileItem> fileItems = new ArrayList<FileItem>();
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -128,282 +106,89 @@ public class ServerManagerServlet extends HttpServlet {
 		return fileItems;
 	}
 
-	protected void debugPortHandler(
-		HttpServletRequest request, Map<Object,Object> jsonResponse)
-		throws IOException {
+	public static File getFileItemTemp(HttpServletRequest request)
+		throws Exception {
 
-		String debugPort = null;
+		FileItem fileItem = getFileItem(request);
 
-		// Get JVM arguments
-		RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-		List<String> jvmArguments = runtimeMXBean.getInputArguments();
-
-		if (jvmArguments == null) {
-			// Server was not started in debug mode
-			jsonResponse.put(JSON_SUCCESS_KEY, 1);
-			jsonResponse.put(
-				JSON_ERROR_STREAM_KEY, "Server was not started in debug mode.");
-			return;
+		if (fileItem == null) {
+			return null;
 		}
 
-		for (String jvmArgument : jvmArguments) {
-			if (jvmArgument.contains("agentlib:jdwp")) {
-				Pattern pattern = Pattern.compile("address=(\\d+)");
-				Matcher matcher = pattern.matcher(jvmArgument);
+		UUID uuid = UUID.randomUUID();
+		File systemTempDirectory =
+			new File(SystemProperties.get(SystemProperties.TMP_DIR));
+		File tempDirectory = new File(systemTempDirectory, uuid.toString());
+		File tempFile = new File(tempDirectory, fileItem.getName());
 
-				if (matcher.find()) {
-					debugPort = matcher.group(1);
-				}
-			}
+		if (!tempFile.getParentFile().mkdirs()) {
+			return null;
 		}
 
-		if (debugPort == null) {
-			jsonResponse.put(JSON_SUCCESS_KEY, 1);
-		}
-		else {
-			jsonResponse.put(JSON_OUTPUT_STREAM_KEY, debugPort);
-		}
+		fileItem.write(tempFile);
+
+		return tempFile;
 	}
-
-	protected void deployHandler(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
-
-		String context = null;
-
-		if (path.length >= 2) {
-			context = path[1];
+	public static String shift(List<String> parameters) {
+		if (parameters.isEmpty()) {
+			return null;
 		}
 
-		File tempFile = getFileItemTemp(request);
+		String result = parameters.get(0);
+		parameters.remove(0);
 
-		if (tempFile == null) {
-			return;
-		}
-
-		DeployManagerUtil.deploy(tempFile, context);
-
-		boolean success = FileUtil.delete(tempFile);
-
-		if (!success) {
-			jsonResponse.put(JSON_SUCCESS_KEY, 1);
-		}
+		return result;
 	}
-
-	protected void deployUpdateHandler(
+	public static void unknownUrlHandler(
 		HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
+		Map<Object, Object> jsonResponse)
+		throws Exception {
 
-		if (path.length < 2) {
-			return;
-		}
+		jsonResponse.put(JSON_ERROR_STREAM_KEY, "ERROR: unknown command. "
+			+ "Check the documentation and enter a valid URL.");
+	}
 
-		String context = path[1];
-		String webappsDirectory = DeployManagerUtil.getDeployDir();
-		File contextDirectory = new File(webappsDirectory, context);
+	protected void mapUrl(
+		HttpServletRequest request, Map<Object, Object> jsonResponse,
+		List<String> pathPieces)
+		throws Exception {
 
-		File tempFile = getFileItemTemp(request);
+		if (!pathPieces.isEmpty()) {
+			String category = shift(pathPieces);
 
-		if (tempFile == null) {
-			return;
-		}
+			if (category.equalsIgnoreCase("plugins")) {
+				String context = shift(pathPieces);
+				PluginsHandler pluginsHandler = new PluginsHandler();
 
-		// Unzip over current files
-		FileUtil.unzip(tempFile, contextDirectory);
-
-		// delete uneeded files
-		File deleteInfo = new File(
-			contextDirectory, "META-INF/liferay-partialapp-delete.props");
-
-		if (deleteInfo.exists()) {
-			BufferedReader reader =
-				new BufferedReader(new FileReader(deleteInfo));
-
-			String line;
-			while ((line = reader.readLine()) != null) {
-				File fileToDelete = new File(contextDirectory, line.trim());
-
-				boolean success = FileUtil.delete(fileToDelete);
-
-				if (!success) {
-					_log.info("Could not delete file: " +
-						fileToDelete.getAbsolutePath());
-
-					jsonResponse.put(JSON_SUCCESS_KEY, 1);
+				if (request.getMethod().equalsIgnoreCase("get")) {
+					pluginsHandler.read(request, jsonResponse, context);
+				}
+				else if (request.getMethod().equalsIgnoreCase("post")) {
+					pluginsHandler.create(request, jsonResponse, context);
+				}
+				else if (request.getMethod().equalsIgnoreCase("put")) {
+					pluginsHandler.update(request, jsonResponse, context);
+				}
+				else if (request.getMethod().equalsIgnoreCase("delete")) {
+					pluginsHandler.delete(request, jsonResponse, context);
 				}
 			}
+			else {
+				String parameter1 = shift(pathPieces);
+				String parameter2 = shift(pathPieces);
+				GlobalHandler globalHandler = new GlobalHandler();
 
-			FileUtil.delete(deleteInfo);
-		}
-
-		// Liferay IDE handles redeploy so we don't worry about it
-	}
-
-	protected void handleDelete(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
-
-		if (path.length == 0) {
-			return;
-		}
-
-		if (path[0].equals("undeploy")) {
-			undeployHandler(request, path, jsonResponse);
-		}
-	}
-
-	protected void handleGet(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
-
-		if (path.length == 0) {
-			return;
-		}
-
-		if (path[0].equals("is-alive")) {
-			isAliveHandler(request, jsonResponse);
-		}
-		else if (path[0].equals("log")) {
-			logHandler(request, path, jsonResponse);
-		}
-		else if (path[0].equals("debug-port")) {
-			debugPortHandler(request, jsonResponse);
-		}
-		else if (path[0].equals("plugins")) {
-			pluginsHandler(request, path, jsonResponse);
-		}
-		else {
-			unknownUrlHandler(request, path, jsonResponse);
-		}
-	}
-
-	protected void handlePost(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
-
-		if (path.length == 0) {
-			return;
-		}
-
-		if (path[0].equals("deploy")) {
-			deployHandler(request, path, jsonResponse);
-		}
-	}
-
-	protected void handlePut(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
-
-		if (path.length == 0) {
-			return;
-		}
-
-		if (path[0].equals("deploy")) {
-			deployUpdateHandler(request, path, jsonResponse);
-		}
-	}
-
-	protected void isAliveHandler(
-		HttpServletRequest request, Map<Object,Object> jsonResponse) {
-
-		// Nothing to do, because the success flag on this request is all
-		// that's needed to tell if the server is alive, and success is assumed
-		// unless otherwise specified
-	}
-
-	protected void logHandler(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws IOException {
-
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		String dateString = dateFormat.format(date);
-
-		if (path.length < 2) {
-			return;
-		}
-
-		File logFile = null;
-
-		if (path[1].equalsIgnoreCase("sysout")) {
-			logFile = new File(PropsUtil.get(PropsKeys.LIFERAY_HOME) +
-				"/logs/liferay." + dateString + ".log");
-		}
-		else if (path[1].equalsIgnoreCase("syserr")) {
-			logFile = new File(System.getProperty("catalina.base") +
-				"/logs/catalina." + dateString + ".log");
-		}
-		else {
-			return;
-		}
-
-		if (!logFile.exists()) {
-			return;
-		}
-
-		int offset = 0;
-
-		try {
-			if (path.length >= 3) {
-				offset = Integer.parseInt(path[2]);
-			}
-		}
-		catch (NumberFormatException e) {
-			// Just use default offset
-		}
-
-		BufferedReader reader = new BufferedReader(new FileReader(logFile));
-		reader.skip(offset);
-
-		StringWriter sw = new StringWriter();
-		IOUtils.copy(reader, sw);
-
-		jsonResponse.put(JSON_OUTPUT_STREAM_KEY, sw.toString());
-	}
-
-	protected void pluginsHandler(HttpServletRequest request, String[] path,
-		Map<Object, Object> jsonResponse) throws Exception {
-
-		List<PluginPackage> installedPlugins =
-			DeployManagerUtil.getInstalledPlugins();
-
-		List<String> installedContexts = new ArrayList<String>();
-
-		if (path.length == 1) {
-			for (PluginPackage plugin : installedPlugins) {
-				installedContexts.add(plugin.getContext());
-			}
-
-			jsonResponse.put(JSON_OUTPUT_STREAM_KEY, installedContexts);
-		}
-		else if (path.length == 2) {
-			boolean installed = true;
-			boolean started = true;
-
-			String context = path[1];
-
-			PluginPackage installedPlugin = null;
-			for (PluginPackage plugin : installedPlugins) {
-				if (context.equalsIgnoreCase(plugin.getContext())) {
-					installedPlugin = plugin;
-					break;
+				if (category.equalsIgnoreCase("is-alive")) {
+					globalHandler.isAlive(request, jsonResponse);
+				}
+				else if (category.equalsIgnoreCase("debug-port")) {
+					globalHandler.debugPort(request, jsonResponse);
+				}
+				else if (category.equalsIgnoreCase("log")) {
+					globalHandler.log(
+						request, jsonResponse, parameter1, parameter2);
 				}
 			}
-
-			List<String> types = new ArrayList<String>();
-
-			if (installedPlugin == null) {
-				installed = false;
-				started = false;
-			} else {
-				types = installedPlugin.getTypes();
-			}
-
-			Map<Object, Object> pluginInformation =
-				new HashMap<Object, Object>();
-
-			pluginInformation.put("installed", installed);
-			pluginInformation.put("started", started);
-			pluginInformation.put("types", types);
-
-			jsonResponse.put(JSON_OUTPUT_STREAM_KEY, pluginInformation);
-		}
-		else {
-			unknownUrlHandler(request, path, jsonResponse);
 		}
 	}
 
@@ -420,7 +205,12 @@ public class ServerManagerServlet extends HttpServlet {
 			path = path.substring(1);
 		}
 
-		String[] pathPieces = path.split("/");
+		String[] pathPiecesArray = path.split("/");
+		List<String> pathPieces = new LinkedList<String>();
+
+		for (String pathPiece : pathPiecesArray) {
+			pathPieces.add(pathPiece);
+		}
 
 		httpResponse.setContentType("application/json");
 
@@ -432,18 +222,7 @@ public class ServerManagerServlet extends HttpServlet {
 		jsonResponse.put(JSON_OUTPUT_STREAM_KEY, "");
 
 		try {
-			if (request.getMethod().equalsIgnoreCase("get")) {
-				handleGet(request, pathPieces, jsonResponse);
-			}
-			else if (request.getMethod().equalsIgnoreCase("post")) {
-				handlePost(request, pathPieces, jsonResponse);
-			}
-			else if (request.getMethod().equalsIgnoreCase("put")) {
-				handlePut(request, pathPieces, jsonResponse);
-			}
-			else if (request.getMethod().equalsIgnoreCase("delete")) {
-				handleDelete(request, pathPieces, jsonResponse);
-			}
+			mapUrl(request, jsonResponse, pathPieces);
 		}
 		catch (Exception e) {
 			_log.error(e);
@@ -453,6 +232,7 @@ public class ServerManagerServlet extends HttpServlet {
 			jsonResponse.put(JSON_SUCCESS_KEY, 1);
 		}
 
+		// Handle global format
 		String format = request.getParameter("format");
 
 		if (format != null) {
@@ -468,28 +248,10 @@ public class ServerManagerServlet extends HttpServlet {
 		out.close();
 	}
 
-	protected void undeployHandler(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
+	public static final String JSON_ERROR_STREAM_KEY = "error-stream";
+	public static final String JSON_OUTPUT_STREAM_KEY = "output-stream";
+	public static final String JSON_SUCCESS_KEY = "success";
 
-		if (path.length < 2) {
-			return;
-		}
-
-		String context = path[1];
-
-		DeployManagerUtil.undeploy(context);
-	}
-
-	protected void unknownUrlHandler(HttpServletRequest request, String[] path,
-		Map<Object,Object> jsonResponse) throws Exception {
-
-		jsonResponse.put(JSON_ERROR_STREAM_KEY, "ERROR: unknown command. "
-			+ "Check the documentation and enter a valid URL.");
-	}
-
-	private static final String JSON_ERROR_STREAM_KEY = "error-stream";
-	private static final String JSON_OUTPUT_STREAM_KEY = "output-stream";
-	private static final String JSON_SUCCESS_KEY = "success";
 	private static final long serialVersionUID = 1L;
 
 	protected static Log _log =
