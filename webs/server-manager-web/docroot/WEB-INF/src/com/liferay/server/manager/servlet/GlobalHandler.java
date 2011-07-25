@@ -98,10 +98,6 @@ public class GlobalHandler {
 		HttpServletRequest request, Map<Object, Object> jsonResponse,
 		String stream, String offsetString) throws IOException {
 
-		for (Map.Entry<Object, Object> property : System.getProperties().entrySet()) {
-			System.out.println("DEBUG: key: " + property.getKey() + ", value: " + property.getValue());
-		}
-
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String dateString = dateFormat.format(date);
