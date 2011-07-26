@@ -25,6 +25,8 @@ import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
+import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
@@ -128,7 +130,7 @@ public class EmailNotificationSender implements NotificationSender {
 			if (assigneeClassName.equals(User.class.getName())) {
 				getUserEmailAddress(
 					kaleoTaskAssignmentInstance.getAssigneeClassPK(),
-					internetAddresses);
+					internetAddresses, executionContext);
 			}
 			else {
 				long roleId = kaleoTaskAssignmentInstance.getAssigneeClassPK();
@@ -172,7 +174,7 @@ public class EmailNotificationSender implements NotificationSender {
 					if (recipientClassName.equals(User.class.getName())) {
 						getUserEmailAddress(
 							kaleoNotificationRecipient.getRecipientClassPK(),
-							internetAddresses);
+							internetAddresses, executionContext);
 					}
 					else {
 						getRoleRecipientAddresses(
@@ -223,8 +225,19 @@ public class EmailNotificationSender implements NotificationSender {
 	}
 
 	protected void getUserEmailAddress(
-			long userId, List<InternetAddress> internetAddresses)
+			long userId, List<InternetAddress> internetAddresses,
+			ExecutionContext executionContext)
 		throws Exception {
+
+		if (userId <= 0) {
+			KaleoInstanceToken kaleoInstanceToken =
+				executionContext.getKaleoInstanceToken();
+
+			KaleoInstance kaleoInstance =
+				kaleoInstanceToken.getKaleoInstance();
+
+			userId = kaleoInstance.getUserId();
+		}
 
 		User user = UserLocalServiceUtil.getUser(userId);
 

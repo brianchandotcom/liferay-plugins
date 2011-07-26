@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<Module>
+	<ModulePrefs height="250" title="Sample PubSub Subscriber">
+		<Require feature="pubsub-2">
+			<Param name="topics">
+				<![CDATA[ 
+					<Topic
+						description="Subscribes to random number generator."
+						name="org.apache.shindig.random-number"
+						subscribe="true"
+						title="Random Number"
+						type="number"
+					/>
+				]]>
+			</Param>
+		</Require>
+	</ModulePrefs>
+	<Content type="html">
+		<![CDATA[
+			<script>
+				var subId;
+
+				gadgets.HubSettings.params.HubClient.onSecurityAlert = function(alertSource, alertType) {
+					alert('Security error!');
+
+					window.location.href = 'about:blank';
+				};
+
+				function callback(topic, data, subscriberData) {
+					document.getElementById('output').innerHTML = 'Message: ' + gadgets.util.escapeString(data + '') + '<br />' + 'Received: ' + (new Date()).toString();
+				}
+
+				function subscribe() {
+					subId = gadgets.Hub.subscribe('org.apache.shindig.random-number', callback);
+				}
+
+				function unsubscribe() {
+					gadgets.Hub.unsubscribe(subId);
+				
+					document.getElementById('output').innerHTML = '';
+				}
+			</script>
+
+			<div>
+				<input onclick="subscribe();" type="button" value="Subscribe" />
+
+				<input onclick="unsubscribe();" type="button" value="Unsubscribe" />
+			</div>
+
+			<div id="output">
+			</div>
+		]]>
+	</Content>
+</Module>

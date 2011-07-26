@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<Module>
+	<ModulePrefs height="250" title="Sample PubSub Publisher">
+		<Require feature="pubsub-2">
+			<Param name="topics">
+				<![CDATA[ 
+					<Topic
+						description="Publishes a random number."
+						name="org.apache.shindig.random-number"
+						publish="true"
+						title="Random Number"
+						type="number"
+					/>
+				]]>
+			</Param>
+		</Require>
+	</ModulePrefs>
+	<Content type="html">
+		<![CDATA[
+			<script>
+				function publish() {
+					var message = Math.random();
+	
+					gadgets.Hub.publish('org.apache.shindig.random-number', message);
+
+					document.getElementById('output').innerHTML = message;
+				}
+			</script>
+
+			<div>
+				<input onclick="publish();" type="button" value="Publish a Random Number" />
+			</div>
+
+			<div id="output">
+			</div>
+		]]>
+	</Content>
+</Module>
