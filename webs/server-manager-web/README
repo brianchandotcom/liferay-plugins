@@ -4,6 +4,10 @@
 
 The Server Manager allows managing an application server running Liferay remotely. It follows a RESTful URL pattern, and specific functionality is documented below.
 
+## Authentication
+
+BASIC authentication is used for security, and you must authenticate before using any of the functionality of this plugin. The user must be a valid liferay Omni Admin.
+
 ## Request
 
 Each url has a request type which is the type of the HTTP request (GET, POST, UPDATE, or DELETE), and arguments as specified. Square brackets '[]' denote optional arguments, and dollar signs '$' denote variable arguments. 

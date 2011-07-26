@@ -44,24 +44,9 @@ import org.junit.Test;
  */
 public class ServerManagerServletTest {
 
-	@Before
-	public void setUp() {
-		_host = "localhost";
-		_pluginName = "server-manager-web";
-		_port = "8080";
-
-		_urlPrefix = "http://" + _host + ":" + _port + "/" + _pluginName;
-	}
-
-	@After
-	public void tearDown() {
-	}
-
 	@Test
-	public void isAlive() throws Exception {
-		doRequest(
-			new HttpGet(),
-			new URI(_urlPrefix + "/is-alive"));
+	public void debugPort() throws Exception {
+		doRequest(new HttpGet(), new URI(_urlPrefix + "/debug-port"));
 	}
 
 	@Test
@@ -99,20 +84,10 @@ public class ServerManagerServletTest {
 	public void deployTheme() throws Exception {
 		doRequest(
 			new HttpPost(),
-			new URI(_urlPrefix + "/plugins"),
+			new URI(_urlPrefix + "/plugins/beautiful-day-theme"),
 			new File(
 				"/Users/liferay/Data/application-data/eclipse/zTest",
 				"beautiful-day-theme-6.1.0.1.war"));
-	}
-
-	@Test
-	public void deployWeb() throws Exception {
-		doRequest(
-			new HttpPost(),
-			new URI(_urlPrefix + "/plugins"),
-			new File(
-				"/Users/liferay/Data/application-data/eclipse/zTest",
-				"vldap-web-6.1.0.1.war"));
 	}
 
 	@Test
@@ -126,14 +101,27 @@ public class ServerManagerServletTest {
 	}
 
 	@Test
-	public void undeploy() throws Exception {
+	public void deployWeb() throws Exception {
 		doRequest(
-			new HttpDelete(), new URI(_urlPrefix + "/plugins/vldap-web"));
+			new HttpPost(),
+			new URI(_urlPrefix + "/plugins"),
+			new File(
+				"/Users/liferay/Data/application-data/eclipse/zTest",
+				"vldap-web-6.1.0.1.war"));
 	}
 
 	@Test
-	public void logLiferay() throws Exception {
-		doRequest(new HttpGet(), new URI(_urlPrefix + "/log/sysout"));
+	public void isAlive() throws Exception {
+		doRequest(
+			new HttpGet(),
+			new URI(_urlPrefix + "/is-alive"));
+	};
+
+	@Test
+	public void listPlugins() throws Exception {
+		doRequest(
+			new HttpGet(),
+			new URI(_urlPrefix + "/plugins"));
 	}
 
 	@Test
@@ -146,7 +134,8 @@ public class ServerManagerServletTest {
 		// Loop forever and read the log, this will need to be terminated
 		// manually
 		while (true) {
-			request.setURI(new URI(_urlPrefix + "/log/syserr/" + offset + "?format=raw"));
+			request.setURI(new URI(_urlPrefix + "/log/syserr/" + offset +
+				"?format=raw"));
 			HttpResponse response = httpClient.execute(request);
 
 			Reader reader =
@@ -171,27 +160,31 @@ public class ServerManagerServletTest {
 //		printResponse(response);
 
 	}
+	@Test
+	public void logLiferay() throws Exception {
+		doRequest(new HttpGet(), new URI(_urlPrefix + "/log/sysout"));
+	}
+
+	@Before
+	public void setUp() {
+		_host = "localhost";
+		_pluginName = "server-manager-web";
+		_port = "8080";
+
+		_urlPrefix = "http://" + _host + ":" + _port + "/" + _pluginName;
+	}
+
+	@After
+	public void tearDown() {
+	}
 
 	@Test
-	public void debugPort() throws Exception {
-		doRequest(new HttpGet(), new URI(_urlPrefix + "/debug-port"));
+	public void undeploy() throws Exception {
+		doRequest(
+			new HttpDelete(), new URI(_urlPrefix + "/plugins/vldap-web"));
 	}
 
-	public void doRequest(HttpRequestBase request, URI uri) {
-		HttpClient httpClient = new DefaultHttpClient();
-
-		request.setURI(uri);
-
-		try {
-			HttpResponse response = httpClient.execute(request);
-			printResponse(response);
-		}
-		catch (Exception e) {
-			_log.error(e);
-		}
-	}
-
-	public void doRequest(
+	protected void doRequest(
 		HttpEntityEnclosingRequestBase request, URI uri, File file) {
 
 		HttpClient httpClient = new DefaultHttpClient();
@@ -214,21 +207,35 @@ public class ServerManagerServletTest {
 		}
 	}
 
-	public Reader getReader(HttpResponse response) throws Exception {
+	protected void doRequest(HttpRequestBase request, URI uri) {
+		HttpClient httpClient = new DefaultHttpClient();
+
+		request.setURI(uri);
+
+		try {
+			HttpResponse response = httpClient.execute(request);
+			printResponse(response);
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+	}
+
+	protected Reader getReader(HttpResponse response) throws Exception {
 		return new BufferedReader(new InputStreamReader(
 			response.getEntity().getContent()));
 	}
 
-	public void printResponse(HttpResponse response) throws Exception {
+	protected void printResponse(HttpResponse response) throws Exception {
 		Reader reader = getReader(response);
 		IOUtils.copy(reader, System.out);
 	}
 
+	protected enum RequestType {DELETE, GET, POST, PUT}
 	protected String _host;
 	protected String _pluginName;
 	protected String _port;
 	protected String _urlPrefix;
-	protected enum RequestType {DELETE, GET, POST, PUT};
 
 	private static Log _log =
 		LogFactoryUtil.getLog(ServerManagerServletTest.class);

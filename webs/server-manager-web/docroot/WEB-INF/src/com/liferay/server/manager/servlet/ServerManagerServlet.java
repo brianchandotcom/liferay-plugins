@@ -18,6 +18,10 @@ import com.google.gson.Gson;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.SystemProperties;
 
 import java.io.File;
@@ -148,6 +152,27 @@ public class ServerManagerServlet extends HttpServlet {
 			+ "Check the documentation and enter a valid URL.");
 	}
 
+	protected boolean isValidUser(HttpServletRequest request) {
+		PermissionChecker permissionChecker = null;
+
+		try {
+			User user = PortalUtil.getUser(request);
+			permissionChecker = PermissionCheckerFactoryUtil.create(user, false);
+		} catch (Exception e) {
+			_log.error(e);
+		}
+
+		if (permissionChecker == null) {
+			return false;
+		}
+
+		if (!permissionChecker.isOmniadmin()) {
+			return false;
+		}
+
+		return true;
+	}
+
 	protected void mapUrl(
 		HttpServletRequest request, Map<Object, Object> jsonResponse,
 		List<String> pathPieces)
@@ -196,6 +221,11 @@ public class ServerManagerServlet extends HttpServlet {
 	protected void service(
 		HttpServletRequest request, HttpServletResponse httpResponse)
 		throws ServletException, IOException {
+
+		// Require admin user
+		if (!isValidUser(request)) {
+			return;
+		}
 
 		PrintWriter out = httpResponse.getWriter();
 		String path = request.getServletPath().toLowerCase();
