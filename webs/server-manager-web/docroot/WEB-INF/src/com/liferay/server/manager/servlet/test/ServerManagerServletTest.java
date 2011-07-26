@@ -25,6 +25,8 @@ import java.net.URI;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -115,7 +117,7 @@ public class ServerManagerServletTest {
 		doRequest(
 			new HttpGet(),
 			new URI(_urlPrefix + "/is-alive"));
-	};
+	}
 
 	@Test
 	public void listPlugins() throws Exception {
@@ -168,8 +170,10 @@ public class ServerManagerServletTest {
 	@Before
 	public void setUp() {
 		_host = "localhost";
+		_password = "test";
 		_pluginName = "server-manager-web";
 		_port = "8080";
+		_username = "test@liferay.com";
 
 		_urlPrefix = "http://" + _host + ":" + _port + "/" + _pluginName;
 	}
@@ -187,7 +191,12 @@ public class ServerManagerServletTest {
 	protected void doRequest(
 		HttpEntityEnclosingRequestBase request, URI uri, File file) {
 
-		HttpClient httpClient = new DefaultHttpClient();
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+
+		// Do authentication
+		httpClient.getCredentialsProvider().setCredentials(
+			AuthScope.ANY,
+			new UsernamePasswordCredentials(_username, _password));
 
 		request.setURI(uri);
 
@@ -208,7 +217,12 @@ public class ServerManagerServletTest {
 	}
 
 	protected void doRequest(HttpRequestBase request, URI uri) {
-		HttpClient httpClient = new DefaultHttpClient();
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+
+		// Do authentication
+		httpClient.getCredentialsProvider().setCredentials(
+			AuthScope.ANY,
+			new UsernamePasswordCredentials(_username, _password));
 
 		request.setURI(uri);
 
@@ -234,8 +248,10 @@ public class ServerManagerServletTest {
 	protected enum RequestType {DELETE, GET, POST, PUT}
 	protected String _host;
 	protected String _pluginName;
+	protected String _password;
 	protected String _port;
 	protected String _urlPrefix;
+	protected String _username;
 
 	private static Log _log =
 		LogFactoryUtil.getLog(ServerManagerServletTest.class);

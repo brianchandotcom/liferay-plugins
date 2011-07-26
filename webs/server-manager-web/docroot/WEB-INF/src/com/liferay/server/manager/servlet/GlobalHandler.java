@@ -56,10 +56,16 @@ public class GlobalHandler {
 
 		if (jvmArguments == null) {
 			// Server was not started in debug mode
-			jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
+
+			String message = "Server was not started in debug mode.";
+
+			_log.error(message);
+
 			jsonResponse.put(
-				ServerManagerServlet.JSON_ERROR_STREAM_KEY,
-				"Server was not started in debug mode.");
+				ServerManagerServlet.JSON_ERROR_STREAM_KEY, message);
+
+			jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
+
 			return;
 		}
 
@@ -78,6 +84,13 @@ public class GlobalHandler {
 		}
 
 		if (debugPort == null) {
+			String message = "Server was not started in debug mode.";
+
+			_log.error(message);
+
+			jsonResponse.put(
+				ServerManagerServlet.JSON_ERROR_STREAM_KEY, message);
+
 			jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
 		}
 		else {

@@ -30,6 +30,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
+
 /**
  * @author Jonathan Potter
  */
@@ -46,10 +48,14 @@ public class PluginsHandler {
 
 		DeployManagerUtil.deploy(tempFile, context);
 
-		boolean success = FileUtil.delete(tempFile);
+		boolean success = FileUtils.deleteQuietly(tempFile.getParentFile());
 
 		if (!success) {
-			jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
+			jsonResponse.put(
+				ServerManagerServlet.JSON_ERROR_STREAM_KEY,
+				"Could not remove directory: " + tempFile.getParentFile());
+
+			FileUtils.deleteQuietly(tempFile);
 		}
 	}
 
@@ -64,10 +70,17 @@ public class PluginsHandler {
 			ServerManagerServlet.getDeployDirectory(context);
 
 		if (!contextDirectory.exists()) {
-			_log.error("Context directory not found: " +
-				contextDirectory.getAbsolutePath());
+			String message =
+				"Context directory not found: " +
+					contextDirectory.getAbsolutePath();
+
+			_log.error(message);
+
+			jsonResponse.put(
+				ServerManagerServlet.JSON_ERROR_STREAM_KEY, message);
 
 			jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
+
 			return;
 		}
 
@@ -134,8 +147,14 @@ public class PluginsHandler {
 			ServerManagerServlet.getDeployDirectory(context);
 
 		if (!contextDirectory.exists()) {
-			_log.error("Context directory not found: " +
-				contextDirectory.getAbsolutePath());
+			String message =
+				"Context directory not found: " +
+					contextDirectory.getAbsolutePath();
+
+			_log.error(message);
+
+			jsonResponse.put(
+				ServerManagerServlet.JSON_ERROR_STREAM_KEY, message);
 
 			jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
 			return;
@@ -144,7 +163,12 @@ public class PluginsHandler {
 		File tempFile = ServerManagerServlet.getFileItemTemp(request);
 
 		if (tempFile == null) {
-			_log.error("Could not create temp file for uploaded plugin");
+			String message = "Could not create temp file for uploaded plugin";
+
+			_log.error(message);
+
+			jsonResponse.put(
+				ServerManagerServlet.JSON_ERROR_STREAM_KEY, message);
 
 			jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
 			return;
@@ -165,17 +189,21 @@ public class PluginsHandler {
 			while ((line = reader.readLine()) != null) {
 				File fileToDelete = new File(contextDirectory, line.trim());
 
-				boolean success = FileUtil.delete(fileToDelete);
+				boolean success = FileUtils.deleteQuietly(fileToDelete);
 
 				if (!success) {
-					_log.info("Could not delete file: " +
-						fileToDelete.getAbsolutePath());
+					String message =
+						"Could not delete file: " +
+							fileToDelete.getAbsolutePath();
 
-					jsonResponse.put(ServerManagerServlet.JSON_SUCCESS_KEY, 1);
+					_log.info(message);
+
+					jsonResponse.put(
+						ServerManagerServlet.JSON_ERROR_STREAM_KEY, message);
 				}
 			}
 
-			FileUtil.delete(deleteInfo);
+			FileUtils.deleteQuietly(deleteInfo);
 		}
 
 		// Liferay IDE handles redeploy so we don't worry about it
