@@ -63,6 +63,7 @@ import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -1329,7 +1330,18 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			subject = AdminUtil.getEmailKBArticleUpdatedSubject(preferences);
 			body = AdminUtil.getEmailKBArticleUpdatedBody(preferences);
 		}
+		
+		String portletId =
+			serviceContext.getPortletPreferencesIds().getPortletId();
+		
+		long groupId = kbArticle.getGroupId();
 
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		if (group.isLayout()) {
+			groupId = group.getParentGroupId();
+		}
+		
 		SubscriptionSender subscriptionSender = new AdminSubscriptionSender(
 			kbArticle, serviceContext);
 
@@ -1342,7 +1354,9 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			kbArticleDiffs.get("title"));
 		subscriptionSender.setContextUserPrefix("ARTICLE");
 		subscriptionSender.setFrom(fromAddress, fromName);
-		subscriptionSender.setGroupId(kbArticle.getGroupId());
+		subscriptionSender.setGroupId(groupId);
+		subscriptionSender.setScopeGroupId(serviceContext.getScopeGroupId());
+		subscriptionSender.setPortletId(portletId);
 		subscriptionSender.setHtmlFormat(true);
 		subscriptionSender.setMailId("kb_article", kbArticle.getKbArticleId());
 		subscriptionSender.setReplyToAddress(fromAddress);
