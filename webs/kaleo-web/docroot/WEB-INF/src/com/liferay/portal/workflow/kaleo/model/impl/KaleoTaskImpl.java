@@ -19,8 +19,10 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
 import com.liferay.portal.workflow.kaleo.model.KaleoTask;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
+import com.liferay.portal.workflow.kaleo.model.KaleoTaskForm;
 import com.liferay.portal.workflow.kaleo.service.KaleoNodeLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskAssignmentLocalServiceUtil;
+import com.liferay.portal.workflow.kaleo.service.KaleoTaskFormLocalServiceUtil;
 
 import java.util.List;
 
@@ -42,6 +44,13 @@ public class KaleoTaskImpl extends KaleoTaskBaseImpl {
 
 		return KaleoTaskAssignmentLocalServiceUtil.getKaleoTaskAssignments(
 			KaleoTask.class.getName(), getKaleoTaskId());
+	}
+
+	public List<KaleoTaskForm> getKaleoTaskForms()
+		throws SystemException {
+
+		return KaleoTaskFormLocalServiceUtil.getKaleoTaskForms(
+			getKaleoTaskId());
 	}
 
 }

@@ -29,8 +29,10 @@ import com.liferay.portal.workflow.kaleo.definition.Definition;
 import com.liferay.portal.workflow.kaleo.definition.DelayDuration;
 import com.liferay.portal.workflow.kaleo.definition.DurationScale;
 import com.liferay.portal.workflow.kaleo.definition.Fork;
+import com.liferay.portal.workflow.kaleo.definition.Form;
 import com.liferay.portal.workflow.kaleo.definition.Join;
 import com.liferay.portal.workflow.kaleo.definition.Node;
+import com.liferay.portal.workflow.kaleo.definition.NodeType;
 import com.liferay.portal.workflow.kaleo.definition.Notification;
 import com.liferay.portal.workflow.kaleo.definition.NotificationAware;
 import com.liferay.portal.workflow.kaleo.definition.ResourceActionAssignment;
@@ -131,7 +133,7 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 	protected void parseActionElements(
 		List<Element> actionElements, ActionAware actionAware) {
 
-		if (!actionElements.isEmpty()) {
+		if (actionElements.isEmpty()) {
 			return;
 		}
 
@@ -163,6 +165,14 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 		List<Element> actionElements = actionsElement.elements("action");
 
 		parseActionElements(actionElements, node);
+
+		NodeType nodeType = node.getNodeType();
+
+		if (nodeType.equals(NodeType.TASK)) {
+			List<Element> formElements = actionsElement.elements("form");
+
+			parseFormElements(formElements, (Task)node);
+		}
 
 		List<Element> notificationElements = actionsElement.elements(
 			"notification");
@@ -317,6 +327,29 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 		parseTimerElements(timersElement, fork);
 
 		return fork;
+	}
+
+	protected void parseFormElements(List<Element> formElements, Task task) {
+		if (formElements.isEmpty()) {
+			return;
+		}
+
+		Set<Form> forms = new HashSet<Form>(formElements.size());
+
+		for (Element formElement : formElements) {
+			long formTemplateId = GetterUtil.getLong(
+				formElement.elementText("form-template-id"));
+
+			Form form = new Form(formTemplateId);
+
+			String description = formElement.elementText("description");
+
+			form.setDescription(description);
+
+			forms.add(form);
+		}
+
+		task.setForms(forms);
 	}
 
 	protected Join parseJoin(Element joinElement) {

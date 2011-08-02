@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.dao.search.DAOParamUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MethodKey;
@@ -51,7 +52,6 @@ import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.so.sites.util.SitesUtil;
 import com.liferay.so.util.WebKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import com.liferay.util.servlet.ServletResponseUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -256,12 +256,12 @@ public class SitesPortlet extends MVCPortlet {
 			if (group.hasPrivateLayouts() || group.hasPublicLayouts()) {
 				PortletURL portletURL = PortletURLFactoryUtil.create(
 					PortalUtil.getHttpServletRequest(resourceRequest),
-					PortletKeys.MY_PLACES, themeDisplay.getLayout().getPlid(),
+					PortletKeys.MY_SITES, themeDisplay.getLayout().getPlid(),
 					PortletRequest.ACTION_PHASE);
 
 				portletURL.setWindowState(WindowState.NORMAL);
 
-				portletURL.setParameter("struts_action", "/my_places/view");
+				portletURL.setParameter("struts_action", "/my_sites/view");
 				portletURL.setParameter(
 					"groupId", String.valueOf(group.getGroupId()));
 				portletURL.setParameter(
@@ -387,7 +387,7 @@ public class SitesPortlet extends MVCPortlet {
 		}
 
 		for (Layout layout : layouts) {
-			LayoutLocalServiceUtil.deleteLayout(layout, true);
+			LayoutLocalServiceUtil.deleteLayout(layout, true, serviceContext);
 		}
 	}
 

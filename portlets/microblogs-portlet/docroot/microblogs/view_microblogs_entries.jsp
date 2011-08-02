@@ -60,6 +60,40 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 				<c:if test="<%= microblogsEntry.getType() == MicroblogsEntryConstants.TYPE_REPOST %>">
 					<span class="small"><liferay-ui:message key="reposted-from" /></span> <span><%= PortalUtil.getUserName(microblogsEntry.getReceiverUserId(), StringPool.BLANK) %></span>
 				</c:if>
+
+				<%
+				int replyCount = MicroblogsEntryLocalServiceUtil.getReceiverMicroblogsEntryMicroblogsEntriesCount(MicroblogsEntryConstants.TYPE_REPLY, microblogsEntry.getMicroblogsEntryId());
+				%>
+
+				<c:if test="<%= replyCount > 0 %>">
+					<portlet:renderURL var="conversationURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+						<portlet:param name="jspPage" value="/microblogs/view.jsp" />
+						<portlet:param name="tabs1" value="conversation" />
+						<portlet:param name="redirect" value="<%= redirect %>" />
+						<portlet:param name="receiverMicroblogsEntryId" value="<%= String.valueOf(microblogsEntry.getMicroblogsEntryId()) %>" />
+					</portlet:renderURL>
+
+					<liferay-ui:icon
+						cssClass="microblogs-reply-icon"
+						image="conversation"
+						url="<%= conversationURL %>"
+					/>
+				</c:if>
+
+				<c:if test="<%= microblogsEntry.getType() == MicroblogsEntryConstants.TYPE_REPLY %>">
+					<portlet:renderURL var="conversationURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+						<portlet:param name="jspPage" value="/microblogs/view.jsp" />
+						<portlet:param name="tabs1" value="conversation" />
+						<portlet:param name="redirect" value="<%= redirect %>" />
+						<portlet:param name="receiverMicroblogsEntryId" value="<%= String.valueOf(microblogsEntry.getReceiverMicroblogsEntryId()) %>" />
+					</portlet:renderURL>
+
+					<liferay-ui:icon
+						cssClass="microblogs-reply-icon"
+						image="conversation"
+						url="<%= conversationURL %>"
+					/>
+				</c:if>
 			</div>
 
 			<div class="content">
@@ -92,7 +126,7 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 					String receiverUserFullName = PortalUtil.getUserName(microblogsEntry.getReceiverUserId(), StringPool.BLANK);
 
 					viewURL.setParameter("tabs1", receiverUserFullName);
-					viewURL.setParameter("receiverMicroblogsEntryId", String.valueOf(microblogsEntry.getReceiverMicroblogsEntryId()));
+					viewURL.setParameter("receiverUserId", String.valueOf(microblogsEntry.getReceiverUserId()));
 					viewURL.setParameter("assetTagName", StringPool.BLANK);
 
 					content = "@<a href=\"" + viewURL + "\">" + receiverUserFullName + "</a> " + content;
@@ -110,7 +144,7 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 				</span>
 
 				<span class="action-container">
-					<c:if test="<%= themeDisplay.getUserId() != microblogsEntry.getUserId() && MicroblogsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_ENTRY) && (microblogsEntry.getSocialRelationType() == MicroblogsEntryConstants.TYPE_EVERYONE) %>">
+					<c:if test="<%= themeDisplay.getUserId() != microblogsEntry.getUserId() && MicroblogsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_ENTRY) && (microblogsEntry.getSocialRelationType() == MicroblogsEntryConstants.TYPE_EVERYONE) && (microblogsEntry.getType() != MicroblogsEntryConstants.TYPE_REPLY) %>">
 						<portlet:renderURL var="repostMicroblogsEntryURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 							<portlet:param name="jspPage" value="/microblogs/edit_microblogs_entry.jsp" />
 							<portlet:param name="redirect" value="<%= redirect %>" />
@@ -130,7 +164,7 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 						/>
 					</c:if>
 
-					<c:if test="<%= MicroblogsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_ENTRY) && (microblogsEntry.getSocialRelationType() == MicroblogsEntryConstants.TYPE_EVERYONE) %>">
+					<c:if test="<%= MicroblogsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_ENTRY) && (microblogsEntry.getSocialRelationType() == MicroblogsEntryConstants.TYPE_EVERYONE) && (microblogsEntry.getType() != MicroblogsEntryConstants.TYPE_REPLY) %>">
 						<portlet:renderURL var="replyMicroblogsEntryURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 							<portlet:param name="jspPage" value="/microblogs/edit_microblogs_entry.jsp" />
 							<portlet:param name="redirect" value="<%= redirect %>" />
@@ -143,8 +177,9 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 						%>
 
 						<liferay-ui:icon
-							image="reply"
+							image="conversation"
 							label="<%= true %>"
+							message="reply"
 							url="<%= taglibReplyURL %>"
 						/>
 					</c:if>
