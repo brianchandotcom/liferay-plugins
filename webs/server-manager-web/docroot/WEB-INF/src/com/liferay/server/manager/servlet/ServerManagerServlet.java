@@ -18,11 +18,11 @@ import com.google.gson.Gson;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.SystemProperties;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.util.SystemProperties;
 
 import java.io.File;
 import java.io.IOException;
