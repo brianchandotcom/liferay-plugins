@@ -438,7 +438,7 @@ public class LiferayMediaItemService implements MediaItemService {
 
 			DLAppServiceUtil.addFileEntry(
 				groupIdLong, albumIdLong, fileName, contentType,
-				mediaItem.getDescription(), StringPool.BLANK,
+				mediaItem.getDescription(), fileName, StringPool.BLANK,
 				byteArray, serviceContext);
 		}
 		else {
