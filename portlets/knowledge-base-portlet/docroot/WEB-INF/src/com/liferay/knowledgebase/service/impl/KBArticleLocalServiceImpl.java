@@ -60,6 +60,7 @@ import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
+import com.liferay.portal.model.PortletPreferencesIds;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.User;
@@ -1331,8 +1332,10 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			body = AdminUtil.getEmailKBArticleUpdatedBody(preferences);
 		}
 		
-		String portletId =
-			serviceContext.getPortletPreferencesIds().getPortletId();
+		PortletPreferencesIds portletPreferencesIds =
+			serviceContext.getPortletPreferencesIds();
+		
+		String portletId = portletPreferencesIds.getPortletId();
 		
 		long groupId = kbArticle.getGroupId();
 
@@ -1355,7 +1358,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		subscriptionSender.setContextUserPrefix("ARTICLE");
 		subscriptionSender.setFrom(fromAddress, fromName);
 		subscriptionSender.setGroupId(groupId);
-		subscriptionSender.setScopeGroupId(serviceContext.getScopeGroupId());
+		subscriptionSender.setScopeGroupId(kbArticle.getGroupId());
 		subscriptionSender.setPortletId(portletId);
 		subscriptionSender.setHtmlFormat(true);
 		subscriptionSender.setMailId("kb_article", kbArticle.getKbArticleId());
