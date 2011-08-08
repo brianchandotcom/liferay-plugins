@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="osgi-adaptor-jar" basedir="." default="deploy">
+	<import file="../build-common-jar.xml" />
+
+	<property name="jar.scope" value="portal" />
+
+	<target name="deploy" depends="build-common-jar.deploy">
+		<copy file="${docroot.dir}/WEB-INF/lib/osgi.core.jar" todir="${app.server.lib.portal.dir}" />
+	</target>
+</project>

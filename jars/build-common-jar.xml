@@ -80,7 +80,7 @@
 		<delete file="${plugin.file}" />
 
 		<script classpathref="portal.classpath" language="beanshell">
-			import com.liferay.portal.kernel.osgi.BundleHelperUtil;
+			import com.liferay.portal.kernel.util.PackagingUtil;
 			import com.liferay.portal.kernel.util.ReleaseInfo;
 			import com.liferay.portal.kernel.util.StringUtil;
 
@@ -88,7 +88,7 @@
 
 			version = project.getProperty("lp.version") + "." + project.getProperty("plugin.version");
 
-			packages = BundleHelperUtil.getPackagesFromPath(classesFolder);
+			packages = PackagingUtil.getPackagesFromPath(classesFolder);
 
 			packages = StringUtil.merge(packages, ";version=\"" + version + "\"") + ";version=\"" + version +  "\"";
 
