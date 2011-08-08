@@ -32,7 +32,10 @@
 	</antelope:stringutil>
 
 	<if>
-		<antelope:endswith string="${plugin.name}" with="-client" />
+		<or>
+			<antelope:endswith string="${plugin.name}" with="-client" />
+			<antelope:endswith string="${plugin.name}" with="-jar" />
+		</or>
 		<then>
 			<property name="plugin.file" value="${project.dir}/dist/${plugin.name}-${lp.version}.${plugin.version}.jar" />
 		</then>
@@ -150,8 +153,8 @@
 			<not>
 				<isset property="service.input.file" />
 			</not>
-		    	<then>
-		    		<property name="service.input.file" value="${basedir}/docroot/WEB-INF/service.xml" />
+			<then>
+				<property name="service.input.file" value="${basedir}/docroot/WEB-INF/service.xml" />
 			</then>
 		</if>
 

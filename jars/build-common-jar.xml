@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="build-common-jar">
+	<property name="project.dir" value="../.." />
+
+	<import file="../build-common-plugin.xml" />
+
+	<target name="compile">
+		<antcall target="merge" />
+
+		<mkdir dir="docroot/WEB-INF/classes" />
+		<mkdir dir="docroot/WEB-INF/lib" />
+
+		<copy todir="docroot/WEB-INF/lib">
+			<fileset dir="${app.server.lib.portal.dir}" includes="${plugin.jars}" />
+		</copy>
+
+		<if>
+			<available file="docroot/WEB-INF/src" />
+			<then>
+				<if>
+					<equals arg1="${jar.scope}" arg2="portal" />
+					<then>
+						<path id="plugin-lib.classpath">
+							<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
+							<fileset dir="${app.server.lib.portal.dir}" includes="*.jar" />
+							<fileset dir="docroot/WEB-INF/lib" includes="*.jar" />
+							<pathelement location="docroot/WEB-INF/classes" />
+						</path>
+					</then>
+					<else>
+						<path id="plugin-lib.classpath">
+							<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
+							<fileset dir="docroot/WEB-INF/lib" includes="*.jar" />
+							<pathelement location="docroot/WEB-INF/classes" />
+						</path>
+					</else>
+				</if>
+
+				<copy todir="docroot/WEB-INF/lib">
+					<fileset dir="${app.server.lib.portal.dir}" includes="${required.portal.jars}" />
+				</copy>
+
+				<antcall target="compile-java">
+					<param name="javac.classpathref" value="plugin.classpath" />
+					<param name="javac.destdir" value="docroot/WEB-INF/classes" />
+					<param name="javac.srcdir" value="docroot/WEB-INF/src" />
+					<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
+				</antcall>
+			</then>
+		</if>
+	</target>
+
+	<target name="deploy" depends="war">
+		<if>
+			<equals arg1="${jar.scope}" arg2="portal" />
+			<then>
+				<copy file="${plugin.file}" todir="${app.server.lib.portal.dir}" />
+			</then>
+			<else>
+				<copy file="${plugin.file}" todir="${app.server.lib.global.dir}" />
+			</else>
+		</if>
+	</target>
+
+	<target name="war" depends="compile">
+		<mkdir dir="${project.dir}/dist" />
+
+		<if>
+			<available file="tmp" />
+			<then>
+				<property name="docroot.dir" value="tmp" />
+			</then>
+			<else>
+				<property name="docroot.dir" value="docroot" />
+			</else>
+		</if>
+
+		<delete file="${plugin.file}" />
+
+		<script classpathref="portal.classpath" language="beanshell">
+			import com.liferay.portal.kernel.osgi.BundleHelperUtil;
+			import com.liferay.portal.kernel.util.ReleaseInfo;
+			import com.liferay.portal.kernel.util.StringUtil;
+
+			classesFolder = new File(project.getBaseDir(), project.getProperty("docroot.dir") + "/WEB-INF/classes");
+
+			version = project.getProperty("lp.version") + "." + project.getProperty("plugin.version");
+
+			packages = BundleHelperUtil.getPackagesFromPath(classesFolder);
+
+			packages = StringUtil.merge(packages, ";version=\"" + version + "\"") + ";version=\"" + version +  "\"";
+
+			project.setProperty("export.packages", packages);
+		</script>
+
+		<manifest file="${docroot.dir}/META-INF/MANIFEST.MF" mode="update">
+			<attribute name="Bundle-Vendor" value="${plugin-package.author}" />
+			<attribute name="Bundle-Version" value="${lp.version}.${plugin.version}" />
+			<attribute name="Export-Package" value="${export.packages}" />
+		</manifest>
+
+		<jar
+			basedir="${docroot.dir}/WEB-INF/classes"
+			jarfile="${plugin.file}"
+			manifest="${docroot.dir}/META-INF/MANIFEST.MF"
+		/>
+	</target>
+</project>

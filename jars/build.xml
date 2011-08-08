@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="jars" basedir="." default="jar" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value=".." />
+
+	<import file="../build-common-plugins.xml" />
+
+	<target name="create">
+		<if>
+			<or>
+				<not>
+					<isset property="jar.name" />
+				</not>
+				<not>
+					<isset property="jar.display.name" />
+				</not>
+			</or>
+			<then>
+				<echo message="This task must be called by create.bat." />
+			</then>
+			<else>
+				<if>
+					<not>
+						<isset property="jar.parent.dir" />
+					</not>
+					<then>
+						<property name="jar.parent.dir" value="${basedir}" />
+					</then>
+				</if>
+
+				<property name="jar.dir" value="${jar.parent.dir}/${jar.name}-jar" />
+
+				<if>
+					<available file="${jar.dir}" />
+					<then>
+						<fail message="${jar.dir} already exists." />
+					</then>
+				</if>
+
+				<copy todir="${jar.dir}">
+					<fileset
+						dir="${project.dir}/tools/jar_tmpl"
+					/>
+				</copy>
+
+				<antelope:stringutil string="${jar.name}" property="jar.java.package.name">
+					<antelope:replace regex="-" replacement="" />
+					<antelope:trim />
+				</antelope:stringutil>
+
+				<replace dir="${jar.dir}">
+					<replacefilter token="@jar.name@" value="${jar.name}" />
+					<replacefilter token="@jar.display.name@" value="${jar.display.name}" />
+				</replace>
+
+				<mkdir dir="${jar.dir}/docroot/META-INF" />
+
+				<manifest file="${jar.dir}/docroot/META-INF/MANIFEST.MF">
+					<attribute name="Bundle-ManifestVersion" value="2" />
+					<attribute name="Bundle-Name" value="${jar.display.name}" />
+					<attribute name="Bundle-RequiredExecutionEnvironment" value="J2SE-1.5" />
+					<attribute name="Bundle-SymbolicName" value="${jar.java.package.name}" />
+				</manifest>
+			</else>
+		</if>
+	</target>
+</project>
