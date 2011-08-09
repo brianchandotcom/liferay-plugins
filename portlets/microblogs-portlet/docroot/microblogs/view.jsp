@@ -124,11 +124,17 @@ portletURL.setParameter("tabs1", tabs1);
 
 		portletURL.setParameter("receiverMicroblogsEntryId", String.valueOf(receiverMicroblogsEntryId));
 	}
+	else if ((receiverUserId > 0) && (receiverUserId == themeDisplay.getUserId())) {
+		results = MicroblogsEntryLocalServiceUtil.getUserMicroblogsEntries(receiverUserId, searchContainer.getStart(), searchContainer.getEnd());
+		total = MicroblogsEntryLocalServiceUtil.getUserMicroblogsEntriesCount(receiverUserId);
+
+		portletURL.setParameter("receiverUserId", String.valueOf(receiverUserId));
+	}
 	else if (receiverUserId > 0) {
 		results = MicroblogsEntryServiceUtil.getUserMicroblogsEntries(receiverUserId, searchContainer.getStart(), searchContainer.getEnd());
 		total = MicroblogsEntryServiceUtil.getUserMicroblogsEntriesCount(receiverUserId);
 
-		portletURL.setParameter("assetTagName", String.valueOf(receiverUserId));
+		portletURL.setParameter("receiverUserId", String.valueOf(receiverUserId));
 	}
 	else if (Validator.isNotNull(assetTagName)) {
 		results = MicroblogsEntryServiceUtil.getMicroblogsEntries(assetTagName, searchContainer.getStart(), searchContainer.getEnd());
