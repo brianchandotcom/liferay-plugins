@@ -72,6 +72,8 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		<%
 		boolean alternate = false;
 
+		String starredGroupIds = preferences.getValue("starredGroupIds", StringPool.BLANK);
+
 		for (Group group : groups) {
 			String classNames = StringPool.BLANK;
 
@@ -91,6 +93,33 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		%>
 
 			<li class="<%= classNames %>">
+				<c:choose>
+					<c:when test="<%= !StringUtil.contains(starredGroupIds, String.valueOf(group.getGroupId())) %>">
+						<span class="action star">
+							<liferay-portlet:actionURL name="updateStars" var="starURL">
+								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />
+								<portlet:param name="redirect" value="<%= currentURL %>" />
+								<portlet:param name="starredGroupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+								<portlet:param name="portletResource" value="<%= portletResource %>" />
+							</liferay-portlet:actionURL>
+
+							<a href="<%= starURL %>"><liferay-ui:message key="star" /></a>
+						</span>
+					</c:when>
+					<c:otherwise>
+						<span class="action unstar">
+							<liferay-portlet:actionURL name="updateStars" var="unstarURL">
+								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+								<portlet:param name="redirect" value="<%= currentURL %>" />
+								<portlet:param name="starredGroupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+								<portlet:param name="portletResource" value="<%= portletResource %>" />
+							</liferay-portlet:actionURL>
+
+							<a href="<%= unstarURL %>"><liferay-ui:message key="unstar" /></a>
+						</span>
+					</c:otherwise>
+				</c:choose>
+
 				<c:if test="<%= !GroupLocalServiceUtil.hasUserGroup(themeDisplay.getUserId(), group.getGroupId()) && GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ASSIGN_MEMBERS) %>">
 					<liferay-portlet:actionURL windowState="<%= WindowState.NORMAL.toString() %>" portletName="<%= PortletKeys.SITES_ADMIN %>" var="joinURL">
 						<portlet:param name="struts_action" value="/sites_admin/edit_site_assignments" />
@@ -100,7 +129,7 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 						<portlet:param name="addUserIds" value="<%= String.valueOf(user.getUserId()) %>" />
 					</liferay-portlet:actionURL>
 
-					<span class="join">
+					<span class="action join">
 						<a href="<%= joinURL %>"><liferay-ui:message key="join" /></a>
 					</span>
 				</c:if>
@@ -197,6 +226,7 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		else {
 			var siteTemplate =
 				'<li class="{classNames}">' +
+					'{starHtml}' +
 					'{joinHtml}' +
 					'<span class="name">{siteName}</span>' +
 					'<span class="description">{siteDescription}</span>'
@@ -231,6 +261,7 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 							siteTemplate,
 							{
 								classNames: classNames.join(' '),
+								starHtml: (result.starURL ? '<span class="star"><a href="' + result.starURL + '">' + Liferay.Language.get('star') + '</a></span>' : '<span class="unstar"><a href="' + result.unstarURL + '">' + Liferay.Language.get('unstar') + '</a></span>'),
 								joinHtml: (result.joinUrl ? '<span class="join"><a href="' + result.joinUrl + '">' + Liferay.Language.get('join') + '</a></span>' : ''),
 								siteDescription: result.description,
 								siteName: name
@@ -339,6 +370,6 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 				}
 			);
 		},
-		'.join a'
+		'.action a'
 	);
 </aui:script>
