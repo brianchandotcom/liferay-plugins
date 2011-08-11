@@ -41,7 +41,7 @@ else {
 
 List<Group> groups = GroupLocalServiceUtil.search(themeDisplay.getCompanyId(), searchKeywords, null, params, 0, 20, new GroupNameComparator(true));
 
-int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(), searchKeywords, null, params);
+int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(), searchKeywords, null, params);
 %>
 
 <div class="directory">
@@ -61,7 +61,7 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		<div class="buttons-right">
 			<aui:button cssClass="previous" disabled="<%= true %>" value="previous" />
 
-			<aui:button cssClass="next" disabled="<%= totalGroups < 20 %>" value="next" />
+			<aui:button cssClass="next" disabled="<%= groupsCount < 20 %>" value="next" />
 		</div>
 
 		<div style="clear: both;"><!-- --></div>
@@ -71,6 +71,8 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 
 		<%
 		boolean alternate = false;
+
+		String starredGroupIds = preferences.getValue("starredGroupIds", StringPool.BLANK);
 
 		for (Group group : groups) {
 			String classNames = StringPool.BLANK;
@@ -91,6 +93,33 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		%>
 
 			<li class="<%= classNames %>">
+				<c:choose>
+					<c:when test="<%= !StringUtil.contains(starredGroupIds, String.valueOf(group.getGroupId())) %>">
+						<span class="action star">
+							<liferay-portlet:actionURL name="updateStars" var="starURL">
+								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />
+								<portlet:param name="redirect" value="<%= currentURL %>" />
+								<portlet:param name="portletResource" value="<%= portletResource %>" />
+								<portlet:param name="starredGroupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+							</liferay-portlet:actionURL>
+
+							<a href="<%= starURL %>"><liferay-ui:message key="star" /></a>
+						</span>
+					</c:when>
+					<c:otherwise>
+						<span class="action unstar">
+							<liferay-portlet:actionURL name="updateStars" var="unstarURL">
+								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+								<portlet:param name="redirect" value="<%= currentURL %>" />
+								<portlet:param name="portletResource" value="<%= portletResource %>" />
+								<portlet:param name="starredGroupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+							</liferay-portlet:actionURL>
+
+							<a href="<%= unstarURL %>"><liferay-ui:message key="unstar" /></a>
+						</span>
+					</c:otherwise>
+				</c:choose>
+
 				<c:if test="<%= !GroupLocalServiceUtil.hasUserGroup(themeDisplay.getUserId(), group.getGroupId()) && GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ASSIGN_MEMBERS) %>">
 					<liferay-portlet:actionURL windowState="<%= WindowState.NORMAL.toString() %>" portletName="<%= PortletKeys.SITES_ADMIN %>" var="joinURL">
 						<portlet:param name="struts_action" value="/sites_admin/edit_site_assignments" />
@@ -100,7 +129,7 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 						<portlet:param name="addUserIds" value="<%= String.valueOf(user.getUserId()) %>" />
 					</liferay-portlet:actionURL>
 
-					<span class="join">
+					<span class="action join">
 						<a href="<%= joinURL %>"><liferay-ui:message key="join" /></a>
 					</span>
 				</c:if>
@@ -137,7 +166,7 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 	<aui:button-row>
 		<div class="directory-navigation buttons-left">
 			<span class="page-indicator">
-				<%= LanguageUtil.format(pageContext, "page-x-of-x", new String[] {"<span class=\"current\">1</span>", "<span class=\"total\">" + String.valueOf((int)Math.ceil(totalGroups / 20.0)) + "</span>"}) %>
+				<%= LanguageUtil.format(pageContext, "page-x-of-x", new String[] {"<span class=\"current\">1</span>", "<span class=\"total\">" + String.valueOf((int)Math.ceil(groupsCount / 20.0)) + "</span>"}) %>
 			</span>
 		</div>
 
@@ -197,6 +226,7 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		else {
 			var siteTemplate =
 				'<li class="{classNames}">' +
+					'{starHtml}' +
 					'{joinHtml}' +
 					'<span class="name">{siteName}</span>' +
 					'<span class="description">{siteDescription}</span>'
@@ -233,7 +263,8 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 								classNames: classNames.join(' '),
 								joinHtml: (result.joinUrl ? '<span class="join"><a href="' + result.joinUrl + '">' + Liferay.Language.get('join') + '</a></span>' : ''),
 								siteDescription: result.description,
-								siteName: name
+								siteName: name,
+								starHtml: (result.starURL ? '<span class="star"><a href="' + result.starURL + '">' + Liferay.Language.get('star') + '</a></span>' : '<span class="unstar"><a href="' + result.unstarURL + '">' + Liferay.Language.get('unstar') + '</a></span>')
 							}
 						);
 					}
@@ -243,8 +274,8 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 
 		this._listNode.html(buffer.join(''));
 
-		var currentPage = Math.floor(options.start/20) + 1;
-		var totalPage = Math.ceil(count/20);
+		var currentPage = Math.floor(options.start / 20) + 1;
+		var totalPage = Math.ceil(count / 20);
 
 		currentPageNode.html(currentPage);
 		totalPageNode.html(totalPage);
@@ -339,6 +370,6 @@ int totalGroups = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 				}
 			);
 		},
-		'.join a'
+		'.action a'
 	);
 </aui:script>

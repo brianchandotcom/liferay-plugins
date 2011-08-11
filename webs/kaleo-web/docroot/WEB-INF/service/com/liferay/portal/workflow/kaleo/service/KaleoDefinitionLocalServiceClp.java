@@ -100,7 +100,8 @@ public class KaleoDefinitionLocalServiceClp
 
 		_addKaleoDefinitionMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
 				"addKaleoDefinition", java.lang.String.class,
-				java.lang.String.class, java.lang.String.class, int.class,
+				java.lang.String.class, java.lang.String.class,
+				java.lang.String.class, int.class,
 				com.liferay.portal.service.ServiceContext.class);
 
 		_deactivateKaleoDefinitionMethodKey20 = new MethodKey(_classLoaderProxy.getClassName(),
@@ -696,7 +697,7 @@ public class KaleoDefinitionLocalServiceClp
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoDefinition addKaleoDefinition(
 		java.lang.String name, java.lang.String title,
-		java.lang.String description, int version,
+		java.lang.String description, java.lang.String content, int version,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -705,7 +706,8 @@ public class KaleoDefinitionLocalServiceClp
 		MethodHandler methodHandler = new MethodHandler(_addKaleoDefinitionMethodKey19,
 				ClpSerializer.translateInput(name),
 				ClpSerializer.translateInput(title),
-				ClpSerializer.translateInput(description), version,
+				ClpSerializer.translateInput(description),
+				ClpSerializer.translateInput(content), version,
 				ClpSerializer.translateInput(serviceContext));
 
 		try {

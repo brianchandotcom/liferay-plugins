@@ -36,10 +36,26 @@
 				display: block;
 			}
 
+			.star a {
+				background: url(<%= request.getContextPath() %>/sites/images/star-empty.png) no-repeat 0 50%;
+				float: right;
+				font-size: 0px;
+				height: 16px;
+				width: 16px;
+			}
+
+			.unstar a {
+				background: url(<%= request.getContextPath() %>/sites/images/star.png) no-repeat 0 50%;
+				float: right;
+				font-size: 0px;
+				height: 16px;
+				width: 16px;
+			}
+
 			.join {
 				background: url(<%= themeImagesPath %>/common/join.png) no-repeat 0 50%;
 				float: right;
-				padding-left: 20px;
+				padding: 0 20px;
 			}
 
 			.name {
@@ -53,7 +69,8 @@
 		}
 
 		li.empty {
-			background-image: url(<%= themeImagesPath %>/messages/alert.png);
+			background: url(<%= themeImagesPath %>/messages/alert.png) no-repeat 0 3px;
+			padding-left: 25px;
 		}
 
 		li.empty:hover {
@@ -80,6 +97,14 @@
 		-moz-border-radius: 4px;
 		border-radius: 4px;
 	}
+
+	.search {
+		margin: 10px 0;
+	}
+
+	.hide-notice {
+		float: right;
+	}
 }
 
 .so-portlet-sites-dialog {
@@ -92,10 +117,26 @@
 			background: url(<%= PortalUtil.getPathContext() %>/html/icons/sites_admin.png) no-repeat 5px 5px;
 			padding: 5px 10px 5px 25px;
 
+			.star a {
+				background: url(<%= request.getContextPath() %>/sites/images/star-empty.png) no-repeat 0 50%;
+				float: right;
+				font-size: 0px;
+				height: 16px;
+				width: 16px;
+			}
+
+			.unstar a {
+				background: url(<%= request.getContextPath() %>/sites/images/star.png) no-repeat 0 50%;
+				float: right;
+				font-size: 0px;
+				height: 16px;
+				width: 16px;
+			}
+
 			.join {
 				background: url(<%= themeImagesPath %>/common/join.png) no-repeat 0 50%;
 				float: right;
-				padding-left: 20px;
+				padding: 0 20px;
 			}
 
 			.description {

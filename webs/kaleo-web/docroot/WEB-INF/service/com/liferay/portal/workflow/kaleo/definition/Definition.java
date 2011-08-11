@@ -26,9 +26,12 @@ import java.util.Map;
  */
 public class Definition {
 
-	public Definition(String name, String description, int version) {
+	public Definition(
+		String name, String description, String content, int version) {
+
 		_name = name;
 		_description = description;
+		_content = content;
 		_version = version;
 	}
 
@@ -52,6 +55,10 @@ public class Definition {
 				_initialState = state;
 			}
 		}
+	}
+
+	public String getContent() {
+		return _content;
 	}
 
 	public String getDescription() {
@@ -78,6 +85,7 @@ public class Definition {
 		return _version;
 	}
 
+	private String _content;
 	private String _description;
 	private State _initialState;
 	private String _name;
