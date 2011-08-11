@@ -19,20 +19,57 @@ package com.liferay.so.sites.util;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portal.util.comparator.GroupNameComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.portlet.PortletPreferences;
 
 /**
  * @author Ryan Park
  */
 public class SitesUtil {
+
+	public static List<Group> getStarredSites(
+			PortletPreferences portletPreferences)
+		throws Exception {
+
+		String starredGroupIds = portletPreferences.getValue(
+			"starredGroupIds", StringPool.BLANK);
+
+		long[] groupIds = StringUtil.split(starredGroupIds, 0L);
+
+		List<Group> groups = new ArrayList<Group>(groupIds.length);
+
+		for (long groupId : groupIds) {
+			try {
+				Group group = GroupServiceUtil.getGroup(groupId);
+
+				groups.add(group);
+			}
+			catch (Exception e) {
+				StringUtil.remove(starredGroupIds, String.valueOf(groupId));
+
+				portletPreferences.setValue("starredGroupIds", starredGroupIds);
+
+				portletPreferences.store();
+			}
+		}
+
+		Collections.sort(groups, new GroupNameComparator(true));
+
+		return groups;
+	}
 
 	public static List<Group> getVisibleSites(
 		long companyId, long userId, String keywords, int maxResultSize) {
@@ -132,7 +169,7 @@ public class SitesUtil {
 
 			params.put("types", types);
 
-			int count = GroupLocalServiceUtil.searchCount(
+			int groupsCount = GroupLocalServiceUtil.searchCount(
 				comapnyId, keywords, null, params);
 
 			params.clear();
@@ -145,11 +182,8 @@ public class SitesUtil {
 
 			params.put("types", types);
 
-			count +=
-				GroupLocalServiceUtil.searchCount(
-					comapnyId, keywords, null, params);
-
-			return count;
+			return groupsCount + GroupLocalServiceUtil.searchCount(
+				comapnyId, keywords, null, params);
 		}
 	}
 

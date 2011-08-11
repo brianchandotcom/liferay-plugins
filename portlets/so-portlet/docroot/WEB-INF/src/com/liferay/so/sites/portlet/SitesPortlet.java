@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.dao.search.DAOParamUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MethodKey;
@@ -48,6 +47,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.comparator.GroupNameComparator;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.so.sites.util.SitesUtil;
 import com.liferay.so.util.WebKeys;
@@ -60,13 +60,12 @@ import java.util.List;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Ryan Park
@@ -112,10 +111,7 @@ public class SitesPortlet extends MVCPortlet {
 				jsonObject.put("message", themeDisplay.translate(message));
 			}
 
-			HttpServletResponse response = PortalUtil.getHttpServletResponse(
-				actionResponse);
-
-			ServletResponseUtil.write(response, jsonObject.toString());
+			writeJSON(actionRequest, actionResponse, jsonObject);
 		}
 	}
 
@@ -171,10 +167,7 @@ public class SitesPortlet extends MVCPortlet {
 			jsonObject.put("layouts", jsonArray);
 		}
 
-		HttpServletResponse response = PortalUtil.getHttpServletResponse(
-			resourceResponse);
-
-		ServletResponseUtil.write(response, jsonObject.toString());
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
 	}
 
 	public void getSites(
@@ -207,7 +200,11 @@ public class SitesPortlet extends MVCPortlet {
 			WebKeys.THEME_DISPLAY);
 
 		List<Group> groups = null;
-		int count = 0;
+		int groupsCount = 0;
+
+		PortletPreferences portletPreferences =
+			PortletPreferencesFactoryUtil.getPortletSetup(
+				resourceRequest, "5_WAR_soportlet");
 
 		if (directory) {
 			LinkedHashMap<String, Object> params =
@@ -228,30 +225,35 @@ public class SitesPortlet extends MVCPortlet {
 			groups = GroupLocalServiceUtil.search(
 				themeDisplay.getCompanyId(), keywords, null, params, start, end,
 				new GroupNameComparator(true));
-
-			count = GroupLocalServiceUtil.searchCount(
+			groupsCount = GroupLocalServiceUtil.searchCount(
 				themeDisplay.getCompanyId(), keywords, null, params);
 		}
 		else {
-			groups = SitesUtil.getVisibleSites(
-				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
-				keywords, maxResultSize);
+			groups = SitesUtil.getStarredSites(portletPreferences);
+			groupsCount = groups.size();
 
-			count = SitesUtil.getVisibleSitesCount(
-				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
-				keywords);
+			if (groups.isEmpty() || Validator.isNotNull(keywords)) {
+				groups = SitesUtil.getVisibleSites(
+					themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+					keywords, maxResultSize);
+				groupsCount = SitesUtil.getVisibleSitesCount(
+					themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+					keywords);
+			}
 		}
 
-		jsonObject.put("count", count);
+		jsonObject.put("count", groupsCount);
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
-		for (Group group : groups) {
-			JSONObject groupJSONObject =
-				JSONFactoryUtil.createJSONObject();
+		String starredGroupIds = portletPreferences.getValue(
+			"starredGroupIds", StringPool.BLANK);
 
-			groupJSONObject.put("name", group.getDescriptiveName());
+		for (Group group : groups) {
+			JSONObject groupJSONObject = JSONFactoryUtil.createJSONObject();
+
 			groupJSONObject.put("description", group.getDescription());
+			groupJSONObject.put("name", group.getDescriptiveName());
 
 			if (group.hasPrivateLayouts() || group.hasPublicLayouts()) {
 				PortletURL portletURL = PortletURLFactoryUtil.create(
@@ -301,15 +303,49 @@ public class SitesPortlet extends MVCPortlet {
 				groupJSONObject.put("joinUrl", portletURL.toString());
 			}
 
+			PortletURL starPortletURL = resourceResponse.createActionURL();
+
+			starPortletURL.setWindowState(WindowState.NORMAL);
+
+			starPortletURL.setParameter(
+				ActionRequest.ACTION_NAME, "updateStars");
+			starPortletURL.setParameter(
+				"redirect", themeDisplay.getURLCurrent());
+			starPortletURL.setParameter(
+				"starredGroupId", String.valueOf(group.getGroupId()));
+
+			if (!StringUtil.contains(
+					starredGroupIds, String.valueOf(group.getGroupId()))) {
+
+				starPortletURL.setParameter(Constants.CMD, Constants.ADD);
+
+				groupJSONObject.put("starURL", starPortletURL.toString());
+			}
+			else {
+				starPortletURL.setParameter(Constants.CMD, Constants.DELETE);
+
+				groupJSONObject.put("unstarURL", starPortletURL.toString());
+			}
+
 			jsonArray.put(groupJSONObject);
 		}
 
 		jsonObject.put("sites", jsonArray);
 
-		HttpServletResponse response = PortalUtil.getHttpServletResponse(
-			resourceResponse);
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
 
-		ServletResponseUtil.write(response, jsonObject.toString());
+	public void hideNotice(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		PortletPreferences portletPreferences =
+			PortletPreferencesFactoryUtil.getPortletSetup(
+				actionRequest, "5_WAR_soportlet");
+
+		portletPreferences.setValue("hide-notice", Boolean.TRUE.toString());
+
+		portletPreferences.store();
 	}
 
 	@Override
@@ -334,6 +370,53 @@ public class SitesPortlet extends MVCPortlet {
 		catch (Exception e) {
 			throw new PortletException(e);
 		}
+	}
+
+	public void updateStars(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		long starredGroupId = ParamUtil.getLong(
+			actionRequest, "starredGroupId");
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			GroupServiceUtil.getGroup(starredGroupId);
+		}
+		catch (Exception e) {
+			jsonObject.put("result", "failure");
+
+			writeJSON(actionRequest, actionResponse, jsonObject);
+
+			return;
+		}
+
+		PortletPreferences portletPreferences =
+			PortletPreferencesFactoryUtil.getPortletSetup(
+				actionRequest, "5_WAR_soportlet");
+
+		String starredGroupIds = portletPreferences.getValue(
+			"starredGroupIds", StringPool.BLANK);
+
+		if (cmd.equals(Constants.ADD)) {
+			starredGroupIds = StringUtil.add(
+				starredGroupIds, String.valueOf(starredGroupId));
+		}
+		else if (cmd.equals(Constants.DELETE)) {
+			starredGroupIds = StringUtil.remove(
+				starredGroupIds, String.valueOf(starredGroupId));
+		}
+
+		portletPreferences.setValue("starredGroupIds", starredGroupIds);
+
+		portletPreferences.store();
+
+		jsonObject.put("result", "success");
+
+		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	protected void doAddSite(
