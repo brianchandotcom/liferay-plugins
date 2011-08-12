@@ -362,15 +362,15 @@
 					<available file="tmp" />
 					<then>
 						<path id="plugin-lib.classpath">
-							<fileset dir="docroot/WEB-INF/lib" includes="*.jar" />
-							<fileset dir="tmp/WEB-INF/lib" includes="*.jar" />
+							<fileset dir="docroot/WEB-INF/lib" includes="**/*.jar" />
+							<fileset dir="tmp/WEB-INF/lib" includes="**/*.jar" />
 							<pathelement location="docroot/WEB-INF/classes" />
 							<pathelement location="tmp/WEB-INF/classes" />
 						</path>
 					</then>
 					<else>
 						<path id="plugin-lib.classpath">
-							<fileset dir="docroot/WEB-INF/lib" includes="*.jar" />
+							<fileset dir="docroot/WEB-INF/lib" includes="**/*.jar" />
 							<pathelement location="docroot/WEB-INF/classes" />
 						</path>
 					</else>
@@ -771,10 +771,11 @@ Please find a solution that does not require portal-impl.jar.
 					excludes="**/META-INF/context.xml"
 				/>
 			</then>
-		<else>
+			<else>
 				<zip
 					basedir="${docroot.dir}"
 					destfile="${plugin.file}"
+					excludes="**/lib/development/**"
 				/>
 			</else>
 		</if>

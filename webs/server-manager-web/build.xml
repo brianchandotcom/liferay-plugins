@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<project name="vldap-web" basedir="." default="deploy">
+	<import file="../build-common-web.xml" />
+
+	<target name="compile">
+		<antcall target="build-common-plugin.compile" />
+	</target>
+</project>
