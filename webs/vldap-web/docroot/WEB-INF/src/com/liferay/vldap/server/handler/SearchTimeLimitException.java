@@ -22,6 +22,8 @@ import com.liferay.portal.kernel.exception.SystemException;
  */
 public class SearchTimeLimitException extends SystemException {
 
+	private static final long serialVersionUID = 1L;
+
 	public SearchTimeLimitException() {
 		super();
 	}

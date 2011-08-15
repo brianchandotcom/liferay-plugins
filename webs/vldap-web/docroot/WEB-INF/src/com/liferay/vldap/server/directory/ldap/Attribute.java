@@ -12,32 +12,36 @@
  * details.
  */
 
-package com.liferay.vldap.server.handler;
-
-import com.liferay.portal.kernel.exception.SystemException;
+package com.liferay.vldap.server.directory.ldap;
 
 /**
  * @author Jonathan Potter
  * @author Brian Wing Shun Chan
  */
-public class SearchSizeLimitException extends SystemException {
+public class Attribute {
 
-	private static final long serialVersionUID = 1L;
-
-	public SearchSizeLimitException() {
-		super();
+	public Attribute (String name, String value) {
+		setAttributeId(name);
+		setValue(value);
 	}
 
-	public SearchSizeLimitException(String msg) {
-		super(msg);
+	public String getAttributeId() {
+		return _attributeId;
 	}
 
-	public SearchSizeLimitException(String msg, Throwable cause) {
-		super(msg, cause);
+	public String getValue() {
+		return _value;
 	}
 
-	public SearchSizeLimitException(Throwable cause) {
-		super(cause);
+	public void setAttributeId(String attributeId) {
+		_attributeId = attributeId;
 	}
+
+	public void setValue(String value) {
+		_value = value;
+	}
+
+	private String _attributeId;
+	private String _value;
 
 }

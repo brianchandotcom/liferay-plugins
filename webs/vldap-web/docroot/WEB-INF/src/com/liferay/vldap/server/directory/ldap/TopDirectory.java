@@ -12,32 +12,37 @@
  * details.
  */
 
-package com.liferay.vldap.server.handler;
+package com.liferay.vldap.server.directory.ldap;
 
-import com.liferay.portal.kernel.exception.SystemException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @author Jonathan Potter
  * @author Brian Wing Shun Chan
+ * @author Jonathan Potter
  */
-public class SearchSizeLimitException extends SystemException {
+public class TopDirectory extends LdapDirectory {
 
-	private static final long serialVersionUID = 1L;
-
-	public SearchSizeLimitException() {
-		super();
+	public TopDirectory(String top) {
+		_top = top;
 	}
 
-	public SearchSizeLimitException(String msg) {
-		super(msg);
+	@Override
+	public List<Attribute> getAttributes() {
+		List<Attribute> attributes = new ArrayList<Attribute>();
+
+		attributes.add(new Attribute("objectclass", "organizationalUnit"));
+		attributes.add(new Attribute("objectclass", "top"));
+		attributes.add(new Attribute("o", "Liferay"));
+
+		return attributes;
 	}
 
-	public SearchSizeLimitException(String msg, Throwable cause) {
-		super(msg, cause);
+	@Override
+	public String getName() {
+		return "o=" + LdapDirectory.escape(_top);
 	}
 
-	public SearchSizeLimitException(Throwable cause) {
-		super(cause);
-	}
+	protected String _top;
 
 }

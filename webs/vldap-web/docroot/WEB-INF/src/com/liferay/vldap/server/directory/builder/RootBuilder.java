@@ -12,28 +12,31 @@
  * details.
  */
 
-package com.liferay.vldap.server.handler;
+package com.liferay.vldap.server.directory.builder;
 
-import com.liferay.vldap.server.handler.util.LdapHandlerContext;
+import com.liferay.vldap.server.directory.FilterConstraint;
+import com.liferay.vldap.server.directory.SearchBase;
+import com.liferay.vldap.server.directory.ldap.LdapDirectory;
+import com.liferay.vldap.server.directory.ldap.RootDirectory;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.directory.shared.ldap.model.message.Request;
-import org.apache.directory.shared.ldap.model.message.Response;
-import org.apache.mina.core.session.IoSession;
+import java.util.Set;
 
 /**
  * @author Jonathan Potter
- * @author Brian Wing Shun Chan
  */
-public class UnbindLdapHandler extends BaseLdapHandler {
+public class RootBuilder extends DirectoryBuilder {
 
-	public List<Response> messageReceived(
-		Request request, IoSession ioSession,
-		LdapHandlerContext ldapHandlerContext) {
+	@Override
+	public List<LdapDirectory> buildThisLevel(
+		Set<FilterConstraint> constraints, SearchBase base) {
 
-		return Collections.emptyList();
+		List<LdapDirectory> directories = new ArrayList<LdapDirectory>();
+
+		directories.add(new RootDirectory());
+
+		return directories;
 	}
 
 }
