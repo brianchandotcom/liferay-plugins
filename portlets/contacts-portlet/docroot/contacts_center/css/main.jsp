@@ -285,3 +285,7 @@
 .contacts-portlet .lfr-members-grid-item .lfr-user-data-extra {
 	white-space: nowrap
 }
+
+.contacts-portlet .edit-profile {
+	cursor: pointer;
+}
