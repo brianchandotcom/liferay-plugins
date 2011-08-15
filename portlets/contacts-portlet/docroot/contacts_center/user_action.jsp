@@ -191,6 +191,15 @@ else {
 		</c:when>
 	</c:choose>
 
+	<c:if test="<%= user.getUserId() == user2.getUserId() %>">
+		<div class="edit-profile">
+			<liferay-ui:icon
+				image="edit"
+				message="edit-profile"
+			/>
+		</div>
+	</c:if>
+
 	<portlet:resourceURL id="exportVCard" var="exportURL">
 		<portlet:param name="userId" value="<%= String.valueOf(user2.getUserId()) %>" />
 	</portlet:resourceURL>
@@ -201,3 +210,35 @@ else {
 		url="<%= exportURL %>"
 	/>
 </liferay-ui:icon-menu>
+
+<c:if test="<%= user.getUserId() == user2.getUserId() %>">
+	<aui:script use="aui-base,aui-dialog,aui-dialog-iframe">
+		var editProfile = A.one('.contacts-portlet .edit-profile');
+
+		editProfile.on(
+			'click',
+			function(event) {
+				event.halt(true);
+
+				var dialog = new A.Dialog(
+					{
+						align: {
+							node: null,
+							points: ['tc', 'tc']
+						},
+						constrain2view: true,
+						modal: true,
+						resizable: false,
+						title: '<liferay-ui:message key="edit-profile" />',
+						width: 950
+					}
+				).plug(
+					A.Plugin.DialogIframe,
+					{
+						uri: '<%= themeDisplay.getURLMyAccount().toString() %>'
+					}
+				).render();
+			}
+		);
+	</aui:script>
+</c:if>
