@@ -238,6 +238,7 @@
 
 .contacts-portlet .members-container {
 	clear: both;
+	margin: 1em 0;
 }
 
 .contacts-portlet .letter-anchors {
@@ -284,4 +285,16 @@
 .contacts-portlet .lfr-members-grid-item .lfr-user-data-job-title,
 .contacts-portlet .lfr-members-grid-item .lfr-user-data-extra {
 	white-space: nowrap
+}
+
+.contacts-portlet .lfr-panel{
+	margin-bottom: 1em;
+}
+
+.contacts-portlet .taglib-header {
+	margin-bottom: 1em;
+}
+
+.contacts-portlet .lfr-search-container {
+	margin-top: 1em;
 }
