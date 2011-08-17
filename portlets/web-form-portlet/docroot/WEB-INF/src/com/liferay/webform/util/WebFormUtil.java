@@ -18,11 +18,13 @@ import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.mozilla.javascript.Context;
 import com.liferay.mozilla.javascript.Scriptable;
 import com.liferay.mozilla.javascript.ScriptableObject;
+import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -106,6 +108,22 @@ public class WebFormUtil {
 		}
 
 		return expandoTable;
+	}
+	
+	@AutoEscape
+	public static String getEmailFromAddress(PortletPreferences preferences) {
+		String emailFromAddress = GetterUtil.getString(PortletProps.get(
+			"webform.email.from.address"));
+
+		return preferences.getValue("emailFromAddress", emailFromAddress);
+	}
+	
+	@AutoEscape
+	public static String getEmailFromName(PortletPreferences preferences) {
+		String emailFromName = GetterUtil.getString(PortletProps.get(
+			"webform.email.from.name"));
+
+		return preferences.getValue("emailFromName", emailFromName);
 	}
 
 	public static String getNewDatabaseTableName(String portletId)

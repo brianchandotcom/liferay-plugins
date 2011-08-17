@@ -43,6 +43,7 @@
 <%@ page import="com.liferay.portal.security.permission.ActionKeys" %>
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
 <%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
+<%@ page import="com.liferay.util.portlet.PortletProps" %>
 <%@ page import="com.liferay.webform.util.WebFormUtil" %>
 
 <%@ page import="javax.portlet.ActionRequest" %>
