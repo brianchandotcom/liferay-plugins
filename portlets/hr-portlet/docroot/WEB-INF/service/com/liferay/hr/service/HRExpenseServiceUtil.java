@@ -38,6 +38,42 @@ public class HRExpenseServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.hr.service.impl.HRExpenseServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static void addDocument(long companyId, long userId, long classPK,
+		long repositoryId, java.lang.String dirName, java.lang.String fileName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addDocument(companyId, userId, classPK, repositoryId, dirName,
+			fileName, file);
+	}
+
+	public static java.lang.String addTempDocument(long userId, long classPK,
+		java.lang.String fileName, java.lang.String tempFolderName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .addTempDocument(userId, classPK, fileName, tempFolderName,
+			file);
+	}
+
+	public static void deleteTempDocument(long userId, long classPK,
+		java.lang.String fileName, java.lang.String tempFolderName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.deleteTempDocument(userId, classPK, fileName, tempFolderName);
+	}
+
+	public static java.lang.String[] getTempDocumentNames(long userId,
+		long classPK, java.lang.String tempFolderName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getTempDocumentNames(userId, classPK, tempFolderName);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

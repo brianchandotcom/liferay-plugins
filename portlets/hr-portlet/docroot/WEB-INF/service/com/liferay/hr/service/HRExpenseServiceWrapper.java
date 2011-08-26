@@ -28,6 +28,41 @@ public class HRExpenseServiceWrapper implements HRExpenseService {
 		_hrExpenseService = hrExpenseService;
 	}
 
+	public void addDocument(long companyId, long userId, long classPK,
+		long repositoryId, java.lang.String dirName, java.lang.String fileName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_hrExpenseService.addDocument(companyId, userId, classPK, repositoryId,
+			dirName, fileName, file);
+	}
+
+	public java.lang.String addTempDocument(long userId, long classPK,
+		java.lang.String fileName, java.lang.String tempFolderName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _hrExpenseService.addTempDocument(userId, classPK, fileName,
+			tempFolderName, file);
+	}
+
+	public void deleteTempDocument(long userId, long classPK,
+		java.lang.String fileName, java.lang.String tempFolderName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_hrExpenseService.deleteTempDocument(userId, classPK, fileName,
+			tempFolderName);
+	}
+
+	public java.lang.String[] getTempDocumentNames(long userId, long classPK,
+		java.lang.String tempFolderName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _hrExpenseService.getTempDocumentNames(userId, classPK,
+			tempFolderName);
+	}
+
 	public HRExpenseService getWrappedHRExpenseService() {
 		return _hrExpenseService;
 	}

@@ -253,6 +253,36 @@ public class HRExpenseLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static void addDocument(long companyId, long userId, long classPK,
+		long repositoryId, java.lang.String dirName, java.lang.String fileName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addDocument(companyId, userId, classPK, repositoryId, dirName,
+			fileName, file);
+	}
+
+	public static java.lang.String addTempDocument(long userId,
+		java.lang.String fileName, java.lang.String tempFolderName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return getService()
+				   .addTempDocument(userId, fileName, tempFolderName, file);
+	}
+
+	public static void deleteTempDocument(long userId,
+		java.lang.String fileName, java.lang.String tempFolderName) {
+		getService().deleteTempDocument(userId, fileName, tempFolderName);
+	}
+
+	public static java.lang.String[] getTempDocumentNames(long userId,
+		java.lang.String tempFolderName) {
+		return getService().getTempDocumentNames(userId, tempFolderName);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -80,6 +80,22 @@ public class HRExpenseLocalServiceClp implements HRExpenseLocalService {
 
 		_setBeanIdentifierMethodKey15 = new MethodKey(_classLoaderProxy.getClassName(),
 				"setBeanIdentifier", java.lang.String.class);
+
+		_addDocumentMethodKey16 = new MethodKey(_classLoaderProxy.getClassName(),
+				"addDocument", long.class, long.class, long.class, long.class,
+				java.lang.String.class, java.lang.String.class,
+				java.io.File.class);
+
+		_addTempDocumentMethodKey17 = new MethodKey(_classLoaderProxy.getClassName(),
+				"addTempDocument", long.class, java.lang.String.class,
+				java.lang.String.class, java.io.File.class);
+
+		_deleteTempDocumentMethodKey18 = new MethodKey(_classLoaderProxy.getClassName(),
+				"deleteTempDocument", long.class, java.lang.String.class,
+				java.lang.String.class);
+
+		_getTempDocumentNamesMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
+				"getTempDocumentNames", long.class, java.lang.String.class);
 	}
 
 	public com.liferay.hr.model.HRExpense addHRExpense(
@@ -515,6 +531,123 @@ public class HRExpenseLocalServiceClp implements HRExpenseLocalService {
 		}
 	}
 
+	public void addDocument(long companyId, long userId, long classPK,
+		long repositoryId, java.lang.String dirName, java.lang.String fileName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		MethodHandler methodHandler = new MethodHandler(_addDocumentMethodKey16,
+				companyId, userId, classPK, repositoryId,
+				ClpSerializer.translateInput(dirName),
+				ClpSerializer.translateInput(fileName),
+				ClpSerializer.translateInput(file));
+
+		try {
+			_classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	public java.lang.String addTempDocument(long userId,
+		java.lang.String fileName, java.lang.String tempFolderName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_addTempDocumentMethodKey17,
+				userId, ClpSerializer.translateInput(fileName),
+				ClpSerializer.translateInput(tempFolderName),
+				ClpSerializer.translateInput(file));
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof java.io.IOException) {
+				throw (java.io.IOException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	public void deleteTempDocument(long userId, java.lang.String fileName,
+		java.lang.String tempFolderName) {
+		MethodHandler methodHandler = new MethodHandler(_deleteTempDocumentMethodKey18,
+				userId, ClpSerializer.translateInput(fileName),
+				ClpSerializer.translateInput(tempFolderName));
+
+		try {
+			_classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	public java.lang.String[] getTempDocumentNames(long userId,
+		java.lang.String tempFolderName) {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_getTempDocumentNamesMethodKey19,
+				userId, ClpSerializer.translateInput(tempFolderName));
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String[])ClpSerializer.translateOutput(returnObj);
+	}
+
 	public ClassLoaderProxy getClassLoaderProxy() {
 		return _classLoaderProxy;
 	}
@@ -536,4 +669,8 @@ public class HRExpenseLocalServiceClp implements HRExpenseLocalService {
 	private MethodKey _updateHRExpenseMethodKey13;
 	private MethodKey _getBeanIdentifierMethodKey14;
 	private MethodKey _setBeanIdentifierMethodKey15;
+	private MethodKey _addDocumentMethodKey16;
+	private MethodKey _addTempDocumentMethodKey17;
+	private MethodKey _deleteTempDocumentMethodKey18;
+	private MethodKey _getTempDocumentNamesMethodKey19;
 }

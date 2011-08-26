@@ -15,9 +15,53 @@
 package com.liferay.hr.service.impl;
 
 import com.liferay.hr.service.base.HRExpenseLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.TempFileUtil;
+import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
+import com.liferay.portlet.documentlibrary.DuplicateFileException;
+import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Wesley Gong
  */
 public class HRExpenseLocalServiceImpl extends HRExpenseLocalServiceBaseImpl {
+
+	public void addDocument(
+			long companyId, long userId, long classPK, long repositoryId,
+			String dirName, String fileName, File file)
+		throws PortalException, SystemException {
+
+		try {
+			DLStoreUtil.addDirectory(companyId, repositoryId, dirName);
+		}
+		catch (DuplicateDirectoryException dde) {
+		}
+
+		DLStoreUtil.addFile(
+			companyId, repositoryId, dirName + "/" + fileName, file);
+	}
+
+	public String addTempDocument(
+			long userId, String fileName, String tempFolderName, File file)
+		throws IOException, PortalException, SystemException {
+
+		return TempFileUtil.addTempFile(userId, fileName, tempFolderName, file);
+	}
+
+	public void deleteTempDocument(
+		long userId, String fileName, String tempFolderName) {
+
+		TempFileUtil.deleteTempFile(userId, fileName, tempFolderName);
+	}
+
+	public String[] getTempDocumentNames(
+		long userId, String tempFolderName) {
+
+		return TempFileUtil.getTempFileEntryNames(userId, tempFolderName);
+	}
+
 }

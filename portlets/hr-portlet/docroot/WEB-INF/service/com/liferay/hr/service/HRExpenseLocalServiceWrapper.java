@@ -242,6 +242,37 @@ public class HRExpenseLocalServiceWrapper implements HRExpenseLocalService {
 		_hrExpenseLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	public void addDocument(long companyId, long userId, long classPK,
+		long repositoryId, java.lang.String dirName, java.lang.String fileName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_hrExpenseLocalService.addDocument(companyId, userId, classPK,
+			repositoryId, dirName, fileName, file);
+	}
+
+	public java.lang.String addTempDocument(long userId,
+		java.lang.String fileName, java.lang.String tempFolderName,
+		java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException,
+			java.io.IOException {
+		return _hrExpenseLocalService.addTempDocument(userId, fileName,
+			tempFolderName, file);
+	}
+
+	public void deleteTempDocument(long userId, java.lang.String fileName,
+		java.lang.String tempFolderName) {
+		_hrExpenseLocalService.deleteTempDocument(userId, fileName,
+			tempFolderName);
+	}
+
+	public java.lang.String[] getTempDocumentNames(long userId,
+		java.lang.String tempFolderName) {
+		return _hrExpenseLocalService.getTempDocumentNames(userId,
+			tempFolderName);
+	}
+
 	public HRExpenseLocalService getWrappedHRExpenseLocalService() {
 		return _hrExpenseLocalService;
 	}

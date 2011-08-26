@@ -14,6 +14,13 @@
 
 package com.liferay.hr.service.http;
 
+import com.liferay.hr.service.HRExpenseServiceUtil;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * <p>
  * This class provides a SOAP utility for the
@@ -58,4 +65,35 @@ package com.liferay.hr.service.http;
  * @generated
  */
 public class HRExpenseServiceSoap {
+	public static void deleteTempDocument(long userId, long classPK,
+		java.lang.String fileName, java.lang.String tempFolderName)
+		throws RemoteException {
+		try {
+			HRExpenseServiceUtil.deleteTempDocument(userId, classPK, fileName,
+				tempFolderName);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static java.lang.String[] getTempDocumentNames(long userId,
+		long classPK, java.lang.String tempFolderName)
+		throws RemoteException {
+		try {
+			java.lang.String[] returnValue = HRExpenseServiceUtil.getTempDocumentNames(userId,
+					classPK, tempFolderName);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(HRExpenseServiceSoap.class);
 }

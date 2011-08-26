@@ -15,9 +15,57 @@
 package com.liferay.hr.service.impl;
 
 import com.liferay.hr.service.base.HRExpenseServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Wesley Gong
  */
 public class HRExpenseServiceImpl extends HRExpenseServiceBaseImpl {
+
+	public void addDocument(
+			long companyId, long userId, long classPK, long repositoryId,
+			String dirName, String fileName, File file)
+		throws PortalException, SystemException {
+
+		// Add permission checking into here
+
+		hrExpenseLocalService.addDocument(
+			companyId, userId, classPK, repositoryId, dirName, fileName, file);
+	}
+
+	public String addTempDocument(
+			long userId, long classPK, String fileName, String tempFolderName,
+			File file)
+		throws IOException, PortalException, SystemException {
+
+		// Add permission checking into here
+
+		return hrExpenseLocalService.addTempDocument(
+			userId, fileName, tempFolderName, file);
+	}
+
+	public void deleteTempDocument(
+			long userId, long classPK, String fileName, String tempFolderName)
+		throws PortalException, SystemException {
+
+		// Add permission checking into here
+
+		hrExpenseLocalService.deleteTempDocument(
+			userId, fileName, tempFolderName);
+	}
+
+	public String[] getTempDocumentNames(
+			long userId, long classPK, String tempFolderName)
+		throws PortalException, SystemException {
+
+		// Add permission checking into here
+
+		return hrExpenseLocalService.getTempDocumentNames(
+			userId, tempFolderName);
+	}
+
 }
