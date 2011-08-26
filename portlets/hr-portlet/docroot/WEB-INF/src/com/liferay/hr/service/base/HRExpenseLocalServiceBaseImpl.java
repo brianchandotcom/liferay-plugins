@@ -21,6 +21,7 @@ import com.liferay.hr.service.HRExpenseAccountLocalService;
 import com.liferay.hr.service.HRExpenseCurrencyConversionLocalService;
 import com.liferay.hr.service.HRExpenseCurrencyLocalService;
 import com.liferay.hr.service.HRExpenseLocalService;
+import com.liferay.hr.service.HRExpenseService;
 import com.liferay.hr.service.HRExpenseTypeLocalService;
 import com.liferay.hr.service.persistence.HRAssetCheckoutPersistence;
 import com.liferay.hr.service.persistence.HRAssetDefinitionPersistence;
@@ -553,6 +554,24 @@ public abstract class HRExpenseLocalServiceBaseImpl
 	public void setHRExpenseLocalService(
 		HRExpenseLocalService hrExpenseLocalService) {
 		this.hrExpenseLocalService = hrExpenseLocalService;
+	}
+
+	/**
+	 * Returns the h r expense remote service.
+	 *
+	 * @return the h r expense remote service
+	 */
+	public HRExpenseService getHRExpenseService() {
+		return hrExpenseService;
+	}
+
+	/**
+	 * Sets the h r expense remote service.
+	 *
+	 * @param hrExpenseService the h r expense remote service
+	 */
+	public void setHRExpenseService(HRExpenseService hrExpenseService) {
+		this.hrExpenseService = hrExpenseService;
 	}
 
 	/**
@@ -1364,6 +1383,8 @@ public abstract class HRExpenseLocalServiceBaseImpl
 	protected HREmploymentTypePersistence hrEmploymentTypePersistence;
 	@BeanReference(type = HRExpenseLocalService.class)
 	protected HRExpenseLocalService hrExpenseLocalService;
+	@BeanReference(type = HRExpenseService.class)
+	protected HRExpenseService hrExpenseService;
 	@BeanReference(type = HRExpensePersistence.class)
 	protected HRExpensePersistence hrExpensePersistence;
 	@BeanReference(type = HRExpenseAccountLocalService.class)

@@ -15,6 +15,10 @@
 	<bean id="com.liferay.hr.service.HRExpenseLocalServiceUtil" class="com.liferay.hr.service.HRExpenseLocalServiceUtil">
 		<property name="service" ref="com.liferay.hr.service.HRExpenseLocalService" />
 	</bean>
+	<bean id="com.liferay.hr.service.HRExpenseService" class="com.liferay.hr.service.impl.HRExpenseServiceImpl" />
+	<bean id="com.liferay.hr.service.HRExpenseServiceUtil" class="com.liferay.hr.service.HRExpenseServiceUtil">
+		<property name="service" ref="com.liferay.hr.service.HRExpenseService" />
+	</bean>
 	<bean id="com.liferay.hr.service.persistence.HRExpensePersistence" class="com.liferay.hr.service.persistence.HRExpensePersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.hr.service.HRExpenseAccountLocalService" class="com.liferay.hr.service.impl.HRExpenseAccountLocalServiceImpl" />
 	<bean id="com.liferay.hr.service.HRExpenseAccountLocalServiceUtil" class="com.liferay.hr.service.HRExpenseAccountLocalServiceUtil">

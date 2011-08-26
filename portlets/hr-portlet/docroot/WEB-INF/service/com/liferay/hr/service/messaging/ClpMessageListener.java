@@ -19,6 +19,7 @@ import com.liferay.hr.service.HRExpenseAccountLocalServiceUtil;
 import com.liferay.hr.service.HRExpenseCurrencyConversionLocalServiceUtil;
 import com.liferay.hr.service.HRExpenseCurrencyLocalServiceUtil;
 import com.liferay.hr.service.HRExpenseLocalServiceUtil;
+import com.liferay.hr.service.HRExpenseServiceUtil;
 import com.liferay.hr.service.HRExpenseTypeLocalServiceUtil;
 
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
@@ -41,6 +42,7 @@ public class ClpMessageListener extends BaseMessageListener {
 				servletContextName.equals(getServletContextName())) {
 			HRExpenseLocalServiceUtil.clearService();
 
+			HRExpenseServiceUtil.clearService();
 			HRExpenseAccountLocalServiceUtil.clearService();
 
 			HRExpenseCurrencyLocalServiceUtil.clearService();

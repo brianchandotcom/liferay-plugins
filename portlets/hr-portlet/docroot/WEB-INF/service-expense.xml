@@ -2,7 +2,7 @@
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
 
 <service-builder>
-	<entity name="HRExpense" local-service="true" remote-service="false">
+	<entity name="HRExpense" local-service="true" remote-service="true">
 
 		<!-- PK fields -->
 

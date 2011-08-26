@@ -16,9 +16,11 @@ package com.liferay.hr.model.impl;
 
 import com.liferay.hr.model.HRExpense;
 import com.liferay.hr.model.HRExpenseModel;
+import com.liferay.hr.model.HRExpenseSoap;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -37,7 +39,9 @@ import java.lang.reflect.Proxy;
 
 import java.sql.Types;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * The base model implementation for the HRExpense service. Represents a row in the &quot;HRExpense&quot; database table, with each column mapped to a property of this class.
@@ -52,6 +56,7 @@ import java.util.Date;
  * @see com.liferay.hr.model.HRExpenseModel
  * @generated
  */
+@JSON(strict = true)
 public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 	implements HRExpenseModel {
 	/*
@@ -93,6 +98,54 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 				"value.object.finder.cache.enabled.com.liferay.hr.model.HRExpense"),
 			true);
 
+	/**
+	 * Converts the soap model instance into a normal model instance.
+	 *
+	 * @param soapModel the soap model instance to convert
+	 * @return the normal model instance
+	 */
+	public static HRExpense toModel(HRExpenseSoap soapModel) {
+		HRExpense model = new HRExpenseImpl();
+
+		model.setHrExpenseId(soapModel.getHrExpenseId());
+		model.setGroupId(soapModel.getGroupId());
+		model.setCompanyId(soapModel.getCompanyId());
+		model.setUserId(soapModel.getUserId());
+		model.setUserName(soapModel.getUserName());
+		model.setCreateDate(soapModel.getCreateDate());
+		model.setModifiedDate(soapModel.getModifiedDate());
+		model.setHrExpenseAccountId(soapModel.getHrExpenseAccountId());
+		model.setHrExpenseTypeId(soapModel.getHrExpenseTypeId());
+		model.setHrUserId(soapModel.getHrUserId());
+		model.setExpenseDate(soapModel.getExpenseDate());
+		model.setExpenseAmount(soapModel.getExpenseAmount());
+		model.setExpenseHRExpenseCurrencyId(soapModel.getExpenseHRExpenseCurrencyId());
+		model.setReimbursementAmount(soapModel.getReimbursementAmount());
+		model.setReimbursementHRExpenseCurrencyId(soapModel.getReimbursementHRExpenseCurrencyId());
+		model.setStatus(soapModel.getStatus());
+		model.setStatusByUserId(soapModel.getStatusByUserId());
+		model.setStatusByUserName(soapModel.getStatusByUserName());
+		model.setStatusDate(soapModel.getStatusDate());
+
+		return model;
+	}
+
+	/**
+	 * Converts the soap model instances into normal model instances.
+	 *
+	 * @param soapModels the soap model instances to convert
+	 * @return the normal model instances
+	 */
+	public static List<HRExpense> toModels(HRExpenseSoap[] soapModels) {
+		List<HRExpense> models = new ArrayList<HRExpense>(soapModels.length);
+
+		for (HRExpenseSoap soapModel : soapModels) {
+			models.add(toModel(soapModel));
+		}
+
+		return models;
+	}
+
 	public Class<?> getModelClass() {
 		return HRExpense.class;
 	}
@@ -123,6 +176,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@JSON
 	public long getHrExpenseId() {
 		return _hrExpenseId;
 	}
@@ -131,6 +185,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_hrExpenseId = hrExpenseId;
 	}
 
+	@JSON
 	public long getGroupId() {
 		return _groupId;
 	}
@@ -139,6 +194,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_groupId = groupId;
 	}
 
+	@JSON
 	public long getCompanyId() {
 		return _companyId;
 	}
@@ -147,6 +203,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_companyId = companyId;
 	}
 
+	@JSON
 	public long getUserId() {
 		return _userId;
 	}
@@ -163,6 +220,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_userUuid = userUuid;
 	}
 
+	@JSON
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -176,6 +234,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_userName = userName;
 	}
 
+	@JSON
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -184,6 +243,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_createDate = createDate;
 	}
 
+	@JSON
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
@@ -192,6 +252,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_modifiedDate = modifiedDate;
 	}
 
+	@JSON
 	public long getHrExpenseAccountId() {
 		return _hrExpenseAccountId;
 	}
@@ -200,6 +261,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_hrExpenseAccountId = hrExpenseAccountId;
 	}
 
+	@JSON
 	public long getHrExpenseTypeId() {
 		return _hrExpenseTypeId;
 	}
@@ -208,6 +270,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_hrExpenseTypeId = hrExpenseTypeId;
 	}
 
+	@JSON
 	public long getHrUserId() {
 		return _hrUserId;
 	}
@@ -224,6 +287,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_hrUserUuid = hrUserUuid;
 	}
 
+	@JSON
 	public Date getExpenseDate() {
 		return _expenseDate;
 	}
@@ -232,6 +296,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_expenseDate = expenseDate;
 	}
 
+	@JSON
 	public double getExpenseAmount() {
 		return _expenseAmount;
 	}
@@ -240,6 +305,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_expenseAmount = expenseAmount;
 	}
 
+	@JSON
 	public long getExpenseHRExpenseCurrencyId() {
 		return _expenseHRExpenseCurrencyId;
 	}
@@ -248,6 +314,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_expenseHRExpenseCurrencyId = expenseHRExpenseCurrencyId;
 	}
 
+	@JSON
 	public double getReimbursementAmount() {
 		return _reimbursementAmount;
 	}
@@ -256,6 +323,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_reimbursementAmount = reimbursementAmount;
 	}
 
+	@JSON
 	public long getReimbursementHRExpenseCurrencyId() {
 		return _reimbursementHRExpenseCurrencyId;
 	}
@@ -265,6 +333,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_reimbursementHRExpenseCurrencyId = reimbursementHRExpenseCurrencyId;
 	}
 
+	@JSON
 	public int getStatus() {
 		return _status;
 	}
@@ -273,6 +342,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_status = status;
 	}
 
+	@JSON
 	public long getStatusByUserId() {
 		return _statusByUserId;
 	}
@@ -290,6 +360,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_statusByUserUuid = statusByUserUuid;
 	}
 
+	@JSON
 	public String getStatusByUserName() {
 		if (_statusByUserName == null) {
 			return StringPool.BLANK;
@@ -303,6 +374,7 @@ public class HRExpenseModelImpl extends BaseModelImpl<HRExpense>
 		_statusByUserName = statusByUserName;
 	}
 
+	@JSON
 	public Date getStatusDate() {
 		return _statusDate;
 	}

@@ -1,0 +1,1 @@
+Liferay.Service.register("Liferay.Service.HR", "com.liferay.hr.service", "hr-portlet");
