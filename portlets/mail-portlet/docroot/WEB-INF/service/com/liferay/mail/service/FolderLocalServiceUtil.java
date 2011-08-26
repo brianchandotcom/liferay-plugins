@@ -270,6 +270,11 @@ public class FolderLocalServiceUtil {
 		getService().deleteFolders(accountId);
 	}
 
+	public static com.liferay.mail.model.Folder fetchFolder(long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchFolder(folderId);
+	}
+
 	public static com.liferay.mail.model.Folder getFolder(long accountId,
 		java.lang.String fullName)
 		throws com.liferay.portal.kernel.exception.PortalException,
