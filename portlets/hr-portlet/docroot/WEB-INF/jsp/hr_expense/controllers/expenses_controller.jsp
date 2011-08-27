@@ -38,6 +38,57 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 		redirectTo(redirect);
 	}
 
+	public void comment() throws Exception {
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		try {
+			String redirect = ParamUtil.getString(actionRequest, "redirect");
+
+			if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
+				MBMessage message = updateMessage(actionRequest);
+
+				String randomNamespace = ParamUtil.getString(
+					actionRequest, "randomNamespace");
+
+				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+				jsonObject.put("messageId", message.getMessageId());
+				jsonObject.put("randomNamespace", randomNamespace);
+
+				writeJSON(actionRequest, actionResponse, jsonObject);
+
+				return;
+			}
+			else if (cmd.equals(Constants.DELETE)) {
+				deleteMessage(actionRequest);
+			}
+			else if (cmd.equals(Constants.SUBSCRIBE_TO_COMMENTS)) {
+				subscribeToComments(actionRequest, true);
+			}
+			else if (cmd.equals(Constants.UNSUBSCRIBE_FROM_COMMENTS)) {
+				subscribeToComments(actionRequest, false);
+			}
+
+			redirectTo(redirect);
+		}
+		catch (Exception e) {
+			if (e instanceof MessageBodyException ||
+				e instanceof NoSuchMessageException ||
+				e instanceof PrincipalException ||
+				e instanceof RequiredMessageException) {
+
+				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+				jsonObject.putException(e);
+
+				writeJSON(actionRequest, actionResponse, jsonObject);
+			}
+			else {
+				throw e;
+			}
+		}
+	}
+
 	public void delete() throws Exception {
 		long hrExpenseId = ParamUtil.getLong(request, "id");
 

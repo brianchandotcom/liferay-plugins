@@ -116,6 +116,149 @@ alloyController.execute();
 %>
 
 <%!
+protected MBMessage updateMessage(ActionRequest actionRequest)
+	throws Exception {
+
+	ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+		WebKeys.THEME_DISPLAY);
+
+	String className = ParamUtil.getString(actionRequest, "className");
+	long classPK = ParamUtil.getLong(actionRequest, "classPK");
+	String permissionClassName = ParamUtil.getString(
+		actionRequest, "permissionClassName");
+	long permissionClassPK = ParamUtil.getLong(
+		actionRequest, "permissionClassPK");
+	long permissionOwnerId = ParamUtil.getLong(
+		actionRequest, "permissionOwnerId");
+
+	long messageId = ParamUtil.getLong(actionRequest, "messageId");
+
+	long threadId = ParamUtil.getLong(actionRequest, "threadId");
+	long parentMessageId = ParamUtil.getLong(
+		actionRequest, "parentMessageId");
+	String subject = ParamUtil.getString(actionRequest, "subject");
+	String body = ParamUtil.getString(actionRequest, "body");
+
+	ServiceContext serviceContext = ServiceContextFactory.getInstance(
+		className, actionRequest);
+
+	MBMessage message = null;
+
+	if (messageId <= 0) {
+
+		// Add message
+
+		User user = null;
+
+		if (themeDisplay.isSignedIn()) {
+			user = themeDisplay.getUser();
+		}
+		else {
+			String emailAddress = ParamUtil.getString(
+				actionRequest, "emailAddress");
+
+			try {
+				user = UserLocalServiceUtil.getUserByEmailAddress(
+					themeDisplay.getCompanyId(), emailAddress);
+			}
+			catch (NoSuchUserException nsue) {
+				return null;
+			}
+
+			if (user.getStatus() != WorkflowConstants.STATUS_INCOMPLETE) {
+				return  null;
+			}
+		}
+
+		String name = PrincipalThreadLocal.getName();
+
+		PrincipalThreadLocal.setName(user.getUserId());
+
+		try {
+			message = MBMessageServiceUtil.addDiscussionMessage(
+				themeDisplay.getScopeGroupId(), className, classPK,
+				permissionClassName, permissionClassPK, permissionOwnerId,
+				threadId, parentMessageId, subject, body, serviceContext);
+		}
+		finally {
+			PrincipalThreadLocal.setName(name);
+		}
+	}
+	else {
+
+		// Update message
+
+		message = MBMessageServiceUtil.updateDiscussionMessage(
+			className, classPK, permissionClassName, permissionClassPK,
+			permissionOwnerId, messageId, subject, body, serviceContext);
+	}
+
+	// Subscription
+
+	boolean subscribe = ParamUtil.getBoolean(actionRequest, "subscribe");
+
+	if (subscribe) {
+		SubscriptionLocalServiceUtil.addSubscription(
+			themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
+			className, classPK);
+	}
+
+	return message;
+}
+
+protected void deleteMessage(ActionRequest actionRequest) throws Exception {
+	long groupId = PortalUtil.getScopeGroupId(actionRequest);
+
+	String className = ParamUtil.getString(actionRequest, "className");
+	long classPK = ParamUtil.getLong(actionRequest, "classPK");
+	String permissionClassName = ParamUtil.getString(
+		actionRequest, "permissionClassName");
+	long permissionClassPK = ParamUtil.getLong(
+		actionRequest, "permissionClassPK");
+	long permissionOwnerId = ParamUtil.getLong(
+		actionRequest, "permissionOwnerId");
+
+	long messageId = ParamUtil.getLong(actionRequest, "messageId");
+
+	MBMessageServiceUtil.deleteDiscussionMessage(
+		groupId, className, classPK, permissionClassName, permissionClassPK,
+		permissionOwnerId, messageId);
+}
+
+protected void subscribeToComments(
+		ActionRequest actionRequest, boolean subscribe)
+	throws Exception {
+
+	ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+		WebKeys.THEME_DISPLAY);
+
+	String className = ParamUtil.getString(actionRequest, "className");
+	long classPK = ParamUtil.getLong(actionRequest, "classPK");
+
+	if (subscribe) {
+		SubscriptionLocalServiceUtil.addSubscription(
+			themeDisplay.getUserId(), themeDisplay.getScopeGroupId(),
+			className, classPK);
+	}
+	else {
+		SubscriptionLocalServiceUtil.deleteSubscription(
+			themeDisplay.getUserId(), className, classPK);
+	}
+}
+
+protected void writeJSON(
+		PortletRequest portletRequest, ActionResponse actionResponse,
+		Object json)
+	throws IOException {
+
+	HttpServletResponse jsonResponse = PortalUtil.getHttpServletResponse(
+		actionResponse);
+
+	jsonResponse.setContentType(ContentTypes.TEXT_JAVASCRIPT);
+
+	ServletResponseUtil.write(jsonResponse, json.toString());
+}
+
 protected void registerIndex(String className, Indexer indexer, HttpServletRequest request) throws Exception {
 	Indexer classIndexer = IndexerRegistryUtil.getIndexer(className);
 
