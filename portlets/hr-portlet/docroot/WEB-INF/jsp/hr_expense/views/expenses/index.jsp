@@ -16,6 +16,10 @@
 
 <%@ include file="/WEB-INF/jsp/hr_expense/views/init.jsp" %>
 
+<liferay-util:include page="/WEB-INF/jsp/hr_expense/views/page_tabs.jsp" servletContext="<%= application %>">
+	<liferay-util:param name="tabs1" value="expenses" />
+</liferay-util:include>
+
 <portlet:renderURL var="addHRExpenseURL">
 	<portlet:param name="controller" value="expenses" />
 	<portlet:param name="action" value="edit" />
