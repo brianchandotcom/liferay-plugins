@@ -259,6 +259,167 @@ protected void writeJSON(
 	ServletResponseUtil.write(jsonResponse, json.toString());
 }
 
+protected void addDocument(
+		ActionRequest actionRequest, ActionResponse actionResponse,
+		String fileName, String className, String tempFolderName,
+		List<String> validFileNames,
+		List<KeyValuePair> invalidFileNameKVPs)
+	throws Exception {
+
+	ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+	long companyId = themeDisplay.getCompanyId();
+	long userId = themeDisplay.getUserId();
+	long classPK = ParamUtil.getLong(actionRequest, "classPK");
+	long repositoryId = CompanyConstants.SYSTEM;
+
+	String dirName = getDirectoryName(className, classPK);
+
+	File file = null;
+
+	try {
+		file = TempFileUtil.getTempFile(userId, fileName, tempFolderName);
+
+		if ((file != null) && file.exists()) {
+			HRExpenseServiceUtil.addDocument(
+				companyId, userId, classPK, repositoryId, dirName, fileName,
+				file);
+
+			validFileNames.add(fileName);
+		}
+	}
+	catch (Exception e) {
+		String errorMessage = "file-upload-error";
+
+		invalidFileNameKVPs.add(
+			new KeyValuePair(fileName, errorMessage));
+	}
+	finally {
+		FileUtil.delete(file);
+	}
+}
+
+protected void addMultipleDocuments(
+		ActionRequest actionRequest, ActionResponse actionResponse,
+		String className, String tempFolderName)
+	throws Exception {
+
+	List<String> validFileNames = new ArrayList<String>();
+	List<KeyValuePair> invalidFileNameKVPs =
+		new ArrayList<KeyValuePair>();
+
+	String[] selectedFileNames = ParamUtil.getParameterValues(
+		actionRequest, "selectedFileName");
+
+	for (String selectedFileName : selectedFileNames) {
+		addDocument(actionRequest, actionResponse, selectedFileName,
+			className, tempFolderName, validFileNames, invalidFileNameKVPs);
+	}
+
+	JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+	for (String validFileName : validFileNames) {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put("added", Boolean.TRUE);
+		jsonObject.put("fileName", validFileName);
+
+		jsonArray.put(jsonObject);
+	}
+
+	for (KeyValuePair invalidFileNameKVP : invalidFileNameKVPs) {
+		String fileName = invalidFileNameKVP.getKey();
+		String errorMessage = invalidFileNameKVP.getValue();
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put("added", Boolean.FALSE);
+		jsonObject.put("errorMessage", errorMessage);
+		jsonObject.put("fileName", fileName);
+
+		jsonArray.put(jsonObject);
+	}
+
+	writeJSON(actionRequest, actionResponse, jsonArray);
+}
+
+protected void addTempDocument(ActionRequest actionRequest, String tempFolderName)
+	throws Exception {
+
+	UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(
+		actionRequest);
+
+	long userId = ParamUtil.getLong(actionRequest, "userId");
+	long classPK = ParamUtil.getLong(uploadRequest, "classPK");
+	String fileName = uploadRequest.getFileName("file");
+	File file = uploadRequest.getFile("file");
+
+	HRExpenseServiceUtil.addTempDocument(
+		userId, classPK, fileName, tempFolderName, file);
+}
+
+protected void deleteTempDocument(
+		ActionRequest actionRequest, ActionResponse actionResponse, String tempFolderName)
+	throws Exception {
+
+	long userId = ParamUtil.getLong(actionRequest, "userId");
+	long classPK = ParamUtil.getLong(actionRequest, "classPK");
+	String fileName = ParamUtil.getString(actionRequest, "fileName");
+
+	JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+	try {
+		HRExpenseServiceUtil.deleteTempDocument(
+			userId, classPK, fileName, tempFolderName);
+
+		jsonObject.put("deleted", Boolean.TRUE);
+	}
+	catch (Exception e) {
+		jsonObject.put("deleted", Boolean.FALSE);
+		jsonObject.put(
+			"errorMessage",
+			"an-unexpected-error-occurred-while-deleting-the-file");
+	}
+
+	writeJSON(actionRequest, actionResponse, jsonObject);
+}
+
+protected String getDirectoryName(String className, long classPK) {
+	String classFolder = StringUtil.extractLast(className, ".");
+
+	return classFolder.toLowerCase() + "/" + String.valueOf(classPK);
+}
+
+protected void updateDocuments(HttpServletRequest request) throws Exception {
+	ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+
+	long companyId = themeDisplay.getCompanyId();
+	String className = ParamUtil.getString(request, "className");
+	long classPK = ParamUtil.getLong(request, "classPK");
+	long repositoryId = CompanyConstants.SYSTEM;
+	String existingFiles = ParamUtil.getString(request, "filesSearchContainerPrimaryKeys");
+
+	String dirName = getDirectoryName(className, classPK);
+
+	List<String> existingFilesList = ListUtil.toList(StringUtil.split(existingFiles));
+
+	String[] fileNames = new String[0];
+
+	try {
+		fileNames = DLStoreUtil.getFileNames(companyId, repositoryId, dirName);
+	}
+	catch (NoSuchDirectoryException nsde) {
+	}
+
+	for (String fileName : fileNames) {
+		String shortFileName = FileUtil.getShortFileName(fileName);
+
+		if (!existingFilesList.contains(shortFileName)) {
+			DLStoreUtil.deleteFile(companyId, repositoryId, fileName);
+		}
+	}
+}
+
 protected void registerIndex(String className, Indexer indexer, HttpServletRequest request) throws Exception {
 	Indexer classIndexer = IndexerRegistryUtil.getIndexer(className);
 

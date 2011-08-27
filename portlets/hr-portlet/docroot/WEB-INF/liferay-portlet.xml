@@ -8,6 +8,7 @@
 		<friendly-url-mapping>hr_expense</friendly-url-mapping>
 		<friendly-url-routes>com/liferay/util/bridges/alloy/alloy-friendly-url-routes.xml?controller=expenses</friendly-url-routes>
 		<header-portlet-javascript>/js/main.js</header-portlet-javascript>
+		<footer-portlet-javascript>/js/service.js</footer-portlet-javascript>
 		<css-class-wrapper>hr-expense-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>

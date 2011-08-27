@@ -101,6 +101,20 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 		redirectTo(redirectURL);
 	}
 
+	public void docs() throws Exception {
+		String uploadMethod = ParamUtil.getString(actionRequest, "uploadMethod");
+
+		if (uploadMethod.equals(Constants.ADD_MULTIPLE)) {
+			addMultipleDocuments(actionRequest, actionResponse, _className, _tempFolderName);
+		}
+		else if (uploadMethod.equals(Constants.ADD_TEMP)) {
+			addTempDocument(actionRequest, _tempFolderName);
+		}
+		else if (uploadMethod.equals(Constants.DELETE_TEMP)) {
+			deleteTempDocument(actionRequest, actionResponse, _tempFolderName);
+		}
+	}
+
 	public void edit() throws Exception {
 		String cmd = Constants.ADD;
 
@@ -169,6 +183,8 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 		HRExpense hrExpense = HRExpenseLocalServiceUtil.getHRExpense(hrExpenseId);
 
 		updateModel(hrExpense, request);
+
+		updateDocuments(request);
 
 		HRExpenseLocalServiceUtil.updateHRExpense(hrExpense);
 
