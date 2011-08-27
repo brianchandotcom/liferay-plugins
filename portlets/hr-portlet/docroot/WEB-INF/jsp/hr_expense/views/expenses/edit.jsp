@@ -159,3 +159,129 @@
 		}
 	);
 </aui:script>
+
+<aui:script>
+	AUI({}).use(
+		"aui-base",
+		"autocomplete",
+		"autocomplete-filters",
+		"autocomplete-highlighters",
+		"json-parse",
+		function(A) {
+			var accountNode = A.one('#<portlet:namespace />hrExpenseAccountName').plug(A.Plugin.AutoComplete, {
+				resultFilters: 'startsWith',
+				resultHighlighter: 'startsWith',
+				resultTextLocator: 'name',
+				source: ${hrExpenseAccountsJSON}
+			});
+
+			var currentHit = accountNode.ac.get('value');
+			var lastValue = accountNode.ac.get('value');
+
+			var hrExpenseAccountId = A.one('#<portlet:namespace />hrExpenseAccountId');
+
+			accountNode.ac.after('clear', function(event) {
+				currentHit = '';
+				lastValue = '';
+			});
+
+			accountNode.ac.after('select', function(event) {
+				currentHit = setPrimaryKey(event.result);
+
+				lastValue = event.result.text;
+			});
+
+			accountNode.ac.on('results', function(event) {
+				if (event.results.length) {
+					currentHit = setPrimaryKey(event.results[0]);
+
+					lastValue = accountNode.ac.get('value');
+				}
+				else {
+					accountNode.set('value', lastValue);
+				}
+			});
+
+			accountNode.on('change', function(event) {
+				lastValue = currentHit;
+
+				accountNode.set('value', currentHit);
+			});
+
+			function setPrimaryKey(result) {
+				if (result == null) {
+					return 0;
+				}
+
+				var hrExpenseAccount = result.raw;
+
+				hrExpenseAccountId.set('value', hrExpenseAccount.hrExpenseAccountId);
+
+				return hrExpenseAccount.name;
+			}
+		}
+	);
+</aui:script>
+
+<aui:script>
+	AUI({}).use(
+		"aui-base",
+		"autocomplete",
+		"autocomplete-filters",
+		"autocomplete-highlighters",
+		"json-parse",
+		function(A) {
+			var typeNode = A.one('#<portlet:namespace />hrExpenseTypeName').plug(A.Plugin.AutoComplete, {
+				resultFilters: 'startsWith',
+				resultHighlighter: 'startsWith',
+				resultTextLocator: 'name',
+				source: ${hrExpenseTypesJSON}
+			});
+
+			var currentHit = typeNode.ac.get('value');
+			var lastValue = typeNode.ac.get('value');
+
+			var hrExpenseTypeId = A.one('#<portlet:namespace />hrExpenseTypeId');
+
+			typeNode.ac.after('clear', function(event) {
+				currentHit = '';
+				lastValue = '';
+			});
+
+			typeNode.ac.after('select', function(event) {
+				currentHit = setPrimaryKey(event.result);
+
+				lastValue = event.result.text;
+			});
+
+			typeNode.ac.on('results', function(event) {
+				if (event.results.length) {
+					currentHit = setPrimaryKey(event.results[0]);
+
+					lastValue = typeNode.ac.get('value');
+				}
+				else {
+					typeNode.set('value', lastValue);
+				}
+			});
+
+			typeNode.on('change', function(event) {
+				lastValue = currentHit;
+
+				typeNode.set('value', currentHit);
+			});
+
+			function setPrimaryKey(result) {
+				if (result == null) {
+					return 0;
+				}
+
+				var hrExpenseType = result.raw;
+
+				hrExpenseTypeId.set('value', hrExpenseType.hrExpenseTypeId);
+
+				return hrExpenseType.name;
+			}
+		}
+	);
+</aui:script>
