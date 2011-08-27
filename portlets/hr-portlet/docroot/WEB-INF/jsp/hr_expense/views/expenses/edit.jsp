@@ -90,6 +90,19 @@
 				<aui:input name="reimbursementAmount" disabled="<%= true %>" />
 			</aui:column>
 		</aui:layout>
+		<aui:layout>
+			<aui:column>
+				<aui:button-row>
+					<portlet:renderURL var="viewHRExpenseCurrencyConversionsURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+						<portlet:param name="controller" value="currency_conversions" />
+						<portlet:param name="action" value="index" />
+						<portlet:param name="format" value="html" />
+					</portlet:renderURL>
+
+					<aui:button name="viewCurrencyConversions" value="view-currency-conversions" />
+				</aui:button-row>
+			</aui:column>
+		</aui:layout>
 	</aui:fieldset>
 
 	<aui:button-row>
@@ -134,4 +147,15 @@
 		var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 		return result;
 	}
+</aui:script>
+
+<aui:script use="aui-base">
+	var viewCurrencyConversionsButton = A.one('#<portlet:namespace />viewCurrencyConversions');
+
+	viewCurrencyConversionsButton.on(
+		'click',
+		function(event) {
+			Liferay.HR.displayPopup('${viewHRExpenseCurrencyConversionsURL}', '<liferay-ui:message key="view-currency-conversions" />');
+		}
+	);
 </aui:script>
