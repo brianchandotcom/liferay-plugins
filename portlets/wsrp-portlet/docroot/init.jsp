@@ -25,7 +25,6 @@
 <%@ page import="com.liferay.portal.kernel.bean.BeanParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.dao.search.ResultRow" %>
 <%@ page import="com.liferay.portal.kernel.dao.search.SearchContainer" %>
-<%@ page import="com.liferay.portal.kernel.dao.search.SearchEntry" %>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.liferay.portal.kernel.servlet.ServletContextPool" %>
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
@@ -57,15 +56,14 @@
 <%@ page import="com.liferay.wsrp.service.WSRPProducerLocalServiceUtil" %>
 <%@ page import="com.liferay.wsrp.util.Constants" %>
 <%@ page import="com.liferay.wsrp.util.LocalizedStringUtil" %>
-<%@ page import="com.liferay.wsrp.util.WebKeys" %>
 <%@ page import="com.liferay.wsrp.util.WSRPConsumerManager" %>
 <%@ page import="com.liferay.wsrp.util.WSRPConsumerManagerFactory" %>
+<%@ page import="com.liferay.wsrp.util.WebKeys" %>
 
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 
 <%@ page import="javax.portlet.PortletURL" %>
 
