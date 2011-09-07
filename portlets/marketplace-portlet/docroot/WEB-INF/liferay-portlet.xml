@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.0.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_0_0.dtd">
+
+<liferay-portlet-app>
+	<portlet>
+		<portlet-name>1</portlet-name>
+		<icon>/store/icon.png</icon>
+		<control-panel-entry-category>marketplace</control-panel-entry-category>
+		<control-panel-entry-weight>1.0</control-panel-entry-weight>
+		<use-default-template>false</use-default-template>
+		<instanceable>false</instanceable>
+		<private-request-attributes>false</private-request-attributes>
+		<private-session-attributes>false</private-session-attributes>
+		<render-weight>50</render-weight>
+		<header-portlet-css>/store/css/main.css</header-portlet-css>
+		<css-class-wrapper>marketplace-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+		<system>true</system>
+	</portlet>
+	<portlet>
+		<portlet-name>2</portlet-name>
+		<icon>/my_marketplace/icon.png</icon>
+		<control-panel-entry-category>marketplace</control-panel-entry-category>
+		<control-panel-entry-weight>2.0</control-panel-entry-weight>
+		<preferences-owned-by-group>false</preferences-owned-by-group>
+		<use-default-template>false</use-default-template>
+		<instanceable>false</instanceable>
+		<private-request-attributes>false</private-request-attributes>
+		<private-session-attributes>false</private-session-attributes>
+		<render-weight>50</render-weight>
+		<header-portlet-css>/store/css/main.css</header-portlet-css>
+		<css-class-wrapper>marketplace-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
+		<system>true</system>
+	</portlet>
+	<role-mapper>
+		<role-name>administrator</role-name>
+		<role-link>Administrator</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>power-user</role-name>
+		<role-link>Power User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>user</role-name>
+		<role-link>User</role-link>
+	</role-mapper>
+</liferay-portlet-app>
