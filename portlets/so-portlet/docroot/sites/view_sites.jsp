@@ -39,12 +39,12 @@ else {
 	params.put("types", types);
 }
 
-List<Group> groups = GroupLocalServiceUtil.search(themeDisplay.getCompanyId(), searchKeywords, null, params, 0, 20, new GroupNameComparator(true));
+List<Group> groups = GroupLocalServiceUtil.search(themeDisplay.getCompanyId(), searchKeywords, null, params, 0, maxResultSize, new GroupNameComparator(true));
 
 int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(), searchKeywords, null, params);
 %>
 
-<div class="directory">
+<div id="<portlet:namespace />directory" class="so-sites-directory">
 	<liferay-ui:header title="directory" />
 
 	<div class="search">
@@ -72,7 +72,7 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		<%
 		boolean alternate = false;
 
-		String starredGroupIds = preferences.getValue("starredGroupIds", StringPool.BLANK);
+		String starredGroupIds = SitesUtil.getStarredGroupIds(themeDisplay.getUserId());
 
 		for (Group group : groups) {
 			String classNames = StringPool.BLANK;
@@ -103,7 +103,7 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 								<portlet:param name="starredGroupId" value="<%= String.valueOf(group.getGroupId()) %>" />
 							</liferay-portlet:actionURL>
 
-							<a href="<%= starURL %>"><liferay-ui:message key="star" /></a>
+							<a class="star-site" href="<%= starURL %>"><liferay-ui:message key="star" /></a>
 						</span>
 					</c:when>
 					<c:otherwise>
@@ -115,24 +115,56 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 								<portlet:param name="starredGroupId" value="<%= String.valueOf(group.getGroupId()) %>" />
 							</liferay-portlet:actionURL>
 
-							<a href="<%= unstarURL %>"><liferay-ui:message key="unstar" /></a>
+							<a class="unstar-site" href="<%= unstarURL %>"><liferay-ui:message key="unstar" /></a>
 						</span>
 					</c:otherwise>
 				</c:choose>
 
-				<c:if test="<%= !GroupLocalServiceUtil.hasUserGroup(themeDisplay.getUserId(), group.getGroupId()) && GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ASSIGN_MEMBERS) %>">
-					<liferay-portlet:actionURL windowState="<%= WindowState.NORMAL.toString() %>" portletName="<%= PortletKeys.SITES_ADMIN %>" var="joinURL">
-						<portlet:param name="struts_action" value="/sites_admin/edit_site_assignments" />
-						<portlet:param name="<%= Constants.CMD %>" value="group_users" />
-						<portlet:param name="redirect" value="<%= currentURL %>" />
-						<portlet:param name="groupId" value="<%= String.valueOf(group.getGroupId()) %>" />
-						<portlet:param name="addUserIds" value="<%= String.valueOf(user.getUserId()) %>" />
-					</liferay-portlet:actionURL>
-
+				<c:if test="<%= !member && group.getType() == GroupConstants.TYPE_SITE_OPEN %>">
 					<span class="action join">
-						<a href="<%= joinURL %>"><liferay-ui:message key="join" /></a>
+						<liferay-portlet:actionURL windowState="<%= WindowState.NORMAL.toString() %>" portletName="<%= PortletKeys.SITES_ADMIN %>" var="joinURL">
+							<portlet:param name="struts_action" value="/sites_admin/edit_site_assignments" />
+							<portlet:param name="<%= Constants.CMD %>" value="group_users" />
+							<portlet:param name="redirect" value="<%= currentURL %>" />
+							<portlet:param name="groupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+							<portlet:param name="addUserIds" value="<%= String.valueOf(user.getUserId()) %>" />
+						</liferay-portlet:actionURL>
+
+						<a class="join-site" href="<%= joinURL %>"><liferay-ui:message key="join" /></a>
 					</span>
 				</c:if>
+
+				<c:if test="<%= member %>">
+					<span class="action leave">
+						<liferay-portlet:actionURL windowState="<%= WindowState.NORMAL.toString() %>" portletName="<%= PortletKeys.SITES_ADMIN %>" var="leaveURL">
+							<portlet:param name="struts_action" value="/sites_admin/edit_site_assignments" />
+							<portlet:param name="<%= Constants.CMD %>" value="group_users" />
+							<portlet:param name="redirect" value="<%= currentURL %>" />
+							<portlet:param name="groupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+							<portlet:param name="removeUserIds" value="<%= String.valueOf(user.getUserId()) %>" />
+						</liferay-portlet:actionURL>
+
+						<a class="leave-site" href="<%= leaveURL %>"><liferay-ui:message key="leave" /></a>
+					</span>
+				</c:if>
+
+				<c:choose>
+					<c:when test="<%=  GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.DELETE) %>">
+						<span class="action delete">
+							<liferay-portlet:actionURL windowState="<%= WindowState.NORMAL.toString() %>" portletName="<%= PortletKeys.SITES_ADMIN %>" var="deleteURL">
+								<portlet:param name="struts_action" value="/sites_admin/edit_site" />
+								<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+								<portlet:param name="redirect" value="<%= currentURL %>" />
+								<portlet:param name="groupId" value="<%= String.valueOf(group.getGroupId()) %>" />
+							</liferay-portlet:actionURL>
+
+							<a class="delete-site" href="<%= deleteURL %>"><liferay-ui:message key="delete" /></a>
+						</span>
+					</c:when>
+					<c:otherwise>
+						<span class="action-not-allowed"></span>
+					</c:otherwise>
+				</c:choose>
 
 				<span class="name">
 					<c:choose>
@@ -166,18 +198,14 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 	<aui:button-row>
 		<div class="directory-navigation buttons-left">
 			<span class="page-indicator">
-				<%= LanguageUtil.format(pageContext, "page-x-of-x", new String[] {"<span class=\"current\">1</span>", "<span class=\"total\">" + String.valueOf((int)Math.ceil(groupsCount / 20.0)) + "</span>"}) %>
+				<%= LanguageUtil.format(pageContext, "page-x-of-x", new String[] {"<span class=\"current\">1</span>", "<span class=\"total\">" + String.valueOf((int)Math.ceil(groupsCount / (float)maxResultSize)) + "</span>"}) %>
 			</span>
-		</div>
-
-		<div class="buttons-right">
-			<aui:button onClick="Liferay.SO.Sites.closePopup()" value="close" />
 		</div>
 	</aui:button-row>
 </div>
 
 <aui:script use="datatype-number,liferay-so-site-list">
-	var directoryContainer = A.one('.so-portlet-sites-dialog');
+	var directoryContainer = A.one('#<portlet:namespace />directory');
 
 	var navigationContainer = directoryContainer.all('.directory-navigation');
 
@@ -194,19 +222,21 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 			requestTemplate: function(query) {
 				return {
 					directory: true,
-					end: 20,
+					end: <%= maxResultSize %>,
 					keywords: query,
 					start: 0,
 					userGroups: userGroupsCheckbox.get('checked')
 				}
 			},
 
-			inputNode: '.so-portlet-sites-dialog #<portlet:namespace />dialogKeywords',
-			listNode: '.so-portlet-sites-dialog .directory-list',
+			inputNode: '#<portlet:namespace />directory #<portlet:namespace />dialogKeywords',
+			listNode: '#<portlet:namespace />directory .directory-list',
 			minQueryLength: 0,
 			source: Liferay.SO.Sites.createDataSource('<portlet:resourceURL id="getSites" />')
 		}
 	);
+
+	Liferay.SO.Sites.createDirectoryList(directoryList);
 
 	var updateDirectoryList = function(event) {
 		var data = A.JSON.parse(event.data.responseText);
@@ -220,7 +250,7 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 
 		if (results.length == 0) {
 			buffer.push(
-				'<li class="empty">' + Liferay.Language.get('there-are-no-results') + '</li>'
+				'<li class="empty"><liferay-ui:message key="there-are-no-results" /></li>'
 			);
 		}
 		else {
@@ -228,6 +258,8 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 				'<li class="{classNames}">' +
 					'{starHtml}' +
 					'{joinHtml}' +
+					'{leaveHtml}' +
+					'{deleteHtml}' +
 					'<span class="name">{siteName}</span>' +
 					'<span class="description">{siteDescription}</span>'
 				'</li>';
@@ -261,10 +293,12 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 							siteTemplate,
 							{
 								classNames: classNames.join(' '),
-								joinHtml: (result.joinUrl ? '<span class="action join"><a href="' + result.joinUrl + '">' + Liferay.Language.get('join') + '</a></span>' : ''),
-								siteDescription: result.description,
+								starHtml: (result.starURL ? '<span class="action star"><a class="star-site" href="' + result.starURL + '"><liferay-ui:message key="star" /></a></span>' : '<span class="action unstar"><a class="unstar-site" href="' + result.unstarURL + '"><liferay-ui:message key="unstar" /></a></span>'),
+								joinHtml: (result.joinUrl ? '<span class="action join"><a class="join-site" href="' + result.joinUrl + '"><liferay-ui:message key="join" /></a></span>' : ''),
+								leaveHtml: (result.leaveUrl ? '<span class="action leave"><a class="leave-site" href="' + result.leaveUrl + '"><liferay-ui:message key="leave" /></a></span>' : ''),
+								deleteHtml: (result.deleteURL ? '<span class="action delete"><a class="delete-site" href="' + result.deleteURL + '"><liferay-ui:message key="delete" /></a></span>' : '<span class="action-not-allowed"></span>'),
 								siteName: name,
-								starHtml: (result.starURL ? '<span class="action star"><a href="' + result.starURL + '">' + Liferay.Language.get('star') + '</a></span>' : '<span class="action unstar"><a href="' + result.unstarURL + '">' + Liferay.Language.get('unstar') + '</a></span>')
+								siteDescription: result.description
 							}
 						);
 					}
@@ -274,8 +308,8 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 
 		this._listNode.html(buffer.join(''));
 
-		var currentPage = Math.floor(options.start / 20) + 1;
-		var totalPage = Math.ceil(count / 20);
+		var currentPage = Math.floor(options.start/<%= maxResultSize %>) + 1;
+		var totalPage = Math.ceil(count/<%= maxResultSize %>);
 
 		currentPageNode.html(currentPage);
 		totalPageNode.html(totalPage);
@@ -298,8 +332,8 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 	directoryList.on('results', updateDirectoryList);
 
 	var getRequestTemplate = function(targetPage) {
-		var start = (targetPage - 1) * 20;
-		var end = start + 19;
+		var start = (targetPage - 1) * <%= maxResultSize %>;
+		var end = start + <%= maxResultSize %>;
 
 		return function(query) {
 			return {
@@ -355,20 +389,57 @@ int groupsCount = GroupLocalServiceUtil.searchCount(themeDisplay.getCompanyId(),
 		function(event) {
 			event.preventDefault();
 
-			A.io.request(
-				event.currentTarget.get('href'),
-				{
-					after: {
-						success: function(event, id, obj) {
-							Liferay.SO.Sites.updateSites();
+			var currentTargetClass = event.currentTarget.getAttribute('class');
 
-							var targetPage = A.DataType.Number.parse(currentPageNode.html());
+			if((currentTargetClass == 'delete-site') || (currentTargetClass == "leave-site") || (currentTargetClass == "join-site")) {
+				var confirmMessage = '';
 
-							directoryList.sendRequest(keywordsInput.get('value'), getRequestTemplate(targetPage));
+				var siteAction = '';
+
+				var siteNode = event.currentTarget.ancestor('li');
+
+				var siteName = siteNode.one('.name a');
+
+				if (currentTargetClass == "leave-site") {
+					confirmMessage = '<liferay-ui:message key="are-you-sure-you-want-to-leave-x" arguments='<%= siteName.getContent() %>' />';
+					siteAction = '<liferay-ui:message key="you-have-left-x" arguments='<%= siteName.getContent() %>' />';
+				}
+				else if (currentTargetClass == "join-site") {
+					confirmMessage = '<liferay-ui:message key="are-you-sure-you-want-to-join-x" arguments='<%= siteName.getContent() %>' />';
+					siteAction = '<liferay-ui:message key="you-have-joined-x" arguments='<%= siteName.getContent() %>' />';
+				}
+				else {
+					confirmMessage = '<liferay-ui:message key="are-you-sure-you-want-to-delete-x" arguments='<%= siteName.getContent() %>' />';
+					siteAction = '<liferay-ui:message key="you-have-deleted-x" arguments='<%= siteName.getContent() %>' />';
+				}
+
+				if (confirm(confirmMessage)) {
+					A.io.request(
+						event.currentTarget.get('href'),
+						{
+							after: {
+								success: function(event, id, obj) {
+									siteName.insert(siteAction, 'replace');
+
+									setTimeout("Liferay.SO.Sites.updateSites();", 2000);
+								}
+							}
+						}
+					);
+				}
+			}
+			else {
+				A.io.request(
+					event.currentTarget.get('href'),
+					{
+						after: {
+							success: function(event, id, obj) {
+								Liferay.SO.Sites.updateSites();
+							}
 						}
 					}
-				}
-			);
+				);
+			}
 		},
 		'.action a'
 	);

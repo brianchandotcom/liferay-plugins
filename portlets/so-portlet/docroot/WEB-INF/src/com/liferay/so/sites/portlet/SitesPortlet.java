@@ -35,11 +35,13 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutSetPrototype;
+import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeServiceUtil;
+import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
@@ -47,7 +49,6 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.comparator.GroupNameComparator;
-import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.so.sites.util.SitesUtil;
 import com.liferay.so.util.WebKeys;
@@ -69,6 +70,7 @@ import javax.portlet.WindowState;
 
 /**
  * @author Ryan Park
+ * @author Jonathan Lee
  */
 public class SitesPortlet extends MVCPortlet {
 
@@ -176,10 +178,12 @@ public class SitesPortlet extends MVCPortlet {
 
 		boolean directory = ParamUtil.getBoolean(resourceRequest, "directory");
 		String keywords = DAOParamUtil.getLike(resourceRequest, "keywords");
+		String name = ParamUtil.getString(resourceRequest, "keywords");
 		boolean userGroups = ParamUtil.getBoolean(
 			resourceRequest, "userGroups");
 		int maxResultSize = ParamUtil.getInteger(
 			resourceRequest, "maxResultSize", 10);
+		String tabs1 = ParamUtil.getString(resourceRequest, "searchTab");
 		int start = ParamUtil.getInteger(resourceRequest, "start");
 		int end = ParamUtil.getInteger(resourceRequest, "end");
 
@@ -201,10 +205,6 @@ public class SitesPortlet extends MVCPortlet {
 
 		List<Group> groups = null;
 		int groupsCount = 0;
-
-		PortletPreferences portletPreferences =
-			PortletPreferencesFactoryUtil.getPortletSetup(
-				resourceRequest, "5_WAR_soportlet");
 
 		if (directory) {
 			LinkedHashMap<String, Object> params =
@@ -229,16 +229,26 @@ public class SitesPortlet extends MVCPortlet {
 				themeDisplay.getCompanyId(), keywords, null, params);
 		}
 		else {
-			groups = SitesUtil.getStarredSites(portletPreferences);
-			groupsCount = groups.size();
-
-			if (groups.isEmpty() || Validator.isNotNull(keywords)) {
+			if (tabs1.equals("my-favorites")) {
+				groups = SitesUtil.getStarredSites(
+					themeDisplay.getUserId(), name);
+				groupsCount = groups.size();
+			}
+			else if (tabs1.equals("my-sites")) {
 				groups = SitesUtil.getVisibleSites(
 					themeDisplay.getCompanyId(), themeDisplay.getUserId(),
-					keywords, maxResultSize);
+					keywords, maxResultSize, true);
 				groupsCount = SitesUtil.getVisibleSitesCount(
 					themeDisplay.getCompanyId(), themeDisplay.getUserId(),
-					keywords);
+					keywords, true);
+			}
+			else {
+				groups = SitesUtil.getVisibleSites(
+					themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+					keywords, maxResultSize, false);
+				groupsCount = SitesUtil.getVisibleSitesCount(
+					themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+					keywords, false);
 			}
 		}
 
@@ -246,12 +256,10 @@ public class SitesPortlet extends MVCPortlet {
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
-		String starredGroupIds = portletPreferences.getValue(
-			"starredGroupIds", StringPool.BLANK);
-
 		for (Group group : groups) {
 			JSONObject groupJSONObject = JSONFactoryUtil.createJSONObject();
 
+			groupJSONObject.put("name", group.getDescriptiveName());
 			groupJSONObject.put("description", group.getDescription());
 			groupJSONObject.put("name", group.getDescriptiveName());
 
@@ -277,30 +285,63 @@ public class SitesPortlet extends MVCPortlet {
 
 			groupJSONObject.put("socialOfficeEnabled", socialOfficeEnabled);
 
-			if (!GroupLocalServiceUtil.hasUserGroup(
-					themeDisplay.getUserId(), group.getGroupId()) &&
-				GroupPermissionUtil.contains(
-					themeDisplay.getPermissionChecker(), group.getGroupId(),
-					ActionKeys.ASSIGN_MEMBERS)) {
-
-				PortletURL portletURL = PortletURLFactoryUtil.create(
+			PortletURL siteAssignmentsPortletURL = PortletURLFactoryUtil.create(
 					PortalUtil.getHttpServletRequest(resourceRequest),
 					PortletKeys.SITES_ADMIN, themeDisplay.getLayout().getPlid(),
 					PortletRequest.ACTION_PHASE);
 
-				portletURL.setWindowState(WindowState.NORMAL);
+			siteAssignmentsPortletURL.setWindowState(WindowState.NORMAL);
 
-				portletURL.setParameter(
-					"struts_action", "/sites_admin/edit_site_assignments");
-				portletURL.setParameter(Constants.CMD, "group_users");
-				portletURL.setParameter(
-					"redirect", themeDisplay.getURLCurrent());
-				portletURL.setParameter(
-					"groupId", String.valueOf(group.getGroupId()));
-				portletURL.setParameter(
+			siteAssignmentsPortletURL.setParameter(
+				"struts_action", "/sites_admin/edit_site_assignments");
+			siteAssignmentsPortletURL.setParameter(
+				Constants.CMD, "group_users");
+			siteAssignmentsPortletURL.setParameter(
+				"redirect", themeDisplay.getURLCurrent());
+			siteAssignmentsPortletURL.setParameter(
+				"groupId", String.valueOf(group.getGroupId()));
+
+			if (!GroupLocalServiceUtil.hasUserGroup(
+					themeDisplay.getUserId(), group.getGroupId()) &&
+				(group.getType() == GroupConstants.TYPE_SITE_OPEN)) {
+
+				siteAssignmentsPortletURL.setParameter(
 					"addUserIds", String.valueOf(themeDisplay.getUserId()));
 
-				groupJSONObject.put("joinUrl", portletURL.toString());
+				groupJSONObject.put(
+					"joinUrl", siteAssignmentsPortletURL.toString());
+			}
+			else if (GroupLocalServiceUtil.hasUserGroup(
+						themeDisplay.getUserId(), group.getGroupId())) {
+
+				siteAssignmentsPortletURL.setParameter(
+					"removeUserIds", String.valueOf(themeDisplay.getUserId()));
+
+				groupJSONObject.put(
+					"leaveUrl", siteAssignmentsPortletURL.toString());
+			}
+
+			if (GroupPermissionUtil.contains(
+					themeDisplay.getPermissionChecker(), group.getGroupId(),
+					ActionKeys.DELETE)) {
+
+				PortletURL deletePortletURL = PortletURLFactoryUtil.create(
+					PortalUtil.getHttpServletRequest(resourceRequest),
+					PortletKeys.SITES_ADMIN, themeDisplay.getLayout().getPlid(),
+					PortletRequest.ACTION_PHASE);
+
+				deletePortletURL.setWindowState(WindowState.NORMAL);
+
+				deletePortletURL.setParameter(
+					"struts_action", "/sites_admin/edit_site");
+				deletePortletURL.setParameter(Constants.CMD, Constants.DELETE);
+				deletePortletURL.setParameter(
+					"redirect", themeDisplay.getURLCurrent());
+				deletePortletURL.setParameter(
+					"groupId", String.valueOf(group.getGroupId()));
+
+				groupJSONObject.put(
+					"deleteURL", deletePortletURL.toString());
 			}
 
 			PortletURL starPortletURL = resourceResponse.createActionURL();
@@ -313,6 +354,9 @@ public class SitesPortlet extends MVCPortlet {
 				"redirect", themeDisplay.getURLCurrent());
 			starPortletURL.setParameter(
 				"starredGroupId", String.valueOf(group.getGroupId()));
+
+			String starredGroupIds = SitesUtil.getStarredGroupIds(
+				themeDisplay.getUserId());
 
 			if (!StringUtil.contains(
 					starredGroupIds, String.valueOf(group.getGroupId()))) {
@@ -339,13 +383,21 @@ public class SitesPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		PortletPreferences portletPreferences =
-			PortletPreferencesFactoryUtil.getPortletSetup(
-				actionRequest, "5_WAR_soportlet");
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
-		portletPreferences.setValue("hide-notice", Boolean.TRUE.toString());
+		User user = themeDisplay.getUser();
 
-		portletPreferences.store();
+		Group userGroup = user.getGroup();
+
+		PortletPreferences preferences =
+			PortletPreferencesLocalServiceUtil.getPreferences(
+				user.getCompanyId(), userGroup.getGroupId(),
+				PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, "5_WAR_soportlet");
+
+		preferences.setValue("hide-notice", Boolean.TRUE.toString());
+
+		preferences.store();
 	}
 
 	@Override
@@ -376,6 +428,9 @@ public class SitesPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
 		long starredGroupId = ParamUtil.getLong(
@@ -394,11 +449,16 @@ public class SitesPortlet extends MVCPortlet {
 			return;
 		}
 
-		PortletPreferences portletPreferences =
-			PortletPreferencesFactoryUtil.getPortletSetup(
-				actionRequest, "5_WAR_soportlet");
+		User user = themeDisplay.getUser();
 
-		String starredGroupIds = portletPreferences.getValue(
+		Group userGroup = user.getGroup();
+
+		PortletPreferences preferences =
+			PortletPreferencesLocalServiceUtil.getPreferences(
+				user.getCompanyId(), userGroup.getGroupId(),
+				PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, "5_WAR_soportlet");
+
+		String starredGroupIds = preferences.getValue(
 			"starredGroupIds", StringPool.BLANK);
 
 		if (cmd.equals(Constants.ADD)) {
@@ -410,9 +470,9 @@ public class SitesPortlet extends MVCPortlet {
 				starredGroupIds, String.valueOf(starredGroupId));
 		}
 
-		portletPreferences.setValue("starredGroupIds", starredGroupIds);
+		preferences.setValue("starredGroupIds", starredGroupIds);
 
-		portletPreferences.store();
+		preferences.store();
 
 		jsonObject.put("result", "success");
 
