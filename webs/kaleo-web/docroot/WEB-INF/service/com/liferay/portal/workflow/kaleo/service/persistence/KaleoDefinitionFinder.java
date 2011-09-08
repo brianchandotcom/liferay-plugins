@@ -12,22 +12,17 @@
  * details.
  */
 
-package com.liferay.portal.workflow.kaleo.deployment;
-
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.workflow.WorkflowDefinition;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.workflow.kaleo.definition.Definition;
+package com.liferay.portal.workflow.kaleo.service.persistence;
 
 /**
- * @author Michael C. Han
+ * @author Brian Wing Shun Chan
  */
-public interface WorkflowDeployer {
+public interface KaleoDefinitionFinder {
+	public int countKaleoDefinitions(
+		com.liferay.portal.workflow.kaleo.service.persistence.KaleoDefinitionQuery kaleoDefinitionQuery)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
-	public WorkflowDefinition deploy(
-			String title, Definition definition, long scope,
-			ServiceContext serviceContext)
-		throws PortalException, SystemException;
-
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoDefinition> findKaleoDefinitions(
+		com.liferay.portal.workflow.kaleo.service.persistence.KaleoDefinitionQuery kaleoDefinitionQuery)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }
