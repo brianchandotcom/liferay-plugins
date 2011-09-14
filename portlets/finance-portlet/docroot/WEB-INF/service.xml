@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
+
+<service-builder package-path="com.liferay.finance" auto-namespace-tables="false">
+	<namespace>Finance</namespace>
+	<service-builder-import file="service-accounts.xml" />
+	<service-builder-import file="service-accounts-payables.xml" />
+	<service-builder-import file="service-accounts-receivables.xml" />
+</service-builder>
