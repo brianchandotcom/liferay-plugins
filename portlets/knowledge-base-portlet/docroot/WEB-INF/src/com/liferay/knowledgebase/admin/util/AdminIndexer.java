@@ -58,6 +58,10 @@ public class AdminIndexer extends BaseIndexer {
 		return CLASS_NAMES;
 	}
 
+	public String getPortletId() {
+		return PORTLET_ID;
+	}
+
 	@Override
 	public void postProcessSearchQuery(
 			BooleanQuery searchQuery, SearchContext searchContext)
@@ -87,12 +91,8 @@ public class AdminIndexer extends BaseIndexer {
 	protected void doDelete(Object obj) throws Exception {
 		KBArticle kbArticle = (KBArticle)obj;
 
-		Document document = new DocumentImpl();
-
-		document.addUID(PORTLET_ID, kbArticle.getResourcePrimKey());
-
-		SearchEngineUtil.deleteDocument(
-			kbArticle.getCompanyId(), document.get(Field.UID));
+		deleteDocument(
+			kbArticle.getCompanyId(), kbArticle.getResourcePrimKey());
 	}
 
 	@Override
