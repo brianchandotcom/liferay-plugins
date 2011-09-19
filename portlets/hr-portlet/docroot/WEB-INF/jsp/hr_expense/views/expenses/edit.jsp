@@ -98,28 +98,24 @@
 				<aui:input name="reimbursementAmount" disabled="<%= true %>" />
 			</aui:column>
 		</aui:layout>
-		<aui:layout>
-			<aui:column>
-				<aui:button-row>
-					<portlet:renderURL var="viewHRExpenseCurrencyConversionsURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-						<portlet:param name="controller" value="currency_conversions" />
-						<portlet:param name="action" value="index" />
-						<portlet:param name="format" value="html" />
-					</portlet:renderURL>
-
-					<aui:button name="viewCurrencyConversions" value="view-currency-conversions" />
-				</aui:button-row>
-			</aui:column>
-		</aui:layout>
 	</aui:fieldset>
 
 	<c:if test="${hrExpense.hrExpenseId > 0}">
 		<aui:fieldset label="files">
-			<br />
+			<aui:layout>
+				<aui:column>
+					<aui:button-row>
+						<portlet:renderURL var="addDocumentsURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+							<portlet:param name="controller" value="expenses" />
+							<portlet:param name="action" value="upload" />
+							<portlet:param name="id" value="${hrExpense.hrExpenseId}" />
+							<portlet:param name="format" value="html" />
+						</portlet:renderURL>
 
-			<div class="lfr-dynamic-uploader">
-				<div class="lfr-upload-container" id="<portlet:namespace />fileUpload"></div>
-			</div>
+						<aui:button name="addDocuments" value="add-documents" />
+					</aui:button-row>
+				</aui:column>
+			</aui:layout>
 
 			<liferay-ui:search-container
 				id='<%= renderResponse.getNamespace() + "filesSearchContainer" %>'
@@ -208,12 +204,12 @@
 </aui:script>
 
 <aui:script use="aui-base">
-	var viewCurrencyConversionsButton = A.one('#<portlet:namespace />viewCurrencyConversions');
+	var addDocumentsButton = A.one('#<portlet:namespace />addDocuments');
 
-	viewCurrencyConversionsButton.on(
+	addDocumentsButton.on(
 		'click',
 		function(event) {
-			Liferay.HR.displayPopup('${viewHRExpenseCurrencyConversionsURL}', '<liferay-ui:message key="view-currency-conversions" />');
+			Liferay.HR.displayPopup('${addDocumentsURL}', '<liferay-ui:message key="add-documents" />', null, true);
 		}
 	);
 </aui:script>
@@ -357,163 +353,4 @@
 		},
 		'.modify-link'
 	);
-</aui:script>
-
-<portlet:actionURL var="addHRExpenseTempDocumentURL">
-	<portlet:param name="controller" value="expenses" />
-	<portlet:param name="action" value="docs" />
-	<portlet:param name="format" value="html" />
-	<portlet:param name="classPK" value="${hrExpense.hrExpenseId}" />
-	<portlet:param name="uploadMethod" value="<%= Constants.ADD_TEMP %>" />
-	<portlet:param name="userId" value="<%= String.valueOf(themeDisplay.getUserId()) %>" />
-</portlet:actionURL>
-
-<portlet:actionURL var="deleteHRExpenseTempDocumentURL">
-	<portlet:param name="controller" value="expenses" />
-	<portlet:param name="action" value="docs" />
-	<portlet:param name="format" value="html" />
-	<portlet:param name="classPK" value="${hrExpense.hrExpenseId}" />
-	<portlet:param name="uploadMethod" value="<%= Constants.DELETE_TEMP %>" />
-	<portlet:param name="userId" value="<%= String.valueOf(themeDisplay.getUserId()) %>" />
-</portlet:actionURL>
-
-<portlet:actionURL var="addHRExpenseMultipleDocumentsURL">
-	<portlet:param name="controller" value="expenses" />
-	<portlet:param name="action" value="docs" />
-	<portlet:param name="format" value="html" />
-	<portlet:param name="classPK" value="${hrExpense.hrExpenseId}" />
-	<portlet:param name="uploadMethod" value="<%= Constants.ADD_MULTIPLE %>" />
-</portlet:actionURL>
-
-<aui:form action="<%= addHRExpenseMultipleDocumentsURL %>" method="post" name="fm2" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "updateMultiplePageAttachments();" %>'>
-	<span id="<portlet:namespace />selectedFileNameContainer"></span>
-
-	<div class="aui-helper-hidden" id="<portlet:namespace />metadataExplanationContainer"></div>
-
-	<div class="aui-helper-hidden selected" id="<portlet:namespace />selectedFileNameMetadataContainer">
-		<aui:button type="submit" />
-	</div>
-</aui:form>
-
-<aui:script use="liferay-upload">
-	new Liferay.Upload(
-		{
-			allowedFileTypes: '<%= StringUtil.merge(PrefsPropsUtil.getStringArray(PropsKeys.DL_FILE_EXTENSIONS, StringPool.COMMA)) %>',
-			container: '#<portlet:namespace />fileUpload',
-			deleteFile: '${deleteHRExpenseTempDocumentURL}<liferay-ui:input-permissions-params modelName="<%= HRExpense.class.getName() %>" />',
-			fileDescription: '<%= StringUtil.merge(PrefsPropsUtil.getStringArray(PropsKeys.DL_FILE_EXTENSIONS, StringPool.COMMA)) %>',
-			maxFileSize: <%= GetterUtil.getLong(PrefsPropsUtil.getString(PropsKeys.DL_FILE_MAX_SIZE)) %> / 1024,
-			metadataContainer: '#<portlet:namespace />selectedFileNameMetadataContainer',
-			metadataExplanationContainer: '#<portlet:namespace />metadataExplanationContainer',
-			namespace: '<portlet:namespace />',
-			service: {
-				method: Liferay.Service.HR.HRExpense.getTempDocumentNames,
-				params: {
-					userId: <%= themeDisplay.getUserId() %>,
-					classPK: ${hrExpense.hrExpenseId},
-					tempFolderName: 'com.liferay.portlet.hrexpense.action.docs'
-				}
-			},
-			uploadFile: '${addHRExpenseTempDocumentURL}<liferay-ui:input-permissions-params modelName="<%= HRExpense.class.getName() %>" />'
-		}
-	);
-</aui:script>
-
-<aui:script>
-	Liferay.provide(
-		window,
-		'<portlet:namespace />updateMultiplePageAttachments',
-		function() {
-			var A = AUI();
-			var Lang = A.Lang;
-
-			var selectedFileNameContainer = A.one('#<portlet:namespace />selectedFileNameContainer');
-
-			var inputTpl = '<input id="<portlet:namespace />selectedFileName{0}" name="<portlet:namespace />selectedFileName" type="hidden" value="{1}" />';
-
-			var values = A.all('input[name=<portlet:namespace />selectUploadedFileCheckbox]:checked').val();
-
-			var buffer = [];
-			var dataBuffer = [];
-			var length = values.length;
-
-			for (var i = 0; i < length; i++) {
-				dataBuffer[0] = i;
-				dataBuffer[1] = values[i];
-
-				buffer[i] = Lang.sub(inputTpl, dataBuffer);
-			}
-
-			selectedFileNameContainer.html(buffer.join(''));
-
-			A.io.request(
-				document.<portlet:namespace />fm2.action,
-				{
-					dataType: 'json',
-					form: {
-						id: document.<portlet:namespace />fm2
-					},
-					after: {
-						success: function(event, id, obj) {
-							var jsonArray = this.get('responseData');
-
-							for (var i = 0; i < jsonArray.length; i++) {
-								var item = jsonArray[i];
-
-								var checkBox = A.one('input[data-fileName="' + item.fileName + '"]');
-
-								checkBox.attr('checked', false);
-								checkBox.hide();
-
-								var li = checkBox.ancestor();
-
-								li.removeClass('selectable').removeClass('selected');
-
-								var cssClass = null;
-								var childHTML = null;
-
-								if (item.added) {
-									cssClass = 'file-saved';
-
-									childHTML = '<span class="success-message">successfully-saved</span>';
-
-									updateFilesSearchContainer(item);
-								}
-								else {
-									cssClass = 'upload-error';
-
-									childHTML = '<span class="error-message">' + item.errorMessage + '</span>';
-								}
-
-								li.addClass(cssClass);
-								li.append(childHTML);
-							}
-						}
-					}
-				}
-			);
-		},
-		['aui-base']
-	);
-
-	var updateFilesSearchContainer = function(item) {
-		var searchContainer = Liferay.SearchContainer.get('<portlet:namespace />filesSearchContainer');
-
-		var fileName = item.fileName;
-
-		var href = '<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="controller" value="documents" /><portlet:param name="action" value="view" /><portlet:param name="className" value="hrexpense" /><portlet:param name="folderId" value="${hrExpense.hrExpenseId}" /><portlet:param name="fileName" value="REPLACE_FILE_NAME" /><portlet:param name="p_p_resource_id" value="download" /></liferay-portlet:resourceURL>';
-
-		var href = href.replace('REPLACE_FILE_NAME', fileName);
-
-		var fileNameLink = '<a href="' + href + '">' + fileName + '</a>';
-
-		var rowColumns = [];
-
-		rowColumns.push(fileNameLink);
-
-		rowColumns.push('<a class="modify-link" data-rowId="' + fileName + '" href="javascript:;"><%= UnicodeFormatter.toString(removeIcon) %></a>');
-
-		searchContainer.addRow(rowColumns, fileName);
-		searchContainer.updateDataStore();
-	};
 </aui:script>

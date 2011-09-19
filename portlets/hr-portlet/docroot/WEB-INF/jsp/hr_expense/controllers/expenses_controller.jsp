@@ -197,6 +197,16 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 		redirectTo(redirect);
 	}
 
+	public void upload() throws Exception {
+		long hrExpenseId = ParamUtil.getLong(request, "id");
+
+		renderRequest.setAttribute("controller", "expenses");
+		renderRequest.setAttribute("classPK", hrExpenseId);
+		renderRequest.setAttribute("className", _className);
+		renderRequest.setAttribute("uploadMethod", "Liferay.Service.HR.HRExpense.getTempDocumentNames");
+		renderRequest.setAttribute("uploadTempFolderName", _tempFolderName);
+	}
+
 	public void view() throws Exception {
 		long hrExpenseId = ParamUtil.getLong(request, "id");
 

@@ -6,17 +6,7 @@ AUI().use(
 		Liferay.namespace('HR');
 
 		Liferay.HR = {
-			closePopup: function() {
-				var instance = this;
-
-				var popup = instance.getPopup();
-
-				if (popup) {
-					popup.hide();
-				}
-			},
-
-			displayPopup: function(url, title, data) {
+			displayPopup: function(url, title, data, cache) {
 				var instance = this;
 
 				var viewportRegion = A.getBody().get('viewportRegion');
@@ -32,7 +22,11 @@ AUI().use(
 				popup.io.set('uri', url);
 				popup.io.set('data', data);
 
-				popup.io.start();
+				if (!cache || (cache && !instance._INSTANCES[url])) {
+					popup.io.start();
+
+					instance._INSTANCES[url] = popup;
+				}
 			},
 
 			getPopup: function() {
@@ -51,7 +45,9 @@ AUI().use(
 				}
 
 				return instance._popup;
-			}
+			},
+
+			_INSTANCES: {}
 		};
 
 		Liferay.on(
