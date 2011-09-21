@@ -41,7 +41,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 	extends KaleoTaskAssignmentInstanceLocalServiceBaseImpl {
 
 	public KaleoTaskAssignmentInstance addKaleoTaskAssignmentInstance(
-			KaleoTaskInstanceToken kaleoTaskInstanceToken,
+			KaleoTaskInstanceToken kaleoTaskInstanceToken, long groupId,
 			String assigneeClassName, long assigneeClassPK,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -56,8 +56,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 			kaleoTaskAssignmentInstancePersistence.create(
 				kaleoTaskAssignmentInstanceId);
 
-		kaleoTaskAssignmentInstance.setGroupId(
-			kaleoTaskInstanceToken.getGroupId());
+		kaleoTaskAssignmentInstance.setGroupId(groupId);
 		kaleoTaskAssignmentInstance.setCompanyId(user.getCompanyId());
 		kaleoTaskAssignmentInstance.setUserId(user.getUserId());
 		kaleoTaskAssignmentInstance.setUserName(user.getFullName());
@@ -109,9 +108,16 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 				kaleoTaskAssignments.size());
 
 		for (KaleoTaskAssignment kaleoTaskAssignment : kaleoTaskAssignments) {
+
+			long groupId = kaleoTaskAssignment.getGroupId();
+
+			if (groupId <= 0) {
+				groupId = kaleoTaskInstanceToken.getGroupId();
+			}
+
 			KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance =
 				addKaleoTaskAssignmentInstance(
-					kaleoTaskInstanceToken,
+					kaleoTaskInstanceToken, groupId,
 					kaleoTaskAssignment.getAssigneeClassName(),
 					kaleoTaskAssignment.getAssigneeClassPK(), serviceContext);
 
@@ -131,8 +137,8 @@ public class KaleoTaskAssignmentInstanceLocalServiceImpl
 
 		KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance =
 			addKaleoTaskAssignmentInstance(
-				kaleoTaskInstanceToken, assigneeClassName,
-				assigneeClassPK, serviceContext);
+				kaleoTaskInstanceToken, kaleoTaskInstanceToken.getGroupId(),
+				assigneeClassName, assigneeClassPK, serviceContext);
 
 		return kaleoTaskAssignmentInstance;
 	}

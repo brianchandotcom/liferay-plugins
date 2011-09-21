@@ -90,7 +90,7 @@ public class KaleoTaskAssignmentInstanceLocalServiceClp
 		_addKaleoTaskAssignmentInstanceMethodKey16 = new MethodKey(_classLoaderProxy.getClassName(),
 				"addKaleoTaskAssignmentInstance",
 				com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken.class,
-				java.lang.String.class, long.class,
+				long.class, java.lang.String.class, long.class,
 				com.liferay.portal.service.ServiceContext.class);
 
 		_addTaskAssignmentInstancesMethodKey17 = new MethodKey(_classLoaderProxy.getClassName(),
@@ -566,14 +566,14 @@ public class KaleoTaskAssignmentInstanceLocalServiceClp
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentInstance addKaleoTaskAssignmentInstance(
 		com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken kaleoTaskInstanceToken,
-		java.lang.String assigneeClassName, long assigneeClassPK,
+		long groupId, java.lang.String assigneeClassName, long assigneeClassPK,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		MethodHandler methodHandler = new MethodHandler(_addKaleoTaskAssignmentInstanceMethodKey16,
-				ClpSerializer.translateInput(kaleoTaskInstanceToken),
+				ClpSerializer.translateInput(kaleoTaskInstanceToken), groupId,
 				ClpSerializer.translateInput(assigneeClassName),
 				assigneeClassPK, ClpSerializer.translateInput(serviceContext));
 
