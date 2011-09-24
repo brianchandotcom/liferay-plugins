@@ -220,6 +220,8 @@ else {
 			function(event) {
 				event.halt(true);
 
+				var url = Liferay.Util.addParams('controlPanelCategory=<%= PortletCategoryKeys.MY %>', '<%= themeDisplay.getURLMyAccount().toString() %>');
+
 				var dialog = new A.Dialog(
 					{
 						align: {
@@ -235,7 +237,7 @@ else {
 				).plug(
 					A.Plugin.DialogIframe,
 					{
-						uri: '<%= themeDisplay.getURLMyAccount().toString() %>'
+						uri: url
 					}
 				).render();
 			}
