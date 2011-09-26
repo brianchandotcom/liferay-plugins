@@ -90,7 +90,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			<aui:fieldset cssClass="handle-data" label="file">
 				<aui:input name="preferences--saveToFile--" type="checkbox" value="<%= saveToFile %>" />
 
-				<aui:input cssClass="lfr-input-text-container" label="path-and-file-name" name="filename" value="<%= fileName %>" />
+				<aui:input cssClass="lfr-input-text-container" label="path-and-file-name" name="preferences--fileName--" value="<%= fileName %>" />
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -153,12 +153,20 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 					}
 				}
 
+				Set<Integer> wrongFieldIndexes = (Set<Integer>)renderRequest.getAttribute("wrongSizeFieldIndexes");
+				
 				int index = 1;
-
+				
 				for (int formFieldsIndex : formFieldsIndexes) {
 					request.setAttribute("configuration.jsp-index", String.valueOf(index));
 					request.setAttribute("configuration.jsp-formFieldsindex", String.valueOf(formFieldsIndex));
 					request.setAttribute("configuration.jsp-fieldsEditingDisabled", String.valueOf(fieldsEditingDisabled));
+					
+					if (wrongFieldIndexes != null) {
+						if (wrongFieldIndexes.contains(new Integer(formFieldsIndex))) {
+							request.setAttribute("configuration.jsp-wrongSizeFieldIndex", String.valueOf(formFieldsIndex));
+						}
+					}
 				%>
 
 					<div class="lfr-form-row" id="<portlet:namespace/>fieldset<%= formFieldsIndex %>">
