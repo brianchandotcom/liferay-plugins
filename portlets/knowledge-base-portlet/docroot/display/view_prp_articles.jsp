@@ -125,36 +125,32 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 
 					<%
 					AssetCategory assetCategory = AssetCategoryLocalServiceUtil.getAssetCategory(assetCategoryId);
-					
+
 					assetCategory.setEscapedModel(true);
 					
-					String assetCategoryTitle = assetCategory.getTitle(locale);
-
 					AssetVocabulary assetVocabulary = AssetVocabularyLocalServiceUtil.getAssetVocabulary(assetCategory.getVocabularyId());
 					
 					assetVocabulary.setEscapedModel(true);
-					
-					String assetVocabularyTitle = assetVocabulary.getTitle(locale);
 					%>
 
 					<c:choose>
 						<c:when test="<%= Validator.isNotNull(assetTagName) %>">
 							<c:choose>
 								<c:when test="<%= total > 0 %>">
-									<%= LanguageUtil.format(pageContext, "articles-with-x-x-and-tag-x", new String[] {assetVocabularyTitle, assetCategoryTitle, assetTagName}, false) %>
+									<%= LanguageUtil.format(pageContext, "articles-with-x-x-and-tag-x", new String[] {assetVocabulary.getTitle(locale), assetCategory.getTitle(locale), assetTagName}, false) %>
 								</c:when>
 								<c:otherwise>
-									<%= LanguageUtil.format(pageContext, "there-are-no-articles-with-x-x-and-tag-x", new String[] {assetVocabularyTitle, assetCategoryTitle, assetTagName}, false) %>
+									<%= LanguageUtil.format(pageContext, "there-are-no-articles-with-x-x-and-tag-x", new String[] {assetVocabulary.getTitle(locale), assetCategory.getTitle(locale), assetTagName}, false) %>
 								</c:otherwise>
 							</c:choose>
 						</c:when>
 						<c:otherwise>
 							<c:choose>
 								<c:when test="<%= total > 0 %>">
-									<%= LanguageUtil.format(pageContext, "articles-with-x-x", new String[] {assetVocabularyTitle, assetCategoryTitle}, false) %>
+									<%= LanguageUtil.format(pageContext, "articles-with-x-x", new String[] {assetVocabulary.getTitle(locale), assetCategory.getTitle(locale)}, false) %>
 								</c:when>
 								<c:otherwise>
-									<%= LanguageUtil.format(pageContext, "there-are-no-articles-with-x-x", new String[] {assetVocabularyTitle, assetCategoryTitle}, false) %>
+									<%= LanguageUtil.format(pageContext, "there-are-no-articles-with-x-x", new String[] {assetVocabulary.getTitle(locale), assetCategory.getTitle(locale)}, false) %>
 								</c:otherwise>
 							</c:choose>
 						</c:otherwise>
