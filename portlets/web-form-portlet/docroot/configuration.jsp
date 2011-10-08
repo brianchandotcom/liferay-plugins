@@ -28,6 +28,9 @@ boolean sendAsEmail = GetterUtil.getBoolean(preferences.getValue("sendAsEmail", 
 String subject = preferences.getValue("subject", StringPool.BLANK);
 String emailAddress = preferences.getValue("emailAddress", StringPool.BLANK);
 
+String emailFromName = WebFormUtil.getEmailFromName(preferences, company.getCompanyId());
+String emailFromAddress = WebFormUtil.getEmailFromAddress(preferences, company.getCompanyId());
+
 boolean saveToDatabase = GetterUtil.getBoolean(preferences.getValue("saveToDatabase", StringPool.BLANK));
 String databaseTableName = preferences.getValue("databaseTableName", StringPool.BLANK);
 
@@ -78,9 +81,16 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 
 				<aui:input label="send-as-email" name="preferences--sendAsEmail--" type="checkbox" value="<%= sendAsEmail %>" />
 
+				<aui:fieldset>
+					<aui:input cssClass="lfr-input-text-container" label="name-from" name="preferences--emailFromName--" value="<%= emailFromName %>" />
+
+					<aui:input cssClass="lfr-input-text-container" label="address-from" name="preferences--emailFromAddress--" value="<%= emailFromAddress %>" />
+				</aui:fieldset>
+
+				<aui:input cssClass="lfr-input-text-container" helpMessage="add-email-addresses-separated-by-commas" label="address-to" name="preferences--emailAddress--" value="<%= emailAddress %>" />
+
 				<aui:input cssClass="lfr-input-text-container" name="preferences--subject--" value="<%= subject %>" />
 
-				<aui:input cssClass="lfr-input-text-container" helpMessage="add-email-addresses-separated-by-commas" label="email-addresses" name="preferences--emailAddress--" value="<%= emailAddress %>" />
 			</aui:fieldset>
 
 			<aui:fieldset cssClass="handle-data" label="database">
