@@ -27,8 +27,6 @@ String fieldType = PrefsParamUtil.getString(preferences, renderRequest, "fieldTy
 boolean fieldOptional = PrefsParamUtil.getBoolean(preferences, renderRequest, "fieldOptional" + formFieldsIndex);
 String fieldOptionsXml = LocalizationUtil.getLocalizationXmlFromPreferences(preferences, renderRequest, "fieldOptions" + formFieldsIndex);
 String fieldOptions = LocalizationUtil.getLocalization(fieldOptionsXml, themeDisplay.getLanguageId());
-String fieldValidationScript = StringPool.BLANK;
-String fieldValidationErrorMessage = StringPool.BLANK;
 String fieldValidationScript = PrefsParamUtil.getString(preferences, request, "fieldValidationScript" + formFieldsIndex);
 String fieldValidationErrorMessage = PrefsParamUtil.getString(preferences, request, "fieldValidationErrorMessage" + formFieldsIndex);
 %>
