@@ -453,6 +453,10 @@ public class WebFormPortlet extends MVCPortlet {
 				continue;
 			}
 
+			if (!WebFormUtil.VALIDATION_SCRIPT_ENABLED) {
+				continue;
+			}
+
 			String validationScript = GetterUtil.getString(
 				preferences.getValue(
 					"fieldValidationScript" + (i + 1), StringPool.BLANK));
