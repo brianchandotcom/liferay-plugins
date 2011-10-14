@@ -177,7 +177,7 @@ AUI().add(
 							instance._iframe = container.getIframe();
 						}
 						else {
-							var iframe = A.substitute(
+							var iframe = Lang.sub(
 								TPL_IFRAME,
 								{
 									height: (height ? 'height="' + height + '"' : STR_EMPTY),
@@ -768,6 +768,6 @@ AUI().add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-io', 'cookie', 'json', 'liferay-portlet-url', 'liferay-service', 'querystring', 'substitute']
+		requires: ['aui-base', 'aui-io', 'cookie', 'json', 'liferay-portlet-url', 'liferay-service', 'querystring']
 	}
 );
