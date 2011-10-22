@@ -14,7 +14,6 @@
 
 package com.liferay.marketplace.util;
 
-import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeFormatter;
 import com.liferay.portal.kernel.util.Validator;
@@ -26,34 +25,29 @@ import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
  */
 public class MarketplaceUtil {
 
-	public static String decodeClientId(
-		String encodedClientId, String mpToken) {
-
-		if (Validator.isNull(encodedClientId) || Validator.isNull(mpToken)) {
+	public static String decodeClientId(String encodedClientId, String token) {
+		if (Validator.isNull(encodedClientId) || Validator.isNull(token)) {
 			return StringPool.BLANK;
 		}
 
-		String base64EncodedClientId = UnicodeFormatter.parseString(
-			encodedClientId);
+		byte[] encodedClientIdBytes = hexToBytes(encodedClientId);
 
-		byte[] encodedClientIdBytes = Base64.decode(base64EncodedClientId);
+		if (encodedClientIdBytes.length == 0) {
+			return StringPool.BLANK;
+		}
 
-		return new String(xor(encodedClientIdBytes, mpToken.getBytes()));
+		return new String(xor(encodedClientIdBytes, token.getBytes()));
 	}
 
-	public static String encodeClientId(
-		String decodedClientId, String mpToken) {
-
-		if (Validator.isNull(decodedClientId) || Validator.isNull(mpToken)) {
+	public static String encodeClientId(String decodedClientId, String token) {
+		if (Validator.isNull(decodedClientId) || Validator.isNull(token)) {
 			return StringPool.BLANK;
 		}
 
 		byte[] encodedClientIdBytes = xor(
-			decodedClientId.getBytes(), mpToken.getBytes());
+			decodedClientId.getBytes(), token.getBytes());
 
-		String base64EncodedClientId = Base64.encode(encodedClientIdBytes);
-
-		return UnicodeFormatter.toString(base64EncodedClientId);
+		return UnicodeFormatter.bytesToHex(encodedClientIdBytes);
 	}
 
 	public static boolean hasMarketplaceAdmin(long companyId) throws Exception {
@@ -77,6 +71,27 @@ public class MarketplaceUtil {
 		}
 
 		return true;
+	}
+
+	protected static byte[] hexToBytes(String hex) {
+		if ((hex.length() % 2) != 0) {
+			return new byte[0];
+		}
+
+		byte[] bytes = new byte[hex.length() / 2];
+
+		for (int i = 0; i < hex.length(); i = i + 2) {
+			String s = hex.substring(i, i + 2);
+
+			try {
+				bytes[i / 2] = (byte)Integer.parseInt(s, 16);
+			}
+			catch (NumberFormatException nfe) {
+				return new byte[0];
+			}
+		}
+
+		return bytes;
 	}
 
 	protected static byte[] xor(byte[] bytes1, byte[] bytes2) {
