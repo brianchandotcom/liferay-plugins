@@ -27,7 +27,6 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
@@ -130,11 +129,9 @@ public class MicroblogsEntryLocalServiceImpl
 
 		// Social
 
-		AssetEntry assetEntry = AssetEntryLocalServiceUtil.getEntry(
+		SocialActivityLocalServiceUtil.deleteActivities(
 			MicroblogsEntry.class.getName(),
 			microblogsEntry.getMicroblogsEntryId());
-
-		SocialActivityLocalServiceUtil.deleteActivities(assetEntry);
 	}
 
 	public void deleteUserMicroblogsEntries(long userId)
