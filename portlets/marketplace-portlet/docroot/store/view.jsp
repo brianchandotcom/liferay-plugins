@@ -17,14 +17,18 @@
 <%@ include file="/init.jsp" %>
 
 <div class="loading-animation">
-	<iframe class="aui-helper-hidden-accessible" id="<portlet:namespace />frame" scrolling="no" src="<%= iFrameURL %>"></iframe>
+	<iframe class="aui-helper-hidden-accessible" id="<portlet:namespace />frame" name="<portlet:namespace />frame" scrolling="no" src="about:blank"></iframe>
 </div>
+
+<form action="<%= iFrameURL %>" id="<portlet:namespace />fm" method="post" target="<portlet:namespace />frame">
+<input name="mpClientURL" value="<%= themeDisplay.getPortalURL() + themeDisplay.getURLCurrent() %>" type="hidden" />
+</form>
 
 <div class="aui-helper-hidden time-out-message portlet-msg-error">
 	<liferay-ui:message key="could-not-connect-to-the-liferay-marketplace" />
 </div>
 
-<aui:script use="aui-base,aui-io,aui-messaging">
+<aui:script use="aui-base,aui-io,liferay-marketplace-messenger">
 	var frame = A.one('#<portlet:namespace />frame');
 
 	var timeout = setTimeout(
@@ -35,20 +39,31 @@
 		120000
 	);
 
-	A.receiveMessage(
+	Liferay.MarketplaceMessenger.init(
+		{
+			targetFrame: frame
+		}
+	);
+
+	Liferay.MarketplaceMessenger.receiveMessage(
 		function(event) {
 			var response = event.responseData;
 
-			if (response.height) {
+			if (!response.cmd) {
+				return;
+			}
+
+			if (response.cmd == 'init') {
 				clearTimeout(timeout);
 
 				frame.removeClass('aui-helper-hidden-accessible');
 				frame.ancestor().removeClass('loading-animation');
 
+				Liferay.MarketplaceMessenger.setTargetURI(response.serverURL);
+
 				frame.height(response.height + 50);
 			}
-
-			if (response.panel) {
+			else if (response.cmd == 'goto') {
 				var url = null;
 
 				if (response.panel === "control-panel") {
@@ -64,8 +79,7 @@
 
 				window.location = url;
 			}
-
-			if (response.cmd) {
+			else {
 				A.io.request(
 					'<portlet:actionURL />',
 					{
@@ -76,7 +90,7 @@
 							success: function(event, id, obj) {
 								var response = this.get('responseData');
 
-								A.postMessage(response, '<%= iFrameURL %>', frame);
+								Liferay.MarketplaceMessenger.postMessage(response);
 							}
 						}
 					}
@@ -86,17 +100,5 @@
 		A.Lang.emptyFnTrue
 	);
 
-	frame.on(
-		'load',
-		function() {
-			A.postMessage(
-				{
-					message: 'success',
-					clientURL: '<%= themeDisplay.getURLPortal() %>'
-				},
-				'<%= iFrameURL %>',
-				frame
-			);
-		}
-	);
+	A.one('#<portlet:namespace />fm').submit();
 </aui:script>
