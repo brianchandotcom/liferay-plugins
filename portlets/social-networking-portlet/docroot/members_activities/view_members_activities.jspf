@@ -27,9 +27,10 @@ else if (group.isRegularSite()) {
 	activities = SocialActivityLocalServiceUtil.getGroupUsersActivities(group.getGroupId(), start, end);
 }
 
-PortletURL rssURL = renderResponse.createRenderURL();
+ResourceURL rssURL = liferayPortletResponse.createResourceURL();
 
-rssURL.setParameter("rss", "1");
+rssURL.setCacheability(ResourceURL.FULL);
+rssURL.setParameter("struts_action", "/group_users_activities/rss");
 
 String taglibFeedTitle = LanguageUtil.format(pageContext, "subscribe-to-x's-activities", group.getDescriptiveName());
 String taglibFeedLinkMessage = LanguageUtil.format(pageContext, "subscribe-to-x's-activities", group.getDescriptiveName());
