@@ -18,8 +18,10 @@
 package com.liferay.so.notifications.portlet;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -55,18 +57,68 @@ import javax.servlet.http.HttpSession;
  */
 public class NotificationsPortlet extends MVCPortlet {
 
+	public void deleteUserNotificationEvent(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String userNotificationUuid = ParamUtil.getString(
+			actionRequest, "userNotificationEventUuid");
+
+		ChannelHubManagerUtil.deleteUserNotificiationEvent(
+			themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+			userNotificationUuid);
+	}
+
+	public void deleteUserNotificationEvents(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String[] userNotificationEventUuids = StringUtil.split(
+			ParamUtil.getString(actionRequest, "userNotificationEventUuids"));
+
+		for (String userNotificationEventUuid : userNotificationEventUuids) {
+			ChannelHubManagerUtil.deleteUserNotificiationEvent(
+				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+				userNotificationEventUuid);
+		}
+	}
+
+	public void dismissUserNotificationEvents(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String[] userNotificationEventUuids = StringUtil.split(
+			ParamUtil.getString(actionRequest, "userNotificationEventUuids"));
+
+		for (String userNotificationEventUuid : userNotificationEventUuids) {
+			ChannelHubManagerUtil.confirmDelivery(
+				themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+				userNotificationEventUuid, true);
+		}
+	}
+
 	@Override
 	public void doView(
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws IOException, PortletException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)renderRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		try {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 
 			if (themeDisplay.isSignedIn()) {
-				HttpServletRequest request =
-					PortalUtil.getHttpServletRequest(renderRequest);
+				HttpServletRequest request = PortalUtil.getHttpServletRequest(
+					renderRequest);
 
 				HttpSession session = request.getSession();
 
@@ -109,12 +161,14 @@ public class NotificationsPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		long memberRequestId = ParamUtil.getLong(
-			actionRequest, "memberRequestId");
-		int status = ParamUtil.getInteger(actionRequest, "status");
-
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
+
+		long memberRequestId = ParamUtil.getLong(
+			actionRequest, "memberRequestId");
+		String notificationUuid = ParamUtil.getString(
+			actionRequest, "notificationUuid");
+		int status = ParamUtil.getInteger(actionRequest, "status");
 
 		try {
 			MemberRequestLocalServiceUtil.updateMemberRequest(
@@ -130,6 +184,10 @@ public class NotificationsPortlet extends MVCPortlet {
 				throw e;
 			}
 		}
+
+		ChannelHubManagerUtil.confirmDelivery(
+			themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+			notificationUuid, false);
 	}
 
 	public void updateSocialRequest(
@@ -139,6 +197,8 @@ public class NotificationsPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		String notificationUuid = ParamUtil.getString(
+			actionRequest, "notificationUuid");
 		long requestId = ParamUtil.getLong(actionRequest, "requestId");
 		int status = ParamUtil.getInteger(actionRequest, "status");
 
@@ -154,6 +214,10 @@ public class NotificationsPortlet extends MVCPortlet {
 
 		SocialRequestLocalServiceUtil.updateRequest(
 			requestId, status, themeDisplay);
+
+		ChannelHubManagerUtil.confirmDelivery(
+			themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+			notificationUuid, false);
 	}
 
 }
