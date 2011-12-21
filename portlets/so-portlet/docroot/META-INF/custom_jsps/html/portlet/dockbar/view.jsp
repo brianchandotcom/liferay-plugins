@@ -57,6 +57,10 @@ int x = html.indexOf("<li class=\"user-avatar \" id=\"_145_userAvatar\">");
 			<span></span>
 		</li>
 
+		<li class="notifications-menu has-submenu" id="<portlet:namespace />notificationsMenu">
+			<liferay-portlet:runtime portletName="<%= PortletKeys.SO_DOCKBAR_NOTIFICATION %>" />
+		</li>
+
 		<%= html.substring(x) %>
 	</c:when>
 	<c:otherwise>
