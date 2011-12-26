@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -121,23 +122,10 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 						actionRequest, "invalidValidationDefinition" + i);
 				}
 
-				for (Locale locale : fieldLabelMap.keySet()) {
-					String languageId = LocaleUtil.toLanguageId(locale);
-					String fieldLabelValue = fieldLabelMap.get(locale);
-					String fieldOptionsValue = fieldOptionsMap.get(locale);
+				updateFieldLocales("fieldLabel", fieldLabelMap, i, preferences);
 
-					if (Validator.isNotNull(fieldLabelValue)) {
-						LocalizationUtil.setPreferencesValue(
-							preferences, "fieldLabel" + i, languageId,
-							fieldLabelValue);
-					}
-
-					if (Validator.isNotNull(fieldOptionsValue)) {
-						LocalizationUtil.setPreferencesValue(
-							preferences, "fieldOptions" + i, languageId,
-							fieldOptionsValue);
-					}
-				}
+				updateFieldLocales(
+					"fieldOptions", fieldOptionsMap, i, preferences);
 
 				preferences.setValue("fieldType" + i, fieldType);
 				preferences.setValue(
@@ -211,6 +199,28 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		}
 		else {
 			return "/configuration.jsp";
+		}
+	}
+
+	protected void updateFieldLocales(
+			String formFieldName, Map<Locale, String> formFieldMap,
+			int formFieldIndex, PortletPreferences preferences)
+		throws Exception {
+
+		Map<Locale, String> oldFieldLabelMap =
+			LocalizationUtil.getLocalizationMap(
+				preferences, formFieldName + formFieldIndex);
+
+		List<Locale> labelMapModifiedLocales =
+			LocalizationUtil.getModifiedLocales(oldFieldLabelMap, formFieldMap);
+
+		for (Locale locale : labelMapModifiedLocales) {
+			String languageId = LocaleUtil.toLanguageId(locale);
+			String fieldLabelValue = formFieldMap.get(locale);
+
+			LocalizationUtil.setPreferencesValue(
+				preferences, formFieldName + formFieldIndex, languageId,
+				fieldLabelValue);
 		}
 	}
 
