@@ -15,158 +15,50 @@
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
-package com.liferay.so.hook.listeners;
+package com.liferay.so.hook.events;
 
-import com.liferay.portal.ModelListenerException;
+import com.liferay.portal.kernel.events.Action;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
-import com.liferay.portal.model.LayoutSet;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.so.util.LayoutUtil;
 import com.liferay.so.util.PortletPropsKeys;
+import com.liferay.so.util.RoleConstants;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Brian Wing Shun Chan
- * @author Ryan Park
  * @author Jonathan Lee
  */
-public class LayoutSetListener extends BaseModelListener<LayoutSet> {
+public class LoginPreAction extends Action {
 
 	@Override
-	public void onAfterCreate(LayoutSet layoutSet)
-		throws ModelListenerException {
-
+	public void run(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Group group = GroupLocalServiceUtil.getGroup(
-				layoutSet.getGroupId());
-
-			if (!group.isUser()) {
-				return;
-			}
-
-			if (layoutSet.isPrivateLayout()) {
-				addPrivateUserLayouts(group);
-
-				setCustomJspServletContextName(group);
-			}
-			else {
-				addPublicUserLayouts(group);
-			}
+			updateUserLayouts(request, response);
 		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
 		}
-	}
-
-	protected void addPrivateUserLayouts(Group group) throws Exception {
-		LayoutSetLocalServiceUtil.updateLookAndFeel(
-			group.getGroupId(), true, "so_WAR_sotheme", "01", StringPool.BLANK,
-			false);
-
-		// Home
-
-		Layout layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Home",
-			"1_column");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/home",
-			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, false);
-
-		// Contacts Center
-
-		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			"Contacts Center", "1_column");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/contacts-center",
-			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, true);
-
-		// Microblogs
-
-		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			"Microblogs", "1_column");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/microblogs",
-			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, true);
-
-		// Messages
-
-		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			"Messages", "1_column");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/messages",
-			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, true);
-
-		// Tasks
-
-		layout = LayoutUtil.addLayout(
-			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			"Tasks", "1_column");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/tasks",
-			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, true);
-	}
-
-	protected void addPublicUserLayouts(Group group) throws Exception {
-		LayoutSetLocalServiceUtil.updateLookAndFeel(
-			group.getGroupId(), false, "so_WAR_sotheme", "01", StringPool.BLANK,
-			false);
-
-		Layout layout = LayoutUtil.addLayout(
-			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Profile",
-			"1_2_columns_ii");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/profile",
-			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, true);
-
-		// Contacts
-
-		layout = LayoutUtil.addLayout(
-			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			"Contacts", "1_column");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/contacts",
-			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, true);
-
-		// Microblogs
-
-		layout = LayoutUtil.addLayout(
-			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
-			"Microblogs", "1_column");
-
-		LayoutUtil.addPortlets(
-			group, layout, "/microblogs",
-			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
-
-		LayoutUtil.updatePermissions(layout, true);
 	}
 
 	protected void setCustomJspServletContextName(Group group)
@@ -181,5 +73,187 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 		GroupLocalServiceUtil.updateGroup(
 			group.getGroupId(), typeSettingsProperties.toString());
 	}
+
+	protected void updateUserLayouts(
+			HttpServletRequest request, HttpServletResponse response)
+		throws Exception {
+
+		User user = PortalUtil.getUser(request);
+
+		if (user == null) {
+			return;
+		}
+
+		Role role = RoleLocalServiceUtil.fetchRole(
+			user.getCompanyId(), RoleConstants.SOCIAL_OFFICE_USER);
+
+		if (!UserLocalServiceUtil.hasRoleUser(
+				role.getRoleId(), user.getUserId())) {
+
+			return;
+		}
+
+		Group group = user.getGroup();
+
+		String customJspServletContextName = GetterUtil.getString(
+			group.getTypeSettingsProperty("customJspServletContextName"));
+
+		if (customJspServletContextName.equals("so-hook")) {
+			return;
+		}
+
+		if (!LayoutLocalServiceUtil.hasLayouts(user, false)) {
+			LayoutSetLocalServiceUtil.addLayoutSet(group.getGroupId(), false);
+		}
+		else {
+			List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				group.getGroupId(), false);
+
+			ServiceContext serviceContext = new ServiceContext();
+
+			for (Layout layout : layouts) {
+				LayoutLocalServiceUtil.updateLayout(
+					layout.getGroupId(), layout.isPrivateLayout(),
+					layout.getLayoutId(), layout.getParentLayoutId(),
+					layout.getNameMap(), layout.getTitleMap(),
+					layout.getDescriptionMap(), layout.getKeywordsMap(),
+					layout.getRobotsMap(), layout.getType(), true,
+					layout.getFriendlyURL(), null, null, serviceContext);
+			}
+		}
+
+		if (!LayoutLocalServiceUtil.hasLayouts(user, true)) {
+			LayoutSetLocalServiceUtil.addLayoutSet(group.getGroupId(), true);
+		}
+
+		updatePrivateUserLayouts(group);
+		updatePublicUserLayouts(group);
+
+		setCustomJspServletContextName(group);
+	}
+
+	protected void updatePrivateUserLayouts(Group group) throws Exception {
+		LayoutSetLocalServiceUtil.updateLookAndFeel(
+			group.getGroupId(), true, "so_WAR_sotheme", "01", StringPool.BLANK,
+			false);
+
+		// Home
+
+		Layout layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Home",
+			"2_columns_iii");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/home",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, false);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 0);
+
+		// Contacts Center
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Contacts Center", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts-center",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 1);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Microblogs", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 2);
+
+		// Messages
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Messages", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/messages",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 3);
+
+		// Tasks
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Tasks", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/tasks",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 4);
+	}
+
+	protected void updatePublicUserLayouts(Group group) throws Exception {
+		LayoutSetLocalServiceUtil.updateLookAndFeel(
+			group.getGroupId(), false, "so_WAR_sotheme", "01", StringPool.BLANK,
+			false);
+
+		Layout layout = LayoutUtil.addLayout(
+			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Profile",
+			"1_2_columns_ii");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/profile",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 0);
+
+		// Contacts
+
+		layout = LayoutUtil.addLayout(
+			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Contacts", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 1);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Microblogs", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 2);
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(LoginPreAction.class);
 
 }
