@@ -28,6 +28,9 @@ import java.util.List;
  * @generated
  */
 public class CalendarResourceSoap implements Serializable {
+	public CalendarResourceSoap() {
+	}
+
 	public static CalendarResourceSoap toSoapModel(CalendarResource model) {
 		CalendarResourceSoap soapModel = new CalendarResourceSoap();
 
@@ -40,9 +43,10 @@ public class CalendarResourceSoap implements Serializable {
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setResourceBlockId(model.getResourceBlockId());
-		soapModel.setClassNameId(model.getClassNameId());
+		soapModel.setClassName(model.getClassName());
 		soapModel.setClassPK(model.getClassPK());
 		soapModel.setClassUuid(model.getClassUuid());
+		soapModel.setDefaultCalendarId(model.getDefaultCalendarId());
 		soapModel.setCode(model.getCode());
 		soapModel.setName(model.getName());
 		soapModel.setDescription(model.getDescription());
@@ -91,147 +95,80 @@ public class CalendarResourceSoap implements Serializable {
 		return soapModels.toArray(new CalendarResourceSoap[soapModels.size()]);
 	}
 
-	public CalendarResourceSoap() {
-	}
-
-	public long getPrimaryKey() {
-		return _calendarResourceId;
-	}
-
-	public void setPrimaryKey(long pk) {
-		setCalendarResourceId(pk);
-	}
-
-	public String getUuid() {
-		return _uuid;
-	}
-
-	public void setUuid(String uuid) {
-		_uuid = uuid;
+	public boolean getActive() {
+		return _active;
 	}
 
 	public long getCalendarResourceId() {
 		return _calendarResourceId;
 	}
 
-	public void setCalendarResourceId(long calendarResourceId) {
-		_calendarResourceId = calendarResourceId;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	public void setGroupId(long groupId) {
-		_groupId = groupId;
-	}
-
-	public long getCompanyId() {
-		return _companyId;
-	}
-
-	public void setCompanyId(long companyId) {
-		_companyId = companyId;
-	}
-
-	public long getUserId() {
-		return _userId;
-	}
-
-	public void setUserId(long userId) {
-		_userId = userId;
-	}
-
-	public String getUserName() {
-		return _userName;
-	}
-
-	public void setUserName(String userName) {
-		_userName = userName;
-	}
-
-	public Date getCreateDate() {
-		return _createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		_createDate = createDate;
-	}
-
-	public Date getModifiedDate() {
-		return _modifiedDate;
-	}
-
-	public void setModifiedDate(Date modifiedDate) {
-		_modifiedDate = modifiedDate;
-	}
-
-	public long getResourceBlockId() {
-		return _resourceBlockId;
-	}
-
-	public void setResourceBlockId(long resourceBlockId) {
-		_resourceBlockId = resourceBlockId;
-	}
-
-	public long getClassNameId() {
-		return _classNameId;
-	}
-
-	public void setClassNameId(long classNameId) {
-		_classNameId = classNameId;
+	public String getClassName() {
+		return _className;
 	}
 
 	public long getClassPK() {
 		return _classPK;
 	}
 
-	public void setClassPK(long classPK) {
-		_classPK = classPK;
-	}
-
 	public String getClassUuid() {
 		return _classUuid;
-	}
-
-	public void setClassUuid(String classUuid) {
-		_classUuid = classUuid;
 	}
 
 	public String getCode() {
 		return _code;
 	}
 
-	public void setCode(String code) {
-		_code = code;
+	public long getCompanyId() {
+		return _companyId;
 	}
 
-	public String getName() {
-		return _name;
+	public Date getCreateDate() {
+		return _createDate;
 	}
 
-	public void setName(String name) {
-		_name = name;
+	public long getDefaultCalendarId() {
+		return _defaultCalendarId;
 	}
 
 	public String getDescription() {
 		return _description;
 	}
 
-	public void setDescription(String description) {
-		_description = description;
+	public long getGroupId() {
+		return _groupId;
+	}
+
+	public Date getModifiedDate() {
+		return _modifiedDate;
+	}
+
+	public String getName() {
+		return _name;
+	}
+
+	public long getPrimaryKey() {
+		return _calendarResourceId;
+	}
+
+	public long getResourceBlockId() {
+		return _resourceBlockId;
 	}
 
 	public String getType() {
 		return _type;
 	}
 
-	public void setType(String type) {
-		_type = type;
+	public long getUserId() {
+		return _userId;
 	}
 
-	public boolean getActive() {
-		return _active;
+	public String getUserName() {
+		return _userName;
+	}
+
+	public String getUuid() {
+		return _uuid;
 	}
 
 	public boolean isActive() {
@@ -240,6 +177,78 @@ public class CalendarResourceSoap implements Serializable {
 
 	public void setActive(boolean active) {
 		_active = active;
+	}
+
+	public void setCalendarResourceId(long calendarResourceId) {
+		_calendarResourceId = calendarResourceId;
+	}
+
+	public void setClassName(String className) {
+		_className = className;
+	}
+
+	public void setClassPK(long classPK) {
+		_classPK = classPK;
+	}
+
+	public void setClassUuid(String classUuid) {
+		_classUuid = classUuid;
+	}
+
+	public void setCode(String code) {
+		_code = code;
+	}
+
+	public void setCompanyId(long companyId) {
+		_companyId = companyId;
+	}
+
+	public void setCreateDate(Date createDate) {
+		_createDate = createDate;
+	}
+
+	public void setDefaultCalendarId(long defaultCalendarId) {
+		_defaultCalendarId = defaultCalendarId;
+	}
+
+	public void setDescription(String description) {
+		_description = description;
+	}
+
+	public void setGroupId(long groupId) {
+		_groupId = groupId;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		_modifiedDate = modifiedDate;
+	}
+
+	public void setName(String name) {
+		_name = name;
+	}
+
+	public void setPrimaryKey(long pk) {
+		setCalendarResourceId(pk);
+	}
+
+	public void setResourceBlockId(long resourceBlockId) {
+		_resourceBlockId = resourceBlockId;
+	}
+
+	public void setType(String type) {
+		_type = type;
+	}
+
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		_userName = userName;
+	}
+
+	public void setUuid(String uuid) {
+		_uuid = uuid;
 	}
 
 	private String _uuid;
@@ -251,9 +260,10 @@ public class CalendarResourceSoap implements Serializable {
 	private Date _createDate;
 	private Date _modifiedDate;
 	private long _resourceBlockId;
-	private long _classNameId;
+	private String _className;
 	private long _classPK;
 	private String _classUuid;
+	private long _defaultCalendarId;
 	private String _code;
 	private String _name;
 	private String _description;
