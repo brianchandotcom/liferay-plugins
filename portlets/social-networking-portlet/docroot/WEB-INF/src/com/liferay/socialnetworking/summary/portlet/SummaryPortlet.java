@@ -180,7 +180,7 @@ public class SummaryPortlet extends MVCPortlet {
 
 		UserLocalServiceUtil.unsetGroupUsers(
 			themeDisplay.getScopeGroupId(),
-			new long[] {themeDisplay.getUserId()}, serviceContext);
+			new long[] {themeDisplay.getUserId()});
 	}
 
 	public void leaveOrganization(
