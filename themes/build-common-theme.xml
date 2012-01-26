@@ -196,10 +196,22 @@
 
 		<delete file="${plugin.file}" />
 
-		<zip
-			basedir="docroot"
-			destfile="${plugin.file}"
-			excludes="_diffs.*,_diffs/**"
-		/>
+		<if>
+			<equals arg1="${zip.src}" arg2="false" />
+			<then>
+				<zip
+					basedir="docroot"
+					destfile="${plugin.file}"
+					excludes="_diffs.*,_diffs/**,**/WEB-INF/src/**"
+				/>
+			</then>
+			<else>
+				<zip
+					basedir="docroot"
+					destfile="${plugin.file}"
+					excludes="_diffs.*,_diffs/**"
+				/>
+			</else>
+		</if>
 	</target>
 </project>
