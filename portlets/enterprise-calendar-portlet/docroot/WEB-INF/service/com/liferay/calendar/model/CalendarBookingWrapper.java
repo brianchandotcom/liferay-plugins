@@ -801,24 +801,6 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	}
 
 	/**
-	* Returns the remind by of this calendar booking.
-	*
-	* @return the remind by of this calendar booking
-	*/
-	public int getRemindBy() {
-		return _calendarBooking.getRemindBy();
-	}
-
-	/**
-	* Sets the remind by of this calendar booking.
-	*
-	* @param remindBy the remind by of this calendar booking
-	*/
-	public void setRemindBy(int remindBy) {
-		_calendarBooking.setRemindBy(remindBy);
-	}
-
-	/**
 	* Returns the first reminder of this calendar booking.
 	*
 	* @return the first reminder of this calendar booking
@@ -1124,6 +1106,12 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_calendarBooking.persist();
+	}
+
+	public com.liferay.calendar.model.CalendarResource getCalendarResource()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _calendarBooking.getCalendarResource();
 	}
 
 	/**
