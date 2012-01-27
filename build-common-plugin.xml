@@ -777,17 +777,41 @@ Please find a solution that does not require portal-impl.jar.
 		<if>
 			<contains string="${app.server.dir}" substring="glassfish" />
 			<then>
-				<zip
-					basedir="${docroot.dir}"
-					destfile="${plugin.file}"
-					excludes="**/META-INF/context.xml"
-				/>
+				<if>
+					<equals arg1="${zip.src}" arg2="false" />
+					<then>
+						<zip
+							basedir="${docroot.dir}"
+							destfile="${plugin.file}"
+							excludes="**/META-INF/context.xml,**/WEB-INF/src/**"
+						/>
+					</then>
+					<else>
+						<zip
+							basedir="${docroot.dir}"
+							destfile="${plugin.file}"
+							excludes="**/META-INF/context.xml"
+						/>
+					</else>
+				</if>
 			</then>
 			<else>
-				<zip
-					basedir="${docroot.dir}"
-					destfile="${plugin.file}"
-				/>
+				<if>
+					<equals arg1="${zip.src}" arg2="false" />
+					<then>
+						<zip
+							basedir="${docroot.dir}"
+							destfile="${plugin.file}"
+							excludes="**/WEB-INF/src/**"
+						/>
+					</then>
+					<else>
+						<zip
+							basedir="${docroot.dir}"
+							destfile="${plugin.file}"
+						/>
+					</else>
+				</if>
 			</else>
 		</if>
 	</target>
