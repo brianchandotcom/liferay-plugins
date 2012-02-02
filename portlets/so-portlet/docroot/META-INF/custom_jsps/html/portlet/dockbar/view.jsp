@@ -34,6 +34,7 @@ Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Social 
 
 		<%
 		int x = html.indexOf("<li class=\"user-avatar \" id=\"_145_userAvatar\">");
+		int y = html.indexOf("<div class=\"dockbar-messages\"");
 		%>
 
 		<c:choose>
@@ -70,7 +71,89 @@ Role role = RoleLocalServiceUtil.fetchRole(themeDisplay.getCompanyId(), "Social 
 					<liferay-portlet:runtime portletName="7_WAR_soportlet" />
 				</li>
 
-				<%= html.substring(x) %>
+				<li class="aui-toolbar-separator">
+					<span></span>
+				</li>
+
+				<li class="has-submenu user-avatar" id="<portlet:namespace />userMenu">
+					<a class="menu-button user-fullname user-portrait" href="javascript:;">
+						<img style="width: 18px" src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>" />
+
+						<%= HtmlUtil.escape(user.getFullName()) %>
+					</a>
+
+					<div class="aui-menu aui-overlaycontext-hidden" id="<portlet:namespace />userMenuContainer">
+						<div class="aui-menu-content" id="<portlet:namespace />userMenuContent">
+							<ul>
+								<li class="aui-menu-item first profile">
+									<a href="<%= user.getDisplayURL(themeDisplay) %>">
+										<liferay-ui:icon
+											message="my-profile"
+											src='/html/icons/users_admin.png'
+										/>
+
+										<liferay-ui:message key="my-profile" />
+									</a>
+								</li>
+
+								<li class="aui-menu-item my-account" id="<portlet:namespace />userAvatar">
+									<span class="user-links">
+										<a class='<%= !layout.getGroup().isControlPanel() ? "use-dialog full-dialog" : StringPool.BLANK %>' data-controlPanelCategory="<%= !layout.getGroup().isControlPanel() ? PortletCategoryKeys.MY : StringPool.BLANK %>" href="<%= themeDisplay.getURLMyAccount().toString() %>">
+											<liferay-ui:icon
+												message="my-account"
+												src='/html/icons/my_account.png'
+											/>
+
+											<liferay-ui:message key="my-account" />
+										</a>
+									</span>
+								</li>
+
+								<li class="aui-menu-item last sign-out">
+									<a href="<%= themeDisplay.getURLSignOut().toString() %>">
+										<liferay-ui:icon
+											message="sign-out"
+											src='<%= themeDisplay.getPathThemeImages() + "/dock/sign_out.png" %>'
+										/>
+
+										<liferay-ui:message key="sign-out" />
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+
+				<%= "</ul>" + html.substring(y) %>
+
+				<aui:script use="liferay-dockbar">
+					Liferay.once(
+						'dockbarLoaded',
+						function() {
+							var userMenuContainer = A.one('#<portlet:namespace />userMenuContainer');
+							var userMenuTrigger = A.one('#<portlet:namespace />userMenu');
+
+							Liferay.Dockbar.addMenu(
+								{
+									align: {
+										node: userMenuTrigger,
+										points: ['tr', 'br']
+									},
+									boundingBox: userMenuContainer,
+									name: 'userMenu',
+									trigger: userMenuTrigger
+								}
+							);
+
+							userMenuContainer.all('li a').on(
+								['mouseover', 'mouseout'],
+								function(event) {
+									event.currentTarget.toggleClass('aui-focus');
+								}
+							);
+						}
+					);
+				</aui:script>
 			</c:when>
 			<c:otherwise>
 				<%= html %>
