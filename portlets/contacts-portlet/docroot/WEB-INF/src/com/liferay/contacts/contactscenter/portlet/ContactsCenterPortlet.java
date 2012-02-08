@@ -15,7 +15,6 @@
 package com.liferay.contacts.contactscenter.portlet;
 
 import com.liferay.contacts.util.ContactsUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -35,6 +34,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.comparator.UserLastNameComparator;
@@ -50,6 +50,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -138,7 +139,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 
 		long userId = ParamUtil.getLong(resourceRequest, "userId");
 
-		User user = UserLocalServiceUtil.getUserById(userId);
+		User user = UserServiceUtil.getUserById(userId);
 
 		String vCard = ContactsUtil.getVCard(user);
 
@@ -156,13 +157,14 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		long userId = ParamUtil.getLong(resourceRequest, "userId");
-		int socialRelationType = ParamUtil.getInteger(
-			resourceRequest, "socialRelationType");
+		long[] userIds = StringUtil.split(
+			ParamUtil.getString(resourceRequest, "userIds"), 0L);
 
-		List<User> users = UserLocalServiceUtil.getSocialUsers(
-			userId, socialRelationType, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			null);
+		List<User> users = new ArrayList<User>();
+
+		for (long userId : userIds) {
+			users.add(UserServiceUtil.getUserById(userId));
+		}
 
 		String vCards = ContactsUtil.getVCards(users);
 
