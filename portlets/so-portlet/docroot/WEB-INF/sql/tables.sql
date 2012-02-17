@@ -1,3 +1,10 @@
+create table SO_FavoriteSite (
+	favoriteSiteId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG
+);
+
 create table SO_MemberRequest (
 	memberRequestId LONG not null primary key,
 	groupId LONG,
