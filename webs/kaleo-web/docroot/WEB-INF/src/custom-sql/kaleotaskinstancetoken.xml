@@ -17,14 +17,23 @@
 	<sql id="com.liferay.portal.workflow.kaleo.service.persistence.KaleoTaskInstanceTokenFinder.findByC_KTAI">
 		<![CDATA[
 			SELECT
-				DISTINCT {KaleoTaskInstanceToken.*}
+				{KaleoTaskInstanceToken.*}
 			FROM
 				KaleoTaskInstanceToken
-			INNER JOIN
-				KaleoTaskAssignmentInstance ON
-					(KaleoTaskAssignmentInstance.kaleoTaskInstanceTokenId = KaleoTaskInstanceToken.kaleoTaskInstanceTokenId)
 			WHERE
-				(KaleoTaskInstanceToken.companyId = ?)
+				KaleoTaskInstanceToken.kaleoTaskInstanceTokenId IN (				
+					SELECT
+						KaleoTaskInstanceToken.kaleoTaskInstanceTokenId
+					FROM
+						KaleoTaskInstanceToken
+					INNER JOIN
+						KaleoTaskAssignmentInstance ON
+							(KaleoTaskAssignmentInstance.kaleoTaskInstanceTokenId = KaleoTaskInstanceToken.kaleoTaskInstanceTokenId)
+					WHERE
+						(KaleoTaskInstanceToken.companyId = ?)
+					GROUP BY
+						KaleoTaskInstanceToken.kaleoTaskInstanceTokenId
+				)
 		]]>
 	</sql>
 </custom-sql>
