@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
@@ -15,26 +14,15 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
---%>
 
-<span class="site-name">
-	<c:if test="<%= group.isRegularSite() && !group.isControlPanel() %>">
+package com.liferay.so.model.impl;
 
-		<%
-		ExpandoBridge expandoBridge = group.getExpandoBridge();
+/**
+ * @author Jonathan Lee
+ */
+public class FavoriteSiteImpl extends FavoriteSiteBaseImpl {
 
-		boolean socialOfficeEnabled = GetterUtil.getBoolean(expandoBridge.getAttribute("socialOfficeEnabled"));
-		%>
+	public FavoriteSiteImpl() {
+	}
 
-		<c:choose>
-			<c:when test="<%= socialOfficeEnabled %>">
-				<liferay-ui:icon message="<%= group.getDescriptiveName(locale) %>" src='<%= themeDisplay.getPathContext() + "/html/icons/social_office.png" %>' />
-			</c:when>
-			<c:otherwise>
-				<liferay-ui:icon message="<%= group.getDescriptiveName(locale) %>" src='<%= themeDisplay.getPathContext() + "/html/icons/sites_admin.png" %>' />
-			</c:otherwise>
-		</c:choose>
-	</c:if>
-
-	<%= siteName %>
-</span>
+}
