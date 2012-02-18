@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CalendarUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -34,7 +35,6 @@ import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
-import com.liferay.portal.workflow.kaleo.model.impl.KaleoTaskInstanceTokenImpl;
 import com.liferay.portal.workflow.kaleo.util.RoleUtil;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
@@ -102,9 +102,24 @@ public class KaleoTaskInstanceTokenFinderImpl
 			SQLQuery q = buildKaleoTaskInstanceTokenQuerySQL(
 				kaleoTaskInstanceTokenQuery, false, session);
 
-			return (List<KaleoTaskInstanceToken>)QueryUtil.list(
+			List<KaleoTaskInstanceToken> kaleoTaskInstanceTokens =
+				new ArrayList<KaleoTaskInstanceToken>();
+
+			Iterator<Long> itr = (Iterator<Long>)QueryUtil.iterate(
 				q, getDialect(), kaleoTaskInstanceTokenQuery.getStart(),
 				kaleoTaskInstanceTokenQuery.getEnd());
+
+			while (itr.hasNext()) {
+				long kaleoTaskInstanceTokenId = itr.next();
+
+				KaleoTaskInstanceToken kaleoTaskInstanceToken =
+					KaleoTaskInstanceTokenUtil.findByPrimaryKey(
+						kaleoTaskInstanceTokenId);
+
+				kaleoTaskInstanceTokens.add(kaleoTaskInstanceToken);
+			}
+
+			return kaleoTaskInstanceTokens;
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -238,6 +253,26 @@ public class KaleoTaskInstanceTokenFinderImpl
 				kaleoTaskInstanceTokenQuery.getOrderByComparator());
 
 			sql = sb.toString();
+
+			OrderByComparator obc =
+				kaleoTaskInstanceTokenQuery.getOrderByComparator();
+
+			String[] orderByFields = obc.getOrderByFields();
+
+			sb = new StringBundler(orderByFields.length * 3 + 1);
+
+			sb.append(
+				"DISTINCT KaleoTaskInstanceToken.kaleoTaskInstanceTokenId");
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				sb.append(", ");
+				sb.append(_ORDER_BY_ENTITY_ALIAS);
+				sb.append(orderByFields[i]);
+			}
+
+			sql = sql.replace(
+				"DISTINCT KaleoTaskInstanceToken.kaleoTaskInstanceTokenId",
+				sb.toString());
 		}
 
 		SQLQuery q = session.createSQLQuery(sql);
@@ -246,8 +281,7 @@ public class KaleoTaskInstanceTokenFinderImpl
 			q.addScalar(COUNT_COLUMN_NAME, Type.LONG);
 		}
 		else {
-			q.addEntity(
-				"KaleoTaskInstanceToken", KaleoTaskInstanceTokenImpl.class);
+			q.addScalar("KaleoTaskInstanceTokenId", Type.LONG);
 		}
 
 		QueryPos qPos = QueryPos.getInstance(q);
