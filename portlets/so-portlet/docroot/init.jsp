@@ -116,6 +116,6 @@ page import="javax.portlet.WindowState" %>
 <%
 String currentURL = PortalUtil.getCurrentURL(request);
 
-Format dateFormatDate = FastDateFormatFactoryUtil.getSimpleDateFormat("MMM yyyy", locale, timeZone);
+Format dateFormatDate = FastDateFormatFactoryUtil.getSimpleDateFormat("dd MMM yyyy", locale, timeZone);
 Format timeFormatDate = FastDateFormatFactoryUtil.getTime(locale, timeZone);
 %>
