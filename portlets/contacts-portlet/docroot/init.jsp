@@ -39,6 +39,7 @@ page import="com.liferay.portal.kernel.servlet.ServletContextPool" %><%@
 page import="com.liferay.portal.kernel.util.ArrayUtil" %><%@
 page import="com.liferay.portal.kernel.util.CharPool" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
+page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.PrefsParamUtil" %><%@
@@ -110,6 +111,8 @@ page import="javax.portlet.WindowState" %>
 
 <%
 WindowState windowState = renderRequest.getWindowState();
+
+boolean showOnlySiteMembers = GetterUtil.getBoolean(portletConfig.getInitParameter("show-only-site-members"), false);
 
 PortletPreferences preferences = renderRequest.getPreferences();
 

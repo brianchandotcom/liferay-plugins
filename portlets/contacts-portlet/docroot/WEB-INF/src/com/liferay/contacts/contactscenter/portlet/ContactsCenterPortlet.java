@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -311,6 +312,10 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				});
 		}
 
+		if (_showOnlySiteMembers) {
+			params.put("usersGroups", new Long(group.getGroupId()));
+		}
+
 		List<User> users = UserLocalServiceUtil.search(
 			themeDisplay.getCompanyId(), keywords,
 			WorkflowConstants.STATUS_APPROVED, params, start, end,
@@ -357,6 +362,14 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		jsonObject.put("users", jsonArray);
 
 		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
+
+	@Override
+	public void init() throws PortletException {
+		super.init();
+
+		_showOnlySiteMembers = GetterUtil.getBoolean(
+			getInitParameter("show-only-site-members"), false);
 	}
 
 	@Override
@@ -521,5 +534,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			socialRequest.getCompanyId(), socialRequest.getReceiverUserId(),
 			notificationEvent);
 	}
+
+	private boolean _showOnlySiteMembers;
 
 }
