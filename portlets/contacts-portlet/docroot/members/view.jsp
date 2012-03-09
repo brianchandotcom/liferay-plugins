@@ -41,7 +41,7 @@ portletURL.setParameter("mvcPath", "/members/view.jsp");
 
 		<aui:form action="<%= searchURL %>" method="get" name="fm">
 			<liferay-portlet:renderURLParams varImpl="searchURL" />
-			<aui:input inlineField="<%= true %>" id="keywords" label="" name="keywords" size="30" title="search-users" type="text" />
+			<aui:input id="keywords" inlineField="<%= true %>" label="" name="keywords" size="30" title="search-users" type="text" />
 
 			<aui:button type="submit" value="search" />
 		</aui:form>
