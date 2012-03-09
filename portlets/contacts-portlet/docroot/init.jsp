@@ -30,7 +30,6 @@ page import="com.liferay.contacts.util.ContactsUtil" %><%@
 page import="com.liferay.contacts.util.PortletKeys" %><%@
 page import="com.liferay.contacts.util.WebKeys" %><%@
 page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
-page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayPortletResponse" %><%@
@@ -110,6 +109,12 @@ page import="javax.portlet.WindowState" %>
 
 <%
 WindowState windowState = renderRequest.getWindowState();
+
+boolean showOnlySiteMembers = false;
+
+if (portletName.equals(PortletKeys.MEMBERS)) {
+	showOnlySiteMembers = true;
+}
 
 PortletPreferences preferences = renderRequest.getPreferences();
 
