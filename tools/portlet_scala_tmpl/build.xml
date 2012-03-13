@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="@portlet.name@-portlet" basedir="." default="deploy">
+	<import file="../build-common-portlet.xml" />
+
+	<property name="scala.sources.dir" value="docroot/WEB-INF/src/main/scala" />
+  
+  	<property name="build.dir" value="docroot/WEB-INF/classes"/>
+  
+	<target name="fsc" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <fsc classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${scala.sources.dir}" deprecation="true">
+	      <include name="**/*.scala"   />
+	      <!-- <exclude name="forget/**/*.scala"   /> -->
+	   </fsc>
+  	</target>
+
+	<target name="fsc-reset" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <fsc classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${scala.sources.dir}" deprecation="true" reset="true">
+	      <include name="**/*.scala"   />
+	      <!-- <exclude name="forget/**/*.scala"   /> -->
+	   </fsc>
+  	</target>
+
+	<target name="fsc-shutdown" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <fsc classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${scala.sources.dir}" deprecation="true" shutdown="true">
+	      <include name="**/*.scala"   />
+	      <!-- <exclude name="forget/**/*.scala"   /> -->
+	   </fsc>
+  	</target>
+    	
+  	<target name="init-scala">
+	    <property name="scala-compiler.jar" value="docroot/WEB-INF/lib/scala-compiler.jar"/>
+	    <property name="scala-library.jar" value="docroot/WEB-INF/lib/scala-library.jar"/>
+	   
+	    <path id="scala.build.classpath">
+	    	<pathelement location="${scala-library.jar}" />
+	    	<pathelement location="${scala-compiler.jar}" />
+	    	<path refid="portal.classpath" />
+	    </path>
+
+	    <taskdef resource="scala/tools/ant/antlib.xml">
+	      <classpath>
+	        <pathelement location="${scala-compiler.jar}"   />
+	        <pathelement location="${scala-library.jar}"   />
+	      </classpath>
+	    </taskdef>
+	  </target>
+
+   	<target name="scalac" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <scalac classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${scala.sources.dir}" deprecation="true">
+	      <include name="**/*.scala"   />
+	      <!-- <exclude name="forget/**/*.scala"   /> -->
+	    </scalac>
+  	</target>
+</project>
