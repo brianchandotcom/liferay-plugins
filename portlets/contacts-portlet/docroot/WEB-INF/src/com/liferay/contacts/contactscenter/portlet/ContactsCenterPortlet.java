@@ -502,6 +502,9 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			else if (fieldGroup.equals("addresses")) {
 				updateAddresses(actionRequest);
 			}
+			else if (fieldGroup.equals("categorization")) {
+				updateAsset(actionRequest);
+			}
 			else if (fieldGroup.equals("comments")) {
 				updateComments(actionRequest);
 			}
@@ -675,6 +678,26 @@ public class ContactsCenterPortlet extends MVCPortlet {
 
 		UsersAdminUtil.updateAddresses(
 			Contact.class.getName(), user.getContactId(), addresses);
+	}
+
+	protected void updateAsset(ActionRequest actionRequest)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		User user = themeDisplay.getUser();
+
+		String assetCategoryIdsString = ParamUtil.getString(
+			actionRequest, "assetCategoryNames");
+		String assetTagNamesString = ParamUtil.getString(
+			actionRequest, "assetTagNames");
+
+		long[] assetCategoryIds = StringUtil.split(assetCategoryIdsString, 0L);
+		String[] assetTagNames = StringUtil.split(assetTagNamesString);
+
+		UserLocalServiceUtil.updateAsset(
+			user.getUserId(), user, assetCategoryIds, assetTagNames);
 	}
 
 	protected void updateComments(ActionRequest actionRequest)
