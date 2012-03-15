@@ -42,6 +42,7 @@ taskListURL.setParameter("tabs2", tabs2);
 <liferay-ui:search-container
 	emptyResultsMessage="no-tasks-were-found"
 	headerNames="description,due, "
+	id="tasksEntriesSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 

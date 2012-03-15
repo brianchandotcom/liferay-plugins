@@ -32,6 +32,7 @@
 		</liferay-portlet:renderURL>
 
 		<liferay-ui:search-container
+			id="kbTemplatesSearchContainer"
 			rowChecker="<%= AdminPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE_KB_TEMPLATES) ? new RowChecker(renderResponse) : null %>"
 			searchContainer="<%= new KBTemplateSearch(renderRequest, iteratorURL) %>"
 		>

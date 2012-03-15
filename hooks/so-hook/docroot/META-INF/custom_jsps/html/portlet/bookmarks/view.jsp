@@ -68,6 +68,7 @@ request.setAttribute("view.jsp-viewFolder", Boolean.TRUE.toString());
 
 <liferay-ui:search-container
 	curParam="cur1"
+	id="bookmarksEntriesSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 

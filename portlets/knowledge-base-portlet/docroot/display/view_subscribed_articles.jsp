@@ -28,6 +28,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 	<aui:fieldset>
 		<liferay-ui:search-container
 			emptyResultsMessage="no-subscriptions-were-found"
+			id="kbArticlesSearchContainer"
 			orderByCol="<%= orderByCol %>"
 			orderByComparator="<%= KnowledgeBaseUtil.getKBArticleOrderByComparator(orderByCol, orderByType) %>"
 			orderByType="<%= orderByType %>"

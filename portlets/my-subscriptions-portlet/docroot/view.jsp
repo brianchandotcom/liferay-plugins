@@ -32,6 +32,7 @@
 		<liferay-ui:search-container
 			deltaConfigurable="<%= true %>"
 			emptyResultsMessage="no-subscriptions-were-found"
+			id="subscriptionsSearchContainer"
 			iteratorURL="<%= iteratorURL %>"
 			rowChecker="<%= new RowChecker(renderResponse) %>"
 		>

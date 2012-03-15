@@ -17,6 +17,7 @@
 <liferay-ui:search-container
 	emptyResultsMessage="there-are-no-producers"
 	headerNames="name"
+	id="wsrpProducersSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 	<liferay-ui:search-container-results

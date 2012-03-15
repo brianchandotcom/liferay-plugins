@@ -84,6 +84,7 @@ boolean helpful = BeanParamUtil.getBoolean(kbComment, request, "helpful", true);
 					</liferay-portlet:renderURL>
 
 					<liferay-ui:search-container
+						id="kbCommentsSearchContainer"
 						iteratorURL="<%= iteratorURL %>"
 					>
 						<liferay-ui:search-container-results

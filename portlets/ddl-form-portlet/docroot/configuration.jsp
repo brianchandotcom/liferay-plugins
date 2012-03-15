@@ -85,6 +85,7 @@ catch (NoSuchRecordSetException nsrse) {
 
 		<liferay-ui:search-container
 			emptyResultsMessage="no-entries-were-found"
+			id="ddlRecordSetsSearchContainer"
 			iteratorURL="<%= portletURL %>"
 		>
 			<div>

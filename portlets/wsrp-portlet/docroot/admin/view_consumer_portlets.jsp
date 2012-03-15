@@ -34,6 +34,7 @@ portletURL.setParameter("wsrpConsumerId", String.valueOf(wsrpConsumerId));
 <liferay-ui:search-container
 	emptyResultsMessage="there-are-no-portlets"
 	headerNames="name,remote-portlet"
+	id="wsrpConsumerPortletsSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 	<liferay-ui:search-container-results

@@ -36,6 +36,7 @@ int categoriesCount = MBCategoryServiceUtil.getCategoriesCount(scopeGroupId, cat
 		curParam="cur1"
 		deltaConfigurable="<%= false %>"
 		headerNames="category,categories,threads,posts"
+		id="mbCategoriesSearchContainer"
 		iteratorURL="<%= portletURL %>"
 	>
 		<liferay-ui:search-container-results
@@ -67,6 +68,7 @@ int categoriesCount = MBCategoryServiceUtil.getCategoriesCount(scopeGroupId, cat
 	curParam="cur2"
 	emptyResultsMessage="there-are-no-threads-in-this-category"
 	headerNames="thread,flag,started-by,posts,views,last-post"
+	id="mbThreadsSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 

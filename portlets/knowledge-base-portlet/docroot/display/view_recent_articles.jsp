@@ -29,6 +29,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 
 <liferay-ui:search-container
 	emptyResultsMessage="no-articles-were-found"
+	id="kbArticlesSearchContainer"
 	iteratorURL="<%= iteratorURL %>"
 	orderByCol="<%= orderByCol %>"
 	orderByComparator="<%= KnowledgeBaseUtil.getKBArticleOrderByComparator(orderByCol, orderByType) %>"

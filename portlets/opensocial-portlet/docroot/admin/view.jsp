@@ -23,6 +23,7 @@ PortletURL portletURL = renderResponse.createRenderURL();
 <liferay-ui:search-container
 	emptyResultsMessage="there-are-no-gadgets"
 	headerNames="name"
+	id="gadgetsSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 	<liferay-ui:search-container-results

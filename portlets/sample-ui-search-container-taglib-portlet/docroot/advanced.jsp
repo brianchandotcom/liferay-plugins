@@ -25,6 +25,7 @@ portletURL.setParameter("mvcPath", "/advanced.jsp");
 <liferay-ui:search-container
 	delta="<%= 5 %>"
 	headerNames="email-address,screen-name,user-id"
+	id="usersSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 	<liferay-ui:search-container-results>

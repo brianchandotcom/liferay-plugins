@@ -33,6 +33,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container
+	id="assetEntriesSearchContainer"
 	iteratorURL="<%= iteratorURL %>"
 	orderByCol="<%= orderByCol %>"
 	orderByType="<%= orderByType %>"

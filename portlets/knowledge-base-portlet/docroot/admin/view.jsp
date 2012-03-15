@@ -39,6 +39,7 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 		</liferay-portlet:renderURL>
 
 		<liferay-ui:search-container
+			id="kbArticlesSearchContainer"
 			rowChecker="<%= AdminPermission.contains(permissionChecker, scopeGroupId, ActionKeys.DELETE_KB_ARTICLES) ? new RowChecker(renderResponse) : null %>"
 			searchContainer="<%= new KBArticleSearch(renderRequest, iteratorURL) %>"
 		>

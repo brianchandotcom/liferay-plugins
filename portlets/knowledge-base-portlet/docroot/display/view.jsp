@@ -23,6 +23,7 @@
 </liferay-portlet:renderURL>
 
 <liferay-ui:search-container
+	id="kbArticlesSearchContainer"
 	searchContainer="<%= new KBArticleSearch(renderRequest, iteratorURL) %>"
 >
 	<liferay-ui:search-container-results

@@ -22,6 +22,7 @@ List<CalEvent> events = (List<CalEvent>)request.getAttribute("view.jsp-events");
 
 <liferay-ui:search-container
 	delta="<%= events.size() %>"
+	id="calEventsSearchContainer"
 >
 	<liferay-ui:search-container-results
 		results="<%= events %>"

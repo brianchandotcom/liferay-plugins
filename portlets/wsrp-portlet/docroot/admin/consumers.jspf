@@ -20,6 +20,7 @@
 <liferay-ui:search-container
 	emptyResultsMessage="there-are-no-consumers"
 	headerNames="name"
+	id="wsrpConsumersSearchContainer"
 	iteratorURL="<%= portletURL %>"
 >
 	<liferay-ui:search-container-results

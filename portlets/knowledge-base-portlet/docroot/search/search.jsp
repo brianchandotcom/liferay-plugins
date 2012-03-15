@@ -34,6 +34,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 
 <liferay-ui:search-container
 	emptyResultsMessage='<%= LanguageUtil.format(pageContext, "no-articles-were-found-that-matched-the-keywords-x", "<strong>" + HtmlUtil.escape(keywords) + "</strong>", false) %>'
+	id="kbArticlesSearchContainer"
 	iteratorURL="<%= iteratorURL %>"
 	orderByCol="<%= orderByCol %>"
 	orderByType="<%= orderByType %>"

@@ -34,6 +34,7 @@
 				<liferay-ui:search-container
 					deltaConfigurable="<%= true %>"
 					emptyResultsMessage="you-have-no-notifications"
+					id="userNotificationEventsSearchContainer"
 					iteratorURL="<%= iteratorURL %>"
 					rowChecker="<%= new RowChecker(renderResponse) %>"
 				>
