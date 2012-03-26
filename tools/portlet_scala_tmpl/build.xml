@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="foo-portlet" basedir="." default="deploy">
+<project name="@portlet.name@-portlet" basedir="." default="deploy">
 	<import file="../build-common-portlet.xml" />
 
 	<property name="project.dir" value="." />
