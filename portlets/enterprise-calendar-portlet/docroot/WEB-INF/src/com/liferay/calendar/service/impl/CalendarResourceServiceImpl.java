@@ -21,8 +21,10 @@ import com.liferay.calendar.service.permission.EnterpriseCalendarPermission;
 import com.liferay.calendar.util.ActionKeys;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.service.ServiceContext;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class CalendarResourceServiceImpl
 
 	public CalendarResource addCalendarResource(
 			long groupId, String className, long classPK, String classUuid,
-			String code, Map<Locale, String> nameMap,
+			long defaultCalendarId, String code, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap, String type, boolean active,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -45,8 +47,18 @@ public class CalendarResourceServiceImpl
 			getPermissionChecker(), groupId, ActionKeys.ADD_RESOURCE);
 
 		return calendarResourceLocalService.addCalendarResource(
-			getUserId(), groupId, className, classPK, classUuid, code, nameMap,
-			descriptionMap, type, active, serviceContext);
+			getUserId(), groupId, className, classPK, classUuid,
+			defaultCalendarId, code, nameMap, descriptionMap, type, active,
+			serviceContext);
+	}
+
+	public int countByKeywords(
+			long companyId, long[] groupIds, long[] classNameIds,
+			String keywords, boolean active)
+		throws SystemException {
+
+		return calendarResourceFinder.filterCountByKeywords(
+			companyId, groupIds, classNameIds, keywords, active);
 	}
 
 	public void deleteCalendarResource(long calendarResourceId)
@@ -66,6 +78,54 @@ public class CalendarResourceServiceImpl
 
 		return calendarResourceLocalService.getCalendarResource(
 			calendarResourceId);
+	}
+
+	public List<CalendarResource> search(
+			long companyId, long[] groupIds, long[] classNameIds, String code,
+			String name, String description, String type, boolean active,
+			boolean andOperator, int start, int end,
+			OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return calendarResourceFinder.filterFindByC_G_C_C_N_D_T_A(
+			companyId, groupIds, classNameIds, code, name, description, type,
+			active, andOperator, start, end, orderByComparator);
+	}
+
+	public List<CalendarResource> searchByKeywords(
+			long companyId, long[] groupIds, long[] classNameIds,
+			String keywords, boolean active, boolean andOperator, int start,
+			int end, OrderByComparator orderByComparator)
+		throws SystemException {
+
+		return calendarResourceFinder.filterFindByKeywords(
+			companyId, groupIds, classNameIds, keywords, active, start, end,
+			orderByComparator);
+	}
+
+	public int searchCount(
+			long companyId, long[] groupIds, long[] classNameIds, String code,
+			String name, String description, String type, boolean active,
+			boolean andOperator)
+		throws SystemException {
+
+		return calendarResourceFinder.filterCountByC_G_C_C_N_D_T_A(
+			companyId, groupIds, classNameIds, code, name, description, type,
+			active, andOperator);
+	}
+
+	public CalendarResource updateCalendarResource(
+			long calendarResourceId, long defaultCalendarId, String code,
+			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
+			String type, boolean active, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		CalendarResourcePermission.check(
+			getPermissionChecker(), calendarResourceId, ActionKeys.UPDATE);
+
+		return calendarResourceLocalService.updateCalendarResource(
+			calendarResourceId, defaultCalendarId, code, nameMap,
+			descriptionMap, type, active, serviceContext);
 	}
 
 	public CalendarResource updateCalendarResource(
