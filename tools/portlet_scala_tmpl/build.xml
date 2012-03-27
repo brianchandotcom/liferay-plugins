@@ -78,11 +78,11 @@
 
   	<target name="update-scala-libraries">
   		<get
-			dest="${project.dir}/docroot/WEB-INF/lib/scala-compiler.java"
+			dest="docroot/WEB-INF/lib/scala-compiler.jar"
 			src="${scala.compiler}"
 		/>
 		<get
-			dest="${project.dir}/docroot/WEB-INF/lib/scala-library.java"
+			dest="docroot/WEB-INF/lib/scala-library.jar"
 			src="${scala.library}"
 		/>
   	</target>
