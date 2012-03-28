@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
@@ -15,24 +14,30 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
---%>
 
-<span class="site-name">
-	<c:if test="<%= group.isRegularSite() && !group.isControlPanel() %>">
+package com.liferay.so.service.impl;
 
-		<%
-		boolean socialOfficeEnabled = SocialOfficeServiceUtil.isSocialOfficeSite(group.getGroupId());
-		%>
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.model.Group;
+import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.so.service.base.SocialOfficeServiceBaseImpl;
 
-		<c:choose>
-			<c:when test="<%= socialOfficeEnabled %>">
-				<liferay-ui:icon message="<%= group.getDescriptiveName(locale) %>" src='<%= themeDisplay.getPathContext() + "/html/icons/social_office.png" %>' />
-			</c:when>
-			<c:otherwise>
-				<liferay-ui:icon message="<%= group.getDescriptiveName(locale) %>" src='<%= themeDisplay.getPathContext() + "/html/icons/sites_admin.png" %>' />
-			</c:otherwise>
-		</c:choose>
-	</c:if>
+/**
+ * @author Jonathan Lee
+ */
+public class SocialOfficeServiceImpl extends SocialOfficeServiceBaseImpl {
 
-	<%= siteName %>
-</span>
+	public boolean isSocialOfficeSite(long groupId)
+		throws PortalException, SystemException {
+
+		Group group = groupPersistence.findByPrimaryKey(groupId);
+
+		ExpandoBridge expandoBridge = group.getExpandoBridge();
+
+		return GetterUtil.getBoolean(
+			expandoBridge.getAttribute("socialOfficeEnabled"));
+	}
+
+}
