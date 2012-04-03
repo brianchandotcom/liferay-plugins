@@ -30,7 +30,6 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
-import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -40,7 +39,6 @@ import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletPreferencesThreadLocal;
@@ -68,10 +66,10 @@ public class InstanceUtil {
 			PortletPreferencesThreadLocal.setStrict(false);
 
 			setupRole(companyId);
-			setupUserGroup(companyId);
 
 			setupExpando(companyId);
-			setupLayoutSetPrototype(companyId);
+
+			initLayoutSetPrototype(companyId);
 
 			setInitialized(companyId);
 		}
@@ -84,7 +82,9 @@ public class InstanceUtil {
 	}
 
 	public static void initLayoutSetPrototype(long companyId) throws Exception {
-		setupLayoutSetPrototype(companyId);
+		setupLayoutSetPrototypeSite(companyId);
+		setupLayoutSetPrototypeUserPrivate(companyId);
+		setupLayoutSetPrototypeUserPublic(companyId);
 	}
 
 	public static void initRuntime(long companyId) {
@@ -137,12 +137,10 @@ public class InstanceUtil {
 		boolean active = true;
 		long defaultUserId = UserLocalServiceUtil.getDefaultUserId(companyId);
 
-		ServiceContext serviceContext = new ServiceContext();
-
 		LayoutSetPrototype layoutSetPrototype =
 			LayoutSetPrototypeLocalServiceUtil.addLayoutSetPrototype(
 				defaultUserId, companyId, localeNamesMap, description, active,
-				true, serviceContext);
+				true, new ServiceContext());
 
 		UnicodeProperties settingsProperties =
 			layoutSetPrototype.getSettingsProperties();
@@ -214,8 +212,9 @@ public class InstanceUtil {
 		try {
 			ExpandoColumn expandoColumn =
 				ExpandoColumnLocalServiceUtil.addColumn(
-					expandoTable.getTableId(), "socialOfficeDefault",
-					ExpandoColumnConstants.BOOLEAN);
+					expandoTable.getTableId(),
+					SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+					ExpandoColumnConstants.STRING);
 
 			updatePermissions(expandoColumn);
 		}
@@ -223,7 +222,7 @@ public class InstanceUtil {
 		}
 	}
 
-	protected static void setupLayoutSetPrototype(long companyId)
+	protected static void setupLayoutSetPrototypeSite(long companyId)
 		throws Exception {
 
 		LayoutSetPrototype layoutSetPrototype = addLayoutSetPrototype(
@@ -231,8 +230,10 @@ public class InstanceUtil {
 
 		ExpandoValueLocalServiceUtil.addValue(
 			companyId, LayoutSetPrototype.class.getName(),
-			ExpandoTableConstants.DEFAULT_TABLE_NAME, "socialOfficeDefault",
-			layoutSetPrototype.getLayoutSetPrototypeId(), true);
+			ExpandoTableConstants.DEFAULT_TABLE_NAME,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+			layoutSetPrototype.getLayoutSetPrototypeId(),
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_SITE);
 
 		Role role = RoleLocalServiceUtil.getRole(
 			layoutSetPrototype.getCompanyId(),
@@ -247,10 +248,8 @@ public class InstanceUtil {
 
 		Group group = layoutSetPrototype.getGroup();
 
-		ServiceContext serviceContext = new ServiceContext();
-
 		LayoutLocalServiceUtil.deleteLayouts(
-			group.getGroupId(), true, serviceContext);
+			group.getGroupId(), true, new ServiceContext());
 
 		LayoutSetLocalServiceUtil.updateLookAndFeel(
 			group.getGroupId(), "so_WAR_sotheme", "01", "", false);
@@ -259,7 +258,7 @@ public class InstanceUtil {
 
 		Layout layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Home",
-			PortletPropsValues.SITE_PROTOTYPE_LAYOUT_TEMPLATE);
+			PortletPropsValues.SITE_PROTOTYPE_LAYOUT_TEMPLATE, null);
 
 		LayoutUtil.addPortlets(
 			group, layout, "/home", PortletPropsKeys.SITE_PROTOTYPE_PORTLETS);
@@ -272,7 +271,7 @@ public class InstanceUtil {
 
 		layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Calendar",
-			"1_column");
+			"1_column", null);
 
 		LayoutUtil.addPortlets(
 			group, layout, "/calendar",
@@ -284,7 +283,7 @@ public class InstanceUtil {
 
 		layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Documents",
-			"1_column");
+			"1_column", null);
 
 		LayoutUtil.addPortlets(
 			group, layout, "/documents",
@@ -298,7 +297,7 @@ public class InstanceUtil {
 
 		layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Forums",
-			"1_column");
+			"1_column", null);
 
 		LayoutUtil.addPortlets(
 			group, layout, "/forums", PortletPropsKeys.SITE_PROTOTYPE_PORTLETS);
@@ -312,7 +311,7 @@ public class InstanceUtil {
 
 		layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Blog",
-			"2_columns_iii");
+			"2_columns_iii", null);
 
 		LayoutUtil.addPortlets(
 			group, layout, "/blog", PortletPropsKeys.SITE_PROTOTYPE_PORTLETS);
@@ -325,7 +324,7 @@ public class InstanceUtil {
 
 		layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Wiki",
-			"1_column");
+			"1_column", null);
 
 		LayoutUtil.addPortlets(
 			group, layout, "/wiki", PortletPropsKeys.SITE_PROTOTYPE_PORTLETS);
@@ -338,7 +337,7 @@ public class InstanceUtil {
 
 		layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Members",
-			"1_column");
+			"1_column", null);
 
 		LayoutUtil.addPortlets(
 			group, layout, "/members",
@@ -347,6 +346,162 @@ public class InstanceUtil {
 		LayoutUtil.removePortletBorder(layout, "2_WAR_soportlet");
 
 		LayoutUtil.updatePermissions(layout, true);
+	}
+
+	protected static void setupLayoutSetPrototypeUserPrivate(long companyId)
+		throws Exception {
+
+		LayoutSetPrototype layoutSetPrototype = addLayoutSetPrototype(
+			companyId, "Social Office User Home");
+
+		ExpandoValueLocalServiceUtil.addValue(
+			companyId, LayoutSetPrototype.class.getName(),
+			ExpandoTableConstants.DEFAULT_TABLE_NAME,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+			layoutSetPrototype.getLayoutSetPrototypeId(),
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PRIVATE);
+
+		Group group = layoutSetPrototype.getGroup();
+
+		LayoutLocalServiceUtil.deleteLayouts(
+			group.getGroupId(), true, new ServiceContext());
+
+		LayoutSetLocalServiceUtil.updateLookAndFeel(
+			group.getGroupId(), "so_WAR_sotheme", "01", "", false);
+
+		// Dashboard
+
+		Layout layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Dashboard",
+			"2_columns_iii", "/so/dashboard");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/home",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, false);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 0);
+
+		// Contacts Center
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Contacts Center", "1_column", "/so/contacts-center");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts-center",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 1);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Microblogs",
+			"1_column", "/so/microblogs");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 2);
+
+		// Messages
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Messages",
+			"1_column", "/so/messages");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/messages",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 3);
+
+		// Tasks
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Tasks",
+			"1_column", "/so/tasks");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/tasks",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 4);
+	}
+
+	protected static void setupLayoutSetPrototypeUserPublic(long companyId)
+		throws Exception {
+
+		LayoutSetPrototype layoutSetPrototype = addLayoutSetPrototype(
+			companyId, "Social Office User Profile");
+
+		ExpandoValueLocalServiceUtil.addValue(
+			companyId, LayoutSetPrototype.class.getName(),
+			ExpandoTableConstants.DEFAULT_TABLE_NAME,
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY,
+			layoutSetPrototype.getLayoutSetPrototypeId(),
+			SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PUBLIC);
+
+		Group group = layoutSetPrototype.getGroup();
+
+		LayoutLocalServiceUtil.deleteLayouts(
+			group.getGroupId(), true, new ServiceContext());
+
+		LayoutSetLocalServiceUtil.updateLookAndFeel(
+			group.getGroupId(), "so_WAR_sotheme", "01", "", false);
+
+		// Profile
+
+		Layout layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Profile",
+			"1_2_columns_ii", "/so/profile");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/profile",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 0);
+
+		// Contacts
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Contacts",
+			"1_column", "/so/contacts");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 1);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Microblogs",
+			"1_column", "/so/microblogs");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		LayoutLocalServiceUtil.updatePriority(layout, 2);
 	}
 
 	protected static void setupRole(long companyId) throws Exception {
@@ -371,20 +526,6 @@ public class InstanceUtil {
 			companyId, User.class.getName(), ResourceConstants.SCOPE_COMPANY,
 			String.valueOf(companyId), role.getRoleId(),
 			new String[] {ActionKeys.VIEW});
-	}
-
-	protected static void setupUserGroup(long companyId) throws Exception {
-		long defaultUserId = UserLocalServiceUtil.getDefaultUserId(companyId);
-
-		UserGroup userGroup = UserGroupLocalServiceUtil.addUserGroup(
-			defaultUserId, companyId, UserGroupConstants.SOCIAL_OFFICE_USERS,
-			"Social Office Users have access to the Social Office Suite.");
-
-		Role role = RoleLocalServiceUtil.getRole(
-			companyId, RoleConstants.SOCIAL_OFFICE_USER);
-
-		GroupLocalServiceUtil.addRoleGroups(
-			role.getRoleId(), new long[] {userGroup.getGroup().getGroupId()});
 	}
 
 	protected static void updatePermissions(ExpandoColumn expandoColumn)

@@ -19,12 +19,8 @@
 
 <%@ include file="/html/taglib/init.jsp" %>
 
-<%
-UserGroup userGroup = UserGroupLocalServiceUtil.getUserGroup(themeDisplay.getCompanyId(), "Social Office Users");
-%>
-
 <c:choose>
-	<c:when test="<%= (userGroup == null) || !UserLocalServiceUtil.hasUserGroupUser(userGroup.getUserGroupId(), themeDisplay.getUserId()) %>">
+	<c:when test='<%= !UserLocalServiceUtil.hasRoleUser(themeDisplay.getCompanyId(), "Social Office User", themeDisplay.getUserId(), true) %>'>
 		<liferay-util:include page="/html/taglib/ui/my_sites/page.portal.jsp" />
 	</c:when>
 	<c:otherwise>

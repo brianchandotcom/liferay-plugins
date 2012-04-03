@@ -17,13 +17,21 @@
 
 package com.liferay.so.util;
 
-/**
- * @author Jonathan Lee
+/*
  * @author Eudaldo Alonso
  */
-public class UserGroupConstants
-	extends com.liferay.portal.model.UserGroupConstants {
+public class SocialOfficeConstants {
 
-	public static final String SOCIAL_OFFICE_USERS = "Social Office Users";
+	public static final String LAYOUT_SET_PROTOTYPE_KEY =
+		"layoutSetPrototypeKey";
+
+	public static final String LAYOUT_SET_PROTOTYPE_KEY_SITE =
+		"layoutSetPrototypeKey_Site";
+
+	public static final String LAYOUT_SET_PROTOTYPE_KEY_USER_PRIVATE =
+		"layoutSetPrototypeKey_UserPrivate";
+
+	public static final String LAYOUT_SET_PROTOTYPE_KEY_USER_PUBLIC =
+		"layoutSetPrototypeKey_UserPublic";
 
 }
