@@ -86,7 +86,9 @@
 										}
 									).render();
 
-									buttonRow.setData('dialogInstance', dialog);
+									var fm = A.one('#<portlet:namespace />fm');
+
+									fm.setData('dialogInstance', dialog);
 								},
 								icon: 'edit',
 								id: '<portlet:namespace />edit',
@@ -102,7 +104,7 @@
 
 									if (confirm(confirmMessage)) {
 										A.io.request(
-											'<portlet:actionURL><portlet:param name="<%= Constants.CMD %>" value="deleteEntry" /></portlet:actionURL>',
+											'<portlet:actionURL name="deleteEntry" />',
 											{
 												after: {
 													failure: function(event, id, obj) {

@@ -26,6 +26,24 @@ if (entryId > 0) {
 }
 %>
 
+<c:if test='<%= SessionMessages.contains(renderRequest, "request_processed") %>'>
+	<div class="portlet-msg-success">
+
+		<%
+		String successMessage = (String)SessionMessages.get(renderRequest, "request_processed");
+		%>
+
+		<c:choose>
+			<c:when test='<%= Validator.isNotNull(successMessage) && !successMessage.equals("request_processed") %>'>
+				<%= successMessage %>
+			</c:when>
+			<c:otherwise>
+				<liferay-ui:message key="your-request-completed-successfully" />
+			</c:otherwise>
+		</c:choose>
+	</div>
+</c:if>
+
 <c:if test="<%= entry != null %>">
 
 	<%
@@ -46,7 +64,7 @@ if (entryId > 0) {
 				</div>
 
 				<div class="lfr-contact-extra">
-					<%= HtmlUtil.escape(entry.getEmailAddress()) %>
+					<a href="mailto:<%= entry.getEmailAddress() %>"><%= HtmlUtil.escape(entry.getEmailAddress()) %></a>
 				</div>
 			</div>
 		</div>

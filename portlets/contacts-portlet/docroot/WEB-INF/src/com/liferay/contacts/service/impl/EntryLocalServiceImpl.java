@@ -63,16 +63,30 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		return entry;
 	}
 
-	public List<Entry> getEntries(long compayId, long userId)
+	public List<Entry> getEntries(long companyId, long userId)
 		throws SystemException {
 
-		return entryPersistence.findByC_U(compayId, userId);
+		return entryPersistence.findByC_U(companyId, userId);
 	}
 
-	public int getEntriesCount(long compayId, long userId)
+	public List<Entry> getEntries(
+			long companyId, long userId, String keywords, int start, int end)
 		throws SystemException {
 
-		return entryPersistence.countByC_U(compayId, userId);
+		return entryFinder.findByC_U_EA_FN(
+			companyId, userId, keywords, start, end);
+	}
+
+	public int getEntriesCount(long companyId, long userId)
+		throws SystemException {
+
+		return entryPersistence.countByC_U(companyId, userId);
+	}
+
+	public int getEntriesCount(long companyId, long userId, String keywords)
+		throws SystemException {
+
+		return entryFinder.countByC_U_EA_FN(companyId, userId, keywords);
 	}
 
 	public List<Object> getUserAndEntries(

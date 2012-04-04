@@ -101,6 +101,9 @@ portletURL.setWindowState(WindowState.NORMAL);
 						<aui:layout cssClass="contact-group-filter">
 							<aui:select inlineField="true" label="" name="socialRelationType">
 								<aui:option label="all" selected='<%= socialRelationType == 0 %>' value="all" />
+								<c:if test="<%= !showOnlySiteMembers %>">
+									<aui:option label="my-contacts" selected='<%= socialRelationType == SocialRelationConstants.TYPE_MY_CONTACTS %>' value="<%= SocialRelationConstants.TYPE_MY_CONTACTS %>" />
+								</c:if>
 								<aui:option label="connections" selected='<%= socialRelationType == SocialRelationConstants.TYPE_BI_CONNECTION %>' value="<%= SocialRelationConstants.TYPE_BI_CONNECTION %>" />
 								<aui:option label="following" selected='<%= socialRelationType == SocialRelationConstants.TYPE_UNI_FOLLOWER %>' value="<%= SocialRelationConstants.TYPE_UNI_FOLLOWER %>" />
 							</aui:select>
@@ -207,6 +210,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 									<portlet:param name="mvcPath" value="/contacts_center/view_resources.jsp" />
 									<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
 									<portlet:param name="isUser" value="<%= String.valueOf(false) %>" />
+									<portlet:param name="redirect" value="<%= currentURL %>" />
 								</liferay-portlet:renderURL>
 
 								<div class="lfr-contact">
@@ -295,6 +299,17 @@ portletURL.setWindowState(WindowState.NORMAL);
 										<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(followingUsersCount) %>" key='<%= showOnlySiteMembers ? "you-are-following-x-people-in-this-site" : "you-are-following-x-people" %>' /></a>
 									</aui:layout>
 
+									<c:if test="<%= !showOnlySiteMembers %>">
+
+										<%
+										int myContactsCount = EntryLocalServiceUtil.getEntriesCount(themeDisplay.getCompanyId(), user.getUserId());
+										%>
+
+										<aui:layout cssClass="contacts-count contacts">
+											<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(myContactsCount) %>" key="view-my-x-contacts" /></a>
+										</aui:layout>
+									</c:if>
+
 									<aui:layout cssClass="contacts-count all">
 										<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(allUsersCount) %>" key="view-all-x-users" /></a>
 									</aui:layout>
@@ -321,7 +336,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 				{
 					contactsResult: '.contacts-portlet .contacts-result-content',
 					contactsResultContainer: '.contacts-portlet .contacts-result',
-					contactsResultURL: '<portlet:resourceURL id="getContacts"><portlet:param name="portletResource" value="<%= portletResource %>" /></portlet:resourceURL>',
+					contactsResultURL: '<portlet:resourceURL id="getContacts"><portlet:param name="portletResource" value="<%= portletResource %>" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:resourceURL>',
 					contactsSearchInput: '#<portlet:namespace />name',
 					namespace: '<portlet:namespace />'
 				}
@@ -381,7 +396,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 					var lastNameAnchor = node.getAttribute('data-lastNameAnchor');
 
 					A.io.request(
-						'<portlet:resourceURL id="getContacts"><portlet:param name="portletResource" value="<%= portletResource %>" /></portlet:resourceURL>',
+						'<portlet:resourceURL id="getContacts"><portlet:param name="portletResource" value="<%= portletResource %>" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:resourceURL>',
 						{
 							after: {
 								success: function(event, id, obj) {
@@ -502,9 +517,23 @@ portletURL.setWindowState(WindowState.NORMAL);
 									uri: uri
 								}
 							).render();
+
+							var fm = A.one('#<portlet:namespace />fm');
+
+							fm.setData('dialogInstance', dialog);
 						}
 					);
 				</c:if>
+
+				A.one('.contacts-portlet .contacts-center-home .contacts').on(
+					'click',
+					function(event) {
+						contactFilterSelect.set('value', '<%= SocialRelationConstants.TYPE_MY_CONTACTS %>');
+
+						contactsCenter.updateContacts(searchInput.get('value'), contactFilterSelect.get('value'));
+					},
+					'a'
+				);
 
 				A.one('.contacts-portlet .contacts-center-home .connections').on(
 					'click',
