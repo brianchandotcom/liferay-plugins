@@ -14,14 +14,17 @@
 
 package com.liferay.calendar.util;
 
+import com.liferay.portal.kernel.util.StringPool;
+
 /**
- * @author Eduardo Lundgren
+ * @author Fabio Pezzutto
  * @author Andrea Di Giorgi
+ * @author Eduardo Lundgren
  */
-public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
+public class ColorUtil {
 
-	public static final String CALENDAR = "CALENDAR";
-
-	public static final String CALENDAR_RESOURCE = "CALENDAR_RESOURCE";
+	public static String toHexString(int color) {
+		return StringPool.POUND.concat(Integer.toHexString(color));
+	}
 
 }

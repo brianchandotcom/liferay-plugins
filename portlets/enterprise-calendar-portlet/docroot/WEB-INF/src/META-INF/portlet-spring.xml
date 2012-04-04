@@ -10,6 +10,7 @@
 		<property name="service" ref="com.liferay.calendar.service.CalendarService" />
 	</bean>
 	<bean id="com.liferay.calendar.service.persistence.CalendarPersistence" class="com.liferay.calendar.service.persistence.CalendarPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.calendar.service.persistence.CalendarFinder" class="com.liferay.calendar.service.persistence.CalendarFinderImpl" parent="basePersistence" />
 	<bean id="com.liferay.calendar.service.CalendarBookingLocalService" class="com.liferay.calendar.service.impl.CalendarBookingLocalServiceImpl" />
 	<bean id="com.liferay.calendar.service.CalendarBookingLocalServiceUtil" class="com.liferay.calendar.service.CalendarBookingLocalServiceUtil">
 		<property name="service" ref="com.liferay.calendar.service.CalendarBookingLocalService" />
@@ -19,6 +20,7 @@
 		<property name="service" ref="com.liferay.calendar.service.CalendarBookingService" />
 	</bean>
 	<bean id="com.liferay.calendar.service.persistence.CalendarBookingPersistence" class="com.liferay.calendar.service.persistence.CalendarBookingPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.calendar.service.persistence.CalendarBookingFinder" class="com.liferay.calendar.service.persistence.CalendarBookingFinderImpl" parent="basePersistence" />
 	<bean id="com.liferay.calendar.service.CalendarResourceLocalService" class="com.liferay.calendar.service.impl.CalendarResourceLocalServiceImpl" />
 	<bean id="com.liferay.calendar.service.CalendarResourceLocalServiceUtil" class="com.liferay.calendar.service.CalendarResourceLocalServiceUtil">
 		<property name="service" ref="com.liferay.calendar.service.CalendarResourceLocalService" />

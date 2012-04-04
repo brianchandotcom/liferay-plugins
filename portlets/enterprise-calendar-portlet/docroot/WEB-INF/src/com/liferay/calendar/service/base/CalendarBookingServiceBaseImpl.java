@@ -21,7 +21,9 @@ import com.liferay.calendar.service.CalendarLocalService;
 import com.liferay.calendar.service.CalendarResourceLocalService;
 import com.liferay.calendar.service.CalendarResourceService;
 import com.liferay.calendar.service.CalendarService;
+import com.liferay.calendar.service.persistence.CalendarBookingFinder;
 import com.liferay.calendar.service.persistence.CalendarBookingPersistence;
+import com.liferay.calendar.service.persistence.CalendarFinder;
 import com.liferay.calendar.service.persistence.CalendarPersistence;
 import com.liferay.calendar.service.persistence.CalendarResourceFinder;
 import com.liferay.calendar.service.persistence.CalendarResourcePersistence;
@@ -121,6 +123,24 @@ public abstract class CalendarBookingServiceBaseImpl extends PrincipalBean
 	}
 
 	/**
+	 * Returns the calendar finder.
+	 *
+	 * @return the calendar finder
+	 */
+	public CalendarFinder getCalendarFinder() {
+		return calendarFinder;
+	}
+
+	/**
+	 * Sets the calendar finder.
+	 *
+	 * @param calendarFinder the calendar finder
+	 */
+	public void setCalendarFinder(CalendarFinder calendarFinder) {
+		this.calendarFinder = calendarFinder;
+	}
+
+	/**
 	 * Returns the calendar booking local service.
 	 *
 	 * @return the calendar booking local service
@@ -175,6 +195,25 @@ public abstract class CalendarBookingServiceBaseImpl extends PrincipalBean
 	public void setCalendarBookingPersistence(
 		CalendarBookingPersistence calendarBookingPersistence) {
 		this.calendarBookingPersistence = calendarBookingPersistence;
+	}
+
+	/**
+	 * Returns the calendar booking finder.
+	 *
+	 * @return the calendar booking finder
+	 */
+	public CalendarBookingFinder getCalendarBookingFinder() {
+		return calendarBookingFinder;
+	}
+
+	/**
+	 * Sets the calendar booking finder.
+	 *
+	 * @param calendarBookingFinder the calendar booking finder
+	 */
+	public void setCalendarBookingFinder(
+		CalendarBookingFinder calendarBookingFinder) {
+		this.calendarBookingFinder = calendarBookingFinder;
 	}
 
 	/**
@@ -461,12 +500,16 @@ public abstract class CalendarBookingServiceBaseImpl extends PrincipalBean
 	protected CalendarService calendarService;
 	@BeanReference(type = CalendarPersistence.class)
 	protected CalendarPersistence calendarPersistence;
+	@BeanReference(type = CalendarFinder.class)
+	protected CalendarFinder calendarFinder;
 	@BeanReference(type = CalendarBookingLocalService.class)
 	protected CalendarBookingLocalService calendarBookingLocalService;
 	@BeanReference(type = CalendarBookingService.class)
 	protected CalendarBookingService calendarBookingService;
 	@BeanReference(type = CalendarBookingPersistence.class)
 	protected CalendarBookingPersistence calendarBookingPersistence;
+	@BeanReference(type = CalendarBookingFinder.class)
+	protected CalendarBookingFinder calendarBookingFinder;
 	@BeanReference(type = CalendarResourceLocalService.class)
 	protected CalendarResourceLocalService calendarResourceLocalService;
 	@BeanReference(type = CalendarResourceService.class)
