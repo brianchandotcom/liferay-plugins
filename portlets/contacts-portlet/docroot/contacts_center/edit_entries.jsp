@@ -37,7 +37,7 @@ if (entryId > 0) {
 
 	<aui:model-context bean="<%= entry %>" model="<%= Entry.class %>" />
 
-	<aui:input name="fullName" label="name" />
+	<aui:input label="name" name="fullName" />
 	<aui:input name="emailAddress" />
 	<aui:input name="comments" />
 

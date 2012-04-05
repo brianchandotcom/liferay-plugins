@@ -64,7 +64,6 @@
 
 						contactsToolbarChildren.push(
 							{
-								cssClass: '',
 								handler: function(event) {
 									var uri = '<%= viewEntryURL %>';
 
@@ -98,7 +97,6 @@
 
 						contactsToolbarChildren.push(
 							{
-								cssClass: '',
 								handler: function(event) {
 									var confirmMessage = '<%= LanguageUtil.format(pageContext, "are-you-sure-you-want-to-delete-x-from-your-contacts", entry.getFullName()) %>';
 
@@ -181,7 +179,6 @@
 
 							contactsToolbarChildren.push(
 								{
-									cssClass: '',
 									handler: function(event) {
 										Liferay.ContactsCenter._setVisibleSelectedUsersView();
 									},

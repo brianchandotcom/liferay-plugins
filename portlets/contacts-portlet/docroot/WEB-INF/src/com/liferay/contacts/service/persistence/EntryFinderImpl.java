@@ -39,19 +39,19 @@ import java.util.List;
 public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 	implements EntryFinder {
 
-	public static final String COUNT_BY_COMPANY_ID =
-		EntryFinder.class.getName() + ".countByCompany";
+	public static final String COUNT_BY_C_U_FN_EA =
+		EntryFinder.class.getName() + ".countByC_U_FN_EA";
 
-	public static final String COUNT_BY_C_U_EA_FN =
-		EntryFinder.class.getName() + ".countByC_U_EA_FN";
+	public static final String COUNT_BY_C_U_FN_MN_LN_SN_EA =
+		EntryFinder.class.getName() + ".countByC_U_FN_MN_LN_SN_EA";
 
-	public static final String FIND_BY_COMPANY_ID =
-		EntryFinder.class.getName() + ".findByCompany";
+	public static final String FIND_BY_C_U_FN_EA =
+		EntryFinder.class.getName() + ".findByC_U_FN_EA";
 
-	public static final String FIND_BY_C_U_EA_FN =
-		EntryFinder.class.getName() + ".findByC_U_EA_FN";
+	public static final String FIND_BY_C_U_FN_MN_LN_SN_EA =
+		EntryFinder.class.getName() + ".findByC_U_FN_MN_LN_SN_EA";
 
-	public int countByCompanyId(long companyId, long userId, String keywords)
+	public int countByC_U_FN_EA(long companyId, long userId, String keywords)
 		throws SystemException {
 
 		Session session = null;
@@ -59,82 +59,26 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(COUNT_BY_COMPANY_ID);
+			String sql = CustomSQLUtil.get(COUNT_BY_C_U_FN_EA);
 
-			String[] name = null;
+			String[] names = null;
 			boolean andOperator = false;
 
 			if (Validator.isNotNull(keywords)) {
-				name = CustomSQLUtil.keywords(keywords);
+				names = CustomSQLUtil.keywords(keywords);
 			}
 			else {
 				andOperator = true;
 			}
 
-			name = CustomSQLUtil.keywords(name);
-
-			sql = replaceKeywords(sql, name, andOperator);
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME, Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(companyId);
-			qPos.add(name, 10);
-			qPos.add(userId);
-			qPos.add(companyId);
-			qPos.add(name, 4);
-
-			Iterator<Long> itr = q.iterate();
-
-			if (itr.hasNext()) {
-				Long count = itr.next();
-
-				if (count != null) {
-					return count.intValue();
-				}
-			}
-
-			return 0;
-		}
-		catch (Exception e) {
-			throw new SystemException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	public int countByC_U_EA_FN(long companyId, long userId, String keywords)
-		throws SystemException {
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil.get(COUNT_BY_C_U_EA_FN);
-
-			String[] name = null;
-			boolean andOperator = false;
-
-			if (Validator.isNotNull(keywords)) {
-				name = CustomSQLUtil.keywords(keywords);
-			}
-			else {
-				andOperator = true;
-			}
-
-			name = CustomSQLUtil.keywords(name);
+			names = CustomSQLUtil.keywords(names);
 
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "lower(Contacts_Entry.fullName)", StringPool.LIKE, true,
-				name);
+				names);
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "lower(Contacts_Entry.emailAddress)", StringPool.LIKE,
-				true, name);
+				true, names);
 
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
 
@@ -144,9 +88,9 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
-			qPos.add(userId);
 			qPos.add(companyId);
-			qPos.add(name, 4);
+			qPos.add(userId);
+			qPos.add(names, 4);
 
 			Iterator<Long> itr = q.iterate();
 
@@ -168,7 +112,64 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 		}
 	}
 
-	public List<Object> findByCompanyId(
+	public int countByC_U_FN_MN_LN_SN_EA(
+			long companyId, long userId, String keywords)
+		throws SystemException {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(COUNT_BY_C_U_FN_MN_LN_SN_EA);
+
+			String[] names = null;
+			boolean andOperator = false;
+
+			if (Validator.isNotNull(keywords)) {
+				names = CustomSQLUtil.keywords(keywords);
+			}
+			else {
+				andOperator = true;
+			}
+
+			names = CustomSQLUtil.keywords(names);
+
+			sql = replaceKeywords(sql, names, andOperator);
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME, Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+			qPos.add(names, 10);
+			qPos.add(companyId);
+			qPos.add(userId);
+			qPos.add(names, 4);
+
+			Iterator<Long> itr = q.iterate();
+
+			if (itr.hasNext()) {
+				Long count = itr.next();
+
+				if (count != null) {
+					return count.intValue();
+				}
+			}
+
+			return 0;
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	public List<Entry> findByC_U_FN_EA(
 			long companyId, long userId, String keywords, int start, int end)
 		throws SystemException {
 
@@ -177,21 +178,73 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(FIND_BY_COMPANY_ID);
+			String sql = CustomSQLUtil.get(FIND_BY_C_U_FN_EA);
 
-			String[] name = null;
+			String[] names = null;
 			boolean andOperator = false;
 
 			if (Validator.isNotNull(keywords)) {
-				name = CustomSQLUtil.keywords(keywords);
+				names = CustomSQLUtil.keywords(keywords);
 			}
 			else {
 				andOperator = true;
 			}
 
-			name = CustomSQLUtil.keywords(name);
+			names = CustomSQLUtil.keywords(names);
 
-			sql = replaceKeywords(sql, name, andOperator);
+			sql = CustomSQLUtil.replaceKeywords(
+				sql, "lower(Contacts_Entry.fullName)", StringPool.LIKE, true,
+				names);
+			sql = CustomSQLUtil.replaceKeywords(
+				sql, "lower(Contacts_Entry.emailAddress)", StringPool.LIKE,
+				true, names);
+
+			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addEntity("Entry", EntryImpl.class);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(companyId);
+			qPos.add(userId);
+			qPos.add(names, 4);
+
+			return (List<Entry>)QueryUtil.list(q, getDialect(), start, end);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	public List<Object> findByC_U_FN_MN_LN_SN_EA(
+			long companyId, long userId, String keywords, int start, int end)
+		throws SystemException {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(FIND_BY_C_U_FN_MN_LN_SN_EA);
+
+			String[] names = null;
+			boolean andOperator = false;
+
+			if (Validator.isNotNull(keywords)) {
+				names = CustomSQLUtil.keywords(keywords);
+			}
+			else {
+				andOperator = true;
+			}
+
+			names = CustomSQLUtil.keywords(names);
+
+			sql = replaceKeywords(sql, names, andOperator);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -202,10 +255,10 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(companyId);
-			qPos.add(name, 10);
-			qPos.add(userId);
+			qPos.add(names, 10);
 			qPos.add(companyId);
-			qPos.add(name, 4);
+			qPos.add(userId);
+			qPos.add(names, 4);
 
 			List<Object> models = new ArrayList<Object>();
 
@@ -216,7 +269,7 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 				Object[] array = itr.next();
 
 				long id = (Long)array[0];
-				//String name = (String)array[1];
+				String name = (String)array[1];
 				boolean isUser = (Boolean)array[2];
 
 				Object obj = null;
@@ -232,58 +285,6 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 			}
 
 			return models;
-		}
-		catch (Exception e) {
-			throw new SystemException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	public List<Entry> findByC_U_EA_FN(
-			long companyId, long userId, String keywords, int start, int end)
-		throws SystemException {
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			String sql = CustomSQLUtil.get(FIND_BY_C_U_EA_FN);
-
-			String[] name = null;
-			boolean andOperator = false;
-
-			if (Validator.isNotNull(keywords)) {
-				name = CustomSQLUtil.keywords(keywords);
-			}
-			else {
-				andOperator = true;
-			}
-
-			name = CustomSQLUtil.keywords(name);
-
-			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Contacts_Entry.fullName)", StringPool.LIKE, true,
-				name);
-			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(Contacts_Entry.emailAddress)", StringPool.LIKE,
-				true, name);
-
-			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addEntity("Entry", EntryImpl.class);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(userId);
-			qPos.add(companyId);
-			qPos.add(name, 4);
-
-			return (List<Entry>)QueryUtil.list(q, getDialect(), start, end);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);

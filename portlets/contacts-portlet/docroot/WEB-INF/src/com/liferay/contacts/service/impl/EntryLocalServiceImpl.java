@@ -73,7 +73,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 			long companyId, long userId, String keywords, int start, int end)
 		throws SystemException {
 
-		return entryFinder.findByC_U_EA_FN(
+		return entryFinder.findByC_U_FN_EA(
 			companyId, userId, keywords, start, end);
 	}
 
@@ -86,14 +86,14 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	public int getEntriesCount(long companyId, long userId, String keywords)
 		throws SystemException {
 
-		return entryFinder.countByC_U_EA_FN(companyId, userId, keywords);
+		return entryFinder.countByC_U_FN_EA(companyId, userId, keywords);
 	}
 
 	public List<Object> getUserAndEntries(
 			long companyId, long userId, String keywords, int start, int end)
 		throws SystemException {
 
-		return entryFinder.findByCompanyId(
+		return entryFinder.findByC_U_FN_MN_LN_SN_EA(
 			companyId, userId, keywords, start, end);
 	}
 
@@ -101,7 +101,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 			long companyId, long userId, String keywords)
 		throws SystemException {
 
-		return entryFinder.countByCompanyId(companyId, userId, keywords);
+		return entryFinder.countByC_U_FN_MN_LN_SN_EA(companyId, userId, keywords);
 	}
 
 	public Entry updateEntry(
