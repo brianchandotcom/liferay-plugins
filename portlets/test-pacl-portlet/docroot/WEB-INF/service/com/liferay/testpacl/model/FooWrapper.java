@@ -116,7 +116,7 @@ public class FooWrapper implements Foo, ModelWrapper<Foo> {
 		return new FooWrapper((Foo)_foo.clone());
 	}
 
-	public int compareTo(Foo foo) {
+	public int compareTo(com.liferay.testpacl.model.Foo foo) {
 		return _foo.compareTo(foo);
 	}
 
@@ -125,11 +125,11 @@ public class FooWrapper implements Foo, ModelWrapper<Foo> {
 		return _foo.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<Foo> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.liferay.testpacl.model.Foo> toCacheModel() {
 		return _foo.toCacheModel();
 	}
 
-	public Foo toEscapedModel() {
+	public com.liferay.testpacl.model.Foo toEscapedModel() {
 		return new FooWrapper(_foo.toEscapedModel());
 	}
 
