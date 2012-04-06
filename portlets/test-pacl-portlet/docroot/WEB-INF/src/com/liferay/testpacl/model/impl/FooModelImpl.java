@@ -32,6 +32,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the Foo service. Represents a row in the &quot;TestPACL_Foo&quot; database table, with each column mapped to a property of this class.
  *
@@ -95,6 +98,24 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 
 	public String getModelClassName() {
 		return Foo.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("fooId", getFooId());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long fooId = (Long)attributes.get("fooId");
+
+		if (fooId != null) {
+			setFooId(fooId);
+		}
 	}
 
 	public long getFooId() {
