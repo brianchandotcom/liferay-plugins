@@ -250,7 +250,7 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 
 			q.addScalar("id", Type.LONG);
 			q.addScalar("name", Type.STRING);
-			q.addScalar("isUser", Type.BOOLEAN);
+			q.addScalar("registeredUser", Type.BOOLEAN);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
@@ -270,11 +270,11 @@ public class EntryFinderImpl extends BasePersistenceImpl<Entry>
 
 				long id = (Long)array[0];
 				String name = (String)array[1];
-				boolean isUser = (Boolean)array[2];
+				boolean registeredUser = (Boolean)array[2];
 
 				Object obj = null;
 
-				if (isUser) {
+				if (registeredUser) {
 					obj = UserLocalServiceUtil.getUser(id);
 				}
 				else {

@@ -30,15 +30,18 @@ if (entryId > 0) {
 
 <div id="<portlet:namespace />errorMessage"></div>
 
-<aui:form action="" method="post" name="addEntry" onSubmit="event.preventDefault();">
-	<aui:input name="action" type="hidden"  value="<%= (entry != null) ? Constants.UPDATE : Constants.ADD %>" />
-	<aui:input name="entryId" type="hidden"  value="<%= entryId %>" />
+<liferay-portlet:actionURL name="addEntry" var="addEntryURL" />
+
+<aui:form action="<%= addEntryURL %>" method="post" name="addEntry">
 	<aui:input name="redirect" type="hidden"  value="<%= redirect %>" />
+	<aui:input name="entryId" type="hidden"  value="<%= entryId %>" />
 
 	<aui:model-context bean="<%= entry %>" model="<%= Entry.class %>" />
 
 	<aui:input label="name" name="fullName" />
+
 	<aui:input name="emailAddress" />
+
 	<aui:input name="comments" />
 
 	<aui:button-row>
@@ -54,8 +57,10 @@ if (entryId > 0) {
 	form.on(
 		'submit',
 		function(event) {
+			event.preventDefault();
+
 			A.io.request(
-				'<liferay-portlet:actionURL name="addEntry" />',
+				form.attr('action'),
 				{
 					after: {
 						failure: function(event, id, obj) {
@@ -76,39 +81,26 @@ if (entryId > 0) {
 								}
 							}
 							else {
-								<liferay-portlet:renderURL var="viewUserSummaryURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-									<portlet:param name="mvcPath" value="/contacts_center/view_resources.jsp" />
-									<portlet:param name="redirect" value="<%= currentURL %>" />
-									<portlet:param name="isUser" value="<%= String.valueOf(false) %>" />
-								</liferay-portlet:renderURL>
-
-								var ioRequest = A.io.request(
-									'<%= viewUserSummaryURL %>',
+								A.io.request(
+									'<liferay-portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/contacts_center/view_resources.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="registeredUser" value="<%= String.valueOf(false) %>" /></liferay-portlet:renderURL>',
 									{
 										after: {
 											failure: function(event, id, obj) {
 												var errorMessage = A.one('#<portlet:namespace/>errorMessage');
 
 												if (errorMessage) {
-													errorMessage.html('<span class="portlet-msg-error">' + Liferay.Language.get('an-error-occurred-while-retrieving-the-users-information') + '</span>');
+													errorMessage.html('<span class="portlet-msg-error"><liferay-ui:message key="an-error-occurred-while-retrieving-the-users-information" /></span>');
 												}
 											},
 											success: function(event, id, obj) {
-												var instance = this;
-
-												var fm = A.one('#<portlet:namespace />fm');
-
-												var dialog = fm.getData('dialogInstance');
-
 												Liferay.ContactsCenter.renderContent(this.get('responseData'));
 
 												var searchInput = A.one('.contacts-portlet #<portlet:namespace />name');
-
 												var contactFilterSelect = A.one('.contacts-portlet .contact-group-filter select[name=<portlet:namespace />socialRelationType]');
 
 												Liferay.ContactsCenter.updateContacts(searchInput.get('value'), contactFilterSelect.get('value'));
 
-												dialog.destroy();
+												A.one('#<portlet:namespace />fm').getData('dialogInstance').destroy();
 											}
 										},
 										data: {

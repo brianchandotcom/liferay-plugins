@@ -28,20 +28,17 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * The implementation of the entry local service.
- *
  * @author Brian Wing Shun Chan
- * @see com.liferay.contacts.service.base.EntryLocalServiceBaseImpl
- * @see com.liferay.contacts.service.EntryLocalService
- * @see com.liferay.contacts.service.EntryLocalServiceUtil
  */
 public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
+
 	public Entry addEntry(
 			User user, String fullName, String emailAddress, String comments)
 		throws PortalException, SystemException {
 
 		long companyId = user.getCompanyId();
 		long userId = user.getUserId();
+		Date now = new Date();
 
 		validate(companyId, userId, fullName, emailAddress);
 
@@ -52,11 +49,11 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		entry.setCompanyId(user.getCompanyId());
 		entry.setUserId(user.getUserId());
 		entry.setUserName(user.getFullName());
-		entry.setFullName(fullName);
+		entry.setCreateDate(now);
+		entry.setModifiedDate(now);
 		entry.setEmailAddress(emailAddress);
+		entry.setFullName(fullName);
 		entry.setComments(comments);
-		entry.setCreateDate(new Date());
-		entry.setModifiedDate(new Date());
 
 		entryPersistence.update(entry, true);
 
@@ -101,7 +98,8 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 			long companyId, long userId, String keywords)
 		throws SystemException {
 
-		return entryFinder.countByC_U_FN_MN_LN_SN_EA(companyId, userId, keywords);
+		return entryFinder.countByC_U_FN_MN_LN_SN_EA(
+			companyId, userId, keywords);
 	}
 
 	public Entry updateEntry(
@@ -119,26 +117,14 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		entry.setCompanyId(user.getCompanyId());
 		entry.setUserId(user.getUserId());
 		entry.setUserName(user.getFullName());
-		entry.setFullName(fullName);
-		entry.setEmailAddress(emailAddress);
-		entry.setComments(comments);
 		entry.setModifiedDate(new Date());
+		entry.setEmailAddress(emailAddress);
+		entry.setFullName(fullName);
+		entry.setComments(comments);
 
 		entryPersistence.update(entry, true);
 
 		return entry;
-	}
-
-	protected void validate(
-			long companyId, long userId, String fullName, String emailAddress)
-		throws PortalException, SystemException {
-
-		if (Validator.isNull(fullName)) {
-			throw new ContactFullNameException();
-		}
-
-		validateEmailAddress(emailAddress);
-		validateDuplicateEmailAddress(companyId, userId, emailAddress);
 	}
 
 	protected void validate(
@@ -159,13 +145,26 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		}
 	}
 
+	protected void validate(
+			long companyId, long userId, String fullName, String emailAddress)
+		throws PortalException, SystemException {
+
+		if (Validator.isNull(fullName)) {
+			throw new ContactFullNameException();
+		}
+
+		validateEmailAddress(emailAddress);
+		validateDuplicateEmailAddress(companyId, userId, emailAddress);
+	}
+
 	protected void validateDuplicateEmailAddress(
 			long companyId, long userId, String emailAddress)
 		throws PortalException, SystemException {
 
-		if (entryPersistence.fetchByC_U_EA(companyId, userId, emailAddress)
-				!= null) {
+		Entry entry = entryPersistence.fetchByC_U_EA(
+			companyId, userId, emailAddress);
 
+		if (entry != null) {
 			throw new DuplicateEntryEmailAddressException();
 		}
 	}

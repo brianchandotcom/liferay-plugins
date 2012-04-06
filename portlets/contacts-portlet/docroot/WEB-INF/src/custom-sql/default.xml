@@ -6,10 +6,10 @@
 			SELECT
 				COUNT(*) AS COUNT_VALUE
 			FROM
-    		(
-    		    (
+			(
+				(
 					SELECT
-						userId as id, lastName as name, 1 as isUser
+						userId as id, lastName as name, 1 as registeredUser
 					FROM
 						User_
 					WHERE
@@ -22,10 +22,10 @@
 							(lower(User_.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
 						)
 				)
-        		UNION ALL
-        		(
+				UNION ALL
+				(
 					SELECT
-						entryId as id, fullName as name, 0 as isUser
+						entryId as id, fullName as name, 0 as registeredUser
 					FROM
 						Contacts_Entry
 					WHERE
@@ -35,7 +35,7 @@
 							(lower(Contacts_Entry.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
 						)
 				)
-    		) as USERS_AND_CONTACTS
+			) as USERS_AND_CONTACTS
 		]]>
 	</sql>
 	<sql id="com.liferay.contacts.service.persistence.EntryFinder.countByC_U_EA_FN">
@@ -55,12 +55,12 @@
 	<sql id="com.liferay.contacts.service.persistence.EntryFinder.findByCompany">
 		<![CDATA[
 			SELECT
-				id, name, isUser
+				id, name, registeredUser
 			FROM
-    		(
-    		    (
+			(
+				(
 					SELECT
-						userId as id, lastName as name, 1 as isUser
+						userId as id, lastName as name, 1 as registeredUser
 					FROM
 						User_
 					WHERE
@@ -73,10 +73,10 @@
 							(lower(User_.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
 						)
 				)
-        		UNION ALL
-        		(
+				UNION ALL
+				(
 					SELECT
-						entryId as id, fullName as name, 0 as isUser
+						entryId as id, fullName as name, 0 as registeredUser
 					FROM
 						Contacts_Entry
 					WHERE
@@ -86,7 +86,7 @@
 							(lower(Contacts_Entry.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
 						)
 				)
-    		) as USERS_AND_CONTACTS
+			) as USERS_AND_CONTACTS
 			ORDER BY
 				name
 		]]>

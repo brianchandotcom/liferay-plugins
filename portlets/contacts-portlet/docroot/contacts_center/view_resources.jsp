@@ -16,26 +16,26 @@
 
 <%@ include file="/init.jsp" %>
 
+<%
+boolean registeredUser = ParamUtil.getBoolean(request, "registeredUser");
+%>
+
 <div>
-
-	<%
-	boolean isUser = ParamUtil.getBoolean(request, "isUser");
-	%>
-
 	<c:choose>
-		<c:when test="<%= !isUser %>">
+		<c:when test="<%= !registeredUser %>">
 
 			<%
 			long entryId = ParamUtil.getLong(request, "entryId");
-
-			Entry entry = null;
-
-			if (entryId > 0) {
-				entry = EntryLocalServiceUtil.getEntry(entryId);
-			}
 			%>
 
-			<c:if test="<%= entry != null %>">
+			<c:if test="<%= entryId > 0 %>">
+
+				<%
+				Entry entry = EntryLocalServiceUtil.getEntry(entryId);
+
+				String redirect = ParamUtil.getString(request, "redirect");
+				%>
+
 				<div id="<portlet:namespace />contactSummary">
 					<liferay-util:include page="/contacts_center/view_entry.jsp" servletContext="<%= application %>" />
 				</div>
@@ -46,10 +46,6 @@
 							<aui:button-row cssClass="edit-toolbar" id='<%= renderResponse.getNamespace() + "entryToolbar" %>' />
 						</div>
 					</div>
-
-					<%
-					String redirect = ParamUtil.getString(request, "redirect");
-					%>
 
 					<aui:script use="aui-dialog,aui-io-plugin,aui-toolbar">
 						var buttonRow = A.one('#<portlet:namespace />entryToolbar');

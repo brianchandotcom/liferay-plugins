@@ -398,7 +398,7 @@ AUI.add(
 
 										var name;
 
-										if (result.isUser) {
+										if (result.registeredUser) {
 										 	name = result.lastName;
 										}
 										else {
@@ -418,7 +418,7 @@ AUI.add(
 											lastNameAnchor = nameAnchor;
 										}
 
-										if (result.isUser) {
+										if (result.registeredUser) {
 											return A.Lang.sub(
 												TPL_USER_DATA,
 												{

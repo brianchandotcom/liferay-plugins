@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
-import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -111,6 +110,14 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		User user = themeDisplay.getUser();
+
+		long entryId = ParamUtil.getLong(actionRequest, "entryId");
+		String emailAddress = ParamUtil.getString(
+			actionRequest, "emailAddress");
+		String fullName = ParamUtil.getString(actionRequest, "fullName");
+		String comments = ParamUtil.getString(actionRequest, "comments");
+
 		PortletConfig portletConfig =
 			(PortletConfig)actionRequest.getAttribute(
 				JavaConstants.JAVAX_PORTLET_CONFIG);
@@ -118,42 +125,30 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			User user = themeDisplay.getUser();
-
-			String emailAddress = ParamUtil.getString(
-				actionRequest, "emailAddress");
-			String fullName = ParamUtil.getString(actionRequest, "fullName");
-			String comments = ParamUtil.getString(actionRequest, "comments");
-
-			String action = ParamUtil.getString(actionRequest, "action");
-
-			String successMessage = ParamUtil.getString(
-				actionRequest, "successMessage");
-
 			Entry entry = null;
 
-			if (action.equals(Constants.ADD)) {
-				entry = EntryLocalServiceUtil.addEntry(
-					user, fullName, emailAddress, comments);
+			String message = StringPool.BLANK;
 
-				successMessage = "you-have-successfully-added-a-new-contact";
-			}
-			else if (action.equals(Constants.UPDATE)) {
-				long entryId = ParamUtil.getLong(actionRequest, "entryId");
-
+			if (entryId > 0) {
 				entry = EntryLocalServiceUtil.updateEntry(
 					entryId, user, fullName, emailAddress, comments);
 
-				successMessage = "you-have-successfully-updated-the-contact";
+				message = "you-have-successfully-updated-the-contact";
+			}
+			else {
+				entry = EntryLocalServiceUtil.addEntry(
+					user, fullName, emailAddress, comments);
+
+				message = "you-have-successfully-added-a-new-contact";
 			}
 
 			jsonObject.put("entryId", entry.getEntryId());
 			jsonObject.put("success", true);
 
-			SessionMessages.add(
-				actionRequest, "request_processed",
-				LanguageUtil.get(
-					portletConfig, themeDisplay.getLocale(), successMessage));
+			message = LanguageUtil.get(
+				portletConfig, themeDisplay.getLocale(), message);
+
+			SessionMessages.add(actionRequest, "request_processed", message);
 		}
 		catch (Exception e) {
 			String message = null;
@@ -182,10 +177,10 @@ public class ContactsCenterPortlet extends MVCPortlet {
 					"an-error-occurred-while-processing-the-requested-resource";
 			}
 
-			jsonObject.put(
-				"message",
-				LanguageUtil.get(
-					portletConfig, themeDisplay.getLocale(), message));
+			message = LanguageUtil.get(
+				portletConfig, themeDisplay.getLocale(), message);
+
+			jsonObject.put("message", message);
 			jsonObject.put("success", false);
 		}
 
@@ -384,7 +379,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		viewSummaryURL.setParameter(
 			"mvcPath", "/contacts_center/view_resources.jsp");
 		viewSummaryURL.setParameter("userId", String.valueOf(user.getUserId()));
-		viewSummaryURL.setParameter("isUser", Boolean.TRUE.toString());
+		viewSummaryURL.setParameter("registeredUser", Boolean.TRUE.toString());
 
 		userJSONObject.put("viewSummaryURL", viewSummaryURL.toString());
 
@@ -427,20 +422,20 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		if ((socialRelationType == 0) &&
 			!portletName.equals(PortletKeys.MEMBERS)) {
 
-			List<Object> models = EntryLocalServiceUtil.getUserAndEntries(
+			List<Object> contacts = EntryLocalServiceUtil.getUserAndEntries(
 				themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords,
 				start, end);
 
-			for (Object model : models) {
+			for (Object contact : contacts) {
 				JSONObject contactJSONObject = null;
 
-				if (model instanceof User) {
+				if (contact instanceof User) {
 					contactJSONObject = getUserJSONObject(
-						resourceResponse, (User) model, themeDisplay);
+						resourceResponse, (User)contact, themeDisplay);
 				}
 				else {
 					contactJSONObject = getEntryJSONObject(
-						resourceResponse, (Entry) model, redirect,
+						resourceResponse, (Entry)contact, redirect,
 						themeDisplay);
 				}
 
@@ -524,7 +519,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				deleteEntry(actionRequest, actionResponse);
 			}
 			else if (actionName.equals("updateFieldGroup")) {
-		         updateFieldGroup(actionRequest, actionResponse);
+				updateFieldGroup(actionRequest, actionResponse);
 			}
 			else {
 				super.processAction(actionRequest, actionResponse);
@@ -736,10 +731,10 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		contactJSONObject.put("entryId", String.valueOf(entry.getEntryId()));
 		contactJSONObject.put("emailAddress", entry.getEmailAddress());
 		contactJSONObject.put("fullName", entry.getFullName());
-		contactJSONObject.put("isUser", false);
+		contactJSONObject.put("registeredUser", false);
 		contactJSONObject.put(
 			"portraitURL",
-			themeDisplay.getPathImage() + "/user_male_portrait?img_id=0&t=");
+			themeDisplay.getPathImage() + "/user_male_portrait?img_id=0");
 
 		LiferayPortletResponse liferayPortletResponse =
 			(LiferayPortletResponse)resourceResponse;
@@ -750,10 +745,10 @@ public class ContactsCenterPortlet extends MVCPortlet {
 
 		viewSummaryURL.setParameter(
 			"mvcPath", "/contacts_center/view_resources.jsp");
+		viewSummaryURL.setParameter("redirect", redirect);
 		viewSummaryURL.setParameter(
 			"entryId", String.valueOf(entry.getEntryId()));
-		viewSummaryURL.setParameter("isUser", Boolean.FALSE.toString());
-		viewSummaryURL.setParameter("redirect", redirect);
+		viewSummaryURL.setParameter("registeredUser", Boolean.FALSE.toString());
 
 		contactJSONObject.put("viewSummaryURL", viewSummaryURL.toString());
 
@@ -786,7 +781,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		userJSONObject.put("emailAddress", user.getEmailAddress());
 		userJSONObject.put("firstName", user.getFirstName());
 		userJSONObject.put("fullName", user.getFullName());
-		userJSONObject.put("isUser", true);
+		userJSONObject.put("registeredUser", true);
 		userJSONObject.put("jobTitle", user.getJobTitle());
 		userJSONObject.put("lastName", user.getLastName());
 		userJSONObject.put("portraitURL", user.getPortraitURL(themeDisplay));
@@ -802,7 +797,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		viewSummaryURL.setParameter(
 			"mvcPath", "/contacts_center/view_resources.jsp");
 		viewSummaryURL.setParameter("userId", String.valueOf(user.getUserId()));
-		viewSummaryURL.setParameter("isUser", Boolean.TRUE.toString());
+		viewSummaryURL.setParameter("registeredUser", Boolean.TRUE.toString());
 
 		userJSONObject.put("viewSummaryURL", viewSummaryURL.toString());
 
