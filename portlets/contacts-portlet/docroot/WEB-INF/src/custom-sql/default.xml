@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+
+<custom-sql>
+	<sql id="com.liferay.contacts.service.persistence.EntryFinder.countByCompany">
+		<![CDATA[
+			SELECT
+				COUNT(*) AS COUNT_VALUE
+			FROM
+			(
+				(
+					SELECT
+						userId as id, lastName as name, 1 as registeredUser
+					FROM
+						User_
+					WHERE
+						companyId = ? AND status = 0 AND defaultUser = 0 AND
+						(
+							(lower(User_.firstName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.middleName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.lastName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.screenName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
+						)
+				)
+				UNION ALL
+				(
+					SELECT
+						entryId as id, fullName as name, 0 as registeredUser
+					FROM
+						Contacts_Entry
+					WHERE
+						userId = ? AND companyId = ? AND
+						(
+							(lower(Contacts_Entry.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(Contacts_Entry.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
+						)
+				)
+			) as USERS_AND_CONTACTS
+		]]>
+	</sql>
+	<sql id="com.liferay.contacts.service.persistence.EntryFinder.countByC_U_EA_FN">
+		<![CDATA[
+			SELECT
+				COUNT(*) AS COUNT_VALUE
+			FROM
+				Contacts_Entry
+			WHERE
+				userId = ? AND companyId = ? AND
+				(
+					(lower(Contacts_Entry.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+					(lower(Contacts_Entry.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
+				)
+		]]>
+	</sql>
+	<sql id="com.liferay.contacts.service.persistence.EntryFinder.findByCompany">
+		<![CDATA[
+			SELECT
+				id, name, registeredUser
+			FROM
+			(
+				(
+					SELECT
+						userId as id, lastName as name, 1 as registeredUser
+					FROM
+						User_
+					WHERE
+						companyId = ? AND status = 0 AND defaultUser = 0 AND
+						(
+							(lower(User_.firstName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.middleName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.lastName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.screenName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(User_.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
+						)
+				)
+				UNION ALL
+				(
+					SELECT
+						entryId as id, fullName as name, 0 as registeredUser
+					FROM
+						Contacts_Entry
+					WHERE
+						userId = ? AND companyId = ? AND
+						(
+							(lower(Contacts_Entry.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+							(lower(Contacts_Entry.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
+						)
+				)
+			) as USERS_AND_CONTACTS
+			ORDER BY
+				name
+		]]>
+	</sql>
+	<sql id="com.liferay.contacts.service.persistence.EntryFinder.findByC_U_EA_FN">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				Contacts_Entry
+			WHERE
+				userId = ? AND companyId = ? AND
+				(
+					(lower(Contacts_Entry.fullName) LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
+					(lower(Contacts_Entry.emailAddress) LIKE ? [$AND_OR_NULL_CHECK$])
+				)
+			ORDER BY
+				Contacts_Entry.fullName
+		]]>
+	</sql>
+</custom-sql>

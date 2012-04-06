@@ -127,7 +127,7 @@ request.setAttribute("view_user.jsp-user", user2);
 				</aui:layout>
 			</aui:layout>
 
-			<div class="lfr-contact-grid-item">
+			<div class="lfr-detail-info">
 				<c:if test="<%= showIcon %>">
 					<div class="lfr-contact-thumb">
 						<a href="<%= user2.getDisplayURL(themeDisplay) %>"><img alt="<%= HtmlUtil.escape(user2.getFullName()) %>" src="<%= user2.getPortraitURL(themeDisplay) %>" /></a>
@@ -144,7 +144,7 @@ request.setAttribute("view_user.jsp-user", user2);
 					</div>
 
 					<div class="lfr-contact-extra">
-						<%= HtmlUtil.escape(user2.getEmailAddress()) %>
+						<a href="mailto:<%= user2.getEmailAddress() %>"><%= HtmlUtil.escape(user2.getEmailAddress()) %></a>
 					</div>
 				</div>
 
@@ -274,7 +274,7 @@ request.setAttribute("view_user.jsp-user", user2);
 
 								<c:choose>
 									<c:when test="<%= !assetTags.isEmpty() %>">
-										<div class="field-group" data-sectionId="categorization" data-title="<%= LanguageUtil.get(pageContext, "tags") %>" >
+										<div class="field-group" data-sectionId="categorization" data-title="<%= LanguageUtil.get(pageContext, "tags") %>">
 											<ul class="user-tags">
 
 												<%
