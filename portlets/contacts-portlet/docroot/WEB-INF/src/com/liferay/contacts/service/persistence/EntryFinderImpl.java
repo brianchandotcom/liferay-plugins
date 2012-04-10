@@ -258,6 +258,9 @@ public class EntryFinderImpl
 			boolean andOperator, int start, int end)
 		throws SystemException {
 
+		fullNames = CustomSQLUtil.keywords(fullNames);
+		emailAddresses = CustomSQLUtil.keywords(emailAddresses);
+
 		Session session = null;
 
 		try {
