@@ -1,3 +1,5 @@
+#set ($user_local_service = $serviceLocator.findService("com.liferay.portal.service.UserLocalService"))
+
 #set ($logo = "logo")
 
 #set ($user_profile_url = $community_default_public_url)
@@ -26,8 +28,6 @@
 #end
 
 #if ($page_group.isUser())
-	#set ($user_local_service = $serviceLocator.findService("com.liferay.portal.service.UserLocalService"))
-
 	#set ($current_user = $user_local_service.getUserById($page_group.getClassPK()))
 
 	#set ($current_user_name = $current_user.getFullName())
