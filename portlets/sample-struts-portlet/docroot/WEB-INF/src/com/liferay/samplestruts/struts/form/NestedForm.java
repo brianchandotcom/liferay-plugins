@@ -30,13 +30,13 @@ import org.apache.struts.action.ActionMapping;
  */
 public class NestedForm extends ActionForm {
 
-	public Collection getBooks() {
+	public Collection<Book> getBooks() {
 		return _books;
 	}
 
 	@Override
 	public void reset(ActionMapping mapping, HttpServletRequest req) {
-		_books = new ArrayList();
+		_books = new ArrayList<Book>();
 
 		_books.add(new Book("1", "Genesis"));
 		_books.add(new Book("2", "Exodus"));
@@ -59,6 +59,6 @@ public class NestedForm extends ActionForm {
 		return errors;
 	}
 
-	private Collection _books;
+	private Collection<Book> _books;
 
 }
