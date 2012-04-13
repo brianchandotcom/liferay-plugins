@@ -9,4 +9,10 @@
 		<param-name>productionMode</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	<listener>
+		<listener-class>com.liferay.portal.kernel.spring.context.PortletContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.liferay.portal.kernel.servlet.PortletContextListener</listener-class>
+	</listener>
 </web-app>
