@@ -111,11 +111,11 @@ public class WSRPProducerLocalServiceImpl
 		return wsrpProducer;
 	}
 
-	public WSRPProducer getWSRPProducer(String wsrpProducerUuid)
+	public WSRPProducer getWSRPProducer(String wsrpProducerUuid, long companyId)
 		throws PortalException, SystemException {
 
-		List<WSRPProducer> wsrpProducers = wsrpProducerPersistence.findByUuid(
-			wsrpProducerUuid);
+		List<WSRPProducer> wsrpProducers = wsrpProducerPersistence.findByUuid_C(
+			wsrpProducerUuid, companyId);
 
 		if (wsrpProducers.isEmpty()) {
 			throw new NoSuchProducerException(
