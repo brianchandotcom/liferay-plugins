@@ -99,7 +99,7 @@ public class WSRPConsumerPortletLocalServiceClp
 				com.liferay.portal.service.ServiceContext.class);
 
 		_deleteWSRPConsumerPortletMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
-				"deleteWSRPConsumerPortlet", java.lang.String.class);
+				"deleteWSRPConsumerPortlet", java.lang.String.class, long.class);
 
 		_deleteWSRPConsumerPortletsMethodKey20 = new MethodKey(_classLoaderProxy.getClassName(),
 				"deleteWSRPConsumerPortlets", long.class);
@@ -115,7 +115,7 @@ public class WSRPConsumerPortletLocalServiceClp
 				"getWSRPConsumerPortlet", long.class, java.lang.String.class);
 
 		_getWSRPConsumerPortletMethodKey24 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getWSRPConsumerPortlet", java.lang.String.class);
+				"getWSRPConsumerPortlet", java.lang.String.class, long.class);
 
 		_getWSRPConsumerPortletsMethodKey25 = new MethodKey(_classLoaderProxy.getClassName(),
 				"getWSRPConsumerPortlets", long.class, int.class, int.class);
@@ -693,11 +693,11 @@ public class WSRPConsumerPortletLocalServiceClp
 	}
 
 	public void deleteWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
+		java.lang.String wsrpConsumerPortletUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		MethodHandler methodHandler = new MethodHandler(_deleteWSRPConsumerPortletMethodKey19,
-				ClpSerializer.translateInput(wsrpConsumerPortletUuid));
+				ClpSerializer.translateInput(wsrpConsumerPortletUuid), companyId);
 
 		try {
 			_classLoaderProxy.invoke(methodHandler);
@@ -831,13 +831,13 @@ public class WSRPConsumerPortletLocalServiceClp
 	}
 
 	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
+		java.lang.String wsrpConsumerPortletUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		MethodHandler methodHandler = new MethodHandler(_getWSRPConsumerPortletMethodKey24,
-				ClpSerializer.translateInput(wsrpConsumerPortletUuid));
+				ClpSerializer.translateInput(wsrpConsumerPortletUuid), companyId);
 
 		try {
 			returnObj = _classLoaderProxy.invoke(methodHandler);

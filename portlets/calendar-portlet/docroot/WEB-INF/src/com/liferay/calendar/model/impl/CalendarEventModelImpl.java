@@ -21,7 +21,6 @@ import com.liferay.calendar.model.CalendarEventSoap;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -109,8 +108,9 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.calendar.model.CalendarEvent"),
 			true);
-	public static long GROUPID_COLUMN_BITMASK = 1L;
-	public static long UUID_COLUMN_BITMASK = 2L;
+	public static long COMPANYID_COLUMN_BITMASK = 1L;
+	public static long GROUPID_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -250,7 +250,19 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 	}
 
 	public void setCompanyId(long companyId) {
+		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+		if (!_setOriginalCompanyId) {
+			_setOriginalCompanyId = true;
+
+			_originalCompanyId = _companyId;
+		}
+
 		_companyId = companyId;
+	}
+
+	public long getOriginalCompanyId() {
+		return _originalCompanyId;
 	}
 
 	@JSON
@@ -385,13 +397,8 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 			return;
 		}
 
-		Locale[] locales = LanguageUtil.getAvailableLocales();
-
-		for (Locale locale : locales) {
-			String title = titleMap.get(locale);
-
-			setTitle(title, locale, defaultLocale);
-		}
+		setTitle(LocalizationUtil.updateLocalization(titleMap, getTitle(),
+				"Title", LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -478,13 +485,9 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 			return;
 		}
 
-		Locale[] locales = LanguageUtil.getAvailableLocales();
-
-		for (Locale locale : locales) {
-			String description = descriptionMap.get(locale);
-
-			setDescription(description, locale, defaultLocale);
-		}
+		setDescription(LocalizationUtil.updateLocalization(descriptionMap,
+				getDescription(), "Description",
+				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -726,6 +729,10 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 		calendarEventModelImpl._originalGroupId = calendarEventModelImpl._groupId;
 
 		calendarEventModelImpl._setOriginalGroupId = false;
+
+		calendarEventModelImpl._originalCompanyId = calendarEventModelImpl._companyId;
+
+		calendarEventModelImpl._setOriginalCompanyId = false;
 
 		calendarEventModelImpl._columnBitmask = 0;
 	}
@@ -1008,6 +1015,8 @@ public class CalendarEventModelImpl extends BaseModelImpl<CalendarEvent>
 	private long _originalGroupId;
 	private boolean _setOriginalGroupId;
 	private long _companyId;
+	private long _originalCompanyId;
+	private boolean _setOriginalCompanyId;
 	private long _userId;
 	private String _userUuid;
 	private String _userName;

@@ -114,7 +114,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 		throws PortalException, SystemException {
 
 		WSRPConsumer wsrpConsumer = wsrpConsumerLocalService.getWSRPConsumer(
-			wsrpConsumerUuid);
+			wsrpConsumerUuid, serviceContext.getCompanyId());
 
 		return addWSRPConsumerPortlet(
 			wsrpConsumer.getWsrpConsumerId(), name, portletHandle,
@@ -133,11 +133,13 @@ public class WSRPConsumerPortletLocalServiceImpl
 		return deleteWSRPConsumerPortlet(wsrpConsumerPortlet);
 	}
 
-	public void deleteWSRPConsumerPortlet(String wsrpConsumerPortletUuid)
+	public void deleteWSRPConsumerPortlet(
+			String wsrpConsumerPortletUuid, long companyId)
 		throws PortalException, SystemException {
 
 		List<WSRPConsumerPortlet> wsrpConsumerPortlets =
-			wsrpConsumerPortletPersistence.findByUuid(wsrpConsumerPortletUuid);
+			wsrpConsumerPortletPersistence.findByUuid_C(
+				wsrpConsumerPortletUuid, companyId);
 
 		if (!wsrpConsumerPortlets.isEmpty()) {
 			deleteWSRPConsumerPortlet(wsrpConsumerPortlets.get(0));
@@ -224,11 +226,12 @@ public class WSRPConsumerPortletLocalServiceImpl
 	}
 
 	public WSRPConsumerPortlet getWSRPConsumerPortlet(
-			String wsrpConsumerPortletUuid)
+			String wsrpConsumerPortletUuid, long companyId)
 		throws PortalException, SystemException {
 
 		List<WSRPConsumerPortlet> wsrpConsumerPortlets =
-			wsrpConsumerPortletPersistence.findByUuid(wsrpConsumerPortletUuid);
+			wsrpConsumerPortletPersistence.findByUuid_C(
+				wsrpConsumerPortletUuid, companyId);
 
 		if (wsrpConsumerPortlets.isEmpty()) {
 			throw new NoSuchConsumerPortletException(

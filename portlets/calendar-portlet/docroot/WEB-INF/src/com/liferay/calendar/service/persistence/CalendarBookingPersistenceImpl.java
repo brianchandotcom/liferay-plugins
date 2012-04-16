@@ -78,26 +78,28 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByUuid",
+			"findByUuid_C",
 			new String[] {
-				String.class.getName(),
+				String.class.getName(), Long.class.getName(),
 				
 			"java.lang.Integer", "java.lang.Integer",
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			CalendarBookingModelImpl.UUID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			CalendarBookingModelImpl.UUID_COLUMN_BITMASK |
+			CalendarBookingModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
-			new String[] { String.class.getName() });
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class, FINDER_CLASS_NAME_ENTITY,
@@ -419,19 +421,23 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		}
 		else {
 			if ((calendarBookingModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						calendarBookingModelImpl.getOriginalUuid()
+						calendarBookingModelImpl.getOriginalUuid(),
+						Long.valueOf(calendarBookingModelImpl.getOriginalCompanyId())
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
 					args);
 
-				args = new Object[] { calendarBookingModelImpl.getUuid() };
+				args = new Object[] {
+						calendarBookingModelImpl.getUuid(),
+						Long.valueOf(calendarBookingModelImpl.getCompanyId())
+					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
 					args);
 			}
 
@@ -674,62 +680,71 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns all the calendar bookings where uuid = &#63;.
+	 * Returns all the calendar bookings where uuid = &#63; and companyId = &#63;.
 	 *
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @return the matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByUuid(String uuid)
+	public List<CalendarBooking> findByUuid_C(String uuid, long companyId)
 		throws SystemException {
-		return findByUuid(uuid, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		return findByUuid_C(uuid, companyId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the calendar bookings where uuid = &#63;.
+	 * Returns a range of all the calendar bookings where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @param start the lower bound of the range of calendar bookings
 	 * @param end the upper bound of the range of calendar bookings (not inclusive)
 	 * @return the range of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByUuid(String uuid, int start, int end)
-		throws SystemException {
-		return findByUuid(uuid, start, end, null);
+	public List<CalendarBooking> findByUuid_C(String uuid, long companyId,
+		int start, int end) throws SystemException {
+		return findByUuid_C(uuid, companyId, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the calendar bookings where uuid = &#63;.
+	 * Returns an ordered range of all the calendar bookings where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @param start the lower bound of the range of calendar bookings
 	 * @param end the upper bound of the range of calendar bookings (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByUuid(String uuid, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
+	public List<CalendarBooking> findByUuid_C(String uuid, long companyId,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid };
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] { uuid, companyId };
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID;
-			finderArgs = new Object[] { uuid, start, end, orderByComparator };
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C;
+			finderArgs = new Object[] {
+					uuid, companyId,
+					
+					start, end, orderByComparator
+				};
 		}
 
 		List<CalendarBooking> list = (List<CalendarBooking>)FinderCacheUtil.getResult(finderPath,
@@ -737,7 +752,8 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 		if ((list != null) && !list.isEmpty()) {
 			for (CalendarBooking calendarBooking : list) {
-				if (!Validator.equals(uuid, calendarBooking.getUuid())) {
+				if (!Validator.equals(uuid, calendarBooking.getUuid()) ||
+						(companyId != calendarBooking.getCompanyId())) {
 					list = null;
 
 					break;
@@ -749,26 +765,28 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
+				query = new StringBundler(4 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
 
 			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
 			}
 			else {
 				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 				}
 				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
 				}
 			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -794,6 +812,8 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 					qPos.add(uuid);
 				}
 
+				qPos.add(companyId);
+
 				list = (List<CalendarBooking>)QueryUtil.list(q, getDialect(),
 						start, end);
 			}
@@ -818,30 +838,35 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the first calendar booking in the ordered set where uuid = &#63;.
+	 * Returns the first calendar booking in the ordered set where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking findByUuid_First(String uuid,
+	public CalendarBooking findByUuid_C_First(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
-		List<CalendarBooking> list = findByUuid(uuid, 0, 1, orderByComparator);
+		List<CalendarBooking> list = findByUuid_C(uuid, companyId, 0, 1,
+				orderByComparator);
 
 		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
+			StringBundler msg = new StringBundler(6);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
 			msg.append("uuid=");
 			msg.append(uuid);
+
+			msg.append(", companyId=");
+			msg.append(companyId);
 
 			msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -853,33 +878,37 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the last calendar booking in the ordered set where uuid = &#63;.
+	 * Returns the last calendar booking in the ordered set where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking findByUuid_Last(String uuid,
+	public CalendarBooking findByUuid_C_Last(String uuid, long companyId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
-		int count = countByUuid(uuid);
+		int count = countByUuid_C(uuid, companyId);
 
-		List<CalendarBooking> list = findByUuid(uuid, count - 1, count,
-				orderByComparator);
+		List<CalendarBooking> list = findByUuid_C(uuid, companyId, count - 1,
+				count, orderByComparator);
 
 		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(4);
+			StringBundler msg = new StringBundler(6);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
 			msg.append("uuid=");
 			msg.append(uuid);
+
+			msg.append(", companyId=");
+			msg.append(companyId);
 
 			msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -891,7 +920,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where uuid = &#63;.
+	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -899,13 +928,14 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	 *
 	 * @param calendarBookingId the primary key of the current calendar booking
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a calendar booking with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking[] findByUuid_PrevAndNext(long calendarBookingId,
-		String uuid, OrderByComparator orderByComparator)
+	public CalendarBooking[] findByUuid_C_PrevAndNext(long calendarBookingId,
+		String uuid, long companyId, OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
 		CalendarBooking calendarBooking = findByPrimaryKey(calendarBookingId);
 
@@ -916,13 +946,13 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 			CalendarBooking[] array = new CalendarBookingImpl[3];
 
-			array[0] = getByUuid_PrevAndNext(session, calendarBooking, uuid,
-					orderByComparator, true);
+			array[0] = getByUuid_C_PrevAndNext(session, calendarBooking, uuid,
+					companyId, orderByComparator, true);
 
 			array[1] = calendarBooking;
 
-			array[2] = getByUuid_PrevAndNext(session, calendarBooking, uuid,
-					orderByComparator, false);
+			array[2] = getByUuid_C_PrevAndNext(session, calendarBooking, uuid,
+					companyId, orderByComparator, false);
 
 			return array;
 		}
@@ -934,8 +964,8 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		}
 	}
 
-	protected CalendarBooking getByUuid_PrevAndNext(Session session,
-		CalendarBooking calendarBooking, String uuid,
+	protected CalendarBooking getByUuid_C_PrevAndNext(Session session,
+		CalendarBooking calendarBooking, String uuid, long companyId,
 		OrderByComparator orderByComparator, boolean previous) {
 		StringBundler query = null;
 
@@ -950,16 +980,18 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
 
 		if (uuid == null) {
-			query.append(_FINDER_COLUMN_UUID_UUID_1);
+			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
 		}
 		else {
 			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_UUID_3);
+				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 			}
 			else {
-				query.append(_FINDER_COLUMN_UUID_UUID_2);
+				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
 			}
 		}
+
+		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -1033,6 +1065,8 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		if (uuid != null) {
 			qPos.add(uuid);
 		}
+
+		qPos.add(companyId);
 
 		if (orderByComparator != null) {
 			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
@@ -2442,13 +2476,15 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Removes all the calendar bookings where uuid = &#63; from the database.
+	 * Removes all the calendar bookings where uuid = &#63; and companyId = &#63; from the database.
 	 *
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (CalendarBooking calendarBooking : findByUuid(uuid)) {
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (CalendarBooking calendarBooking : findByUuid_C(uuid, companyId)) {
 			remove(calendarBooking);
 		}
 	}
@@ -2522,34 +2558,38 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the number of calendar bookings where uuid = &#63;.
+	 * Returns the number of calendar bookings where uuid = &#63; and companyId = &#63;.
 	 *
 	 * @param uuid the uuid
+	 * @param companyId the company ID
 	 * @return the number of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { uuid, companyId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
 				finderArgs, this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_COUNT_CALENDARBOOKING_WHERE);
 
 			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
 			}
 			else {
 				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
+					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
 				}
 				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
+					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
 				}
 			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
 
 			String sql = query.toString();
 
@@ -2566,6 +2606,8 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 					qPos.add(uuid);
 				}
 
+				qPos.add(companyId);
+
 				count = (Long)q.uniqueResult();
 			}
 			catch (Exception e) {
@@ -2576,7 +2618,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
 					finderArgs, count);
 
 				closeSession(session);
@@ -2905,9 +2947,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	private static final String _SQL_SELECT_CALENDARBOOKING_WHERE = "SELECT calendarBooking FROM CalendarBooking calendarBooking WHERE ";
 	private static final String _SQL_COUNT_CALENDARBOOKING = "SELECT COUNT(calendarBooking) FROM CalendarBooking calendarBooking";
 	private static final String _SQL_COUNT_CALENDARBOOKING_WHERE = "SELECT COUNT(calendarBooking) FROM CalendarBooking calendarBooking WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "calendarBooking.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "calendarBooking.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(calendarBooking.uuid IS NULL OR calendarBooking.uuid = ?)";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "calendarBooking.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "calendarBooking.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(calendarBooking.uuid IS NULL OR calendarBooking.uuid = ?) AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "calendarBooking.companyId = ?";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "calendarBooking.uuid IS NULL AND ";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "calendarBooking.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(calendarBooking.uuid IS NULL OR calendarBooking.uuid = ?) AND ";

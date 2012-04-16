@@ -105,11 +105,11 @@ public class WSRPConsumerLocalServiceImpl
 		return wsrpConsumerPersistence.remove(wsrpConsumer);
 	}
 
-	public WSRPConsumer getWSRPConsumer(String wsrpConsumerUuid)
+	public WSRPConsumer getWSRPConsumer(String wsrpConsumerUuid, long companyId)
 		throws PortalException, SystemException {
 
-		List<WSRPConsumer> wsrpConsumers = wsrpConsumerPersistence.findByUuid(
-			wsrpConsumerUuid);
+		List<WSRPConsumer> wsrpConsumers = wsrpConsumerPersistence.findByUuid_C(
+			wsrpConsumerUuid, companyId);
 
 		if (wsrpConsumers.isEmpty()) {
 			throw new NoSuchConsumerException(

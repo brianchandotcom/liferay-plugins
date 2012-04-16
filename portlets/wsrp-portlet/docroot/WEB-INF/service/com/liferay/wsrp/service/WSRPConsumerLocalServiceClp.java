@@ -91,7 +91,7 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 				com.liferay.portal.service.ServiceContext.class);
 
 		_getWSRPConsumerMethodKey18 = new MethodKey(_classLoaderProxy.getClassName(),
-				"getWSRPConsumer", java.lang.String.class);
+				"getWSRPConsumer", java.lang.String.class, long.class);
 
 		_getWSRPConsumersMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
 				"getWSRPConsumers", long.class, int.class, int.class);
@@ -634,13 +634,13 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 	}
 
 	public com.liferay.wsrp.model.WSRPConsumer getWSRPConsumer(
-		java.lang.String wsrpConsumerUuid)
+		java.lang.String wsrpConsumerUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		MethodHandler methodHandler = new MethodHandler(_getWSRPConsumerMethodKey18,
-				ClpSerializer.translateInput(wsrpConsumerUuid));
+				ClpSerializer.translateInput(wsrpConsumerUuid), companyId);
 
 		try {
 			returnObj = _classLoaderProxy.invoke(methodHandler);
