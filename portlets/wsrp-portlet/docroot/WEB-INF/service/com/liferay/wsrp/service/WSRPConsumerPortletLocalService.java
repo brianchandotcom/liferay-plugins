@@ -257,7 +257,7 @@ public interface WSRPConsumerPortletLocalService
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void deleteWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
+		java.lang.String wsrpConsumerPortletUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -280,7 +280,7 @@ public interface WSRPConsumerPortletLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
+		java.lang.String wsrpConsumerPortletUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

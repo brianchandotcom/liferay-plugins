@@ -305,10 +305,10 @@ public class WSRPProducerLocalServiceUtil {
 	}
 
 	public static com.liferay.wsrp.model.WSRPProducer getWSRPProducer(
-		java.lang.String wsrpProducerUuid)
+		java.lang.String wsrpProducerUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getWSRPProducer(wsrpProducerUuid);
+		return getService().getWSRPProducer(wsrpProducerUuid, companyId);
 	}
 
 	public static java.util.List<com.liferay.wsrp.model.WSRPProducer> getWSRPProducers(

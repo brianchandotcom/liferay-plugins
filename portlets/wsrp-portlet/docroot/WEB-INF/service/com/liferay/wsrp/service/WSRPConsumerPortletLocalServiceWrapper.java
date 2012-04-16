@@ -285,10 +285,11 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	}
 
 	public void deleteWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
+		java.lang.String wsrpConsumerPortletUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlet(wsrpConsumerPortletUuid);
+		_wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlet(wsrpConsumerPortletUuid,
+			companyId);
 	}
 
 	public void deleteWSRPConsumerPortlets(long wsrpConsumerId)
@@ -318,10 +319,11 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	}
 
 	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
+		java.lang.String wsrpConsumerPortletUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlet(wsrpConsumerPortletUuid);
+		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlet(wsrpConsumerPortletUuid,
+			companyId);
 	}
 
 	public java.util.List<com.liferay.wsrp.model.WSRPConsumerPortlet> getWSRPConsumerPortlets(

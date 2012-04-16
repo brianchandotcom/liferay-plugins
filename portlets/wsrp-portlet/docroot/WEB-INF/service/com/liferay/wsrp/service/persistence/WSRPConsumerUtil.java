@@ -191,102 +191,110 @@ public class WSRPConsumerUtil {
 	}
 
 	/**
-	* Returns all the w s r p consumers where uuid = &#63;.
+	* Returns all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @return the matching w s r p consumers
 	* @throws SystemException if a system exception occurred
 	*/
-	public static java.util.List<com.liferay.wsrp.model.WSRPConsumer> findByUuid(
-		java.lang.String uuid)
+	public static java.util.List<com.liferay.wsrp.model.WSRPConsumer> findByUuid_C(
+		java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid(uuid);
+		return getPersistence().findByUuid_C(uuid, companyId);
 	}
 
 	/**
-	* Returns a range of all the w s r p consumers where uuid = &#63;.
+	* Returns a range of all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	* </p>
 	*
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @param start the lower bound of the range of w s r p consumers
 	* @param end the upper bound of the range of w s r p consumers (not inclusive)
 	* @return the range of matching w s r p consumers
 	* @throws SystemException if a system exception occurred
 	*/
-	public static java.util.List<com.liferay.wsrp.model.WSRPConsumer> findByUuid(
-		java.lang.String uuid, int start, int end)
+	public static java.util.List<com.liferay.wsrp.model.WSRPConsumer> findByUuid_C(
+		java.lang.String uuid, long companyId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid(uuid, start, end);
+		return getPersistence().findByUuid_C(uuid, companyId, start, end);
 	}
 
 	/**
-	* Returns an ordered range of all the w s r p consumers where uuid = &#63;.
+	* Returns an ordered range of all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	* </p>
 	*
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @param start the lower bound of the range of w s r p consumers
 	* @param end the upper bound of the range of w s r p consumers (not inclusive)
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching w s r p consumers
 	* @throws SystemException if a system exception occurred
 	*/
-	public static java.util.List<com.liferay.wsrp.model.WSRPConsumer> findByUuid(
-		java.lang.String uuid, int start, int end,
+	public static java.util.List<com.liferay.wsrp.model.WSRPConsumer> findByUuid_C(
+		java.lang.String uuid, long companyId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid(uuid, start, end, orderByComparator);
+		return getPersistence()
+				   .findByUuid_C(uuid, companyId, start, end, orderByComparator);
 	}
 
 	/**
-	* Returns the first w s r p consumer in the ordered set where uuid = &#63;.
+	* Returns the first w s r p consumer in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	* </p>
 	*
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the first matching w s r p consumer
 	* @throws com.liferay.wsrp.NoSuchConsumerException if a matching w s r p consumer could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.wsrp.model.WSRPConsumer findByUuid_First(
-		java.lang.String uuid,
+	public static com.liferay.wsrp.model.WSRPConsumer findByUuid_C_First(
+		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.wsrp.NoSuchConsumerException {
-		return getPersistence().findByUuid_First(uuid, orderByComparator);
+		return getPersistence()
+				   .findByUuid_C_First(uuid, companyId, orderByComparator);
 	}
 
 	/**
-	* Returns the last w s r p consumer in the ordered set where uuid = &#63;.
+	* Returns the last w s r p consumer in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	* </p>
 	*
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the last matching w s r p consumer
 	* @throws com.liferay.wsrp.NoSuchConsumerException if a matching w s r p consumer could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.wsrp.model.WSRPConsumer findByUuid_Last(
-		java.lang.String uuid,
+	public static com.liferay.wsrp.model.WSRPConsumer findByUuid_C_Last(
+		java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.wsrp.NoSuchConsumerException {
-		return getPersistence().findByUuid_Last(uuid, orderByComparator);
+		return getPersistence()
+				   .findByUuid_C_Last(uuid, companyId, orderByComparator);
 	}
 
 	/**
-	* Returns the w s r p consumers before and after the current w s r p consumer in the ordered set where uuid = &#63;.
+	* Returns the w s r p consumers before and after the current w s r p consumer in the ordered set where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
@@ -294,18 +302,19 @@ public class WSRPConsumerUtil {
 	*
 	* @param wsrpConsumerId the primary key of the current w s r p consumer
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	* @return the previous, current, and next w s r p consumer
 	* @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.wsrp.model.WSRPConsumer[] findByUuid_PrevAndNext(
-		long wsrpConsumerId, java.lang.String uuid,
+	public static com.liferay.wsrp.model.WSRPConsumer[] findByUuid_C_PrevAndNext(
+		long wsrpConsumerId, java.lang.String uuid, long companyId,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.wsrp.NoSuchConsumerException {
 		return getPersistence()
-				   .findByUuid_PrevAndNext(wsrpConsumerId, uuid,
+				   .findByUuid_C_PrevAndNext(wsrpConsumerId, uuid, companyId,
 			orderByComparator);
 	}
 
@@ -481,14 +490,15 @@ public class WSRPConsumerUtil {
 	}
 
 	/**
-	* Removes all the w s r p consumers where uuid = &#63; from the database.
+	* Removes all the w s r p consumers where uuid = &#63; and companyId = &#63; from the database.
 	*
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @throws SystemException if a system exception occurred
 	*/
-	public static void removeByUuid(java.lang.String uuid)
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
+		getPersistence().removeByUuid_C(uuid, companyId);
 	}
 
 	/**
@@ -513,15 +523,16 @@ public class WSRPConsumerUtil {
 	}
 
 	/**
-	* Returns the number of w s r p consumers where uuid = &#63;.
+	* Returns the number of w s r p consumers where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
+	* @param companyId the company ID
 	* @return the number of matching w s r p consumers
 	* @throws SystemException if a system exception occurred
 	*/
-	public static int countByUuid(java.lang.String uuid)
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
+		return getPersistence().countByUuid_C(uuid, companyId);
 	}
 
 	/**

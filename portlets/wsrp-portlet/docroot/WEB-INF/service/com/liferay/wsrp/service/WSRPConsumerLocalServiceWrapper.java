@@ -270,10 +270,11 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	}
 
 	public com.liferay.wsrp.model.WSRPConsumer getWSRPConsumer(
-		java.lang.String wsrpConsumerUuid)
+		java.lang.String wsrpConsumerUuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerLocalService.getWSRPConsumer(wsrpConsumerUuid);
+		return _wsrpConsumerLocalService.getWSRPConsumer(wsrpConsumerUuid,
+			companyId);
 	}
 
 	public java.util.List<com.liferay.wsrp.model.WSRPConsumer> getWSRPConsumers(
