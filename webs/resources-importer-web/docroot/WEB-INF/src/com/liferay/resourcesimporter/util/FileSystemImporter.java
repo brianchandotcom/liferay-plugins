@@ -16,6 +16,7 @@ package com.liferay.resourcesimporter.util;
 
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
@@ -24,6 +25,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleConstants;
 import com.liferay.portlet.journal.model.JournalStructure;
@@ -97,6 +99,22 @@ public class FileSystemImporter {
 
 	protected void createDLFileEntries(long userId, long groupId, File dir)
 		throws Exception {
+
+		File[] files = listFiles(dir);
+
+		for (File file : files) {
+			String mimeType = MimeTypesUtil.getContentType(file);
+
+			byte[] bytes = FileUtil.getBytes(file);
+
+			ServiceContext serviceContext = new ServiceContext();
+
+			serviceContext.setScopeGroupId(groupId);
+
+			DLAppLocalServiceUtil.addFileEntry(
+				userId, groupId, 0, file.getName(), mimeType, file.getName(),
+				StringPool.BLANK, StringPool.BLANK, bytes, serviceContext);
+		}
 	}
 
 	protected void createJournalArticles(
