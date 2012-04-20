@@ -112,8 +112,6 @@ String currentURL = PortalUtil.getCurrentURL(request);
 
 int displayStyle = PrefsParamUtil.getInteger(preferences, request, "displayStyle", ContactsConstants.DISPLAY_STYLE_FULL);
 
-int maxResultCount = 200;
-
 boolean showAdditionalEmailAddresses = PrefsParamUtil.getBoolean(preferences, request, "showAdditionalEmailAddresses", true);
 boolean showAddresses = PrefsParamUtil.getBoolean(preferences, request, "showAddresses", true);
 boolean showComments = PrefsParamUtil.getBoolean(preferences, request, "showComments", true);

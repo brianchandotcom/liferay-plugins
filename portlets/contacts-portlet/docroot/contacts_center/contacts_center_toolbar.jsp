@@ -78,7 +78,7 @@ if (user2 != null) {
 			},
 			icon: 'add-coworker',
 			id: '<portlet:namespace />addConnectionButton',
-			label: '<%= UnicodeLanguageUtil.get(pageContext, "add-as-connection") %>'
+			label: '<%= UnicodeLanguageUtil.get(pageContext, "add-connection") %>'
 		}
 	);
 
@@ -90,7 +90,7 @@ if (user2 != null) {
 			},
 			icon: 'remove-coworker',
 			id: '<portlet:namespace />removeConnectionButton',
-			label: '<%= UnicodeLanguageUtil.get(pageContext, "remove-as-connection") %>'
+			label: '<%= UnicodeLanguageUtil.get(pageContext, "remove-connection") %>'
 		}
 	);
 
@@ -183,16 +183,14 @@ if (user2 != null) {
 	).render();
 
 	function <portlet:namespace />relationAction(event, uri) {
-		var start = 0;
-		var end = <%= maxResultCount %>;
+		var end = <%= ContactsConstants.MAX_RESULT_COUNT %>;
 
 		var lastNameAnchor = '';
 
 		var node = A.one('.more-results a');
 
 		if (node) {
-			start = A.DataType.Number.parse(node.getAttribute('data-end'));
-			end = start + <%= maxResultCount %>;
+			end = A.DataType.Number.parse(node.getAttribute('data-end'));
 
 			lastNameAnchor = node.getAttribute('data-lastNameAnchor');
 		}
@@ -225,7 +223,7 @@ if (user2 != null) {
 					end: end,
 					filterBy: contactFilterSelect.get('value') || '<%= ContactsConstants.FILTER_BY_DEFAULT %>',
 					keywords: searchInput.get('value'),
-					start: start,
+					start: 0,
 					jsonFormat: true,
 					userIds: userIds.join()
 				},
