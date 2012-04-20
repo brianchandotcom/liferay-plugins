@@ -106,9 +106,7 @@ pageContext.setAttribute("portletURL", portletURL);
 
 					ExpandoBridge expandoBridge = group.getExpandoBridge();
 
-					boolean socialOfficeEnabled = SocialOfficeServiceUtil.isSocialOfficeSite(group.getGroupId());
-
-					if (socialOfficeEnabled) {
+					if (SocialOfficeServiceUtil.isSocialOfficeGroup(group.getGroupId())) {
 						className += "social-office-enabled ";
 					}
 
