@@ -17,6 +17,77 @@
 <%@ include file="/init.jsp" %>
 
 <liferay-ui:header
+	title="Class Loaders"
+/>
+
+<p>
+	<h3>Get Class Loaders</h3>
+</p>
+
+<p>
+	PortletClassLoaderUtil.getClassLoader("1_WAR_chatportlet")=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				PortletClassLoaderUtil.getClassLoader("1_WAR_chatportlet");
+			}
+
+		};
+		%>
+
+	PortalClassLoaderUtil.getClassLoader()=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				PortalClassLoaderUtil.getClassLoader();
+			}
+
+		};
+		%>
+
+	PortalUtil.getPortal().getClass().getClassLoader()=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				PortalUtil.getPortal().getClass().getClassLoader();
+			}
+
+		};
+		%>
+
+	BlogsEntryLocalServiceUtil.getService().getClass().getClassLoader()=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				BlogsEntryLocalServiceUtil.getService().getClass().getClassLoader();
+			}
+
+		};
+		%>
+
+	EntryLocalServiceUtil.getService().getClass().getClassLoader()=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				EntryLocalServiceUtil.getService().getClass().getClassLoader();
+			}
+
+		};
+		%>
+
+</p>
+
+<liferay-ui:header
 	title="Dynamic Query"
 />
 
@@ -1904,6 +1975,8 @@ private class SecurityExceptionTest {
 			}
 		}
 		catch (Exception e) {
+			e.printStackTrace();
+
 			writer.write("FAILED with " + e.getMessage());
 		}
 
