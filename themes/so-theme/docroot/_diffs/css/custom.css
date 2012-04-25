@@ -81,6 +81,7 @@ a:focus .opens-new-window-accessible {
 
 	.logo {
 		display: block;
+		zoom: 0;
 
 		img {
 			max-height: 64px;
@@ -91,16 +92,6 @@ a:focus .opens-new-window-accessible {
 	.company-title {
 		float: left;
 		padding: 5px 10px 10px;
-	}
-
-	.default-logo {
-		background-image: url(../images/custom/so_logo.png);
-		height: 64px;
-		width: 186px;
-
-		img {
-			display: none;
-		}
 	}
 
 	.community-title {
@@ -1683,6 +1674,34 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	.document-info {
 		background-color: #EEE;
 	}
+
+	.taglib-ratings.stars .aui-rating-content, .taglib-ratings.stars .liferay-rating-score {
+		min-width: 200px;
+	}
+
+	.version-history .results-grid {
+		overflow: visible;
+
+		table {
+			background: #FFF;
+			position: relative;
+			width: 100%;
+			z-index: 1;
+
+			td, th {
+				overflow: hidden;
+				padding: 5px 5px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			&:hover td, th {
+				overflow: visible;
+				text-overflow: visible;
+				white-space: normal;
+			}
+		}
+	}
 }
 
 /* Social Office Notifications */
@@ -2026,6 +2045,10 @@ body.so-layout-fluid, body.so-layout-fluid-ad {
 	#content, #footer, #banner #heading {
 		margin: 0 auto;
 		width: auto;
+	}
+
+	#heading {
+		zoom: 1;
 	}
 
 	#content {
