@@ -31,6 +31,7 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 
 		boolean deleteFolder = true;
 
-		List<FileEntry> fileEntries = DLAppLocalServiceUtil.getFileEntries(
+		List<FileEntry> fileEntries = DLAppServiceUtil.getFileEntries(
 			groupId, rootFolderId);
 
 		for (FileEntry fileEntry : fileEntries) {
@@ -97,7 +98,7 @@ public class UpgradeDocumentLibrary extends UpgradeProcess {
 			}
 		}
 
-		List<Folder> folders = DLAppLocalServiceUtil.getFolders(
+		List<Folder> folders = DLAppServiceUtil.getFolders(
 			groupId, rootFolderId);
 
 		for (Folder folder : folders) {
