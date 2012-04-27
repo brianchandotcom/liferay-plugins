@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
@@ -33,11 +34,8 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.model.GroupConstants;
-import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.so.MemberRequestAlreadyUsedException;
 import com.liferay.so.MemberRequestInvalidUserException;
 import com.liferay.so.invitemembers.util.InviteMembersConstants;
@@ -51,7 +49,7 @@ import java.util.List;
 import javax.mail.internet.InternetAddress;
 
 /**
- * @author Ryan	Park
+ * @author Ryan Park
  * @author Jonathan Lee
  */
 public class MemberRequestLocalServiceImpl
@@ -60,7 +58,7 @@ public class MemberRequestLocalServiceImpl
 	public MemberRequest addMemberRequest(
 			long userId, long groupId, long receiverUserId,
 			String receiverEmailAddress, long invitedRoleId, long invitedTeamId,
-			ThemeDisplay themeDisplay)
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Member request
@@ -91,7 +89,7 @@ public class MemberRequestLocalServiceImpl
 		// Email
 
 		try {
-			sendEmail(receiverEmailAddress, memberRequest, themeDisplay);
+			sendEmail(receiverEmailAddress, memberRequest, serviceContext);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -106,7 +104,8 @@ public class MemberRequestLocalServiceImpl
 
 	public void addMemberRequests(
 			long userId, long groupId, long[] receiverUserIds,
-			long invitedRoleId, long invitedTeamId, ThemeDisplay themeDisplay)
+			long invitedRoleId, long invitedTeamId,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		for (long receiverUserId : receiverUserIds) {
@@ -120,13 +119,14 @@ public class MemberRequestLocalServiceImpl
 
 			addMemberRequest(
 				userId, groupId, receiverUserId, emailAddress, invitedRoleId,
-				invitedTeamId, themeDisplay);
+				invitedTeamId, serviceContext);
 		}
 	}
 
 	public void addMemberRequests(
 			long userId, long groupId, String[] emailAddresses,
-			long invitedRoleId, long invitedTeamId, ThemeDisplay themeDisplay)
+			long invitedRoleId, long invitedTeamId,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		for (String emailAddress : emailAddresses) {
@@ -136,7 +136,7 @@ public class MemberRequestLocalServiceImpl
 
 			addMemberRequest(
 				userId, groupId, 0, emailAddress, invitedRoleId, invitedTeamId,
-				themeDisplay);
+				serviceContext);
 		}
 	}
 
@@ -241,31 +241,9 @@ public class MemberRequestLocalServiceImpl
 		return memberRequest;
 	}
 
-	protected String getCreateAccountURL(String key, ThemeDisplay themeDisplay)
-		throws Exception {
-
-		return getLoginURL(key, themeDisplay) +
-			"&p_p_id=58&_58_struts_action=%2Flogin%2Fcreate_account";
-	}
-
-	protected String getLoginURL(String key, ThemeDisplay themeDisplay)
-		throws Exception {
-
-		Group group = groupLocalService.getGroup(
-			themeDisplay.getCompanyId(), GroupConstants.GUEST);
-
-		long plid = PortalUtil.getPlidFromPortletId(
-			group.getGroupId(), PortletKeys.LOGIN);
-
-		Layout layout = layoutLocalService.getLayout(plid);
-
-		return PortalUtil.getLayoutFullURL(layout, themeDisplay, false) +
-			"?key=" + key;
-	}
-
 	protected void sendEmail(
 			String emailAddress, MemberRequest memberRequest,
-			ThemeDisplay themeDisplay)
+			ServiceContext serviceContext)
 		throws Exception {
 
 		long companyId = memberRequest.getCompanyId();
@@ -312,19 +290,34 @@ public class MemberRequestLocalServiceImpl
 					"new_user_body.tmpl");
 		}
 
-		String createAccountURL = getCreateAccountURL(
-			memberRequest.getKey(), themeDisplay);
-		String loginURL = getLoginURL(memberRequest.getKey(), themeDisplay);
-
 		subject = StringUtil.replace(
 			subject,
 			new String[] {
 				"[$MEMBER_REQUEST_GROUP$]", "[$MEMBER_REQUEST_USER$]"
 			},
 			new String[] {
-				group.getDescriptiveName(themeDisplay.getLocale()),
+				group.getDescriptiveName(serviceContext.getLocale()),
 				user.getFullName()
 			});
+
+		String createAccountURL = (String)serviceContext.getAttribute(
+			"createAccountURL");
+
+		if (Validator.isNull(createAccountURL)) {
+			createAccountURL = serviceContext.getPortalURL();
+		}
+
+		createAccountURL = HttpUtil.addParameter(
+			createAccountURL, "key", memberRequest.getKey());
+
+		String loginURL = (String)serviceContext.getAttribute("loginURL");
+
+		if (Validator.isNull(loginURL)) {
+			loginURL = serviceContext.getPortalURL();
+		}
+
+		loginURL = HttpUtil.addParameter(
+			loginURL, "key", memberRequest.getKey());
 
 		body = StringUtil.replace(
 			body,
@@ -336,7 +329,7 @@ public class MemberRequestLocalServiceImpl
 			},
 			new String[] {
 				fromAddress, fromName, createAccountURL,
-				group.getDescriptiveName(themeDisplay.getLocale()), loginURL,
+				group.getDescriptiveName(serviceContext.getLocale()), loginURL,
 				user.getFullName()
 			});
 

@@ -19,18 +19,28 @@ package com.liferay.so.invitemembers.portlet;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.so.service.MemberRequestLocalServiceUtil;
+import com.liferay.so.util.PortletKeys;
 import com.liferay.so.util.WebKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 
 /**
  * @author Ryan Park
@@ -71,13 +81,44 @@ public class InviteMembersPortlet extends MVCPortlet {
 			return;
 		}
 
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		PortletURL portletURL =
+			PortletURLFactoryUtil.create(
+				actionRequest, PortletKeys.SITE_REDIRECTOR,
+				themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+
+		portletURL.setWindowState(LiferayWindowState.NORMAL);
+		portletURL.setParameter("struts_action", "/my_sites/view");
+		portletURL.setParameter("groupId", String.valueOf(groupId));
+		portletURL.setParameter(
+			"privateLayout", String.valueOf(!group.hasPublicLayouts()));
+
+		String createAccountURL = PortalUtil.getCreateAccountURL(
+			PortalUtil.getHttpServletRequest(actionRequest), themeDisplay);
+
+		createAccountURL = HttpUtil.addParameter(
+			createAccountURL, "redirect", portletURL.toString());
+
+		String loginURL = themeDisplay.getPortalURL() +
+			themeDisplay.getURLSignIn();
+
+		loginURL = HttpUtil.addParameter(
+			loginURL, "redirect", portletURL.toString());
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			actionRequest);
+
+		serviceContext.setAttribute("createAccountURL", createAccountURL);
+		serviceContext.setAttribute("loginURL", loginURL);
+
 		MemberRequestLocalServiceUtil.addMemberRequests(
 			themeDisplay.getUserId(), groupId, receiverUserIds, invitedRoleId,
-			invitedTeamId, themeDisplay);
+			invitedTeamId, serviceContext);
 
 		MemberRequestLocalServiceUtil.addMemberRequests(
 			themeDisplay.getUserId(), groupId, receiverEmailAddresses,
-			invitedRoleId, invitedTeamId, themeDisplay);
+			invitedRoleId, invitedTeamId, serviceContext);
 	}
 
 	protected long[] getLongArray(PortletRequest portletRequest, String name) {
