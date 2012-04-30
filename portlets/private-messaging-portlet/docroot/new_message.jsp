@@ -77,7 +77,19 @@ if (mbThreadId != 0) {
 	</aui:form>
 </aui:layout>
 
-<aui:script use="aui-base,aui-io-request,aui-loading-mask">
+<aui:script>
+	function <portlet:namespace />showMessage(message) {
+		var A = AUI();
+
+		var messageContainer = A.one('#<portlet:namespace />messageContainer');
+
+		if (messageContainer) {
+			messageContainer.html(message);
+		}
+	}
+</aui:script>
+
+<aui:script use="aui-base,aui-io-request,aui-loading-mask,autocomplete">
 	var form = A.one('#<portlet:namespace />fm');
 
 	form.on(
@@ -143,25 +155,37 @@ if (mbThreadId != 0) {
 		}
 	);
 
-	function <portlet:namespace />showMessage(message) {
-		var messageContainer = A.one('#<portlet:namespace />messageContainer');
+	var to = A.one('#<portlet:namespace/>to');
 
-		if (messageContainer) {
-			messageContainer.html(message);
-		}
-	}
-</aui:script>
-
-<aui:script use="aui-autocomplete">
-	var autocomplete = new A.AutoComplete(
+	to.plug(
+		A.Plugin.AutoComplete,
 		{
-			dataSource: <%= PrivateMessagingUtil.getJSONRecipients(user.getUserId()) %>,
-			delimChar: ',',
-			typeAhead: true,
-			contentBox: '#<portlet:namespace/>autoCompleteContainer',
-			input: '#<portlet:namespace/>to'
+			queryDelimiter: ',',
+			source: '<liferay-portlet:resourceURL id="getUsers" />',
+			requestTemplate: '&keywords={query}',
+			resultListLocator: 'results.users',
+			resultTextLocator: 'name'
 		}
-	).render();
+	);
 
-	autocomplete.overlay.set('zIndex', 1002);
+	to.on(
+		'focus',
+		function () {
+			to.ac.sendRequest('');
+		}
+	);
+
+	var autocompleteButton = new A.ButtonItem(
+		{
+			cssClass: 'autocomplete-button',
+			icon: 'circle-triangle-b',
+			on: {
+				click: function() {
+					to.focus();
+				}
+			}
+		}
+	);
+
+	autocompleteButton.render(to.ancestor('.aui-field-element'));
 </aui:script>
