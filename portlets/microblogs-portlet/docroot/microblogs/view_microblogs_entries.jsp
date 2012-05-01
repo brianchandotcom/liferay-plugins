@@ -23,8 +23,25 @@ PortletURL microblogsEntriesURL = (PortletURL)request.getAttribute(WebKeys.MICRO
 %>
 
 <c:if test="<%= microblogsEntries.isEmpty() %>">
+
+	<%
+	String message = LanguageUtil.get(pageContext, "there-are-no-microblog-entries");
+
+	Group group = themeDisplay.getScopeGroup();
+
+	if (group.isUser()) {
+		if (group.getGroupId() == user.getGroupId()) {
+			message = LanguageUtil.get(pageContext, "you-have-no-microblogs-entry");
+		}
+		else {
+			message = LanguageUtil.format(pageContext, "x-does-not-have-any-microblog-entry" , new Object[] {user.getFullName()});
+
+		}
+	}
+	%>
+
 	<div class="portlet-msg-info">
-		<liferay-ui:message key="you-have-no-microblogs-entry" />
+		<%= message %>
 	</div>
 </c:if>
 
