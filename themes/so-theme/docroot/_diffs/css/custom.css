@@ -30,7 +30,7 @@ a:hover {
 	position: static;
 }
 
-#skip-to-content, #navigation h1, .opens-new-window-accessible, #toggleFluid span {
+#skip-to-content, #navigation h1, .opens-new-window-accessible, #toggleFluid span, .site-breadcrumbs h1 {
 	clip: rect(0 0 0 0);
 	position: absolute;
 	text-indent: -9999em;
@@ -106,19 +106,6 @@ a:focus .opens-new-window-accessible {
 
 		a {
 			color: $red;
-		}
-	}
-
-	#socialOfficeMembership {
-		bottom: 0;
-		position: absolute;
-		right: 0;
-
-		input {
-			font-size: 12px;
-			line-height: 14px;
-			margin-bottom: -1px;
-			padding: 5px 10px;
 		}
 	}
 
@@ -350,6 +337,11 @@ a:focus .opens-new-window-accessible {
 				padding: 3px 3px 3px 25px;
 			}
 		}
+	}
+
+	#socialOfficeMembership {
+		padding: 4px 10px;
+		text-align: right;
 	}
 }
 
@@ -826,20 +818,19 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 
 /* Breadcrumbs */
 
-.breadcrumbs .last {
-	background-image: none;
-}
+.site-breadcrumbs {
+	background: $gray-light;
+	border: 1px solid $gray-dark;
+	border-width: 0 1px 1px 0;
 
-.breadcrumbs-horizontal {
-	li {
-		background: transparent url(../images/arrows/05_right.png) no-repeat scroll 100% 50%;
-		margin-right: 5px;
-		max-width: 50%;
-		padding-right: 15px;
+	ul {
+		margin: 0;
 	}
 
-	.last {
-		margin-top: 0.2em;
+	ul li a {
+		background: url(../images/custom/breadcrumb_divider_bg.png) right -13px no-repeat;
+		display: block;
+		padding: 8px 23px 7px 16px;
 	}
 }
 
@@ -2063,11 +2054,7 @@ body.so-layout-fluid, body.so-layout-fluid-ad {
 		right: 80px;
 	}
 
-	#heading #socialOfficeMembership {
-		right: 10px;
-	}
-
-	#content #so-context {
+	#content #so-context, .site-breadcrumbs {
 		border-right-width: 0;
 	}
 }
@@ -2132,7 +2119,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	@include border-radius(0 3px 3px 0);
 }
 
-.aui-dialog .yui3-widget-hd, .aui-dialog-hd, .aui-panel-hd, .aui-tabview-list, .portlet-message-boards .thread-controls, #socialOfficeMembership input {
+.aui-dialog .yui3-widget-hd, .aui-dialog-hd, .aui-panel-hd, .aui-tabview-list, .portlet-message-boards .thread-controls {
 	@include border-radius(3px 3px 0 0);
 }
 
