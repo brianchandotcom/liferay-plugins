@@ -18,33 +18,14 @@
 package com.liferay.so.hook.listeners;
 
 import com.liferay.portal.ModelListenerException;
-import com.liferay.portal.NoSuchGroupException;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.model.Layout;
-import com.liferay.portal.model.LayoutSet;
-import com.liferay.portal.model.LayoutSetPrototype;
-import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
-import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.LayoutLocalServiceUtil;
-import com.liferay.portal.service.LayoutSetLocalServiceUtil;
-import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
-import com.liferay.portal.service.RoleLocalServiceUtil;
-import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portlet.expando.model.ExpandoTableConstants;
-import com.liferay.portlet.expando.model.ExpandoValue;
-import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
+import com.liferay.portlet.expando.model.ExpandoBridge;
 import com.liferay.so.util.LayoutSetPrototypeUtil;
-import com.liferay.so.util.RoleConstants;
-
-import java.util.List;
+import com.liferay.so.util.SocialOfficeUtil;
 
 /**
  * @author Jonathan Lee
@@ -59,47 +40,25 @@ public class UserListener extends BaseModelListener<User> {
 		throws ModelListenerException {
 
 		try {
-			if (!associationClassName.equals(Role.class.getName())) {
-				return;
-			}
-
-			Role role = RoleLocalServiceUtil.getRole((Long)associationClassPK);
-
-			String name = role.getName();
-
-			if (!name.equals(RoleConstants.SOCIAL_OFFICE_USER)) {
-				return;
-			}
-
 			User user = UserLocalServiceUtil.getUser((Long)classPK);
+
+			boolean hasRole = UserLocalServiceUtil.hasRoleUser(
+				user.getCompanyId(), "Social Office User", user.getUserId(),
+				true);
 
 			Group group = user.getGroup();
 
-			LayoutSetPrototype publicLayoutSetPrototype =
-				LayoutSetPrototypeUtil.fetchLayoutSetPrototype(user, false);
+			ExpandoBridge expandoBridge = group.getExpandoBridge();
 
-			if (publicLayoutSetPrototype != null) {
-				LayoutSetLocalServiceUtil.updateLayoutSetPrototypeLinkEnabled(
-					group.getGroupId(), false, true,
-					publicLayoutSetPrototype.getUuid());
+			boolean socialOfficeEnabled = GetterUtil.getBoolean(
+				expandoBridge.getAttribute("socialOfficeEnabled"));
 
-				LayoutLocalServiceUtil.updatePriorities(
-					group.getGroupId(), false);
+			if (hasRole && !socialOfficeEnabled) {
+				LayoutSetPrototypeUtil.updateLayoutSetPrototype(group, false);
+				LayoutSetPrototypeUtil.updateLayoutSetPrototype(group, true);
+
+				SocialOfficeUtil.enableSocialOffice(group);
 			}
-
-			LayoutSetPrototype privateLayoutSetPrototype =
-				LayoutSetPrototypeUtil.fetchLayoutSetPrototype(user, true);
-
-			if (privateLayoutSetPrototype != null) {
-				LayoutSetLocalServiceUtil.updateLayoutSetPrototypeLinkEnabled(
-					group.getGroupId(), true, true,
-					privateLayoutSetPrototype.getUuid());
-
-				LayoutLocalServiceUtil.updatePriorities(
-					group.getGroupId(), true);
-			}
-
-			enableSocialOffice(group);
 		}
 		catch (Exception e) {
 			throw new ModelListenerException(e);
@@ -113,127 +72,28 @@ public class UserListener extends BaseModelListener<User> {
 		throws ModelListenerException {
 
 		try {
-			if (!associationClassName.equals(Role.class.getName())) {
-				return;
-			}
-
-			Role role = RoleLocalServiceUtil.getRole((Long)associationClassPK);
-
-			String name = role.getName();
-
-			if (!name.equals(RoleConstants.SOCIAL_OFFICE_USER)) {
-				return;
-			}
-
 			User user = UserLocalServiceUtil.getUser((Long)classPK);
 
-			LayoutSetPrototype publicLayoutSetPrototype =
-				LayoutSetPrototypeUtil.fetchLayoutSetPrototype(user, false);
+			boolean hasRole = UserLocalServiceUtil.hasRoleUser(
+				user.getCompanyId(), "Social Office User", user.getUserId(),
+				true);
 
-			removeUserLayouts(user, false, publicLayoutSetPrototype.getUuid());
+			Group group = user.getGroup();
 
-			LayoutSetPrototype privateLayoutSetPrototype =
-				LayoutSetPrototypeUtil.fetchLayoutSetPrototype(user, true);
+			ExpandoBridge expandoBridge = group.getExpandoBridge();
 
-			removeUserLayouts(user, true, privateLayoutSetPrototype.getUuid());
+			boolean socialOfficeEnabled = GetterUtil.getBoolean(
+				expandoBridge.getAttribute("socialOfficeEnabled"));
 
-			disableSocialOffice(user.getGroup());
-		}
-		catch (NoSuchGroupException nsge) {
-			return;
+			if (!hasRole && socialOfficeEnabled) {
+				LayoutSetPrototypeUtil.removeLayoutSetPrototype(group, false);
+				LayoutSetPrototypeUtil.removeLayoutSetPrototype(group, true);
+
+				SocialOfficeUtil.disableSocialOffice(group);
+			}
 		}
 		catch (Exception e) {
 			throw new ModelListenerException(e);
-		}
-	}
-
-	protected void disableSocialOffice(Group group) throws Exception {
-		UnicodeProperties typeSettingsProperties =
-			group.getTypeSettingsProperties();
-
-		typeSettingsProperties.remove("customJspServletContextName");
-
-		GroupLocalServiceUtil.updateGroup(
-			group.getGroupId(), typeSettingsProperties.toString());
-
-		ExpandoValue expandoValue = ExpandoValueLocalServiceUtil.getValue(
-			group.getCompanyId(), Group.class.getName(),
-			ExpandoTableConstants.DEFAULT_TABLE_NAME, "socialOfficeEnabled",
-			group.getGroupId());
-
-		expandoValue.setBoolean(false);
-
-		ExpandoValueLocalServiceUtil.updateExpandoValue(expandoValue);
-	}
-
-	protected void enableSocialOffice(Group group) throws Exception {
-		UnicodeProperties typeSettingsProperties =
-			group.getTypeSettingsProperties();
-
-		typeSettingsProperties.setProperty(
-			"customJspServletContextName", "so-hook");
-
-		GroupLocalServiceUtil.updateGroup(
-			group.getGroupId(), typeSettingsProperties.toString());
-
-		ExpandoValueLocalServiceUtil.addValue(
-			group.getCompanyId(), Group.class.getName(),
-			ExpandoTableConstants.DEFAULT_TABLE_NAME, "socialOfficeEnabled",
-			group.getGroupId(), true);
-	}
-
-	protected void removeUserLayouts(
-			User user, boolean privateLayout, String layoutSetPrototypeUuid)
-		throws PortalException, SystemException {
-
-		Group group = user.getGroup();
-
-		LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(
-			group.getGroupId(), privateLayout);
-
-		UnicodeProperties settingsProperties =
-			layoutSet.getSettingsProperties();
-
-		settingsProperties.remove("last-merge-time");
-
-		layoutSet.setSettingsProperties(settingsProperties);
-
-		layoutSet.setLayoutSetPrototypeUuid(StringPool.BLANK);
-		layoutSet.setLayoutSetPrototypeLinkEnabled(false);
-
-		LayoutSetLocalServiceUtil.updateLayoutSet(layoutSet);
-
-		LayoutSetLocalServiceUtil.updateLookAndFeel(
-			group.getGroupId(), null, null, StringPool.BLANK, false);
-
-		LayoutSetPrototype layoutSetPrototype =
-			LayoutSetPrototypeLocalServiceUtil.getLayoutSetPrototypeByUuid(
-				layoutSetPrototypeUuid);
-
-		Group layoutSetPrototypeGroup = layoutSetPrototype.getGroup();
-
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-			layoutSetPrototypeGroup.getGroupId(), true);
-
-		String[] layoutUuids = new String[layouts.size()];
-
-		for (int i = 0; i < layouts.size(); i++) {
-			Layout layout = layouts.get(i);
-
-			layoutUuids[i] = layout.getUuid();
-		}
-
-		layouts = LayoutLocalServiceUtil.getLayouts(
-			group.getGroupId(), privateLayout);
-
-		for (Layout layout : layouts) {
-			if (ArrayUtil.contains(
-					layoutUuids, layout.getSourcePrototypeLayoutUuid())) {
-
-				LayoutLocalServiceUtil.deleteLayout(
-					layout.getGroupId(), privateLayout, layout.getLayoutId(),
-					new ServiceContext());
-			}
 		}
 	}
 
