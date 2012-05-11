@@ -61,10 +61,10 @@ public class UserListener extends BaseModelListener<User> {
 				SocialOfficeUtil.enableSocialOffice(group);
 			}
 		}
-		catch (NoSuchGroupException nsge) {
-		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			if (!(e instanceof NoSuchGroupException)) {
+				throw new ModelListenerException(e);
+			}
 		}
 	}
 
@@ -95,10 +95,10 @@ public class UserListener extends BaseModelListener<User> {
 				SocialOfficeUtil.disableSocialOffice(group);
 			}
 		}
-		catch (NoSuchGroupException nsge) {
-		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			if (!(e instanceof NoSuchGroupException)) {
+				throw new ModelListenerException(e);
+			}
 		}
 	}
 
