@@ -18,6 +18,7 @@
 package com.liferay.so.hook.listeners;
 
 import com.liferay.portal.ModelListenerException;
+import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.Group;
@@ -61,7 +62,9 @@ public class UserListener extends BaseModelListener<User> {
 			}
 		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			if (!(e instanceof NoSuchGroupException)) {
+				throw new ModelListenerException(e);
+			}
 		}
 	}
 
@@ -93,7 +96,9 @@ public class UserListener extends BaseModelListener<User> {
 			}
 		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			if (!(e instanceof NoSuchGroupException)) {
+				throw new ModelListenerException(e);
+			}
 		}
 	}
 
