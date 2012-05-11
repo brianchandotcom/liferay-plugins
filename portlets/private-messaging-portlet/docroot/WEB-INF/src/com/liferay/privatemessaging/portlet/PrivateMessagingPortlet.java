@@ -21,6 +21,11 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.notifications.Channel;
+import com.liferay.portal.kernel.notifications.ChannelException;
+import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.UnknownChannelException;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CharPool;
@@ -42,6 +47,7 @@ import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.privatemessaging.service.UserThreadLocalServiceUtil;
+import com.liferay.privatemessaging.util.PortletKeys;
 import com.liferay.privatemessaging.util.PortletPropsValues;
 import com.liferay.privatemessaging.util.PrivateMessagingUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -80,6 +86,14 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		for (long mbThreadId : mbThreadIds) {
 			UserThreadLocalServiceUtil.deleteUserThread(
 				themeDisplay.getUserId(), mbThreadId);
+
+			try {
+				removeNotification(
+					themeDisplay.getCompanyId(), mbThreadId,
+					themeDisplay.getUserId());
+			}
+			catch (ChannelException ce) {
+			}
 		}
 	}
 
@@ -309,6 +323,40 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		results.put("results", jsonObject);
 
 		writeJSON(resourceRequest, resourceResponse, results);
+	}
+
+	protected void removeNotification(
+			long companyId, long mbThreadId, long userId)
+		throws ChannelException {
+
+		List<NotificationEvent> notificationEvents = null;
+
+		try {
+			notificationEvents = ChannelHubManagerUtil.getNotificationEvents(
+				companyId, userId, true);
+		}
+		catch (UnknownChannelException e) {
+			Channel channel = ChannelHubManagerUtil.getChannel(
+				companyId, userId, true);
+
+			notificationEvents = channel.getNotificationEvents();
+		}
+
+		for (NotificationEvent notificationEvent : notificationEvents) {
+			JSONObject notificationEventJSONObject =
+				notificationEvent.getPayload();
+
+			String portletId = notificationEventJSONObject.getString(
+				"portletId");
+			long entryId = notificationEventJSONObject.getLong("entryId");
+
+			if (portletId.equals(PortletKeys.PRIVATE_MESSAGING) &&
+				(entryId == mbThreadId)) {
+
+				ChannelHubManagerUtil.deleteUserNotificiationEvent(
+					companyId, userId, notificationEvent.getUuid());
+			}
+		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
