@@ -16,8 +16,22 @@
 
 <%@ include file="/init.jsp" %>
 
-<liferay-portlet:renderURL var="viewCalendarResourcesURL">
-	<liferay-portlet:param name="jspPage" value="/view_calendar_resources.jsp" />
-</liferay-portlet:renderURL>
+<%
+String tabs1 = ParamUtil.getString(request, "tabs1", "calendar");
 
-<aui:a href="<%= viewCalendarResourcesURL.toString() %>">Resources...</aui:a>
+portletURL.setParameter("tabs1", tabs1);
+%>
+
+<liferay-ui:tabs
+	names="calendar,resources"
+	url="<%= portletURL.toString() %>"
+/>
+
+<c:choose>
+	<c:when test='<%= tabs1.equals("calendar") %>'>
+		<liferay-util:include page="/view_calendar.jsp" servletContext="<%= application %>" />
+	</c:when>
+	<c:when test='<%= tabs1.equals("resources") %>'>
+		<liferay-util:include page="/view_calendar_resources.jsp" servletContext="<%= application %>" />
+	</c:when>
+</c:choose>
