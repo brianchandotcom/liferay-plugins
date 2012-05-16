@@ -388,6 +388,63 @@
 </p>
 
 <liferay-ui:header
+	title="Features"
+/>
+
+<p>
+	ExpandoBridgeFactoryUtil=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				ExpandoBridgeFactoryUtil.getExpandoBridge(themeDisplay.getCompanyId(), Group.class.getName());
+			}
+
+		};
+		%>
+
+	[entity].getExpandoBridge()=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				themeDisplay.getScopeGroup().getExpandoBridge();
+			}
+
+		};
+		%>
+
+	JournalContentUtil=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				JournalContentUtil.getContent(themeDisplay.getScopeGroupId(), "TEST", "", themeDisplay.getLanguageId(), themeDisplay);
+			}
+
+		};
+		%>
+
+	RuntimePageUtil=
+
+		<%
+		final PageContext testPageContext = pageContext;
+
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				RuntimePageUtil.processTemplate(testPageContext, "null_CUSTOM_2_columns_ii", "Hello Velocity!");
+			}
+
+		};
+		%>
+
+</p>
+
+<liferay-ui:header
 	title="Files"
 />
 
@@ -2452,6 +2509,8 @@ private class SecurityExceptionTest {
 		}
 		catch (Exception e) {
 			writer.write("FAILED with " + e.getMessage());
+
+			_log.error(e.getMessage(), e);
 		}
 
 		writer.write("<br />");
@@ -2533,4 +2592,7 @@ private class SQLSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 }
+
+private static Log _log = LogFactoryUtil.getLog("test-pacl-portlet_view_jsp");
+
 %>
