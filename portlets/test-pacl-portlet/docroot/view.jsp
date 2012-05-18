@@ -2421,6 +2421,8 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 	protected void testDeleteWithFile(String fileName) throws Exception {
+		fileName = translateFileName(fileName);
+
 		writer.write(fileName);
 		writer.write("=");
 
@@ -2455,6 +2457,8 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 	protected void testDeleteWithFileUtil(String fileName) throws Exception {
+		fileName = translateFileName(fileName);
+
 		writer.write(fileName);
 		writer.write("=");
 
@@ -2498,6 +2502,8 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 	protected void testReadWithFile(String fileName) throws Exception {
+		fileName = translateFileName(fileName);
+
 		writer.write(fileName);
 		writer.write("=");
 
@@ -2512,6 +2518,8 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 	protected void testReadWithFileUtil(String fileName) throws Exception {
+		fileName = translateFileName(fileName);
+
 		writer.write(fileName);
 		writer.write("=");
 
@@ -2519,6 +2527,8 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 	protected void testWriteWithFile(String fileName) throws Exception {
+		fileName = translateFileName(fileName);
+
 		writer.write(fileName);
 		writer.write("=");
 
@@ -2533,6 +2543,8 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 	protected void testWriteWithFileUtil(String fileName) throws Exception {
+		fileName = translateFileName(fileName);
+
 		writer.write(fileName);
 		writer.write("=");
 
@@ -2541,6 +2553,20 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 		byte[] bytes = FileUtil.getBytes(file);
 
 		FileUtil.write(file, bytes);
+	}
+
+	protected String translateFileName(String fileName) throws Exception {
+		if (fileName.startsWith("../webapps")) {
+			String deployDir = DeployManagerUtil.getDeployDir();
+
+			fileName = StringUtil.replace(fileName, "../webapps", deployDir);
+
+			if (ServerDetector.isJBoss()) {
+				fileName = StringUtil.replace(fileName, "/chat-portlet/", "/chat-portlet.war/");
+			}
+		}
+
+		return fileName;
 	}
 
 }
