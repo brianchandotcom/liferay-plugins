@@ -367,8 +367,10 @@ public class FooLocalServiceUtil {
 		return getService().getUserUtil_FindByPrimaryKey(userId);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static void clearService() {
-		_service = null;
 	}
 
 	public static FooLocalService getService() {

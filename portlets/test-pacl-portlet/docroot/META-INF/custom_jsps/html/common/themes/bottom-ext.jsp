@@ -15,5 +15,9 @@
 --%>
 
 <%
-throw new Exception("Custom JSP directory is not protected");
+SecurityManager securityManager = System.getSecurityManager();
+
+if (securityManager != null) {
+	throw new Exception("Custom JSP directory is not protected");
+}
 %>

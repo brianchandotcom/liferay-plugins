@@ -36,7 +36,9 @@ public class FailureFilter implements Filter {
 			FilterChain filterChain)
 		throws IOException, ServletException {
 
-		if (true) {
+		SecurityManager securityManager = System.getSecurityManager();
+
+		if ((securityManager != null) && true) {
 			throw new ServletException("Hook servlet filters is not protected");
 		}
 
