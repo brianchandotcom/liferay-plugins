@@ -52,6 +52,12 @@ public class TestPACLFilter implements Filter {
 	}
 
 	protected void testWriteFile() {
+		SecurityManager securityManager = System.getSecurityManager();
+
+		if (securityManager == null) {
+			return;
+		}
+
 		File file = new File("../webapps/chat-portlet/css/main.css");
 
 		try {

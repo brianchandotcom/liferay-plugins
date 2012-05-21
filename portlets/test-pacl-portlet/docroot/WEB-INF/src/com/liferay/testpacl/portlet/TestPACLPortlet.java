@@ -55,17 +55,21 @@ public class TestPACLPortlet extends MVCPortlet {
 		throws IOException, PortletException {
 
 		try{
-			TestPACLUtil.testWriteFile();
+			SecurityManager securityManager = System.getSecurityManager();
 
-			testGetClassLoaderBlogsEntryLocalService();
-			testGetClassLoaderEntryLocalService();
-			testGetClassLoaderFooLocalService();
-			testGetClassLoaderPortal();
-			testGetClassLoaderTestPACLUtil();
+			if (securityManager != null) {
+				TestPACLUtil.testWriteFile();
 
-			testReflectionTestPACLUtil_log();
-			testReflectionTestPACLUtil_TEST_FIELD();
-			testReflectionTestPACLUtil_TEST_FIELD_setAccessible();
+				testGetClassLoaderBlogsEntryLocalService();
+				testGetClassLoaderEntryLocalService();
+				testGetClassLoaderFooLocalService();
+				testGetClassLoaderPortal();
+				testGetClassLoaderTestPACLUtil();
+
+				testReflectionTestPACLUtil_log();
+				testReflectionTestPACLUtil_TEST_FIELD();
+				testReflectionTestPACLUtil_TEST_FIELD_setAccessible();
+			}
 		}
 		catch (Exception e) {
 			throw new PortletException(e);
