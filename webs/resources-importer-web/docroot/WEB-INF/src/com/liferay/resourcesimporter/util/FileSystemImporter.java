@@ -497,7 +497,7 @@ public class FileSystemImporter extends BaseImporter {
 			if (fileEntry != null) {
 				fileEntryURL = DLUtil.getPreviewURL(
 					fileEntry, fileEntry.getFileVersion(), null,
-					StringPool.BLANK);
+					StringPool.BLANK, false, false);
 			}
 
 			content = matcher.replaceFirst(fileEntryURL);
