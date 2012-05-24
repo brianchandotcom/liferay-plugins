@@ -956,8 +956,12 @@ AUI.add(
 						var unfollowButton = instance.byId('unfollowButton');
 
 						if (user.block) {
+							addConnectionButton.hide();
 							blockButton.hide();
+							followButton.hide();
+							removeConnectionButton.hide();
 							unblockButton.show();
+							unfollowButton.hide();
 						}
 						else {
 							blockButton.show();
