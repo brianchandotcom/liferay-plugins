@@ -35,7 +35,7 @@ microblogsEntriesURL.setParameter("mvcPath", "/microblogs/view.jsp");
 microblogsEntriesURL.setParameter("tabs1", tabs1);
 microblogsEntriesURL.setParameter("cur", String.valueOf(cur));
 
-request.setAttribute(WebKeys.MICROBLOGS_ENTRIES_URL, microblogsEntriesURL);
+request.setAttribute(WebKeys.MICROBLOGS_ENTRIES_URL, microblogsEntriesURL.toString());
 %>
 
 <div class="comments-container-content">

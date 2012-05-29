@@ -51,7 +51,7 @@ portletURL.setParameter("mvcPath", "/status_update/view.jsp");
 	}
 
 	request.setAttribute(WebKeys.MICROBLOGS_ENTRIES, microblogsEntries);
-	request.setAttribute(WebKeys.MICROBLOGS_ENTRIES_URL, portletURL);
+	request.setAttribute(WebKeys.MICROBLOGS_ENTRIES_URL, portletURL.toString());
 	%>
 
 	<liferay-util:include page="/microblogs/view_microblogs_entries.jsp" servletContext="<%= application %>" />

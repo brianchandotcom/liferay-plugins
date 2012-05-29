@@ -19,7 +19,7 @@
 <%
 List<MicroblogsEntry> microblogsEntries = (List<MicroblogsEntry>)request.getAttribute(WebKeys.MICROBLOGS_ENTRIES);
 
-PortletURL microblogsEntriesURL = (PortletURL)request.getAttribute(WebKeys.MICROBLOGS_ENTRIES_URL);
+String microblogsEntriesURL = (String)request.getAttribute(WebKeys.MICROBLOGS_ENTRIES_URL);
 %>
 
 <c:if test="<%= microblogsEntries.isEmpty() %>">
@@ -179,7 +179,7 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 					<c:if test="<%= (microblogsEntry.getType() != MicroblogsEntryConstants.TYPE_REPOST) && (microblogsEntry.getType() != MicroblogsEntryConstants.TYPE_REPLY) && (MicroblogsEntryPermission.contains(permissionChecker, microblogsEntry.getMicroblogsEntryId(), ActionKeys.UPDATE)) %>">
 						<portlet:renderURL var="updateMicroblogsEntryURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 							<portlet:param name="mvcPath" value="/microblogs/edit_microblogs_entry.jsp" />
-							<portlet:param name="redirect" value="<%= microblogsEntriesURL.toString() %>" />
+							<portlet:param name="redirect" value="<% microblogsEntriesURL %>" />
 							<portlet:param name="microblogsEntryId" value="<%= String.valueOf(microblogsEntry.getMicroblogsEntryId()) %>" />
 							<portlet:param name="edit" value="<%= Boolean.TRUE.toString() %>" />
 						</portlet:renderURL>

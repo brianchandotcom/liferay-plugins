@@ -134,7 +134,7 @@ portletURL.setParameter("tabs1", tabs1);
 	microblogsEntriesURL.setParameter("cur", String.valueOf(cur));
 
 	request.setAttribute(WebKeys.MICROBLOGS_ENTRIES, results);
-	request.setAttribute(WebKeys.MICROBLOGS_ENTRIES_URL, microblogsEntriesURL);
+	request.setAttribute(WebKeys.MICROBLOGS_ENTRIES_URL, microblogsEntriesURL.toString());
 	%>
 
 	<liferay-util:include page="/microblogs/view_microblogs_entries.jsp" servletContext="<%= application %>" />
