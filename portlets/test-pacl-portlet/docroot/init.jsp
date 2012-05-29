@@ -37,6 +37,7 @@ page import="com.liferay.portal.kernel.dao.orm.PortalCustomSQL" %><%@
 page import="com.liferay.portal.kernel.dao.orm.PortalCustomSQLUtil" %><%@
 page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
 page import="com.liferay.portal.kernel.deploy.DeployManagerUtil" %><%@
+page import="com.liferay.portal.kernel.executor.PortalExecutorManagerUtil" %><%@
 page import="com.liferay.portal.kernel.format.PhoneNumberFormatUtil" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.messaging.Message" %><%@
