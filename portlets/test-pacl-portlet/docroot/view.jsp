@@ -1328,6 +1328,37 @@
 </p>
 
 <liferay-ui:header
+	title="Search Engines"
+/>
+
+<p>
+	SYSTEM_ENGINE=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				SearchEngineUtil.getSearchEngine("SYSTEM_ENGINE");
+			}
+
+		};
+		%>
+
+	GENERIC_ENGINE=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				SearchEngineUtil.getSearchEngine("GENERIC_ENGINE");
+			}
+
+		};
+		%>
+
+</p>
+
+<liferay-ui:header
 	title="Services: Chat Portlet"
 />
 
@@ -1933,6 +1964,128 @@
 
 </p>
 
+<p>
+	<h3>Accept</h3>
+	<i>Test accept after listen because we need to have a listening socket before being able to accept.</i>
+</p>
+
+<p>
+	localhost:4320=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				ServerSocket serverSocket = new ServerSocket(4316);
+
+				serverSocket.setSoTimeout(1000);
+
+				final InetSocketAddress host = new InetSocketAddress("localhost", 4316);
+
+				Socket clientSocket = null;
+
+				try {
+					Runnable client = new Runnable() {
+						public void run() {
+							try {
+								Socket socket = new Socket();
+
+								InetSocketAddress client = new InetSocketAddress("localhost", 4320);
+
+								socket.bind(client);
+
+								try {
+									socket.connect(host , 500);
+								}
+								finally {
+									if (socket != null) {
+										socket.close();
+									}
+								}
+							}
+							catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					};
+
+					Thread clientThread = new Thread(client);
+
+					clientThread.start();
+
+					clientSocket = serverSocket.accept();
+				}
+				finally {
+					if (clientSocket != null) {
+						clientSocket.close();
+					}
+				}
+
+				serverSocket.close();
+			}
+
+		};
+		%>
+
+	localhost:4321=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				ServerSocket serverSocket = new ServerSocket(4316);
+
+				serverSocket.setSoTimeout(1000);
+
+				final InetSocketAddress host = new InetSocketAddress("localhost", 4316);
+
+				Socket clientSocket = null;
+
+				try {
+					Runnable client = new Runnable() {
+						public void run() {
+							try {
+								Socket socket = new Socket();
+
+								InetSocketAddress client = new InetSocketAddress("localhost", 4321);
+
+								socket.bind(client);
+
+								try {
+									socket.connect(host , 500);
+								}
+								finally {
+									if (socket != null) {
+										socket.close();
+									}
+								}
+							}
+							catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					};
+
+					Thread clientThread = new Thread(client);
+
+					clientThread.start();
+
+					clientSocket = serverSocket.accept();
+				}
+				finally {
+					if (clientSocket != null) {
+						clientSocket.close();
+					}
+				}
+
+				serverSocket.close();
+			}
+
+		};
+		%>
+
+</p>
+
 <liferay-ui:header
 	title="SQL"
 />
@@ -2391,6 +2544,27 @@
 
 	PortalServiceUtil#getBuildNumber=<%= _assertTrue(results.get("PortalServiceUtil#getBuildNumber")) %><br />
 	UserLocalServiceUtil#getUser=<%= _assertTrue(results.get("UserLocalServiceUtil#getUser")) %>
+</p>
+
+<p>
+	<h3>Portal Executor Manager</h3>
+</p>
+
+<p>
+
+	PortalExecutorManagerUtil.shutdown("liferay/hot_deploy");=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				PortalExecutorManagerUtil.shutdown("liferay/hot_deploy");
+			}
+
+		};
+		%>
+
+
 </p>
 
 <%!
