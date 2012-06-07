@@ -131,6 +131,7 @@ public class CalendarUtil {
 			"permissions",
 			_getPermissionsJSONObject(
 				themeDisplay.getPermissionChecker(), calendar));
+		jsonObject.put("userId", calendar.getUserId());
 
 		return jsonObject;
 	}
@@ -164,6 +165,11 @@ public class CalendarUtil {
 			ActionKeys.MANAGE_BOOKINGS,
 			CalendarPermission.contains(
 				permissionChecker, calendar, ActionKeys.MANAGE_BOOKINGS));
+
+		jsonObject.put(
+			ActionKeys.UPDATE,
+			CalendarPermission.contains(
+				permissionChecker, calendar, ActionKeys.UPDATE));
 
 		jsonObject.put(
 			ActionKeys.VIEW,
