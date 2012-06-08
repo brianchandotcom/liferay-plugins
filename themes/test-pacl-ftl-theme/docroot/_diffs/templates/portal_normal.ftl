@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<#include init />
+
+<html class="<@liferay.language key="lang.dir" />" dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
+
+<head>
+	<title>${the_title} - ${company_name}</title>
+
+	${theme.include(top_head_include)}
+</head>
+
+<body class="${css_class}">
+
+<#if is_signed_in>
+	<@liferay.dockbar />
+</#if>
+
+${theme.include(top_messages_include)}
+
+<div id="wrapper">
+	<a href="#main-content" id="skip-to-content"><@liferay.language key="skip-to-content" /></a>
+
+	<header id="banner" role="banner">
+		<div id="heading">
+			<h1 class="site-title">
+				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language key="go-to" /> ${site_name}">
+					<img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" />
+				</a>
+
+				<#if show_site_name>
+					<span class="site-name" title="<@liferay.language key="go-to" /> ${site_name}">
+						${site_name}
+					</span>
+				</#if>
+			</h1>
+
+			<h2 class="page-title">
+				<span>${the_title}</span>
+			</h2>
+		</div>
+
+		<#if !is_signed_in>
+			<a href="${sign_in_url}" id="sign-in" rel="nofollow">${sign_in_text}</a>
+		</#if>
+
+		<#if has_navigation || is_signed_in>
+			<#include "${full_templates_path}/navigation.ftl" />
+		</#if>
+	</header>
+
+	<div id="content">
+		<nav class="site-breadcrumbs" id="breadcrumbs">
+			<h1>
+				<span><@liferay.language key="breadcrumbs" /></span>
+			</h1>
+
+			<@liferay.breadcrumbs />
+		</nav>
+
+		<#if selectable>
+			${theme.include(content_include)}
+		<#else>
+			${portletDisplay.recycle()}
+
+			${portletDisplay.setTitle(the_title)}
+
+			${theme.wrapPortlet("portlet.ftl", content_include)}
+		</#if>
+
+		<div id="test">
+			<div class="taglib-header">
+				<h1 class="header-title">
+					<span>Tests</span>
+				</h1>
+			</div>
+
+			<p>
+				<h3>Class Loader</h3>
+			</p>
+
+			<p>
+				serviceLocator.findService('com.liferay.portlet.blogs.service.BlogsEntryLocalService')=
+
+					<#assign result1 = serviceLocator.findService('com.liferay.portlet.blogs.service.BlogsEntryLocalService') />
+
+					<#attempt>
+						<#if (result1.getBeanIdentifier()?has_content)>
+							FAILED
+						</#if>
+					<#recover>
+						PASSED
+					</#attempt>
+
+			</p>
+
+			<p>
+				serviceLocator.findService('com.liferay.portal.service.GroupLocalService')=
+
+					<#assign result2 = serviceLocator.findService('com.liferay.portal.service.GroupLocalService') />
+
+					<#attempt>
+						<#if (result2.getBeanIdentifier()?has_content)>
+							PASSED
+						</#if>
+					<#recover>
+						FAILED
+					</#attempt>
+
+			</p>
+
+			<p>
+				objectUtil("com.liferay.portal.json.JSONFactoryImpl")=
+
+					<#attempt>
+						<#assign result3 = objectUtil("com.liferay.portal.json.JSONFactoryImpl") />
+
+						<#if (result3.createJSONObject()?has_content)>
+							FAILED
+						</#if>
+					<#recover>
+						PASSED
+					</#attempt>
+
+			</p>
+
+			<p>
+				"com.liferay.portal.json.JSONFactoryImpl"?new=
+
+					<#attempt>
+						<#assign result4 = "com.liferay.portal.json.JSONFactoryImpl"?new />
+
+						<#if (result4.createJSONObject()?has_content)>
+							FAILED
+						</#if>
+					<#recover>
+						PASSED
+					</#attempt>
+
+			</p>
+		</div>
+	</div>
+
+	<footer id="footer" role="contentinfo">
+		<p class="powered-by">
+			<@liferay.language key="powered-by" /> <a href="http://www.liferay.com" rel="external">Liferay</a>
+		</p>
+	</footer>
+</div>
+
+${theme.include(body_bottom_include)}
+
+</body>
+
+${theme.include(bottom_include)}
+
+</html>
