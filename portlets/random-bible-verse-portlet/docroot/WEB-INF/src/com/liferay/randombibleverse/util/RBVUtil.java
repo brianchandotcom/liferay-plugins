@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Randomizer;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnmodifiableList;
+import com.liferay.portal.kernel.webcache.WebCacheException;
 import com.liferay.portal.kernel.webcache.WebCacheItem;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
 import com.liferay.portal.kernel.xml.Document;
@@ -133,13 +134,17 @@ public class RBVUtil {
 	private Verse _getVerse(
 		String location, String versionId, String language) {
 
-		WebCacheItem webCacheItem = new VerseWebCacheItem(
-			location, versionId, language);
+		WebCacheItem wci = new VerseWebCacheItem(location, versionId, language);
 
-		return (Verse)WebCachePoolUtil.get(
-			RBVUtil.class.getName() + StringPool.PERIOD + location +
-				StringPool.PERIOD + versionId,
-			webCacheItem);
+		try {
+			return (Verse)WebCachePoolUtil.get(
+				RBVUtil.class.getName() + StringPool.PERIOD + location +
+					StringPool.PERIOD + versionId,
+				wci);
+		}
+		catch (WebCacheException wce) {
+			return null;
+		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(RBVUtil.class);

@@ -15,6 +15,7 @@
 package com.liferay.stocks.util;
 
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.webcache.WebCacheException;
 import com.liferay.portal.kernel.webcache.WebCacheItem;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
 import com.liferay.stocks.model.Stocks;
@@ -32,10 +33,8 @@ public class StocksUtil {
 		try {
 			return (Stocks)WebCachePoolUtil.get(key, wci);
 		}
-		catch (ClassCastException cce) {
-			WebCachePoolUtil.remove(key);
-
-			return (Stocks)WebCachePoolUtil.get(key, wci);
+		catch (WebCacheException wce) {
+			return null;
 		}
 	}
 
