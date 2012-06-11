@@ -14,6 +14,7 @@
 
 package com.liferay.tich.util;
 
+import com.liferay.portal.kernel.webcache.WebCacheException;
 import com.liferay.portal.kernel.webcache.WebCacheItem;
 import com.liferay.portal.kernel.webcache.WebCachePoolUtil;
 import com.liferay.tich.model.Event;
@@ -30,20 +31,12 @@ public class TICHUtil {
 
 		String key = TICHUtil.class.getName();
 
-		List<Event> events = (List<Event>)WebCachePoolUtil.get(key, wci);
-
 		try {
-			if (events.size() > 0) {
-				Event event = events.get(0);
-			}
+			return (List<Event>)WebCachePoolUtil.get(key, wci);
 		}
-		catch (ClassCastException cce) {
-			WebCachePoolUtil.remove(key);
-
-			events = (List<Event>)WebCachePoolUtil.get(key, wci);
+		catch (WebCacheException wce) {
+			return null;
 		}
-
-		return events;
 	}
 
 }
