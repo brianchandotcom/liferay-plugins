@@ -838,7 +838,7 @@ AUI.add(
 
 		gadgets.rpc.register(
 			'set_pref',
-			 function(editToken, name, value) {
+			function(editToken, name, value) {
 				var gadget = Gadget.get(this.f);
 
 				if (gadget) {
@@ -866,6 +866,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-io', 'cookie', 'json', 'liferay-portlet-url', 'liferay-service', 'querystring']
+		requires: ['aui-base', 'aui-io', 'cookie', 'json', 'liferay-portlet-url', 'querystring']
 	}
 );

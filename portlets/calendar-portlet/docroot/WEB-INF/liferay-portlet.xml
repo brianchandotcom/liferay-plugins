@@ -7,7 +7,7 @@
 		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/js/components.js</header-portlet-javascript>
-		<header-portlet-javascript>/js/javascript.js</header-portlet-javascript>		
+		<header-portlet-javascript>/js/javascript.js</header-portlet-javascript>
 		<css-class-wrapper>calendar-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
