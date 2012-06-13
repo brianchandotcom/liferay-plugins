@@ -1,2 +1,4 @@
-<Context>
-</Context>
+<Context
+	antiJARLocking="true"
+	antiResourceLocking="true"
+/>
