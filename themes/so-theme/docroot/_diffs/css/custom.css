@@ -1693,27 +1693,20 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 		min-width: 200px;
 	}
 
-	.version-history .results-grid {
-		overflow: visible;
+	.version-entry {
+		border-bottom: 1px solid $gray;
+		padding: 10px 4px;
 
-		table {
-			background: #FFF;
-			position: relative;
-			width: 100%;
-			z-index: 1;
+		.version-number, .user-name {
+			font-weight: bold;
+		}
 
-			td, th {
-				overflow: hidden;
-				padding: 5px 5px;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
+		.version-number {
+			color: #8F0920;
+		}
 
-			&:hover td, th {
-				overflow: visible;
-				text-overflow: visible;
-				white-space: normal;
-			}
+		.version-description {
+			padding: 4px 0 4px 10px;
 		}
 	}
 }
