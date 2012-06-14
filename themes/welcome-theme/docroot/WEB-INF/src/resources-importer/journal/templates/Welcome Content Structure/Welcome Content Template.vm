@@ -22,7 +22,7 @@
 	<div class="content-area-wrapper">
 		#foreach($link in $links.siblings)
 			#if($velocityCount == 1)
-				<style media="screen" type="text/css">
+				<style type="text/css">
 					.content-area {
 						background: url($link.bg-image.data) 100% 0 no-repeat;
 					}
@@ -30,11 +30,13 @@
 
 				<div class="content-area selected" data-bannerImage="$link.bg-image.data" id="pageId$velocityCount">
 					$link.data
+
 					<a href="$link.action-link-url.data" id="marketplace">&nbsp;</a>
 				</div>
 			#else
 				<div class="content-area" data-bannerImage="$link.bg-image.data" id="pageId$velocityCount">
 					$link.data
+
 					<a href="$link.action-link-url.data" id="marketplace">&nbsp;</a>
 				</div>
 			#end
@@ -46,9 +48,11 @@
 	AUI().ready(
 		'aui-base',
 		function(A) {
-			function selectContent(href) {
+			var hash = null;
+
+			var selectContent = function(href) {
 				var div = A.one(href);
-			
+
 				if (div) {
 					div.radioClass('selected');
 
@@ -56,28 +60,31 @@
 
 					hash = href;
 				}
-			}
-			
-			function selectNavItem (hash) {
+			};
+
+			var selectNavItem = function(hash) {
 				if (hash) {
 					A.one('#contentNav a[href$="'+ hash +'"]').ancestor().radioClass('selected');
 				}
-			}
+			};
 
-			var hash = null;
+			var select = function(hash) {
+				selectContent(hash);
+				selectNavItem(hash);
+			};
 
-			if (location.hash) {
-				selectContent(location.hash);
+			var currentHash = location.hash;
 
-				selectNavItem(location.hash);
+			if (currentHash) {
+				select(currentHash);
 			}
 
 			setInterval(
 				function() {
-					if (location.hash != hash) {
-						selectContent(location.hash);
+					var currentHash = location.hash;
 
-						selectNavItem(location.hash);
+					if (currentHash != hash) {
+						select(currentHash);
 					}
 				},
 				200
@@ -87,9 +94,10 @@
 				'click',
 				function(event) {
 					var a = event.currentTarget;
-					var href = a.get('hash');
+
 					a.ancestor().radioClass('selected');
-					selectContent(href);
+
+					selectContent(a.attr('hash'));
 				},
 				'a'
 			);
