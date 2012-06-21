@@ -134,6 +134,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		userThread.setCompanyId(user.getCompanyId());
 		userThread.setUserId(userId);
+		userThread.setUserName(user.getFullName());
 		userThread.setCreateDate(new Date());
 		userThread.setModifiedDate(new Date());
 		userThread.setMbThreadId(mbThreadId);
@@ -233,6 +234,23 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		userThread.setRead(false);
 
 		userThreadPersistence.update(userThread, false);
+	}
+
+	public void updateUserName(User user)
+		throws PortalException, SystemException {
+
+		String userName = user.getFullName();
+
+		List<UserThread> userThreads = userThreadPersistence.findByUserId(
+			user.getUserId());
+
+		for (UserThread userThread : userThreads) {
+			if (!userName.equals(userThread.getUserName())) {
+				userThread.setUserName(userName);
+
+				userThreadPersistence.update(userThread, false);
+			}
+		}
 	}
 
 	protected MBMessage addPrivateMessage(
