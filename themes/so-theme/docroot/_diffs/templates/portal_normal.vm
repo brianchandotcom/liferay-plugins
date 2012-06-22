@@ -40,10 +40,10 @@ $theme.include($body_top_include)
 
 				<div class="signed-in-as portlet-login">
 					<div class="profile-image">
-						<a href="$user_dashboard_url"><img src="$user.getPortraitURL($themeDisplay)" alt="$user_name"></a>
+						<a href="$user_dashboard_portlet_url"><img src="$user.getPortraitURL($themeDisplay)" alt="$user_name"></a>
 					</div>
 
-					<a class="user-name aui-state-default aui-buttonitem-content" href="$user_dashboard_url"><span class="aui-button-label">#language("dashboard")</span></a>
+					<a class="user-name aui-state-default aui-buttonitem-content" href="$user_dashboard_portlet_url"><span class="aui-button-label">#language("dashboard")</span></a>
 				</div>
 			#end
 		</div>
@@ -59,7 +59,7 @@ $theme.include($body_top_include)
 		<header id="banner" role="banner">
 			<hgroup id="heading">
 				<div class="company-title">
-					<a class="$logo_css_class" href="$user_dashboard_url" title='#language("go-to") #language("dashboard")'>
+					<a class="$logo_css_class" href="$user_dashboard_portlet_url" title='#language("go-to") #language("dashboard")'>
 						<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
 					</a>
 				</div>
