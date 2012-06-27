@@ -81,6 +81,8 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 		attributes.put("assigneeActionId", getAssigneeActionId());
 		attributes.put("assigneeScript", getAssigneeScript());
 		attributes.put("assigneeScriptLanguage", getAssigneeScriptLanguage());
+		attributes.put("assigneeScriptRequiredContexts",
+			getAssigneeScriptRequiredContexts());
 
 		return attributes;
 	}
@@ -182,6 +184,13 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 
 		if (assigneeScriptLanguage != null) {
 			setAssigneeScriptLanguage(assigneeScriptLanguage);
+		}
+
+		String assigneeScriptRequiredContexts = (String)attributes.get(
+				"assigneeScriptRequiredContexts");
+
+		if (assigneeScriptRequiredContexts != null) {
+			setAssigneeScriptRequiredContexts(assigneeScriptRequiredContexts);
 		}
 	}
 
@@ -321,6 +330,15 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 		_assigneeScriptLanguage = assigneeScriptLanguage;
 	}
 
+	public String getAssigneeScriptRequiredContexts() {
+		return _assigneeScriptRequiredContexts;
+	}
+
+	public void setAssigneeScriptRequiredContexts(
+		String assigneeScriptRequiredContexts) {
+		_assigneeScriptRequiredContexts = assigneeScriptRequiredContexts;
+	}
+
 	public BaseModel<?> getKaleoTaskAssignmentRemoteModel() {
 		return _kaleoTaskAssignmentRemoteModel;
 	}
@@ -366,6 +384,7 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 		clone.setAssigneeActionId(getAssigneeActionId());
 		clone.setAssigneeScript(getAssigneeScript());
 		clone.setAssigneeScriptLanguage(getAssigneeScriptLanguage());
+		clone.setAssigneeScriptRequiredContexts(getAssigneeScriptRequiredContexts());
 
 		return clone;
 	}
@@ -422,7 +441,7 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(33);
+		StringBundler sb = new StringBundler(35);
 
 		sb.append("{kaleoTaskAssignmentId=");
 		sb.append(getKaleoTaskAssignmentId());
@@ -456,13 +475,15 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 		sb.append(getAssigneeScript());
 		sb.append(", assigneeScriptLanguage=");
 		sb.append(getAssigneeScriptLanguage());
+		sb.append(", assigneeScriptRequiredContexts=");
+		sb.append(getAssigneeScriptRequiredContexts());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(52);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment");
@@ -532,6 +553,10 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 			"<column><column-name>assigneeScriptLanguage</column-name><column-value><![CDATA[");
 		sb.append(getAssigneeScriptLanguage());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>assigneeScriptRequiredContexts</column-name><column-value><![CDATA[");
+		sb.append(getAssigneeScriptRequiredContexts());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -555,5 +580,6 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 	private String _assigneeActionId;
 	private String _assigneeScript;
 	private String _assigneeScriptLanguage;
+	private String _assigneeScriptRequiredContexts;
 	private BaseModel<?> _kaleoTaskAssignmentRemoteModel;
 }

@@ -76,6 +76,7 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 		attributes.put("kaleoNodeId", getKaleoNodeId());
 		attributes.put("script", getScript());
 		attributes.put("scriptLanguage", getScriptLanguage());
+		attributes.put("scriptRequiredContexts", getScriptRequiredContexts());
 
 		return attributes;
 	}
@@ -145,6 +146,13 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 
 		if (scriptLanguage != null) {
 			setScriptLanguage(scriptLanguage);
+		}
+
+		String scriptRequiredContexts = (String)attributes.get(
+				"scriptRequiredContexts");
+
+		if (scriptRequiredContexts != null) {
+			setScriptRequiredContexts(scriptRequiredContexts);
 		}
 	}
 
@@ -244,6 +252,14 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 		_scriptLanguage = scriptLanguage;
 	}
 
+	public String getScriptRequiredContexts() {
+		return _scriptRequiredContexts;
+	}
+
+	public void setScriptRequiredContexts(String scriptRequiredContexts) {
+		_scriptRequiredContexts = scriptRequiredContexts;
+	}
+
 	public BaseModel<?> getKaleoConditionRemoteModel() {
 		return _kaleoConditionRemoteModel;
 	}
@@ -284,6 +300,7 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 		clone.setKaleoNodeId(getKaleoNodeId());
 		clone.setScript(getScript());
 		clone.setScriptLanguage(getScriptLanguage());
+		clone.setScriptRequiredContexts(getScriptRequiredContexts());
 
 		return clone;
 	}
@@ -340,7 +357,7 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{kaleoConditionId=");
 		sb.append(getKaleoConditionId());
@@ -364,13 +381,15 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 		sb.append(getScript());
 		sb.append(", scriptLanguage=");
 		sb.append(getScriptLanguage());
+		sb.append(", scriptRequiredContexts=");
+		sb.append(getScriptRequiredContexts());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(40);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.portal.workflow.kaleo.model.KaleoCondition");
@@ -420,6 +439,10 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 			"<column><column-name>scriptLanguage</column-name><column-value><![CDATA[");
 		sb.append(getScriptLanguage());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>scriptRequiredContexts</column-name><column-value><![CDATA[");
+		sb.append(getScriptRequiredContexts());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -438,5 +461,6 @@ public class KaleoConditionClp extends BaseModelImpl<KaleoCondition>
 	private long _kaleoNodeId;
 	private String _script;
 	private String _scriptLanguage;
+	private String _scriptRequiredContexts;
 	private BaseModel<?> _kaleoConditionRemoteModel;
 }
