@@ -18,9 +18,12 @@ import com.liferay.calendar.CalendarBookingDurationException;
 import com.liferay.calendar.CalendarBookingTitleException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
+import com.liferay.calendar.notification.NotificationType;
 import com.liferay.calendar.service.CalendarBookingLocalServiceUtil;
 import com.liferay.calendar.service.base.CalendarBookingLocalServiceBaseImpl;
 import com.liferay.calendar.util.JCalendarUtil;
+import com.liferay.calendar.util.NotificationUtil;
+import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.calendar.workflow.CalendarBookingApprovalWorkflow;
 import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -49,8 +52,9 @@ public class CalendarBookingLocalServiceImpl
 			long userId, long calendarId, long[] childCalendarIds,
 			long parentCalendarBookingId, Map<Locale, String> titleMap,
 			Map<Locale, String> descriptionMap, String location, Date startDate,
-			Date endDate, boolean allDay, String recurrence, int firstReminder,
-			int secondReminder, ServiceContext serviceContext)
+			Date endDate, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar booking
@@ -82,7 +86,7 @@ public class CalendarBookingLocalServiceImpl
 		}
 
 		if (firstReminder < secondReminder) {
-			int originalSecondReminder = secondReminder;
+			long originalSecondReminder = secondReminder;
 
 			secondReminder = firstReminder;
 			firstReminder = originalSecondReminder;
@@ -122,7 +126,9 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setAllDay(allDay);
 		calendarBooking.setRecurrence(recurrence);
 		calendarBooking.setFirstReminder(firstReminder);
+		calendarBooking.setFirstReminderType(firstReminderType);
 		calendarBooking.setSecondReminder(secondReminder);
+		calendarBooking.setSecondReminderType(secondReminderType);
 
 		int status = CalendarBookingWorkflowConstants.STATUS_PENDING;
 
@@ -145,6 +151,24 @@ public class CalendarBookingLocalServiceImpl
 			userId, calendarBookingId, serviceContext);
 
 		return calendarBooking;
+	}
+
+	public void checkCalendarBookings()
+		throws PortalException, SystemException {
+
+		try {
+			Date now = new Date();
+
+			List<CalendarBooking> calendarBookings =
+				calendarBookingFinder.findByFutureReminders(now);
+
+			for (CalendarBooking calendarBooking : calendarBookings) {
+				NotificationUtil.notifyCalendarBookingReminders(
+					calendarBooking);
+			}
+		}
+		catch (Exception e) {
+		}
 	}
 
 	@Override
@@ -299,8 +323,10 @@ public class CalendarBookingLocalServiceImpl
 			long userId, long calendarBookingId, long calendarId,
 			long[] childCalendarIds, Map<Locale, String> titleMap,
 			Map<Locale, String> descriptionMap, String location, Date startDate,
-			Date endDate, boolean allDay, String recurrence, int firstReminder,
-			int secondReminder, int status, ServiceContext serviceContext)
+			Date endDate, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar booking
@@ -320,7 +346,7 @@ public class CalendarBookingLocalServiceImpl
 		}
 
 		if (firstReminder < secondReminder) {
-			int originalSecondReminder = secondReminder;
+			long originalSecondReminder = secondReminder;
 
 			secondReminder = firstReminder;
 			firstReminder = originalSecondReminder;
@@ -341,7 +367,9 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setAllDay(allDay);
 		calendarBooking.setRecurrence(recurrence);
 		calendarBooking.setFirstReminder(firstReminder);
+		calendarBooking.setFirstReminderType(firstReminderType);
 		calendarBooking.setSecondReminder(secondReminder);
+		calendarBooking.setSecondReminderType(secondReminderType);
 
 		calendarBookingPersistence.update(calendarBooking, false);
 
@@ -361,8 +389,9 @@ public class CalendarBookingLocalServiceImpl
 			long userId, long calendarBookingId, long calendarId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
 			String location, Date startDate, Date endDate, boolean allDay,
-			String recurrence, int firstReminder, int secondReminder,
-			int status, ServiceContext serviceContext)
+			String recurrence, long firstReminder, String firstReminderType,
+			long secondReminder, String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarBooking calendarBooking =
@@ -390,7 +419,8 @@ public class CalendarBookingLocalServiceImpl
 		return updateCalendarBooking(
 			userId, calendarBookingId, calendarId, childCalendarIds, titleMap,
 			descriptionMap, location, startDate, endDate, allDay, recurrence,
-			firstReminder, secondReminder, status, serviceContext);
+			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
 	}
 
 	public CalendarBooking updateStatus(
@@ -447,7 +477,7 @@ public class CalendarBookingLocalServiceImpl
 				continue;
 			}
 
-			addCalendarBooking(
+			CalendarBooking childCalendarBooking = addCalendarBooking(
 				calendarBooking.getUserId(), calendarId, new long[0],
 				calendarBooking.getCalendarBookingId(),
 				calendarBooking.getTitleMap(),
@@ -457,7 +487,19 @@ public class CalendarBookingLocalServiceImpl
 				calendarBooking.getUTCEndDate(), calendarBooking.getAllDay(),
 				calendarBooking.getRecurrence(),
 				calendarBooking.getFirstReminder(),
-				calendarBooking.getSecondReminder(), serviceContext);
+				calendarBooking.getFirstReminderType(),
+				calendarBooking.getSecondReminder(),
+				calendarBooking.getSecondReminderType(), serviceContext);
+
+			try {
+				NotificationType notificationType = NotificationType.parse(
+					PortletPropsValues.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+
+				NotificationUtil.notifyCalendarBookingInvites(
+					childCalendarBooking, notificationType);
+			}
+			catch (Exception e) {
+			}
 		}
 	}
 

@@ -858,6 +858,14 @@ public class CalendarResourceWrapper implements CalendarResource,
 		return _calendarResource.isGlobal();
 	}
 
+	public boolean isGroup() {
+		return _calendarResource.isGroup();
+	}
+
+	public boolean isUser() {
+		return _calendarResource.isUser();
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedModel}
 	 */

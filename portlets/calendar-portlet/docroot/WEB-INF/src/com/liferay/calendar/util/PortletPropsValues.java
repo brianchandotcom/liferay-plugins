@@ -14,6 +14,7 @@
 
 package com.liferay.calendar.util;
 
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.util.portlet.PortletProps;
 
 /**
@@ -26,6 +27,19 @@ public class PortletPropsValues {
 	public static final int CALENDAR_COLOR_DEFAULT =
 		Integer.decode(
 			PortletProps.get(PortletPropsKeys.CALENDAR_COLOR_DEFAULT));
+
+	public static final int CALENDAR_NOTIFICATION_CHECK_INTERVAL =
+		GetterUtil.getInteger(PortletProps.get(
+			PortletPropsKeys.CALENDAR_NOTIFICATION_CHECK_INTERVAL));
+
+	public static final String CALENDAR_NOTIFICATION_DEFAULT_TYPE =
+		PortletProps.get(PortletPropsKeys.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+
+	public static final String CALENDAR_NOTIFICATION_FROM_ADDRESS =
+		PortletProps.get(PortletPropsKeys.CALENDAR_NOTIFICATION_FROM_ADDRESS);
+
+	public static final String CALENDAR_NOTIFICATION_FROM_NAME =
+		PortletProps.get(PortletPropsKeys.CALENDAR_NOTIFICATION_FROM_NAME);
 
 	public static final String[] CALENDAR_RESOURCE_TYPES =
 		PortletProps.getArray(PortletPropsKeys.CALENDAR_RESOURCE_TYPES);

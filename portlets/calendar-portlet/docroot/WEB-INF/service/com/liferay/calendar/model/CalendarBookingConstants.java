@@ -16,6 +16,7 @@ package com.liferay.calendar.model;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Fabio Pezzutto
  */
 public class CalendarBookingConstants {
 

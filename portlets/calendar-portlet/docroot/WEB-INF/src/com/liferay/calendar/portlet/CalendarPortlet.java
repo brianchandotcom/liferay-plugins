@@ -20,6 +20,7 @@ import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarBookingConstants;
 import com.liferay.calendar.model.CalendarResource;
+import com.liferay.calendar.notification.NotificationTemplateContextFactory;
 import com.liferay.calendar.service.CalendarBookingServiceUtil;
 import com.liferay.calendar.service.CalendarLocalServiceUtil;
 import com.liferay.calendar.service.CalendarResourceServiceUtil;
@@ -42,6 +43,7 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.Group;
@@ -98,6 +100,12 @@ public class CalendarPortlet extends MVCPortlet {
 			actionRequest, "calendarResourceId");
 
 		CalendarResourceServiceUtil.deleteCalendarResource(calendarResourceId);
+	}
+
+	public void init() throws PortletException {
+		super.init();
+
+		NotificationTemplateContextFactory.setPortletConfig(getPortletConfig());
 	}
 
 	@Override
@@ -257,6 +265,9 @@ public class CalendarPortlet extends MVCPortlet {
 		String recurrence = ParamUtil.getString(actionRequest, "recurrence");
 		int status = ParamUtil.getInteger(actionRequest, "status");
 
+		long[] reminders = getReminders(actionRequest);
+		String[] remindersType = getRemindersType(actionRequest);
+
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CalendarBooking.class.getName(), actionRequest);
 
@@ -266,13 +277,15 @@ public class CalendarPortlet extends MVCPortlet {
 				CalendarBookingConstants.PARENT_CALENDAR_BOOKING_ID_DEFAULT,
 				titleMap, descriptionMap, location,
 				startDateJCalendar.getTime(), endDateJCalendar.getTime(),
-				allDay, recurrence, 0, 0, serviceContext);
+				allDay, recurrence, reminders[0], remindersType[0],
+				reminders[1], remindersType[1], serviceContext);
 		}
 		else {
 			CalendarBookingServiceUtil.updateCalendarBooking(
 				calendarBookingId, calendarId, childCalendarIds, titleMap,
 				descriptionMap, location, startDateJCalendar.getTime(),
-				endDateJCalendar.getTime(), allDay, recurrence, 0, 0, status,
+				endDateJCalendar.getTime(), allDay, recurrence, reminders[0],
+				remindersType[0], reminders[1], remindersType[1], status,
 				serviceContext);
 		}
 	}
@@ -420,6 +433,33 @@ public class CalendarPortlet extends MVCPortlet {
 
 		return JCalendarUtil.getJCalendar(
 			year, month, day, hour, minute, 0, 0, timezone);
+	}
+
+	protected long[] getReminders(ActionRequest actionRequest) {
+		long firstReminder = ParamUtil.getInteger(
+			actionRequest, "reminderValue0");
+		long firstReminderDuration = ParamUtil.getInteger(
+			actionRequest, "reminderDuration0");
+		long secondReminder = ParamUtil.getInteger(
+			actionRequest, "reminderValue1");
+		long secondReminderDuration = ParamUtil.getInteger(
+			actionRequest, "reminderDuration1");
+
+		return new long[] {
+			firstReminder*firstReminderDuration*Time.SECOND,
+			secondReminder*secondReminderDuration*Time.SECOND
+		};
+	}
+
+	protected String[] getRemindersType(ActionRequest actionRequest) {
+		String firstReminderType = ParamUtil.getString(
+			actionRequest, "reminderType0");
+		String secondReminderType = ParamUtil.getString(
+			actionRequest, "reminderType1");
+
+		return new String[] {
+			firstReminderType, secondReminderType
+		};
 	}
 
 	@Override

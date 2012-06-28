@@ -55,6 +55,9 @@ public class CalendarBookingFinderImpl
 		CalendarBookingFinder.class.getName() +
 			".findByC_G_C_C_P_T_D_L_S_E_S";
 
+	public static final String FIND_BY_FUTURE_REMINDERS =
+		CalendarBookingFinder.class.getName() + ".findByFutureReminders";
+
 	public int countByKeywords(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
@@ -225,6 +228,34 @@ public class CalendarBookingFinderImpl
 			parentCalendarBookingId, titles, descriptions, locations, startDate,
 			endDate, statuses, andOperator, start, end, orderByComparator,
 			true);
+	}
+
+	public List<CalendarBooking> findByFutureReminders(Date startDate)
+		throws SystemException {
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			String sql = CustomSQLUtil.get(FIND_BY_FUTURE_REMINDERS);
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addEntity("CalendarBooking", CalendarBookingImpl.class);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(startDate);
+
+			return q.list(true);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		finally {
+			closeSession(session);
+		}
 	}
 
 	public List<CalendarBooking> findByKeywords(

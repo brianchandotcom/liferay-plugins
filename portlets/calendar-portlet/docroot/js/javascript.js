@@ -1,17 +1,22 @@
 (function() {
-	var STR_BLANK = '';
-	var STR_DASH = '-';
-	var STR_SPACE = ' ';
+	var Workflow = Liferay.Workflow;
 
 	var toNumber = function(val) {
 		return parseInt(val, 10) || 0;
 	};
 
-	var Workflow = Liferay.Workflow;
+	var STR_BLANK = '';
+
+	var STR_DASH = '-';
+
+	var STR_SPACE = ' ';
 
 	var COMPANY_GROUP_ID = toNumber(themeDisplay.getCompanyGroupId());
+
 	var COMPANY_ID = toNumber(themeDisplay.getCompanyId());
+
 	var GROUP_ID = toNumber(themeDisplay.getScopeGroupId());
+
 	var USER_ID = toNumber(themeDisplay.getUserId());
 
 	AUI.add(
@@ -38,7 +43,44 @@
 			return jsonObj;
 		};
 
+		var Time = {
+			DAY: 86400000,
+			HOUR: 3600000,
+			MINUTE: 60000,
+			SECOND: 1000,
+			WEEK: 604800000,
+
+			TIME_DESC: ['weeks', 'days', 'hours', 'minutes'],
+
+			getDescription: function(milliseconds) {
+				var instance = this;
+
+				var desc = 'minutes';
+				var value = 0;
+
+				if (milliseconds > 0) {
+					A.Array.some(
+						[ Time.WEEK, Time.DAY, Time.HOUR, Time.MINUTE ],
+						function(item, index, collection) {
+							value = milliseconds/item;
+							desc = Time.TIME_DESC[index];
+
+							return (milliseconds % item === 0);
+						}
+					);
+				}
+
+				return {
+					desc: desc,
+					value: value
+				};
+			}
+		};
+
+		Liferay.Time = Time;
+
 		var CalendarUtil = {
+			NOTIFICATION_DEFAULT_TYPE: 'email',
 			PORTLET_NAMESPACE: STR_BLANK,
 			USER_TIMEZONE_OFFSET: 0,
 
@@ -57,11 +99,13 @@
 							childCalendarIds: '',
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
 							endDate: instance.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
-							firstReminder: 0,
+							firstReminder: schedulerEvent.get('firstReminder'),
+							firstReminderType: schedulerEvent.get('firstReminderType'),
 							location: schedulerEvent.get('location'),
 							parentCalendarBookingId: schedulerEvent.get('parentCalendarBookingId'),
 							recurrence: schedulerEvent.get('repeat'),
-							secondReminder: 0,
+							secondReminder: schedulerEvent.get('secondReminder'),
+							secondReminderType: schedulerEvent.get('secondReminderType'),
 							startDate: instance.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
 							titleMap: instance.getLocalizationMap(schedulerEvent.get('content'))
 						}
@@ -460,10 +504,12 @@
 							calendarId: schedulerEvent.get('calendarId'),
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
 							endDate: instance.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
-							firstReminder: 0,
+							firstReminder: schedulerEvent.get('firstReminder'),
+							firstReminderType: schedulerEvent.get('firstReminderType'),
 							location: schedulerEvent.get('location'),
 							recurrence: schedulerEvent.get('repeat'),
-							secondReminder: 0,
+							secondReminder: schedulerEvent.get('secondReminder'),
+							secondReminderType: schedulerEvent.get('secondReminderType'),
 							startDate: instance.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
 							status: schedulerEvent.get('status'),
 							titleMap: instance.getLocalizationMap(schedulerEvent.get('content')),
@@ -582,7 +628,9 @@
 
 						instance.set('events', A.Object.values(visibleCalendarsMap));
 
-						instance.syncEventsUI();
+						if (instance.get('rendered')) {
+							instance.syncEventsUI();
+						}
 
 						CalendarUtil.message('');
 					},
@@ -653,6 +701,16 @@
 						value: STR_BLANK
 					},
 
+					firstReminder: {
+						setter: toNumber,
+						value: 60
+					},
+
+					firstReminderType: {
+						validator: isString,
+						value: CalendarUtil.NOTIFICATION_DEFAULT_TYPE
+					},
+
 					loading: {
 						validator: isBoolean,
 						value: false
@@ -666,6 +724,16 @@
 					parentCalendarBookingId: {
 						setter: toNumber,
 						value: 0
+					},
+
+					secondReminder: {
+						setter: toNumber,
+						value: 0
+					},
+
+					secondReminderType: {
+						validator: isString,
+						value: CalendarUtil.NOTIFICATION_DEFAULT_TYPE
 					},
 
 					status: {

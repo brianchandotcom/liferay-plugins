@@ -23,6 +23,27 @@ public class PortletPropsKeys {
 	public static final String CALENDAR_COLOR_DEFAULT =
 		"calendar.color.default";
 
+	public static final String CALENDAR_NOTIFICATION_BODY =
+		"calendar.notification.body";
+
+	public static final String CALENDAR_NOTIFICATION_CHECK_INTERVAL =
+		"calendar.notification.check.interval";
+
+	public static final String CALENDAR_NOTIFICATION_DEFAULT_TYPE =
+		"calendar.notification.default.type";
+
+	public static final String CALENDAR_NOTIFICATION_ENABLED =
+		"calendar.notification.enabled";
+
+	public static final String CALENDAR_NOTIFICATION_FROM_ADDRESS =
+		"calendar.notification.from.address";
+
+	public static final String CALENDAR_NOTIFICATION_FROM_NAME =
+		"calendar.notification.from.name";
+
+	public static final String CALENDAR_NOTIFICATION_SUBJECT =
+		"calendar.notification.subject";
+
 	public static final String CALENDAR_RESOURCE_TYPES =
 		"calendar.resource.types";
 
