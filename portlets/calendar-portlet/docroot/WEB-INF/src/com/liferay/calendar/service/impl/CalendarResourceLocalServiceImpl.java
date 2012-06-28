@@ -14,6 +14,7 @@
 
 package com.liferay.calendar.service.impl;
 
+import com.liferay.calendar.CalendarResourceCodeException;
 import com.liferay.calendar.DuplicateCalendarResourceException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
@@ -22,6 +23,7 @@ import com.liferay.calendar.service.base.CalendarResourceLocalServiceBaseImpl;
 import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
@@ -39,15 +41,16 @@ import java.util.Map;
 /**
  * @author Eduardo Lundgren
  * @author Fabio Pezzutto
+ * @author Bruno Basto
  */
 public class CalendarResourceLocalServiceImpl
 	extends CalendarResourceLocalServiceBaseImpl {
 
 	public CalendarResource addCalendarResource(
 			long userId, long groupId, String className, long classPK,
-			String classUuid, long defaultCalendarId, String code, Map<Locale,
-			String> nameMap, Map<Locale, String> descriptionMap, String type,
-			boolean active, ServiceContext serviceContext)
+			String classUuid, long defaultCalendarId, String code,
+			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
+			String type, boolean active, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar resource
@@ -62,6 +65,15 @@ public class CalendarResourceLocalServiceImpl
 
 		long classNameId = PortalUtil.getClassNameId(className);
 
+		if (Validator.isNull(code)) {
+			code = String.valueOf(calendarResourceId);
+		}
+		else {
+			code = code.trim().toUpperCase();
+		}
+
+		validate(groupId, classNameId, classPK, code);
+
 		long globalUserId = 0;
 
 		if (isGlobalResource(classNameId)) {
@@ -75,8 +87,6 @@ public class CalendarResourceLocalServiceImpl
 		}
 
 		Date now = new Date();
-
-		validate(classNameId, classPK);
 
 		CalendarResource calendarResource = calendarResourcePersistence.create(
 			calendarResourceId);
@@ -234,7 +244,7 @@ public class CalendarResourceLocalServiceImpl
 	}
 
 	public CalendarResource updateCalendarResource(
-			long calendarResourceId, long defaultCalendarId, String code,
+			long calendarResourceId, long defaultCalendarId,
 			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
 			String type, boolean active, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -246,7 +256,6 @@ public class CalendarResourceLocalServiceImpl
 
 		calendarResource.setModifiedDate(serviceContext.getModifiedDate(null));
 		calendarResource.setDefaultCalendarId(defaultCalendarId);
-		calendarResource.setCode(code);
 		calendarResource.setNameMap(nameMap);
 		calendarResource.setDescriptionMap(descriptionMap);
 		calendarResource.setType(type);
@@ -263,7 +272,7 @@ public class CalendarResourceLocalServiceImpl
 	}
 
 	public CalendarResource updateCalendarResource(
-			long calendarResourceId, String code, Map<Locale, String> nameMap,
+			long calendarResourceId, Map<Locale, String> nameMap,
 			Map<Locale, String> descriptionMap, String type, boolean active,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -272,7 +281,7 @@ public class CalendarResourceLocalServiceImpl
 			calendarResourcePersistence.findByPrimaryKey(calendarResourceId);
 
 		return updateCalendarResource(
-			calendarResourceId, calendarResource.getDefaultCalendarId(), code,
+			calendarResourceId, calendarResource.getDefaultCalendarId(),
 			nameMap, descriptionMap, type, active, serviceContext);
 	}
 
@@ -320,13 +329,28 @@ public class CalendarResourceLocalServiceImpl
 		return false;
 	}
 
-	protected void validate(long classNameId, long classPK)
+	protected void validate(
+			long groupId, long classNameId, long classPK, String code)
 		throws PortalException, SystemException {
+
+		validate(groupId, code);
 
 		CalendarResource calendarResource =
 			calendarResourcePersistence.fetchByC_C(classNameId, classPK);
 
 		if (calendarResource != null) {
+			throw new DuplicateCalendarResourceException();
+		}
+	}
+
+	protected void validate(long groupId, String code)
+		throws PortalException, SystemException {
+
+		if (Validator.isNull(code) || (code.indexOf(CharPool.SPACE) != -1)) {
+			throw new CalendarResourceCodeException();
+		}
+
+		if (calendarResourcePersistence.countByG_C(groupId, code) > 0) {
 			throw new DuplicateCalendarResourceException();
 		}
 	}

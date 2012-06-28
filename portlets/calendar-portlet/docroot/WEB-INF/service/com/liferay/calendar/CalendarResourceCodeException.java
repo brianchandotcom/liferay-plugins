@@ -12,22 +12,29 @@
  * details.
  */
 
-package com.liferay.calendar.util;
+package com.liferay.calendar;
+
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Eduardo Lundgren
- * @author Fabio Pezzutto
- * @author Bruno Basto
  */
-public class PortletPropsKeys {
+public class CalendarResourceCodeException extends PortalException {
 
-	public static final String CALENDAR_COLOR_DEFAULT =
-		"calendar.color.default";
+	public CalendarResourceCodeException() {
+		super();
+	}
 
-	public static final String CALENDAR_RESOURCE_FORCE_AUTOGENERATE_CODE =
-		"calendar.resource.force.autogenerate.code";
+	public CalendarResourceCodeException(String msg) {
+		super(msg);
+	}
 
-	public static final String CALENDAR_RESOURCE_TYPES =
-		"calendar.resource.types";
+	public CalendarResourceCodeException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
+	public CalendarResourceCodeException(Throwable cause) {
+		super(cause);
+	}
 
 }

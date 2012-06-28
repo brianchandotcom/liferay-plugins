@@ -14,6 +14,7 @@
 
 package com.liferay.calendar.portlet;
 
+import com.liferay.calendar.CalendarResourceCodeException;
 import com.liferay.calendar.DuplicateCalendarResourceException;
 import com.liferay.calendar.NoSuchResourceException;
 import com.liferay.calendar.model.Calendar;
@@ -29,6 +30,7 @@ import com.liferay.calendar.util.ActionKeys;
 import com.liferay.calendar.util.CalendarResourceUtil;
 import com.liferay.calendar.util.CalendarUtil;
 import com.liferay.calendar.util.JCalendarUtil;
+import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.calendar.util.WebKeys;
 import com.liferay.calendar.util.comparator.CalendarResourceNameComparator;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
@@ -294,6 +296,10 @@ public class CalendarPortlet extends MVCPortlet {
 		String type = ParamUtil.getString(actionRequest, "type");
 		boolean active = ParamUtil.getBoolean(actionRequest, "active");
 
+		if (PortletPropsValues.CALENDAR_RESOURCE_FORCE_AUTOGENERATE_CODE) {
+			code = null;
+		}
+
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CalendarResource.class.getName(), actionRequest);
 
@@ -305,8 +311,8 @@ public class CalendarPortlet extends MVCPortlet {
 		}
 		else {
 			CalendarResourceServiceUtil.updateCalendarResource(
-				calendarResourceId, defaultCalendarId, code, nameMap,
-				descriptionMap, type, active, serviceContext);
+				calendarResourceId, defaultCalendarId, nameMap, descriptionMap,
+				type, active, serviceContext);
 		}
 	}
 
@@ -424,7 +430,8 @@ public class CalendarPortlet extends MVCPortlet {
 
 	@Override
 	protected boolean isSessionErrorException(Throwable cause) {
-		if (cause instanceof DuplicateCalendarResourceException ||
+		if (cause instanceof CalendarResourceCodeException ||
+			cause instanceof DuplicateCalendarResourceException ||
 			cause instanceof PrincipalException) {
 
 			return true;

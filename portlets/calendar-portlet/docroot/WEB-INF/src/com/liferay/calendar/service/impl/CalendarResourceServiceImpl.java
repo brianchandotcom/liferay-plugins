@@ -132,7 +132,7 @@ public class CalendarResourceServiceImpl
 	}
 
 	public CalendarResource updateCalendarResource(
-			long calendarResourceId, long defaultCalendarId, String code,
+			long calendarResourceId, long defaultCalendarId,
 			Map<Locale, String> nameMap, Map<Locale, String> descriptionMap,
 			String type, boolean active, ServiceContext serviceContext)
 		throws PortalException, SystemException {
@@ -141,8 +141,8 @@ public class CalendarResourceServiceImpl
 			getPermissionChecker(), calendarResourceId, ActionKeys.UPDATE);
 
 		return calendarResourceLocalService.updateCalendarResource(
-			calendarResourceId, defaultCalendarId, code, nameMap,
-			descriptionMap, type, active, serviceContext);
+			calendarResourceId, defaultCalendarId, nameMap, descriptionMap,
+			type, active, serviceContext);
 	}
 
 	public CalendarResource updateCalendarResource(
@@ -155,7 +155,7 @@ public class CalendarResourceServiceImpl
 			getPermissionChecker(), calendarResourceId, ActionKeys.UPDATE);
 
 		return calendarResourceLocalService.updateCalendarResource(
-			calendarResourceId, code, nameMap, descriptionMap, type, active,
+			calendarResourceId, nameMap, descriptionMap, type, active,
 			serviceContext);
 	}
 
