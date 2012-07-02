@@ -7,6 +7,10 @@
 
 	var STR_BLANK = '';
 
+	var STR_COMMA = ',';
+
+	var STR_COMMA_SPACE = ', ';
+
 	var STR_DASH = '-';
 
 	var STR_SPACE = ' ';
@@ -28,6 +32,7 @@
 		var isArray = Lang.isArray;
 		var isBoolean = Lang.isBoolean;
 		var isDate = Lang.isDate;
+		var isFunction = Lang.isFunction;
 		var isObject = Lang.isObject;
 		var isString = Lang.isString;
 
@@ -135,23 +140,6 @@
 				);
 			},
 
-			collectCalendarEvents: function(calendarBookings, calendarId) {
-				var instance = this;
-
-				var events = [];
-
-				A.Array.each(
-					calendarBookings,
-					function(item, index, collection) {
-						if (calendarId === item.calendarId) {
-							events[index] = instance.toSchedulerEvent(item);
-						}
-					}
-				);
-
-				return events;
-			},
-
 			createCalendarsAutoComplete: function(resourceURL, input, afterSelectFn) {
 				var instance = this;
 
@@ -219,6 +207,23 @@
 
 				scheduler.removeEvent(schedulerEvent);
 				scheduler.syncEventsUI();
+			},
+
+			filterJSONArray: function(jsonArray, property, value) {
+				var instance = this;
+
+				var events = [];
+
+				A.Array.each(
+					jsonArray,
+					function(item, index, collection) {
+						if (value === item[property]) {
+							events.push(instance.toSchedulerEvent(item));
+						}
+					}
+				);
+
+				return events;
 			},
 
 			getCalendarJSONById: function(calendarJSONArray, calendarId) {
@@ -560,6 +565,10 @@
 						}
 					},
 
+					filterCalendarBookings: {
+						validator: isFunction
+					},
+
 					portletNamespace: {
 						value: '',
 						validator: isString
@@ -596,6 +605,8 @@
 					loadCalendarBookings: function() {
 						var instance = this;
 
+						var filterCalendarBookings = instance.get('filterCalendarBookings');
+
 						CalendarUtil.message(Liferay.Language.get('loading') + '...');
 
 						var currentDate = instance.get('currentDate');
@@ -608,7 +619,13 @@
 							startDate,
 							endDate,
 							[CalendarWorkflow.STATUS_APPROVED, CalendarWorkflow.STATUS_MAYBE, CalendarWorkflow.STATUS_PENDING],
-							A.bind(instance.loadCalendarBookingsJSON, instance)
+							function(calendarBookings) {
+								if (filterCalendarBookings) {
+									calendarBookings = A.Array.filter(calendarBookings, filterCalendarBookings);
+								}
+
+								instance.loadCalendarBookingsJSON(calendarBookings);
+							}
 						);
 					},
 
@@ -620,7 +637,7 @@
 						A.each(
 							visibleCalendarsMap,
 							function(item, index, collection) {
-								var events = CalendarUtil.collectCalendarEvents(calendarBookings, toNumber(index, collection));
+								var events = CalendarUtil.filterJSONArray(calendarBookings, 'calendarId', toNumber(index));
 
 								item.set('events', events);
 							}
@@ -701,9 +718,14 @@
 						value: STR_BLANK
 					},
 
+					editingEvent: {
+						validator: isBoolean,
+						value: false
+					},
+
 					firstReminder: {
 						setter: toNumber,
-						value: 60
+						value: 3600000
 					},
 
 					firstReminderType: {
@@ -771,7 +793,7 @@
 						var node = instance.get('node');
 						var scheduler = instance.get('scheduler');
 
-						if (scheduler) {
+						if (scheduler && !instance.get('editingEvent')) {
 							var activeViewName = scheduler.get('activeView').get('name');
 
 							if ((activeViewName === 'month') && !instance.get('allDay')) {

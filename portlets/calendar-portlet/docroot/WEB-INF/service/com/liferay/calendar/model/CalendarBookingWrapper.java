@@ -1136,6 +1136,10 @@ public class CalendarBookingWrapper implements CalendarBooking,
 		return _calendarBooking.getParentCalendarBooking();
 	}
 
+	public com.liferay.calendar.recurrence.Recurrence getRecurrenceObj() {
+		return _calendarBooking.getRecurrenceObj();
+	}
+
 	public com.liferay.calendar.notification.NotificationType getSecondReminderNotificationType() {
 		return _calendarBooking.getSecondReminderNotificationType();
 	}
@@ -1154,6 +1158,10 @@ public class CalendarBookingWrapper implements CalendarBooking,
 
 	public boolean isMasterBooking() {
 		return _calendarBooking.isMasterBooking();
+	}
+
+	public boolean isRecurring() {
+		return _calendarBooking.isRecurring();
 	}
 
 	/**

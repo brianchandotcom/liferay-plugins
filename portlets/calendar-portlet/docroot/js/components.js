@@ -1,6 +1,8 @@
 (function() {
 	var STR_BLANK = '';
 
+	var STR_COMMA = ',';
+
 	var STR_DASH = '-';
 
 	var STR_DOT = '.';
@@ -8,6 +10,10 @@
 	var STR_PLUS = '+';
 
 	var STR_SPACE = ' ';
+
+	var toNumber = function(val) {
+		return parseInt(val, 10) || 0;
+	};
 
 	AUI.add(
 		'liferay-calendar-simple-menu',
@@ -190,7 +196,7 @@
 
 			Liferay.SimpleMenu = SimpleMenu;
 		},
-		'' ,
+		'',
 		{
 			requires: ['aui-base', 'aui-template', 'widget-position', 'widget-position-align', 'widget-position-constrain', 'widget-stack', 'widget-stdmod']
 		}
@@ -319,7 +325,7 @@
 						},
 
 						clear: function() {
-							var instance= this;
+							var instance = this;
 
 							instance.set('calendars', []);
 						},
@@ -588,7 +594,7 @@
 
 			var TPL_SIMPLE_COLOR_PICKER_ITEM = new A.Template(
 				'<tpl for="pallete">',
-					'<div class="', CSS_SIMPLE_COLOR_PICKER_ITEM, '" style="background-color: {.}', '; border-color:', '{.};','"></div>',
+					'<div class="', CSS_SIMPLE_COLOR_PICKER_ITEM, '" style="background-color: {.}', '; border-color:', '{.};', '"></div>',
 				'</tpl>'
 			);
 
@@ -810,6 +816,174 @@
 			);
 
 			Liferay.Reminders = Reminders;
+		},
+		'',
+		{
+			requires: ['aui-base']
+		}
+	);
+
+	AUI.add(
+		'liferay-calendar-date-picker-util',
+		function(A) {
+			Liferay.DatePickerUtil = {
+				linkToSchedulerEvent: function(datePickerContainer, schedulerEvent, dateAttr) {
+					var instance = this;
+
+					var selects = A.one(datePickerContainer).all('select');
+
+					selects.on(
+						'change',
+						function(event) {
+							var currentTarget = event.currentTarget;
+
+							var date = schedulerEvent.get(dateAttr);
+							var selectedSetter = selects.indexOf(currentTarget);
+
+							var setters = [date.setMonth, date.setDate, date.setFullYear, date.setHours, date.setMinutes, date.setHours];
+
+							var value = toNumber(currentTarget.val());
+
+							if ((selectedSetter === 3) && (date.getHours() > 12)) {
+								value += 12;
+							}
+
+							if (selectedSetter === 5) {
+								value = date.getHours() + ((value === 1) ? 12 : -12);
+							}
+
+							setters[selectedSetter].call(date, value);
+
+							schedulerEvent.set(dateAttr, date);
+
+							schedulerEvent.get('scheduler').syncEventsUI();
+						}
+					);
+				},
+
+				syncUI: function(form, fieldName, date) {
+					var instance = this;
+
+					var amPmNode = form.one('select[name$=' + fieldName + 'AmPm]');
+					var hourNode = form.one('select[name$=' + fieldName + 'Hour]');
+					var minuteNode = form.one('select[name$=' + fieldName + 'Minute]');
+
+					var datePicker = Liferay.component(Liferay.CalendarUtil.PORTLET_NAMESPACE + fieldName + 'datePicker');
+
+					if (datePicker) {
+						datePicker.calendar.set('dates', [date]);
+
+						datePicker.syncUI();
+					}
+
+					var hours = date.getHours();
+					var minutes = date.getMinutes();
+
+					var amPm = (hours < 12) ? 0 : 1;
+
+					if (amPm === 1) {
+						hours -= 12;
+
+						if (hours === 12) {
+							hours = 0;
+						}
+					}
+
+					amPmNode.val(amPm);
+					hourNode.val(hours);
+					minuteNode.val(minutes);
+				}
+			};
+		},
+		'',
+		{
+			requires: ['aui-base']
+		}
+	);
+
+	AUI.add(
+		'liferay-calendar-recurrence-util',
+		function(A) {
+			Liferay.RecurrenceUtil = {
+				FREQUENCY: {
+					DAILY: 'DAILY',
+					WEEKLY: 'WEEKLY',
+					MONTHLY: 'MONTHLY',
+					YEARLY: 'YEARLY'
+				},
+
+				INTERVAL_LABELS: {
+					DAILY: Liferay.Language.get('days'),
+					WEEKLY: Liferay.Language.get('weeks'),
+					MONTHLY: Liferay.Language.get('months'),
+					YEARLY: Liferay.Language.get('years')
+				},
+
+				MONTH_LABELS: [
+					Liferay.Language.get('january'),
+					Liferay.Language.get('frebruary'),
+					Liferay.Language.get('march'),
+					Liferay.Language.get('april'),
+					Liferay.Language.get('may'),
+					Liferay.Language.get('june'),
+					Liferay.Language.get('july'),
+					Liferay.Language.get('august'),
+					Liferay.Language.get('september'),
+					Liferay.Language.get('october'),
+					Liferay.Language.get('november'),
+					Liferay.Language.get('december')
+				],
+
+				getSummary: function(recurrence) {
+					var instance = this;
+
+					var template = [];
+
+					if (recurrence.interval == 1) {
+						template.push(recurrence.frequency);
+					}
+					else {
+						template.push(Liferay.Language.get('every'), ' {interval} {intervalLabel}');
+					}
+
+					if ((recurrence.frequency == instance.FREQUENCY.WEEKLY) && (recurrence.weekdays.length > 0)) {
+						template.push(STR_SPACE, Liferay.Language.get('on'), ' {weekDays}');
+					}
+
+					if (recurrence.count && (recurrence.endValue === 'after')) {
+						template.push(', {count} ', Liferay.Language.get('times'));
+					}
+					else if (recurrence.untilDate && (recurrence.endValue === 'on')) {
+						var untilDate = recurrence.untilDate;
+
+						template.push(
+							STR_COMMA,
+							STR_SPACE,
+							Liferay.Language.get('until'),
+							A.Lang.sub(
+								' {month} {date}, {year}',
+								{
+									date: untilDate.getDate(),
+									month: instance.MONTH_LABELS[untilDate.getMonth()],
+									year: untilDate.getFullYear()
+								}
+							)
+						);
+					}
+
+					var summary = A.Lang.sub(
+						template.join(STR_BLANK),
+						{
+							count: recurrence.count,
+							interval: recurrence.interval,
+							intervalLabel: instance.INTERVAL_LABELS[recurrence.frequency],
+							weekDays: recurrence.weekdays.join(', ')
+						}
+					);
+
+					return A.Lang.String.capitalize(summary);
+				}
+			};
 		},
 		'',
 		{
