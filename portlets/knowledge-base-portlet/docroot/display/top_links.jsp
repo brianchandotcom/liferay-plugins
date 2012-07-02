@@ -49,7 +49,6 @@ String assetTagName = ParamUtil.getString(request, "tag");
 				image="../aui/home"
 				label="<%= true %>"
 				message="knowledge-base-home"
-				method="get"
 				url="<%= viewURL %>"
 			/>
 
@@ -70,7 +69,6 @@ String assetTagName = ParamUtil.getString(request, "tag");
 				image="../aui/clock"
 				label="<%= true %>"
 				message="recent-articles"
-				method="get"
 				url="<%= viewRecentKBArticlesURL %>"
 			/>
 
@@ -94,7 +92,6 @@ String assetTagName = ParamUtil.getString(request, "tag");
 					image="../aui/person"
 					label="<%= true %>"
 					message="administrator"
-					method="get"
 					url="<%= viewAdminPanelURL %>"
 				/>
 			</c:if>
@@ -118,7 +115,6 @@ String assetTagName = ParamUtil.getString(request, "tag");
 					image="../aui/signal-diag"
 					label="<%= true %>"
 					message="my-subscriptions"
-					method="get"
 					url="<%= viewSubscribedKBArticlesURL %>"
 				/>
 			</c:if>

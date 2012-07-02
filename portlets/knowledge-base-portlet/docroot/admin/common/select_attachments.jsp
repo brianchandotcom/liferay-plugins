@@ -84,7 +84,6 @@ if (DLStoreUtil.hasDirectory(company.getCompanyId(), CompanyConstants.SYSTEM, di
 						image="clip"
 						label="<%= true %>"
 						message='<%= FileUtil.getShortFileName(fileName) + " (" + TextFormatter.formatKB(DLStoreUtil.getFileSize(company.getCompanyId(), CompanyConstants.SYSTEM, fileName), locale) + "k)" %>'
-						method="get"
 						url="<%= rowURL %>"
 					/>
 				</liferay-ui:search-container-column-text>

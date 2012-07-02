@@ -32,7 +32,6 @@ KBArticle kbArticle = (KBArticle)row.getObject();
 
 	<liferay-ui:icon
 		image="view"
-		method="get"
 		url="<%= viewURL %>"
 	/>
 
@@ -45,7 +44,6 @@ KBArticle kbArticle = (KBArticle)row.getObject();
 
 		<liferay-ui:icon
 			image="edit"
-			method="get"
 			url="<%= editURL %>"
 		/>
 	</c:if>
@@ -60,7 +58,6 @@ KBArticle kbArticle = (KBArticle)row.getObject();
 
 		<liferay-ui:icon
 			image="permissions"
-			method="get"
 			url="<%= permissionsURL %>"
 		/>
 	</c:if>
@@ -102,7 +99,6 @@ KBArticle kbArticle = (KBArticle)row.getObject();
 		<liferay-ui:icon
 			image="forward"
 			message="move"
-			method="get"
 			url="<%= moveKBArticleURL %>"
 		/>
 	</c:if>

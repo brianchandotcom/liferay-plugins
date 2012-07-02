@@ -38,7 +38,6 @@ long kbTemplateId = ParamUtil.getLong(request, "kbTemplateId");
 						image="../aui/check"
 						label="<%= true %>"
 						message="use-this-template"
-						method="get"
 						url="<%= useThisKBTemplateURL %>"
 					/>
 				</td>
@@ -55,7 +54,6 @@ long kbTemplateId = ParamUtil.getLong(request, "kbTemplateId");
 					<liferay-ui:icon
 						image="edit"
 						label="<%= true %>"
-						method="get"
 						url="<%= editURL %>"
 					/>
 				</td>
@@ -73,7 +71,6 @@ long kbTemplateId = ParamUtil.getLong(request, "kbTemplateId");
 					<liferay-ui:icon
 						image="permissions"
 						label="<%= true %>"
-						method="get"
 						url="<%= permissionsURL %>"
 					/>
 				</td>

@@ -146,7 +146,6 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 					<liferay-ui:icon
 						image="rss"
 						label="<%= true %>"
-						method="get"
 						target="_blank"
 						url="<%= groupKBArticlesRSSURL %>"
 					/>

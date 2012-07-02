@@ -32,7 +32,6 @@ Gadget gadget = (Gadget)renderRequest.getAttribute(WebKeys.GADGET);
 			cssClass="portlet-configuration"
 			image="configuration"
 			message="configure-gadget"
-			method="get"
 			onClick="<%= portletDisplay.getURLConfigurationJS() %>"
 			url="<%= portletDisplay.getURLConfiguration() %>"
 		/>

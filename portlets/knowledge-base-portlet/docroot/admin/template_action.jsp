@@ -33,7 +33,6 @@ KBTemplate kbTemplate = (KBTemplate)row.getObject();
 
 		<liferay-ui:icon
 			image="view"
-			method="get"
 			url="<%= viewURL %>"
 		/>
 	</c:if>
@@ -47,7 +46,6 @@ KBTemplate kbTemplate = (KBTemplate)row.getObject();
 
 		<liferay-ui:icon
 			image="edit"
-			method="get"
 			url="<%= editURL %>"
 		/>
 	</c:if>
@@ -62,7 +60,6 @@ KBTemplate kbTemplate = (KBTemplate)row.getObject();
 
 		<liferay-ui:icon
 			image="permissions"
-			method="get"
 			url="<%= permissionsURL %>"
 		/>
 	</c:if>

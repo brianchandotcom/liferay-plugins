@@ -29,7 +29,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 		<liferay-ui:icon
 			image="print"
 			label="<%= true %>"
-			method="get"
 			url="javascript:print();"
 		/>
 	</div>

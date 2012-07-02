@@ -40,7 +40,6 @@ long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
 						image="add_article"
 						label="<%= true %>"
 						message="add-child-article"
-						method="get"
 						url="<%= addKBArticleURL %>"
 					/>
 				</td>
@@ -58,7 +57,6 @@ long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
 					<liferay-ui:icon
 						image="edit"
 						label="<%= true %>"
-						method="get"
 						url="<%= editURL %>"
 					/>
 				</td>
@@ -76,7 +74,6 @@ long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
 					<liferay-ui:icon
 						image="permissions"
 						label="<%= true %>"
-						method="get"
 						url="<%= permissionsURL %>"
 					/>
 				</td>
@@ -95,7 +92,6 @@ long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
 						image="forward"
 						label="<%= true %>"
 						message="move"
-						method="get"
 						url="<%= moveKBArticleURL %>"
 					/>
 				</td>

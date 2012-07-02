@@ -130,7 +130,6 @@ for (int i = 0; i < meetupsEntries.size(); i++) {
 
 					<liferay-ui:icon
 						image="edit"
-						method="get"
 						url="<%= editMeetupsEntryURL.toString() %>"
 					/>
 				</c:if>
@@ -138,7 +137,6 @@ for (int i = 0; i < meetupsEntries.size(); i++) {
 				<liferay-ui:icon
 					image="join"
 					message="register"
-					method="get"
 					url="<%= viewMeetupsEntryURL.toString() %>"
 				/>
 

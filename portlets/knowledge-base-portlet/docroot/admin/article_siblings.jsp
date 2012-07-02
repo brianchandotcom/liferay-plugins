@@ -43,7 +43,6 @@ List<KBArticle> siblingKBArticles = KBArticleServiceUtil.getSiblingKBArticles(sc
 						image="../trees/page"
 						label="<%= true %>"
 						message="<%= siblingKBArticle.getTitle() %>"
-						method="get"
 						url="<%= viewKBArticleURL %>"
 					/>
 				</div>

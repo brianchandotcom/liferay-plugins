@@ -60,7 +60,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 								<liferay-ui:icon
 									label="<%= true %>"
 									message="<%= assetRenderer.getTitle(locale) %>"
-									method="get"
 									src="<%= assetRenderer.getIconPath(renderRequest) %>"
 									url="<%= KBArticleAssetEntriesUtil.getURL(request, themeDisplay, assetRendererFactory, assetRenderer) %>"
 								/>
@@ -93,7 +92,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 								<liferay-ui:icon
 									label="<%= true %>"
 									message="<%= assetRenderer.getTitle(locale) %>"
-									method="get"
 									src="<%= assetRenderer.getIconPath(renderRequest) %>"
 									url="<%= KBArticleAssetEntriesUtil.getURL(request, themeDisplay, assetRendererFactory, assetRenderer) %>"
 								/>

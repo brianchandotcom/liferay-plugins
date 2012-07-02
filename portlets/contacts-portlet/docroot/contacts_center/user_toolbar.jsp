@@ -43,7 +43,6 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 				image="../social/remove_coworker"
 				label="<%= true %>"
 				message="remove-connection"
-				method="get"
 				url="<%= removeConnectionURL %>"
 			/>
 		</c:when>
@@ -67,7 +66,6 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 				image="../social/add_coworker"
 				label="<%= true %>"
 				message="add-connection"
-				method="get"
 				url="<%= addConnectionURL %>"
 			/>
 		</c:when>
@@ -86,7 +84,6 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 				image="../social/unfollow"
 				label="<%= true %>"
 				message="unfollow"
-				method="get"
 				url="<%= unfollowURL %>"
 			/>
 		</c:when>
@@ -102,7 +99,6 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 				image="../social/follow"
 				label="<%= true %>"
 				message="follow"
-				method="get"
 				url="<%= followURL %>"
 			/>
 		</c:when>
@@ -122,7 +118,6 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 			image="../social/unblock"
 			label="<%= true %>"
 			message="unblock"
-			method="get"
 			url="<%= unblockURL %>"
 		/>
 	</c:when>
@@ -138,7 +133,6 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 			image="../social/block"
 			label="<%= true %>"
 			message="block"
-			method="get"
 			url="<%= blockURL %>"
 		/>
 	</c:when>

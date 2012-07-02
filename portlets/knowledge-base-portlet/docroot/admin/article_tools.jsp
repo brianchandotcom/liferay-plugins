@@ -37,7 +37,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 				<liferay-ui:icon
 					image="rss"
 					label="<%= true %>"
-					method="get"
 					target="_blank"
 					url="<%= kbArticleRSSURL %>"
 				/>
@@ -87,7 +86,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 					image="recent_changes"
 					label="<%= true %>"
 					message="history"
-					method="get"
 					url="<%= historyURL %>"
 				/>
 			</td>
@@ -107,7 +105,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 			<liferay-ui:icon
 				image="print"
 				label="<%= true %>"
-				method="get"
 				url="<%= taglibURL %>"
 			/>
 		</td>

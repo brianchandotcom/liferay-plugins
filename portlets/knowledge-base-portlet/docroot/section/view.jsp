@@ -68,7 +68,6 @@
 							image="../trees/page"
 							label="<%= true %>"
 							message="<%= kbArticle.getTitle() %>"
-							method="get"
 							url="<%= viewKBArticleURL %>"
 						/>
 					</div>

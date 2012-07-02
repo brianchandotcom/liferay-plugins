@@ -29,7 +29,6 @@ KBTemplate kbTemplate = (KBTemplate)request.getAttribute(WebKeys.KNOWLEDGE_BASE_
 		<liferay-ui:icon
 			image="print"
 			label="<%= true %>"
-			method="get"
 			url="javascript:print();"
 		/>
 	</div>

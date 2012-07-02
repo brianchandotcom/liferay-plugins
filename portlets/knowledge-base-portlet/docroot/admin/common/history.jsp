@@ -187,7 +187,6 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 						image="../common/page"
 						label="<%= true %>"
 						message="latest-version"
-						method="get"
 						url="<%= viewKBArticleURL %>"
 					/>
 				</div>
