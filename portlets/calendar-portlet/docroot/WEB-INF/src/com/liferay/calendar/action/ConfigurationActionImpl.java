@@ -18,6 +18,8 @@ import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portlet.PortalPreferences;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -43,8 +45,42 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		else if (tabs2.equals("templates")) {
 			validateTemplate(actionRequest);
 		}
+		else if (tabs2.equals("user-settings")) {
+			updateUserSettings(actionRequest, actionResponse);
+		}
 
 		super.processAction(portletConfig, actionRequest, actionResponse);
+	}
+
+	protected void updateUserSettings(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		PortalPreferences preferences =
+			PortletPreferencesFactoryUtil.getPortalPreferences(actionRequest);
+
+		String portletId = ParamUtil.getString(
+			actionRequest, "portletResource");
+		String defaultView = ParamUtil.getString(actionRequest, "defaultView");
+		String timeZoneId = ParamUtil.getString(actionRequest, "timeZoneId");
+		int defaultDuration = ParamUtil.getInteger(
+			actionRequest, "defaultDuration");
+		int weekStartsOn = ParamUtil.getInteger(actionRequest, "weekStartsOn");
+		boolean isoTimeFormat = ParamUtil.getBoolean(
+			actionRequest, "isoTimeFormat");
+		boolean usePortalTimeZone = ParamUtil.getBoolean(
+			actionRequest, "usePortalTimeZone");
+
+		preferences.setValue(portletId, "defaultView", defaultView);
+		preferences.setValue(portletId, "timeZoneId", timeZoneId);
+		preferences.setValue(
+			portletId, "defaultDuration", String.valueOf(defaultDuration));
+		preferences.setValue(
+			portletId, "weekStartsOn", String.valueOf(weekStartsOn));
+		preferences.setValue(
+			portletId, "isoTimeFormat", String.valueOf(isoTimeFormat));
+		preferences.setValue(
+			portletId, "usePortalTimeZone", String.valueOf(usePortalTimeZone));
 	}
 
 	protected void validateEmailFrom(ActionRequest actionRequest)

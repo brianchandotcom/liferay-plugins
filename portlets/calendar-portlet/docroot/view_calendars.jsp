@@ -90,3 +90,98 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 
 	<liferay-ui:search-iterator />
 </liferay-ui:search-container>
+
+<div class="aui-helper-hidden calendar-portlet-import-container" id="<portlet:namespace />importCalendarContainer">
+	<div class="aui-helper-hidden portlet-msg-error" id="<portlet:namespace />portletErrorMessage"></div>
+
+	<div class="aui-helper-hidden portlet-msg-success" id="<portlet:namespace />portletSuccessMessage">
+		<liferay-ui:message key="your-request-completed-successfully" />
+	</div>
+
+	<aui:form enctype="multipart/form-data" method="post" name="fm">
+		<aui:input id="file" name="file" type="file" />
+		<div class="portlet-msg-help">
+			<liferay-ui:message key="choose-the-file-that-contains-your-events.this-calendar-can-import-event-information-in-ical-format" />
+		</div>
+	</aui:form>
+</div>
+
+<aui:script>
+	var <portlet:namespace />importDialog;
+
+	Liferay.provide(
+		window,
+		'<portlet:namespace />importCalendar',
+		function(url) {
+			var A = AUI();
+
+			if (!<portlet:namespace />importDialog) {
+				var form = A.one('#<portlet:namespace />fm');
+				var importCalendarContainer = A.one('#<portlet:namespace />importCalendarContainer');
+				var portletErrorMessage = A.one('#<portlet:namespace />portletErrorMessage');
+				var portletSuccessMessage = A.one('#<portlet:namespace />portletSuccessMessage');
+
+				<portlet:namespace />importDialog = new A.Dialog(
+					{
+						bodyContent: importCalendarContainer,
+						buttons: [
+							{
+								handler: function() {
+									var config = ;
+
+									A.io(
+										url,
+										{
+											dataType: 'json',
+											form: {
+												id: form,
+												upload: true
+											},
+											method: 'post',
+											on: {
+												complete: function(id, xhr) {
+													var obj = this.get('responseData');
+
+													var error = obj.error;
+
+													if (error) {
+														portletErrorMessage.html(error).show();
+													}
+													else {
+														portletErrorMessage.hide();
+														portletSuccessMessage.show();
+													}
+												}
+											}
+										}
+									);
+								},
+								label: Liferay.Language.get('import')
+							}
+						],
+						centered: true,
+						modal: true,
+						on: {
+							visibleChange: function(event) {
+								if (event.newVal) {
+									importCalendarContainer.show();
+								}
+								else {
+									form.reset();
+
+									portletSuccessMessage.hide();
+									portletErrorMessage.hide();
+								}
+							}
+						},
+						title: Liferay.Language.get('import'),
+						width: 500
+					}
+				).render();
+			}
+
+			<portlet:namespace />importDialog.show();
+		},
+		['aui-dialog', 'aui-io']
+	);
+</aui:script>

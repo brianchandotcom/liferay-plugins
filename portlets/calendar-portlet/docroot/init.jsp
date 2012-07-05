@@ -72,6 +72,7 @@ page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
 page import="com.liferay.portal.kernel.util.OrderByComparator" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.PrefsParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.StringBundler" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.kernel.util.UnicodeFormatter" %><%@
@@ -84,6 +85,7 @@ page import="com.liferay.portal.service.UserLocalServiceUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
 page import="com.liferay.portal.util.SessionClicks" %><%@
 page import="com.liferay.portal.util.comparator.UserScreenNameComparator" %><%@
+page import="com.liferay.portlet.PortalPreferences" %><%@
 page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
 
 <%@ page import="java.util.ArrayList" %><%@
@@ -100,12 +102,16 @@ page import="javax.portlet.PortletURL" %>
 <%
 String currentURL = PortalUtil.getCurrentURL(request);
 
+String portletId = PortalUtil.getPortletId(request);
+
 PortletPreferences preferences = renderRequest.getPreferences();
 
 String portletResource = ParamUtil.getString(request, "portletResource");
 
 if (Validator.isNotNull(portletResource)) {
 	preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
+
+	portletId = portletResource;
 }
 
 CalendarResource groupCalendarResource = CalendarResourceUtil.getGroupCalendarResource(liferayPortletRequest, scopeGroupId);
@@ -121,11 +127,21 @@ if (themeDisplay.isSignedIn()) {
 	}
 }
 
-String dayViewHeaderDateFormat = preferences.getValue("dayViewHeaderDateFormat", "%d %A");
-String navigationHeaderDateFormat = preferences.getValue("navigationHeaderDateFormat", "%A - %d %b %Y");
-boolean isoTimeFormat = GetterUtil.getBoolean(preferences.getValue("isoTimeFormat", null));
+PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(request);
 
+int defaultDuration = GetterUtil.getInteger(portalPreferences.getValue(portletId, "defaultDuration", null), 60);
+String defaultView = portalPreferences.getValue(portletId, "defaultView", "week");
+boolean isoTimeFormat = GetterUtil.getBoolean(portalPreferences.getValue(portletId, "isoTimeFormat", null));
+String timeZoneId = portalPreferences.getValue(portletId, "timeZoneId", user.getTimeZoneId());
+boolean usePortalTimeZone = GetterUtil.getBoolean(portalPreferences.getValue(portletId, "usePortalTimeZone", null));
+int weekStartsOn = GetterUtil.getInteger(portalPreferences.getValue(portletId, "weekStartsOn", null), 0);
+
+if (usePortalTimeZone) {
+	timeZoneId = user.getTimeZoneId();
+}
+
+TimeZone userTimeZone = TimeZone.getTimeZone(timeZoneId);
 TimeZone utcTimeZone = TimeZone.getTimeZone(StringPool.UTC);
 
-java.util.Calendar now = CalendarFactoryUtil.getCalendar(timeZone);
+java.util.Calendar now = CalendarFactoryUtil.getCalendar(userTimeZone);
 %>
