@@ -127,34 +127,34 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 						buttons: [
 							{
 								handler: function() {
-									var config = {
-										form: {
-											id: form,
-											upload: true
-										},
-										method: 'post',
-										on: {
-											complete: function(id, xhr) {
-												var jsonObj = {};
+									var config = ;
 
-												try {
-													jsonObj = A.JSON.parse(xhr.responseText);
-												}
-												catch(e) {
-												}
+									A.io(
+										url,
+										{
+											dataType: 'json',
+											form: {
+												id: form,
+												upload: true
+											},
+											method: 'post',
+											on: {
+												complete: function(id, xhr) {
+													var obj = this.get('responseData');
 
-												if (jsonObj.error) {
-													portletErrorMessage.html(jsonObj.error).show();
-												}
-												else {
-													portletErrorMessage.hide();
-													portletSuccessMessage.show();
+													var error = obj.error;
+
+													if (error) {
+														portletErrorMessage.html(error).show();
+													}
+													else {
+														portletErrorMessage.hide();
+														portletSuccessMessage.show();
+													}
 												}
 											}
 										}
-									};
-
-									A.io(url, config);
+									);
 								},
 								label: Liferay.Language.get('import')
 							}
@@ -168,6 +168,7 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 								}
 								else {
 									form.reset();
+
 									portletSuccessMessage.hide();
 									portletErrorMessage.hide();
 								}
