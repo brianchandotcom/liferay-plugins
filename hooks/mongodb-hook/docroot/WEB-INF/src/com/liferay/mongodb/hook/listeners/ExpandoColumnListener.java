@@ -15,7 +15,7 @@
 package com.liferay.mongodb.hook.listeners;
 
 import com.liferay.mongodb.lang.MongoOperator;
-import com.liferay.mongodb.util.MongoDBUtil;
+import com.liferay.mongodb.util.MongoDBExpandoUtil;
 import com.liferay.portal.ModelListenerException;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portlet.expando.model.ExpandoColumn;
@@ -50,7 +50,8 @@ public class ExpandoColumnListener extends BaseModelListener<ExpandoColumn> {
 		ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
 			expandoColumn.getTableId());
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+			expandoTable);
 
 		for (DBObject indexDBObject : dbCollection.getIndexInfo()) {
 			DBObject keyDBObject = (DBObject)indexDBObject.get("key");

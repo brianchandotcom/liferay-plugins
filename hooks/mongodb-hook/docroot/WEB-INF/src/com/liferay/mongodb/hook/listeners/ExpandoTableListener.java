@@ -14,6 +14,7 @@
 
 package com.liferay.mongodb.hook.listeners;
 
+import com.liferay.mongodb.util.MongoDBExpandoUtil;
 import com.liferay.mongodb.util.MongoDBUtil;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portlet.expando.model.ExpandoTable;
@@ -32,7 +33,7 @@ public class ExpandoTableListener extends BaseModelListener<ExpandoTable> {
 	public void onAfterCreate(ExpandoTable expandoTable) {
 		DB db = MongoDBUtil.getDB(expandoTable.getCompanyId());
 
-		String collectionName = MongoDBUtil.getCollectionName(
+		String collectionName = MongoDBExpandoUtil.getCollectionName(
 			expandoTable.getClassName(), expandoTable.getName());
 
 		if (!db.collectionExists(collectionName)) {
@@ -52,7 +53,7 @@ public class ExpandoTableListener extends BaseModelListener<ExpandoTable> {
 	public void onAfterRemove(ExpandoTable expandoTable) {
 		DB db = MongoDBUtil.getDB(expandoTable.getCompanyId());
 
-		String tableName = MongoDBUtil.getCollectionName(
+		String tableName = MongoDBExpandoUtil.getCollectionName(
 			expandoTable.getClassName(), expandoTable.getName());
 
 		if (db.collectionExists(tableName)) {

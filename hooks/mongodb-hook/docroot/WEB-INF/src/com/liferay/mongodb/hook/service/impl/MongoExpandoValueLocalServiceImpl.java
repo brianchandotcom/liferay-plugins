@@ -16,7 +16,7 @@ package com.liferay.mongodb.hook.service.impl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.mongodb.lang.MongoOperator;
-import com.liferay.mongodb.util.MongoDBUtil;
+import com.liferay.mongodb.util.MongoDBExpandoUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -79,7 +79,8 @@ public class MongoExpandoValueLocalServiceImpl
 		expandoValue.setClassPK(classPK);
 		expandoValue.setData(data);
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+			expandoTable);
 
 		DBObject queryDBObject = new BasicDBObject();
 
@@ -137,7 +138,8 @@ public class MongoExpandoValueLocalServiceImpl
 		expandoValue.setClassNameId(classNameId);
 		expandoValue.setClassPK(classPK);
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+			expandoTable);
 
 		DBObject queryDBObject = new BasicDBObject();
 
@@ -191,7 +193,8 @@ public class MongoExpandoValueLocalServiceImpl
 			ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
 				expandoColumn.getTableId());
 
-			DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+				expandoTable);
 
 			DBObject operatorDBObject = new BasicDBObject(
 				MongoOperator.SET,
@@ -216,7 +219,8 @@ public class MongoExpandoValueLocalServiceImpl
 			ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
 				tableId);
 
-			DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+				expandoTable);
 
 			DBObject valueDBObject = new BasicDBObject();
 
@@ -267,7 +271,8 @@ public class MongoExpandoValueLocalServiceImpl
 		ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
 			companyId, classNameId, tableName);
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+			expandoTable);
 
 		DBObject queryDBObject = new BasicDBObject();
 
@@ -297,7 +302,8 @@ public class MongoExpandoValueLocalServiceImpl
 			ExpandoTableLocalServiceUtil.getTables(companyId, classNameId);
 
 		for (ExpandoTable expandoTable : expandoTables) {
-			DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+				expandoTable);
 
 			DBObject queryDBObject = new BasicDBObject();
 
@@ -343,7 +349,7 @@ public class MongoExpandoValueLocalServiceImpl
 				ExpandoColumnLocalServiceUtil.getColumn(
 					companyId, classNameId, tableName, columnName);
 
-			DBCollection dbCollection = MongoDBUtil.getCollection(
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
 				companyId, classNameId, tableName);
 
 			DBCursor dbCursor = null;
@@ -416,7 +422,7 @@ public class MongoExpandoValueLocalServiceImpl
 				ExpandoColumnLocalServiceUtil.getColumn(
 					companyId, classNameId, tableName, columnName);
 
-			DBCollection dbCollection = MongoDBUtil.getCollection(
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
 				companyId, classNameId, tableName);
 
 			DBCursor dbCursor = null;
@@ -465,7 +471,8 @@ public class MongoExpandoValueLocalServiceImpl
 			ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
 				companyId, classNameId, tableName);
 
-			DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+				expandoTable);
 
 			BasicDBObject queryDBObject = new BasicDBObject();
 
@@ -582,7 +589,8 @@ public class MongoExpandoValueLocalServiceImpl
 				ExpandoColumnLocalServiceUtil.getColumn(
 					expandoTable.getTableId(), columnName);
 
-			DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+				expandoTable);
 
 			DBObject queryDBObject = new BasicDBObject();
 

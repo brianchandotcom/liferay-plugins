@@ -22,24 +22,12 @@ import com.mongodb.Mongo;
  * @author Brian Wing Shun Chan
  * @author Michael C. Han
  */
-public class MongoDBUtil {
+public interface MongoDB {
 
-	public static boolean authenticate(long companyId) {
-		return _mongoDB.authenticate(companyId);
-	}
+	public boolean authenticate(long companyId);
 
-	public static DB getDB(long companyId) {
-		return _mongoDB.getDB(companyId);
-	}
+	public DB getDB(long companyId);
 
-	public static Mongo getMongo() {
-		return _mongoDB.getMongo();
-	}
-
-	public void setMongDB(MongoDB mongoDB) {
-		_mongoDB = mongoDB;
-	}
-
-	private static MongoDB _mongoDB;
+	public Mongo getMongo();
 
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.mongodb.hook.service.impl;
 
-import com.liferay.mongodb.util.MongoDBUtil;
+import com.liferay.mongodb.util.MongoDBExpandoUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -63,7 +63,7 @@ public class MongoExpandoRowLocalServiceImpl
 		ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
 			tableId);
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(expandoTable);
 
 		dbCollection.remove(new BasicDBObject("classPK", classPK));
 	}
@@ -150,14 +150,15 @@ public class MongoExpandoRowLocalServiceImpl
 	public int getRowsCount(
 		long companyId, long classNameId, String tableName) {
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
 			companyId, classNameId, tableName);
 
 		return (int)dbCollection.count();
 	}
 
 	protected ExpandoRow getRow(ExpandoTable expandoTable, long classPK) {
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+			expandoTable);
 
 		DBObject expandoRowDBObject = dbCollection.findOne(
 			new BasicDBObject("classPK", classPK));
@@ -168,7 +169,8 @@ public class MongoExpandoRowLocalServiceImpl
 	protected List<ExpandoRow> getRows(
 		ExpandoTable expandoTable, int start, int end) {
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(
+			expandoTable);
 
 		DBCursor dbCursor = dbCollection.find(new BasicDBObject());
 

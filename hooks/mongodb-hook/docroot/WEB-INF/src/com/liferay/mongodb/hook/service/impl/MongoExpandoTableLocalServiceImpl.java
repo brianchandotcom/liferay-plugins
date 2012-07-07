@@ -14,6 +14,7 @@
 
 package com.liferay.mongodb.hook.service.impl;
 
+import com.liferay.mongodb.util.MongoDBExpandoUtil;
 import com.liferay.mongodb.util.MongoDBUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -46,9 +47,9 @@ public class MongoExpandoTableLocalServiceImpl
 
 		DB db = MongoDBUtil.getDB(expandoTable.getCompanyId());
 
-		String collectionName = MongoDBUtil.getCollectionName(
+		String collectionName = MongoDBExpandoUtil.getCollectionName(
 			expandoTable.getClassName(), expandoTable.getName());
-		String newCollectionName = MongoDBUtil.getCollectionName(
+		String newCollectionName = MongoDBExpandoUtil.getCollectionName(
 			expandoTable.getClassName(), name);
 
 		if (db.collectionExists(newCollectionName)) {

@@ -15,7 +15,7 @@
 package com.liferay.mongodb.hook.service.impl;
 
 import com.liferay.mongodb.lang.MongoOperator;
-import com.liferay.mongodb.util.MongoDBUtil;
+import com.liferay.mongodb.util.MongoDBExpandoUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -55,7 +55,7 @@ public class MongoExpandoColumnLocalServiceImpl
 		ExpandoTable expandoTable = ExpandoTableLocalServiceUtil.getTable(
 			expandoColumn.getTableId());
 
-		DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+		DBCollection dbCollection = MongoDBExpandoUtil.getCollection(expandoTable);
 
 		DBObject operatorDBObject = new BasicDBObject(
 			MongoOperator.RENAME,
@@ -84,7 +84,7 @@ public class MongoExpandoColumnLocalServiceImpl
 				ExpandoColumnConstants.INDEX_TYPE));
 
 		if (indexType != ExpandoColumnConstants.INDEX_TYPE_NONE) {
-			DBCollection dbCollection = MongoDBUtil.getCollection(expandoTable);
+			DBCollection dbCollection = MongoDBExpandoUtil.getCollection(expandoTable);
 
 			dbCollection.createIndex(
 				new BasicDBObject(expandoColumn.getName(), 1));

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<beans
+	default-destroy-method="destroy"
+	default-init-method="afterPropertiesSet"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+>
+	<bean class="com.liferay.portal.spring.context.PortletBeanFactoryPostProcessor" />
+
+	<!-- Mongo DB -->
+    <bean id="com.liferay.mongodb.util.MongDB" class="com.liferay.mongodb.util.MongoDBImpl" />
+
+    <bean id="com.liferay.mongodb.util.MongoDBUtil" class="com.liferay.mongodb.util.MongoDBUtil">
+        <property name="mongDB" ref="com.liferay.mongodb.util.MongDB" />
+    </bean>
+
+    <bean id="com.liferay.mongodb.util.MongoDBExpandoUtil" class="com.liferay.mongodb.util.MongoDBExpandoUtil">
+        <property name="mongDB" ref="com.liferay.mongodb.util.MongDB" />
+    </bean>
+
+</beans>
