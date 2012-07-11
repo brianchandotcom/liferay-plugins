@@ -25,15 +25,19 @@ import com.mongodb.Mongo;
 public class MongoDBUtil {
 
 	public static boolean authenticate(long companyId) {
-		return _mongoDB.authenticate(companyId);
+		return getMongoDB().authenticate(companyId);
 	}
 
 	public static DB getDB(long companyId) {
-		return _mongoDB.getDB(companyId);
+		return getMongoDB().getDB(companyId);
 	}
 
 	public static Mongo getMongo() {
-		return _mongoDB.getMongo();
+		return getMongoDB().getMongo();
+	}
+
+	public static MongoDB getMongoDB() {
+		return _mongoDB;
 	}
 
 	public void setMongDB(MongoDB mongoDB) {
