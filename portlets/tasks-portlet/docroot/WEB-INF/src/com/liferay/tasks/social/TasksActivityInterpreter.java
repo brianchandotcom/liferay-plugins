@@ -14,7 +14,6 @@
 
 package com.liferay.tasks.social;
 
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
@@ -99,11 +98,8 @@ public class TasksActivityInterpreter extends BaseSocialActivityInterpreter {
 
 		// Body
 
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(HtmlUtil.escape(tasksEntry.getTitle()));
-
-		String body = sb.toString();
+		String body = getValue(
+			activity.getExtraData(), "title", tasksEntry.getTitle());
 
 		return new SocialActivityFeedEntry(link, title, body);
 	}
