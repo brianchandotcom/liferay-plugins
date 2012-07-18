@@ -105,6 +105,10 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			throw new FileNameException();
 		}
 
+		if (!isValidFileName(shortFileName)) {
+			throw new FileNameException();
+		}
+
 		if (!DLStoreUtil.hasDirectory(
 				serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
 				dirName)) {
@@ -1380,6 +1384,16 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		ticket.setExpirationDate(getTicketExpirationDate());
 
 		ticket = ticketLocalService.updateTicket(ticket);
+
+		return true;
+	}
+
+	protected boolean isValidFileName(String name) throws SystemException {
+		if ((name == null) || name.contains(StringPool.BACK_SLASH) ||
+			name.contains(StringPool.SLASH)) {
+
+			return false;
+		}
 
 		return true;
 	}
