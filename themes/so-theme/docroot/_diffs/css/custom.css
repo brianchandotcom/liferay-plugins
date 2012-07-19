@@ -312,7 +312,7 @@ a:focus .opens-new-window-accessible {
 
 	.profile-name {
 		font-weight: bold;
-		line-height: 1em;
+		line-height: 1.25em;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		width: 128px;
@@ -1170,7 +1170,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		}
 	}
 
-	.results-header {
+	#_28_bookmarksEntriesSearchContainer .results-header {
 		display: none;
 	}
 }
@@ -1182,13 +1182,15 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	margin: 0px;
 
 	li {
-		background: url(@theme_image_path@/common/breadcrumbs_so.png) no-repeat scroll 100% 50% transparent;
+		background: url(../images/custom/so_breadcrumbs.png) no-repeat scroll 100% 50% transparent;
 		max-width: 50%;
 
 		a {
+			border-bottom: 1px solid $gray;
 			color: #34404F;
 			display: inline-block;
 			font-weight: bold;
+			margin-bottom: -1px;
 			padding: 7px 20px 7px 5px;
 
 			&:hover {
@@ -1249,10 +1251,12 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 
 	.date-selector, .event-selector {
 		float: left;
+		margin: 4px 10px;
 	}
 
 	.day-grid {
 		border-top: 1px solid #CCC;
+		clear: both;
 
 		.hour, .half-hour {
 			border-bottom: 1px dotted #EEE;
@@ -1270,6 +1274,17 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 			background: #EEE;
 			border: 1px solid #CCC;
 		}
+	}
+
+	p {
+		word-wrap: break-word;
+	}
+}
+
+.portlet-column-content-only {
+	.portlet-calendar .aui-column-content {
+		max-width: 550px;
+		padding: 10px;
 	}
 }
 
@@ -1721,8 +1736,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		padding: 0;
 	}
 
-	.threads-panel .lfr-actions.show-arrow.direction-left {
-		.lfr-trigger {
+	.message-boards-panels, .results-grid {
+		.lfr-actions.show-arrow.direction-left .lfr-trigger {
 			padding: 0;
 
 			strong {
