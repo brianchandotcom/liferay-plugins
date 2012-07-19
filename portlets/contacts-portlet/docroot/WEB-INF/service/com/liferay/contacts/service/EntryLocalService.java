@@ -82,11 +82,13 @@ public interface EntryLocalService extends BaseLocalService,
 	*
 	* @param entry the entry
 	* @return the entry that was removed
+	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
 	public com.liferay.contacts.model.Entry deleteEntry(
 		com.liferay.contacts.model.Entry entry)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery();
 
@@ -245,7 +247,13 @@ public interface EntryLocalService extends BaseLocalService,
 
 	public com.liferay.contacts.model.Entry addEntry(long userId,
 		java.lang.String fullName, java.lang.String emailAddress,
-		java.lang.String comments)
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void addEntryResources(com.liferay.contacts.model.Entry entry,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
@@ -279,7 +287,13 @@ public interface EntryLocalService extends BaseLocalService,
 
 	public com.liferay.contacts.model.Entry updateEntry(long entryId,
 		java.lang.String fullName, java.lang.String emailAddress,
-		java.lang.String comments)
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void updateEntryResources(com.liferay.contacts.model.Entry entry,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 }

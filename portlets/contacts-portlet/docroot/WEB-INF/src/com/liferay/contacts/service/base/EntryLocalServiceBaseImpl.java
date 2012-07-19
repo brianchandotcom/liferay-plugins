@@ -16,6 +16,7 @@ package com.liferay.contacts.service.base;
 
 import com.liferay.contacts.model.Entry;
 import com.liferay.contacts.service.EntryLocalService;
+import com.liferay.contacts.service.EntryService;
 import com.liferay.contacts.service.persistence.EntryFinder;
 import com.liferay.contacts.service.persistence.EntryPersistence;
 
@@ -109,10 +110,12 @@ public abstract class EntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 *
 	 * @param entry the entry
 	 * @return the entry that was removed
+	 * @throws PortalException
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Indexable(type = IndexableType.DELETE)
-	public Entry deleteEntry(Entry entry) throws SystemException {
+	public Entry deleteEntry(Entry entry)
+		throws PortalException, SystemException {
 		return entryPersistence.remove(entry);
 	}
 
@@ -279,6 +282,24 @@ public abstract class EntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 */
 	public void setEntryLocalService(EntryLocalService entryLocalService) {
 		this.entryLocalService = entryLocalService;
+	}
+
+	/**
+	 * Returns the entry remote service.
+	 *
+	 * @return the entry remote service
+	 */
+	public EntryService getEntryService() {
+		return entryService;
+	}
+
+	/**
+	 * Sets the entry remote service.
+	 *
+	 * @param entryService the entry remote service
+	 */
+	public void setEntryService(EntryService entryService) {
+		this.entryService = entryService;
 	}
 
 	/**
@@ -470,6 +491,8 @@ public abstract class EntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 
 	@BeanReference(type = EntryLocalService.class)
 	protected EntryLocalService entryLocalService;
+	@BeanReference(type = EntryService.class)
+	protected EntryService entryService;
 	@BeanReference(type = EntryPersistence.class)
 	protected EntryPersistence entryPersistence;
 	@BeanReference(type = EntryFinder.class)

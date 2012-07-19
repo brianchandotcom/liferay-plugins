@@ -24,7 +24,9 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
 
 import java.util.Date;
 import java.util.List;
@@ -35,7 +37,8 @@ import java.util.List;
 public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 
 	public Entry addEntry(
-			long userId, String fullName, String emailAddress, String comments)
+			long userId, String fullName, String emailAddress, String comments,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
@@ -58,7 +61,47 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 
 		entryPersistence.update(entry, true);
 
+		//Resources
+
+		addEntryResources(
+			entry, serviceContext.getGroupPermissions(),
+			serviceContext.getGuestPermissions());
+
 		return entry;
+	}
+
+	public void addEntryResources(
+			Entry entry, String[] groupPermissions, String[] guestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.addModelResources(
+			entry.getCompanyId(), entry.getGroupId(), entry.getUserId(),
+			Entry.class.getName(), entry.getEntryId(), groupPermissions,
+			guestPermissions);
+	}
+
+	public Entry deleteEntry(Entry entry)
+		throws PortalException, SystemException {
+
+		// Entry
+
+		entry = entryPersistence.remove(entry);
+
+		// Resources
+
+		resourceLocalService.deleteResource(
+			entry.getCompanyId(), Entry.class.getName(),
+			ResourceConstants.SCOPE_INDIVIDUAL, entry.getEntryId());
+
+		return entry;
+	}
+
+	public Entry deleteEntry(long entryId)
+		throws PortalException, SystemException {
+
+		Entry entry = entryPersistence.findByPrimaryKey(entryId);
+
+		return deleteEntry(entry);
 	}
 
 	public List<Entry> getEntries(long userId, int start, int end)
@@ -99,7 +142,8 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	}
 
 	public Entry updateEntry(
-			long entryId, String fullName, String emailAddress, String comments)
+			long entryId, String fullName, String emailAddress, String comments,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		Entry entry = entryPersistence.findByPrimaryKey(entryId);
@@ -113,7 +157,26 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 
 		entryPersistence.update(entry, true);
 
+		// Resources
+
+		if ((serviceContext.getGroupPermissions() != null) ||
+			(serviceContext.getGuestPermissions() != null)) {
+
+			updateEntryResources(
+				entry, serviceContext.getGroupPermissions(),
+				serviceContext.getGuestPermissions());
+		}
+
 		return entry;
+	}
+
+	public void updateEntryResources(
+			Entry entry, String[] groupPermissions, String[] guestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.updateResources(
+			entry.getCompanyId(), entry.getGroupId(), Entry.class.getName(),
+			entry.getEntryId(), groupPermissions, guestPermissions);
 	}
 
 	protected void validate(

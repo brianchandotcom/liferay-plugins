@@ -73,11 +73,13 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	*
 	* @param entry the entry
 	* @return the entry that was removed
+	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
 	public com.liferay.contacts.model.Entry deleteEntry(
 		com.liferay.contacts.model.Entry entry)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _entryLocalService.deleteEntry(entry);
 	}
 
@@ -264,11 +266,20 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 
 	public com.liferay.contacts.model.Entry addEntry(long userId,
 		java.lang.String fullName, java.lang.String emailAddress,
-		java.lang.String comments)
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _entryLocalService.addEntry(userId, fullName, emailAddress,
-			comments);
+			comments, serviceContext);
+	}
+
+	public void addEntryResources(com.liferay.contacts.model.Entry entry,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_entryLocalService.addEntryResources(entry, groupPermissions,
+			guestPermissions);
 	}
 
 	public java.util.List<com.liferay.contacts.model.Entry> getEntries(
@@ -309,11 +320,20 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 
 	public com.liferay.contacts.model.Entry updateEntry(long entryId,
 		java.lang.String fullName, java.lang.String emailAddress,
-		java.lang.String comments)
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _entryLocalService.updateEntry(entryId, fullName, emailAddress,
-			comments);
+			comments, serviceContext);
+	}
+
+	public void updateEntryResources(com.liferay.contacts.model.Entry entry,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_entryLocalService.updateEntryResources(entry, groupPermissions,
+			guestPermissions);
 	}
 
 	/**
