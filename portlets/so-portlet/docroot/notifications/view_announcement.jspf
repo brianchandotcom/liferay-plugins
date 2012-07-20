@@ -25,6 +25,16 @@ long portletPlid = PortalUtil.getPlidFromPortletId(notificationEventJSONObject.g
 if (portletPlid != 0) {
 	portletURL = PortletURLFactoryUtil.create(request, portletId, portletPlid, PortletRequest.RENDER_PHASE);
 }
+else {
+	portletURL = new PortletURLImpl(request, PortletKeys.SITE_REDIRECTOR, plid, PortletRequest.ACTION_PHASE);
+
+	portletURL.setWindowState(WindowState.NORMAL);
+	portletURL.setPortletMode(PortletMode.VIEW);
+
+	portletURL.setParameter("struts_action", "/my_sites/view");
+	portletURL.setParameter("groupId", String.valueOf(mySite.getGroupId()));
+	portletURL.setParameter("privateLayout", Boolean.TRUE.toString());
+}
 %>
 
 <div class="aui-menu-item user-notification-event-content" data-portletUrl="<%= portletURL != null ? portletURL : StringPool.BLANK %>">

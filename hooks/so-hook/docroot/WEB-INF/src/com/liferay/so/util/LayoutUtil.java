@@ -137,7 +137,8 @@ public class LayoutUtil {
 			else if (portletId.startsWith(PortletKeys.MESSAGE_BOARDS)) {
 				configureMessageBoards(layout);
 			}
-			else if (portletId.equals(PortletKeys.CALENDAR) ||
+			else if (portletId.equals(PortletKeys.ANNOUNCEMENTS) ||
+					 portletId.equals(PortletKeys.CALENDAR) ||
 					 portletId.equals(PortletKeys.DOCUMENT_LIBRARY) ||
 					 portletId.equals(PortletKeys.BLOGS) ||
 					 portletId.equals(PortletKeys.WIKI) ||
