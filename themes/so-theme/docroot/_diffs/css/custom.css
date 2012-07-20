@@ -590,13 +590,13 @@ input[type=password], input[type=text], textarea, .aui-field-select select, .aui
 	}
 }
 
-button, input[type=button], input[type=submit], input[type=reset], #toggleFluid, .aui-button-disabled button, .aui-button-disabled button:hover, .aui-button-disabled button:focus, .aui-button-disabled input[type], .aui-button-disabled input[type]:hover, .aui-button-disabled input[type]:focus, .aui-dialog-hd, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .results-header th, .lfr-actions.lfr-extended, .invite-members, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .portlet-wiki .top-links-nodes .top-link-node a.node-current, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover {
+button, input[type=button], input[type=submit], input[type=reset], #toggleFluid, .aui-button-disabled button, .aui-button-disabled button:hover, .aui-button-disabled button:focus, .aui-button-disabled input[type], .aui-button-disabled input[type]:hover, .aui-button-disabled input[type]:focus, .aui-dialog-hd, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .results-header th, .lfr-actions.lfr-extended, .invite-members, .portlet-announcements .edit-actions a, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .portlet-wiki .top-links-nodes .top-link-node a.node-current, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover {
 	background: #E9E8E8;
 	border: 1px solid $gray;
 	text-shadow: none;
 }
 
-input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .contacts-portlet .social-relations a, .edit-controls a:hover, .invite-members:hover, .lfr-actions.lfr-extended, .thread-controls a:hover, .tasks-dialog .control a.taglib-icon, .top-links-navigation a:hover {
+input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .contacts-portlet .social-relations a, .edit-controls a:hover, .invite-members:hover, .lfr-actions.lfr-extended, .thread-controls a:hover, .portlet-announcements .edit-actions a, .tasks-dialog .control a.taglib-icon, .top-links-navigation a:hover {
 	&:hover {
 		background: #EEE;
 		border-color: #AAA;
@@ -894,6 +894,155 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 }
 
 /* ---------- Portlet ---------- */
+
+/* Announcement's Portlet */
+
+.portlet-announcements {
+	border-bottom: 1px solid $gray-dark;
+
+	.announcement-heading {
+		color: #929292;
+		font-size: 1em;
+		margin: 0;
+		padding: 7px 7px 0;
+	}
+
+	.edit-actions a .icon, a .entry-scope {
+		display: none;
+	}
+
+	.controls {
+		background: #E9E8E8;
+		margin: 0;
+		padding: 4px 5px;
+	}
+
+	.unread-entries, .read-entries {
+		border-bottom: 1px solid $gray-light;
+		padding: 6px 0;
+		margin: 0 6px;
+	}
+
+	.aui-form {
+		padding: 10px;
+	}
+
+	.entry {
+		margin: 0 -6px;
+		padding: 0 5px;
+		position: relative;
+
+		.header-title {
+			color: $red;
+			font-size: 2em;
+			font-weight: normal;
+		}
+
+		.entry-content, .delete-entry {
+			padding: 0;
+		}
+
+		.entry-content, .entry-title {
+			background: transparent none;
+		}
+
+		.entry-content {
+			padding: 10px;
+		}
+
+		a {
+			color: #666;
+			display: block;
+			padding: 5px;
+
+			.entry-title {
+				border-left: 3px solid;
+				color: $red;
+				font-size: 1em;
+				font-weight: bold;
+				padding-left: 2px;
+			}
+
+			.entry-content {
+				margin-bottom: 0;
+				max-height: 4.5em;
+				overflow: hidden;
+				padding: 0 0 0 5px;
+				text-overflow: ellipsis;
+			}
+
+		}
+
+		a:hover {
+			background-color: #EAF2F8;
+			text-decoration: none;
+		}
+
+		.edit-actions {
+			background: #E9E8E8;
+			border: 1px solid $gray;
+			display: none;
+			float: none;
+			font-size: 1em;
+			font-weight: bold;
+			left: 50%;
+			margin: 0 auto 0 -98px;
+			max-width: 196px;
+			padding: 4px 0 1px 4px;
+			position: absolute;
+			right: auto;
+			top: 100%;
+			z-index: 1;
+
+			a, span {
+				display: inline-block;
+			}
+
+			a {
+				display: none;
+				margin: 0 3px 3px 0;
+
+				&:hover {
+					background: #EEE;
+				}
+			}
+
+			.control-entry a, a.taglib-icon {
+				display: inline-block;
+			}
+
+			&:after, &:before {
+				border: 8px solid $gray;
+				border-color: transparent transparent $gray;
+				content: "";
+				display: block;
+				left: 50%;
+				margin-left: -8px;
+				position: absolute;
+				top: -16px;
+			}
+
+			&:after {
+				border-color: transparent transparent #EEE;
+				top: -15px;
+			}
+		}
+
+		&:hover {
+			a {
+				background-color: #EAF2F8;
+			}
+
+			.edit-actions {
+				display: block;
+
+				a {
+					background-color: #E9E8E8;
+				}
+			}
+		}
+	}
+}
 
 /* Dockbar */
 
@@ -2253,7 +2402,7 @@ button, input[type=button], input[type=reset], input[type=submit], #toggleFluid,
 	@include border-radius(3px);
 }
 
-button, input[type=button], input[type=reset], input[type=submit], #toggleFluid, .aui-button-disabled input[type], .aui-button-disabled input[type]:focus, .aui-button-disabled input[type]:hover, .aui-button-disabled button, .aui-button-disabled button:hover, .aui-button-disabled button:focus, .aui-dialog-hd, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .invite-members, .lfr-actions.lfr-extended, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .results-header th, .so-layout-fluid-ad #toggleFluid, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover, .portlet-wiki .top-links-nodes .top-link-node a.node-current {
+button, input[type=button], input[type=reset], input[type=submit], #toggleFluid, .aui-button-disabled input[type], .aui-button-disabled input[type]:focus, .aui-button-disabled input[type]:hover, .aui-button-disabled button, .aui-button-disabled button:hover, .aui-button-disabled button:focus, .aui-dialog-hd, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .invite-members, .lfr-actions.lfr-extended, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .portlet-announcements .edit-actions a, .portlet-announcements .edit-actions a:hover, .portlet-announcements .edit-actions a:active, .portlet-announcements .edit-actions a:visited, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .results-header th, .so-layout-fluid-ad #toggleFluid, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover, .portlet-wiki .top-links-nodes .top-link-node a.node-current {
 	@include box-shadow(0 1px 0 #F4F3F3 inset, 0 -1px 0 #D9D8D8 inset);
 }
 
@@ -2261,11 +2410,11 @@ button, input[type=button], input[type=reset], input[type=submit], #toggleFluid,
 	@include box-shadow(0 0 9px -3px #000, 0 20px 29px -22px rgba(0, 0, 0, 0.6));
 }
 
-.user-group .microblogs-status-container .microblogs-entry, .user-group .microblogs-status-container .portlet-msg-info {
+.user-group .microblogs-status-container .microblogs-entry, .user-group .microblogs-status-container .portlet-msg-info, .portlet-announcements .edit-actions {
 	@include box-shadow(0 3px 2px #DDD);
 }
 
-input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .invite-members:hover, .lfr-actions.lfr-extended:hover, .portlet-wiki .top-links-nodes .top-link-node a.node-current, .signed-in-as .user-name, .tasks-dialog .control a.taglib-icon:hover, .thread-controls a:hover, .top-links-navigation a:hover {
+input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .invite-members:hover, .lfr-actions.lfr-extended:hover, .portlet-announcements .edit-actions a, .portlet-wiki .top-links-nodes .top-link-node a.node-current, .signed-in-as .user-name, .tasks-dialog .control a.taglib-icon:hover, .thread-controls a:hover, .top-links-navigation a:hover {
 	&:active {
 		@include box-shadow(0 1px 1px #C9C9C9 inset);
 	}
@@ -2275,7 +2424,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	@include box-shadow(0 3px 10px -6px rgba(0, 0, 0, .5));
 }
 
-.portlet-blogs .lfr-meta-actions, .user-tags li a {
+.portlet-blogs .lfr-meta-actions, .user-tags li a, .portlet-announcements .entry a, .portlet-announcements .entry .edit-actions {
 	@include border-radius(4px);
 }
 
