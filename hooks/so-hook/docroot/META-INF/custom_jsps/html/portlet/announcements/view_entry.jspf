@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
@@ -14,6 +15,8 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
+ --%>
+
 <%
 boolean hiddenEntry = false;
 boolean readEntry = false;
@@ -42,17 +45,10 @@ if (entry.getPriority() > 0) {
 }
 %>
 
-<a href='<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" /></portlet:renderURL>'>
+<a class="entry-preview" href='<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" /></portlet:renderURL>'>
 	<div class="entry<%= className %>" id="<portlet:namespace /><%= entry.getEntryId() %>">
 		<div class="entry-title">
-			<c:choose>
-				<c:when test="<%= Validator.isNotNull(entry.getUrl()) %>">
-					<a class="entry-url" href="<%= entry.getUrl() %>"><%= HtmlUtil.escape(entry.getTitle()) %></a>
-				</c:when>
-				<c:when test="<%= Validator.isNull(entry.getUrl()) %>">
-					<%= HtmlUtil.escape(entry.getTitle()) %>
-				</c:when>
-			</c:choose>
+			<%= HtmlUtil.escape(entry.getTitle()) %>
 		</div>
 
 		<%

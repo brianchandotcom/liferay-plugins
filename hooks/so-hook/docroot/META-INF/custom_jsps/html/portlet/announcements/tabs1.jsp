@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
@@ -14,6 +15,8 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
+ --%>
+
 <%@ include file="/html/portlet/announcements/init.jsp" %>
 
 <%
@@ -25,11 +28,11 @@ String tabs1 = ParamUtil.getString(request, "tabs1", "entries");
 		<div class="controls-content">
 			<c:choose>
 				<c:when test='<%= tabs1.equals("entries") %>'>
-					<input onClick="location.href = '<portlet:renderURL windowState=" type="button" value='<liferay-ui:message key="add-entry" />'<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/edit_entry" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" />
-					<input onClick="location.href = '<portlet:renderURL windowState=" type="button" value='<liferay-ui:message key="manage-entries" />'<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="tabs1" value="manage-entries" /></portlet:renderURL>'" />
+					<input onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/edit_entry" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" type="button" value='<liferay-ui:message key="add-entry" />' />
+					<input onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="tabs1" value="manage-entries" /></portlet:renderURL>'" type="button" value='<liferay-ui:message key="manage-entries" />' />
 				</c:when>
 				<c:when test='<%= tabs1.equals("manage-entries") %>'>
-					<input onClick="location.href = '<portlet:renderURL windowState=" type="button" value='<liferay-ui:message key="entries" />'<%= WindowState.NORMAL.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" />
+					<input onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.NORMAL.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" type="button" value='<liferay-ui:message key="entries" />' />
 				</c:when>
 			</c:choose>
 		</div>

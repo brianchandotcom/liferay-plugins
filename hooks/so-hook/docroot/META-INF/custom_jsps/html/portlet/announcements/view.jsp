@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
@@ -14,6 +15,8 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
+ --%>
+
 <%@ include file="/html/portlet/announcements/init.jsp" %>
 
 <%
@@ -35,8 +38,6 @@ portletURL.setParameter("tabs1", tabs1);
 	<liferay-util:include page="/html/portlet/announcements/tabs1.jsp" />
 </c:if>
 
-<h3 class="announcement-heading"><liferay-ui:message key="announcements" /></h3>
-
 <c:choose>
 	<c:when test="<%= entryId > 0 %>">
 
@@ -47,6 +48,8 @@ portletURL.setParameter("tabs1", tabs1);
 		<%@ include file="/html/portlet/announcements/view_full_entry.so-hook.jspf" %>
 	</c:when>
 	<c:when test='<%= tabs1.equals("entries") && (entryId == 0) %>'>
+		<h3 class="announcement-heading"><liferay-ui:message key="announcements" /></h3>
+
 		<%@ include file="/html/portlet/announcements/view_entries.so-hook.jspf" %>
 	</c:when>
 	<c:when test='<%= tabs1.equals("manage-entries") %>'>

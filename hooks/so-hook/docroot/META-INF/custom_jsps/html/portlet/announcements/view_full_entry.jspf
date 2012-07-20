@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
@@ -14,21 +15,22 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
-<div class="entry" id="<portlet:namespace /><%= entry.getEntryId() %>">
-	<liferay-ui:header
-		backURL="<%= redirect %>"
-		title="<%= entry.getTitle() %>"
-	/>
+ --%>
 
-	<div class="entry-title">
-		<c:choose>
-			<c:when test="<%= Validator.isNotNull(entry.getUrl()) %>">
-				<a class="entry-url" href="<%= entry.getUrl() %>"><%= HtmlUtil.escape(entry.getTitle()) %></a>
-			</c:when>
-			<c:when test="<%= Validator.isNull(entry.getUrl()) %>">
-				<%= HtmlUtil.escape(entry.getTitle()) %>
-			</c:when>
-		</c:choose>
+<div class="entry" id="<portlet:namespace /><%= entry.getEntryId() %>">
+	<div class="entry-header">
+		<span class="entry-title">
+			<c:choose>
+				<c:when test="<%= Validator.isNotNull(entry.getUrl()) %>">
+					<a class="entry-url" href="<%= entry.getUrl() %>"><%= HtmlUtil.escape(entry.getTitle()) %></a>
+				</c:when>
+				<c:when test="<%= Validator.isNull(entry.getUrl()) %>">
+					<%= HtmlUtil.escape(entry.getTitle()) %>
+				</c:when>
+			</c:choose>
+		</span>
+
+		<span class="back"><a href="<%= redirect %>"><liferay-ui:message key="back" /></a></span>
 	</div>
 
 	<%

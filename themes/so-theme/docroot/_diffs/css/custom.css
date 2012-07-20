@@ -932,10 +932,21 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		padding: 0 5px;
 		position: relative;
 
-		.header-title {
-			color: $red;
-			font-size: 2em;
-			font-weight: normal;
+		.entry-header {
+			margin: 10px;
+
+			.entry-title, .entry-title a {
+				color: $red;
+				float: left;
+				font-size: 20px;
+				text-decoration: none;
+			}
+
+			.back a {
+				float: right;
+				font-weight: bold;
+				text-decoration: none;
+			}
 		}
 
 		.entry-content, .delete-entry {
@@ -950,7 +961,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 			padding: 10px;
 		}
 
-		a {
+		.entry-preview {
 			color: #666;
 			display: block;
 			padding: 5px;
@@ -970,10 +981,9 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 				padding: 0 0 0 5px;
 				text-overflow: ellipsis;
 			}
-
 		}
 
-		a:hover {
+		a.entry-preview:hover {
 			background-color: #EAF2F8;
 			text-decoration: none;
 		}
@@ -999,11 +1009,14 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 			}
 
 			a {
+				color: #333;
 				display: none;
 				margin: 0 3px 3px 0;
+				padding: 3px 4px;
 
 				&:hover {
 					background: #EEE;
+					text-decoration: none;
 				}
 			}
 
@@ -1029,7 +1042,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		}
 
 		&:hover {
-			a {
+			a.entry-preview {
 				background-color: #EAF2F8;
 			}
 
@@ -2398,7 +2411,7 @@ input[type=password], input[type=text], textarea, .aui-field-select select, .aui
 	@include box-shadow(0 1px 3px #C9C9C9 inset);
 }
 
-button, input[type=button], input[type=reset], input[type=submit], #toggleFluid, .aui-button-disabled input[type], .aui-button-disabled input[type]:hover, .aui-button-disabled input[type]:focus, .aui-button-disabled button, .aui-button-disabled button:focus, .aui-button-disabled button:hover, .aui-dialog-hd, .aui-form-validator-message, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a, .invite-members, .lfr-actions.lfr-extended, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .microblogs-portlet .microblogs-countdown, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .portlet-message-boards .edit-controls, .results-header th, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover, .portlet-wiki .top-links-nodes .top-link-node a.node-current {
+button, input[type=button], input[type=reset], input[type=submit], #toggleFluid, .aui-button-disabled input[type], .aui-button-disabled input[type]:hover, .aui-button-disabled input[type]:focus, .aui-button-disabled button, .aui-button-disabled button:focus, .aui-button-disabled button:hover, .aui-dialog-hd, .aui-form-validator-message, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a, .invite-members, .lfr-actions.lfr-extended, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .microblogs-portlet .microblogs-countdown, .portlet-announcements .edit-actions a, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .portlet-message-boards .edit-controls, .results-header th, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover, .portlet-wiki .top-links-nodes .top-link-node a.node-current {
 	@include border-radius(3px);
 }
 
@@ -2424,7 +2437,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	@include box-shadow(0 3px 10px -6px rgba(0, 0, 0, .5));
 }
 
-.portlet-blogs .lfr-meta-actions, .user-tags li a, .portlet-announcements .entry a, .portlet-announcements .entry .edit-actions {
+.portlet-blogs .lfr-meta-actions, .user-tags li a, .portlet-announcements .entry a.entry-preview, .portlet-announcements .entry .edit-actions {
 	@include border-radius(4px);
 }
 
