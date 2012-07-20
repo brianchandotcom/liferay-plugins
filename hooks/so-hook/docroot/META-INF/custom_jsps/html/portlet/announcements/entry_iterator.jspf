@@ -16,3 +16,32 @@
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
  --%>
+
+<%
+total = AnnouncementsEntryLocalServiceUtil.getEntriesCount(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue);
+
+searchContainer.setTotal(total);
+
+results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue, searchContainer.getStart(), searchContainer.getEnd());
+
+searchContainer.setResults(results);
+
+for (int i = 0; i < results.size(); i++) {
+	AnnouncementsEntry entry = results.get(i);
+
+	String className = StringPool.BLANK;
+
+	if (i == 0) {
+		className += " first";
+	}
+
+	if ((i + 1) == results.size()) {
+		className += " last";
+	}
+%>
+
+	<%@ include file="/html/portlet/announcements/view_entry.so-hook.jspf" %>
+
+<%
+}
+%>
