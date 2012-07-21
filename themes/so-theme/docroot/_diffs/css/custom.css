@@ -969,6 +969,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	a.group {
 		color: $red;
 	}
+
+	.taglib-page-iterator {
+		word-break: break-all;
+	}
 }
 
 .profile-page .so-portlet-activities {
@@ -1368,6 +1372,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 
 	.contacts-profile .lfr-contact-grid-item {
 		padding-top: 20px;
+	}
+
+	.contacts-profile .user-information-column-1 {
+		float: none;
 	}
 
 	.social-relations {
