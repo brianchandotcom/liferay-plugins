@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="@portlet.name@-portlet" basedir="." default="deploy">
+	<import file="../build-common-portlet.xml" />
+
+	<property name="project.dir" value="." />
+
+	<property file="${project.dir}/build.${user.name}.properties" />
+	<property file="${project.dir}/build.properties" />
+
+	<property name="base.sources.dir" value="docroot/WEB-INF/src/main" />
+	<property name="java.sources.dir" value="${base.sources.dir}/java" />
+	<property name="scala.sources.dir" value="${base.sources.dir}/scala" />
+
+  	<property name="build.dir" value="docroot/WEB-INF/classes"/>
+  
+	<property name="scala-compiler.jar" value="docroot/WEB-INF/lib/scala-compiler.jar"/>
+	<property name="scala-library.jar" value="docroot/WEB-INF/lib/scala-library.jar"/>
+	<property name="scalariform.jar" value="docroot/WEB-INF/lib/scalariform.jar"/>
+
+	<path id="scala.build.classpath">
+	    <pathelement location="${scala-library.jar}" />
+	    <pathelement location="${scala-compiler.jar}" />
+	    <path refid="portal.classpath" />    		
+	</path>
+
+	<path id="scala.scalariform.classpath">
+	    <pathelement location="${scala-library.jar}" />
+	    <pathelement location="${scalariform.jar}" />
+	</path>
+
+	<target name="compile">
+		<antcall target="scalac" />
+
+		<antcall target="build-common-plugin.compile" />
+	</target>
+    	
+  	<target name="fsc" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <fsc classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${base.sources.dir}" deprecation="true">
+	      <include name="**/*.scala"   />
+	      <include name="**/*.java" />
+	   </fsc>
+  	</target>
+
+	<target name="format-scala-code">
+  		<fileset id="scala.files" dir="${scala.sources.dir}">
+    		<include name="**/*.scala"/>
+  		</fileset>
+
+  		<pathconvert property="scala.source.code" pathsep=" " refid="scala.files" /> 
+	
+  		<java
+			classname="scalariform.commandline.Main"
+			classpathref="scala.scalariform.classpath"
+			failonerror="true"
+			fork="true"
+			newenvironment="true"
+		>
+			<arg value="${scala.scalariform.format.alignParameters}" />
+			<arg value="${scala.scalariform.format.alignSingleLineCaseStatements}" />
+			<arg value="${scala.scalariform.format.alignSingleLineCaseStatements.maxArrowIndent}" /> 
+    		<arg value="${scala.scalariform.format.compactControlReadability}" />
+		    <arg value="${scala.scalariform.format.compactStringConcatenation}" />
+		    <arg value="${scala.scalariform.format.doubleIndentClassDeclaration}" />
+		    <arg value="${scala.scalariform.format.formatXml}" />
+		    <arg value="${scala.scalariform.format.indentLocalDefs}" />
+		    <arg value="${scala.scalariform.format.indentPackageBlocks}" />
+		    <arg value="${scala.scalariform.format.indentWithTabs}" />     
+		    <arg value="${scala.scalariform.format.indentSpaces}" />          
+		    <arg value="${scala.scalariform.format.multilineScaladocCommentsStartOnFirstLine}" />
+		    <arg value="${scala.scalariform.format.placeScaladocAsterisksBeneathSecondAsterisk}" />
+		    <arg value="${scala.scalariform.format.preserveDanglingCloseParenthesis}" />
+		    <arg value="${scala.scalariform.format.preserveSpaceBeforeArguments}" />
+		    <arg value="${scala.scalariform.format.rewriteArrowSymbols}" />
+		    <arg value="${scala.scalariform.format.spaceBeforeColon}" />
+		    <arg value="${scala.scalariform.format.spaceInsideBrackets}" />
+		    <arg value="${scala.scalariform.format.spaceInsideParentheses}" />       
+		    <arg value="${scala.scalariform.format.spacesWithinPatternBinders}" />
+		    <arg value="${scala.scalariform.format.test}" />
+		    <arg value="${scala.scalariform.format.verbose}" />  
+			<arg value="${scala.source.code}" />
+		</java>	
+  	</target>	
+
+	<target name="fsc-reset" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <fsc classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${base.sources.dir}" deprecation="true" reset="true">
+	      <include name="**/*.scala" />
+	      <include name="**/*.java" />
+	   </fsc>
+  	</target>
+
+	<target name="fsc-shutdown" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <fsc classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${base.sources.dir}" deprecation="true" shutdown="true">
+		<include name="**/*.scala"   />
+	    <include name="**/*.java" />
+	   </fsc>
+  	</target>
+
+  	<target name="init-scala">
+	    <taskdef resource="scala/tools/ant/antlib.xml">
+	      <classpath>
+	        <pathelement location="${scala-compiler.jar}"   />
+	        <pathelement location="${scala-library.jar}"   />
+	      </classpath>
+	    </taskdef>
+	  </target>
+
+   	<target name="scalac" depends="init-scala">
+	   <mkdir dir="${build.dir}" />
+	  
+	   <scalac classpathref="scala.build.classpath" destdir="${build.dir}" srcdir="${base.sources.dir}" deprecation="true">
+	      <include name="**/*.scala"   />
+	      <include name="**/*.java" />
+	    </scalac>
+  	</target>
+
+  	<target name="update-scala-libraries">
+  		<get
+			dest="docroot/WEB-INF/lib/scala-compiler.jar"
+			src="${scala.compiler}"
+		/>
+		<get
+			dest="docroot/WEB-INF/lib/scala-library.jar"
+			src="${scala.library}"
+		/>
+  	</target>
+
+  	<target name="update-scalariform-library">
+  		<get
+			dest="docroot/WEB-INF/lib/scalariform.jar"
+			src="${scala.scalariform}"
+		/>
+  	</target>
+</project>
