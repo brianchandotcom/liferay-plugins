@@ -151,6 +151,8 @@
 			<pathelement location="docroot/WEB-INF/classes" />
 		</path>
 
+		<classpath-to-jar classpathref="service.classpath" jar="build-service-classpath.jar" />
+
 		<if>
 			<not>
 				<isset property="service.input.file" />
@@ -162,7 +164,7 @@
 
 		<java
 			classname="com.liferay.portal.tools.servicebuilder.ServiceBuilder"
-			classpathref="service.classpath"
+			classpath="build-service-classpath.jar"
 			fork="true"
 			newenvironment="true"
 			outputproperty="service.test.output"
@@ -210,6 +212,8 @@
 
 		<delete file="ServiceBuilder.temp" />
 
+		<delete file="build-service-classpath.jar" />
+
 		<mkdir dir="docroot/WEB-INF/service-classes" />
 
 		<path id="service.classpath">
@@ -241,9 +245,11 @@
 			<pathelement location="docroot/WEB-INF/classes" />
 		</path>
 
+		<classpath-to-jar classpathref="wsdd.classpath" jar="build-wsdd-classpath.jar" />
+
 		<java
 			classname="com.liferay.portal.tools.WSDDBuilder"
-			classpathref="wsdd.classpath"
+			classpath="build-wsdd-classpath.jar"
 			fork="true"
 			maxmemory="256m"
 			newenvironment="true"
@@ -255,6 +261,8 @@
 			<arg value="wsdd.service.namespace=Plugin" />
 			<arg value="wsdd.output.path=docroot/WEB-INF/src/" />
 		</java>
+
+		<delete file="build-wsdd-classpath.jar" />
 	</target>
 
 	<target name="build-wsdl">
@@ -352,6 +360,27 @@
 
 		<delete dir="${tstamp.value}" />
 	</target>
+
+	<macrodef name="classpath-to-jar">
+		<attribute name="classpathref"/>
+		<attribute name="jar"/>
+
+		<sequential>
+			<manifestclasspath property="manifest.cp" jarfile="@{jar}" maxParentLevels="99">
+				<classpath refid="@{classpathref}"/>
+			</manifestclasspath>
+
+			<manifest file="@{jar}.manifest">
+				<attribute name="Class-Path" value="${manifest.cp}"/>
+			</manifest>
+
+			<jar destfile="@{jar}" manifest="@{jar}.manifest"/>
+
+			<delete file="@{jar}.manifest"/>
+
+			<var name="manifest.cp" unset="true"/>
+		</sequential>
+	</macrodef>
 
 	<target name="clean" description="clean">
 		<delete dir="docroot/WEB-INF/classes" />
