@@ -108,8 +108,8 @@ input[type=button], input[type=reset], input[type=submit], #sign-in:hover, .aui-
 }
 
 .aui-dialog-content, .aui-underlay-content {
-	border-width: 0;
 	background-color: #F9F9F9;
+	border-width: 0;
 }
 
 .aui-dialog-hd, .aui-panel-hd {
@@ -159,10 +159,6 @@ input[type=button], input[type=reset], input[type=submit], #sign-in:hover, .aui-
 }
 
 #loginPage {
-	.portlet {
-		border-bottom-width: 0;
-	}
-
 	.login-holder, .portlet {
 		margin: 15px auto;
 	}
@@ -178,10 +174,15 @@ input[type=button], input[type=reset], input[type=submit], #sign-in:hover, .aui-
 		text-align: center;
 	}
 
+	#so-welcome-context {
+		display: table;
+		margin: 0 auto;
+	}
+
 	.portlet {
+		border-bottom-width: 0;
 		padding: 4px;
 		position: relative;
-		width: 260px;
 
 		.portlet-topper {
 			display: none;
@@ -273,6 +274,20 @@ html.ie, .ie body, .ie #loginPage {
 
 .ie6 img {
 	position: static;
+}
+
+.ie7 #loginPage {
+	#main-content {
+		text-align: center;
+	}
+
+	.portlet {
+		display: inline-block;
+	}
+
+	.portlet-content {
+		text-align: left;
+	}
 }
 
 .ie9 #loginPage .portlet {
