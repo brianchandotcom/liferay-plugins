@@ -80,10 +80,6 @@ html body {
 	z-index: 30;
 	margin: -2px 0 -1px;
 }
-/*
-.chat-bar div ul li.buddy-list .panel-trigger {
-	border-right: 0;
-}*/
 
 /* ---------- Unread Messages ---------- */
 
@@ -210,8 +206,10 @@ html body {
 }
 
 .buddy-list .panel-content div {
-	float: left;
 	font: 12px/24px Arial, Helvetica, sans-serif;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .buddy-list .panel-content .idle div {
@@ -298,6 +296,7 @@ html body {
 	font-weight: bold;
 	height: 24px;
 	line-height: 24px;
+	padding-right: 35px;
 	text-indent: 60px;
 }
 
@@ -371,7 +370,7 @@ html body {
 	color: #fff;
 	display: block;
 	line-height: 11px;
-	padding: 2px 4px 3px;
+	padding: 2px 50px 3px 4px;
 }
 
 .panel-output .incoming .name {
@@ -383,9 +382,10 @@ html body {
 	color: #eee;
 	font-size: 10px;
 	font-style: normal;
+	margin-top: -2em;
 	position: absolute;
 	right: 8px;
-	top: 2px;
+	top: 50%;
 }
 
 .panel-output .incoming .date {
