@@ -21,11 +21,13 @@
 
 	<div id="banner" role="banner">
 		<div id="heading">
-			<h1 class="company-title">
-				<a class="${logo_css_class}" href="${company_url}" title="<@liferay.language key="go-to" /> ${company_name}">
-					<span>${company_name}</span>
-				</a>
-			</h1>
+			<#if show_company_logo>
+				<h1 class="company-title">
+					<a class="${logo_css_class}" href="${company_url}" title="<@liferay.language key="go-to" /> ${company_name}">
+						<span>${company_name}</span>
+					</a>
+				</h1>
+			</#if>
 
 			<h2 class="community-title">
 				<a href="${community_default_url}" title="<@liferay.language key="go-to" /> ${community_name}">
