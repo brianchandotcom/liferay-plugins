@@ -1,0 +1,5 @@
+#parse ("$full_templates_path/so_framework_init.vm")
+
+#*
+This file allows you to override and define new Velocity variables.
+*#

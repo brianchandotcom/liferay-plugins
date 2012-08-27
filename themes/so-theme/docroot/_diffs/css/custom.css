@@ -1,4 +1,5 @@
 @import "compass";
+@import url(so-framework.css);
 
 $blue-link: #2571AD;
 $button-text-color: #34404F;
@@ -27,32 +28,6 @@ a:hover {
 	text-decoration: underline;
 }
 
-a:focus .opens-new-window-accessible {
-	clip: none;
-	position: fixed;
-	text-indent: 0;
-}
-
-.ie6 img {
-	position: static;
-}
-
-#navigation h1, #skip-to-content, #toggleFluid span, .opens-new-window-accessible {
-	clip: rect(0 0 0 0);
-	position: absolute;
-	text-indent: -9999em;
-}
-
-#banner:after, #content:after, #footer, .contacts-portlet .members-container:after, .portlet-msg-info:after, .portlet-toolbar:after, .so-portlet-activities .activity-item:after, .taglib-header:after, .tasks-portlet:after {
-	clear: both;
-	content: "";
-	display: block;
-}
-
-.lfr-has-sidebar #main-content {
-	padding-left: 0;
-}
-
 #banner #heading, #content, #footer {
 	margin: 0 auto;
 	width: 960px;
@@ -61,10 +36,6 @@ a:focus .opens-new-window-accessible {
 #content {
 	width: 760px;
 	zoom: 1;
-}
-
-#footer p {
-	padding-left: 210px;
 }
 
 #content div#column-1.portlet-column-only .portlet-column-content {
@@ -77,26 +48,17 @@ a:focus .opens-new-window-accessible {
 
 #banner {
 	border-bottom: 1px solid $gray-dark;
-	position: relative;
-	zoom: 1;
 
-	.logo {
-		display: block;
-		zoom: 0;
-
-		img {
-			max-height: 64px;
-			width: auto;
-		}
+	.logo img {
+		max-height: 64px;
+		width: auto;
 	}
 
 	.company-title {
-		float: left;
 		padding: 5px 10px 10px;
 	}
 
 	.community-title {
-		float: left;
 		font-size: 2.2em;
 		font-weight: bold;
 		line-height: 1.5em;
@@ -155,9 +117,6 @@ a:focus .opens-new-window-accessible {
 /* ---------- Layout ---------- */
 
 #content {
-	padding-left: 200px;
-	position: relative;
-
 	#so-context {
 		border: 1px solid $gray-dark;
 		border-width: 0 1px 1px 0;
@@ -198,12 +157,6 @@ a:focus .opens-new-window-accessible {
 /* ---------- Navigation ---------- */
 
 #navigation {
-	ul, li {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
 	li {
 		a {
 			border: 1px solid transparent;
@@ -235,7 +188,6 @@ a:focus .opens-new-window-accessible {
 		display: none;
 	}
 }
-
 
 /* ---------- Portlets ---------- */
 
@@ -275,10 +227,6 @@ a:focus .opens-new-window-accessible {
 
 /* ---------- Sidebar ---------- */
 
-#so-sidebar .search input[type=image], .aui-dialog .sidebar {
-	display: none;
-}
-
 #wrapper .sidebar h2 {
 	border: none;
 	font-size: 12px;
@@ -289,57 +237,20 @@ a:focus .opens-new-window-accessible {
 /* User Detail Structure */
 
 .so-user-detail {
-	display: table-cell;
-	line-height: 0;
 	padding: 10px;
-
-	.profile-image, .profile-name {
-		display: inline-block;
-		vertical-align: middle;
-	}
-
-	.profile-image {
-		height: 45px;
-		margin-right: 2px;
-		overflow: hidden;
-		width: 45px;
-
-		img {
-			max-width: 45px;
-			min-height: 45px;
-		}
-	}
 
 	.profile-name {
 		font-weight: bold;
-		line-height: 1.25em;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		width: 128px;
 	}
 }
 
 #so-sidebar {
 	border-right: 1px solid $gray-dark;
-	left: 0;
 	padding-bottom: 2.5em;
-	position: absolute;
-	top: 0;
-	width: 200px;
-	z-index: 1;
 
 	.portlet-msg, .portlet-msg-alert, .portlet-msg-error, .portlet-msg-info, .portlet-msg-success {
 		margin: 0 0 10px;
-	}
-
-	.user-profile-detail .profile-image {
-		line-height: 0;
-		padding: 0 0 10px;
-
-		img {
-			max-width: 200px;
-			min-width: 200px;
-		}
 	}
 
 	hr {
