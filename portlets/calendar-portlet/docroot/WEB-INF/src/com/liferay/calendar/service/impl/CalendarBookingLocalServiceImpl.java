@@ -245,6 +245,12 @@ public class CalendarBookingLocalServiceImpl
 			calendarId, startDate, endDate);
 	}
 
+	public List<CalendarBooking> getCalendarBookings(long[] calendarIds)
+		throws SystemException {
+
+		return calendarBookingPersistence.findByCalendarIds(calendarIds);
+	}
+
 	public int getCalendarBookingsCount(
 			long calendarId, long parentCalendarBookingId)
 		throws SystemException {

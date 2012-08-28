@@ -350,6 +350,12 @@ public class CalendarBookingLocalServiceUtil {
 		return getService().getCalendarBookings(calendarId, startDate, endDate);
 	}
 
+	public static java.util.List<com.liferay.calendar.model.CalendarBooking> getCalendarBookings(
+		long[] calendarIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getCalendarBookings(calendarIds);
+	}
+
 	public static int getCalendarBookingsCount(long calendarId,
 		long parentCalendarBookingId)
 		throws com.liferay.portal.kernel.exception.SystemException {

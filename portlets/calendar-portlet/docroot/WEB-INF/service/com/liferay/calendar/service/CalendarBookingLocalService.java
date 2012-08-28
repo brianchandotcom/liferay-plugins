@@ -308,6 +308,11 @@ public interface CalendarBookingLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.calendar.model.CalendarBooking> getCalendarBookings(
+		long[] calendarIds)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getCalendarBookingsCount(long calendarId,
 		long parentCalendarBookingId)
 		throws com.liferay.portal.kernel.exception.SystemException;

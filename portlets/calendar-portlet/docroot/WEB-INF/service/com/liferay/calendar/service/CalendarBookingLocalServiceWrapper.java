@@ -349,6 +349,12 @@ public class CalendarBookingLocalServiceWrapper
 			startDate, endDate);
 	}
 
+	public java.util.List<com.liferay.calendar.model.CalendarBooking> getCalendarBookings(
+		long[] calendarIds)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _calendarBookingLocalService.getCalendarBookings(calendarIds);
+	}
+
 	public int getCalendarBookingsCount(long calendarId,
 		long parentCalendarBookingId)
 		throws com.liferay.portal.kernel.exception.SystemException {
