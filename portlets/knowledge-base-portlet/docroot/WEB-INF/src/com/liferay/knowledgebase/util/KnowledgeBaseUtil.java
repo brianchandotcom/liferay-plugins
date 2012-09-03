@@ -53,6 +53,9 @@ import java.util.Map;
  */
 public class KnowledgeBaseUtil {
 
+	public static final boolean RSS_FEED_ENABLED =
+		GetterUtil.getBoolean(PropsUtil.get(PropsKeys.RSS_FEEDS_ENABLED));
+
 	public static OrderByComparator getKBArticleOrderByComparator(
 		String orderByCol, String orderByType) {
 
