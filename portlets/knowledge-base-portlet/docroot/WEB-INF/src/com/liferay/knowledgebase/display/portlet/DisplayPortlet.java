@@ -32,6 +32,7 @@ import com.liferay.knowledgebase.service.KBCommentServiceUtil;
 import com.liferay.knowledgebase.service.KBTemplateServiceUtil;
 import com.liferay.knowledgebase.service.permission.KBArticlePermission;
 import com.liferay.knowledgebase.util.ActionKeys;
+import com.liferay.knowledgebase.util.KnowledgeBaseUtil;
 import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.knowledgebase.util.WebKeys;
 import com.liferay.portal.NoSuchSubscriptionException;
@@ -61,6 +62,7 @@ import com.liferay.portlet.documentlibrary.FileNameException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
+import com.liferay.portlet.journal.NoSuchFeedException;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
@@ -73,6 +75,9 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Peter Shin
@@ -256,6 +261,19 @@ public class DisplayPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
+		if (!KnowledgeBaseUtil.RSS_FEED_ENABLED) {
+			HttpServletRequest request = PortalUtil.getHttpServletRequest(
+				resourceRequest);
+			HttpServletResponse response = PortalUtil.getHttpServletResponse(
+				resourceResponse);
+
+			PortalUtil.sendError(
+				HttpServletResponse.SC_NOT_FOUND, new NoSuchFeedException(),
+				request, response);
+
+			return;
+		}
+
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
@@ -276,6 +294,19 @@ public class DisplayPortlet extends MVCPortlet {
 	public void serveKBArticleRSS(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
+
+		if (!KnowledgeBaseUtil.RSS_FEED_ENABLED) {
+			HttpServletRequest request = PortalUtil.getHttpServletRequest(
+				resourceRequest);
+			HttpServletResponse response = PortalUtil.getHttpServletResponse(
+				resourceResponse);
+
+			PortalUtil.sendError(
+				HttpServletResponse.SC_NOT_FOUND, new NoSuchFeedException(),
+				request, response);
+
+			return;
+		}
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);

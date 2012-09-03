@@ -16,111 +16,123 @@
 
 <c:choose>
 	<c:when test="<%= themeDisplay.isStateExclusive() %>">
+		<c:choose>
+			<c:when test="<%= !RSS_FEEDS_ENABLED %>">
 
-		<%
-		String url = ParamUtil.getString(request, "url");
-		boolean all = ParamUtil.getBoolean(request, "all");
+				<%
+				PortalUtil.sendError(HttpServletResponse.SC_NOT_FOUND, new NoSuchFeedException(), request, response);
+				%>
 
-		String svnURL = "svn://svn.liferay.com/repos/public" + url;
+			</c:when>
+			<c:otherwise>
 
-		SVNRepository svnRepository = SVNRepositoryLocalServiceUtil.getSVNRepository(svnURL);
+				<%
+				String url = ParamUtil.getString(request, "url");
+				boolean all = ParamUtil.getBoolean(request, "all");
 
-		List<SVNRevision> svnRevisions = null;
+				String svnURL = "svn://svn.liferay.com/repos/public" + url;
 
-		if (all) {
-			svnRevisions = SVNRevisionLocalServiceUtil.getSVNRevisions(svnRepository.getSvnRepositoryId(), 0, 100);
-		}
-		else {
-			String svnUserId = user2.getScreenName();
+				SVNRepository svnRepository = SVNRepositoryLocalServiceUtil.getSVNRepository(svnURL);
 
-			svnRevisions = SVNRevisionLocalServiceUtil.getSVNRevisions(svnUserId, svnRepository.getSvnRepositoryId(), 0, 100);
-		}
+				List<SVNRevision> svnRevisions = null;
 
-		String title = null;
+				if (all) {
+					svnRevisions = SVNRevisionLocalServiceUtil.getSVNRevisions(svnRepository.getSvnRepositoryId(), 0, 100);
+				}
+				else {
+					String svnUserId = user2.getScreenName();
 
-		if (all) {
-			title = LanguageUtil.format(pageContext, "all-commits-on-x", svnURL);
-		}
-		else {
-			title = LanguageUtil.format(pageContext, "x's-commits-on-x", new Object[] {HtmlUtil.escape(user2.getFullName()), svnURL});
-		}
+					svnRevisions = SVNRevisionLocalServiceUtil.getSVNRevisions(svnUserId, svnRepository.getSvnRepositoryId(), 0, 100);
+				}
 
-		SyndFeed syndFeed = new SyndFeedImpl();
+				String title = null;
 
-		syndFeed.setFeedType(RSSUtil.FEED_TYPE_DEFAULT);
-		syndFeed.setLink(currentURL);
-		syndFeed.setTitle(title);
-		syndFeed.setDescription(title);
+				if (all) {
+					title = LanguageUtil.format(pageContext, "all-commits-on-x", svnURL);
+				}
+				else {
+					title = LanguageUtil.format(pageContext, "x's-commits-on-x", new Object[] {HtmlUtil.escape(user2.getFullName()), svnURL});
+				}
 
-		List<SyndEntry> entries = new ArrayList<SyndEntry>();
+				SyndFeed syndFeed = new SyndFeedImpl();
 
-		syndFeed.setEntries(entries);
+				syndFeed.setFeedType(RSSUtil.FEED_TYPE_DEFAULT);
+				syndFeed.setLink(currentURL);
+				syndFeed.setTitle(title);
+				syndFeed.setDescription(title);
 
-		for (SVNRevision svnRevision : svnRevisions) {
-			String link = svnRevision.getWebRevisionNumberURL();
+				List<SyndEntry> entries = new ArrayList<SyndEntry>();
 
-			SyndEntry syndEntry = new SyndEntryImpl();
+				syndFeed.setEntries(entries);
 
-			syndEntry.setAuthor(HtmlUtil.escape(user2.getFullName()));
-			syndEntry.setTitle(LanguageUtil.get(pageContext, "revision") + StringPool.SPACE + svnRevision.getRevisionNumber());
-			syndEntry.setLink(link);
-			syndEntry.setPublishedDate(svnRevision.getCreateDate());
+				for (SVNRevision svnRevision : svnRevisions) {
+					String link = svnRevision.getWebRevisionNumberURL();
 
-			Object[] jiraIssueAndComments = svnRevision.getJIRAIssueAndComments();
+					SyndEntry syndEntry = new SyndEntryImpl();
 
-			JIRAIssue jiraIssue = null;
-			String comments = svnRevision.getComments();
+					syndEntry.setAuthor(HtmlUtil.escape(user2.getFullName()));
+					syndEntry.setTitle(LanguageUtil.get(pageContext, "revision") + StringPool.SPACE + svnRevision.getRevisionNumber());
+					syndEntry.setLink(link);
+					syndEntry.setPublishedDate(svnRevision.getCreateDate());
 
-			if (jiraIssueAndComments != null) {
-				jiraIssue = (JIRAIssue)jiraIssueAndComments[0];
-				comments = (String)jiraIssueAndComments[1];
+					Object[] jiraIssueAndComments = svnRevision.getJIRAIssueAndComments();
 
-				StringBuilder sb = new StringBuilder();
+					JIRAIssue jiraIssue = null;
+					String comments = svnRevision.getComments();
 
-				sb.append(comments);
-				sb.append("<br />");
+					if (jiraIssueAndComments != null) {
+						jiraIssue = (JIRAIssue)jiraIssueAndComments[0];
+						comments = (String)jiraIssueAndComments[1];
 
-				sb.append(jiraIssue.getSummary());
-				sb.append("<br />");
+						StringBuilder sb = new StringBuilder();
 
-				sb.append("<a href=\"");
-				sb.append(link);
-				sb.append("\"><img border=\"0\" src=\"");
-				sb.append(request.getContextPath());
-				sb.append("/icons/svn.png\" />SVN</a><br />");
+						sb.append(comments);
+						sb.append("<br />");
 
-				sb.append("<a href=\"http://issues.liferay.com/browse/");
-				sb.append(jiraIssue.getKey());
-				sb.append("\"><img border=\"0\" src=\"");
-				sb.append(request.getContextPath());
-				sb.append("/icons/jira.png\" />JIRA</a>");
+						sb.append(jiraIssue.getSummary());
+						sb.append("<br />");
 
-				comments = sb.toString();
-			}
+						sb.append("<a href=\"");
+						sb.append(link);
+						sb.append("\"><img border=\"0\" src=\"");
+						sb.append(request.getContextPath());
+						sb.append("/icons/svn.png\" />SVN</a><br />");
 
-			SyndContent syndContent = new SyndContentImpl();
+						sb.append("<a href=\"http://issues.liferay.com/browse/");
+						sb.append(jiraIssue.getKey());
+						sb.append("\"><img border=\"0\" src=\"");
+						sb.append(request.getContextPath());
+						sb.append("/icons/jira.png\" />JIRA</a>");
 
-			syndContent.setType(RSSUtil.ENTRY_TYPE_DEFAULT);
-			syndContent.setValue(comments);
+						comments = sb.toString();
+					}
 
-			syndEntry.setDescription(syndContent);
+					SyndContent syndContent = new SyndContentImpl();
 
-			entries.add(syndEntry);
-		}
+					syndContent.setType(RSSUtil.ENTRY_TYPE_DEFAULT);
+					syndContent.setValue(comments);
 
-		String feedXML = StringPool.BLANK;
+					syndEntry.setDescription(syndContent);
 
-		try {
-			feedXML = RSSUtil.export(syndFeed);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
+					entries.add(syndEntry);
+				}
 
-		response.setContentType(ContentTypes.TEXT_XML_UTF8);
-		%>
+				String feedXML = StringPool.BLANK;
 
-		<%= feedXML %>
+				try {
+					feedXML = RSSUtil.export(syndFeed);
+				}
+				catch (Exception e) {
+					_log.error(e, e);
+				}
+
+				response.setContentType(ContentTypes.TEXT_XML_UTF8);
+				%>
+
+				<%= feedXML %>
+
+			</c:otherwise>
+		</c:choose>
 	</c:when>
 	<c:otherwise>
 
@@ -193,12 +205,15 @@
 										<td>
 											<%= SVNRevisionLocalServiceUtil.getSVNRevisionsCount(svnUserId, svnRepository.getSvnRepositoryId()) %>
 										</td>
-										<td>
-											<liferay-ui:icon
-												image="rss"
-												url='<%= PortalUtil.getPathFriendlyURLPublic() + StringPool.SLASH + user2.getScreenName() + "/profile/-/svn/rss/user" + svnRepository.getShortURL() %>'
-											/>
-										</td>
+
+										<c:if test="<%= RSS_FEEDS_ENABLED %>">
+											<td>
+												<liferay-ui:icon
+													image="rss"
+													url='<%= PortalUtil.getPathFriendlyURLPublic() + StringPool.SLASH + user2.getScreenName() + "/profile/-/svn/rss/user" + svnRepository.getShortURL() %>'
+												/>
+											</td>
+										</c:if>
 									</tr>
 									<tr>
 										<td>
@@ -207,12 +222,15 @@
 										<td>
 											<%= SVNRevisionLocalServiceUtil.getSVNRevisionsCount(svnRepository.getSvnRepositoryId()) %>
 										</td>
-										<td>
-											<liferay-ui:icon
-												image="rss"
-												url='<%= PortalUtil.getPathFriendlyURLPublic() + StringPool.SLASH + user2.getScreenName() + "/profile/-/svn/rss/all" + svnRepository.getShortURL() %>'
-											/>
-										</td>
+
+										<c:if test="<%= RSS_FEEDS_ENABLED %>">
+											<td>
+												<liferay-ui:icon
+													image="rss"
+													url='<%= PortalUtil.getPathFriendlyURLPublic() + StringPool.SLASH + user2.getScreenName() + "/profile/-/svn/rss/all" + svnRepository.getShortURL() %>'
+												/>
+											</td>
+										</c:if>
 									</tr>
 									</table>
 								</div>
