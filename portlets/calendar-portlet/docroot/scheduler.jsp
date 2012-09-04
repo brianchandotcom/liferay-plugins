@@ -22,6 +22,8 @@ long currentDate = ParamUtil.getLong(request, "currentDate", now.getTimeInMillis
 String editCalendarBookingURL = ParamUtil.getString(request, "editCalendarBookingURL");
 String filterCalendarBookings = ParamUtil.getString(request, "filterCalendarBookings", null);
 boolean readOnly = ParamUtil.getBoolean(request, "readOnly");
+
+List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.getCompanyId(), null, null, null, true, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new CalendarNameComparator(true), ActionKeys.MANAGE_BOOKINGS);
 %>
 
 <div class="calendar-portlet-wrapper" id="<portlet:namespace />scheduler"></div>
@@ -33,6 +35,15 @@ boolean readOnly = ParamUtil.getBoolean(request, "readOnly");
 <aui:script use="aui-toggler,liferay-calendar-list,liferay-scheduler,liferay-store,json">
 	Liferay.CalendarUtil.PORTLET_NAMESPACE = '<portlet:namespace />';
 	Liferay.CalendarUtil.USER_TIMEZONE_OFFSET = <%= JCalendarUtil.getTimeZoneOffset(userTimeZone) %>;
+
+	var manageableCalendars = Liferay.CalendarUtil.manageableCalendars;
+
+	A.each(
+		<%= CalendarUtil.toCalendarsJSONArray(themeDisplay, manageableCalendars) %>,
+		function(item, index, collection) {
+			manageableCalendars[item.calendarId] = item;
+		}
+	);
 
 	window.<portlet:namespace />dayView = new A.SchedulerDayView(
 		{
@@ -63,6 +74,7 @@ boolean readOnly = ParamUtil.getBoolean(request, "readOnly");
 		eventRecorder = new Liferay.SchedulerEventRecorder(
 			{
 				calendarId: <%= userDefaultCalendar.getCalendarId() %>,
+				color: '<%= ColorUtil.toHexString(userDefaultCalendar.getColor()) %>',
 				duration: <%= defaultDuration %>,
 				editCalendarBookingURL: '<%= HtmlUtil.escapeJS(editCalendarBookingURL) %>',
 				portletNamespace: '<portlet:namespace />',
