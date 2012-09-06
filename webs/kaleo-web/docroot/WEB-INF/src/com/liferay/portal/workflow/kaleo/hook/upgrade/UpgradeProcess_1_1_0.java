@@ -15,10 +15,22 @@
 package com.liferay.portal.workflow.kaleo.hook.upgrade;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoAction;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoCondition;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoDefinition;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoLog;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoNode;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoNotification;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoTask;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoTaskAssignment;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoTaskInstanceToken;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoTimer;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeKaleoTimerInstanceToken;
 import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0.UpgradeWorkflowContext;
 
 /**
  * @author Janghyun Kim
+ * @author Michael C. Han
  */
 public class UpgradeProcess_1_1_0 extends UpgradeProcess {
 
@@ -29,7 +41,19 @@ public class UpgradeProcess_1_1_0 extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeKaleoAction.class);
+		upgrade(UpgradeKaleoCondition.class);
+		upgrade(UpgradeKaleoDefinition.class);
+		upgrade(UpgradeKaleoLog.class);
+		upgrade(UpgradeKaleoNode.class);
+		upgrade(UpgradeKaleoNotification.class);
+		upgrade(UpgradeKaleoTask.class);
+		upgrade(UpgradeKaleoTaskAssignment.class);
+		upgrade(UpgradeKaleoTaskInstanceToken.class);
+		upgrade(UpgradeKaleoTimer.class);
+		upgrade(UpgradeKaleoTimerInstanceToken.class);
 		upgrade(UpgradeWorkflowContext.class);
+
 	}
 
 }
