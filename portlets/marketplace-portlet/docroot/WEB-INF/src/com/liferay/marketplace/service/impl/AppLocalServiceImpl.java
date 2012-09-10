@@ -153,10 +153,18 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 				Time.getTimestamp();
 
 		ZipFile zipFile = null;
+		InputStream zipInputStream = null;
 
 		try {
-			File liferayPackageFile = DLStoreUtil.getFile(
+			zipInputStream = DLStoreUtil.getFileAsStream(
 				app.getCompanyId(), CompanyConstants.SYSTEM, app.getFilePath());
+
+			if (zipInputStream == null) {
+				throw new IOException(
+					"Cannot read the file: " + app.getFilePath());
+			}
+
+			File liferayPackageFile = FileUtil.createTempFile(zipInputStream);
 
 			zipFile = new ZipFile(liferayPackageFile);
 
@@ -238,6 +246,14 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 			if (zipFile != null) {
 				try {
 					zipFile.close();
+				}
+				catch (IOException ioe) {
+				}
+			}
+
+			if (zipInputStream != null) {
+				try {
+					zipInputStream.close();
 				}
 				catch (IOException ioe) {
 				}
