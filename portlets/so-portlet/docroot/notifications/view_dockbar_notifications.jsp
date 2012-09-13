@@ -20,8 +20,6 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String userNotificationEventUuids = StringPool.BLANK;
-
 List<NotificationEvent> notificationEvents = null;
 
 try {
@@ -33,62 +31,75 @@ catch (UnknownChannelException e) {
 	notificationEvents = channel.getNotificationEvents();
 }
 
-int notificationEventsCount = notificationEvents.size();
+List<NotificationEvent> userNotificationEvents = new ArrayList<NotificationEvent>();
+String userNotificationEventUuids = StringPool.BLANK;
+
+for (NotificationEvent notificationEvent : notificationEvents) {
+	if (notificationEvent.getType().equals(PortletKeys.SO_NOTIFICATION)) {
+		userNotificationEvents.add(notificationEvent);
+	}
+}
+
+int notificationEventsCount = userNotificationEvents.size();
 %>
 
 <div class="aui-menu aui-overlaycontext-hidden user-notification-events" id="<portlet:namespace />notificationsMenuContainer">
 	<div class="aui-menu-content user-notification-events-container" id="<portlet:namespace />notificationsMenuContent">
 
 		<%
-		if (!notificationEvents.isEmpty()) {
-			for (NotificationEvent notificationEvent : notificationEvents) {
-				if (notificationEvent.getType().equals(PortletKeys.SO_NOTIFICATION)) {
-					userNotificationEventUuids = StringUtil.add(userNotificationEventUuids, notificationEvent.getUuid());
-				}
-				else {
-					notificationEventsCount--;
+		int maxNotificationEvents = Math.min(notificationEventsCount, PortletPropsValues.NOTIFICATIONS_DOCKBAR_MAX_ELEMENTS);
 
-					continue;
-				}
+		for  (int i = 0; i < maxNotificationEvents; i++) {
+			NotificationEvent  notificationEvent = userNotificationEvents.get(i);
 
-				JSONObject notificationEventJSONObject = notificationEvent.getPayload();
+			if (notificationEvent.getType().equals(PortletKeys.SO_NOTIFICATION)) {
+				userNotificationEventUuids = StringUtil.add(userNotificationEventUuids, notificationEvent.getUuid());
+			}
+			else {
+				notificationEventsCount--;
 
-				String portletId = notificationEventJSONObject.getString("portletId");
+				continue;
+			}
 
-				long userId = notificationEventJSONObject.getLong("userId");
+			userNotificationEventUuids = StringUtil.add(userNotificationEventUuids, notificationEvent.getUuid());
 
-				String userFullName = PortalUtil.getUserName(userId, StringPool.BLANK);
+			JSONObject notificationEventJSONObject = notificationEvent.getPayload();
 
-				String userDisplayURL = StringPool.BLANK;
-				String userPortaitURL = StringPool.BLANK;
+			String portletId = notificationEventJSONObject.getString("portletId");
 
-				User curUser = UserLocalServiceUtil.fetchUserById(userId);
+			long userId = notificationEventJSONObject.getLong("userId");
 
-				if (curUser != null) {
-					userDisplayURL = curUser.getDisplayURL(themeDisplay);
-					userPortaitURL = curUser.getPortraitURL(themeDisplay);
-				}
+			String userFullName = PortalUtil.getUserName(userId, StringPool.BLANK);
 
-				int daysBetween = DateUtil.getDaysBetween(new Date(notificationEvent.getTimestamp()), new Date(), timeZone);
-			%>
+			String userDisplayURL = StringPool.BLANK;
+			String userPortaitURL = StringPool.BLANK;
 
-				<c:choose>
-					<c:when test="<%= portletId.equals(PortletKeys.ANNOUNCEMENTS) %>">
-						<%@ include file="/notifications/view_announcement.jspf" %>
-					</c:when>
-					<c:when test="<%= portletId.equals(PortletKeys.SO_INVITE_MEMBERS) %>">
-						<%@ include file="/notifications/view_member_request.jspf" %>
-					</c:when>
-					<c:when test='<%= portletId.equals("1_WAR_contactsportlet") %>'>
-						<%@ include file="/notifications/view_social_request.jspf" %>
-					</c:when>
-					<c:otherwise>
-						<%@ include file="/notifications/view_notification.jspf" %>
-					</c:otherwise>
-				</c:choose>
+			User curUser = UserLocalServiceUtil.fetchUserById(userId);
+
+			if (curUser != null) {
+				userDisplayURL = curUser.getDisplayURL(themeDisplay);
+				userPortaitURL = curUser.getPortraitURL(themeDisplay);
+			}
+
+			int daysBetween = DateUtil.getDaysBetween(new Date(notificationEvent.getTimestamp()), new Date(), timeZone);
+		%>
+
+			<c:choose>
+				<c:when test="<%= portletId.equals(PortletKeys.ANNOUNCEMENTS) %>">
+					<%@ include file="/notifications/view_announcement.jspf" %>
+				</c:when>
+				<c:when test="<%= portletId.equals(PortletKeys.SO_INVITE_MEMBERS) %>">
+					<%@ include file="/notifications/view_member_request.jspf" %>
+				</c:when>
+				<c:when test='<%= portletId.equals("1_WAR_contactsportlet") %>'>
+					<%@ include file="/notifications/view_social_request.jspf" %>
+				</c:when>
+				<c:otherwise>
+					<%@ include file="/notifications/view_notification.jspf" %>
+				</c:otherwise>
+			</c:choose>
 
 		<%
-			}
 		}
 		%>
 
