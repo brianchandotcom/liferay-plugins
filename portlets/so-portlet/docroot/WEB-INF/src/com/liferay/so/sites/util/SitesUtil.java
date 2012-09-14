@@ -110,7 +110,7 @@ public class SitesUtil {
 			params.put("usersGroups", userId);
 
 			List<Group> groups = GroupLocalServiceUtil.search(
-				companyId, keywords, null, params, start, end,
+				companyId, keywords, null, params, true, start, end,
 				new GroupNameComparator(true));
 
 			return groups;
@@ -130,7 +130,7 @@ public class SitesUtil {
 			params.put("types", types);
 
 			List<Group> groups = GroupLocalServiceUtil.search(
-				companyId, keywords, null, params, start, end,
+				companyId, keywords, null, params, true, start, end,
 				new GroupNameComparator(true));
 
 			return groups;
@@ -138,7 +138,7 @@ public class SitesUtil {
 	}
 
 	protected static int doGetVisibleSitesCount(
-			long comapnyId, long userId, String keywords, boolean usersSites)
+			long companyId, long userId, String keywords, boolean usersSites)
 		throws Exception {
 
 		if (usersSites) {
@@ -150,7 +150,7 @@ public class SitesUtil {
 			params.put("usersGroups", userId);
 
 			return GroupLocalServiceUtil.searchCount(
-				comapnyId, keywords, null, params);
+				companyId, keywords, null, params, true);
 		}
 		else {
 			LinkedHashMap<String, Object> params =
@@ -166,7 +166,7 @@ public class SitesUtil {
 			params.put("types", types);
 
 			int groupsCount = GroupLocalServiceUtil.searchCount(
-				comapnyId, keywords, null, params);
+				companyId, keywords, null, params, true);
 
 			params.clear();
 
@@ -180,7 +180,7 @@ public class SitesUtil {
 			params.put("types", types);
 
 			return groupsCount + GroupLocalServiceUtil.searchCount(
-				comapnyId, keywords, null, params);
+				companyId, keywords, null, params, true);
 		}
 	}
 
