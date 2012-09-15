@@ -353,6 +353,23 @@ AUI.add(
 				return instance.dataSource;
 			},
 
+			getEvent: function(calendarBookingId, success, failure) {
+				var instance = this;
+
+				instance.invoke(
+					{
+						'/calendar-portlet/calendarbooking/get-calendar-booking': {
+							calendarBookingId: calendarBookingId
+						}
+					},
+					{
+						cache: false,
+						failure: failure,
+						success: success
+					}
+				);
+			},
+
 			getEvents: function(startDate, endDate, status, success, failure) {
 				var instance = this;
 
@@ -501,22 +518,23 @@ AUI.add(
 				schedulerEvent.set('calendarResourceId', data.calendarResourceId);
 				schedulerEvent.set('parentCalendarBookingId', data.parentCalendarBookingId);
 				schedulerEvent.set('recurrence', data.recurrence);
-
 				schedulerEvent.set('status', data.status);
 
-				var oldCalendar = instance.availableCalendars[oldCalendarId];
+				if (schedulerEvent.get('scheduler')) {
+					var oldCalendar = instance.availableCalendars[oldCalendarId];
 
-				if (oldCalendar) {
-					oldCalendar.removeEvent(schedulerEvent);
+					if (oldCalendar) {
+						oldCalendar.removeEvent(schedulerEvent);
+					}
+
+					var newCalendar = instance.availableCalendars[newCalendarId];
+
+					if (newCalendar) {
+						newCalendar.addEvent(schedulerEvent);
+					}
+
+					schedulerEvent.set('calendarId', newCalendarId);
 				}
-
-				var newCalendar = instance.availableCalendars[newCalendarId];
-
-				if (newCalendar) {
-					newCalendar.addEvent(schedulerEvent);
-				}
-
-				schedulerEvent.set('calendarId', newCalendarId);
 			},
 
 			syncCalendarsMap: function() {
@@ -588,7 +606,7 @@ AUI.add(
 				return DateMath.subtract(date, DateMath.MINUTES, date.getTimezoneOffset() + instance.USER_TIMEZONE_OFFSET / DateMath.ONE_MINUTE_MS);
 			},
 
-			updateEvent: function(schedulerEvent) {
+			updateEvent: function(schedulerEvent, success) {
 				var instance = this;
 
 				instance.invoke(
@@ -626,6 +644,59 @@ AUI.add(
 								else {
 									instance.setEventAttrs(schedulerEvent, data);
 								}
+							}
+
+							if (success) {
+								success.call(this, data);
+							}
+						}
+					}
+				);
+			},
+
+			updateEventInstance: function(schedulerEvent, allFollowing, success) {
+				var instance = this;
+
+				instance.invoke(
+					{
+						'/calendar-portlet/calendarbooking/update-calendar-booking-instance': {
+							allDay: schedulerEvent.get('allDay'),
+							allFollowing: allFollowing,
+							calendarBookingId: schedulerEvent.get('calendarBookingId'),
+							calendarId: schedulerEvent.get('calendarId'),
+							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
+							endDate: instance.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
+							firstReminder: schedulerEvent.get('firstReminder'),
+							firstReminderType: schedulerEvent.get('firstReminderType'),
+							location: schedulerEvent.get('location'),
+							recurrence: schedulerEvent.get('recurrence'),
+							secondReminder: schedulerEvent.get('secondReminder'),
+							secondReminderType: schedulerEvent.get('secondReminderType'),
+							startDate: instance.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
+							status: schedulerEvent.get('status'),
+							titleMap: instance.getLocalizationMap(schedulerEvent.get('content')),
+							userId: USER_ID
+						}
+					},
+					{
+						start: function() {
+							schedulerEvent.set('loading', true);
+						},
+
+						success: function(data) {
+							schedulerEvent.set('loading', false);
+
+							if (data) {
+								if (data.exception) {
+									return;
+								}
+								else {
+									instance.setEventAttrs(schedulerEvent, data);
+								}
+							}
+
+							if (success) {
+								success.call(this, data);
 							}
 						}
 					}
@@ -756,8 +827,72 @@ AUI.add(
 						var instance = this;
 
 						var schedulerEvent = event.target;
+						var calendarBookingId = schedulerEvent.get('calendarBookingId');
 
-						if (schedulerEvent.isMasterBooking()) {
+						if (schedulerEvent.isRecurring()) {
+							Liferay.RecurrenceUtil.openConfirmationPanel(
+								'update',
+								schedulerEvent.isMasterBooking(),
+								function() {
+									CalendarUtil.updateEventInstance(schedulerEvent, false);
+
+									this.close();
+								},
+								function() {
+									CalendarUtil.updateEventInstance(
+										schedulerEvent,
+										true,
+										function() {
+											instance.loadCalendarBookings();
+										}
+									);
+
+									this.close();
+								},
+								function() {
+									CalendarUtil.getEvent(
+										calendarBookingId,
+										function(calendarBooking) {
+											var newSchedulerEvent = CalendarUtil.toSchedulerEvent(calendarBooking);
+
+											newSchedulerEvent.copyPropagateAttrValues(schedulerEvent);
+
+											var offset = 0;
+
+											var newVal = event.newVal;
+											var prevVal = event.prevVal;
+
+											if (isDate(newVal) && isDate(prevVal)) {
+												offset = newVal.getTime() - prevVal.getTime();
+											}
+
+											var calendarStartDate = calendarBooking.startDate + offset;
+
+											var startDate = CalendarUtil.toUserTimeZone(calendarStartDate);
+											var endDate = CalendarUtil.toUserTimeZone(calendarStartDate + (schedulerEvent.getSecondsDuration() * 1000));
+
+											newSchedulerEvent.set('startDate', startDate);
+											newSchedulerEvent.set('endDate', endDate);
+
+											CalendarUtil.updateEvent(
+												newSchedulerEvent,
+												function() {
+													instance.loadCalendarBookings();
+												}
+											);
+										}
+									);
+
+									this.close();
+								},
+								function() {
+									instance.loadCalendarBookings();
+
+									this.close();
+								}
+							);
+						}
+						else if (schedulerEvent.isMasterBooking()) {
 							CalendarUtil.updateEvent(schedulerEvent);
 						}
 						else {
@@ -808,8 +943,8 @@ AUI.add(
 
 						if (schedulerEvent.isRecurring()) {
 							RecurrenceUtil.openConfirmationPanel(
-								schedulerEvent,
 								'delete',
+								schedulerEvent.isMasterBooking(),
 								function() {
 									CalendarUtil.deleteEventInstance(schedulerEvent, false);
 
