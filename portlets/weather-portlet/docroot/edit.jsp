@@ -27,6 +27,18 @@ zipsString = StringUtil.merge(zips, StringPool.NEW_LINE);
 <form action="<portlet:actionURL />" method="post" name="<portlet:namespace />fm">
 <input name="<portlet:namespace /><%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 
+<div class="portlet-msg-info">
+	<a href="http://www.worldweatheronline.com/free-weather-feed.aspx"><liferay-ui:message key="you-can-get-an-api-key-directly-from-world-weather-online" /></a>
+</div>
+
+<liferay-ui:message key="world-weather-online-api-key" />
+
+<br /><br />
+
+<input name="<portlet:namespace />apiKey" value="<%= HtmlUtil.escape(apiKey) %>" />
+
+<br /><br />
+
 <liferay-ui:error exception="<%= ValidatorException.class %>">
 
 	<%

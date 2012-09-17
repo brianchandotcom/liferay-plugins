@@ -55,11 +55,14 @@ public class WeatherPortlet extends MVCPortlet {
 
 		PortletPreferences preferences = actionRequest.getPreferences();
 
+		String apiKey = ParamUtil.getString(actionRequest, "apiKey");
+
 		String[] zips = StringUtil.split(
 			ParamUtil.getString(actionRequest, "zips"), "\n");
 
 		boolean fahrenheit = ParamUtil.get(actionRequest, "fahrenheit", true);
 
+		preferences.setValue("apiKey", apiKey);
 		preferences.setValues("zips", zips);
 		preferences.setValue("fahrenheit", String.valueOf(fahrenheit));
 

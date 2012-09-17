@@ -24,8 +24,8 @@ import com.liferay.weather.model.Weather;
  */
 public class WeatherUtil {
 
-	public static Weather getWeather(String zip) {
-		WebCacheItem wci = new WeatherWebCacheItem(zip);
+	public static Weather getWeather(String apiKey, String zip) {
+		WebCacheItem wci = new WeatherWebCacheItem(apiKey, zip);
 
 		String key = WeatherUtil.class.getName() + StringPool.PERIOD + zip;
 
