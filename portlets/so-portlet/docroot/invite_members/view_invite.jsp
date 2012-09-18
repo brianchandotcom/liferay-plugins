@@ -55,19 +55,22 @@
 					<div class="list">
 
 						<%
-						LinkedHashMap usersParams = new LinkedHashMap();
-
-						List<User> users = UserLocalServiceUtil.search(layout.getCompanyId(), StringPool.BLANK, WorkflowConstants.STATUS_APPROVED, usersParams, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new ContactFirstNameComparator(true));
-
 						User defaultUser = UserLocalServiceUtil.getDefaultUser(layout.getCompanyId());
 
-						List<User> inviteUsers = new ArrayList<User>();
+						List<User> allCompanyUsers = UserLocalServiceUtil.getCompanyUsers(layout.getCompanyId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-						for (User curUser : users) {
-							if (!UserLocalServiceUtil.hasGroupUser(layout.getGroupId(), curUser.getUserId()) && !curUser.equals(defaultUser)) {
+						List<User> usersInGroupList = UserLocalServiceUtil.getGroupUsers(layout.getGroupId());
+						Set<User> usersInGroup = new HashSet<User>(UserLocalServiceUtil.getGroupUsers(layout.getGroupId());
+
+						List<User> inviteUsers = new ArrayList<User>(allCompanyUsers.size() - usersInGroupList.size());
+
+						for (User curUser : allCompanyUsers) {
+							if(!curUser.equals(defaultUser) && (curUser.getStatus() == WorkflowConstants.STATUS_APPROVED) && (!usersInGroup.contains(curUser))) {
 								inviteUsers.add(curUser);
 							}
 						}
+
+						Collections.sort(inviteUsers, new UserFirstNameComparator(true));
 
 						if (!inviteUsers.isEmpty()) {
 							for (User curUser : inviteUsers) {
