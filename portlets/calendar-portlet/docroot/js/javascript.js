@@ -577,9 +577,13 @@ AUI.add(
 						content: calendarBooking.titleCurrentValue,
 						description: calendarBooking.descriptionCurrentValue,
 						endDate: instance.toUserTimeZone(calendarBooking.endDate),
+						firstReminder: calendarBooking.firstReminder,
+						firstReminderType: calendarBooking.firstReminderType,
 						location: calendarBooking.location,
 						parentCalendarBookingId: calendarBooking.parentCalendarBookingId,
 						recurrence: calendarBooking.recurrence,
+						secondReminder: calendarBooking.secondReminder,
+						secondReminderType: calendarBooking.secondReminderType,
 						startDate: instance.toUserTimeZone(calendarBooking.startDate),
 						status: calendarBooking.status
 					}
@@ -1022,7 +1026,7 @@ AUI.add(
 
 					firstReminder: {
 						setter: toInt,
-						value: 3600000
+						value: 0
 					},
 
 					firstReminderType: {
@@ -1048,6 +1052,22 @@ AUI.add(
 					recurrence: {
 						validator: isString,
 						value: STR_BLANK
+					},
+
+					reminder: {
+						getter: function() {
+							var instance = this;
+
+							return (instance.get('firstReminder') > 0) || (instance.get('secondReminder') > 0);
+						}
+					},
+
+					repeated: {
+						getter: function() {
+							var instance = this;
+
+							return instance.isRecurring();
+						}
 					},
 
 					secondReminder: {
@@ -1107,9 +1127,10 @@ AUI.add(
 							if ((activeViewName === 'month') && !instance.get('allDay')) {
 								node.setStyles(
 									{
-										backgroundColor: '#f8f8f8',
+										backgroundColor: instance.get('color'),
+										padding: '0 2px',
 										border: 'none',
-										color: instance.get('color')
+										color: '#111'
 									}
 								);
 							}
@@ -1381,9 +1402,9 @@ AUI.add(
 						var schedulerEvent = instance.get('event');
 						var portletNamespace = instance.get('portletNamespace');
 
-						var parentCalendarBookingId = schedulerEvent.get('parentCalendarBookingId');
-
 						if (schedulerEvent) {
+							var parentCalendarBookingId = schedulerEvent.get('parentCalendarBookingId');
+
 							CalendarUtil.getCalendarBookingInvitees(
 								parentCalendarBookingId,
 								function(data) {
