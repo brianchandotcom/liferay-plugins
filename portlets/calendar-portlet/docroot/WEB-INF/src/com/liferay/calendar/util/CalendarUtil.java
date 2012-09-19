@@ -69,31 +69,40 @@ public class CalendarUtil {
 		for (CalendarBooking calendarBooking : calendarBookings) {
 			java.util.Calendar startDateJCalendar = JCalendarUtil.getJCalendar(
 				calendarBooking.getStartDate());
+			java.util.Calendar endDateJCalendar = JCalendarUtil.getJCalendar(
+				calendarBooking.getEndDate());
 
-			int year = startDateJCalendar.get(java.util.Calendar.YEAR);
+			long days = JCalendarUtil.daysBetween(
+				startDateJCalendar, endDateJCalendar);
 
-			Map<Integer, List<Integer>> rulesMonth = rulesMap.get(year);
+			for (int i = 0; i <= days; i++) {
+				int year = startDateJCalendar.get(java.util.Calendar.YEAR);
 
-			if (rulesMonth == null) {
-				rulesMonth = new HashMap<Integer, List<Integer>>();
+				Map<Integer, List<Integer>> rulesMonth = rulesMap.get(year);
 
-				rulesMap.put(year, rulesMonth);
-			}
+				if (rulesMonth == null) {
+					rulesMonth = new HashMap<Integer, List<Integer>>();
 
-			int month = startDateJCalendar.get(java.util.Calendar.MONTH);
+					rulesMap.put(year, rulesMonth);
+				}
 
-			List<Integer> rulesDay = rulesMonth.get(month);
+				int month = startDateJCalendar.get(java.util.Calendar.MONTH);
 
-			if (rulesDay == null) {
-				rulesDay = new ArrayList<Integer>();
+				List<Integer> rulesDay = rulesMonth.get(month);
 
-				rulesMonth.put(month, rulesDay);
-			}
+				if (rulesDay == null) {
+					rulesDay = new ArrayList<Integer>();
 
-			int day = startDateJCalendar.get(java.util.Calendar.DAY_OF_MONTH);
+					rulesMonth.put(month, rulesDay);
+				}
 
-			if (!rulesDay.contains(day)) {
-				rulesDay.add(day);
+				int day = startDateJCalendar.get(java.util.Calendar.DAY_OF_MONTH);
+
+				if (!rulesDay.contains(day)) {
+					rulesDay.add(day);
+				}
+
+				startDateJCalendar.add(java.util.Calendar.DATE, 1);
 			}
 		}
 
