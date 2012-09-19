@@ -161,7 +161,7 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 
 			if (inputStream == null) {
 				throw new IOException(
-					"Cannot read the file: " + app.getFilePath());
+					"Unable to open file at " + app.getFilePath());
 			}
 
 			File liferayPackageFile = FileUtil.createTempFile(inputStream);
@@ -230,6 +230,9 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 				}
 			}
 		}
+		catch (IOException ioe) {
+			throw new PortalException(ioe.getMessage());
+		}
 		catch (ZipException ze) {
 			if (_log.isInfoEnabled()) {
 				_log.info(
@@ -237,9 +240,6 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 			}
 
 			deleteApp(app);
-		}
-		catch (IOException ioe) {
-			throw new PortalException(ioe.getMessage());
 		}
 		catch (Exception e) {
 			_log.error(e, e);
