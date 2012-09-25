@@ -370,14 +370,14 @@ AUI.add(
 				);
 			},
 
-			getEvents: function(startDate, endDate, status, success, failure) {
+			getEvents: function(startDate, endDate, status, success, failure, cache) {
 				var instance = this;
 
 				var calendarIds = A.Object.keys(instance.availableCalendars);
 
 				instance.invoke(
 					{
-						'$booking = /calendar-portlet/calendarbooking/search': {
+						'/calendar-portlet/calendarbooking/search': {
 							calendarIds: calendarIds.join(','),
 							calendarResourceIds: STR_BLANK,
 							companyId: COMPANY_ID,
@@ -394,7 +394,7 @@ AUI.add(
 						}
 					},
 					{
-						cache: true,
+						cache: !!cache,
 						failure: failure,
 						success: success
 					}
@@ -463,7 +463,7 @@ AUI.add(
 								}
 							}
 						},
-						request: '?p_auth=' + Liferay.authToken + '&cmd=' + A.JSON.stringify(service)
+						request: '?p_auth=' + Liferay.authToken + '&cmd=' + encodeURIComponent(A.JSON.stringify(service))
 					}
 				);
 			},
@@ -767,7 +767,7 @@ AUI.add(
 						Scheduler.superclass.bindUI.apply(this, arguments);
 					},
 
-					loadCalendarBookings: function() {
+					loadCalendarBookings: function(cache) {
 						var instance = this;
 
 						var filterCalendarBookings = instance.get('filterCalendarBookings');
@@ -790,7 +790,9 @@ AUI.add(
 								}
 
 								instance.loadCalendarBookingsJSON(calendarBookings);
-							}
+							},
+							null,
+							cache
 						);
 					},
 
@@ -920,7 +922,7 @@ AUI.add(
 									this.close();
 								},
 								function() {
-									instance.loadCalendarBookings();
+									instance.loadCalendarBookings(true);
 
 									this.close();
 								}
@@ -993,7 +995,7 @@ AUI.add(
 					_uiSetCurrentMonth: function(val) {
 						var instance = this;
 
-						instance.loadCalendarBookings();
+						instance.loadCalendarBookings(true);
 					}
 				}
 			}
@@ -1022,6 +1024,12 @@ AUI.add(
 					editingEvent: {
 						validator: isBoolean,
 						value: false
+					},
+
+					eventClass: {
+						valueFn: function() {
+							return Liferay.SchedulerEvent;
+						}
 					},
 
 					firstReminder: {
@@ -1089,6 +1097,8 @@ AUI.add(
 				EXTENDS: A.SchedulerEvent,
 
 				NAME: 'scheduler-event',
+
+				PROPAGATE_ATTRS: A.SchedulerEvent.PROPAGATE_ATTRS.concat(['calendarId', 'calendarBookingId', 'calendarResourceId', 'parentCalendarBookingId', 'recurrence', 'status']),
 
 				prototype: {
 					initializer: function() {
