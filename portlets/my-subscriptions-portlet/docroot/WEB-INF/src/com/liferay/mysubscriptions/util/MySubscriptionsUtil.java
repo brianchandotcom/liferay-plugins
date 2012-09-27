@@ -18,7 +18,9 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
@@ -58,6 +60,13 @@ public class MySubscriptionsUtil {
 			return PortalUtil.getLayoutFullURL(classPK, PortletKeys.BLOGS);
 		}
 
+		if (className.equals(Layout.class.getName())) {
+			classPK = LayoutLocalServiceUtil.getLayout(classPK).getGroupId();
+
+			return PortalUtil.getLayoutFullURL(
+				classPK, PortletKeys.PAGE_COMMENTS);
+		}
+
 		if (className.equals(MBCategory.class.getName())) {
 			return PortalUtil.getLayoutFullURL(
 				classPK, PortletKeys.MESSAGE_BOARDS);
@@ -67,7 +76,8 @@ public class MySubscriptionsUtil {
 	}
 
 	public static String getTitleText(
-		Locale locale, String className, long classPK, String title) {
+			Locale locale, String className, long classPK, String title)
+		throws PortalException, SystemException {
 
 		if (Validator.isNotNull(title)) {
 			return title;
@@ -76,8 +86,12 @@ public class MySubscriptionsUtil {
 		if (className.equals(BlogsEntry.class.getName())) {
 			title = "Blog at ";
 		}
+		else if (className.equals(Layout.class.getName())) {
+			classPK = LayoutLocalServiceUtil.getLayout(classPK).getGroupId();
 
-		if (className.equals(MBCategory.class.getName())) {
+			title = "Page at ";
+		}
+		else if (className.equals(MBCategory.class.getName())) {
 			title = "Message Board at ";
 		}
 
@@ -100,7 +114,10 @@ public class MySubscriptionsUtil {
 			String className, long classPK)
 		throws Exception {
 
-		if (className.equals(MBThread.class.getName())) {
+		if (className.equals(Layout.class.getName())) {
+			classPK = LayoutLocalServiceUtil.getLayout(classPK).getGroupId();
+		}
+		else if (className.equals(MBThread.class.getName())) {
 			className = MBMessage.class.getName();
 
 			MBThread mbThread = MBThreadLocalServiceUtil.getThread(classPK);
