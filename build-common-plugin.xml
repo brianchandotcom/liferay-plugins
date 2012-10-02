@@ -468,11 +468,12 @@
 			</then>
 		</if>
 
-		<delete dir="test-classes" />
-		<delete dir="test-results" />
+		<delete dir="docroot/WEB-INF/test-classes" />
+		<delete dir="docroot/WEB-INF/test-results" />
 		<delete dir="tmp" />
 		<delete file="${plugin.file}" />
 		<delete file="${plugin.src.file}" />
+		<delete file="docroot/WEB-INF/lib/${plugin.name}-test-integration.jar" />
 
 		<delete includeemptydirs="true">
 			<fileset dir="docroot" includes="**/.sass-cache/**" />
@@ -645,21 +646,21 @@ Please find a solution that does not require portal-impl.jar.
 		<antcall target="merge" />
 	</target>
 
-	<target name="compile-test">
+	<target name="compile-test" depends="compile">
 		<antcall target="compile-test-integration" inheritall="false" />
 		<antcall target="compile-test-unit" inheritall="false" />
 	</target>
 
 	<target name="compile-test-cmd">
 		<if>
-			<available file="test/${test.type}" type="dir" />
+			<available file="docroot/WEB-INF/test/${test.type}" type="dir" />
 			<then>
-				<mkdir dir="test-classes/${test.type}" />
-				<mkdir dir="test-results/${test.type}" />
+				<mkdir dir="docroot/WEB-INF/test-classes/${test.type}" />
+				<mkdir dir="docroot/WEB-INF/test-results/${test.type}" />
 
-				<copy todir="test-classes/${test.type}">
-					<fileset dir="test" includes="*.properties" />
-					<fileset dir="test/${test.type}" includes="**/*.png,**/*.properties,**/*.xml" />
+				<copy todir="docroot/WEB-INF/test-classes/${test.type}">
+					<fileset dir="docroot/WEB-INF/test" includes="*.properties" />
+					<fileset dir="docroot/WEB-INF/test/${test.type}" includes="**/*.png,**/*.properties,**/dependencies/**,**/*.xml" />
 				</copy>
 
 				<if>
@@ -682,8 +683,8 @@ Please find a solution that does not require portal-impl.jar.
 
 				<antcall target="compile-java">
 					<param name="javac.classpathref" value="test.classpath" />
-					<param name="javac.destdir" value="test-classes/${test.type}" />
-					<param name="javac.srcdir" value="test/${test.type}" />
+					<param name="javac.destdir" value="docroot/WEB-INF/test-classes/${test.type}" />
+					<param name="javac.srcdir" value="docroot/WEB-INF/test/${test.type}" />
 					<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
 				</antcall>
 			</then>
@@ -704,6 +705,56 @@ Please find a solution that does not require portal-impl.jar.
 
 	<target name="deploy" depends="war">
 		<copy file="${plugin.file}" todir="${auto.deploy.dir}" />
+	</target>
+
+	<target name="deploy-cmd">
+		<mkdir dir="${project.dir}/dist" />
+
+		<if>
+			<available file="tmp" />
+			<then>
+				<property name="docroot.dir" value="tmp" />
+			</then>
+			<else>
+				<property name="docroot.dir" value="docroot" />
+			</else>
+		</if>
+
+		<delete file="${plugin.file}" />
+
+		<antcall target="clean-portal-dependencies" />
+
+		<if>
+			<contains string="${app.server.dir}" substring="glassfish" />
+			<then>
+				<zip
+					basedir="${docroot.dir}"
+					destfile="${plugin.file}"
+					excludes="**/META-INF/context.xml,${plugins.war.excludes}"
+				/>
+			</then>
+			<else>
+				<zip
+					basedir="${docroot.dir}"
+					destfile="${plugin.file}"
+					excludes="${plugins.war.excludes}"
+				/>
+			</else>
+		</if>
+
+		<if>
+			<and>
+				<equals arg1="${plugins.src.zip.enabled}" arg2="true" />
+			</and>
+			<then>
+				<zip destfile="${plugin.src.file}">
+					<zipfileset
+						dir="${docroot.dir}"
+						prefix="${plugin.name}-src-${lp.version}.${plugin.version}${lp.version.file.suffix}"
+					/>
+				</zip>
+			</then>
+		</if>
 	</target>
 
 	<target name="direct-deploy" depends="war">
@@ -963,8 +1014,8 @@ Please find a solution that does not require portal-impl.jar.
 	</target>
 
 	<target name="test">
-		<delete dir="test-classes" />
-		<delete dir="test-results" />
+		<delete dir="docroot/WEB-INF/test-classes" />
+		<delete dir="docroot/WEB-INF/test-results" />
 
 		<antcall target="compile" />
 		<antcall target="compile-test" />
@@ -996,7 +1047,7 @@ Please find a solution that does not require portal-impl.jar.
 			<available file="test/integration" type="dir" />
 			<then>
 				<resourcecount property="test.integration.count">
-					<fileset dir="test-classes/integration" includes="**/${class}.class" />
+					<fileset dir="docroot/WEB-INF/test-classes/integration" includes="**/${class}.class" />
 				</resourcecount>
 			</then>
 		</if>
@@ -1005,7 +1056,7 @@ Please find a solution that does not require portal-impl.jar.
 			<available file="test/unit" type="dir" />
 			<then>
 				<resourcecount property="test.unit.count">
-					<fileset dir="test-classes/unit" includes="**/${class}.class" />
+					<fileset dir="docroot/WEB-INF/test-classes/unit" includes="**/${class}.class" />
 				</resourcecount>
 			</then>
 		</if>
@@ -1048,8 +1099,8 @@ Please find a solution that does not require portal-impl.jar.
 					<classpath refid="test.classpath" />
 					<formatter type="brief" usefile="false" />
 					<formatter type="xml" />
-					<batchtest todir="test-results/${test.type}">
-						<fileset dir="test-classes/${test.type}" includes="**/${class}.class" />
+					<batchtest todir="docroot/WEB-INF/test-results/${test.type}">
+						<fileset dir="docroot/WEB-INF/test-classes/${test.type}" includes="**/${class}.class" />
 					</batchtest>
 				</junit>
 			</then>
@@ -1057,11 +1108,12 @@ Please find a solution that does not require portal-impl.jar.
 	</target>
 
 	<target name="test-integration" depends="compile,compile-test-integration">
-		<property name="class" value="*Test" />
+		<jar
+			basedir="docroot/WEB-INF/test-classes/integration"
+			destfile="docroot/WEB-INF/lib/${plugin.name}-test-integration.jar"
+		/>
 
-		<ant target="test-cmd" inheritrefs="true">
-			<property name="test.type" value="integration" />
-		</ant>
+		<ant target="deploy" />
 	</target>
 
 	<target name="test-unit" depends="compile,compile-test-unit">
@@ -1073,52 +1125,6 @@ Please find a solution that does not require portal-impl.jar.
 	</target>
 
 	<target name="war" depends="compile">
-		<mkdir dir="${project.dir}/dist" />
-
-		<if>
-			<available file="tmp" />
-			<then>
-				<property name="docroot.dir" value="tmp" />
-			</then>
-			<else>
-				<property name="docroot.dir" value="docroot" />
-			</else>
-		</if>
-
-		<delete file="${plugin.file}" />
-
-		<antcall target="clean-portal-dependencies" />
-
-		<if>
-			<contains string="${app.server.dir}" substring="glassfish" />
-			<then>
-				<zip
-					basedir="${docroot.dir}"
-					destfile="${plugin.file}"
-					excludes="**/META-INF/context.xml,${plugins.war.excludes}"
-				/>
-			</then>
-			<else>
-				<zip
-					basedir="${docroot.dir}"
-					destfile="${plugin.file}"
-					excludes="${plugins.war.excludes}"
-				/>
-			</else>
-		</if>
-
-		<if>
-			<and>
-				<equals arg1="${plugins.src.zip.enabled}" arg2="true" />
-			</and>
-			<then>
-				<zip destfile="${plugin.src.file}">
-					<zipfileset
-						dir="${docroot.dir}"
-						prefix="${plugin.name}-src-${lp.version}.${plugin.version}${lp.version.file.suffix}"
-					/>
-				</zip>
-			</then>
-		</if>
+		<ant target="deploy-cmd" />
 	</target>
 </project>
