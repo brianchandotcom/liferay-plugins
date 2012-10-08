@@ -14,9 +14,13 @@
 
 package com.liferay.testsearchcontainer.testsearchcontainer.portlet;
 
+import com.liferay.portal.kernel.configuration.Filter;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.testsearchcontainer.service.FooLocalServiceUtil;
+import com.liferay.testsearchcontainer.util.PortletPropsKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.util.portlet.PortletProps;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -35,7 +39,11 @@ public class TestSearchContainerPortlet extends MVCPortlet {
 		String nextFormNumber = ParamUtil.getString(
 			actionRequest, "nextFormNumber", "1");
 
-		int total = 21;
+		Filter filter = new Filter(nextFormNumber);
+
+		int total = GetterUtil.getInteger(
+			PortletProps.get(
+				PortletPropsKeys.TEST_SEARCH_CONTAINER_TOTAL, filter));
 
 		for (int i = 1; i <= total; i++) {
 			FooLocalServiceUtil.addFoo(i);
