@@ -20,6 +20,26 @@
 String nextFormNumber = ParamUtil.getString(request, "nextFormNumber");
 %>
 
+<c:if test="<%= Validator.isNotNull(curFormNumber) %>">
+
+	<%
+	PortletURL portletURL = renderResponse.createRenderURL();
+
+	portletURL.setParameter("curFormNumber", curFormNumber);
+	portletURL.setParameter("mvcPath", mvcPath);
+	%>
+
+	<liferay-portlet:actionURL name="testLastPagination" var="testURL">
+		<portlet:param name="curFormNumber" value="<%= curFormNumber %>" />
+		<portlet:param name="mvcPath" value="<%= mvcPath %>" />
+		<portlet:param name="redirect" value="<%= portletURL.toString() %>" />
+	</liferay-portlet:actionURL>
+
+	<div class="separator"></div>
+
+	<a href="<%= testURL %>">PAGINATION TEST</a>
+</c:if>
+
 <c:if test="<%= Validator.isNotNull(nextFormNumber) %>">
 	<liferay-portlet:actionURL name="initAndForward" var="initURL">
 		<portlet:param name="nextFormNumber" value="<%= nextFormNumber %>" />

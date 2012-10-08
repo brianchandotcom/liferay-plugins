@@ -15,12 +15,18 @@
 package com.liferay.testsearchcontainer.testsearchcontainer.portlet;
 
 import com.liferay.portal.kernel.configuration.Filter;
+import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.testsearchcontainer.model.Foo;
 import com.liferay.testsearchcontainer.service.FooLocalServiceUtil;
 import com.liferay.testsearchcontainer.util.PortletPropsKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.liferay.util.portlet.PortletProps;
+
+import java.lang.String;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -52,6 +58,30 @@ public class TestSearchContainerPortlet extends MVCPortlet {
 		actionResponse.setRenderParameter("curFormNumber", nextFormNumber);
 		actionResponse.setRenderParameter(
 			"mvcPath", "/forms/form" + nextFormNumber + ".jsp");
+	}
+
+	public void testLastPagination(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		int total = FooLocalServiceUtil.getFoosCount();
+		int cur = (int)Math.ceil((double)total / SearchContainer.DEFAULT_DELTA);
+
+		// fetch last entry and delete
+
+		Foo lastFoo = FooLocalServiceUtil.getFooByValue(total);
+		FooLocalServiceUtil.delete(lastFoo.getFooId());
+
+		String redirect = ParamUtil.getString(actionRequest, "redirect");
+		String mvcPath = ParamUtil.getString(actionRequest, "mvcPath");
+
+		redirect = HttpUtil.setParameter(
+			redirect, actionResponse.getNamespace() + "mvcPath", mvcPath);
+		redirect = HttpUtil.setParameter(
+			redirect, actionResponse.getNamespace() + "cur",
+			String.valueOf(cur));
+
+		actionRequest.setAttribute(WebKeys.REDIRECT, redirect);
 	}
 
 }
