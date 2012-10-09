@@ -44,5 +44,7 @@ page import="java.util.List" %>
 <%
 String currentURL = PortalUtil.getCurrentURL(request);
 
+String curFormNumber = ParamUtil.getString(request, "curFormNumber");
+
 String mvcPath = ParamUtil.getString(request, "mvcPath");
 %>
