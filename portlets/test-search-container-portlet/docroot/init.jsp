@@ -37,6 +37,8 @@ page import="com.liferay.testsearchcontainer.service.FooLocalServiceUtil" %>
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.List" %>
 
+<%@ page import="javax.portlet.PortletURL" %>
+
 <portlet:defineObjects />
 
 <liferay-theme:defineObjects />
