@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
+<service-builder package-path="com.liferay.testsearchcontainer">
+	<author>Janghyun Kim</author>
+	<namespace>TestSearchContainer</namespace>
+	<entity name="Foo" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="fooId" type="long" primary="true" />
+
+		<!-- Other fields -->
+
+		<column name="value" type="int" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="fooId" />
+		</order>
+
+		<!-- Finder methods -->
+		<finder name="Value" return-type="Foo" unique="true">
+			<finder-column name="value" />
+		</finder>
+	</entity>
+</service-builder>
