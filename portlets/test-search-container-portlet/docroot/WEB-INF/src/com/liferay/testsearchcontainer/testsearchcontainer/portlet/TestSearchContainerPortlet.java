@@ -41,6 +41,7 @@ public class TestSearchContainerPortlet extends MVCPortlet {
 			FooLocalServiceUtil.addFoo(i);
 		}
 
+		actionResponse.setRenderParameter("curFormNumber", nextFormNumber);
 		actionResponse.setRenderParameter(
 			"mvcPath", "/forms/form" + nextFormNumber + ".jsp");
 	}
