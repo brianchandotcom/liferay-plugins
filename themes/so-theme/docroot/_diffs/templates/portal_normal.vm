@@ -74,11 +74,11 @@ $theme.include($body_top_include)
 									<a>#language ("membership-requested")</a>
 								</span>
 							#end
-							#end
-						</div>
-					#end
-				</div>
-			#end
+						#end
+					</div>
+				#end
+			</div>
+		#end
 
 			<h3 class="page-title">
 				<span>$the_title</span>
@@ -105,7 +105,22 @@ $theme.include($body_top_include)
 			#if ($page_group.isUser())
 				<div class="$user_detail_class">
 					<div class="profile-image">
-						<a href="$current_user_profile_url"><img src="$current_user_profile_portrait_url" alt="$current_user_name"></a>
+						<div class="taglib-logo-selector" id="_SO_THEME_taglibLogoSelector">
+							<div class="taglib-logo-selector-content" id="_SO_THEME_taglibLogoSelectorContent">
+								<a href="$current_user_profile_url">
+									<img class="avatar" id="_SO_THEME_avatar" src="$current_user_profile_portrait_url" alt="$current_user_name">
+								</a>
+
+								#if ($is_current_users_public_layout)
+									<span class="aui-button edit-logo-button">
+										<button class="aui-button-content" onClick="editPortrait._openEditLogoWindow();">
+											<span class="aui-buttonitem-icon aui-icon aui-icon-edit"></span>
+											<span class="aui-buttonitem-label">$languageUtil.get($locale, "edit-profile-picture")</span>
+										</button>
+									</span>
+								#end
+							</div>
+						</div>
 					</div>
 
 					#if (!$layout.isPublicLayout())
@@ -150,3 +165,45 @@ $theme.include($body_bottom_include)
 $theme.include($bottom_include)
 
 </html>
+
+#if ($is_current_users_public_layout)
+	<script type="text/javascript">
+		AUI().use(
+			'liferay-logo-selector',
+			'aui-base',
+			function(A) {
+				editPortrait = new Liferay.LogoSelector(
+					{
+						boundingBox: '#_SO_THEME_taglibLogoSelector',
+						contentBox: '#_SO_THEME_taglibLogoSelectorContent',
+						defaultLogoURL: '$current_user_profile_portrait_url',
+						editLogoURL: '$current_user_edit_profile_portrait_url',
+						randomNamespace: '_SO_THEME_',
+						logoDisplaySelector: '#_SO_THEME_avatar',
+						portletNamespace: ''
+					}
+				);
+
+				window['_2_changeLogo'] = function (logoURL) {
+					var avatarDialog = A.one('#_SO_THEME_avatar');
+
+					if (avatarDialog) {
+						avatarDialog.attr('src', logoURL);
+					}
+
+					var avatarContext = A.all('#so-context .avatar img');
+
+					if (avatarContext) {
+						avatarContext.attr('src', logoURL);
+					}
+
+					var avatarDockbar = A.one('.user-fullname.user-portrait img');
+
+					if (avatarDockbar) {
+						avatarDockbar.attr('src', logoURL);
+					}
+				}
+			}
+		);
+	</script>
+#end
