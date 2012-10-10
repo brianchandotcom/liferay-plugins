@@ -41,7 +41,7 @@ String nextFormNumber = ParamUtil.getString(request, "nextFormNumber");
 </c:if>
 
 <c:if test="<%= Validator.isNotNull(nextFormNumber) %>">
-	<liferay-portlet:actionURL name="initAndForward" var="initURL">
+	<liferay-portlet:actionURL name="init" var="initURL">
 		<portlet:param name="nextFormNumber" value="<%= nextFormNumber %>" />
 		<portlet:param name="mvcPath" value="<%= mvcPath %>" />
 	</liferay-portlet:actionURL>

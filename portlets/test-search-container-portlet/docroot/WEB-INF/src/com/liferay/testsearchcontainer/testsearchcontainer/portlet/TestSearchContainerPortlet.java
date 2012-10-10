@@ -36,8 +36,7 @@ import javax.portlet.ActionResponse;
  */
 public class TestSearchContainerPortlet extends MVCPortlet {
 
-	public void initAndForward(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+	public void init(ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		FooLocalServiceUtil.deleteFoos();
@@ -65,14 +64,17 @@ public class TestSearchContainerPortlet extends MVCPortlet {
 		throws Exception {
 
 		int total = FooLocalServiceUtil.getFoosCount();
+
 		int cur = (int)Math.ceil((double)total / SearchContainer.DEFAULT_DELTA);
 
 		// fetch last entry and delete
 
 		Foo lastFoo = FooLocalServiceUtil.getFooByValue(total);
+
 		FooLocalServiceUtil.deleteFoo(lastFoo.getFooId());
 
 		String redirect = ParamUtil.getString(actionRequest, "redirect");
+
 		String mvcPath = ParamUtil.getString(actionRequest, "mvcPath");
 
 		redirect = HttpUtil.setParameter(
