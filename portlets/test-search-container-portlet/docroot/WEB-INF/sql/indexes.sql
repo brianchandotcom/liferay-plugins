@@ -1,0 +1,1 @@
+create unique index IX_A391700D on TestSearchContainer_Foo (value);
