@@ -14,6 +14,9 @@
 
 package com.liferay.testsearchcontainer.service.impl;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.testsearchcontainer.model.Foo;
 import com.liferay.testsearchcontainer.service.base.FooLocalServiceBaseImpl;
 
 /**
@@ -31,9 +34,29 @@ import com.liferay.testsearchcontainer.service.base.FooLocalServiceBaseImpl;
  * @see com.liferay.testsearchcontainer.service.FooLocalServiceUtil
  */
 public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link com.liferay.testsearchcontainer.service.FooLocalServiceUtil} to access the foo local service.
-	 */
+
+	public Foo addFoo(int value) throws SystemException {
+		long fooId = counterLocalService.increment();
+
+		Foo foo = fooPersistence.create(fooId);
+
+		foo.setValue(value);
+
+		fooPersistence.update(foo, false);
+
+		return foo;
+	}
+
+	public void deleteFoos() throws PortalException, SystemException {
+		for (Foo foo : fooPersistence.findAll()) {
+			deleteFoo(foo);
+		}
+	}
+
+	public Foo getFooByValue(int value)
+		throws PortalException, SystemException {
+
+		return fooPersistence.findByValue(value);
+	}
+
 }
