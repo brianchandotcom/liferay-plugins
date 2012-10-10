@@ -271,6 +271,24 @@ public class FooLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.testsearchcontainer.model.Foo addFoo(int value)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().addFoo(value);
+	}
+
+	public static void deleteFoos()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteFoos();
+	}
+
+	public static com.liferay.testsearchcontainer.model.Foo getFooByValue(
+		int value)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getFooByValue(value);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

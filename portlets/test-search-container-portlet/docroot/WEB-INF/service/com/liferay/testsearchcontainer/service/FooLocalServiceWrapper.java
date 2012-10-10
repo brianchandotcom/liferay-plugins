@@ -262,6 +262,23 @@ public class FooLocalServiceWrapper implements FooLocalService,
 		return _fooLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public com.liferay.testsearchcontainer.model.Foo addFoo(int value)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _fooLocalService.addFoo(value);
+	}
+
+	public void deleteFoos()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_fooLocalService.deleteFoos();
+	}
+
+	public com.liferay.testsearchcontainer.model.Foo getFooByValue(int value)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _fooLocalService.getFooByValue(value);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */
