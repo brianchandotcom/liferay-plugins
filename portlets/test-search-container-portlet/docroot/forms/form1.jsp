@@ -45,4 +45,8 @@ for (int i = 0; i < results.size(); i++) {
 
 <liferay-ui:search-iterator paginate="<%= false %>" searchContainer="<%= searchContainer %>" />
 
+<liferay-util:include page="/forward.jsp" servletContext="<%= application %>">
+	<liferay-util:param name="nextFormNumber" value="2" />
+</liferay-util:include>
+
 <liferay-util:include page="/test.jsp" servletContext="<%= application %>" />
