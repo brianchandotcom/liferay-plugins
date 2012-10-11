@@ -10,7 +10,7 @@
 >
 	<bean name="test.scheduler.entry" class="com.liferay.portal.kernel.scheduler.SchedulerEntryImpl">
 		<property name="description" value="" />
-		<property name="eventListenerClass" value="com.liferay.testmisc.messaging.TestMessageListenerForSpringConfigJob" />
+		<property name="eventListenerClass" value="com.liferay.test.scheduler.TestMessageListenerForSpringConfigJob" />
 		<property name="timeUnit">
 			<util:constant static-field="com.liferay.portal.kernel.scheduler.TimeUnit.HOUR" />
 		</property>
@@ -19,7 +19,7 @@
 		</property>
 		<property name="triggerValue" value="1" />
 	</bean>
-	<bean name="com.liferay.portal.kernel.scheduler.config.SchedulingConfigurator" class="com.liferay.portal.kernel.scheduler.config.PluginSchedulingConfigurator" >
+	<bean name="com.liferay.portal.kernel.scheduler.config.SchedulingConfigurator" class="com.liferay.portal.kernel.scheduler.config.DefaultSchedulingConfigurator" >
 		<property name="schedulerEntries">
 			<list value-type="com.liferay.portal.kernel.scheduler.SchedulerEntry">
 				<ref bean="test.scheduler.entry" />

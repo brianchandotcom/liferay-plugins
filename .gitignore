@@ -13,3 +13,6 @@ _sass_cache_*.css
 
 /build.*.properties
 /dist
+
+/ext/*/docroot/WEB-INF/ext-*/classes/**
+/ext/*/docroot/WEB-INF/ext-*/ext-*.jar

@@ -164,17 +164,22 @@ loader.
 		<mkdir dir="docroot/WEB-INF/ext-lib/global" />
 		<mkdir dir="docroot/WEB-INF/ext-${module.name}/classes" />
 
-		<path id="plugin-lib.classpath">
-			<fileset dir="docroot/WEB-INF/ext-lib/global" includes="*.jar" />
-			<pathelement location="docroot/WEB-INF/ext-${module.name}/classes" />
-		</path>
+		<if>
+			<available file="docroot/WEB-INF/ext-${module.name}/src" />
+			<then>
+				<path id="plugin-lib.classpath">
+					<fileset dir="docroot/WEB-INF/ext-lib/global" includes="*.jar" />
+					<pathelement location="docroot/WEB-INF/ext-${module.name}/classes" />
+				</path>
 
-		<antcall target="compile-java">
-			<param name="javac.classpathref" value="plugin.classpath" />
-			<param name="javac.destdir" value="docroot/WEB-INF/ext-${module.name}/classes" />
-			<param name="javac.srcdir" value="docroot/WEB-INF/ext-${module.name}/src" />
-			<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
-		</antcall>
+				<antcall target="compile-java">
+					<param name="javac.classpathref" value="plugin.classpath" />
+					<param name="javac.destdir" value="docroot/WEB-INF/ext-${module.name}/classes" />
+					<param name="javac.srcdir" value="docroot/WEB-INF/ext-${module.name}/src" />
+					<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
+				</antcall>
+			</then>
+		</if>
 	</target>
 
 	<target name="compile-with-portal-class-loader">
@@ -183,19 +188,24 @@ loader.
 		<mkdir dir="docroot/WEB-INF/ext-${module.name}/classes" />
 		<mkdir dir="docroot/WEB-INF/ext-${module.name}/src" />
 
-		<path id="plugin-lib.classpath">
-			<fileset dir="docroot/WEB-INF/ext-lib/global" includes="*.jar" />
-			<fileset dir="docroot/WEB-INF/ext-lib/portal" includes="*.jar" />
-			<pathelement path="${module.class.path}" />
-			<fileset dir="${app.server.lib.portal.dir}" includes="*.jar" />
-		</path>
+		<if>
+			<available file="docroot/WEB-INF/ext-${module.name}/src" />
+			<then>
+				<path id="plugin-lib.classpath">
+					<fileset dir="docroot/WEB-INF/ext-lib/global" includes="*.jar" />
+					<fileset dir="docroot/WEB-INF/ext-lib/portal" includes="*.jar" />
+					<pathelement path="${module.class.path}" />
+					<fileset dir="${app.server.lib.portal.dir}" includes="*.jar" />
+				</path>
 
-		<antcall target="compile-java">
-			<param name="javac.classpathref" value="plugin.classpath" />
-			<param name="javac.destdir" value="docroot/WEB-INF/ext-${module.name}/classes" />
-			<param name="javac.srcdir" value="docroot/WEB-INF/ext-${module.name}/src" />
-			<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
-		</antcall>
+				<antcall target="compile-java">
+					<param name="javac.classpathref" value="plugin.classpath" />
+					<param name="javac.destdir" value="docroot/WEB-INF/ext-${module.name}/classes" />
+					<param name="javac.srcdir" value="docroot/WEB-INF/ext-${module.name}/src" />
+					<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
+				</antcall>
+			</then>
+		</if>
 	</target>
 
 	<target name="deploy-properties">
