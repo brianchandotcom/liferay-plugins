@@ -72,7 +72,7 @@
 <h3>Scheduler</h3>
 
 <p>
-    TestMessageListenerForSpringConfigJob.isReceived=<%= _assertTrue(TestMessageListenerForSpringConfigJob.isReceived()) %><br />
+	TestMessageListenerForSpringConfigJob.isReceived=<%= _assertTrue(TestMessageListenerForSpringConfigJob.isReceived()) %><br />
 	TestMessageListenerForXMLConfigJob.isReceived=<%= _assertTrue(TestMessageListenerForXMLConfigJob.isReceived()) %>
 </p>
 

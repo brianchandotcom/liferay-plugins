@@ -16,30 +16,29 @@ package com.liferay.testmisc.messaging;
 
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author Brian Wing Shun Chan
  */
-public class TestMessageListenerForXMLConfigJob
-	extends BaseMessageListener {
+public class TestMessageListenerForXMLConfigJob extends BaseMessageListener {
 
 	public static boolean isReceived() {
 		try {
 			return _countDownLatch.await(60000, TimeUnit.MILLISECONDS);
 		}
-		catch (Exception te) {
+		catch (InterruptedException ie) {
 			return false;
 		}
 	}
-	
+
 	@Override
 	protected void doReceive(Message message) throws Exception {
 		_countDownLatch.countDown();
 	}
-	
-	private static CountDownLatch _countDownLatch =
-		new CountDownLatch(1);
+
+	private static CountDownLatch _countDownLatch = new CountDownLatch(1);
 
 }

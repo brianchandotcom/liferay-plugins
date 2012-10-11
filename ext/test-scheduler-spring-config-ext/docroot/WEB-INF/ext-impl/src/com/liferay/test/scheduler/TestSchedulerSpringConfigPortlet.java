@@ -19,8 +19,6 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -37,29 +35,22 @@ public class TestSchedulerSpringConfigPortlet extends GenericPortlet {
 
 		renderResponse.setContentType(ContentTypes.TEXT_HTML_UTF8);
 
-		PrintWriter writer = renderResponse.getWriter();
-		
+		PrintWriter printWriter = renderResponse.getWriter();
+
 		boolean isReceived = TestMessageListenerForSpringConfigJob.isReceived();
-		
+
 		if (isReceived) {
-			writer.print(
-				"\ncom.liferay.test.scheduler." +
-					"TestMessageListenerForSpringConfigJob.isReceived()=" +
-						"PASSED.");
+			printWriter.println(
+				TestMessageListenerForSpringConfigJob.class.getName() +
+					".isReceived()=PASSED.");
 		}
 		else {
-			writer.print(
-				"\ncom.liferay.test.scheduler." +
-					"TestMessageListenerForSpringConfigJob.isReceived()=" +
-						"FAILD.");
+			printWriter.println(
+				TestMessageListenerForSpringConfigJob.class.getName() +
+					".isReceived()=FAILED.");
 		}
 
-		writer.close();
-	}
-
-	@Override
-	public void processAction(
-		ActionRequest actionRequest, ActionResponse actionResponse) {
+		printWriter.close();
 	}
 
 }
