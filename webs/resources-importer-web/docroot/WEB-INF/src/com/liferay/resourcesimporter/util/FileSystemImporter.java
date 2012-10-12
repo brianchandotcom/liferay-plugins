@@ -76,9 +76,7 @@ public class FileSystemImporter extends BaseImporter {
 	public void importResources() throws Exception {
 		_resourcesDir = new File(resourcesDir);
 
-		if (!_resourcesDir.exists() || !_resourcesDir.isDirectory() ||
-			!_resourcesDir.canRead()) {
-
+		if (!_resourcesDir.isDirectory() || !_resourcesDir.canRead()) {
 			throw new IllegalArgumentException(
 				"Unaccessible resource directory " + resourcesDir);
 		}
@@ -91,9 +89,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		File dlDocumentsDir = new File(_resourcesDir, fileEntriesDirName);
 
-		if (!dlDocumentsDir.exists() || !dlDocumentsDir.isDirectory()||
-			!dlDocumentsDir.canRead()) {
-
+		if (!dlDocumentsDir.isDirectory()|| !dlDocumentsDir.canRead()) {
 			return;
 		}
 
@@ -123,8 +119,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		File journalArticlesDir = new File(_resourcesDir, articlesDirName);
 
-		if (!journalArticlesDir.exists() ||
-			!journalArticlesDir.isDirectory() ||
+		if (!journalArticlesDir.isDirectory() ||
 			!journalArticlesDir.canRead()) {
 
 			return;
@@ -151,13 +146,13 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
-	protected void addJournalStructures(String structuresDirName)
+	protected void addJournalStructures(
+			String parentStructureId, String structuresDirName)
 		throws Exception {
 
 		File journalStructuresDir = new File(_resourcesDir, structuresDirName);
 
-		if (!journalStructuresDir.exists() ||
-			!journalStructuresDir.isDirectory() ||
+		if (!journalStructuresDir.isDirectory() ||
 			!journalStructuresDir.canRead()) {
 
 			return;
@@ -172,7 +167,8 @@ public class FileSystemImporter extends BaseImporter {
 				inputStream = new BufferedInputStream(
 					new FileInputStream(file));
 
-				doAddJournalStructures(file.getName(), inputStream);
+				doAddJournalStructures(
+					parentStructureId, file.getName(), inputStream);
 			}
 			finally {
 				if (inputStream != null) {
@@ -188,8 +184,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		File journalTemplatesDir = new File(_resourcesDir, templatesDirName);
 
-		if (!journalTemplatesDir.exists() ||
-			!journalTemplatesDir.isDirectory() ||
+		if (!journalTemplatesDir.isDirectory() ||
 			!journalTemplatesDir.canRead()) {
 
 			return;
@@ -405,7 +400,8 @@ public class FileSystemImporter extends BaseImporter {
 			StringPool.BLANK, serviceContext);
 	}
 
-	protected void doAddJournalStructures(String name, InputStream inputStream)
+	protected void doAddJournalStructures(
+			String parentStructureId, String name, InputStream inputStream)
 		throws Exception {
 
 		name = getName(name);
@@ -416,11 +412,17 @@ public class FileSystemImporter extends BaseImporter {
 
 		JournalStructure journalStructure =
 			JournalStructureLocalServiceUtil.addStructure(
-				userId, groupId, StringPool.BLANK, true, StringPool.BLANK,
+				userId, groupId, StringPool.BLANK, true, parentStructureId,
 				nameMap, null, xsd, serviceContext);
 
 		addJournalTemplates(
-			journalStructure.getStructureId(), "/journal/templates/" + name);
+			journalStructure.getStructureId(), _journalTemplatesDir + name);
+
+		if (Validator.isNull(parentStructureId)) {
+			addJournalStructures(
+				journalStructure.getStructureId(),
+				_journalStructuresDir + name);
+		}
 	}
 
 	protected void doAddJournalTemplates(
@@ -441,7 +443,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		addJournalArticles(
 			journalStructureId, journalTemplate.getTemplateId(),
-			"/journal/articles/" + name);
+			_journalArticlesDir + name);
 	}
 
 	protected void doImportResources() throws Exception {
@@ -504,18 +506,13 @@ public class FileSystemImporter extends BaseImporter {
 
 	protected String getName(String fileName) {
 		int x = fileName.lastIndexOf(StringPool.SLASH);
-
-		if (x < 0) {
-			x = 0;
-		}
-
 		int y = fileName.lastIndexOf(StringPool.PERIOD);
 
 		if (y < 0) {
 			y = fileName.length();
 		}
 
-		return fileName.substring(x, y);
+		return fileName.substring(x + 1, y);
 	}
 
 	protected Map<Locale, String> getNameMap(String name) {
@@ -593,14 +590,14 @@ public class FileSystemImporter extends BaseImporter {
 	}
 
 	protected void setupAssets() throws Exception {
-		addDLFileEntries("/document_library/documents");
+		addDLFileEntries(_dlDocumentsDir);
 
 		addJournalArticles(
-			StringPool.BLANK, StringPool.BLANK, "/journal/articles");
+			StringPool.BLANK, StringPool.BLANK, _journalArticlesDir);
 
-		addJournalStructures("/journal/structures");
+		addJournalStructures(StringPool.BLANK, _journalStructuresDir);
 
-		addJournalTemplates(StringPool.BLANK, "/journal/templates");
+		addJournalTemplates(StringPool.BLANK, _journalTemplatesDir);
 	}
 
 	protected void setupSettings(InputStream inputStream) throws Exception {
@@ -720,6 +717,12 @@ public class FileSystemImporter extends BaseImporter {
 	}
 
 	protected ServiceContext serviceContext;
+
+	private static final String _dlDocumentsDir =
+		"/document_library/documents/";
+	private static final String _journalArticlesDir = "/journal/articles/";
+	private static final String _journalStructuresDir = "/journal/structures/";
+	private static final String _journalTemplatesDir = "/journal/templates/";
 
 	private String _defaultLayoutTemplateId;
 	private Map<String, FileEntry> _fileEntries =

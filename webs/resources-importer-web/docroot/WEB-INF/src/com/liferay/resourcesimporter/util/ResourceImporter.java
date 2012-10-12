@@ -44,23 +44,15 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
+			String name = getName(resourcePath);
+
+			URL resourceURL = servletContext.getResource(resourcePath);
+
 			URLConnection urlConnection = resourceURL.openConnection();
-
-			String name = resourceURL.getFile();
-
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
 
 			doAddDLFileEntries(
 				name, urlConnection.getInputStream(),
@@ -83,23 +75,15 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
+			String name = getName(resourcePath);
+
+			URL resourceURL = servletContext.getResource(resourcePath);
+
 			URLConnection urlConnection = resourceURL.openConnection();
-
-			String name = resourceURL.getFile();
-
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
 
 			doAddJournalArticles(
 				journalStructureId, journalTemplateId, name,
@@ -109,7 +93,8 @@ public class ResourceImporter extends FileSystemImporter {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void addJournalStructures(String structuresDirName)
+	protected void addJournalStructures(
+			String parentStructureId, String structuresDirName)
 		throws Exception {
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
@@ -120,25 +105,18 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
+			String name = getName(resourcePath);
+
+			URL resourceURL = servletContext.getResource(resourcePath);
+
 			URLConnection urlConnection = resourceURL.openConnection();
 
-			String name = resourceURL.getFile();
-
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
-
-			doAddJournalStructures(name, urlConnection.getInputStream());
+			doAddJournalStructures(
+				parentStructureId, name, urlConnection.getInputStream());
 		}
 	}
 
@@ -156,23 +134,15 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
+			String name = getName(resourcePath);
+
+			URL resourceURL = servletContext.getResource(resourcePath);
+
 			URLConnection urlConnection = resourceURL.openConnection();
-
-			String name = resourceURL.getFile();
-
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
 
 			doAddJournalTemplates(
 				journalStructureId, name, urlConnection.getInputStream());
