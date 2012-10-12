@@ -51,17 +51,27 @@ public abstract class BaseImporter implements Importer {
 		Group group = null;
 
 		if (targetClassName.equals(LayoutSetPrototype.class.getName())) {
-			if (!hasLayoutSetPrototype(companyId, targetValue)) {
-				LayoutSetPrototype layoutSetPrototype =
+			LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototype(
+				companyId, targetValue);
+
+			if ((layoutSetPrototype != null) &&
+				!PortletPropsValues.DEVELOPER_MODE_ENABLED) {
+
+				return;
+			}
+
+			if (layoutSetPrototype == null) {
+				layoutSetPrototype =
 					LayoutSetPrototypeLocalServiceUtil.addLayoutSetPrototype(
 						userId, companyId, getTargetValueMap(),
 						StringPool.BLANK, true, true, new ServiceContext());
-
-				group = layoutSetPrototype.getGroup();
-
-				privateLayout = true;
-				targetClassPK = layoutSetPrototype.getLayoutSetPrototypeId();
 			}
+
+			group = layoutSetPrototype.getGroup();
+
+			groupId = group.getGroupId();
+			privateLayout = true;
+			targetClassPK = layoutSetPrototype.getLayoutSetPrototypeId();
 		}
 		else if (targetClassName.equals(Group.class.getName())) {
 			if (targetValue.equals(GroupConstants.GUEST)) {
@@ -95,25 +105,29 @@ public abstract class BaseImporter implements Importer {
 
 				group = guestGroup;
 			}
-			else if (!hasGroup(companyId, targetValue)) {
-				group = GroupLocalServiceUtil.addGroup(
-					userId, GroupConstants.DEFAULT_PARENT_GROUP_ID,
-					StringPool.BLANK, 0, targetValue, StringPool.BLANK,
-					GroupConstants.TYPE_SITE_OPEN, null, true, true,
-					new ServiceContext());
+			else {
+				group = GroupLocalServiceUtil.fetchGroup(
+					companyId, targetValue);
+
+				if ((group != null) &&
+					!PortletPropsValues.DEVELOPER_MODE_ENABLED) {
+
+					return;
+				}
+
+				if (group == null) {
+					group = GroupLocalServiceUtil.addGroup(
+						userId, GroupConstants.DEFAULT_PARENT_GROUP_ID,
+						StringPool.BLANK, 0, targetValue, StringPool.BLANK,
+						GroupConstants.TYPE_SITE_OPEN, null, true, true,
+						new ServiceContext());
+				}
 			}
 
-			if (group != null) {
-				privateLayout = false;
-				targetClassPK = group.getGroupId();
-			}
+			groupId = group.getGroupId();
+			privateLayout = false;
+			targetClassPK = group.getGroupId();
 		}
-
-		if (group == null) {
-			return;
-		}
-
-		groupId = group.getGroupId();
 	}
 
 	public long getGroupId() {
@@ -158,17 +172,8 @@ public abstract class BaseImporter implements Importer {
 		this.targetValue = targetValue;
 	}
 
-	protected boolean hasGroup(long companyId, String name) throws Exception {
-		Group group = GroupLocalServiceUtil.fetchGroup(companyId, name);
-
-		if (group != null) {
-			return true;
-		}
-
-		return false;
-	}
-
-	protected boolean hasLayoutSetPrototype(long companyId, String name)
+	protected LayoutSetPrototype getLayoutSetPrototype(
+			long companyId, String name)
 		throws Exception {
 
 		Locale locale = LocaleUtil.getDefault();
@@ -179,11 +184,11 @@ public abstract class BaseImporter implements Importer {
 
 		for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
 			if (name.equals(layoutSetPrototype.getName(locale))) {
-				return true;
+				return layoutSetPrototype;
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	protected long companyId;
