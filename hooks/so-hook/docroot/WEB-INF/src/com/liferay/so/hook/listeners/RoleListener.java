@@ -89,7 +89,7 @@ public class RoleListener extends BaseModelListener<Role> {
 				ExpandoBridge expandoBridge = userGroup.getExpandoBridge();
 
 				boolean socialOfficeEnabled = GetterUtil.getBoolean(
-					expandoBridge.getAttribute("socialOfficeEnabled"));
+					expandoBridge.getAttribute("socialOfficeEnabled", false));
 
 				if (socialOfficeEnabled) {
 					continue;
@@ -159,7 +159,7 @@ public class RoleListener extends BaseModelListener<Role> {
 				ExpandoBridge expandoBridge = userGroup.getExpandoBridge();
 
 				boolean socialOfficeEnabled = GetterUtil.getBoolean(
-					expandoBridge.getAttribute("socialOfficeEnabled"));
+					expandoBridge.getAttribute("socialOfficeEnabled", false));
 
 				if (!socialOfficeEnabled) {
 					continue;
