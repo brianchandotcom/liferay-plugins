@@ -167,7 +167,7 @@ public class UserListener extends BaseModelListener<User> {
 		ExpandoBridge expandoBridge = group.getExpandoBridge();
 
 		boolean socialOfficeEnabled = GetterUtil.getBoolean(
-			expandoBridge.getAttribute("socialOfficeEnabled"));
+			expandoBridge.getAttribute("socialOfficeEnabled", false));
 
 		if (!socialOfficeEnabled) {
 			return;
@@ -187,7 +187,7 @@ public class UserListener extends BaseModelListener<User> {
 		ExpandoBridge expandoBridge = group.getExpandoBridge();
 
 		boolean socialOfficeEnabled = GetterUtil.getBoolean(
-			expandoBridge.getAttribute("socialOfficeEnabled"));
+			expandoBridge.getAttribute("socialOfficeEnabled", false));
 
 		if (socialOfficeEnabled) {
 			return;
