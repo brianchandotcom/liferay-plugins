@@ -85,7 +85,7 @@ boolean verifyStep = Validator.isNotNull(oauthURL);
 	 />
 
 	<liferay-ui:search-container-row
-		className="com.liferay.portal.oauth.model.Application"
+		className="com.liferay.oauth.model.Application"
 		keyProperty="applicationId"
 		modelVar="app">
 

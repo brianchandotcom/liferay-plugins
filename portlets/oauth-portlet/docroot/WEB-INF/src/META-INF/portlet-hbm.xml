@@ -2,9 +2,9 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false" auto-import="false">
-	<import class="com.liferay.portal.oauth.model.Application" />
-	<import class="com.liferay.portal.oauth.model.ApplicationUser" />
-	<class name="com.liferay.portal.oauth.model.impl.ApplicationImpl" table="OAuth_Application">
+	<import class="com.liferay.oauth.model.Application" />
+	<import class="com.liferay.oauth.model.ApplicationUser" />
+	<class name="com.liferay.oauth.model.impl.ApplicationImpl" table="OAuth_Application">
 		<cache usage="read-write" />
 		<id name="applicationId" type="long">
 			<generator class="assigned" />
@@ -23,7 +23,7 @@
 		<property name="consumerSecret" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="logoId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
-	<class name="com.liferay.portal.oauth.model.impl.ApplicationUserImpl" table="OAuth_ApplicationUser">
+	<class name="com.liferay.oauth.model.impl.ApplicationUserImpl" table="OAuth_ApplicationUser">
 		<cache usage="read-write" />
 		<id name="oaauId" type="long">
 			<generator class="assigned" />

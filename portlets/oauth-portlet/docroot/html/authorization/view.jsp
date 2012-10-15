@@ -14,10 +14,10 @@
  */
 --%>
 
+<%@ page import="com.liferay.oauth.model.ApplicationUser" %>
+<%@ page import="com.liferay.oauth.search.OAuthApplicationDisplayTerms" %>
+<%@ page import="com.liferay.oauth.search.OAuthApplicationSearchTerms" %>
 <%@ page import="com.liferay.portal.kernel.servlet.SessionMessages" %>
-<%@ page import="com.liferay.portal.oauth.model.ApplicationUser" %>
-<%@ page import="com.liferay.portlet.oauth.search.OAuthApplicationDisplayTerms" %>
-<%@ page import="com.liferay.portlet.oauth.search.OAuthApplicationSearchTerms" %>
 
 <%@ include file="/html/init.jsp" %>
 
@@ -43,7 +43,7 @@ long userId = themeDisplay.getUserId();
 	 />
 
 	<liferay-ui:search-container-row
-		className="com.liferay.portal.oauth.model.ApplicationUser"
+		className="com.liferay.oauth.model.ApplicationUser"
 		keyProperty="oaauId"
 		modelVar="applicationUser"
 		>

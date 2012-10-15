@@ -14,8 +14,8 @@
  */
 --%>
 
-<%@ page import="com.liferay.portlet.oauth.search.OAuthApplicationDisplayTerms" %>
-<%@ page import="com.liferay.portlet.oauth.search.OAuthApplicationSearch" %>
+<%@ page import="com.liferay.oauth.search.OAuthApplicationDisplayTerms" %>
+<%@ page import="com.liferay.oauth.search.OAuthApplicationSearch" %>
 
 <%@ include file="/html/init.jsp" %>
 

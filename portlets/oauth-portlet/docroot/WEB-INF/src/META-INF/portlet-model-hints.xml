@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <model-hints>
-	<model name="com.liferay.portal.oauth.model.Application">
+	<model name="com.liferay.oauth.model.Application">
 		<field name="applicationId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="userId" type="long" />
@@ -17,7 +17,7 @@
 		<field name="consumerSecret" type="String" />
 		<field name="logoId" type="long" />
 	</model>
-	<model name="com.liferay.portal.oauth.model.ApplicationUser">
+	<model name="com.liferay.oauth.model.ApplicationUser">
 		<field name="oaauId" type="long" />
 		<field name="userId" type="long" />
 		<field name="applicationId" type="long" />

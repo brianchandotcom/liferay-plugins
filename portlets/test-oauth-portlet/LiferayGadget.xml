@@ -187,17 +187,20 @@
 
           for ( var i = 0; i < data.length; i++) {
             var entry = data[i];
-            var text = entry.name;
+            var docName = entry.name;
             var title = entry.title;
             var createdAt = new Date(entry.createDate);
             var screenName = entry.userName;
 
-      var li = document.createElement('li');
+      			var li = document.createElement('li');
 
             if (typeof entry != 'undefined') {
-              var textNode = document.createTextNode(text + " ("+ title +") by " + screenName + " at " + createdAt);
-
-              li.appendChild(textNode);
+              var strongNode = document.createElement("strong");
+              strongNode.appendChild(document.createTextNode(title));
+              
+              li.appendChild(document.createTextNode("("));
+              li.appendChild(strongNode);
+              li.appendChild(document.createTextNode(") by " + screenName + " at " + createdAt));
             }
 
             ul.appendChild(li);

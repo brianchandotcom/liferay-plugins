@@ -34,24 +34,29 @@ String backURL = ParamUtil.getString(request, "referer");
 <h3><liferay-ui:message key="<%= actionName %>" /></h3>
 <liferay-ui:error-marker key="errorSection" value="details" />
 
-<aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveApplication();" %>'>
-	<aui:input id="applicationId" name="applicationId" type="hidden" value='<%= isNew ? "" : app.getApplicationId()%>'/>
+<liferay-portlet:actionURL name="<%= actionName %>" var="addApplicationURL">
+	<portlet:param name="mvcPath" value="/html/admin/edit.jsp" />
+	<portlet:param name="referer" value="<%= backURL %>" />
+</liferay-portlet:actionURL>
 
-	<liferay-ui:error exception="<%=RequiredFieldException.class %>" message="this-field-is-required" />
-	<liferay-ui:error exception="<%=MalformedURLException.class %>" message="please-enter-a-valid-url" />
+<aui:form action="<%= addApplicationURL %>" method="post" name="fm">
+	<aui:input id="applicationId" name="applicationId" type="hidden" value='<%= isNew ? "" : app.getApplicationId() %>'/>
+
+	<liferay-ui:error exception="<%= MalformedURLException.class %>" message="please-enter-a-valid-url" />
+	<liferay-ui:error exception="<%= RequiredFieldException.class %>" message="this-field-is-required" />
 
 	<aui:model-context bean="<%= app %>" model="<%= Application.class %>" />
 
 	<aui:fieldset>
-		<aui:input label="name" name="<%=OAuthConstants.NAME%>">
+		<aui:input label="name" name="<%= OAuthConstants.NAME %>">
 			<aui:validator name="required" />
 		</aui:input>
-		<aui:input cols="65" label="description" name="<%=OAuthConstants.DESCRIPTION%>" rows="5" type="textarea" />
-		<aui:input label="website" name="<%=OAuthConstants.WEBSITE%>">
+		<aui:input cols="65" label="description" name="<%= OAuthConstants.DESCRIPTION %>" rows="5" type="textarea" />
+		<aui:input label="website" name="<%= OAuthConstants.WEBSITE %>">
 			<aui:validator name="required" />
 			<aui:validator name="url" />
 		</aui:input>
-		<aui:input label="callback-url" name="<%=OAuthConstants.CALLBACK_URL%>">
+		<aui:input label="callback-url" name="<%= OAuthConstants.CALLBACK_URL %>">
 			<aui:validator name="required" />
 			<aui:validator name="url" />
 		</aui:input>
@@ -65,12 +70,10 @@ String backURL = ParamUtil.getString(request, "referer");
 
 		<c:if test="<%= !isNew %>">
 			<aui:field-wrapper helpMessage="application-credentials-description" label="application-credentials">
-				<liferay-ui:message key="application-key" />: <%= app.getConsumerKey() %> <br />
-				<liferay-ui:message key="application-secret" />: <%= app.getConsumerSecret() %>
+				<liferay-ui:message key="consumer-key" />: <%= app.getConsumerKey() %> <br />
+				<liferay-ui:message key="consumer-secret" />: <%= app.getConsumerSecret() %>
 			</aui:field-wrapper>
-		</c:if>
 
-		<c:if test="<%= app != null && app.getApplicationId() != 0 %>">
 			<portlet:renderURL var="editApplicationLogoURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 				<portlet:param name="mvcPath" value="/html/admin/edit_application_logo.jsp" />
 				<portlet:param name="applicationId" value="<%= StringUtil.valueOf(app.getApplicationId()) %>" />
@@ -90,11 +93,6 @@ String backURL = ParamUtil.getString(request, "referer");
 		</aui:button-row>
 	</aui:fieldset>
 </aui:form>
-
-<liferay-portlet:actionURL name="<%= actionName %>" var="addApplicationURL">
-	<portlet:param name="mvcPath" value="/html/admin/edit.jsp" />
-	<portlet:param name="referer" value="<%= backURL %>" />
-</liferay-portlet:actionURL>
 
 <aui:script>
 	function <portlet:namespace />saveApplication() {

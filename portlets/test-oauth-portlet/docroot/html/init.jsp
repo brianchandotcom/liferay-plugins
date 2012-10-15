@@ -13,11 +13,12 @@
  * details.
  */
 --%>
-<%@ page import="com.liferay.portal.kernel.util.Validator" %><%@
-page import="com.liferay.portal.oauth.model.Application" %><%@
-page import="com.liferay.portal.oauth.model.ApplicationUser" %><%@
-page import="com.liferay.portal.oauth.service.ApplicationLocalServiceUtil" %><%@
-page import="com.liferay.portal.oauth.service.ApplicationUserLocalServiceUtil" %><%@
+<%@
+page import="com.liferay.oauth.model.Application" %><%@
+page import="com.liferay.oauth.model.ApplicationUser" %><%@
+page import="com.liferay.oauth.service.ApplicationLocalServiceUtil" %><%@
+page import="com.liferay.oauth.service.ApplicationUserLocalServiceUtil" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portlet.PortletURLUtil" %>
 
 <%@ page import="javax.portlet.PortletMode" %><%@
