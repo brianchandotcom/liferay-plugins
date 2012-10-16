@@ -48,7 +48,9 @@ public class ResourceImporter extends FileSystemImporter {
 				continue;
 			}
 
-			String name = getName(resourcePath);
+			int pos = resourcePath.lastIndexOf(StringPool.SLASH);
+
+			String name = resourcePath.substring(pos + 1);
 
 			URL url = servletContext.getResource(resourcePath);
 
@@ -79,9 +81,7 @@ public class ResourceImporter extends FileSystemImporter {
 				continue;
 			}
 
-			int pos = resourcePath.lastIndexOf(StringPool.SLASH);
-
-			String name = resourcePath.substring(pos + 1);
+			String name = getName(resourcePath);
 
 			URL resourceURL = servletContext.getResource(resourcePath);
 
