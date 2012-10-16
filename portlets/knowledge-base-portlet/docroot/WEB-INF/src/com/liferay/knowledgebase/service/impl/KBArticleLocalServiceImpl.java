@@ -260,6 +260,18 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	public void deleteAttachment(long companyId, String fileName)
 		throws PortalException, SystemException {
 
+		String dirName = FileUtil.getPath(fileName);
+
+		if (dirName.startsWith(StringPool.BACK_SLASH) ||
+			dirName.startsWith(StringPool.SLASH)) {
+
+			dirName = dirName.substring(1);
+		}
+
+		if (!isValidDirName(dirName)) {
+			throw new FileNameException();
+		}
+
 		DLStoreUtil.deleteFile(companyId, CompanyConstants.SYSTEM, fileName);
 	}
 
