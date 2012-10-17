@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="nv8Rm4jb" name="page-title" type="text" index-type="">
+		<dynamic-content><![CDATA[Child 2 Content]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="fCbz7MKc" name="content" type="text_area" index-type="">
+		<dynamic-content><![CDATA[<p>
+	Here is the page Content</p>
+]]></dynamic-content>
+	</dynamic-element>
+</root>

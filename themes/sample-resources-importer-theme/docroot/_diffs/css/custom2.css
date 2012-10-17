@@ -1,0 +1,9 @@
+@import "compass";
+
+#wrapper {
+	background: none;
+	margin: 0 auto;
+	min-width: 960px;
+	position: relative;
+	width: 960px;
+}
