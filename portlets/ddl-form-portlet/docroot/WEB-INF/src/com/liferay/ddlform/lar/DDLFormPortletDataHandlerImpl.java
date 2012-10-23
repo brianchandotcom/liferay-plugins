@@ -49,7 +49,7 @@ public class DDLFormPortletDataHandlerImpl extends BasePortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		portletPreferences.setValue("detailDDMTemplateId", StringPool.BLANK);
+		portletPreferences.setValue("formDDMTemplateId", StringPool.BLANK);
 		portletPreferences.setValue(
 			"multipleSubmissions", Boolean.FALSE.toString());
 		portletPreferences.setValue("recordSetId", StringPool.BLANK);
@@ -123,15 +123,15 @@ public class DDLFormPortletDataHandlerImpl extends BasePortletDataHandler {
 			(Map<Long, Long>)portletDataContext.getNewPrimaryKeysMap(
 				DDMTemplate.class);
 
-		long importedDetailDDMTemplateId = GetterUtil.getLong(
-			portletPreferences.getValue("detailDDMTemplateId", null));
+		long importedFormDDMTemplateId = GetterUtil.getLong(
+			portletPreferences.getValue("formDDMTemplateId", null));
 
-		long detailDDMTemplateId = MapUtil.getLong(
-			templateIds, importedDetailDDMTemplateId,
-			importedDetailDDMTemplateId);
+		long formDDMTemplateId = MapUtil.getLong(
+			templateIds, importedFormDDMTemplateId,
+			importedFormDDMTemplateId);
 
 		portletPreferences.setValue(
-			"detailDDMTemplateId", String.valueOf(detailDDMTemplateId));
+			"formDDMTemplateId", String.valueOf(formDDMTemplateId));
 
 		long importedRecordSetId = GetterUtil.getLong(
 			portletPreferences.getValue("recordSetId", null));
