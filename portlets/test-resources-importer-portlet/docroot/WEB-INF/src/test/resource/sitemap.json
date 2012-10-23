@@ -1,0 +1,110 @@
+{
+	"layouts": [
+		{
+			"columns": [
+				[
+					{
+						"portletId": "58"
+					},
+					{
+						"portletId": "71"
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Without Border.html",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Custom Title.html",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "true",
+							"portletSetupUseCustomTitle": "true",
+							"portletSetupTitle_en_US": "Web Content with Custom Title"
+						}
+					}
+				],
+				[
+					{
+						"portletId": "47"
+					},
+					{
+						"portletId": "71_INSTANCE_${groupId}",
+						"portletPreferences": {
+							"nestedChildren": "1",
+							"includedLayouts": "all",
+							"rootLayoutLevel": "3",
+							"headerType": "root-layout",
+							"rootLayoutType": "relative",
+							"displayStyle": "[custom]"
+						}
+					},
+					"Web Content with Image.html",
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Child 1 Web Content.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "true",
+							"portletSetupUseCustomTitle": "true",
+							"portletSetupTitle_en_US": "Web Content with Child Structure 1"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Child 2 Web Content.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "true",
+							"portletSetupUseCustomTitle": "true",
+							"portletSetupTitle_en_US": "Web Content with Child Structure 2"
+						}
+					}
+				]
+			],
+			"friendlyURL": "/home",
+			"name": "Welcome",
+			"title": "Welcome"
+		},
+		{
+			"columns": [
+				[
+					{
+						"portletId": "58"
+					}
+				],
+				[
+					{
+						"portletId": "47"
+					}
+				]
+			],
+			"friendlyURL": "/parent",
+			"name": "Parent",
+			"title": "Parent",
+			"layouts": [
+				{
+					"friendlyURL": "/child-1",
+					"name": "Child 1",
+					"title": "Child 1"
+				},
+				{
+					"friendlyURL": "/child-2",
+					"name": "Child 2",
+					"title": "Child 2"
+				}
+			]
+		},
+		{
+			"friendlyURL": "/hidden",
+			"name": "Hidden",
+			"title": "Hidden",
+			"hidden": "true"
+		}
+	],
+	"layoutTemplateId": "2_columns_ii"
+}
