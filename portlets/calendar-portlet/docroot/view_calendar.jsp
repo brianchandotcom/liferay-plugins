@@ -155,6 +155,7 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 			%>
 
 			calendars: <%= userCalendarsJSONArray %>,
+			scheduler: <portlet:namespace />scheduler,
 			simpleMenu: window.<portlet:namespace />calendarsMenu
 		}
 	).render();
@@ -165,7 +166,7 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 				calendarsChange: function(event) {
 					syncCalendarsMap();
 
-					window.<portlet:namespace />scheduler.loadCalendarBookings();
+					<portlet:namespace />scheduler.load();
 
 					var calendarIds = A.Array.invoke(event.newVal, 'get', 'calendarId');
 
@@ -184,6 +185,7 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 			%>
 
 			calendars: <%= otherCalendarsJSONArray %>,
+			scheduler: <portlet:namespace />scheduler,
 			simpleMenu: window.<portlet:namespace />calendarsMenu
 		}
 	).render();
@@ -205,21 +207,27 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 			%>
 
 			calendars: <%= groupCalendarsJSONArray %>,
+			scheduler: <portlet:namespace />scheduler,
 			simpleMenu: window.<portlet:namespace />calendarsMenu
 		}
 	).render();
 
 	syncCalendarsMap();
 
-	<portlet:namespace />scheduler.on(
-		{
-			'scheduler-calendar:visibleChange': function(event) {
-				var instance = this;
+	A.each(
+		Liferay.CalendarUtil.availableCalendars,
+		function(calendar) {
+			calendar.on(
+					{
+						'visibleChange': function(event) {
+							var instance = this;
 
-				var calendar = event.target;
+							var calendar = event.currentTarget;
 
-				Liferay.Store('calendar-portlet-calendar-' + calendar.get('calendarId') + '-visible', event.newVal);
-			}
+							Liferay.Store('calendar-portlet-calendar-' + calendar.get('calendarId') + '-visible', event.newVal);
+						}
+					}
+				);
 		}
 	);
 
@@ -254,14 +262,16 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 		var DateMath = A.DataType.DateMath;
 
 		window.<portlet:namespace />refreshVisibleCalendarRenderingRules = function() {
-			var miniCalendarStartDate = window.<portlet:namespace />miniCalendar.get('date');
+			var miniCalendarStartDate = DateMath.subtract(DateMath.toMidnight(window.<portlet:namespace />miniCalendar.get('date')), DateMath.WEEK, 1);
 
-			var miniCalendarEndDate = DateMath.add(miniCalendarStartDate, DateMath.MONTH, 1);
+			var miniCalendarEndDate = DateMath.add(DateMath.add(miniCalendarStartDate, DateMath.MONTH, 1), DateMath.WEEK, 1);
+
+			miniCalendarEndDate.setHours(23,59,59,999);
 
 			Liferay.CalendarUtil.getCalendarRenderingRules(
 				A.Object.keys(Liferay.CalendarUtil.visibleCalendars),
-				miniCalendarStartDate,
-				miniCalendarEndDate,
+				Liferay.CalendarUtil.toUTCTimeZone(miniCalendarStartDate),
+				Liferay.CalendarUtil.toUTCTimeZone(miniCalendarEndDate),
 				'busy',
 				function(rulesDefinition) {
 					window.<portlet:namespace />miniCalendar.set(
@@ -297,7 +307,10 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 
 		<portlet:namespace />refreshVisibleCalendarRenderingRules();
 
-		<portlet:namespace />scheduler.on('eventsChangeBatch', <portlet:namespace />refreshVisibleCalendarRenderingRules);
+		<portlet:namespace />scheduler.after(
+			['*:load', '*:add', '*:change', '*:remove', '*:reset'],
+			A.debounce(<portlet:namespace />refreshVisibleCalendarRenderingRules, 100)
+		);
 
 		<portlet:namespace />scheduler.after(
 			'dateChange',
