@@ -312,6 +312,8 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 				document.add(field);
 			}
 
+			documents.add(document);
+
 			String snippet = StringPool.BLANK;
 
 			if (queryConfig.isHighlightEnabled()) {
@@ -323,14 +325,12 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 					snippet = getSnippet(
 						solrDocument, queryConfig, queryTerms,
 						queryResponse.getHighlighting(), Field.TITLE);
+				}
 
-					if (Validator.isNull(snippet)) {
-						continue;
-					}
+				if (Validator.isNotNull(snippet)) {
+					snippets.add(snippet);
 				}
 			}
-
-			documents.add(document);
 
 			if (queryConfig.isScoreEnabled()) {
 				float score = GetterUtil.getFloat(
@@ -345,8 +345,6 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 			else {
 				scores.add(maxScore);
 			}
-
-			snippets.add(snippet);
 
 			subsetTotal++;
 		}
