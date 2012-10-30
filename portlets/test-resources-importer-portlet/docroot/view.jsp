@@ -58,10 +58,11 @@ for (String importer : importers) {
 	Map<String, Object> responseMap = (Map<String, Object>)MessageBusUtil.sendSynchronousMessage(DestinationNames.HOT_DEPLOY, message);
 
 	long groupId = GetterUtil.getLong(responseMap.get("groupId"));
+
+	group = GroupLocalServiceUtil.fetchGroup(groupId);
 %>
 
 	<h3>
-
 		<c:choose>
 			<c:when test='<%= importer.equals("custom") %>'>
 				Custom Resource Directory
@@ -76,12 +77,16 @@ for (String importer : importers) {
 	</h3>
 
 	<p>
-		GroupLocalServiceUtil#fetchGroup=<%= _assertTrue(GroupLocalServiceUtil.fetchGroup(groupId) != null) %><br />
+		GroupLocalServiceUtil#fetchGroup=<%= _assertTrue(group != null) %><br />
 
 		<%
 		if (groupId == 0) {
 			continue;
 		}
+
+		// Update the thread local finder cache for the next iteration
+
+		GroupLocalServiceUtil.updateGroup(group);
 
 		LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(groupId, false);
 		%>
