@@ -4,7 +4,7 @@
 	<portlet>
 		<portlet-name>1</portlet-name>
 		<display-name>Polls</display-name>
-		<portlet-class>com.liferay.polls.portlet.PollsPortlet</portlet-class>
+		<portlet-class>com.liferay.portlet.polls.PollsPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/polls/view.jsp</value>
@@ -13,6 +13,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>Polls</title>
 			<short-title>Polls</short-title>
@@ -34,7 +35,7 @@
 	<portlet>	
 		<portlet-name>2</portlet-name>
 		<display-name>Polls Display</display-name>
-		<portlet-class>com.liferay.polls.portlet.PollsPortlet</portlet-class>
+		<portlet-class>com.liferay.portlet.polls.PollsPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/polls_display/view.jsp</value>
@@ -43,6 +44,7 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>Polls Display</title>
 			<short-title>Polls Display</short-title>
