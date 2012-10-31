@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.liferay.portlet.polls.service.PollsChoiceLocalService" class="com.liferay.portlet.polls.service.impl.PollsChoiceLocalServiceImpl" />
+	<bean id="com.liferay.portlet.polls.service.PollsChoiceService" class="com.liferay.portlet.polls.service.impl.PollsChoiceServiceImpl" />
+	<bean id="com.liferay.portlet.polls.service.persistence.PollsChoicePersistence" class="com.liferay.portlet.polls.service.persistence.PollsChoicePersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.portlet.polls.service.PollsQuestionLocalService" class="com.liferay.portlet.polls.service.impl.PollsQuestionLocalServiceImpl" />
+	<bean id="com.liferay.portlet.polls.service.PollsQuestionService" class="com.liferay.portlet.polls.service.impl.PollsQuestionServiceImpl" />
+	<bean id="com.liferay.portlet.polls.service.persistence.PollsQuestionPersistence" class="com.liferay.portlet.polls.service.persistence.PollsQuestionPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.portlet.polls.service.PollsVoteLocalService" class="com.liferay.portlet.polls.service.impl.PollsVoteLocalServiceImpl" />
+	<bean id="com.liferay.portlet.polls.service.PollsVoteService" class="com.liferay.portlet.polls.service.impl.PollsVoteServiceImpl" />
+	<bean id="com.liferay.portlet.polls.service.persistence.PollsVotePersistence" class="com.liferay.portlet.polls.service.persistence.PollsVotePersistenceImpl" parent="basePersistence" />
+</beans>
