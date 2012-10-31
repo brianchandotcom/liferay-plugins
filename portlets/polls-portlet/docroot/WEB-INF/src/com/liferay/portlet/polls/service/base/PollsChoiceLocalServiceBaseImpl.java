@@ -31,10 +31,8 @@ import com.liferay.portal.model.PersistedModel;
 import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
-import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.service.UserService;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 
 import com.liferay.portlet.polls.model.PollsChoice;
@@ -44,6 +42,7 @@ import com.liferay.portlet.polls.service.PollsQuestionLocalService;
 import com.liferay.portlet.polls.service.PollsQuestionService;
 import com.liferay.portlet.polls.service.PollsVoteLocalService;
 import com.liferay.portlet.polls.service.PollsVoteService;
+import com.liferay.portlet.polls.service.persistence.PollsChoiceFinder;
 import com.liferay.portlet.polls.service.persistence.PollsChoicePersistence;
 import com.liferay.portlet.polls.service.persistence.PollsQuestionPersistence;
 import com.liferay.portlet.polls.service.persistence.PollsVotePersistence;
@@ -87,7 +86,7 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 		throws SystemException {
 		pollsChoice.setNew(true);
 
-		return pollsChoicePersistence.update(pollsChoice, false);
+		return pollsChoicePersistence.update(pollsChoice);
 	}
 
 	/**
@@ -260,23 +259,7 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 	@Indexable(type = IndexableType.REINDEX)
 	public PollsChoice updatePollsChoice(PollsChoice pollsChoice)
 		throws SystemException {
-		return updatePollsChoice(pollsChoice, true);
-	}
-
-	/**
-	 * Updates the polls choice in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	 *
-	 * @param pollsChoice the polls choice
-	 * @param merge whether to merge the polls choice with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
-	 * @return the polls choice that was updated
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Indexable(type = IndexableType.REINDEX)
-	public PollsChoice updatePollsChoice(PollsChoice pollsChoice, boolean merge)
-		throws SystemException {
-		pollsChoice.setNew(false);
-
-		return pollsChoicePersistence.update(pollsChoice, merge);
+		return pollsChoicePersistence.update(pollsChoice);
 	}
 
 	/**
@@ -333,6 +316,24 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 	public void setPollsChoicePersistence(
 		PollsChoicePersistence pollsChoicePersistence) {
 		this.pollsChoicePersistence = pollsChoicePersistence;
+	}
+
+	/**
+	 * Returns the polls choice finder.
+	 *
+	 * @return the polls choice finder
+	 */
+	public PollsChoiceFinder getPollsChoiceFinder() {
+		return pollsChoiceFinder;
+	}
+
+	/**
+	 * Sets the polls choice finder.
+	 *
+	 * @param pollsChoiceFinder the polls choice finder
+	 */
+	public void setPollsChoiceFinder(PollsChoiceFinder pollsChoiceFinder) {
+		this.pollsChoiceFinder = pollsChoiceFinder;
 	}
 
 	/**
@@ -486,42 +487,6 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the resource remote service.
-	 *
-	 * @return the resource remote service
-	 */
-	public ResourceService getResourceService() {
-		return resourceService;
-	}
-
-	/**
-	 * Sets the resource remote service.
-	 *
-	 * @param resourceService the resource remote service
-	 */
-	public void setResourceService(ResourceService resourceService) {
-		this.resourceService = resourceService;
-	}
-
-	/**
-	 * Returns the resource persistence.
-	 *
-	 * @return the resource persistence
-	 */
-	public ResourcePersistence getResourcePersistence() {
-		return resourcePersistence;
-	}
-
-	/**
-	 * Sets the resource persistence.
-	 *
-	 * @param resourcePersistence the resource persistence
-	 */
-	public void setResourcePersistence(ResourcePersistence resourcePersistence) {
-		this.resourcePersistence = resourcePersistence;
-	}
-
-	/**
 	 * Returns the user local service.
 	 *
 	 * @return the user local service
@@ -576,6 +541,10 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 	}
 
 	public void afterPropertiesSet() {
+		Class<?> clazz = getClass();
+
+		_classLoader = clazz.getClassLoader();
+
 		PersistedModelLocalServiceRegistryUtil.register("com.liferay.portlet.polls.model.PollsChoice",
 			pollsChoiceLocalService);
 	}
@@ -605,7 +574,22 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		if (contextClassLoader != _classLoader) {
+			currentThread.setContextClassLoader(_classLoader);
+		}
+
+		try {
+			return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
+		}
+		finally {
+			if (contextClassLoader != _classLoader) {
+				currentThread.setContextClassLoader(contextClassLoader);
+			}
+		}
 	}
 
 	protected Class<?> getModelClass() {
@@ -641,6 +625,8 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 	protected PollsChoiceService pollsChoiceService;
 	@BeanReference(type = PollsChoicePersistence.class)
 	protected PollsChoicePersistence pollsChoicePersistence;
+	@BeanReference(type = PollsChoiceFinder.class)
+	protected PollsChoiceFinder pollsChoiceFinder;
 	@BeanReference(type = PollsQuestionLocalService.class)
 	protected PollsQuestionLocalService pollsQuestionLocalService;
 	@BeanReference(type = PollsQuestionService.class)
@@ -657,10 +643,6 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 	protected CounterLocalService counterLocalService;
 	@BeanReference(type = ResourceLocalService.class)
 	protected ResourceLocalService resourceLocalService;
-	@BeanReference(type = ResourceService.class)
-	protected ResourceService resourceService;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserLocalService.class)
 	protected UserLocalService userLocalService;
 	@BeanReference(type = UserService.class)
@@ -668,5 +650,6 @@ public abstract class PollsChoiceLocalServiceBaseImpl
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private String _beanIdentifier;
+	private ClassLoader _classLoader;
 	private PollsChoiceLocalServiceClpInvoker _clpInvoker = new PollsChoiceLocalServiceClpInvoker();
 }

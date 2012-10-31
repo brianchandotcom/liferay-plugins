@@ -14,9 +14,9 @@
 
 package com.liferay.portlet.polls.model.impl;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.json.JSON;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
@@ -371,28 +371,13 @@ public class PollsChoiceModelImpl extends BaseModelImpl<PollsChoice>
 			return;
 		}
 
-		Locale[] locales = LanguageUtil.getAvailableLocales();
-
-		for (Locale locale : locales) {
-			String description = descriptionMap.get(locale);
-
-			setDescription(description, locale, defaultLocale);
-		}
+		setDescription(LocalizationUtil.updateLocalization(descriptionMap,
+				getDescription(), "Description",
+				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	public long getColumnBitmask() {
 		return _columnBitmask;
-	}
-
-	@Override
-	public PollsChoice toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (PollsChoice)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
 	}
 
 	@Override
@@ -406,6 +391,23 @@ public class PollsChoiceModelImpl extends BaseModelImpl<PollsChoice>
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@SuppressWarnings("unused")
+	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
+		throws LocaleException {
+		setDescription(getDescription(defaultImportLocale),
+			defaultImportLocale, defaultImportLocale);
+	}
+
+	@Override
+	public PollsChoice toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (PollsChoice)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -582,7 +584,7 @@ public class PollsChoiceModelImpl extends BaseModelImpl<PollsChoice>
 	}
 
 	private static ClassLoader _classLoader = PollsChoice.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			PollsChoice.class
 		};
 	private String _uuid;
@@ -596,5 +598,5 @@ public class PollsChoiceModelImpl extends BaseModelImpl<PollsChoice>
 	private String _description;
 	private String _descriptionCurrentLanguageId;
 	private long _columnBitmask;
-	private PollsChoice _escapedModelProxy;
+	private PollsChoice _escapedModel;
 }

@@ -378,17 +378,6 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	@Override
-	public PollsVote toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (PollsVote)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			PollsVote.class.getName(), getPrimaryKey());
@@ -399,6 +388,16 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@Override
+	public PollsVote toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (PollsVote)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -612,7 +611,7 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	}
 
 	private static ClassLoader _classLoader = PollsVote.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			PollsVote.class
 		};
 	private long _voteId;
@@ -632,5 +631,5 @@ public class PollsVoteModelImpl extends BaseModelImpl<PollsVote>
 	private boolean _setOriginalChoiceId;
 	private Date _voteDate;
 	private long _columnBitmask;
-	private PollsVote _escapedModelProxy;
+	private PollsVote _escapedModel;
 }

@@ -4,6 +4,7 @@
 	<bean id="com.liferay.portlet.polls.service.PollsChoiceLocalService" class="com.liferay.portlet.polls.service.impl.PollsChoiceLocalServiceImpl" />
 	<bean id="com.liferay.portlet.polls.service.PollsChoiceService" class="com.liferay.portlet.polls.service.impl.PollsChoiceServiceImpl" />
 	<bean id="com.liferay.portlet.polls.service.persistence.PollsChoicePersistence" class="com.liferay.portlet.polls.service.persistence.PollsChoicePersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.portlet.polls.service.persistence.PollsChoiceFinder" class="com.liferay.portlet.polls.service.persistence.PollsChoiceFinderImpl" parent="basePersistence" />
 	<bean id="com.liferay.portlet.polls.service.PollsQuestionLocalService" class="com.liferay.portlet.polls.service.impl.PollsQuestionLocalServiceImpl" />
 	<bean id="com.liferay.portlet.polls.service.PollsQuestionService" class="com.liferay.portlet.polls.service.impl.PollsQuestionServiceImpl" />
 	<bean id="com.liferay.portlet.polls.service.persistence.PollsQuestionPersistence" class="com.liferay.portlet.polls.service.persistence.PollsQuestionPersistenceImpl" parent="basePersistence" />

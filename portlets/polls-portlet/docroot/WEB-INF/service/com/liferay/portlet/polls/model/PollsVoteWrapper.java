@@ -373,6 +373,10 @@ public class PollsVoteWrapper implements PollsVote, ModelWrapper<PollsVote> {
 		return new PollsVoteWrapper(_pollsVote.toEscapedModel());
 	}
 
+	public com.liferay.portlet.polls.model.PollsVote toUnescapedModel() {
+		return new PollsVoteWrapper(_pollsVote.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _pollsVote.toString();
@@ -385,6 +389,12 @@ public class PollsVoteWrapper implements PollsVote, ModelWrapper<PollsVote> {
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_pollsVote.persist();
+	}
+
+	public com.liferay.portlet.polls.model.PollsChoice getChoice()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVote.getChoice();
 	}
 
 	/**

@@ -103,85 +103,79 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 				"com.liferay.portlet.polls.model.PollsQuestion"
 			};
 
-		_methodName16 = "updatePollsQuestion";
+		_methodName16 = "getBeanIdentifier";
 
-		_methodParameterTypes16 = new String[] {
-				"com.liferay.portlet.polls.model.PollsQuestion", "boolean"
-			};
+		_methodParameterTypes16 = new String[] {  };
 
-		_methodName17 = "getBeanIdentifier";
+		_methodName17 = "setBeanIdentifier";
 
-		_methodParameterTypes17 = new String[] {  };
+		_methodParameterTypes17 = new String[] { "java.lang.String" };
 
-		_methodName18 = "setBeanIdentifier";
+		_methodName19 = "addQuestion";
 
-		_methodParameterTypes18 = new String[] { "java.lang.String" };
-
-		_methodName20 = "addQuestion";
-
-		_methodParameterTypes20 = new String[] {
+		_methodParameterTypes19 = new String[] {
 				"long", "java.util.Map", "java.util.Map", "int", "int", "int",
 				"int", "int", "boolean", "java.util.List",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
+		_methodName20 = "addQuestionResources";
+
+		_methodParameterTypes20 = new String[] { "long", "boolean", "boolean" };
+
 		_methodName21 = "addQuestionResources";
 
-		_methodParameterTypes21 = new String[] { "long", "boolean", "boolean" };
+		_methodParameterTypes21 = new String[] {
+				"long", "java.lang.String[][]", "java.lang.String[][]"
+			};
 
 		_methodName22 = "addQuestionResources";
 
 		_methodParameterTypes22 = new String[] {
-				"long", "java.lang.String[][]", "java.lang.String[][]"
+				"com.liferay.portlet.polls.model.PollsQuestion", "boolean",
+				"boolean"
 			};
 
 		_methodName23 = "addQuestionResources";
 
 		_methodParameterTypes23 = new String[] {
-				"com.liferay.portlet.polls.model.PollsQuestion", "boolean",
-				"boolean"
-			};
-
-		_methodName24 = "addQuestionResources";
-
-		_methodParameterTypes24 = new String[] {
 				"com.liferay.portlet.polls.model.PollsQuestion",
 				"java.lang.String[][]", "java.lang.String[][]"
 			};
 
+		_methodName24 = "deleteQuestion";
+
+		_methodParameterTypes24 = new String[] { "long" };
+
 		_methodName25 = "deleteQuestion";
 
-		_methodParameterTypes25 = new String[] { "long" };
-
-		_methodName26 = "deleteQuestion";
-
-		_methodParameterTypes26 = new String[] {
+		_methodParameterTypes25 = new String[] {
 				"com.liferay.portlet.polls.model.PollsQuestion"
 			};
 
-		_methodName27 = "deleteQuestions";
+		_methodName26 = "deleteQuestions";
+
+		_methodParameterTypes26 = new String[] { "long" };
+
+		_methodName27 = "getQuestion";
 
 		_methodParameterTypes27 = new String[] { "long" };
 
-		_methodName28 = "getQuestion";
+		_methodName28 = "getQuestions";
 
 		_methodParameterTypes28 = new String[] { "long" };
 
 		_methodName29 = "getQuestions";
 
-		_methodParameterTypes29 = new String[] { "long" };
+		_methodParameterTypes29 = new String[] { "long", "int", "int" };
 
-		_methodName30 = "getQuestions";
+		_methodName30 = "getQuestionsCount";
 
-		_methodParameterTypes30 = new String[] { "long", "int", "int" };
+		_methodParameterTypes30 = new String[] { "long" };
 
-		_methodName31 = "getQuestionsCount";
+		_methodName31 = "updateQuestion";
 
-		_methodParameterTypes31 = new String[] { "long" };
-
-		_methodName32 = "updateQuestion";
-
-		_methodParameterTypes32 = new String[] {
+		_methodParameterTypes31 = new String[] {
 				"long", "long", "java.util.Map", "java.util.Map", "int", "int",
 				"int", "int", "int", "boolean", "java.util.List",
 				"com.liferay.portal.service.ServiceContext"
@@ -672,46 +666,12 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		return (com.liferay.portlet.polls.model.PollsQuestion)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public com.liferay.portlet.polls.model.PollsQuestion updatePollsQuestion(
-		com.liferay.portlet.polls.model.PollsQuestion pollsQuestion,
-		boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName16,
-					_methodParameterTypes16,
-					new Object[] {
-						ClpSerializer.translateInput(pollsQuestion),
-						
-					merge
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.portlet.polls.model.PollsQuestion)ClpSerializer.translateOutput(returnObj);
-	}
-
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName17,
-					_methodParameterTypes17, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName16,
+					_methodParameterTypes16, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -730,8 +690,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
-			_invokableLocalService.invokeMethod(_methodName18,
-				_methodParameterTypes18,
+			_invokableLocalService.invokeMethod(_methodName17,
+				_methodParameterTypes17,
 				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
 		}
 		catch (Throwable t) {
@@ -766,8 +726,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20,
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19,
 					new Object[] {
 						userId,
 						
@@ -820,8 +780,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName21,
-				_methodParameterTypes21,
+			_invokableLocalService.invokeMethod(_methodName20,
+				_methodParameterTypes20,
 				new Object[] {
 					questionId,
 					
@@ -856,8 +816,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName22,
-				_methodParameterTypes22,
+			_invokableLocalService.invokeMethod(_methodName21,
+				_methodParameterTypes21,
 				new Object[] {
 					questionId,
 					
@@ -893,8 +853,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName23,
-				_methodParameterTypes23,
+			_invokableLocalService.invokeMethod(_methodName22,
+				_methodParameterTypes22,
 				new Object[] {
 					ClpSerializer.translateInput(question),
 					
@@ -930,8 +890,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName24,
-				_methodParameterTypes24,
+			_invokableLocalService.invokeMethod(_methodName23,
+				_methodParameterTypes23,
 				new Object[] {
 					ClpSerializer.translateInput(question),
 					
@@ -965,8 +925,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName25,
-				_methodParameterTypes25, new Object[] { questionId });
+			_invokableLocalService.invokeMethod(_methodName24,
+				_methodParameterTypes24, new Object[] { questionId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -994,8 +954,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName26,
-				_methodParameterTypes26,
+			_invokableLocalService.invokeMethod(_methodName25,
+				_methodParameterTypes25,
 				new Object[] { ClpSerializer.translateInput(question) });
 		}
 		catch (Throwable t) {
@@ -1023,8 +983,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName27,
-				_methodParameterTypes27, new Object[] { groupId });
+			_invokableLocalService.invokeMethod(_methodName26,
+				_methodParameterTypes26, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1054,8 +1014,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName28,
-					_methodParameterTypes28, new Object[] { questionId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27, new Object[] { questionId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1086,8 +1046,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName29,
-					_methodParameterTypes29, new Object[] { groupId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1114,8 +1074,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName30,
-					_methodParameterTypes30,
+			returnObj = _invokableLocalService.invokeMethod(_methodName29,
+					_methodParameterTypes29,
 					new Object[] { groupId, start, end });
 		}
 		catch (Throwable t) {
@@ -1142,8 +1102,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName31,
-					_methodParameterTypes31, new Object[] { groupId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1177,8 +1137,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName32,
-					_methodParameterTypes32,
+			returnObj = _invokableLocalService.invokeMethod(_methodName31,
+					_methodParameterTypes31,
 					new Object[] {
 						userId,
 						
@@ -1265,8 +1225,8 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
-	private String _methodName18;
-	private String[] _methodParameterTypes18;
+	private String _methodName19;
+	private String[] _methodParameterTypes19;
 	private String _methodName20;
 	private String[] _methodParameterTypes20;
 	private String _methodName21;
@@ -1291,6 +1251,4 @@ public class PollsQuestionLocalServiceClp implements PollsQuestionLocalService {
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
-	private String _methodName32;
-	private String[] _methodParameterTypes32;
 }

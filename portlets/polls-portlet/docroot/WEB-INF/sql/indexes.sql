@@ -4,6 +4,7 @@ create index IX_3A6EE84 on Polls_PollsChoice (uuid_);
 
 create index IX_687C1055 on Polls_PollsQuestion (groupId);
 create index IX_B693B41F on Polls_PollsQuestion (uuid_);
+create index IX_33D0D6A9 on Polls_PollsQuestion (uuid_, companyId);
 create unique index IX_D9C0F36B on Polls_PollsQuestion (uuid_, groupId);
 
 create index IX_E1609DC9 on Polls_PollsVote (choiceId);

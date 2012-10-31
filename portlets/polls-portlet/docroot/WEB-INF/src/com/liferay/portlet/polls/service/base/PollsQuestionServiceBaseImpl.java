@@ -23,10 +23,8 @@ import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.BaseServiceImpl;
 import com.liferay.portal.service.ResourceLocalService;
-import com.liferay.portal.service.ResourceService;
 import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.service.UserService;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 
 import com.liferay.portlet.polls.model.PollsQuestion;
@@ -36,6 +34,7 @@ import com.liferay.portlet.polls.service.PollsQuestionLocalService;
 import com.liferay.portlet.polls.service.PollsQuestionService;
 import com.liferay.portlet.polls.service.PollsVoteLocalService;
 import com.liferay.portlet.polls.service.PollsVoteService;
+import com.liferay.portlet.polls.service.persistence.PollsChoiceFinder;
 import com.liferay.portlet.polls.service.persistence.PollsChoicePersistence;
 import com.liferay.portlet.polls.service.persistence.PollsQuestionPersistence;
 import com.liferay.portlet.polls.service.persistence.PollsVotePersistence;
@@ -116,6 +115,24 @@ public abstract class PollsQuestionServiceBaseImpl extends BaseServiceImpl
 	public void setPollsChoicePersistence(
 		PollsChoicePersistence pollsChoicePersistence) {
 		this.pollsChoicePersistence = pollsChoicePersistence;
+	}
+
+	/**
+	 * Returns the polls choice finder.
+	 *
+	 * @return the polls choice finder
+	 */
+	public PollsChoiceFinder getPollsChoiceFinder() {
+		return pollsChoiceFinder;
+	}
+
+	/**
+	 * Sets the polls choice finder.
+	 *
+	 * @param pollsChoiceFinder the polls choice finder
+	 */
+	public void setPollsChoiceFinder(PollsChoiceFinder pollsChoiceFinder) {
+		this.pollsChoiceFinder = pollsChoiceFinder;
 	}
 
 	/**
@@ -269,42 +286,6 @@ public abstract class PollsQuestionServiceBaseImpl extends BaseServiceImpl
 	}
 
 	/**
-	 * Returns the resource remote service.
-	 *
-	 * @return the resource remote service
-	 */
-	public ResourceService getResourceService() {
-		return resourceService;
-	}
-
-	/**
-	 * Sets the resource remote service.
-	 *
-	 * @param resourceService the resource remote service
-	 */
-	public void setResourceService(ResourceService resourceService) {
-		this.resourceService = resourceService;
-	}
-
-	/**
-	 * Returns the resource persistence.
-	 *
-	 * @return the resource persistence
-	 */
-	public ResourcePersistence getResourcePersistence() {
-		return resourcePersistence;
-	}
-
-	/**
-	 * Sets the resource persistence.
-	 *
-	 * @param resourcePersistence the resource persistence
-	 */
-	public void setResourcePersistence(ResourcePersistence resourcePersistence) {
-		this.resourcePersistence = resourcePersistence;
-	}
-
-	/**
 	 * Returns the user local service.
 	 *
 	 * @return the user local service
@@ -359,6 +340,9 @@ public abstract class PollsQuestionServiceBaseImpl extends BaseServiceImpl
 	}
 
 	public void afterPropertiesSet() {
+		Class<?> clazz = getClass();
+
+		_classLoader = clazz.getClassLoader();
 	}
 
 	public void destroy() {
@@ -384,7 +368,22 @@ public abstract class PollsQuestionServiceBaseImpl extends BaseServiceImpl
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
+		Thread currentThread = Thread.currentThread();
+
+		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		if (contextClassLoader != _classLoader) {
+			currentThread.setContextClassLoader(_classLoader);
+		}
+
+		try {
+			return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
+		}
+		finally {
+			if (contextClassLoader != _classLoader) {
+				currentThread.setContextClassLoader(contextClassLoader);
+			}
+		}
 	}
 
 	protected Class<?> getModelClass() {
@@ -420,6 +419,8 @@ public abstract class PollsQuestionServiceBaseImpl extends BaseServiceImpl
 	protected PollsChoiceService pollsChoiceService;
 	@BeanReference(type = PollsChoicePersistence.class)
 	protected PollsChoicePersistence pollsChoicePersistence;
+	@BeanReference(type = PollsChoiceFinder.class)
+	protected PollsChoiceFinder pollsChoiceFinder;
 	@BeanReference(type = PollsQuestionLocalService.class)
 	protected PollsQuestionLocalService pollsQuestionLocalService;
 	@BeanReference(type = PollsQuestionService.class)
@@ -436,10 +437,6 @@ public abstract class PollsQuestionServiceBaseImpl extends BaseServiceImpl
 	protected CounterLocalService counterLocalService;
 	@BeanReference(type = ResourceLocalService.class)
 	protected ResourceLocalService resourceLocalService;
-	@BeanReference(type = ResourceService.class)
-	protected ResourceService resourceService;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserLocalService.class)
 	protected UserLocalService userLocalService;
 	@BeanReference(type = UserService.class)
@@ -447,5 +444,6 @@ public abstract class PollsQuestionServiceBaseImpl extends BaseServiceImpl
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private String _beanIdentifier;
+	private ClassLoader _classLoader;
 	private PollsQuestionServiceClpInvoker _clpInvoker = new PollsQuestionServiceClpInvoker();
 }

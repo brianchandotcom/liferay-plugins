@@ -14,10 +14,10 @@
 
 package com.liferay.portlet.polls.model.impl;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -100,8 +100,9 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.portlet.polls.model.PollsQuestion"),
 			true);
-	public static long GROUPID_COLUMN_BITMASK = 1L;
-	public static long UUID_COLUMN_BITMASK = 2L;
+	public static long COMPANYID_COLUMN_BITMASK = 1L;
+	public static long GROUPID_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -335,7 +336,19 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 	}
 
 	public void setCompanyId(long companyId) {
+		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+		if (!_setOriginalCompanyId) {
+			_setOriginalCompanyId = true;
+
+			_originalCompanyId = _companyId;
+		}
+
 		_companyId = companyId;
+	}
+
+	public long getOriginalCompanyId() {
+		return _originalCompanyId;
 	}
 
 	@JSON
@@ -470,13 +483,8 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 			return;
 		}
 
-		Locale[] locales = LanguageUtil.getAvailableLocales();
-
-		for (Locale locale : locales) {
-			String title = titleMap.get(locale);
-
-			setTitle(title, locale, defaultLocale);
-		}
+		setTitle(LocalizationUtil.updateLocalization(titleMap, getTitle(),
+				"Title", LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -563,13 +571,9 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 			return;
 		}
 
-		Locale[] locales = LanguageUtil.getAvailableLocales();
-
-		for (Locale locale : locales) {
-			String description = descriptionMap.get(locale);
-
-			setDescription(description, locale, defaultLocale);
-		}
+		setDescription(LocalizationUtil.updateLocalization(descriptionMap,
+				getDescription(), "Description",
+				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -595,17 +599,6 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 	}
 
 	@Override
-	public PollsQuestion toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (PollsQuestion)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			PollsQuestion.class.getName(), getPrimaryKey());
@@ -616,6 +609,25 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@SuppressWarnings("unused")
+	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
+		throws LocaleException {
+		setTitle(getTitle(defaultImportLocale), defaultImportLocale,
+			defaultImportLocale);
+		setDescription(getDescription(defaultImportLocale),
+			defaultImportLocale, defaultImportLocale);
+	}
+
+	@Override
+	public PollsQuestion toEscapedModel() {
+		if (_escapedModel == null) {
+			_escapedModel = (PollsQuestion)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModel;
 	}
 
 	@Override
@@ -694,6 +706,10 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 		pollsQuestionModelImpl._originalGroupId = pollsQuestionModelImpl._groupId;
 
 		pollsQuestionModelImpl._setOriginalGroupId = false;
+
+		pollsQuestionModelImpl._originalCompanyId = pollsQuestionModelImpl._companyId;
+
+		pollsQuestionModelImpl._setOriginalCompanyId = false;
 
 		pollsQuestionModelImpl._columnBitmask = 0;
 	}
@@ -876,7 +892,7 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 	}
 
 	private static ClassLoader _classLoader = PollsQuestion.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			PollsQuestion.class
 		};
 	private String _uuid;
@@ -886,6 +902,8 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 	private long _originalGroupId;
 	private boolean _setOriginalGroupId;
 	private long _companyId;
+	private long _originalCompanyId;
+	private boolean _setOriginalCompanyId;
 	private long _userId;
 	private String _userUuid;
 	private String _userName;
@@ -898,5 +916,5 @@ public class PollsQuestionModelImpl extends BaseModelImpl<PollsQuestion>
 	private Date _expirationDate;
 	private Date _lastVoteDate;
 	private long _columnBitmask;
-	private PollsQuestion _escapedModelProxy;
+	private PollsQuestion _escapedModel;
 }

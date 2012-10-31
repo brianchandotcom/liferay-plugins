@@ -16,6 +16,7 @@ package com.liferay.portlet.polls.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
@@ -24,8 +25,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.polls.service.PollsVoteLocalServiceUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -216,6 +215,10 @@ public class PollsVoteClp extends BaseModelImpl<PollsVote> implements PollsVote 
 		_voteDate = voteDate;
 	}
 
+	public com.liferay.portlet.polls.model.PollsChoice getChoice() {
+		throw new UnsupportedOperationException();
+	}
+
 	public BaseModel<?> getPollsVoteRemoteModel() {
 		return _pollsVoteRemoteModel;
 	}
@@ -235,7 +238,7 @@ public class PollsVoteClp extends BaseModelImpl<PollsVote> implements PollsVote 
 
 	@Override
 	public PollsVote toEscapedModel() {
-		return (PollsVote)Proxy.newProxyInstance(PollsVote.class.getClassLoader(),
+		return (PollsVote)ProxyUtil.newProxyInstance(PollsVote.class.getClassLoader(),
 			new Class[] { PollsVote.class }, new AutoEscapeBeanHandler(this));
 	}
 

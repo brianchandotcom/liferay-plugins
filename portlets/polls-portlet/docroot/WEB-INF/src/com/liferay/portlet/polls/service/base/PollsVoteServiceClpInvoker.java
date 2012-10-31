@@ -23,35 +23,37 @@ import java.util.Arrays;
  */
 public class PollsVoteServiceClpInvoker {
 	public PollsVoteServiceClpInvoker() {
-		_methodName34 = "getBeanIdentifier";
+		_methodName32 = "getBeanIdentifier";
 
-		_methodParameterTypes34 = new String[] {  };
+		_methodParameterTypes32 = new String[] {  };
 
-		_methodName35 = "setBeanIdentifier";
+		_methodName33 = "setBeanIdentifier";
 
-		_methodParameterTypes35 = new String[] { "java.lang.String" };
+		_methodParameterTypes33 = new String[] { "java.lang.String" };
 
-		_methodName40 = "addVote";
+		_methodName38 = "addVote";
 
-		_methodParameterTypes40 = new String[] {
+		_methodParameterTypes38 = new String[] {
 				"long", "long", "com.liferay.portal.service.ServiceContext"
 			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		if (_methodName34.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
+		if (_methodName32.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
 			return PollsVoteServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName35.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes35, parameterTypes)) {
+		if (_methodName33.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
 			PollsVoteServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+
+			return null;
 		}
 
-		if (_methodName40.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes40, parameterTypes)) {
+		if (_methodName38.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
 			return PollsVoteServiceUtil.addVote(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(com.liferay.portal.service.ServiceContext)arguments[2]);
@@ -60,10 +62,10 @@ public class PollsVoteServiceClpInvoker {
 		throw new UnsupportedOperationException();
 	}
 
-	private String _methodName34;
-	private String[] _methodParameterTypes34;
-	private String _methodName35;
-	private String[] _methodParameterTypes35;
-	private String _methodName40;
-	private String[] _methodParameterTypes40;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
+	private String _methodName33;
+	private String[] _methodParameterTypes33;
+	private String _methodName38;
+	private String[] _methodParameterTypes38;
 }

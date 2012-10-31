@@ -14,6 +14,7 @@
 
 package com.liferay.portlet.polls.model;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
@@ -439,6 +440,9 @@ public interface PollsQuestionModel extends BaseModel<PollsQuestion>,
 
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
+		throws LocaleException;
+
 	public Object clone();
 
 	public int compareTo(PollsQuestion pollsQuestion);
@@ -448,6 +452,8 @@ public interface PollsQuestionModel extends BaseModel<PollsQuestion>,
 	public CacheModel<PollsQuestion> toCacheModel();
 
 	public PollsQuestion toEscapedModel();
+
+	public PollsQuestion toUnescapedModel();
 
 	public String toString();
 

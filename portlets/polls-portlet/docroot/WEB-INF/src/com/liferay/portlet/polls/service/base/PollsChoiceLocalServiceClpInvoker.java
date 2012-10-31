@@ -98,42 +98,36 @@ public class PollsChoiceLocalServiceClpInvoker {
 				"com.liferay.portlet.polls.model.PollsChoice"
 			};
 
-		_methodName15 = "updatePollsChoice";
+		_methodName47 = "getBeanIdentifier";
 
-		_methodParameterTypes15 = new String[] {
-				"com.liferay.portlet.polls.model.PollsChoice", "boolean"
-			};
+		_methodParameterTypes47 = new String[] {  };
 
-		_methodName50 = "getBeanIdentifier";
+		_methodName48 = "setBeanIdentifier";
 
-		_methodParameterTypes50 = new String[] {  };
+		_methodParameterTypes48 = new String[] { "java.lang.String" };
 
-		_methodName51 = "setBeanIdentifier";
+		_methodName53 = "addChoice";
 
-		_methodParameterTypes51 = new String[] { "java.lang.String" };
-
-		_methodName56 = "addChoice";
-
-		_methodParameterTypes56 = new String[] {
+		_methodParameterTypes53 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName57 = "getChoice";
+		_methodName54 = "getChoice";
 
-		_methodParameterTypes57 = new String[] { "long" };
+		_methodParameterTypes54 = new String[] { "long" };
 
-		_methodName58 = "getChoices";
+		_methodName55 = "getChoices";
 
-		_methodParameterTypes58 = new String[] { "long" };
+		_methodParameterTypes55 = new String[] { "long" };
 
-		_methodName59 = "getChoicesCount";
+		_methodName56 = "getChoicesCount";
 
-		_methodParameterTypes59 = new String[] { "long" };
+		_methodParameterTypes56 = new String[] { "long" };
 
-		_methodName60 = "updateChoice";
+		_methodName57 = "updateChoice";
 
-		_methodParameterTypes60 = new String[] {
+		_methodParameterTypes57 = new String[] {
 				"long", "long", "java.lang.String", "java.lang.String"
 			};
 	}
@@ -221,46 +215,42 @@ public class PollsChoiceLocalServiceClpInvoker {
 			return PollsChoiceLocalServiceUtil.updatePollsChoice((com.liferay.portlet.polls.model.PollsChoice)arguments[0]);
 		}
 
-		if (_methodName15.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes15, parameterTypes)) {
-			return PollsChoiceLocalServiceUtil.updatePollsChoice((com.liferay.portlet.polls.model.PollsChoice)arguments[0],
-				((Boolean)arguments[1]).booleanValue());
-		}
-
-		if (_methodName50.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+		if (_methodName47.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
 			return PollsChoiceLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName51.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			PollsChoiceLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+
+			return null;
 		}
 
-		if (_methodName56.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
 			return PollsChoiceLocalServiceUtil.addChoice(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(com.liferay.portal.service.ServiceContext)arguments[3]);
 		}
 
-		if (_methodName57.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
 			return PollsChoiceLocalServiceUtil.getChoice(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName58.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
 			return PollsChoiceLocalServiceUtil.getChoices(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName59.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
 			return PollsChoiceLocalServiceUtil.getChoicesCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName60.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
+		if (_methodName57.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
 			return PollsChoiceLocalServiceUtil.updateChoice(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
@@ -299,20 +289,18 @@ public class PollsChoiceLocalServiceClpInvoker {
 	private String[] _methodParameterTypes13;
 	private String _methodName14;
 	private String[] _methodParameterTypes14;
-	private String _methodName15;
-	private String[] _methodParameterTypes15;
-	private String _methodName50;
-	private String[] _methodParameterTypes50;
-	private String _methodName51;
-	private String[] _methodParameterTypes51;
+	private String _methodName47;
+	private String[] _methodParameterTypes47;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
+	private String _methodName53;
+	private String[] _methodParameterTypes53;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
 	private String _methodName56;
 	private String[] _methodParameterTypes56;
 	private String _methodName57;
 	private String[] _methodParameterTypes57;
-	private String _methodName58;
-	private String[] _methodParameterTypes58;
-	private String _methodName59;
-	private String[] _methodParameterTypes59;
-	private String _methodName60;
-	private String[] _methodParameterTypes60;
 }

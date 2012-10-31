@@ -102,85 +102,79 @@ public class PollsQuestionLocalServiceClpInvoker {
 				"com.liferay.portlet.polls.model.PollsQuestion"
 			};
 
-		_methodName16 = "updatePollsQuestion";
+		_methodName48 = "getBeanIdentifier";
 
-		_methodParameterTypes16 = new String[] {
-				"com.liferay.portlet.polls.model.PollsQuestion", "boolean"
-			};
+		_methodParameterTypes48 = new String[] {  };
 
-		_methodName51 = "getBeanIdentifier";
+		_methodName49 = "setBeanIdentifier";
 
-		_methodParameterTypes51 = new String[] {  };
+		_methodParameterTypes49 = new String[] { "java.lang.String" };
 
-		_methodName52 = "setBeanIdentifier";
+		_methodName54 = "addQuestion";
 
-		_methodParameterTypes52 = new String[] { "java.lang.String" };
-
-		_methodName57 = "addQuestion";
-
-		_methodParameterTypes57 = new String[] {
+		_methodParameterTypes54 = new String[] {
 				"long", "java.util.Map", "java.util.Map", "int", "int", "int",
 				"int", "int", "boolean", "java.util.List",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName58 = "addQuestionResources";
+		_methodName55 = "addQuestionResources";
 
-		_methodParameterTypes58 = new String[] { "long", "boolean", "boolean" };
+		_methodParameterTypes55 = new String[] { "long", "boolean", "boolean" };
 
-		_methodName59 = "addQuestionResources";
+		_methodName56 = "addQuestionResources";
 
-		_methodParameterTypes59 = new String[] {
+		_methodParameterTypes56 = new String[] {
 				"long", "java.lang.String[][]", "java.lang.String[][]"
 			};
 
-		_methodName60 = "addQuestionResources";
+		_methodName57 = "addQuestionResources";
 
-		_methodParameterTypes60 = new String[] {
+		_methodParameterTypes57 = new String[] {
 				"com.liferay.portlet.polls.model.PollsQuestion", "boolean",
 				"boolean"
 			};
 
-		_methodName61 = "addQuestionResources";
+		_methodName58 = "addQuestionResources";
 
-		_methodParameterTypes61 = new String[] {
+		_methodParameterTypes58 = new String[] {
 				"com.liferay.portlet.polls.model.PollsQuestion",
 				"java.lang.String[][]", "java.lang.String[][]"
 			};
 
-		_methodName62 = "deleteQuestion";
+		_methodName59 = "deleteQuestion";
 
-		_methodParameterTypes62 = new String[] { "long" };
+		_methodParameterTypes59 = new String[] { "long" };
 
-		_methodName63 = "deleteQuestion";
+		_methodName60 = "deleteQuestion";
 
-		_methodParameterTypes63 = new String[] {
+		_methodParameterTypes60 = new String[] {
 				"com.liferay.portlet.polls.model.PollsQuestion"
 			};
 
-		_methodName64 = "deleteQuestions";
+		_methodName61 = "deleteQuestions";
 
-		_methodParameterTypes64 = new String[] { "long" };
+		_methodParameterTypes61 = new String[] { "long" };
 
-		_methodName65 = "getQuestion";
+		_methodName62 = "getQuestion";
+
+		_methodParameterTypes62 = new String[] { "long" };
+
+		_methodName63 = "getQuestions";
+
+		_methodParameterTypes63 = new String[] { "long" };
+
+		_methodName64 = "getQuestions";
+
+		_methodParameterTypes64 = new String[] { "long", "int", "int" };
+
+		_methodName65 = "getQuestionsCount";
 
 		_methodParameterTypes65 = new String[] { "long" };
 
-		_methodName66 = "getQuestions";
+		_methodName66 = "updateQuestion";
 
-		_methodParameterTypes66 = new String[] { "long" };
-
-		_methodName67 = "getQuestions";
-
-		_methodParameterTypes67 = new String[] { "long", "int", "int" };
-
-		_methodName68 = "getQuestionsCount";
-
-		_methodParameterTypes68 = new String[] { "long" };
-
-		_methodName69 = "updateQuestion";
-
-		_methodParameterTypes69 = new String[] {
+		_methodParameterTypes66 = new String[] {
 				"long", "long", "java.util.Map", "java.util.Map", "int", "int",
 				"int", "int", "int", "boolean", "java.util.List",
 				"com.liferay.portal.service.ServiceContext"
@@ -276,24 +270,20 @@ public class PollsQuestionLocalServiceClpInvoker {
 			return PollsQuestionLocalServiceUtil.updatePollsQuestion((com.liferay.portlet.polls.model.PollsQuestion)arguments[0]);
 		}
 
-		if (_methodName16.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes16, parameterTypes)) {
-			return PollsQuestionLocalServiceUtil.updatePollsQuestion((com.liferay.portlet.polls.model.PollsQuestion)arguments[0],
-				((Boolean)arguments[1]).booleanValue());
-		}
-
-		if (_methodName51.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			return PollsQuestionLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName52.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
 			PollsQuestionLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+
+			return null;
 		}
 
-		if (_methodName57.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
 			return PollsQuestionLocalServiceUtil.addQuestion(((Long)arguments[0]).longValue(),
 				(java.util.Map<java.util.Locale, java.lang.String>)arguments[1],
 				(java.util.Map<java.util.Locale, java.lang.String>)arguments[2],
@@ -307,73 +297,87 @@ public class PollsQuestionLocalServiceClpInvoker {
 				(com.liferay.portal.service.ServiceContext)arguments[10]);
 		}
 
-		if (_methodName58.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
 			PollsQuestionLocalServiceUtil.addQuestionResources(((Long)arguments[0]).longValue(),
 				((Boolean)arguments[1]).booleanValue(),
 				((Boolean)arguments[2]).booleanValue());
+
+			return null;
+		}
+
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+			PollsQuestionLocalServiceUtil.addQuestionResources(((Long)arguments[0]).longValue(),
+				(java.lang.String[])arguments[1],
+				(java.lang.String[])arguments[2]);
+
+			return null;
+		}
+
+		if (_methodName57.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
+			PollsQuestionLocalServiceUtil.addQuestionResources((com.liferay.portlet.polls.model.PollsQuestion)arguments[0],
+				((Boolean)arguments[1]).booleanValue(),
+				((Boolean)arguments[2]).booleanValue());
+
+			return null;
+		}
+
+		if (_methodName58.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
+			PollsQuestionLocalServiceUtil.addQuestionResources((com.liferay.portlet.polls.model.PollsQuestion)arguments[0],
+				(java.lang.String[])arguments[1],
+				(java.lang.String[])arguments[2]);
+
+			return null;
 		}
 
 		if (_methodName59.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
-			PollsQuestionLocalServiceUtil.addQuestionResources(((Long)arguments[0]).longValue(),
-				(java.lang.String[])arguments[1],
-				(java.lang.String[])arguments[2]);
+			PollsQuestionLocalServiceUtil.deleteQuestion(((Long)arguments[0]).longValue());
+
+			return null;
 		}
 
 		if (_methodName60.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
-			PollsQuestionLocalServiceUtil.addQuestionResources((com.liferay.portlet.polls.model.PollsQuestion)arguments[0],
-				((Boolean)arguments[1]).booleanValue(),
-				((Boolean)arguments[2]).booleanValue());
+			PollsQuestionLocalServiceUtil.deleteQuestion((com.liferay.portlet.polls.model.PollsQuestion)arguments[0]);
+
+			return null;
 		}
 
 		if (_methodName61.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
-			PollsQuestionLocalServiceUtil.addQuestionResources((com.liferay.portlet.polls.model.PollsQuestion)arguments[0],
-				(java.lang.String[])arguments[1],
-				(java.lang.String[])arguments[2]);
+			PollsQuestionLocalServiceUtil.deleteQuestions(((Long)arguments[0]).longValue());
+
+			return null;
 		}
 
 		if (_methodName62.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
-			PollsQuestionLocalServiceUtil.deleteQuestion(((Long)arguments[0]).longValue());
+			return PollsQuestionLocalServiceUtil.getQuestion(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName63.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
-			PollsQuestionLocalServiceUtil.deleteQuestion((com.liferay.portlet.polls.model.PollsQuestion)arguments[0]);
+			return PollsQuestionLocalServiceUtil.getQuestions(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName64.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
-			PollsQuestionLocalServiceUtil.deleteQuestions(((Long)arguments[0]).longValue());
-		}
-
-		if (_methodName65.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes65, parameterTypes)) {
-			return PollsQuestionLocalServiceUtil.getQuestion(((Long)arguments[0]).longValue());
-		}
-
-		if (_methodName66.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes66, parameterTypes)) {
-			return PollsQuestionLocalServiceUtil.getQuestions(((Long)arguments[0]).longValue());
-		}
-
-		if (_methodName67.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes67, parameterTypes)) {
 			return PollsQuestionLocalServiceUtil.getQuestions(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName68.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
+		if (_methodName65.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes65, parameterTypes)) {
 			return PollsQuestionLocalServiceUtil.getQuestionsCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName69.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
+		if (_methodName66.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes66, parameterTypes)) {
 			return PollsQuestionLocalServiceUtil.updateQuestion(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(java.util.Map<java.util.Locale, java.lang.String>)arguments[2],
@@ -423,12 +427,16 @@ public class PollsQuestionLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName16;
-	private String[] _methodParameterTypes16;
-	private String _methodName51;
-	private String[] _methodParameterTypes51;
-	private String _methodName52;
-	private String[] _methodParameterTypes52;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
+	private String _methodName56;
+	private String[] _methodParameterTypes56;
 	private String _methodName57;
 	private String[] _methodParameterTypes57;
 	private String _methodName58;
@@ -449,10 +457,4 @@ public class PollsQuestionLocalServiceClpInvoker {
 	private String[] _methodParameterTypes65;
 	private String _methodName66;
 	private String[] _methodParameterTypes66;
-	private String _methodName67;
-	private String[] _methodParameterTypes67;
-	private String _methodName68;
-	private String[] _methodParameterTypes68;
-	private String _methodName69;
-	private String[] _methodParameterTypes69;
 }

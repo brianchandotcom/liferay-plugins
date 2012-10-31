@@ -37,8 +37,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -310,7 +308,14 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, pollsVote);
+			if (!session.contains(pollsVote)) {
+				pollsVote = (PollsVote)session.get(PollsVoteImpl.class,
+						pollsVote.getPrimaryKeyObj());
+			}
+
+			if (pollsVote != null) {
+				session.delete(pollsVote);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -319,14 +324,16 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 			closeSession(session);
 		}
 
-		clearCache(pollsVote);
+		if (pollsVote != null) {
+			clearCache(pollsVote);
+		}
 
 		return pollsVote;
 	}
 
 	@Override
 	public PollsVote updateImpl(
-		com.liferay.portlet.polls.model.PollsVote pollsVote, boolean merge)
+		com.liferay.portlet.polls.model.PollsVote pollsVote)
 		throws SystemException {
 		pollsVote = toUnwrappedModel(pollsVote);
 
@@ -339,9 +346,14 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, pollsVote, merge);
+			if (pollsVote.isNew()) {
+				session.save(pollsVote);
 
-			pollsVote.setNew(false);
+				pollsVote.setNew(false);
+			}
+			else {
+				session.merge(pollsVote);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -1852,8 +1864,6 @@ public class PollsVotePersistenceImpl extends BasePersistenceImpl<PollsVote>
 	protected PollsQuestionPersistence pollsQuestionPersistence;
 	@BeanReference(type = PollsVotePersistence.class)
 	protected PollsVotePersistence pollsVotePersistence;
-	@BeanReference(type = ResourcePersistence.class)
-	protected ResourcePersistence resourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_POLLSVOTE = "SELECT pollsVote FROM PollsVote pollsVote";
