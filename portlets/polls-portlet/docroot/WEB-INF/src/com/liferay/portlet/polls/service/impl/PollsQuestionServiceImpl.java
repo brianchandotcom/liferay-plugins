@@ -14,26 +14,79 @@
 
 package com.liferay.portlet.polls.service.impl;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.polls.model.PollsChoice;
+import com.liferay.portlet.polls.model.PollsQuestion;
 import com.liferay.portlet.polls.service.base.PollsQuestionServiceBaseImpl;
+import com.liferay.portlet.polls.service.permission.PollsPermission;
+import com.liferay.portlet.polls.service.permission.PollsQuestionPermission;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * The implementation of the polls question remote service.
- *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.portlet.polls.service.PollsQuestionService} interface.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
- *
  * @author Brian Wing Shun Chan
- * @see com.liferay.portlet.polls.service.base.PollsQuestionServiceBaseImpl
- * @see com.liferay.portlet.polls.service.PollsQuestionServiceUtil
+ * @author Julio Camarero
  */
 public class PollsQuestionServiceImpl extends PollsQuestionServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link com.liferay.portlet.polls.service.PollsQuestionServiceUtil} to access the polls question remote service.
-	 */
+
+	public PollsQuestion addQuestion(
+			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
+			int expirationDateMonth, int expirationDateDay,
+			int expirationDateYear, int expirationDateHour,
+			int expirationDateMinute, boolean neverExpire,
+			List<PollsChoice> choices, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		PollsPermission.check(
+			getPermissionChecker(), serviceContext.getScopeGroupId(),
+			ActionKeys.ADD_QUESTION);
+
+		return pollsQuestionLocalService.addQuestion(
+			getUserId(), titleMap, descriptionMap, expirationDateMonth,
+			expirationDateDay, expirationDateYear, expirationDateHour,
+			expirationDateMinute, neverExpire, choices, serviceContext);
+	}
+
+	public void deleteQuestion(long questionId)
+		throws PortalException, SystemException {
+
+		PollsQuestionPermission.check(
+			getPermissionChecker(), questionId, ActionKeys.DELETE);
+
+		pollsQuestionLocalService.deleteQuestion(questionId);
+	}
+
+	public PollsQuestion getQuestion(long questionId)
+		throws PortalException, SystemException {
+
+		PollsQuestionPermission.check(
+			getPermissionChecker(), questionId, ActionKeys.VIEW);
+
+		return pollsQuestionLocalService.getQuestion(questionId);
+	}
+
+	public PollsQuestion updateQuestion(
+			long questionId, Map<Locale, String> titleMap,
+			Map<Locale, String> descriptionMap, int expirationDateMonth,
+			int expirationDateDay, int expirationDateYear,
+			int expirationDateHour, int expirationDateMinute,
+			boolean neverExpire, List<PollsChoice> choices,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		PollsQuestionPermission.check(
+			getPermissionChecker(), questionId, ActionKeys.UPDATE);
+
+		return pollsQuestionLocalService.updateQuestion(
+			getUserId(), questionId, titleMap, descriptionMap,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire, choices,
+			serviceContext);
+	}
+
 }
