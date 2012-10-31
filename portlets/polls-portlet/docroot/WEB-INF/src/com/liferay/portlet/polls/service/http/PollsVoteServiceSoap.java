@@ -14,6 +14,13 @@
 
 package com.liferay.portlet.polls.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import com.liferay.portlet.polls.service.PollsVoteServiceUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * <p>
  * This class provides a SOAP utility for the
@@ -58,4 +65,22 @@ package com.liferay.portlet.polls.service.http;
  * @generated
  */
 public class PollsVoteServiceSoap {
+	public static com.liferay.portlet.polls.model.PollsVoteSoap addVote(
+		long questionId, long choiceId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			com.liferay.portlet.polls.model.PollsVote returnValue = PollsVoteServiceUtil.addVote(questionId,
+					choiceId, serviceContext);
+
+			return com.liferay.portlet.polls.model.PollsVoteSoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(PollsVoteServiceSoap.class);
 }

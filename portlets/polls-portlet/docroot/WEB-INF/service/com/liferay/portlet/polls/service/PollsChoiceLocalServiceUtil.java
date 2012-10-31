@@ -273,6 +273,41 @@ public class PollsChoiceLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.portlet.polls.model.PollsChoice addChoice(
+		long questionId, java.lang.String name, java.lang.String description,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addChoice(questionId, name, description, serviceContext);
+	}
+
+	public static com.liferay.portlet.polls.model.PollsChoice getChoice(
+		long choiceId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getChoice(choiceId);
+	}
+
+	public static java.util.List<com.liferay.portlet.polls.model.PollsChoice> getChoices(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getChoices(questionId);
+	}
+
+	public static int getChoicesCount(long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getChoicesCount(questionId);
+	}
+
+	public static com.liferay.portlet.polls.model.PollsChoice updateChoice(
+		long choiceId, long questionId, java.lang.String name,
+		java.lang.String description)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().updateChoice(choiceId, questionId, name, description);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}
