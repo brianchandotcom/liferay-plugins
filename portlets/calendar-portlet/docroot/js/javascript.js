@@ -197,6 +197,7 @@ AUI.add(
 				var instance = this;
 
 				var scheduler = schedulerEvent.get('scheduler');
+
 				var eventRecorder = scheduler.get('eventRecorder');
 
 				eventRecorder.hideOverlay();
@@ -219,7 +220,6 @@ AUI.add(
 				var instance = this;
 
 				var scheduler = schedulerEvent.get('scheduler');
-
 				var eventRecorder = scheduler.get('eventRecorder');
 
 				eventRecorder.hideOverlay();
@@ -1047,7 +1047,7 @@ AUI.add(
 					var firstDayOfWeek = scheduler.get('firstDayOfWeek');
 					var filterCalendarBookings = scheduler.get('filterCalendarBookings');
 
-					CalendarUtil.message(Liferay.Language.get('loading') + '...');
+					CalendarUtil.message(Liferay.Language.get('loading'));
 
 					var endDate = DateMath.add(DateMath.getFirstDayOfWeek(DateMath.findMonthEnd(date), firstDayOfWeek), DateMath.DAY, 7);
 					var startDate = DateMath.subtract(DateMath.getFirstDayOfWeek(DateMath.findMonthStart(date), firstDayOfWeek), DateMath.DAY, 7);
@@ -1253,16 +1253,19 @@ AUI.add(
 													null,
 													{
 														silent: true
+													}
+												);
+
+												var offset = 0;
+
+												var changedStartDate = changed.startDate;
+
+												var newVal = changedStartDate.newVal;
+												var prevVal = changedStartDate.prevVal;
+
+												if (isDate(newVal) && isDate(prevVal)) {
+													offset = newVal.getTime() - prevVal.getTime();
 												}
-											);
-
-											var offset = 0;
-											var newVal = changed.startDate.newVal;
-											var prevVal = changed.startDate.prevVal;
-
-											if (isDate(newVal) && isDate(prevVal)) {
-												offset = newVal.getTime() - prevVal.getTime();
-											}
 
 												var calendarStartDate = calendarBooking.startDate + offset;
 
@@ -1660,9 +1663,19 @@ AUI.add(
 							}
 						);
 
+						contentNode = A.one(contentNode);
+
+						var messageNode = contentNode.one('.calendar-portlet-invitees');
+
+						var messageHTML = '&mdash;';
+
 						if (values.length > 0) {
-							A.one(contentNode).show().one('.calendar-portlet-invitees').html(values.join(STR_COMMA_SPACE));
+							contentNode.show();
+
+							messageHTML = values.join(STR_COMMA_SPACE);
 						}
+
+						messageNode.html(messageHTML);
 					},
 
 					_syncToolbarButtons: function(overlayVisible) {

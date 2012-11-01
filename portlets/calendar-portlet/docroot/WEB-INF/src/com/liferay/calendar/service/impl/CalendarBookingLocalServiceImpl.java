@@ -19,6 +19,7 @@ import com.liferay.calendar.CalendarBookingTitleException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarBookingConstants;
+import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.notification.NotificationType;
 import com.liferay.calendar.recurrence.Recurrence;
 import com.liferay.calendar.recurrence.RecurrenceSerializer;
@@ -33,11 +34,19 @@ import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.model.AssetLinkConstants;
 
 import java.util.Date;
 import java.util.List;
@@ -143,6 +152,15 @@ public class CalendarBookingLocalServiceImpl
 		calendarBookingApprovalWorkflow.startWorkflow(
 			userId, calendarBookingId, serviceContext);
 
+		// Asset
+
+		calendarBooking = fetchCalendarBooking(calendarBookingId);
+
+		updateAsset(
+			userId, calendarBooking, serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(),
+			serviceContext.getAssetLinkEntryIds());
+
 		return calendarBooking;
 	}
 
@@ -188,6 +206,12 @@ public class CalendarBookingLocalServiceImpl
 		for (CalendarBooking childCalendarBooking : childCalendarBookings) {
 			deleteCalendarBooking(childCalendarBooking);
 		}
+
+		// Asset
+
+		assetEntryLocalService.deleteEntry(
+			CalendarBooking.class.getName(),
+			calendarBooking.getCalendarBookingId());
 
 		return calendarBooking;
 	}
@@ -384,6 +408,50 @@ public class CalendarBookingLocalServiceImpl
 			endDate, statuses, andOperator);
 	}
 
+	public void updateAsset(
+			long userId, CalendarBooking calendarBooking,
+			long[] assetCategoryIds, String[] assetTagNames,
+			long[] assetLinkEntryIds)
+		throws PortalException, SystemException {
+
+		long assetGroupId = calendarBooking.getGroupId();
+
+		CalendarResource calendarResource =
+			calendarBooking.getCalendarResource();
+
+		long classNameId = calendarResource.getClassNameId();
+		long groupClassNameId = PortalUtil.getClassNameId(Group.class);
+
+		if (classNameId == groupClassNameId) {
+			Group group = GroupLocalServiceUtil.getGroup(
+				calendarResource.getClassPK());
+
+			assetGroupId = group.getGroupId();
+		}
+
+		boolean visible = false;
+
+		if (calendarBooking.isApproved()) {
+			visible = true;
+		}
+
+		String summary = HtmlUtil.extractText(
+			StringUtil.shorten(calendarBooking.getDescription(), 500));
+
+		AssetEntry assetEntry = assetEntryLocalService.updateEntry(
+			userId, assetGroupId, calendarBooking.getCreateDate(),
+			calendarBooking.getModifiedDate(), CalendarBooking.class.getName(),
+			calendarBooking.getCalendarBookingId(), calendarBooking.getUuid(),
+			0, assetCategoryIds, assetTagNames, visible, null, null, null,
+			ContentTypes.TEXT_HTML, calendarBooking.getTitle(),
+			calendarBooking.getDescription(), summary, null, null, 0, 0, null,
+			false);
+
+		assetLinkLocalService.updateLinks(
+			userId, assetEntry.getEntryId(), assetLinkEntryIds,
+			AssetLinkConstants.TYPE_RELATED);
+	}
+
 	public CalendarBooking updateCalendarBooking(
 			long userId, long calendarBookingId, long calendarId,
 			long[] childCalendarIds, Map<Locale, String> titleMap,
@@ -448,6 +516,15 @@ public class CalendarBookingLocalServiceImpl
 		calendarBookingApprovalWorkflow.invokeTransition(
 			userId, calendarBookingId,
 			CalendarBookingWorkflowConstants.toLabel(status), serviceContext);
+
+		// Asset
+
+		calendarBooking = fetchCalendarBooking(calendarBookingId);
+
+		updateAsset(
+			userId, calendarBooking, serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(),
+			serviceContext.getAssetLinkEntryIds());
 
 		return calendarBooking;
 	}
