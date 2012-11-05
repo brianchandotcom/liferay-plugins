@@ -45,9 +45,7 @@ PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUEST
 		boolean hasVoted = PollsUtil.hasVoted(request, question.getQuestionId());
 		%>
 
-		<portlet:actionURL var="voteQuestionURL">
-			<portlet:param name="struts_action" value="/polls_display/vote_question" />
-		</portlet:actionURL>
+		<portlet:actionURL name="voteQuestion" var="voteQuestionURL" />
 
 		<aui:form action="<%= voteQuestionURL %>" method="post" name="fm">
 			<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.VOTE %>" />
@@ -82,7 +80,7 @@ PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUEST
 					</aui:fieldset>
 				</c:when>
 				<c:otherwise>
-					<%@ include file="/html/portlet/polls/view_question_results.jspf" %>
+					<%@ include file="/polls/view_question_results.jspf" %>
 
 					<c:if test="<%= !themeDisplay.isSignedIn() && !question.isExpired() && !PollsQuestionPermission.contains(permissionChecker, question, ActionKeys.ADD_VOTE) %>">
 						<div class="portlet-msg-info">
@@ -118,14 +116,14 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 
 	redirectURL.setWindowState(LiferayWindowState.POP_UP);
 
-	redirectURL.setParameter("struts_action", "/polls_display/add_question_redirect");
+	redirectURL.setParameter("jspPage", "/polls_display/add_question_redirect.jsp");
 	%>
 
 	<div class="lfr-meta-actions icons-container">
 		<div class="icon-actions">
 			<c:if test="<%= showEditPollIcon %>">
-				<liferay-portlet:renderURL doAsGroupId="<%= scopeGroupId %>" plid="<%= controlPanelPlid %>" portletName="<%= PortletKeys.POLLS %>" refererPlid="<%= plid %>" var="editPollURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-					<liferay-portlet:param name="struts_action" value="/polls/edit_question" />
+				<liferay-portlet:renderURL doAsGroupId="<%= scopeGroupId %>" plid="<%= controlPanelPlid %>" refererPlid="<%= plid %>" var="editPollURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<liferay-portlet:param name="jspPage" value="/polls/edit_question.jsp" />
 					<liferay-portlet:param name="redirect" value="<%= redirectURL.toString() %>" />
 					<liferay-portlet:param name="referringPortletResource" value="<%= portletDisplay.getId() %>" />
 					<liferay-portlet:param name="questionId" value="<%= String.valueOf(question.getQuestionId()) %>" />
@@ -154,8 +152,8 @@ boolean showIconsActions = themeDisplay.isSignedIn() && (hasConfigurationPermiss
 			</c:if>
 
 			<c:if test="<%= showAddPollIcon %>">
-				<liferay-portlet:renderURL doAsGroupId="<%= scopeGroupId %>" plid="<%= controlPanelPlid %>" portletName="<%= PortletKeys.POLLS %>" refererPlid="<%= plid %>" var="addPollURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-					<liferay-portlet:param name="struts_action" value="/polls/edit_question" />
+				<liferay-portlet:renderURL doAsGroupId="<%= scopeGroupId %>" plid="<%= controlPanelPlid %>" refererPlid="<%= plid %>" var="addPollURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<liferay-portlet:param name="jspPage" value="/polls/edit_question.jsp" />
 					<liferay-portlet:param name="redirect" value="<%= redirectURL.toString() %>" />
 					<liferay-portlet:param name="referringPortletResource" value="<%= portletDisplay.getId() %>" />
 				</liferay-portlet:renderURL>
