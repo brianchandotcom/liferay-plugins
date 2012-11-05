@@ -25,7 +25,7 @@ PollsQuestion question = (PollsQuestion)row.getObject();
 <liferay-ui:icon-menu>
 	<c:if test="<%= PollsQuestionPermission.contains(permissionChecker, question, ActionKeys.UPDATE) %>">
 		<portlet:renderURL var="editURL">
-			<portlet:param name="struts_action" value="/polls/edit_question" />
+			<portlet:param name="jspPage" value="/polls/edit_question.jsp" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="questionId" value="<%= String.valueOf(question.getQuestionId()) %>" />
 		</portlet:renderURL>
@@ -51,8 +51,7 @@ PollsQuestion question = (PollsQuestion)row.getObject();
 	</c:if>
 
 	<c:if test="<%= PollsQuestionPermission.contains(permissionChecker, question, ActionKeys.DELETE) %>">
-		<portlet:actionURL var="deleteURL">
-			<portlet:param name="struts_action" value="/polls/edit_question" />
+		<portlet:actionURL name="deleteQuestion" var="deleteURL">
 			<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="questionId" value="<%= String.valueOf(question.getQuestionId()) %>" />

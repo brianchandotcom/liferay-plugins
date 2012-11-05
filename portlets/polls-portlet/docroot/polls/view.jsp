@@ -21,7 +21,7 @@
 	<%
 	PortletURL portletURL = renderResponse.createRenderURL();
 
-	portletURL.setParameter("struts_action", "/polls/view");
+	portletURL.setParameter("jspPage", "/polls/view_question.jsp");
 
 	List<String> headerNames = new ArrayList<String>();
 
@@ -53,6 +53,7 @@
 		PortletURL rowURL = renderResponse.createRenderURL();
 
 		rowURL.setParameter("struts_action", "/polls/view_question");
+        rowURL.setParameter("jspPage", "/polls/view_question.jsp");
 		rowURL.setParameter("redirect", currentURL);
 		rowURL.setParameter("questionId", String.valueOf(question.getQuestionId()));
 
@@ -102,7 +103,7 @@
 			<aui:button-row>
 				<c:if test="<%= showAddPollButton %>">
 					<portlet:renderURL var="editQuestionURL">
-						<portlet:param name="struts_action" value="/polls/edit_question" />
+						<portlet:param name="jspPage" value="/polls/edit_question.jsp" />
 						<portlet:param name="redirect" value="<%= currentURL %>" />
 					</portlet:renderURL>
 

@@ -21,9 +21,13 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
-PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUESTION);
+long questionId = ParamUtil.getLong(request, "questionId");
 
-long questionId = BeanParamUtil.getLong(question, request, "questionId");
+PollsQuestion question = null;
+
+if (questionId > 0) {
+	question = PollsQuestionLocalServiceUtil.getQuestion(questionId);
+}
 
 boolean neverExpire = ParamUtil.getBoolean(request, "neverExpire", true);
 
@@ -58,9 +62,7 @@ if (choiceName > 0) {
 }
 %>
 
-<liferay-portlet:actionURL refererPlid="<%= themeDisplay.getRefererPlid() %>" var="editQuestionURL">
-	<portlet:param name="struts_action" value="/polls/edit_question" />
-</liferay-portlet:actionURL>
+<portlet:actionURL name="updateQuestion" var="editQuestionURL" />
 
 <aui:form action="<%= editQuestionURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveQuestion();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="" />
@@ -153,21 +155,28 @@ if (choiceName > 0) {
 	</aui:fieldset>
 </aui:form>
 
+<portlet:actionURL name="updateQuestion" var="editQuestionURL" />
+
 <aui:script>
 	function <portlet:namespace />addPollChoice() {
-		<liferay-portlet:actionURL allowEmptyParam="<%= true %>" var="addPollChoiceURL">
-			<liferay-portlet:param name="struts_action" value="/polls/edit_question" />
+		<liferay-portlet:renderURL allowEmptyParam="<%= true %>" var="addPollChoiceURL">
+			<liferay-portlet:param name="jspPage" value="/polls/edit_question.jsp" />
 			<liferay-portlet:param name="<%= EditQuestionAction.CHOICE_DESCRIPTION_PREFIX + (char)(96 + choicesCount + 1) %>" value="" />
-		</liferay-portlet:actionURL>
+		</liferay-portlet:renderURL>
 
 		document.<portlet:namespace />fm.<portlet:namespace />choicesCount.value = '<%= choicesCount + 1 %>';
 		submitForm(document.<portlet:namespace />fm, '<%= addPollChoiceURL %>');
 	}
 
 	function <portlet:namespace />deletePollChoice(choiceName) {
+		<liferay-portlet:renderURL allowEmptyParam="<%= true %>" var="deletePollChoiceURL">
+			<liferay-portlet:param name="jspPage" value="/polls/edit_question.jsp" />
+			<liferay-portlet:param name="redirect" value="<%= redirect %>" />
+		</liferay-portlet:renderURL>
+
 		document.<portlet:namespace />fm.<portlet:namespace />choicesCount.value = '<%= choicesCount - 1 %>';
 		document.<portlet:namespace />fm.<portlet:namespace />choiceName.value = '<%= choiceName %>';
-		submitForm(document.<portlet:namespace />fm);
+		submitForm(document.<portlet:namespace />fm, '<%= deletePollChoiceURL %>');
 	}
 
 	function <portlet:namespace />saveQuestion() {

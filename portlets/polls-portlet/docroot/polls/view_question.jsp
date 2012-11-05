@@ -19,7 +19,9 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUESTION);
+long questionId = ParamUtil.getLong(request, "questionId");
+
+PollsQuestion question = PollsQuestionLocalServiceUtil.getQuestion(questionId);
 
 question = question.toEscapedModel();
 
@@ -34,13 +36,11 @@ if (viewResults && !PollsQuestionPermission.contains(permissionChecker, question
 }
 %>
 
-<portlet:actionURL var="viewQuestionActionURL">
-	<portlet:param name="struts_action" value="/polls/view_question" />
-</portlet:actionURL>
+<portlet:actionURL name="voteQuestion" var="voteQuestionActionURL" />
 
-<aui:form action="<%= viewQuestionActionURL %>" method="post" name="fm">
+<aui:form action="<%= voteQuestionActionURL %>" method="post" name="fm">
 	<portlet:renderURL var="viewQuestionRenderURL">
-		<portlet:param name="struts_action" value="/polls/view_question" />
+		<portlet:param name="jspPage" value="/polls/view_question.jsp" />
 		<portlet:param name="questionId" value="<%= String.valueOf(question.getQuestionId()) %>" />
 	</portlet:renderURL>
 
@@ -84,7 +84,7 @@ if (viewResults && !PollsQuestionPermission.contains(permissionChecker, question
 
 				<c:if test="<%= PollsQuestionPermission.contains(permissionChecker, question, ActionKeys.UPDATE) %>">
 					<portlet:renderURL var="viewResultsURL">
-						<portlet:param name="struts_action" value="/polls/view_question" />
+						<portlet:param name="jspPage" value="/polls/view_question.jsp" />
 						<portlet:param name="redirect" value="<%= redirect %>" />
 						<portlet:param name="questionId" value="<%= String.valueOf(question.getQuestionId()) %>" />
 						<portlet:param name="viewResults" value="1" />
@@ -110,10 +110,10 @@ if (viewResults && !PollsQuestionPermission.contains(permissionChecker, question
 
 			</c:when>
 			<c:otherwise>
-				<%@ include file="/html/portlet/polls/view_question_results.jspf" %>
+				<%@ include file="/polls/view_question_results.jspf" %>
 
 				<portlet:renderURL var="viewQuestionURL">
-					<portlet:param name="struts_action" value="/polls/view_question" />
+					<portlet:param name="jspPage" value="/polls/view_question.jsp" />
 					<portlet:param name="redirect" value="<%= redirect %>" />
 					<portlet:param name="questionId" value="<%= String.valueOf(question.getQuestionId()) %>" />
 				</portlet:renderURL>
