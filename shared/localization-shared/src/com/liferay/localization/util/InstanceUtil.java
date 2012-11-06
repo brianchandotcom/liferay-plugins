@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.model.Company;
@@ -207,6 +208,12 @@ public class InstanceUtil implements PortletPropsKeys {
 				companyId, start, end);
 
 			for (User user : users) {
+				if (!DateUtil.equals(
+						user.getCreateDate(), user.getModifiedDate())) {
+
+					continue;
+				}
+
 				user.setLanguageId(PortletPropsValues.COMPANY_DEFAULT_LOCALE);
 				user.setTimeZoneId(
 					PortletPropsValues.COMPANY_DEFAULT_TIME_ZONE);
