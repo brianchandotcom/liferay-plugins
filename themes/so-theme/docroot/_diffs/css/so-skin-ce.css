@@ -587,10 +587,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	border-color: transparent;
 }
 
-.aui-form-validator-error-container .aui-field-element {
-	padding-right: 30px;
-}
-
 .aui-toolbar {
 	.aui-toolbar-item {
 		border-width: 1px 0 1px 1px;
@@ -618,11 +614,15 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 }
 
+.aui-form-validator-error {
+	text-indent: 18px;
+}
+
 .aui-form-validator-stack-error {
 	background: transparent url(../images/messages/error.png) no-repeat;
 	height: 16px;
+	left: 4px;
 	position: absolute;
-	right: 4px;
 	top: 6px;
 	width: 16px;
 	z-index: 1;
@@ -634,7 +634,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 .aui-form-validator-message {
 	background-color: rgba(51, 51, 51, .8);
-	right: 0;
+	left: -4px;
+	top: 23px;
 	width: 200px;
 }
 
@@ -2439,8 +2440,15 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 }
 
-.ie .tasks-portlet {
-	zoom: 1;
+.ie {
+	.aui-form-validator-error {
+		padding-left: 20px;
+		text-indent: 0;
+	}
+
+	.tasks-portlet {
+		zoom: 1;
+	}
 }
 
 /* ---------- Fluid Layout ---------- */
