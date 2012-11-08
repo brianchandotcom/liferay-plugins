@@ -459,9 +459,11 @@
 
 							var calendar = instance.getCalendarByNode(currentTarget);
 
-							instance._setCalendarColor(calendar, calendar.get('color'));
-
 							currentTarget.addClass(CSS_CALENDAR_LIST_ITEM_HOVER);
+
+							if (!calendar.get('visible')) {
+								instance._setCalendarColor(calendar, calendar.get('color'));
+							}
 						},
 
 						_onHoverOut: function(event) {
@@ -849,6 +851,7 @@
 							var currentTarget = event.currentTarget;
 
 							var date = schedulerEvent.get(dateAttr);
+
 							var selectedSetter = selects.indexOf(currentTarget);
 
 							var setters = [date.setMonth, date.setDate, date.setFullYear, date.setHours, date.setMinutes, date.setHours];
@@ -865,8 +868,6 @@
 
 							setters[selectedSetter].call(date, value);
 
-							schedulerEvent.set(dateAttr, date);
-
 							schedulerEvent.get('scheduler').syncEventsUI();
 						}
 					);
@@ -882,7 +883,7 @@
 					var datePicker = Liferay.component(Liferay.CalendarUtil.PORTLET_NAMESPACE + fieldName + 'datePicker');
 
 					if (datePicker) {
-						datePicker.calendar.set('dates', [date]);
+						datePicker.calendar.selectDates(date);
 
 						datePicker.syncUI();
 					}

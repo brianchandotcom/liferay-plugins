@@ -19,9 +19,9 @@
 <%
 String activeView = ParamUtil.getString(request, "activeView", defaultView);
 
-java.util.Calendar nowJCalendar = CalendarFactoryUtil.getCalendar(userTimeZone);
+java.util.Calendar now = CalendarFactoryUtil.getCalendar(userTimeZone);
 
-long date = ParamUtil.getLong(request, "date", nowJCalendar.getTimeInMillis());
+long date = ParamUtil.getLong(request, "date", now.getTimeInMillis());
 
 CalendarBooking calendarBooking = (CalendarBooking)request.getAttribute(WebKeys.CALENDAR_BOOKING);
 
@@ -30,15 +30,15 @@ long calendarBookingId = BeanParamUtil.getLong(calendarBooking, request, "calend
 long calendarId = BeanParamUtil.getLong(calendarBooking, request, "calendarId", userDefaultCalendar.getCalendarId());
 String title = BeanParamUtil.getString(calendarBooking, request, "titleCurrentValue");
 
-long startDate = ParamUtil.getLong(request, "startDate", nowJCalendar.getTimeInMillis());
+long startDate = BeanParamUtil.getLong(calendarBooking, request, "startDate", now.getTimeInMillis());
 
 java.util.Calendar startDateJCalendar = JCalendarUtil.getJCalendar(startDate, userTimeZone);
 
-java.util.Calendar defaultEndDateJCalendar = (java.util.Calendar)nowJCalendar.clone();
+java.util.Calendar defaultEndDateJCalendar = (java.util.Calendar)now.clone();
 
 defaultEndDateJCalendar.add(java.util.Calendar.HOUR, 1);
 
-long endDate = ParamUtil.getLong(request, "endDate", defaultEndDateJCalendar.getTimeInMillis());
+long endDate = BeanParamUtil.getLong(calendarBooking, request, "endDate", defaultEndDateJCalendar.getTimeInMillis());
 
 java.util.Calendar endDateJCalendar = JCalendarUtil.getJCalendar(endDate, userTimeZone);
 
@@ -116,11 +116,11 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 	<aui:fieldset>
 		<aui:input name="title" />
 
-		<div id="<portlet:namespace />startDateContainer">
+		<div class='<%= allDay ? "allday-class-active" : "" %>' id="<portlet:namespace />startDateContainer">
 			<aui:input name="startDate" value="<%= startDateJCalendar %>" />
 		</div>
 
-		<div id="<portlet:namespace />endDateContainer">
+		<div class='<%= allDay ? "allday-class-active" : "" %>' id="<portlet:namespace />endDateContainer">
 			<aui:input name="endDate" value="<%= endDateJCalendar %>" />
 		</div>
 
@@ -227,6 +227,7 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 									<liferay-util:param name="activeView" value="<%= activeView %>" />
 									<liferay-util:param name="date" value="<%= String.valueOf(date) %>" />
 									<liferay-util:param name="filterCalendarBookings" value='<%= "window." + renderResponse.getNamespace() + "filterCalendarBookings" %>' />
+									<liferay-util:param name="preventPersistence" value="<%= Boolean.TRUE.toString() %>" />
 									<liferay-util:param name="readOnly" value="<%= Boolean.TRUE.toString() %>" />
 								</liferay-util:include>
 							</div>
@@ -326,8 +327,6 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 	);
 
 	Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />title);
-
-	Liferay.Util.toggleBoxes('<portlet:namespace />allDayCheckbox', '<portlet:namespace />endDateContainer', true);
 
 	<c:if test="<%= calendarBooking == null %>">
 		document.<portlet:namespace />fm.<portlet:namespace />title_<%= LanguageUtil.getLanguageId(request) %>.value = '<%= HtmlUtil.escapeJS(title) %>';
@@ -560,10 +559,14 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 			editingEvent: true,
 			endDate: Liferay.CalendarUtil.toUserTimeZone(new Date(<%= endDate %>)),
 			on: {
+				endDateChange: function(event) {
+					event.stopPropagation();
+				},
 				startDateChange: function(event) {
 					event.stopPropagation();
 				}
 			},
+			preventDateChange: true,
 			scheduler: scheduler,
 			startDate: Liferay.CalendarUtil.toUserTimeZone(new Date(<%= startDate %>))
 		}
@@ -635,6 +638,32 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 					type: '<%= HtmlUtil.escape(secondReminderType) %>'
 				}
 			]
+		}
+	);
+
+	var allDayCheckbox = A.one('#<portlet:namespace />allDayCheckbox');
+
+	allDayCheckbox.after(
+		'click',
+		function () {
+			var endDateContainer = A.one('#<portlet:namespace />endDateContainer');
+			var startDateContainer = A.one('#<portlet:namespace />startDateContainer');
+
+			var checked = allDayCheckbox.get('checked');
+
+			if (checked) {
+				window.<portlet:namespace />placeholderSchedulerEvent.set('allDay', true);
+			}
+			else {
+				window.<portlet:namespace />placeholderSchedulerEvent.set('allDay', false);
+
+				endDateContainer.show();
+			}
+
+			endDateContainer.toggleClass('allday-class-active', checked);
+			startDateContainer.toggleClass('allday-class-active', checked);
+
+			scheduler.syncEventsUI();
 		}
 	);
 </aui:script>

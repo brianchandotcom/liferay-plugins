@@ -1,5 +1,21 @@
 @import "compass/css3";
 
+.calendar-portlet {
+	.allday-class-active .lfr-input-time {
+		display: none;
+	}
+
+	.aui-scheduler-view-agenda-info-container {
+		.aui-scheduler-view-agenda-info {
+			line-height: 1.2;
+
+			.aui-scheduler-view-agenda-info-biggie {
+				line-height: 30px;
+			}
+		}
+	}
+}
+
 .calendar-portlet-availability {
 	margin: 0 30px;
 }
