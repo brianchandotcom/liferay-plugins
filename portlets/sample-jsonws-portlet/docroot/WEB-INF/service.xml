@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
+
+<service-builder package-path="com.liferay.samplejsonws">
+	<namespace>JSONWS</namespace>
+	
+	<!-- By setting the remove-service to 'true' we expose service methods as JSONWS api. -->
+
+	<entity name="SampleAsset" local-service="false" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="assetId" type="long" primary="true" />
+
+		<!-- Other fields -->
+
+		<column name="userId" type="long" />
+		<column name="name" type="String" />
+		<column name="date" type="Date" />
+	</entity>
+</service-builder>

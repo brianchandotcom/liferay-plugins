@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.samplejsonws.model.SampleAsset">
+		<field name="assetId" type="long" />
+		<field name="userId" type="long" />
+		<field name="name" type="String" />
+		<field name="date" type="Date" />
+	</model>
+</model-hints>
