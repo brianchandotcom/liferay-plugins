@@ -22,21 +22,13 @@
 	PortletURL portletURL = renderResponse.createRenderURL();
 
 	portletURL.setParameter("jspPage", "/polls/view_question.jsp");
-
-	List<String> headerNames = new ArrayList<String>();
-
-	headerNames.add("question");
-	headerNames.add("num-of-votes");
-	headerNames.add("last-vote-date");
-	headerNames.add("expiration-date");
-	headerNames.add(StringPool.BLANK);
 	%>
 
 	<liferay-ui:search-container
 		curParam="<%= SearchContainer.DEFAULT_CUR_PARAM %>"
 		delta="<%= SearchContainer.DEFAULT_DELTA %>"
 		deltaConfigurable="<%= false %>"
-		headerNames="<%= StringUtil.merge(headerNames) %>"
+		headerNames="question,num-of-votes,last-vote-date,expiration-date, "
 		iteratorURL="<%= portletURL %>"
 	>
 
@@ -127,37 +119,37 @@
 			/>
 		</liferay-ui:search-container-row>
 
+		<%
+		boolean showAddPollButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_QUESTION);
+		boolean showPermissionsButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS);
+		%>
+
+		<aui:fieldset>
+			<c:if test="<%= showAddPollButton || showPermissionsButton %>">
+				<aui:button-row>
+					<c:if test="<%= showAddPollButton %>">
+						<portlet:renderURL var="editQuestionURL">
+							<portlet:param name="jspPage" value="/polls/edit_question.jsp" />
+							<portlet:param name="redirect" value="<%= currentURL %>" />
+						</portlet:renderURL>
+
+						<aui:button href="<%= editQuestionURL %>" value="add-question" />
+					</c:if>
+
+					<c:if test="<%= showPermissionsButton %>">
+						<liferay-security:permissionsURL
+							modelResource="com.liferay.portlet.polls"
+							modelResourceDescription="<%= HtmlUtil.escape(themeDisplay.getScopeGroupName()) %>"
+							resourcePrimKey="<%= String.valueOf(scopeGroupId) %>"
+							var="permissionsURL"
+						/>
+
+						<aui:button href="<%= permissionsURL %>" value="permissions" />
+					</c:if>
+				</aui:button-row>
+			</c:if>
+		</aui:fieldset>
+
 		<liferay-ui:search-iterator />
 	</liferay-ui:search-container>
-
-	<%
-	boolean showAddPollButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_QUESTION);
-	boolean showPermissionsButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS);
-	%>
-
-	<aui:fieldset>
-		<c:if test="<%= showAddPollButton || showPermissionsButton %>">
-			<aui:button-row>
-				<c:if test="<%= showAddPollButton %>">
-					<portlet:renderURL var="editQuestionURL">
-						<portlet:param name="jspPage" value="/polls/edit_question.jsp" />
-						<portlet:param name="redirect" value="<%= currentURL %>" />
-					</portlet:renderURL>
-
-					<aui:button href="<%= editQuestionURL %>" value="add-question" />
-				</c:if>
-
-				<c:if test="<%= showPermissionsButton %>">
-					<liferay-security:permissionsURL
-						modelResource="com.liferay.portlet.polls"
-						modelResourceDescription="<%= HtmlUtil.escape(themeDisplay.getScopeGroupName()) %>"
-						resourcePrimKey="<%= String.valueOf(scopeGroupId) %>"
-						var="permissionsURL"
-					/>
-
-					<aui:button href="<%= permissionsURL %>" value="permissions" />
-				</c:if>
-			</aui:button-row>
-		</c:if>
-	</aui:fieldset>
 </aui:form>
