@@ -36,7 +36,7 @@ import com.liferay.portlet.polls.service.persistence.PollsChoiceFinderUtil;
 import com.liferay.portlet.polls.service.persistence.PollsChoiceUtil;
 import com.liferay.portlet.polls.service.persistence.PollsQuestionUtil;
 import com.liferay.portlet.polls.service.persistence.PollsVoteUtil;
-import com.liferay.portlet.polls.util.PollsKeys;
+import com.liferay.portlet.polls.util.PortletKeys;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -147,7 +147,7 @@ public class PollsPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		StringBundler sb = new StringBundler(6);
 
-		sb.append(portletDataContext.getPortletPath(PollsKeys.POLLS));
+		sb.append(portletDataContext.getPortletPath(PortletKeys.POLLS));
 		sb.append("/questions/");
 		sb.append(choice.getQuestionId());
 		sb.append("/choices/");
@@ -162,7 +162,7 @@ public class PollsPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		StringBundler sb = new StringBundler(4);
 
-		sb.append(portletDataContext.getPortletPath(PollsKeys.POLLS));
+		sb.append(portletDataContext.getPortletPath(PortletKeys.POLLS));
 		sb.append("/questions/");
 		sb.append(question.getQuestionId());
 		sb.append(".xml");
@@ -175,7 +175,7 @@ public class PollsPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		StringBundler sb = new StringBundler(6);
 
-		sb.append(portletDataContext.getPortletPath(PollsKeys.POLLS));
+		sb.append(portletDataContext.getPortletPath(PortletKeys.POLLS));
 		sb.append("/questions/");
 		sb.append(vote.getQuestionId());
 		sb.append("/votes/");

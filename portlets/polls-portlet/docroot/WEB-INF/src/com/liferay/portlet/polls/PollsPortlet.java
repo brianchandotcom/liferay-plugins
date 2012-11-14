@@ -35,7 +35,7 @@ import com.liferay.portlet.polls.model.PollsQuestion;
 import com.liferay.portlet.polls.service.PollsQuestionServiceUtil;
 import com.liferay.portlet.polls.service.PollsVoteServiceUtil;
 import com.liferay.portlet.polls.service.persistence.PollsChoiceUtil;
-import com.liferay.portlet.polls.util.PollsKeys;
+import com.liferay.portlet.polls.util.PollsConstants;
 import com.liferay.portlet.polls.util.PollsUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -216,10 +216,10 @@ public class PollsPortlet extends MVCPortlet {
 		while (enu.hasMoreElements()) {
 			String param = enu.nextElement();
 
-			if (param.startsWith(PollsKeys.CHOICE_DESCRIPTION_PREFIX)) {
+			if (param.startsWith(PollsConstants.CHOICE_DESCRIPTION_PREFIX)) {
 				try {
 					String id = param.substring(
-						PollsKeys.CHOICE_DESCRIPTION_PREFIX.length(),
+						PollsConstants.CHOICE_DESCRIPTION_PREFIX.length(),
 						param.indexOf(CharPool.UNDERLINE));
 
 					if (readParameters.contains(id)) {
@@ -227,12 +227,12 @@ public class PollsPortlet extends MVCPortlet {
 					}
 
 					String choiceName = ParamUtil.getString(
-						actionRequest, PollsKeys.CHOICE_NAME_PREFIX + id);
+						actionRequest, PollsConstants.CHOICE_NAME_PREFIX + id);
 
 					Map<Locale, String> localeChoiceDescriptionMap =
 						LocalizationUtil.getLocalizationMap(
 							actionRequest,
-							PollsKeys.CHOICE_DESCRIPTION_PREFIX + id);
+							PollsConstants.CHOICE_DESCRIPTION_PREFIX + id);
 
 					PollsChoice choice = PollsChoiceUtil.create(0);
 

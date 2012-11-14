@@ -17,13 +17,11 @@ package com.liferay.portlet.polls.util;
 /**
  * @author Juan Fernández
  */
-public class PollsKeys {
+public class PollsConstants {
 
 	public static final String CHOICE_DESCRIPTION_PREFIX = "choiceDescription";
 
 	public static final String CHOICE_NAME_PREFIX = "choiceName";
-
-	public static final String POLLS = "1";
 
 	public static final String POLLS_QUESTION = "POLLS_QUESTION";
 

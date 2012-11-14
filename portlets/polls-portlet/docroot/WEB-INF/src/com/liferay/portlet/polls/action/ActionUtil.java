@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.polls.model.PollsQuestion;
 import com.liferay.portlet.polls.service.PollsQuestionServiceUtil;
-import com.liferay.portlet.polls.util.PollsKeys;
+import com.liferay.portlet.polls.util.PollsConstants;
 
 import javax.portlet.PortletRequest;
 
@@ -40,7 +40,7 @@ public class ActionUtil {
 			question = PollsQuestionServiceUtil.getQuestion(questionId);
 		}
 
-		request.setAttribute(PollsKeys.POLLS_QUESTION, question);
+		request.setAttribute(PollsConstants.POLLS_QUESTION, question);
 	}
 
 	public static void getQuestion(PortletRequest portletRequest)

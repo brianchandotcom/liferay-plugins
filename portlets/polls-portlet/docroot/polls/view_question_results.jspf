@@ -1,3 +1,5 @@
+<%@ page import="com.liferay.portlet.polls.util.PortletKeys" %>
+
 <%--
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
@@ -98,7 +100,7 @@ for (int i = 0; i < choices.size(); i++) {
 	<strong><liferay-ui:message key="total-votes" />:</strong> <%= numberFormat.format(totalVotes) %>
 </div>
 
-<c:if test="<%= portletName.equals(PollsKeys.POLLS) %>">
+<c:if test="<%= portletName.equals(PortletKeys.POLLS) %>">
 	<br />
 
 	<div>
