@@ -19,7 +19,9 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUESTION);
+long questionId = ParamUtil.getLong(request, "questionId");
+
+PollsQuestion question = PollsQuestionServiceUtil.getQuestion(questionId);
 
 question = question.toEscapedModel();
 

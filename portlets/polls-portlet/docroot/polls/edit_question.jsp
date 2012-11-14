@@ -21,9 +21,13 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
-PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUESTION);
+long questionId = ParamUtil.getLong(request, "questionId");
 
-long questionId = BeanParamUtil.getLong(question, request, "questionId");
+PollsQuestion question = null;
+
+if (questionId > 0) {
+	question = PollsQuestionServiceUtil.getQuestion(questionId);
+}
 
 boolean neverExpire = ParamUtil.getBoolean(request, "neverExpire", true);
 

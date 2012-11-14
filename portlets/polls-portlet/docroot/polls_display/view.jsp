@@ -17,7 +17,11 @@
 <%@ include file="/polls_display/init.jsp" %>
 
 <%
-PollsQuestion question = (PollsQuestion)request.getAttribute(WebKeys.POLLS_QUESTION);
+PollsQuestion question = null;
+
+if (questionId > 0) {
+	question = PollsQuestionServiceUtil.getQuestion(questionId);
+}
 %>
 
 <c:choose>
