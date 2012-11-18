@@ -19,6 +19,7 @@
 		<property name="wsdl" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="registrationContextString" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="registrationPropertiesString" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="characterEncoding" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="forwardCookies" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="forwardHeaders" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>

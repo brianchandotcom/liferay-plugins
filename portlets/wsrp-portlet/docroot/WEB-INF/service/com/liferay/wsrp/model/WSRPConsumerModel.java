@@ -207,6 +207,21 @@ public interface WSRPConsumerModel extends BaseModel<WSRPConsumer> {
 		String registrationPropertiesString);
 
 	/**
+	 * Returns the character encoding of this w s r p consumer.
+	 *
+	 * @return the character encoding of this w s r p consumer
+	 */
+	@AutoEscape
+	public String getCharacterEncoding();
+
+	/**
+	 * Sets the character encoding of this w s r p consumer.
+	 *
+	 * @param characterEncoding the character encoding of this w s r p consumer
+	 */
+	public void setCharacterEncoding(String characterEncoding);
+
+	/**
 	 * Returns the forward cookies of this w s r p consumer.
 	 *
 	 * @return the forward cookies of this w s r p consumer

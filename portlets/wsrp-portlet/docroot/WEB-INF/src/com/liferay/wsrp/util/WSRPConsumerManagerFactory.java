@@ -52,6 +52,7 @@ public class WSRPConsumerManagerFactory {
 
 		return _getWSRPConsumerManager(
 			wsrpConsumer.getUrl(), wsrpConsumer.getRegistrationContext(),
+			wsrpConsumer.getCharacterEncoding(),
 			wsrpConsumer.getForwardCookies(), wsrpConsumer.getForwardHeaders());
 	}
 
@@ -65,6 +66,7 @@ public class WSRPConsumerManagerFactory {
 
 			new WSRPConsumerManager(
 				wsrpConsumer.getUrl(), wsrpConsumer.getRegistrationContext(),
+				wsrpConsumer.getCharacterEncoding(),
 				wsrpConsumer.getForwardCookies(),
 				wsrpConsumer.getForwardHeaders(), userToken);
 
@@ -99,7 +101,8 @@ public class WSRPConsumerManagerFactory {
 
 	private static WSRPConsumerManager _getWSRPConsumerManager(
 			String url, RegistrationContext registrationContext,
-			String forwardCookies, String forwardHeaders)
+			String characterEncoding, String forwardCookies,
+			String forwardHeaders)
 		throws Exception {
 
 		HttpSession session = getSession();
@@ -133,8 +136,8 @@ public class WSRPConsumerManagerFactory {
 			String userToken = _getUserToken();
 
 			wsrpConsumerManager = new WSRPConsumerManager(
-				url, registrationContext, forwardCookies, forwardHeaders,
-				userToken);
+				url, registrationContext, characterEncoding, forwardCookies,
+				forwardHeaders, userToken);
 
 			wsrpConsumerManagers.put(url, wsrpConsumerManager);
 		}
