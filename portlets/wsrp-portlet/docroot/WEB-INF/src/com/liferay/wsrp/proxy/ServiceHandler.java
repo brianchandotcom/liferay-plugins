@@ -53,8 +53,10 @@ import org.apache.ws.security.message.token.UsernameToken;
 public class ServiceHandler implements InvocationHandler {
 
 	public ServiceHandler(
-		String forwardCookies, String forwardHeaders, String userToken,
-		boolean v2) {
+		String characterEncoding, String forwardCookies, String forwardHeaders,
+		String userToken, boolean v2) {
+
+		_characterEncoding = characterEncoding;
 
 		_engineConfiguration = getEngineConfiguration(
 			forwardCookies, forwardHeaders, userToken);
@@ -81,7 +83,7 @@ public class ServiceHandler implements InvocationHandler {
 		if (_v2 && methodName.equals("getWSRP_v2_Markup_Service")) {
 			WSRP_v2_Markup_Binding_SOAPStub markupService =
 				new WSRP_v2_Markup_Binding_SOAPStub(
-					(URL)args[0], _serviceLocator);
+					(URL)args[0], _serviceLocator, _characterEncoding);
 
 			WSRP_v2_ServiceLocator wsrpV2ServiceLocator =
 				(WSRP_v2_ServiceLocator)_serviceLocator;
@@ -233,6 +235,7 @@ public class ServiceHandler implements InvocationHandler {
 
 	private static final String _WSRP_PROXY_PACKAGE = "com.liferay.wsrp.proxy.";
 
+	private String _characterEncoding;
 	private EngineConfiguration _engineConfiguration;
 	private Service _serviceLocator;
 	private boolean _v2;

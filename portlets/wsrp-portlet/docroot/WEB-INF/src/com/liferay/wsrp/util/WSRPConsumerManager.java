@@ -54,7 +54,8 @@ public class WSRPConsumerManager {
 
 	public WSRPConsumerManager(
 			String url, RegistrationContext registrationContext,
-			String forwardCookies, String forwardHeaders, String userToken)
+			String characterEncoding, String forwardCookies,
+			String forwardHeaders, String userToken)
 		throws Exception {
 
 		try {
@@ -70,7 +71,7 @@ public class WSRPConsumerManager {
 				_getWsdlQName("service"));
 
 			ServiceHandler serviceHandler = new ServiceHandler(
-				forwardCookies, forwardHeaders, userToken,
+				characterEncoding, forwardCookies, forwardHeaders, userToken,
 				_isV2(serviceElements));
 
 			_service = (WSRP_v2_Service)ProxyUtil.newProxyInstance(

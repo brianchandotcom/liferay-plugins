@@ -14,11 +14,16 @@
 
 package com.liferay.wsrp.proxy;
 
+import com.liferay.portal.kernel.util.Validator;
+
 import java.net.URL;
 
 import javax.xml.rpc.Service;
+import javax.xml.rpc.ServiceException;
+import javax.xml.soap.SOAPMessage;
 
 import org.apache.axis.AxisFault;
+import org.apache.axis.client.Call;
 
 /**
  * @author Michael Young
@@ -35,10 +40,26 @@ public class WSRP_v2_Markup_Binding_SOAPStub
 		super(service);
 	}
 
-	public WSRP_v2_Markup_Binding_SOAPStub(URL endpointURL, Service service)
+	public WSRP_v2_Markup_Binding_SOAPStub(
+		URL endpointURL, Service service, String characterEncoding)
 		throws AxisFault {
 
 		super(endpointURL, service);
+
+		_characterEncoding = characterEncoding;
 	}
 
+	@Override
+	public Call _createCall() throws ServiceException {
+		Call call = super._createCall();
+
+		if (Validator.isNotNull(_characterEncoding)) {
+			call.setProperty(
+				SOAPMessage.CHARACTER_SET_ENCODING, _characterEncoding);
+		}
+
+		return call;
+	}
+
+	private String _characterEncoding;
 }
