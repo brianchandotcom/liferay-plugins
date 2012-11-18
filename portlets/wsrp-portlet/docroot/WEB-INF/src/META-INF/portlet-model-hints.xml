@@ -20,6 +20,7 @@
 		<field name="registrationPropertiesString" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
+		<field name="characterEncoding" type="String" />
 		<field name="forwardCookies" type="String">
 			<hint name="max-length">255</hint>
 		</field>

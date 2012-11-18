@@ -38,7 +38,7 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -60,6 +60,8 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 		sb.append(registrationContextString);
 		sb.append(", registrationPropertiesString=");
 		sb.append(registrationPropertiesString);
+		sb.append(", characterEncoding=");
+		sb.append(characterEncoding);
 		sb.append(", forwardCookies=");
 		sb.append(forwardCookies);
 		sb.append(", forwardHeaders=");
@@ -131,6 +133,13 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 			wsrpConsumerImpl.setRegistrationPropertiesString(registrationPropertiesString);
 		}
 
+		if (characterEncoding == null) {
+			wsrpConsumerImpl.setCharacterEncoding(StringPool.BLANK);
+		}
+		else {
+			wsrpConsumerImpl.setCharacterEncoding(characterEncoding);
+		}
+
 		if (forwardCookies == null) {
 			wsrpConsumerImpl.setForwardCookies(StringPool.BLANK);
 		}
@@ -161,6 +170,7 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 		wsdl = objectInput.readUTF();
 		registrationContextString = objectInput.readUTF();
 		registrationPropertiesString = objectInput.readUTF();
+		characterEncoding = objectInput.readUTF();
 		forwardCookies = objectInput.readUTF();
 		forwardHeaders = objectInput.readUTF();
 	}
@@ -214,6 +224,13 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 			objectOutput.writeUTF(registrationPropertiesString);
 		}
 
+		if (characterEncoding == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(characterEncoding);
+		}
+
 		if (forwardCookies == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -239,6 +256,7 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 	public String wsdl;
 	public String registrationContextString;
 	public String registrationPropertiesString;
+	public String characterEncoding;
 	public String forwardCookies;
 	public String forwardHeaders;
 }

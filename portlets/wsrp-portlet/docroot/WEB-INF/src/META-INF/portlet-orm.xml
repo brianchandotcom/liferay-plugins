@@ -25,6 +25,7 @@
 			<basic name="wsdl" />
 			<basic name="registrationContextString" />
 			<basic name="registrationPropertiesString" />
+			<basic name="characterEncoding" />
 			<basic name="forwardCookies" />
 			<basic name="forwardHeaders" />
 			<transient name="modelAttributes" />

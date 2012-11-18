@@ -77,6 +77,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 			getRegistrationContextString());
 		attributes.put("registrationPropertiesString",
 			getRegistrationPropertiesString());
+		attributes.put("characterEncoding", getCharacterEncoding());
 		attributes.put("forwardCookies", getForwardCookies());
 		attributes.put("forwardHeaders", getForwardHeaders());
 
@@ -145,6 +146,12 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 
 		if (registrationPropertiesString != null) {
 			setRegistrationPropertiesString(registrationPropertiesString);
+		}
+
+		String characterEncoding = (String)attributes.get("characterEncoding");
+
+		if (characterEncoding != null) {
+			setCharacterEncoding(characterEncoding);
 		}
 
 		String forwardCookies = (String)attributes.get("forwardCookies");
@@ -241,6 +248,14 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		_registrationPropertiesString = registrationPropertiesString;
 	}
 
+	public String getCharacterEncoding() {
+		return _characterEncoding;
+	}
+
+	public void setCharacterEncoding(String characterEncoding) {
+		_characterEncoding = characterEncoding;
+	}
+
 	public String getForwardCookies() {
 		return _forwardCookies;
 	}
@@ -312,6 +327,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		clone.setWsdl(getWsdl());
 		clone.setRegistrationContextString(getRegistrationContextString());
 		clone.setRegistrationPropertiesString(getRegistrationPropertiesString());
+		clone.setCharacterEncoding(getCharacterEncoding());
 		clone.setForwardCookies(getForwardCookies());
 		clone.setForwardHeaders(getForwardHeaders());
 
@@ -362,7 +378,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -384,6 +400,8 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		sb.append(getRegistrationContextString());
 		sb.append(", registrationPropertiesString=");
 		sb.append(getRegistrationPropertiesString());
+		sb.append(", characterEncoding=");
+		sb.append(getCharacterEncoding());
 		sb.append(", forwardCookies=");
 		sb.append(getForwardCookies());
 		sb.append(", forwardHeaders=");
@@ -394,7 +412,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(40);
+		StringBundler sb = new StringBundler(43);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.wsrp.model.WSRPConsumer");
@@ -441,6 +459,10 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		sb.append(getRegistrationPropertiesString());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>characterEncoding</column-name><column-value><![CDATA[");
+		sb.append(getCharacterEncoding());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>forwardCookies</column-name><column-value><![CDATA[");
 		sb.append(getForwardCookies());
 		sb.append("]]></column-value></column>");
@@ -464,6 +486,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 	private String _wsdl;
 	private String _registrationContextString;
 	private String _registrationPropertiesString;
+	private String _characterEncoding;
 	private String _forwardCookies;
 	private String _forwardHeaders;
 	private BaseModel<?> _wsrpConsumerRemoteModel;

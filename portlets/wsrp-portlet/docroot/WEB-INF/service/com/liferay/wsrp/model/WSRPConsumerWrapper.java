@@ -58,6 +58,7 @@ public class WSRPConsumerWrapper implements WSRPConsumer,
 			getRegistrationContextString());
 		attributes.put("registrationPropertiesString",
 			getRegistrationPropertiesString());
+		attributes.put("characterEncoding", getCharacterEncoding());
 		attributes.put("forwardCookies", getForwardCookies());
 		attributes.put("forwardHeaders", getForwardHeaders());
 
@@ -125,6 +126,12 @@ public class WSRPConsumerWrapper implements WSRPConsumer,
 
 		if (registrationPropertiesString != null) {
 			setRegistrationPropertiesString(registrationPropertiesString);
+		}
+
+		String characterEncoding = (String)attributes.get("characterEncoding");
+
+		if (characterEncoding != null) {
+			setCharacterEncoding(characterEncoding);
 		}
 
 		String forwardCookies = (String)attributes.get("forwardCookies");
@@ -338,6 +345,24 @@ public class WSRPConsumerWrapper implements WSRPConsumer,
 	public void setRegistrationPropertiesString(
 		java.lang.String registrationPropertiesString) {
 		_wsrpConsumer.setRegistrationPropertiesString(registrationPropertiesString);
+	}
+
+	/**
+	* Returns the character encoding of this w s r p consumer.
+	*
+	* @return the character encoding of this w s r p consumer
+	*/
+	public java.lang.String getCharacterEncoding() {
+		return _wsrpConsumer.getCharacterEncoding();
+	}
+
+	/**
+	* Sets the character encoding of this w s r p consumer.
+	*
+	* @param characterEncoding the character encoding of this w s r p consumer
+	*/
+	public void setCharacterEncoding(java.lang.String characterEncoding) {
+		_wsrpConsumer.setCharacterEncoding(characterEncoding);
 	}
 
 	/**
