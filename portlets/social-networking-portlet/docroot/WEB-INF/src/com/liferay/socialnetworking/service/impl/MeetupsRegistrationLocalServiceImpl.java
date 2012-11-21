@@ -33,7 +33,7 @@ public class MeetupsRegistrationLocalServiceImpl
 			long userId, long meetupsEntryId)
 		throws PortalException, SystemException {
 
-		return meetupsRegistrationPersistence.findByU_ME(
+		return meetupsRegistrationPersistence.findByU_ME_First(
 			userId, meetupsEntryId);
 	}
 
@@ -60,7 +60,8 @@ public class MeetupsRegistrationLocalServiceImpl
 		Date now = new Date();
 
 		MeetupsRegistration meetupsRegistration =
-			meetupsRegistrationPersistence.fetchByU_ME(userId, meetupsEntryId);
+			meetupsRegistrationPersistence.fetchByU_ME_First(
+				userId, meetupsEntryId);
 
 		if (meetupsRegistration == null) {
 			long meetupsRegistrationId = counterLocalService.increment();

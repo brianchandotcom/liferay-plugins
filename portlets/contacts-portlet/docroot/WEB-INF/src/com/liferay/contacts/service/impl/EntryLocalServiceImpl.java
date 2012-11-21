@@ -150,7 +150,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	protected void validateEmailAddress(long userId, String emailAddress)
 		throws PortalException, SystemException {
 
-		Entry entry = entryPersistence.fetchByU_EA(userId, emailAddress);
+		Entry entry = entryPersistence.fetchByU_EA_First(userId, emailAddress);
 
 		if (entry != null) {
 			throw new DuplicateEntryEmailAddressException();

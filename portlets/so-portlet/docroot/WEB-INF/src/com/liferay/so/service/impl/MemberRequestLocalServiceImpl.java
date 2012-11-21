@@ -156,7 +156,7 @@ public class MemberRequestLocalServiceImpl
 			long groupId, long receiverUserId, int status)
 		throws PortalException, SystemException {
 
-		return memberRequestPersistence.findByG_R_S(
+		return memberRequestPersistence.findByG_R_S_First(
 			groupId, receiverUserId, status);
 	}
 
@@ -191,8 +191,9 @@ public class MemberRequestLocalServiceImpl
 	public boolean hasPendingMemberRequest(long groupId, long receiverUserId)
 		throws SystemException {
 
-		MemberRequest memberRequest = memberRequestPersistence.fetchByG_R_S(
-			groupId, receiverUserId, InviteMembersConstants.STATUS_PENDING);
+		MemberRequest memberRequest =
+			memberRequestPersistence.fetchByG_R_S_First(
+				groupId, receiverUserId, InviteMembersConstants.STATUS_PENDING);
 
 		if (memberRequest != null) {
 			return true;
@@ -241,7 +242,8 @@ public class MemberRequestLocalServiceImpl
 	public MemberRequest updateMemberRequest(String key, long receiverUserId)
 		throws PortalException, SystemException {
 
-		MemberRequest memberRequest = memberRequestPersistence.findByKey(key);
+		MemberRequest memberRequest = memberRequestPersistence.findByKey_First(
+			key);
 
 		validate(memberRequest, 0);
 

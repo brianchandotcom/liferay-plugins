@@ -40,7 +40,7 @@ public class AkismetDataLocalServiceImpl
 	public AkismetData fetchMBMessageAkismetData(long mbMessageId)
 		throws SystemException {
 
-		return akismetDataPersistence.fetchByMBMessageId(mbMessageId);
+		return akismetDataPersistence.fetchByMBMessageId_First(mbMessageId);
 	}
 
 	public AkismetData updateAkismetData(
@@ -48,8 +48,8 @@ public class AkismetDataLocalServiceImpl
 			String userAgent, String userIP, String userURL)
 		throws SystemException {
 
-		AkismetData akismetData = akismetDataPersistence.fetchByMBMessageId(
-			mbMessageId);
+		AkismetData akismetData =
+			akismetDataPersistence.fetchByMBMessageId_First(mbMessageId);
 
 		if (akismetData == null) {
 			long akismetDataId = counterLocalService.increment();

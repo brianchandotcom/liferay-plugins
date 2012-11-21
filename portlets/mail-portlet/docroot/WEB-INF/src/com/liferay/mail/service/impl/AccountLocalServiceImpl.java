@@ -131,7 +131,7 @@ public class AccountLocalServiceImpl extends AccountLocalServiceBaseImpl {
 	public Account getAccount(long userId, String address)
 		throws PortalException, SystemException {
 
-		return accountPersistence.findByU_A(userId, address);
+		return accountPersistence.findByU_A_First(userId, address);
 	}
 
 	public List<Account> getAccounts(long userId) throws SystemException {

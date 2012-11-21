@@ -79,7 +79,7 @@ public class KaleoDefinitionLocalServiceImpl
 		throws PortalException, SystemException {
 
 		KaleoDefinition kaleoDefinition =
-			kaleoDefinitionPersistence.findByC_N_V(
+			kaleoDefinitionPersistence.findByC_N_V_First(
 				serviceContext.getCompanyId(), name, version);
 
 		kaleoDefinition.setModifiedDate(new Date());
@@ -124,7 +124,7 @@ public class KaleoDefinitionLocalServiceImpl
 		throws PortalException, SystemException {
 
 		KaleoDefinition kaleoDefinition =
-			kaleoDefinitionPersistence.findByC_N_V(
+			kaleoDefinitionPersistence.findByC_N_V_First(
 				serviceContext.getCompanyId(), name, version);
 
 		kaleoDefinition.setModifiedDate(new Date());
@@ -214,7 +214,7 @@ public class KaleoDefinitionLocalServiceImpl
 			String name, int version, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		return kaleoDefinitionPersistence.findByC_N_V(
+		return kaleoDefinitionPersistence.findByC_N_V_First(
 			serviceContext.getCompanyId(), name, version);
 	}
 
@@ -321,7 +321,7 @@ public class KaleoDefinitionLocalServiceImpl
 		throws PortalException, SystemException {
 
 		KaleoDefinition kaleoDefinition =
-			kaleoDefinitionPersistence.findByC_N_V(
+			kaleoDefinitionPersistence.findByC_N_V_First(
 				serviceContext.getCompanyId(), name, version);
 
 		kaleoDefinition.setTitle(title);
