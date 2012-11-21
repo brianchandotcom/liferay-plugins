@@ -38,6 +38,701 @@ public interface AppPersistence extends BasePersistence<App> {
 	 */
 
 	/**
+	* Returns all the apps where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByUuid(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the apps where uuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param start the lower bound of the range of apps
+	* @param end the upper bound of the range of apps (not inclusive)
+	* @return the range of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByUuid(
+		java.lang.String uuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the apps before and after the current app in the ordered set where uuid = &#63;.
+	*
+	* @param appId the primary key of the current app
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next app
+	* @throws com.liferay.marketplace.NoSuchAppException if a app with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App[] findByUuid_PrevAndNext(
+		long appId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the apps where uuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param start the lower bound of the range of apps
+	* @param end the upper bound of the range of apps (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByUuid(
+		java.lang.String uuid, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_First(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_First(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_Last(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_Last(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the apps where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of apps where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the apps where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByUuid_C(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the apps where uuid = &#63; and companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param start the lower bound of the range of apps
+	* @param end the upper bound of the range of apps (not inclusive)
+	* @return the range of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByUuid_C(
+		java.lang.String uuid, long companyId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the apps before and after the current app in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param appId the primary key of the current app
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next app
+	* @throws com.liferay.marketplace.NoSuchAppException if a app with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App[] findByUuid_C_PrevAndNext(
+		long appId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the apps where uuid = &#63; and companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param start the lower bound of the range of apps
+	* @param end the upper bound of the range of apps (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByUuid_C(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_C_First(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_C_First(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByUuid_C_Last(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the apps where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of apps where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the apps where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByCompanyId(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the apps where companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param start the lower bound of the range of apps
+	* @param end the upper bound of the range of apps (not inclusive)
+	* @return the range of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByCompanyId(
+		long companyId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the apps before and after the current app in the ordered set where companyId = &#63;.
+	*
+	* @param appId the primary key of the current app
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next app
+	* @throws com.liferay.marketplace.NoSuchAppException if a app with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App[] findByCompanyId_PrevAndNext(
+		long appId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the apps where companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param start the lower bound of the range of apps
+	* @param end the upper bound of the range of apps (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.App> findByCompanyId(
+		long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByCompanyId_First(
+		long companyId)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByCompanyId_First(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByCompanyId_First(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByCompanyId_Last(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByCompanyId_Last(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the apps where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of apps where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByRemoteAppId_First(
+		long remoteAppId)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByRemoteAppId_First(
+		long remoteAppId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByRemoteAppId_First(
+		long remoteAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first app in the ordered set where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByRemoteAppId_First(
+		long remoteAppId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByRemoteAppId_Last(
+		long remoteAppId)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app
+	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App findByRemoteAppId_Last(
+		long remoteAppId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchAppException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the default ordered set defined by {@link AppModelImpl#ORDER_BY_JPQL} where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByRemoteAppId_Last(
+		long remoteAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last app in the ordered set where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching app, or <code>null</code> if a matching app could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.App fetchByRemoteAppId_Last(
+		long remoteAppId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the apps where remoteAppId = &#63; from the database.
+	*
+	* @param remoteAppId the remote app ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByRemoteAppId(long remoteAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of apps where remoteAppId = &#63;.
+	*
+	* @param remoteAppId the remote app ID
+	* @return the number of matching apps
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByRemoteAppId(long remoteAppId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the app in the entity cache if it is enabled.
 	*
 	* @param app the app
@@ -99,406 +794,6 @@ public interface AppPersistence extends BasePersistence<App> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns all the apps where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByUuid(
-		java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the apps where uuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param start the lower bound of the range of apps
-	* @param end the upper bound of the range of apps (not inclusive)
-	* @return the range of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByUuid(
-		java.lang.String uuid, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the apps where uuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param start the lower bound of the range of apps
-	* @param end the upper bound of the range of apps (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByUuid(
-		java.lang.String uuid, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first app in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching app
-	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App findByUuid_First(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first app in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByUuid_First(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last app in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching app
-	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App findByUuid_Last(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last app in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByUuid_Last(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the apps before and after the current app in the ordered set where uuid = &#63;.
-	*
-	* @param appId the primary key of the current app
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next app
-	* @throws com.liferay.marketplace.NoSuchAppException if a app with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App[] findByUuid_PrevAndNext(
-		long appId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns all the apps where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByUuid_C(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the apps where uuid = &#63; and companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param start the lower bound of the range of apps
-	* @param end the upper bound of the range of apps (not inclusive)
-	* @return the range of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByUuid_C(
-		java.lang.String uuid, long companyId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the apps where uuid = &#63; and companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param start the lower bound of the range of apps
-	* @param end the upper bound of the range of apps (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByUuid_C(
-		java.lang.String uuid, long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first app in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching app
-	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App findByUuid_C_First(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first app in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByUuid_C_First(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last app in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching app
-	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App findByUuid_C_Last(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last app in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByUuid_C_Last(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the apps before and after the current app in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param appId the primary key of the current app
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next app
-	* @throws com.liferay.marketplace.NoSuchAppException if a app with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App[] findByUuid_C_PrevAndNext(
-		long appId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns all the apps where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByCompanyId(
-		long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the apps where companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param companyId the company ID
-	* @param start the lower bound of the range of apps
-	* @param end the upper bound of the range of apps (not inclusive)
-	* @return the range of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByCompanyId(
-		long companyId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the apps where companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param companyId the company ID
-	* @param start the lower bound of the range of apps
-	* @param end the upper bound of the range of apps (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.App> findByCompanyId(
-		long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first app in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching app
-	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App findByCompanyId_First(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first app in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByCompanyId_First(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last app in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching app
-	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App findByCompanyId_Last(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last app in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByCompanyId_Last(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the apps before and after the current app in the ordered set where companyId = &#63;.
-	*
-	* @param appId the primary key of the current app
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next app
-	* @throws com.liferay.marketplace.NoSuchAppException if a app with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App[] findByCompanyId_PrevAndNext(
-		long appId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the app where remoteAppId = &#63; or throws a {@link com.liferay.marketplace.NoSuchAppException} if it could not be found.
-	*
-	* @param remoteAppId the remote app ID
-	* @return the matching app
-	* @throws com.liferay.marketplace.NoSuchAppException if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App findByRemoteAppId(long remoteAppId)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the app where remoteAppId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param remoteAppId the remote app ID
-	* @return the matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByRemoteAppId(
-		long remoteAppId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the app where remoteAppId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param remoteAppId the remote app ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching app, or <code>null</code> if a matching app could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App fetchByRemoteAppId(
-		long remoteAppId, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the apps.
 	*
 	* @return the apps
@@ -511,7 +806,7 @@ public interface AppPersistence extends BasePersistence<App> {
 	* Returns a range of all the apps.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of apps
@@ -527,7 +822,7 @@ public interface AppPersistence extends BasePersistence<App> {
 	* Returns an ordered range of all the apps.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AppModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of apps
@@ -542,92 +837,11 @@ public interface AppPersistence extends BasePersistence<App> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the apps where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the apps where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the apps where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the app where remoteAppId = &#63; from the database.
-	*
-	* @param remoteAppId the remote app ID
-	* @return the app that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.App removeByRemoteAppId(
-		long remoteAppId)
-		throws com.liferay.marketplace.NoSuchAppException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the apps from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of apps where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of apps where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of apps where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of apps where remoteAppId = &#63;.
-	*
-	* @param remoteAppId the remote app ID
-	* @return the number of matching apps
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByRemoteAppId(long remoteAppId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

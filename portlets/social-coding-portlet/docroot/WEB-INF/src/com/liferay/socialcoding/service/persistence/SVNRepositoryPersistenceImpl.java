@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -76,15 +77,6 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_FETCH_BY_URL = new FinderPath(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRepositoryModelImpl.FINDER_CACHE_ENABLED,
-			SVNRepositoryImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByUrl",
-			new String[] { String.class.getName() },
-			SVNRepositoryModelImpl.URL_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_URL = new FinderPath(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRepositoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUrl",
-			new String[] { String.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			SVNRepositoryModelImpl.FINDER_CACHE_ENABLED,
 			SVNRepositoryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -96,6 +88,377 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			SVNRepositoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_URL = new FinderPath(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRepositoryModelImpl.FINDER_CACHE_ENABLED,
+			SVNRepositoryImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByUrl",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_URL = new FinderPath(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRepositoryModelImpl.FINDER_CACHE_ENABLED,
+			SVNRepositoryImpl.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByUrl", new String[] { String.class.getName() },
+			SVNRepositoryModelImpl.URL_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_URL = new FinderPath(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRepositoryModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUrl",
+			new String[] { String.class.getName() });
+
+	/**
+	 * Returns an ordered range of all the s v n repositories where url = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from SVNRepositoryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param url the url
+	 * @param start the lower bound of the range of s v n repositories
+	 * @param end the upper bound of the range of s v n repositories (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching s v n repositories
+	 * @throws SystemException if a system exception occurred
+	 */
+	protected List<SVNRepository> findByUrl(String url, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_URL;
+			finderArgs = new Object[] { url };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_URL;
+			finderArgs = new Object[] { url, start, end, orderByComparator };
+		}
+
+		List<SVNRepository> list = (List<SVNRepository>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (SVNRepository svnRepository : list) {
+				if (!Validator.equals(url, svnRepository.getUrl())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_SVNREPOSITORY_WHERE);
+
+			if (url == null) {
+				query.append(_FINDER_COLUMN_URL_URL_1);
+			}
+			else {
+				if (url.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_URL_URL_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_URL_URL_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else if (pagination) {
+				query.append(SVNRepositoryModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (url != null) {
+					qPos.add(url);
+				}
+
+				if (!pagination) {
+					list = (List<SVNRepository>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<SVNRepository>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	 *
+	 * @param url the url
+	 * @return the first matching s v n repository
+	 * @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository findByUrl_First(String url)
+		throws NoSuchSVNRepositoryException, SystemException {
+		return findByUrl_First(url, null);
+	}
+
+	/**
+	 * Returns the first s v n repository in the ordered set where url = &#63;.
+	 *
+	 * @param url the url
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s v n repository
+	 * @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository findByUrl_First(String url,
+		OrderByComparator orderByComparator)
+		throws NoSuchSVNRepositoryException, SystemException {
+		SVNRepository svnRepository = fetchByUrl_First(url, orderByComparator);
+
+		if (svnRepository != null) {
+			return svnRepository;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("url=");
+		msg.append(url);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchSVNRepositoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the first s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	 *
+	 * @param url the url
+	 * @return the first matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository fetchByUrl_First(String url) throws SystemException {
+		return fetchByUrl_First(url, null);
+	}
+
+	/**
+	 * Returns the first s v n repository in the ordered set where url = &#63;.
+	 *
+	 * @param url the url
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository fetchByUrl_First(String url,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<SVNRepository> list = findByUrl(url, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	 *
+	 * @param url the url
+	 * @return the last matching s v n repository
+	 * @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository findByUrl_Last(String url)
+		throws NoSuchSVNRepositoryException, SystemException {
+		return findByUrl_Last(url, null);
+	}
+
+	/**
+	 * Returns the last s v n repository in the ordered set where url = &#63;.
+	 *
+	 * @param url the url
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s v n repository
+	 * @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository findByUrl_Last(String url,
+		OrderByComparator orderByComparator)
+		throws NoSuchSVNRepositoryException, SystemException {
+		SVNRepository svnRepository = fetchByUrl_Last(url, orderByComparator);
+
+		if (svnRepository != null) {
+			return svnRepository;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("url=");
+		msg.append(url);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchSVNRepositoryException(msg.toString());
+	}
+
+	/**
+	 * Returns the last s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	 *
+	 * @param url the url
+	 * @return the last matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository fetchByUrl_Last(String url) throws SystemException {
+		return fetchByUrl_Last(url, null);
+	}
+
+	/**
+	 * Returns the last s v n repository in the ordered set where url = &#63;.
+	 *
+	 * @param url the url
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRepository fetchByUrl_Last(String url,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByUrl(url);
+
+		List<SVNRepository> list = findByUrl(url, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the s v n repositories where url = &#63; from the database.
+	 *
+	 * @param url the url
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUrl(String url) throws SystemException {
+		for (SVNRepository svnRepository : findByUrl(url, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(svnRepository);
+		}
+	}
+
+	/**
+	 * Returns the number of s v n repositories where url = &#63;.
+	 *
+	 * @param url the url
+	 * @return the number of matching s v n repositories
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUrl(String url) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_URL;
+
+		Object[] finderArgs = new Object[] { url };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SVNREPOSITORY_WHERE);
+
+			if (url == null) {
+				query.append(_FINDER_COLUMN_URL_URL_1);
+			}
+			else {
+				if (url.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_URL_URL_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_URL_URL_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (url != null) {
+					qPos.add(url);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_URL_URL_1 = "svnRepository.url IS NULL";
+	private static final String _FINDER_COLUMN_URL_URL_2 = "svnRepository.url = ?";
+	private static final String _FINDER_COLUMN_URL_URL_3 = "(svnRepository.url IS NULL OR svnRepository.url = ?)";
 
 	/**
 	 * Caches the s v n repository in the entity cache if it is enabled.
@@ -106,9 +469,6 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 		EntityCacheUtil.putResult(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			SVNRepositoryImpl.class, svnRepository.getPrimaryKey(),
 			svnRepository);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_URL,
-			new Object[] { svnRepository.getUrl() }, svnRepository);
 
 		svnRepository.resetOriginalValues();
 	}
@@ -165,8 +525,6 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(svnRepository);
 	}
 
 	@Override
@@ -177,14 +535,7 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 		for (SVNRepository svnRepository : svnRepositories) {
 			EntityCacheUtil.removeResult(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
 				SVNRepositoryImpl.class, svnRepository.getPrimaryKey());
-
-			clearUniqueFindersCache(svnRepository);
 		}
-	}
-
-	protected void clearUniqueFindersCache(SVNRepository svnRepository) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_URL,
-			new Object[] { svnRepository.getUrl() });
 	}
 
 	/**
@@ -297,8 +648,6 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 
 		boolean isNew = svnRepository.isNew();
 
-		SVNRepositoryModelImpl svnRepositoryModelImpl = (SVNRepositoryModelImpl)svnRepository;
-
 		Session session = null;
 
 		try {
@@ -329,26 +678,6 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 		EntityCacheUtil.putResult(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
 			SVNRepositoryImpl.class, svnRepository.getPrimaryKey(),
 			svnRepository);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_URL,
-				new Object[] { svnRepository.getUrl() }, svnRepository);
-		}
-		else {
-			if ((svnRepositoryModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_URL.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						svnRepositoryModelImpl.getOriginalUrl()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_URL, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_URL, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_URL,
-					new Object[] { svnRepository.getUrl() }, svnRepository);
-			}
-		}
 
 		return svnRepository;
 	}
@@ -440,184 +769,33 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 		if (svnRepository == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				svnRepository = (SVNRepository)session.get(SVNRepositoryImpl.class,
 						Long.valueOf(svnRepositoryId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (svnRepository != null) {
 					cacheResult(svnRepository);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
 						SVNRepositoryImpl.class, svnRepositoryId,
 						_nullSVNRepository);
 				}
-
-				closeSession(session);
-			}
-		}
-
-		return svnRepository;
-	}
-
-	/**
-	 * Returns the s v n repository where url = &#63; or throws a {@link com.liferay.socialcoding.NoSuchSVNRepositoryException} if it could not be found.
-	 *
-	 * @param url the url
-	 * @return the matching s v n repository
-	 * @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SVNRepository findByUrl(String url)
-		throws NoSuchSVNRepositoryException, SystemException {
-		SVNRepository svnRepository = fetchByUrl(url);
-
-		if (svnRepository == null) {
-			StringBundler msg = new StringBundler(4);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("url=");
-			msg.append(url);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchSVNRepositoryException(msg.toString());
-		}
-
-		return svnRepository;
-	}
-
-	/**
-	 * Returns the s v n repository where url = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param url the url
-	 * @return the matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SVNRepository fetchByUrl(String url) throws SystemException {
-		return fetchByUrl(url, true);
-	}
-
-	/**
-	 * Returns the s v n repository where url = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param url the url
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SVNRepository fetchByUrl(String url, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { url };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_URL,
-					finderArgs, this);
-		}
-
-		if (result instanceof SVNRepository) {
-			SVNRepository svnRepository = (SVNRepository)result;
-
-			if (!Validator.equals(url, svnRepository.getUrl())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_SELECT_SVNREPOSITORY_WHERE);
-
-			if (url == null) {
-				query.append(_FINDER_COLUMN_URL_URL_1);
-			}
-			else {
-				if (url.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_URL_URL_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_URL_URL_2);
-				}
-			}
-
-			query.append(SVNRepositoryModelImpl.ORDER_BY_JPQL);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (url != null) {
-					qPos.add(url);
-				}
-
-				List<SVNRepository> list = q.list();
-
-				result = list;
-
-				SVNRepository svnRepository = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_URL,
-						finderArgs, list);
-				}
-				else {
-					svnRepository = list.get(0);
-
-					cacheResult(svnRepository);
-
-					if ((svnRepository.getUrl() == null) ||
-							!svnRepository.getUrl().equals(url)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_URL,
-							finderArgs, svnRepository);
-					}
-				}
-
-				return svnRepository;
 			}
 			catch (Exception e) {
+				EntityCacheUtil.removeResult(SVNRepositoryModelImpl.ENTITY_CACHE_ENABLED,
+					SVNRepositoryImpl.class, svnRepositoryId);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_URL,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (SVNRepository)result;
-			}
-		}
+
+		return svnRepository;
 	}
 
 	/**
@@ -634,7 +812,7 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 	 * Returns a range of all the s v n repositories.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from SVNRepositoryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of s v n repositories
@@ -651,7 +829,7 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 	 * Returns an ordered range of all the s v n repositories.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from SVNRepositoryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of s v n repositories
@@ -662,11 +840,13 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 	 */
 	public List<SVNRepository> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -694,7 +874,11 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SVNREPOSITORY.concat(SVNRepositoryModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SVNREPOSITORY;
+
+				if (pagination) {
+					sql = sql.concat(SVNRepositoryModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -704,49 +888,34 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<SVNRepository>)QueryUtil.list(q, getDialect(),
 							start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
 				}
 				else {
 					list = (List<SVNRepository>)QueryUtil.list(q, getDialect(),
 							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes the s v n repository where url = &#63; from the database.
-	 *
-	 * @param url the url
-	 * @return the s v n repository that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SVNRepository removeByUrl(String url)
-		throws NoSuchSVNRepositoryException, SystemException {
-		SVNRepository svnRepository = findByUrl(url);
-
-		return remove(svnRepository);
 	}
 
 	/**
@@ -758,71 +927,6 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 		for (SVNRepository svnRepository : findAll()) {
 			remove(svnRepository);
 		}
-	}
-
-	/**
-	 * Returns the number of s v n repositories where url = &#63;.
-	 *
-	 * @param url the url
-	 * @return the number of matching s v n repositories
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUrl(String url) throws SystemException {
-		Object[] finderArgs = new Object[] { url };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_URL,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SVNREPOSITORY_WHERE);
-
-			if (url == null) {
-				query.append(_FINDER_COLUMN_URL_URL_1);
-			}
-			else {
-				if (url.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_URL_URL_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_URL_URL_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (url != null) {
-					qPos.add(url);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_URL, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -844,18 +948,17 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 				Query q = session.createQuery(_SQL_COUNT_SVNREPOSITORY);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -891,6 +994,7 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 	public void destroy() {
 		EntityCacheUtil.removeCache(SVNRepositoryImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
@@ -912,9 +1016,6 @@ public class SVNRepositoryPersistenceImpl extends BasePersistenceImpl<SVNReposit
 	private static final String _SQL_SELECT_SVNREPOSITORY_WHERE = "SELECT svnRepository FROM SVNRepository svnRepository WHERE ";
 	private static final String _SQL_COUNT_SVNREPOSITORY = "SELECT COUNT(svnRepository) FROM SVNRepository svnRepository";
 	private static final String _SQL_COUNT_SVNREPOSITORY_WHERE = "SELECT COUNT(svnRepository) FROM SVNRepository svnRepository WHERE ";
-	private static final String _FINDER_COLUMN_URL_URL_1 = "svnRepository.url IS NULL";
-	private static final String _FINDER_COLUMN_URL_URL_2 = "svnRepository.url = ?";
-	private static final String _FINDER_COLUMN_URL_URL_3 = "(svnRepository.url IS NULL OR svnRepository.url = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "svnRepository.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SVNRepository exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SVNRepository exists with the key {";

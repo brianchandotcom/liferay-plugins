@@ -111,6 +111,227 @@ public class AttachmentUtil {
 	}
 
 	/**
+	* Returns all the attachments where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @return the matching attachments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.mail.model.Attachment> findByMessageId(
+		long messageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByMessageId(messageId);
+	}
+
+	/**
+	* Returns a range of all the attachments where messageId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param messageId the message ID
+	* @param start the lower bound of the range of attachments
+	* @param end the upper bound of the range of attachments (not inclusive)
+	* @return the range of matching attachments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.mail.model.Attachment> findByMessageId(
+		long messageId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByMessageId(messageId, start, end);
+	}
+
+	/**
+	* Returns the attachments before and after the current attachment in the ordered set where messageId = &#63;.
+	*
+	* @param attachmentId the primary key of the current attachment
+	* @param messageId the message ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next attachment
+	* @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment[] findByMessageId_PrevAndNext(
+		long attachmentId, long messageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.mail.NoSuchAttachmentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByMessageId_PrevAndNext(attachmentId, messageId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the attachments where messageId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param messageId the message ID
+	* @param start the lower bound of the range of attachments
+	* @param end the upper bound of the range of attachments (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching attachments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.mail.model.Attachment> findByMessageId(
+		long messageId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByMessageId(messageId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first attachment in the default ordered set defined by {@link AttachmentModelImpl#ORDER_BY_JPQL} where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @return the first matching attachment
+	* @throws com.liferay.mail.NoSuchAttachmentException if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment findByMessageId_First(
+		long messageId)
+		throws com.liferay.mail.NoSuchAttachmentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByMessageId_First(messageId);
+	}
+
+	/**
+	* Returns the first attachment in the ordered set where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching attachment
+	* @throws com.liferay.mail.NoSuchAttachmentException if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment findByMessageId_First(
+		long messageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.mail.NoSuchAttachmentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByMessageId_First(messageId, orderByComparator);
+	}
+
+	/**
+	* Returns the first attachment in the default ordered set defined by {@link AttachmentModelImpl#ORDER_BY_JPQL} where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @return the first matching attachment, or <code>null</code> if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment fetchByMessageId_First(
+		long messageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByMessageId_First(messageId);
+	}
+
+	/**
+	* Returns the first attachment in the ordered set where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching attachment, or <code>null</code> if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment fetchByMessageId_First(
+		long messageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByMessageId_First(messageId, orderByComparator);
+	}
+
+	/**
+	* Returns the last attachment in the default ordered set defined by {@link AttachmentModelImpl#ORDER_BY_JPQL} where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @return the last matching attachment
+	* @throws com.liferay.mail.NoSuchAttachmentException if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment findByMessageId_Last(
+		long messageId)
+		throws com.liferay.mail.NoSuchAttachmentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByMessageId_Last(messageId);
+	}
+
+	/**
+	* Returns the last attachment in the ordered set where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching attachment
+	* @throws com.liferay.mail.NoSuchAttachmentException if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment findByMessageId_Last(
+		long messageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.mail.NoSuchAttachmentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByMessageId_Last(messageId, orderByComparator);
+	}
+
+	/**
+	* Returns the last attachment in the default ordered set defined by {@link AttachmentModelImpl#ORDER_BY_JPQL} where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @return the last matching attachment, or <code>null</code> if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment fetchByMessageId_Last(
+		long messageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByMessageId_Last(messageId);
+	}
+
+	/**
+	* Returns the last attachment in the ordered set where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching attachment, or <code>null</code> if a matching attachment could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment fetchByMessageId_Last(
+		long messageId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByMessageId_Last(messageId, orderByComparator);
+	}
+
+	/**
+	* Removes all the attachments where messageId = &#63; from the database.
+	*
+	* @param messageId the message ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByMessageId(long messageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByMessageId(messageId);
+	}
+
+	/**
+	* Returns the number of attachments where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @return the number of matching attachments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByMessageId(long messageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByMessageId(messageId);
+	}
+
+	/**
 	* Caches the attachment in the entity cache if it is enabled.
 	*
 	* @param attachment the attachment
@@ -188,148 +409,6 @@ public class AttachmentUtil {
 	}
 
 	/**
-	* Returns all the attachments where messageId = &#63;.
-	*
-	* @param messageId the message ID
-	* @return the matching attachments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.mail.model.Attachment> findByMessageId(
-		long messageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByMessageId(messageId);
-	}
-
-	/**
-	* Returns a range of all the attachments where messageId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param messageId the message ID
-	* @param start the lower bound of the range of attachments
-	* @param end the upper bound of the range of attachments (not inclusive)
-	* @return the range of matching attachments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.mail.model.Attachment> findByMessageId(
-		long messageId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByMessageId(messageId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the attachments where messageId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param messageId the message ID
-	* @param start the lower bound of the range of attachments
-	* @param end the upper bound of the range of attachments (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching attachments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.mail.model.Attachment> findByMessageId(
-		long messageId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByMessageId(messageId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first attachment in the ordered set where messageId = &#63;.
-	*
-	* @param messageId the message ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching attachment
-	* @throws com.liferay.mail.NoSuchAttachmentException if a matching attachment could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment findByMessageId_First(
-		long messageId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.mail.NoSuchAttachmentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByMessageId_First(messageId, orderByComparator);
-	}
-
-	/**
-	* Returns the first attachment in the ordered set where messageId = &#63;.
-	*
-	* @param messageId the message ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching attachment, or <code>null</code> if a matching attachment could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment fetchByMessageId_First(
-		long messageId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByMessageId_First(messageId, orderByComparator);
-	}
-
-	/**
-	* Returns the last attachment in the ordered set where messageId = &#63;.
-	*
-	* @param messageId the message ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching attachment
-	* @throws com.liferay.mail.NoSuchAttachmentException if a matching attachment could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment findByMessageId_Last(
-		long messageId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.mail.NoSuchAttachmentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByMessageId_Last(messageId, orderByComparator);
-	}
-
-	/**
-	* Returns the last attachment in the ordered set where messageId = &#63;.
-	*
-	* @param messageId the message ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching attachment, or <code>null</code> if a matching attachment could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment fetchByMessageId_Last(
-		long messageId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByMessageId_Last(messageId, orderByComparator);
-	}
-
-	/**
-	* Returns the attachments before and after the current attachment in the ordered set where messageId = &#63;.
-	*
-	* @param attachmentId the primary key of the current attachment
-	* @param messageId the message ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next attachment
-	* @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment[] findByMessageId_PrevAndNext(
-		long attachmentId, long messageId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.mail.NoSuchAttachmentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByMessageId_PrevAndNext(attachmentId, messageId,
-			orderByComparator);
-	}
-
-	/**
 	* Returns all the attachments.
 	*
 	* @return the attachments
@@ -344,7 +423,7 @@ public class AttachmentUtil {
 	* Returns a range of all the attachments.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of attachments
@@ -362,7 +441,7 @@ public class AttachmentUtil {
 	* Returns an ordered range of all the attachments.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of attachments
@@ -379,17 +458,6 @@ public class AttachmentUtil {
 	}
 
 	/**
-	* Removes all the attachments where messageId = &#63; from the database.
-	*
-	* @param messageId the message ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByMessageId(long messageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByMessageId(messageId);
-	}
-
-	/**
 	* Removes all the attachments from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -397,18 +465,6 @@ public class AttachmentUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of attachments where messageId = &#63;.
-	*
-	* @param messageId the message ID
-	* @return the number of matching attachments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByMessageId(long messageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByMessageId(messageId);
 	}
 
 	/**

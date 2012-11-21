@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -75,6 +76,17 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
+			KaleoTransitionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
+			KaleoTransitionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
@@ -83,8 +95,8 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
 		new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
@@ -97,6 +109,514 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
 			new String[] { Long.class.getName() });
+
+	/**
+	 * Returns all the kaleo transitions where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByCompanyId(long companyId)
+		throws SystemException {
+		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the kaleo transitions where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @return the range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByCompanyId(long companyId, int start,
+		int end) throws SystemException {
+		return findByCompanyId(companyId, start, end, null);
+	}
+
+	/**
+	 * Returns the kaleo transitions before and after the current kaleo transition in the ordered set where companyId = &#63;.
+	 *
+	 * @param kaleoTransitionId the primary key of the current kaleo transition
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition[] findByCompanyId_PrevAndNext(
+		long kaleoTransitionId, long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = findByPrimaryKey(kaleoTransitionId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			KaleoTransition[] array = new KaleoTransitionImpl[3];
+
+			array[0] = getByCompanyId_PrevAndNext(session, kaleoTransition,
+					companyId, orderByComparator, true);
+
+			array[1] = kaleoTransition;
+
+			array[2] = getByCompanyId_PrevAndNext(session, kaleoTransition,
+					companyId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected KaleoTransition getByCompanyId_PrevAndNext(Session session,
+		KaleoTransition kaleoTransition, long companyId,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(companyId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<KaleoTransition> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns an ordered range of all the kaleo transitions where companyId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param companyId the company ID
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByCompanyId(long companyId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
+			finderArgs = new Object[] { companyId, start, end, orderByComparator };
+		}
+
+		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KaleoTransition kaleoTransition : list) {
+				if ((companyId != kaleoTransition.getCompanyId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else if (pagination) {
+				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				if (!pagination) {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByCompanyId_First(long companyId)
+		throws NoSuchTransitionException, SystemException {
+		return findByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByCompanyId_First(companyId,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByCompanyId_First(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_First(companyId, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByCompanyId_First(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<KaleoTransition> list = findByCompanyId(companyId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByCompanyId_Last(long companyId)
+		throws NoSuchTransitionException, SystemException {
+		return findByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByCompanyId_Last(companyId,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("companyId=");
+		msg.append(companyId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByCompanyId_Last(long companyId)
+		throws SystemException {
+		return fetchByCompanyId_Last(companyId, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByCompanyId_Last(long companyId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByCompanyId(companyId);
+
+		List<KaleoTransition> list = findByCompanyId(companyId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the kaleo transitions where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (KaleoTransition kaleoTransition : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoTransition);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo transitions where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "kaleoTransition.companyId = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEODEFINITIONID =
 		new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
@@ -105,8 +625,8 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID =
 		new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
@@ -119,6 +639,525 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByKaleoDefinitionId", new String[] { Long.class.getName() });
+
+	/**
+	 * Returns all the kaleo transitions where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @return the matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByKaleoDefinitionId(long kaleoDefinitionId)
+		throws SystemException {
+		return findByKaleoDefinitionId(kaleoDefinitionId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the kaleo transitions where kaleoDefinitionId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @return the range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByKaleoDefinitionId(
+		long kaleoDefinitionId, int start, int end) throws SystemException {
+		return findByKaleoDefinitionId(kaleoDefinitionId, start, end, null);
+	}
+
+	/**
+	 * Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoTransitionId the primary key of the current kaleo transition
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition[] findByKaleoDefinitionId_PrevAndNext(
+		long kaleoTransitionId, long kaleoDefinitionId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = findByPrimaryKey(kaleoTransitionId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			KaleoTransition[] array = new KaleoTransitionImpl[3];
+
+			array[0] = getByKaleoDefinitionId_PrevAndNext(session,
+					kaleoTransition, kaleoDefinitionId, orderByComparator, true);
+
+			array[1] = kaleoTransition;
+
+			array[2] = getByKaleoDefinitionId_PrevAndNext(session,
+					kaleoTransition, kaleoDefinitionId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected KaleoTransition getByKaleoDefinitionId_PrevAndNext(
+		Session session, KaleoTransition kaleoTransition,
+		long kaleoDefinitionId, OrderByComparator orderByComparator,
+		boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+		query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(kaleoDefinitionId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<KaleoTransition> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns an ordered range of all the kaleo transitions where kaleoDefinitionId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByKaleoDefinitionId(
+		long kaleoDefinitionId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID;
+			finderArgs = new Object[] { kaleoDefinitionId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEODEFINITIONID;
+			finderArgs = new Object[] {
+					kaleoDefinitionId,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KaleoTransition kaleoTransition : list) {
+				if ((kaleoDefinitionId != kaleoTransition.getKaleoDefinitionId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else if (pagination) {
+				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoDefinitionId);
+
+				if (!pagination) {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoDefinitionId_First(long kaleoDefinitionId)
+		throws NoSuchTransitionException, SystemException {
+		return findByKaleoDefinitionId_First(kaleoDefinitionId, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoDefinitionId_First(
+		long kaleoDefinitionId, OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKaleoDefinitionId_First(kaleoDefinitionId,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoDefinitionId=");
+		msg.append(kaleoDefinitionId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoDefinitionId_First(
+		long kaleoDefinitionId) throws SystemException {
+		return fetchByKaleoDefinitionId_First(kaleoDefinitionId, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoDefinitionId_First(
+		long kaleoDefinitionId, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<KaleoTransition> list = findByKaleoDefinitionId(kaleoDefinitionId,
+				0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoDefinitionId_Last(long kaleoDefinitionId)
+		throws NoSuchTransitionException, SystemException {
+		return findByKaleoDefinitionId_Last(kaleoDefinitionId, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoDefinitionId_Last(
+		long kaleoDefinitionId, OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKaleoDefinitionId_Last(kaleoDefinitionId,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoDefinitionId=");
+		msg.append(kaleoDefinitionId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoDefinitionId_Last(long kaleoDefinitionId)
+		throws SystemException {
+		return fetchByKaleoDefinitionId_Last(kaleoDefinitionId, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoDefinitionId_Last(
+		long kaleoDefinitionId, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByKaleoDefinitionId(kaleoDefinitionId);
+
+		List<KaleoTransition> list = findByKaleoDefinitionId(kaleoDefinitionId,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the kaleo transitions where kaleoDefinitionId = &#63; from the database.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
+		throws SystemException {
+		for (KaleoTransition kaleoTransition : findByKaleoDefinitionId(
+				kaleoDefinitionId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoTransition);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo transitions where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @return the number of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKaleoDefinitionId(long kaleoDefinitionId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_KALEODEFINITIONID;
+
+		Object[] finderArgs = new Object[] { kaleoDefinitionId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoDefinitionId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2 =
+		"kaleoTransition.kaleoDefinitionId = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEONODEID =
 		new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
@@ -127,8 +1166,8 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONODEID =
 		new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
@@ -141,10 +1180,528 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKaleoNodeId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_KNI_N = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+
+	/**
+	 * Returns all the kaleo transitions where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @return the matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByKaleoNodeId(long kaleoNodeId)
+		throws SystemException {
+		return findByKaleoNodeId(kaleoNodeId, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the kaleo transitions where kaleoNodeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @return the range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByKaleoNodeId(long kaleoNodeId, int start,
+		int end) throws SystemException {
+		return findByKaleoNodeId(kaleoNodeId, start, end, null);
+	}
+
+	/**
+	 * Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoTransitionId the primary key of the current kaleo transition
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition[] findByKaleoNodeId_PrevAndNext(
+		long kaleoTransitionId, long kaleoNodeId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = findByPrimaryKey(kaleoTransitionId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			KaleoTransition[] array = new KaleoTransitionImpl[3];
+
+			array[0] = getByKaleoNodeId_PrevAndNext(session, kaleoTransition,
+					kaleoNodeId, orderByComparator, true);
+
+			array[1] = kaleoTransition;
+
+			array[2] = getByKaleoNodeId_PrevAndNext(session, kaleoTransition,
+					kaleoNodeId, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected KaleoTransition getByKaleoNodeId_PrevAndNext(Session session,
+		KaleoTransition kaleoTransition, long kaleoNodeId,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+		query.append(_FINDER_COLUMN_KALEONODEID_KALEONODEID_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(kaleoNodeId);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<KaleoTransition> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns an ordered range of all the kaleo transitions where kaleoNodeId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KaleoTransition> findByKaleoNodeId(long kaleoNodeId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONODEID;
+			finderArgs = new Object[] { kaleoNodeId };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEONODEID;
+			finderArgs = new Object[] { kaleoNodeId, start, end, orderByComparator };
+		}
+
+		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KaleoTransition kaleoTransition : list) {
+				if ((kaleoNodeId != kaleoTransition.getKaleoNodeId())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(3 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(3);
+			}
+
+			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KALEONODEID_KALEONODEID_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else if (pagination) {
+				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoNodeId);
+
+				if (!pagination) {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoNodeId_First(long kaleoNodeId)
+		throws NoSuchTransitionException, SystemException {
+		return findByKaleoNodeId_First(kaleoNodeId, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoNodeId_First(long kaleoNodeId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKaleoNodeId_First(kaleoNodeId,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoNodeId=");
+		msg.append(kaleoNodeId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoNodeId_First(long kaleoNodeId)
+		throws SystemException {
+		return fetchByKaleoNodeId_First(kaleoNodeId, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoNodeId_First(long kaleoNodeId,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<KaleoTransition> list = findByKaleoNodeId(kaleoNodeId, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoNodeId_Last(long kaleoNodeId)
+		throws NoSuchTransitionException, SystemException {
+		return findByKaleoNodeId_Last(kaleoNodeId, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKaleoNodeId_Last(long kaleoNodeId,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKaleoNodeId_Last(kaleoNodeId,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(4);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoNodeId=");
+		msg.append(kaleoNodeId);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoNodeId_Last(long kaleoNodeId)
+		throws SystemException {
+		return fetchByKaleoNodeId_Last(kaleoNodeId, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKaleoNodeId_Last(long kaleoNodeId,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByKaleoNodeId(kaleoNodeId);
+
+		List<KaleoTransition> list = findByKaleoNodeId(kaleoNodeId, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the kaleo transitions where kaleoNodeId = &#63; from the database.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByKaleoNodeId(long kaleoNodeId) throws SystemException {
+		for (KaleoTransition kaleoTransition : findByKaleoNodeId(kaleoNodeId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoTransition);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo transitions where kaleoNodeId = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @return the number of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKaleoNodeId(long kaleoNodeId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_KALEONODEID;
+
+		Object[] finderArgs = new Object[] { kaleoNodeId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KALEONODEID_KALEONODEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoNodeId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KALEONODEID_KALEONODEID_2 = "kaleoTransition.kaleoNodeId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KNI_N = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
-			KaleoTransitionImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByKNI_N",
+			KaleoTransitionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByKNI_N",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KNI_N = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
+			KaleoTransitionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByKNI_N",
 			new String[] { Long.class.getName(), String.class.getName() },
 			KaleoTransitionModelImpl.KALEONODEID_COLUMN_BITMASK |
 			KaleoTransitionModelImpl.NAME_COLUMN_BITMASK);
@@ -152,10 +1709,412 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKNI_N",
 			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_KNI_DT = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+
+	/**
+	 * Returns an ordered range of all the kaleo transitions where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	protected List<KaleoTransition> findByKNI_N(long kaleoNodeId, String name,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KNI_N;
+			finderArgs = new Object[] { kaleoNodeId, name };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_KNI_N;
+			finderArgs = new Object[] {
+					kaleoNodeId, name,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KaleoTransition kaleoTransition : list) {
+				if ((kaleoNodeId != kaleoTransition.getKaleoNodeId()) ||
+						!Validator.equals(name, kaleoTransition.getName())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KNI_N_KALEONODEID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_KNI_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_KNI_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_KNI_N_NAME_2);
+				}
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else if (pagination) {
+				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoNodeId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				if (!pagination) {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_N_First(long kaleoNodeId, String name)
+		throws NoSuchTransitionException, SystemException {
+		return findByKNI_N_First(kaleoNodeId, name, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_N_First(long kaleoNodeId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKNI_N_First(kaleoNodeId, name,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoNodeId=");
+		msg.append(kaleoNodeId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_N_First(long kaleoNodeId, String name)
+		throws SystemException {
+		return fetchByKNI_N_First(kaleoNodeId, name, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_N_First(long kaleoNodeId, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		List<KaleoTransition> list = findByKNI_N(kaleoNodeId, name, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_N_Last(long kaleoNodeId, String name)
+		throws NoSuchTransitionException, SystemException {
+		return findByKNI_N_Last(kaleoNodeId, name, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_N_Last(long kaleoNodeId, String name,
+		OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKNI_N_Last(kaleoNodeId, name,
+				orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoNodeId=");
+		msg.append(kaleoNodeId);
+
+		msg.append(", name=");
+		msg.append(name);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_N_Last(long kaleoNodeId, String name)
+		throws SystemException {
+		return fetchByKNI_N_Last(kaleoNodeId, name, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_N_Last(long kaleoNodeId, String name,
+		OrderByComparator orderByComparator) throws SystemException {
+		int count = countByKNI_N(kaleoNodeId, name);
+
+		List<KaleoTransition> list = findByKNI_N(kaleoNodeId, name, count - 1,
+				count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the kaleo transitions where kaleoNodeId = &#63; and name = &#63; from the database.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByKNI_N(long kaleoNodeId, String name)
+		throws SystemException {
+		for (KaleoTransition kaleoTransition : findByKNI_N(kaleoNodeId, name,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoTransition);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo transitions where kaleoNodeId = &#63; and name = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param name the name
+	 * @return the number of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKNI_N(long kaleoNodeId, String name)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_KNI_N;
+
+		Object[] finderArgs = new Object[] { kaleoNodeId, name };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KNI_N_KALEONODEID_2);
+
+			if (name == null) {
+				query.append(_FINDER_COLUMN_KNI_N_NAME_1);
+			}
+			else {
+				if (name.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_KNI_N_NAME_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_KNI_N_NAME_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoNodeId);
+
+				if (name != null) {
+					qPos.add(name);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KNI_N_KALEONODEID_2 = "kaleoTransition.kaleoNodeId = ? AND ";
+	private static final String _FINDER_COLUMN_KNI_N_NAME_1 = "kaleoTransition.name IS NULL";
+	private static final String _FINDER_COLUMN_KNI_N_NAME_2 = "kaleoTransition.name = ?";
+	private static final String _FINDER_COLUMN_KNI_N_NAME_3 = "(kaleoTransition.name IS NULL OR kaleoTransition.name = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KNI_DT = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
-			KaleoTransitionImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByKNI_DT",
+			KaleoTransitionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByKNI_DT",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KNI_DT =
+		new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
+			KaleoTransitionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByKNI_DT",
 			new String[] { Long.class.getName(), Boolean.class.getName() },
 			KaleoTransitionModelImpl.KALEONODEID_COLUMN_BITMASK |
 			KaleoTransitionModelImpl.DEFAULTTRANSITION_COLUMN_BITMASK);
@@ -163,17 +2122,375 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKNI_DT",
 			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
-			KaleoTransitionImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED,
-			KaleoTransitionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoTransitionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
+
+	/**
+	 * Returns an ordered range of all the kaleo transitions where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	 * </p>
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @param start the lower bound of the range of kaleo transitions
+	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	protected List<KaleoTransition> findByKNI_DT(long kaleoNodeId,
+		boolean defaultTransition, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KNI_DT;
+			finderArgs = new Object[] { kaleoNodeId, defaultTransition };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_KNI_DT;
+			finderArgs = new Object[] {
+					kaleoNodeId, defaultTransition,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KaleoTransition kaleoTransition : list) {
+				if ((kaleoNodeId != kaleoTransition.getKaleoNodeId()) ||
+						(defaultTransition != kaleoTransition.getDefaultTransition())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KNI_DT_KALEONODEID_2);
+
+			query.append(_FINDER_COLUMN_KNI_DT_DEFAULTTRANSITION_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else if (pagination) {
+				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoNodeId);
+
+				qPos.add(defaultTransition);
+
+				if (!pagination) {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
+				}
+				else {
+					list = (List<KaleoTransition>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_DT_First(long kaleoNodeId,
+		boolean defaultTransition)
+		throws NoSuchTransitionException, SystemException {
+		return findByKNI_DT_First(kaleoNodeId, defaultTransition, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_DT_First(long kaleoNodeId,
+		boolean defaultTransition, OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKNI_DT_First(kaleoNodeId,
+				defaultTransition, orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoNodeId=");
+		msg.append(kaleoNodeId);
+
+		msg.append(", defaultTransition=");
+		msg.append(defaultTransition);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_DT_First(long kaleoNodeId,
+		boolean defaultTransition) throws SystemException {
+		return fetchByKNI_DT_First(kaleoNodeId, defaultTransition, null);
+	}
+
+	/**
+	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_DT_First(long kaleoNodeId,
+		boolean defaultTransition, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<KaleoTransition> list = findByKNI_DT(kaleoNodeId,
+				defaultTransition, 0, 1, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_DT_Last(long kaleoNodeId,
+		boolean defaultTransition)
+		throws NoSuchTransitionException, SystemException {
+		return findByKNI_DT_Last(kaleoNodeId, defaultTransition, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition findByKNI_DT_Last(long kaleoNodeId,
+		boolean defaultTransition, OrderByComparator orderByComparator)
+		throws NoSuchTransitionException, SystemException {
+		KaleoTransition kaleoTransition = fetchByKNI_DT_Last(kaleoNodeId,
+				defaultTransition, orderByComparator);
+
+		if (kaleoTransition != null) {
+			return kaleoTransition;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("kaleoNodeId=");
+		msg.append(kaleoNodeId);
+
+		msg.append(", defaultTransition=");
+		msg.append(defaultTransition);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchTransitionException(msg.toString());
+	}
+
+	/**
+	 * Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_DT_Last(long kaleoNodeId,
+		boolean defaultTransition) throws SystemException {
+		return fetchByKNI_DT_Last(kaleoNodeId, defaultTransition, null);
+	}
+
+	/**
+	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoTransition fetchByKNI_DT_Last(long kaleoNodeId,
+		boolean defaultTransition, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByKNI_DT(kaleoNodeId, defaultTransition);
+
+		List<KaleoTransition> list = findByKNI_DT(kaleoNodeId,
+				defaultTransition, count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes all the kaleo transitions where kaleoNodeId = &#63; and defaultTransition = &#63; from the database.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByKNI_DT(long kaleoNodeId, boolean defaultTransition)
+		throws SystemException {
+		for (KaleoTransition kaleoTransition : findByKNI_DT(kaleoNodeId,
+				defaultTransition, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoTransition);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo transitions where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	 *
+	 * @param kaleoNodeId the kaleo node ID
+	 * @param defaultTransition the default transition
+	 * @return the number of matching kaleo transitions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKNI_DT(long kaleoNodeId, boolean defaultTransition)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_KNI_DT;
+
+		Object[] finderArgs = new Object[] { kaleoNodeId, defaultTransition };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
+
+			query.append(_FINDER_COLUMN_KNI_DT_KALEONODEID_2);
+
+			query.append(_FINDER_COLUMN_KNI_DT_DEFAULTTRANSITION_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoNodeId);
+
+				qPos.add(defaultTransition);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KNI_DT_KALEONODEID_2 = "kaleoTransition.kaleoNodeId = ? AND ";
+	private static final String _FINDER_COLUMN_KNI_DT_DEFAULTTRANSITION_2 = "kaleoTransition.defaultTransition = ?";
 
 	/**
 	 * Caches the kaleo transition in the entity cache if it is enabled.
@@ -184,19 +2501,6 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		EntityCacheUtil.putResult(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoTransitionImpl.class, kaleoTransition.getPrimaryKey(),
 			kaleoTransition);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_N,
-			new Object[] {
-				Long.valueOf(kaleoTransition.getKaleoNodeId()),
-				
-			kaleoTransition.getName()
-			}, kaleoTransition);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_DT,
-			new Object[] {
-				Long.valueOf(kaleoTransition.getKaleoNodeId()),
-				Boolean.valueOf(kaleoTransition.getDefaultTransition())
-			}, kaleoTransition);
 
 		kaleoTransition.resetOriginalValues();
 	}
@@ -254,8 +2558,6 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(kaleoTransition);
 	}
 
 	@Override
@@ -266,24 +2568,7 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		for (KaleoTransition kaleoTransition : kaleoTransitions) {
 			EntityCacheUtil.removeResult(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 				KaleoTransitionImpl.class, kaleoTransition.getPrimaryKey());
-
-			clearUniqueFindersCache(kaleoTransition);
 		}
-	}
-
-	protected void clearUniqueFindersCache(KaleoTransition kaleoTransition) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KNI_N,
-			new Object[] {
-				Long.valueOf(kaleoTransition.getKaleoNodeId()),
-				
-			kaleoTransition.getName()
-			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KNI_DT,
-			new Object[] {
-				Long.valueOf(kaleoTransition.getKaleoNodeId()),
-				Boolean.valueOf(kaleoTransition.getDefaultTransition())
-			});
 	}
 
 	/**
@@ -494,60 +2779,6 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 			KaleoTransitionImpl.class, kaleoTransition.getPrimaryKey(),
 			kaleoTransition);
 
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_N,
-				new Object[] {
-					Long.valueOf(kaleoTransition.getKaleoNodeId()),
-					
-				kaleoTransition.getName()
-				}, kaleoTransition);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_DT,
-				new Object[] {
-					Long.valueOf(kaleoTransition.getKaleoNodeId()),
-					Boolean.valueOf(kaleoTransition.getDefaultTransition())
-				}, kaleoTransition);
-		}
-		else {
-			if ((kaleoTransitionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_KNI_N.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kaleoTransitionModelImpl.getOriginalKaleoNodeId()),
-						
-						kaleoTransitionModelImpl.getOriginalName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KNI_N, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KNI_N, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_N,
-					new Object[] {
-						Long.valueOf(kaleoTransition.getKaleoNodeId()),
-						
-					kaleoTransition.getName()
-					}, kaleoTransition);
-			}
-
-			if ((kaleoTransitionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_KNI_DT.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kaleoTransitionModelImpl.getOriginalKaleoNodeId()),
-						Boolean.valueOf(kaleoTransitionModelImpl.getOriginalDefaultTransition())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KNI_DT, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KNI_DT, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_DT,
-					new Object[] {
-						Long.valueOf(kaleoTransition.getKaleoNodeId()),
-						Boolean.valueOf(kaleoTransition.getDefaultTransition())
-					}, kaleoTransition);
-			}
-		}
-
 		return kaleoTransition;
 	}
 
@@ -651,1510 +2882,33 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		if (kaleoTransition == null) {
 			Session session = null;
 
-			boolean hasException = false;
-
 			try {
 				session = openSession();
 
 				kaleoTransition = (KaleoTransition)session.get(KaleoTransitionImpl.class,
 						Long.valueOf(kaleoTransitionId));
-			}
-			catch (Exception e) {
-				hasException = true;
 
-				throw processException(e);
-			}
-			finally {
 				if (kaleoTransition != null) {
 					cacheResult(kaleoTransition);
 				}
-				else if (!hasException) {
+				else {
 					EntityCacheUtil.putResult(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
 						KaleoTransitionImpl.class, kaleoTransitionId,
 						_nullKaleoTransition);
 				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(KaleoTransitionModelImpl.ENTITY_CACHE_ENABLED,
+					KaleoTransitionImpl.class, kaleoTransitionId);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
 
 		return kaleoTransition;
-	}
-
-	/**
-	 * Returns all the kaleo transitions where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByCompanyId(long companyId)
-		throws SystemException {
-		return findByCompanyId(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			null);
-	}
-
-	/**
-	 * Returns a range of all the kaleo transitions where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of kaleo transitions
-	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
-	 * @return the range of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByCompanyId(long companyId, int start,
-		int end) throws SystemException {
-		return findByCompanyId(companyId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the kaleo transitions where companyId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param companyId the company ID
-	 * @param start the lower bound of the range of kaleo transitions
-	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByCompanyId(long companyId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID;
-			finderArgs = new Object[] { companyId, start, end, orderByComparator };
-		}
-
-		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KaleoTransition kaleoTransition : list) {
-				if ((companyId != kaleoTransition.getCompanyId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				list = (List<KaleoTransition>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first kaleo transition in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByCompanyId_First(companyId,
-				orderByComparator);
-
-		if (kaleoTransition != null) {
-			return kaleoTransition;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTransitionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first kaleo transition in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByCompanyId_First(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<KaleoTransition> list = findByCompanyId(companyId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last kaleo transition in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByCompanyId_Last(companyId,
-				orderByComparator);
-
-		if (kaleoTransition != null) {
-			return kaleoTransition;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("companyId=");
-		msg.append(companyId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTransitionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last kaleo transition in the ordered set where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByCompanyId_Last(long companyId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByCompanyId(companyId);
-
-		List<KaleoTransition> list = findByCompanyId(companyId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the kaleo transitions before and after the current kaleo transition in the ordered set where companyId = &#63;.
-	 *
-	 * @param kaleoTransitionId the primary key of the current kaleo transition
-	 * @param companyId the company ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition[] findByCompanyId_PrevAndNext(
-		long kaleoTransitionId, long companyId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = findByPrimaryKey(kaleoTransitionId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			KaleoTransition[] array = new KaleoTransitionImpl[3];
-
-			array[0] = getByCompanyId_PrevAndNext(session, kaleoTransition,
-					companyId, orderByComparator, true);
-
-			array[1] = kaleoTransition;
-
-			array[2] = getByCompanyId_PrevAndNext(session, kaleoTransition,
-					companyId, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected KaleoTransition getByCompanyId_PrevAndNext(Session session,
-		KaleoTransition kaleoTransition, long companyId,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-		query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-
-		else {
-			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(companyId);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<KaleoTransition> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Returns all the kaleo transitions where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @return the matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByKaleoDefinitionId(long kaleoDefinitionId)
-		throws SystemException {
-		return findByKaleoDefinitionId(kaleoDefinitionId, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the kaleo transitions where kaleoDefinitionId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @param start the lower bound of the range of kaleo transitions
-	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
-	 * @return the range of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByKaleoDefinitionId(
-		long kaleoDefinitionId, int start, int end) throws SystemException {
-		return findByKaleoDefinitionId(kaleoDefinitionId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the kaleo transitions where kaleoDefinitionId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @param start the lower bound of the range of kaleo transitions
-	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByKaleoDefinitionId(
-		long kaleoDefinitionId, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID;
-			finderArgs = new Object[] { kaleoDefinitionId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEODEFINITIONID;
-			finderArgs = new Object[] {
-					kaleoDefinitionId,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KaleoTransition kaleoTransition : list) {
-				if ((kaleoDefinitionId != kaleoTransition.getKaleoDefinitionId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoDefinitionId);
-
-				list = (List<KaleoTransition>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByKaleoDefinitionId_First(
-		long kaleoDefinitionId, OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByKaleoDefinitionId_First(kaleoDefinitionId,
-				orderByComparator);
-
-		if (kaleoTransition != null) {
-			return kaleoTransition;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("kaleoDefinitionId=");
-		msg.append(kaleoDefinitionId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTransitionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKaleoDefinitionId_First(
-		long kaleoDefinitionId, OrderByComparator orderByComparator)
-		throws SystemException {
-		List<KaleoTransition> list = findByKaleoDefinitionId(kaleoDefinitionId,
-				0, 1, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByKaleoDefinitionId_Last(
-		long kaleoDefinitionId, OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByKaleoDefinitionId_Last(kaleoDefinitionId,
-				orderByComparator);
-
-		if (kaleoTransition != null) {
-			return kaleoTransition;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("kaleoDefinitionId=");
-		msg.append(kaleoDefinitionId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTransitionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKaleoDefinitionId_Last(
-		long kaleoDefinitionId, OrderByComparator orderByComparator)
-		throws SystemException {
-		int count = countByKaleoDefinitionId(kaleoDefinitionId);
-
-		List<KaleoTransition> list = findByKaleoDefinitionId(kaleoDefinitionId,
-				count - 1, count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoTransitionId the primary key of the current kaleo transition
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition[] findByKaleoDefinitionId_PrevAndNext(
-		long kaleoTransitionId, long kaleoDefinitionId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = findByPrimaryKey(kaleoTransitionId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			KaleoTransition[] array = new KaleoTransitionImpl[3];
-
-			array[0] = getByKaleoDefinitionId_PrevAndNext(session,
-					kaleoTransition, kaleoDefinitionId, orderByComparator, true);
-
-			array[1] = kaleoTransition;
-
-			array[2] = getByKaleoDefinitionId_PrevAndNext(session,
-					kaleoTransition, kaleoDefinitionId, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected KaleoTransition getByKaleoDefinitionId_PrevAndNext(
-		Session session, KaleoTransition kaleoTransition,
-		long kaleoDefinitionId, OrderByComparator orderByComparator,
-		boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-		query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-
-		else {
-			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(kaleoDefinitionId);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<KaleoTransition> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Returns all the kaleo transitions where kaleoNodeId = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @return the matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByKaleoNodeId(long kaleoNodeId)
-		throws SystemException {
-		return findByKaleoNodeId(kaleoNodeId, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the kaleo transitions where kaleoNodeId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param start the lower bound of the range of kaleo transitions
-	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
-	 * @return the range of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByKaleoNodeId(long kaleoNodeId, int start,
-		int end) throws SystemException {
-		return findByKaleoNodeId(kaleoNodeId, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the kaleo transitions where kaleoNodeId = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param start the lower bound of the range of kaleo transitions
-	 * @param end the upper bound of the range of kaleo transitions (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KaleoTransition> findByKaleoNodeId(long kaleoNodeId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONODEID;
-			finderArgs = new Object[] { kaleoNodeId };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEONODEID;
-			finderArgs = new Object[] { kaleoNodeId, start, end, orderByComparator };
-		}
-
-		List<KaleoTransition> list = (List<KaleoTransition>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KaleoTransition kaleoTransition : list) {
-				if ((kaleoNodeId != kaleoTransition.getKaleoNodeId())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(3 +
-						(orderByComparator.getOrderByFields().length * 3));
-			}
-			else {
-				query = new StringBundler(3);
-			}
-
-			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KALEONODEID_KALEONODEID_2);
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoNodeId);
-
-				list = (List<KaleoTransition>)QueryUtil.list(q, getDialect(),
-						start, end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByKaleoNodeId_First(long kaleoNodeId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByKaleoNodeId_First(kaleoNodeId,
-				orderByComparator);
-
-		if (kaleoTransition != null) {
-			return kaleoTransition;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("kaleoNodeId=");
-		msg.append(kaleoNodeId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTransitionException(msg.toString());
-	}
-
-	/**
-	 * Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKaleoNodeId_First(long kaleoNodeId,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<KaleoTransition> list = findByKaleoNodeId(kaleoNodeId, 0, 1,
-				orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByKaleoNodeId_Last(long kaleoNodeId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByKaleoNodeId_Last(kaleoNodeId,
-				orderByComparator);
-
-		if (kaleoTransition != null) {
-			return kaleoTransition;
-		}
-
-		StringBundler msg = new StringBundler(4);
-
-		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-		msg.append("kaleoNodeId=");
-		msg.append(kaleoNodeId);
-
-		msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-		throw new NoSuchTransitionException(msg.toString());
-	}
-
-	/**
-	 * Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKaleoNodeId_Last(long kaleoNodeId,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByKaleoNodeId(kaleoNodeId);
-
-		List<KaleoTransition> list = findByKaleoNodeId(kaleoNodeId, count - 1,
-				count, orderByComparator);
-
-		if (!list.isEmpty()) {
-			return list.get(0);
-		}
-
-		return null;
-	}
-
-	/**
-	 * Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	 *
-	 * @param kaleoTransitionId the primary key of the current kaleo transition
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	 * @return the previous, current, and next kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition[] findByKaleoNodeId_PrevAndNext(
-		long kaleoTransitionId, long kaleoNodeId,
-		OrderByComparator orderByComparator)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = findByPrimaryKey(kaleoTransitionId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			KaleoTransition[] array = new KaleoTransitionImpl[3];
-
-			array[0] = getByKaleoNodeId_PrevAndNext(session, kaleoTransition,
-					kaleoNodeId, orderByComparator, true);
-
-			array[1] = kaleoTransition;
-
-			array[2] = getByKaleoNodeId_PrevAndNext(session, kaleoTransition,
-					kaleoNodeId, orderByComparator, false);
-
-			return array;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	protected KaleoTransition getByKaleoNodeId_PrevAndNext(Session session,
-		KaleoTransition kaleoTransition, long kaleoNodeId,
-		OrderByComparator orderByComparator, boolean previous) {
-		StringBundler query = null;
-
-		if (orderByComparator != null) {
-			query = new StringBundler(6 +
-					(orderByComparator.getOrderByFields().length * 6));
-		}
-		else {
-			query = new StringBundler(3);
-		}
-
-		query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-		query.append(_FINDER_COLUMN_KALEONODEID_KALEONODEID_2);
-
-		if (orderByComparator != null) {
-			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
-
-			if (orderByConditionFields.length > 0) {
-				query.append(WHERE_AND);
-			}
-
-			for (int i = 0; i < orderByConditionFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByConditionFields[i]);
-
-				if ((i + 1) < orderByConditionFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN_HAS_NEXT);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(WHERE_GREATER_THAN);
-					}
-					else {
-						query.append(WHERE_LESSER_THAN);
-					}
-				}
-			}
-
-			query.append(ORDER_BY_CLAUSE);
-
-			String[] orderByFields = orderByComparator.getOrderByFields();
-
-			for (int i = 0; i < orderByFields.length; i++) {
-				query.append(_ORDER_BY_ENTITY_ALIAS);
-				query.append(orderByFields[i]);
-
-				if ((i + 1) < orderByFields.length) {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC_HAS_NEXT);
-					}
-					else {
-						query.append(ORDER_BY_DESC_HAS_NEXT);
-					}
-				}
-				else {
-					if (orderByComparator.isAscending() ^ previous) {
-						query.append(ORDER_BY_ASC);
-					}
-					else {
-						query.append(ORDER_BY_DESC);
-					}
-				}
-			}
-		}
-
-		else {
-			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-		}
-
-		String sql = query.toString();
-
-		Query q = session.createQuery(sql);
-
-		q.setFirstResult(0);
-		q.setMaxResults(2);
-
-		QueryPos qPos = QueryPos.getInstance(q);
-
-		qPos.add(kaleoNodeId);
-
-		if (orderByComparator != null) {
-			Object[] values = orderByComparator.getOrderByConditionValues(kaleoTransition);
-
-			for (Object value : values) {
-				qPos.add(value);
-			}
-		}
-
-		List<KaleoTransition> list = q.list();
-
-		if (list.size() == 2) {
-			return list.get(1);
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * Returns the kaleo transition where kaleoNodeId = &#63; and name = &#63; or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTransitionException} if it could not be found.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param name the name
-	 * @return the matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByKNI_N(long kaleoNodeId, String name)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByKNI_N(kaleoNodeId, name);
-
-		if (kaleoTransition == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("kaleoNodeId=");
-			msg.append(kaleoNodeId);
-
-			msg.append(", name=");
-			msg.append(name);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchTransitionException(msg.toString());
-		}
-
-		return kaleoTransition;
-	}
-
-	/**
-	 * Returns the kaleo transition where kaleoNodeId = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param name the name
-	 * @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKNI_N(long kaleoNodeId, String name)
-		throws SystemException {
-		return fetchByKNI_N(kaleoNodeId, name, true);
-	}
-
-	/**
-	 * Returns the kaleo transition where kaleoNodeId = &#63; and name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param name the name
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKNI_N(long kaleoNodeId, String name,
-		boolean retrieveFromCache) throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoNodeId, name };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_KNI_N,
-					finderArgs, this);
-		}
-
-		if (result instanceof KaleoTransition) {
-			KaleoTransition kaleoTransition = (KaleoTransition)result;
-
-			if ((kaleoNodeId != kaleoTransition.getKaleoNodeId()) ||
-					!Validator.equals(name, kaleoTransition.getName())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KNI_N_KALEONODEID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_KNI_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_KNI_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_KNI_N_NAME_2);
-				}
-			}
-
-			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoNodeId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				List<KaleoTransition> list = q.list();
-
-				result = list;
-
-				KaleoTransition kaleoTransition = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_N,
-						finderArgs, list);
-				}
-				else {
-					kaleoTransition = list.get(0);
-
-					cacheResult(kaleoTransition);
-
-					if ((kaleoTransition.getKaleoNodeId() != kaleoNodeId) ||
-							(kaleoTransition.getName() == null) ||
-							!kaleoTransition.getName().equals(name)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_N,
-							finderArgs, kaleoTransition);
-					}
-				}
-
-				return kaleoTransition;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KNI_N,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (KaleoTransition)result;
-			}
-		}
-	}
-
-	/**
-	 * Returns the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTransitionException} if it could not be found.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param defaultTransition the default transition
-	 * @return the matching kaleo transition
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition findByKNI_DT(long kaleoNodeId,
-		boolean defaultTransition)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = fetchByKNI_DT(kaleoNodeId,
-				defaultTransition);
-
-		if (kaleoTransition == null) {
-			StringBundler msg = new StringBundler(6);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("kaleoNodeId=");
-			msg.append(kaleoNodeId);
-
-			msg.append(", defaultTransition=");
-			msg.append(defaultTransition);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchTransitionException(msg.toString());
-		}
-
-		return kaleoTransition;
-	}
-
-	/**
-	 * Returns the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param defaultTransition the default transition
-	 * @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKNI_DT(long kaleoNodeId,
-		boolean defaultTransition) throws SystemException {
-		return fetchByKNI_DT(kaleoNodeId, defaultTransition, true);
-	}
-
-	/**
-	 * Returns the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param defaultTransition the default transition
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition fetchByKNI_DT(long kaleoNodeId,
-		boolean defaultTransition, boolean retrieveFromCache)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoNodeId, defaultTransition };
-
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_KNI_DT,
-					finderArgs, this);
-		}
-
-		if (result instanceof KaleoTransition) {
-			KaleoTransition kaleoTransition = (KaleoTransition)result;
-
-			if ((kaleoNodeId != kaleoTransition.getKaleoNodeId()) ||
-					(defaultTransition != kaleoTransition.getDefaultTransition())) {
-				result = null;
-			}
-		}
-
-		if (result == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_SELECT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KNI_DT_KALEONODEID_2);
-
-			query.append(_FINDER_COLUMN_KNI_DT_DEFAULTTRANSITION_2);
-
-			query.append(KaleoTransitionModelImpl.ORDER_BY_JPQL);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoNodeId);
-
-				qPos.add(defaultTransition);
-
-				List<KaleoTransition> list = q.list();
-
-				result = list;
-
-				KaleoTransition kaleoTransition = null;
-
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_DT,
-						finderArgs, list);
-				}
-				else {
-					kaleoTransition = list.get(0);
-
-					cacheResult(kaleoTransition);
-
-					if ((kaleoTransition.getKaleoNodeId() != kaleoNodeId) ||
-							(kaleoTransition.getDefaultTransition() != defaultTransition)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KNI_DT,
-							finderArgs, kaleoTransition);
-					}
-				}
-
-				return kaleoTransition;
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KNI_DT,
-						finderArgs);
-				}
-
-				closeSession(session);
-			}
-		}
-		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (KaleoTransition)result;
-			}
-		}
 	}
 
 	/**
@@ -2171,7 +2925,7 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 	 * Returns a range of all the kaleo transitions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of kaleo transitions
@@ -2188,7 +2942,7 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 	 * Returns an ordered range of all the kaleo transitions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of kaleo transitions
@@ -2199,11 +2953,13 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 	 */
 	public List<KaleoTransition> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -2231,7 +2987,11 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_KALEOTRANSITION.concat(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_KALEOTRANSITION;
+
+				if (pagination) {
+					sql = sql.concat(KaleoTransitionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -2241,105 +3001,34 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<KaleoTransition>)QueryUtil.list(q,
 							getDialect(), start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList(list);
 				}
 				else {
 					list = (List<KaleoTransition>)QueryUtil.list(q,
 							getDialect(), start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the kaleo transitions where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (KaleoTransition kaleoTransition : findByCompanyId(companyId)) {
-			remove(kaleoTransition);
-		}
-	}
-
-	/**
-	 * Removes all the kaleo transitions where kaleoDefinitionId = &#63; from the database.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
-		throws SystemException {
-		for (KaleoTransition kaleoTransition : findByKaleoDefinitionId(
-				kaleoDefinitionId)) {
-			remove(kaleoTransition);
-		}
-	}
-
-	/**
-	 * Removes all the kaleo transitions where kaleoNodeId = &#63; from the database.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByKaleoNodeId(long kaleoNodeId) throws SystemException {
-		for (KaleoTransition kaleoTransition : findByKaleoNodeId(kaleoNodeId)) {
-			remove(kaleoTransition);
-		}
-	}
-
-	/**
-	 * Removes the kaleo transition where kaleoNodeId = &#63; and name = &#63; from the database.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param name the name
-	 * @return the kaleo transition that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition removeByKNI_N(long kaleoNodeId, String name)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = findByKNI_N(kaleoNodeId, name);
-
-		return remove(kaleoTransition);
-	}
-
-	/**
-	 * Removes the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; from the database.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param defaultTransition the default transition
-	 * @return the kaleo transition that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoTransition removeByKNI_DT(long kaleoNodeId,
-		boolean defaultTransition)
-		throws NoSuchTransitionException, SystemException {
-		KaleoTransition kaleoTransition = findByKNI_DT(kaleoNodeId,
-				defaultTransition);
-
-		return remove(kaleoTransition);
 	}
 
 	/**
@@ -2351,296 +3040,6 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 		for (KaleoTransition kaleoTransition : findAll()) {
 			remove(kaleoTransition);
 		}
-	}
-
-	/**
-	 * Returns the number of kaleo transitions where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of kaleo transitions where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @return the number of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKaleoDefinitionId(long kaleoDefinitionId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoDefinitionId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoDefinitionId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of kaleo transitions where kaleoNodeId = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @return the number of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKaleoNodeId(long kaleoNodeId) throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoNodeId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KALEONODEID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KALEONODEID_KALEONODEID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoNodeId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KALEONODEID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of kaleo transitions where kaleoNodeId = &#63; and name = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param name the name
-	 * @return the number of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKNI_N(long kaleoNodeId, String name)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoNodeId, name };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KNI_N,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KNI_N_KALEONODEID_2);
-
-			if (name == null) {
-				query.append(_FINDER_COLUMN_KNI_N_NAME_1);
-			}
-			else {
-				if (name.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_KNI_N_NAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_KNI_N_NAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoNodeId);
-
-				if (name != null) {
-					qPos.add(name);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KNI_N,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of kaleo transitions where kaleoNodeId = &#63; and defaultTransition = &#63;.
-	 *
-	 * @param kaleoNodeId the kaleo node ID
-	 * @param defaultTransition the default transition
-	 * @return the number of matching kaleo transitions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKNI_DT(long kaleoNodeId, boolean defaultTransition)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoNodeId, defaultTransition };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KNI_DT,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KALEOTRANSITION_WHERE);
-
-			query.append(_FINDER_COLUMN_KNI_DT_KALEONODEID_2);
-
-			query.append(_FINDER_COLUMN_KNI_DT_DEFAULTTRANSITION_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoNodeId);
-
-				qPos.add(defaultTransition);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KNI_DT,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2662,18 +3061,17 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 				Query q = session.createQuery(_SQL_COUNT_KALEOTRANSITION);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2709,6 +3107,7 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 	public void destroy() {
 		EntityCacheUtil.removeCache(KaleoTransitionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
@@ -2750,16 +3149,6 @@ public class KaleoTransitionPersistenceImpl extends BasePersistenceImpl<KaleoTra
 	private static final String _SQL_SELECT_KALEOTRANSITION_WHERE = "SELECT kaleoTransition FROM KaleoTransition kaleoTransition WHERE ";
 	private static final String _SQL_COUNT_KALEOTRANSITION = "SELECT COUNT(kaleoTransition) FROM KaleoTransition kaleoTransition";
 	private static final String _SQL_COUNT_KALEOTRANSITION_WHERE = "SELECT COUNT(kaleoTransition) FROM KaleoTransition kaleoTransition WHERE ";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "kaleoTransition.companyId = ?";
-	private static final String _FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2 =
-		"kaleoTransition.kaleoDefinitionId = ?";
-	private static final String _FINDER_COLUMN_KALEONODEID_KALEONODEID_2 = "kaleoTransition.kaleoNodeId = ?";
-	private static final String _FINDER_COLUMN_KNI_N_KALEONODEID_2 = "kaleoTransition.kaleoNodeId = ? AND ";
-	private static final String _FINDER_COLUMN_KNI_N_NAME_1 = "kaleoTransition.name IS NULL";
-	private static final String _FINDER_COLUMN_KNI_N_NAME_2 = "kaleoTransition.name = ?";
-	private static final String _FINDER_COLUMN_KNI_N_NAME_3 = "(kaleoTransition.name IS NULL OR kaleoTransition.name = ?)";
-	private static final String _FINDER_COLUMN_KNI_DT_KALEONODEID_2 = "kaleoTransition.kaleoNodeId = ? AND ";
-	private static final String _FINDER_COLUMN_KNI_DT_DEFAULTTRANSITION_2 = "kaleoTransition.defaultTransition = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "kaleoTransition.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No KaleoTransition exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No KaleoTransition exists with the key {";

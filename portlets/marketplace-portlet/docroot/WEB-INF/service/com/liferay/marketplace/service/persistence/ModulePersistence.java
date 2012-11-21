@@ -38,6 +38,688 @@ public interface ModulePersistence extends BasePersistence<Module> {
 	 */
 
 	/**
+	* Returns all the modules where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByUuid(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the modules where uuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param start the lower bound of the range of modules
+	* @param end the upper bound of the range of modules (not inclusive)
+	* @return the range of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByUuid(
+		java.lang.String uuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the modules before and after the current module in the ordered set where uuid = &#63;.
+	*
+	* @param moduleId the primary key of the current module
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module[] findByUuid_PrevAndNext(
+		long moduleId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the modules where uuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param start the lower bound of the range of modules
+	* @param end the upper bound of the range of modules (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByUuid(
+		java.lang.String uuid, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByUuid_First(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByUuid_First(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByUuid_Last(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByUuid_Last(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the modules where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of modules where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the modules where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @return the matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByAppId(
+		long appId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the modules where appId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param appId the app ID
+	* @param start the lower bound of the range of modules
+	* @param end the upper bound of the range of modules (not inclusive)
+	* @return the range of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByAppId(
+		long appId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the modules before and after the current module in the ordered set where appId = &#63;.
+	*
+	* @param moduleId the primary key of the current module
+	* @param appId the app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module[] findByAppId_PrevAndNext(
+		long moduleId, long appId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the modules where appId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param appId the app ID
+	* @param start the lower bound of the range of modules
+	* @param end the upper bound of the range of modules (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByAppId(
+		long appId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByAppId_First(long appId)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByAppId_First(long appId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByAppId_First(long appId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByAppId_First(long appId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByAppId_Last(long appId)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByAppId_Last(long appId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByAppId_Last(long appId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByAppId_Last(long appId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the modules where appId = &#63; from the database.
+	*
+	* @param appId the app ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByAppId(long appId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of modules where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByAppId(long appId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the modules where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @return the matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByContextName(
+		java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the modules where contextName = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param contextName the context name
+	* @param start the lower bound of the range of modules
+	* @param end the upper bound of the range of modules (not inclusive)
+	* @return the range of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByContextName(
+		java.lang.String contextName, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the modules before and after the current module in the ordered set where contextName = &#63;.
+	*
+	* @param moduleId the primary key of the current module
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module[] findByContextName_PrevAndNext(
+		long moduleId, java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns an ordered range of all the modules where contextName = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param contextName the context name
+	* @param start the lower bound of the range of modules
+	* @param end the upper bound of the range of modules (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.marketplace.model.Module> findByContextName(
+		java.lang.String contextName, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByContextName_First(
+		java.lang.String contextName)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByContextName_First(
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByContextName_First(
+		java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByContextName_First(
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByContextName_Last(
+		java.lang.String contextName)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByContextName_Last(
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByContextName_Last(
+		java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByContextName_Last(
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the modules where contextName = &#63; from the database.
+	*
+	* @param contextName the context name
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByContextName(java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of modules where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByContextName(java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByA_C_First(long appId,
+		java.lang.String contextName)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByA_C_First(long appId,
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByA_C_First(long appId,
+		java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first module in the ordered set where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByA_C_First(long appId,
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByA_C_Last(long appId,
+		java.lang.String contextName)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module findByA_C_Last(long appId,
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the default ordered set defined by {@link ModuleModelImpl#ORDER_BY_JPQL} where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByA_C_Last(long appId,
+		java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last module in the ordered set where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching module, or <code>null</code> if a matching module could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.marketplace.model.Module fetchByA_C_Last(long appId,
+		java.lang.String contextName,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the modules where appId = &#63; and contextName = &#63; from the database.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByA_C(long appId, java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of modules where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByA_C(long appId, java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the module in the entity cache if it is enabled.
 	*
 	* @param module the module
@@ -99,397 +781,6 @@ public interface ModulePersistence extends BasePersistence<Module> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns all the modules where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByUuid(
-		java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the modules where uuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param start the lower bound of the range of modules
-	* @param end the upper bound of the range of modules (not inclusive)
-	* @return the range of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByUuid(
-		java.lang.String uuid, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the modules where uuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param start the lower bound of the range of modules
-	* @param end the upper bound of the range of modules (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByUuid(
-		java.lang.String uuid, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first module in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module findByUuid_First(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first module in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByUuid_First(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last module in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module findByUuid_Last(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last module in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByUuid_Last(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the modules before and after the current module in the ordered set where uuid = &#63;.
-	*
-	* @param moduleId the primary key of the current module
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module[] findByUuid_PrevAndNext(
-		long moduleId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns all the modules where appId = &#63;.
-	*
-	* @param appId the app ID
-	* @return the matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByAppId(
-		long appId) throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the modules where appId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param appId the app ID
-	* @param start the lower bound of the range of modules
-	* @param end the upper bound of the range of modules (not inclusive)
-	* @return the range of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByAppId(
-		long appId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the modules where appId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param appId the app ID
-	* @param start the lower bound of the range of modules
-	* @param end the upper bound of the range of modules (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByAppId(
-		long appId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first module in the ordered set where appId = &#63;.
-	*
-	* @param appId the app ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module findByAppId_First(long appId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first module in the ordered set where appId = &#63;.
-	*
-	* @param appId the app ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByAppId_First(long appId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last module in the ordered set where appId = &#63;.
-	*
-	* @param appId the app ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module findByAppId_Last(long appId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last module in the ordered set where appId = &#63;.
-	*
-	* @param appId the app ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByAppId_Last(long appId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the modules before and after the current module in the ordered set where appId = &#63;.
-	*
-	* @param moduleId the primary key of the current module
-	* @param appId the app ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module[] findByAppId_PrevAndNext(
-		long moduleId, long appId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns all the modules where contextName = &#63;.
-	*
-	* @param contextName the context name
-	* @return the matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByContextName(
-		java.lang.String contextName)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the modules where contextName = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param contextName the context name
-	* @param start the lower bound of the range of modules
-	* @param end the upper bound of the range of modules (not inclusive)
-	* @return the range of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByContextName(
-		java.lang.String contextName, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the modules where contextName = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param contextName the context name
-	* @param start the lower bound of the range of modules
-	* @param end the upper bound of the range of modules (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.marketplace.model.Module> findByContextName(
-		java.lang.String contextName, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first module in the ordered set where contextName = &#63;.
-	*
-	* @param contextName the context name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module findByContextName_First(
-		java.lang.String contextName,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first module in the ordered set where contextName = &#63;.
-	*
-	* @param contextName the context name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByContextName_First(
-		java.lang.String contextName,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last module in the ordered set where contextName = &#63;.
-	*
-	* @param contextName the context name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module findByContextName_Last(
-		java.lang.String contextName,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last module in the ordered set where contextName = &#63;.
-	*
-	* @param contextName the context name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByContextName_Last(
-		java.lang.String contextName,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the modules before and after the current module in the ordered set where contextName = &#63;.
-	*
-	* @param moduleId the primary key of the current module
-	* @param contextName the context name
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module[] findByContextName_PrevAndNext(
-		long moduleId, java.lang.String contextName,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the module where appId = &#63; and contextName = &#63; or throws a {@link com.liferay.marketplace.NoSuchModuleException} if it could not be found.
-	*
-	* @param appId the app ID
-	* @param contextName the context name
-	* @return the matching module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module findByA_C(long appId,
-		java.lang.String contextName)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the module where appId = &#63; and contextName = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param appId the app ID
-	* @param contextName the context name
-	* @return the matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByA_C(long appId,
-		java.lang.String contextName)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the module where appId = &#63; and contextName = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param appId the app ID
-	* @param contextName the context name
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching module, or <code>null</code> if a matching module could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module fetchByA_C(long appId,
-		java.lang.String contextName, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the modules.
 	*
 	* @return the modules
@@ -502,7 +793,7 @@ public interface ModulePersistence extends BasePersistence<Module> {
 	* Returns a range of all the modules.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of modules
@@ -518,7 +809,7 @@ public interface ModulePersistence extends BasePersistence<Module> {
 	* Returns an ordered range of all the modules.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from ModuleModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of modules
@@ -533,92 +824,11 @@ public interface ModulePersistence extends BasePersistence<Module> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the modules where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the modules where appId = &#63; from the database.
-	*
-	* @param appId the app ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByAppId(long appId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the modules where contextName = &#63; from the database.
-	*
-	* @param contextName the context name
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByContextName(java.lang.String contextName)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the module where appId = &#63; and contextName = &#63; from the database.
-	*
-	* @param appId the app ID
-	* @param contextName the context name
-	* @return the module that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.marketplace.model.Module removeByA_C(long appId,
-		java.lang.String contextName)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the modules from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of modules where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of modules where appId = &#63;.
-	*
-	* @param appId the app ID
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByAppId(long appId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of modules where contextName = &#63;.
-	*
-	* @param contextName the context name
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByContextName(java.lang.String contextName)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of modules where appId = &#63; and contextName = &#63;.
-	*
-	* @param appId the app ID
-	* @param contextName the context name
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByA_C(long appId, java.lang.String contextName)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -111,6 +111,782 @@ public class MemberRequestUtil {
 	}
 
 	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByKey_First(
+		java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByKey_First(key);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByKey_First(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByKey_First(key, orderByComparator);
+	}
+
+	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByKey_First(
+		java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByKey_First(key);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByKey_First(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByKey_First(key, orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByKey_Last(
+		java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByKey_Last(key);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByKey_Last(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByKey_Last(key, orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where key = &#63;.
+	*
+	* @param key the key
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByKey_Last(
+		java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByKey_Last(key);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where key = &#63;.
+	*
+	* @param key the key
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByKey_Last(
+		java.lang.String key,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByKey_Last(key, orderByComparator);
+	}
+
+	/**
+	* Removes all the member requests where key = &#63; from the database.
+	*
+	* @param key the key
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByKey(java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByKey(key);
+	}
+
+	/**
+	* Returns the number of member requests where key = &#63;.
+	*
+	* @param key the key
+	* @return the number of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByKey(java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByKey(key);
+	}
+
+	/**
+	* Returns all the member requests where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.so.model.MemberRequest> findByReceiverUserId(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByReceiverUserId(receiverUserId);
+	}
+
+	/**
+	* Returns a range of all the member requests where receiverUserId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from MemberRequestModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param receiverUserId the receiver user ID
+	* @param start the lower bound of the range of member requests
+	* @param end the upper bound of the range of member requests (not inclusive)
+	* @return the range of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.so.model.MemberRequest> findByReceiverUserId(
+		long receiverUserId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByReceiverUserId(receiverUserId, start, end);
+	}
+
+	/**
+	* Returns the member requests before and after the current member request in the ordered set where receiverUserId = &#63;.
+	*
+	* @param memberRequestId the primary key of the current member request
+	* @param receiverUserId the receiver user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a member request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest[] findByReceiverUserId_PrevAndNext(
+		long memberRequestId, long receiverUserId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByReceiverUserId_PrevAndNext(memberRequestId,
+			receiverUserId, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the member requests where receiverUserId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from MemberRequestModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param receiverUserId the receiver user ID
+	* @param start the lower bound of the range of member requests
+	* @param end the upper bound of the range of member requests (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.so.model.MemberRequest> findByReceiverUserId(
+		long receiverUserId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByReceiverUserId(receiverUserId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByReceiverUserId_First(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByReceiverUserId_First(receiverUserId);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByReceiverUserId_First(
+		long receiverUserId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByReceiverUserId_First(receiverUserId, orderByComparator);
+	}
+
+	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByReceiverUserId_First(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByReceiverUserId_First(receiverUserId);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByReceiverUserId_First(
+		long receiverUserId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByReceiverUserId_First(receiverUserId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByReceiverUserId_Last(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByReceiverUserId_Last(receiverUserId);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByReceiverUserId_Last(
+		long receiverUserId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByReceiverUserId_Last(receiverUserId, orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByReceiverUserId_Last(
+		long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByReceiverUserId_Last(receiverUserId);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByReceiverUserId_Last(
+		long receiverUserId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByReceiverUserId_Last(receiverUserId, orderByComparator);
+	}
+
+	/**
+	* Removes all the member requests where receiverUserId = &#63; from the database.
+	*
+	* @param receiverUserId the receiver user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByReceiverUserId(long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByReceiverUserId(receiverUserId);
+	}
+
+	/**
+	* Returns the number of member requests where receiverUserId = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @return the number of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByReceiverUserId(long receiverUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByReceiverUserId(receiverUserId);
+	}
+
+	/**
+	* Returns all the member requests where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.so.model.MemberRequest> findByR_S(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByR_S(receiverUserId, status);
+	}
+
+	/**
+	* Returns a range of all the member requests where receiverUserId = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from MemberRequestModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param start the lower bound of the range of member requests
+	* @param end the upper bound of the range of member requests (not inclusive)
+	* @return the range of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.so.model.MemberRequest> findByR_S(
+		long receiverUserId, int status, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByR_S(receiverUserId, status, start, end);
+	}
+
+	/**
+	* Returns the member requests before and after the current member request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param memberRequestId the primary key of the current member request
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a member request with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest[] findByR_S_PrevAndNext(
+		long memberRequestId, long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByR_S_PrevAndNext(memberRequestId, receiverUserId,
+			status, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the member requests where receiverUserId = &#63; and status = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from MemberRequestModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param start the lower bound of the range of member requests
+	* @param end the upper bound of the range of member requests (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.so.model.MemberRequest> findByR_S(
+		long receiverUserId, int status, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByR_S(receiverUserId, status, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByR_S_First(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByR_S_First(receiverUserId, status);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByR_S_First(
+		long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByR_S_First(receiverUserId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByR_S_First(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByR_S_First(receiverUserId, status);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByR_S_First(
+		long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByR_S_First(receiverUserId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByR_S_Last(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByR_S_Last(receiverUserId, status);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByR_S_Last(
+		long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByR_S_Last(receiverUserId, status, orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByR_S_Last(
+		long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByR_S_Last(receiverUserId, status);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByR_S_Last(
+		long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByR_S_Last(receiverUserId, status, orderByComparator);
+	}
+
+	/**
+	* Removes all the member requests where receiverUserId = &#63; and status = &#63; from the database.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByR_S(long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByR_S(receiverUserId, status);
+	}
+
+	/**
+	* Returns the number of member requests where receiverUserId = &#63; and status = &#63;.
+	*
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the number of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByR_S(long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByR_S(receiverUserId, status);
+	}
+
+	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByG_R_S_First(
+		long groupId, long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByG_R_S_First(groupId, receiverUserId, status);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByG_R_S_First(
+		long groupId, long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByG_R_S_First(groupId, receiverUserId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByG_R_S_First(
+		long groupId, long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_R_S_First(groupId, receiverUserId, status);
+	}
+
+	/**
+	* Returns the first member request in the ordered set where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByG_R_S_First(
+		long groupId, long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_R_S_First(groupId, receiverUserId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByG_R_S_Last(
+		long groupId, long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence().findByG_R_S_Last(groupId, receiverUserId, status);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request
+	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest findByG_R_S_Last(
+		long groupId, long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.so.NoSuchMemberRequestException {
+		return getPersistence()
+				   .findByG_R_S_Last(groupId, receiverUserId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last member request in the default ordered set defined by {@link MemberRequestModelImpl#ORDER_BY_JPQL} where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByG_R_S_Last(
+		long groupId, long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_R_S_Last(groupId, receiverUserId, status);
+	}
+
+	/**
+	* Returns the last member request in the ordered set where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.so.model.MemberRequest fetchByG_R_S_Last(
+		long groupId, long receiverUserId, int status,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_R_S_Last(groupId, receiverUserId, status,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the member requests where groupId = &#63; and receiverUserId = &#63; and status = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_R_S(long groupId, long receiverUserId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_R_S(groupId, receiverUserId, status);
+	}
+
+	/**
+	* Returns the number of member requests where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
+	*
+	* @param groupId the group ID
+	* @param receiverUserId the receiver user ID
+	* @param status the status
+	* @return the number of matching member requests
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_R_S(long groupId, long receiverUserId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_R_S(groupId, receiverUserId, status);
+	}
+
+	/**
 	* Caches the member request in the entity cache if it is enabled.
 	*
 	* @param memberRequest the member request
@@ -191,393 +967,6 @@ public class MemberRequestUtil {
 	}
 
 	/**
-	* Returns the member request where key = &#63; or throws a {@link com.liferay.so.NoSuchMemberRequestException} if it could not be found.
-	*
-	* @param key the key
-	* @return the matching member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest findByKey(
-		java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence().findByKey(key);
-	}
-
-	/**
-	* Returns the member request where key = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param key the key
-	* @return the matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByKey(
-		java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByKey(key);
-	}
-
-	/**
-	* Returns the member request where key = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param key the key
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByKey(
-		java.lang.String key, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByKey(key, retrieveFromCache);
-	}
-
-	/**
-	* Returns all the member requests where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @return the matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.so.model.MemberRequest> findByReceiverUserId(
-		long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Returns a range of all the member requests where receiverUserId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param receiverUserId the receiver user ID
-	* @param start the lower bound of the range of member requests
-	* @param end the upper bound of the range of member requests (not inclusive)
-	* @return the range of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.so.model.MemberRequest> findByReceiverUserId(
-		long receiverUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByReceiverUserId(receiverUserId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the member requests where receiverUserId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param receiverUserId the receiver user ID
-	* @param start the lower bound of the range of member requests
-	* @param end the upper bound of the range of member requests (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.so.model.MemberRequest> findByReceiverUserId(
-		long receiverUserId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByReceiverUserId(receiverUserId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first member request in the ordered set where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest findByReceiverUserId_First(
-		long receiverUserId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence()
-				   .findByReceiverUserId_First(receiverUserId, orderByComparator);
-	}
-
-	/**
-	* Returns the first member request in the ordered set where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByReceiverUserId_First(
-		long receiverUserId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByReceiverUserId_First(receiverUserId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last member request in the ordered set where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest findByReceiverUserId_Last(
-		long receiverUserId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence()
-				   .findByReceiverUserId_Last(receiverUserId, orderByComparator);
-	}
-
-	/**
-	* Returns the last member request in the ordered set where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByReceiverUserId_Last(
-		long receiverUserId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByReceiverUserId_Last(receiverUserId, orderByComparator);
-	}
-
-	/**
-	* Returns the member requests before and after the current member request in the ordered set where receiverUserId = &#63;.
-	*
-	* @param memberRequestId the primary key of the current member request
-	* @param receiverUserId the receiver user ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a member request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest[] findByReceiverUserId_PrevAndNext(
-		long memberRequestId, long receiverUserId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence()
-				   .findByReceiverUserId_PrevAndNext(memberRequestId,
-			receiverUserId, orderByComparator);
-	}
-
-	/**
-	* Returns all the member requests where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.so.model.MemberRequest> findByR_S(
-		long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByR_S(receiverUserId, status);
-	}
-
-	/**
-	* Returns a range of all the member requests where receiverUserId = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param start the lower bound of the range of member requests
-	* @param end the upper bound of the range of member requests (not inclusive)
-	* @return the range of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.so.model.MemberRequest> findByR_S(
-		long receiverUserId, int status, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByR_S(receiverUserId, status, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the member requests where receiverUserId = &#63; and status = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param start the lower bound of the range of member requests
-	* @param end the upper bound of the range of member requests (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.so.model.MemberRequest> findByR_S(
-		long receiverUserId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByR_S(receiverUserId, status, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first member request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest findByR_S_First(
-		long receiverUserId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence()
-				   .findByR_S_First(receiverUserId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the first member request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByR_S_First(
-		long receiverUserId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByR_S_First(receiverUserId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last member request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest findByR_S_Last(
-		long receiverUserId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence()
-				   .findByR_S_Last(receiverUserId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the last member request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByR_S_Last(
-		long receiverUserId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByR_S_Last(receiverUserId, status, orderByComparator);
-	}
-
-	/**
-	* Returns the member requests before and after the current member request in the ordered set where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param memberRequestId the primary key of the current member request
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a member request with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest[] findByR_S_PrevAndNext(
-		long memberRequestId, long receiverUserId, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence()
-				   .findByR_S_PrevAndNext(memberRequestId, receiverUserId,
-			status, orderByComparator);
-	}
-
-	/**
-	* Returns the member request where groupId = &#63; and receiverUserId = &#63; and status = &#63; or throws a {@link com.liferay.so.NoSuchMemberRequestException} if it could not be found.
-	*
-	* @param groupId the group ID
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the matching member request
-	* @throws com.liferay.so.NoSuchMemberRequestException if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest findByG_R_S(long groupId,
-		long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence().findByG_R_S(groupId, receiverUserId, status);
-	}
-
-	/**
-	* Returns the member request where groupId = &#63; and receiverUserId = &#63; and status = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param groupId the group ID
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByG_R_S(
-		long groupId, long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByG_R_S(groupId, receiverUserId, status);
-	}
-
-	/**
-	* Returns the member request where groupId = &#63; and receiverUserId = &#63; and status = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param groupId the group ID
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching member request, or <code>null</code> if a matching member request could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest fetchByG_R_S(
-		long groupId, long receiverUserId, int status, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_R_S(groupId, receiverUserId, status,
-			retrieveFromCache);
-	}
-
-	/**
 	* Returns all the member requests.
 	*
 	* @return the member requests
@@ -592,7 +981,7 @@ public class MemberRequestUtil {
 	* Returns a range of all the member requests.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from MemberRequestModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of member requests
@@ -610,7 +999,7 @@ public class MemberRequestUtil {
 	* Returns an ordered range of all the member requests.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from MemberRequestModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of member requests
@@ -627,59 +1016,6 @@ public class MemberRequestUtil {
 	}
 
 	/**
-	* Removes the member request where key = &#63; from the database.
-	*
-	* @param key the key
-	* @return the member request that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest removeByKey(
-		java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence().removeByKey(key);
-	}
-
-	/**
-	* Removes all the member requests where receiverUserId = &#63; from the database.
-	*
-	* @param receiverUserId the receiver user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByReceiverUserId(long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Removes all the member requests where receiverUserId = &#63; and status = &#63; from the database.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByR_S(long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByR_S(receiverUserId, status);
-	}
-
-	/**
-	* Removes the member request where groupId = &#63; and receiverUserId = &#63; and status = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the member request that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.so.model.MemberRequest removeByG_R_S(
-		long groupId, long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.so.NoSuchMemberRequestException {
-		return getPersistence().removeByG_R_S(groupId, receiverUserId, status);
-	}
-
-	/**
 	* Removes all the member requests from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -687,57 +1023,6 @@ public class MemberRequestUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of member requests where key = &#63;.
-	*
-	* @param key the key
-	* @return the number of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByKey(java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByKey(key);
-	}
-
-	/**
-	* Returns the number of member requests where receiverUserId = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @return the number of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByReceiverUserId(long receiverUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Returns the number of member requests where receiverUserId = &#63; and status = &#63;.
-	*
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the number of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByR_S(long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByR_S(receiverUserId, status);
-	}
-
-	/**
-	* Returns the number of member requests where groupId = &#63; and receiverUserId = &#63; and status = &#63;.
-	*
-	* @param groupId the group ID
-	* @param receiverUserId the receiver user ID
-	* @param status the status
-	* @return the number of matching member requests
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_R_S(long groupId, long receiverUserId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_R_S(groupId, receiverUserId, status);
 	}
 
 	/**

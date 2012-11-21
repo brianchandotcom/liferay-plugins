@@ -37,6 +37,745 @@ public interface KaleoTimerInstanceTokenPersistence extends BasePersistence<Kale
 	 */
 
 	/**
+	* Returns all the kaleo timer instance tokens where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @return the matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKaleoInstanceId(
+		long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the kaleo timer instance tokens where kaleoInstanceId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @param start the lower bound of the range of kaleo timer instance tokens
+	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
+	* @return the range of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKaleoInstanceId(
+		long kaleoInstanceId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the kaleo timer instance tokens before and after the current kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoTimerInstanceTokenId the primary key of the current kaleo timer instance token
+	* @param kaleoInstanceId the kaleo instance ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a kaleo timer instance token with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken[] findByKaleoInstanceId_PrevAndNext(
+		long kaleoTimerInstanceTokenId, long kaleoInstanceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns an ordered range of all the kaleo timer instance tokens where kaleoInstanceId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @param start the lower bound of the range of kaleo timer instance tokens
+	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKaleoInstanceId(
+		long kaleoInstanceId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKaleoInstanceId_First(
+		long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKaleoInstanceId_First(
+		long kaleoInstanceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKaleoInstanceId_First(
+		long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKaleoInstanceId_First(
+		long kaleoInstanceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKaleoInstanceId_Last(
+		long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKaleoInstanceId_Last(
+		long kaleoInstanceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKaleoInstanceId_Last(
+		long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKaleoInstanceId_Last(
+		long kaleoInstanceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo timer instance tokens where kaleoInstanceId = &#63; from the database.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKaleoInstanceId(long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo timer instance tokens where kaleoInstanceId = &#63;.
+	*
+	* @param kaleoInstanceId the kaleo instance ID
+	* @return the number of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKaleoInstanceId(long kaleoInstanceId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_KTI_First(
+		long kaleoInstanceTokenId, long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_KTI_First(
+		long kaleoInstanceTokenId, long kaleoTimerId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_KTI_First(
+		long kaleoInstanceTokenId, long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_KTI_First(
+		long kaleoInstanceTokenId, long kaleoTimerId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_KTI_Last(
+		long kaleoInstanceTokenId, long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_KTI_Last(
+		long kaleoInstanceTokenId, long kaleoTimerId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_KTI_Last(
+		long kaleoInstanceTokenId, long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_KTI_Last(
+		long kaleoInstanceTokenId, long kaleoTimerId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63; from the database.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKITI_KTI(long kaleoInstanceTokenId, long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param kaleoTimerId the kaleo timer ID
+	* @return the number of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKITI_KTI(long kaleoInstanceTokenId, long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @return the matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C(
+		long kaleoInstanceTokenId, boolean completed)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param start the lower bound of the range of kaleo timer instance tokens
+	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
+	* @return the range of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C(
+		long kaleoInstanceTokenId, boolean completed, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the kaleo timer instance tokens before and after the current kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoTimerInstanceTokenId the primary key of the current kaleo timer instance token
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a kaleo timer instance token with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken[] findByKITI_C_PrevAndNext(
+		long kaleoTimerInstanceTokenId, long kaleoInstanceTokenId,
+		boolean completed,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns an ordered range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param start the lower bound of the range of kaleo timer instance tokens
+	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C(
+		long kaleoInstanceTokenId, boolean completed, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_First(
+		long kaleoInstanceTokenId, boolean completed)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_First(
+		long kaleoInstanceTokenId, boolean completed,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_First(
+		long kaleoInstanceTokenId, boolean completed)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_First(
+		long kaleoInstanceTokenId, boolean completed,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_Last(
+		long kaleoInstanceTokenId, boolean completed)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_Last(
+		long kaleoInstanceTokenId, boolean completed,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_Last(
+		long kaleoInstanceTokenId, boolean completed)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_Last(
+		long kaleoInstanceTokenId, boolean completed,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; from the database.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKITI_C(long kaleoInstanceTokenId, boolean completed)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @return the number of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKITI_C(long kaleoInstanceTokenId, boolean completed)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @return the matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C_B(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @param start the lower bound of the range of kaleo timer instance tokens
+	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
+	* @return the range of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C_B(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the kaleo timer instance tokens before and after the current kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoTimerInstanceTokenId the primary key of the current kaleo timer instance token
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a kaleo timer instance token with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken[] findByKITI_C_B_PrevAndNext(
+		long kaleoTimerInstanceTokenId, long kaleoInstanceTokenId,
+		boolean completed, boolean blocking,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns an ordered range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @param start the lower bound of the range of kaleo timer instance tokens
+	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C_B(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_B_First(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_B_First(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the first kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_B_First(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_B_First(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_B_Last(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_B_Last(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
+
+	/**
+	* Returns the last kaleo timer instance token in the default ordered set defined by {@link KaleoTimerInstanceTokenModelImpl#ORDER_BY_JPQL} where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_B_Last(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_B_Last(
+		long kaleoInstanceTokenId, boolean completed, boolean blocking,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63; from the database.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKITI_C_B(long kaleoInstanceTokenId, boolean completed,
+		boolean blocking)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
+	*
+	* @param kaleoInstanceTokenId the kaleo instance token ID
+	* @param completed the completed
+	* @param blocking the blocking
+	* @return the number of matching kaleo timer instance tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKITI_C_B(long kaleoInstanceTokenId, boolean completed,
+		boolean blocking)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the kaleo timer instance token in the entity cache if it is enabled.
 	*
 	* @param kaleoTimerInstanceToken the kaleo timer instance token
@@ -103,430 +842,6 @@ public interface KaleoTimerInstanceTokenPersistence extends BasePersistence<Kale
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns all the kaleo timer instance tokens where kaleoInstanceId = &#63;.
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @return the matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKaleoInstanceId(
-		long kaleoInstanceId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the kaleo timer instance tokens where kaleoInstanceId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @param start the lower bound of the range of kaleo timer instance tokens
-	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
-	* @return the range of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKaleoInstanceId(
-		long kaleoInstanceId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the kaleo timer instance tokens where kaleoInstanceId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @param start the lower bound of the range of kaleo timer instance tokens
-	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKaleoInstanceId(
-		long kaleoInstanceId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKaleoInstanceId_First(
-		long kaleoInstanceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKaleoInstanceId_First(
-		long kaleoInstanceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKaleoInstanceId_Last(
-		long kaleoInstanceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKaleoInstanceId_Last(
-		long kaleoInstanceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo timer instance tokens before and after the current kaleo timer instance token in the ordered set where kaleoInstanceId = &#63;.
-	*
-	* @param kaleoTimerInstanceTokenId the primary key of the current kaleo timer instance token
-	* @param kaleoInstanceId the kaleo instance ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a kaleo timer instance token with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken[] findByKaleoInstanceId_PrevAndNext(
-		long kaleoTimerInstanceTokenId, long kaleoInstanceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the kaleo timer instance token where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63; or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException} if it could not be found.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param kaleoTimerId the kaleo timer ID
-	* @return the matching kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_KTI(
-		long kaleoInstanceTokenId, long kaleoTimerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the kaleo timer instance token where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param kaleoTimerId the kaleo timer ID
-	* @return the matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_KTI(
-		long kaleoInstanceTokenId, long kaleoTimerId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo timer instance token where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param kaleoTimerId the kaleo timer ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_KTI(
-		long kaleoInstanceTokenId, long kaleoTimerId, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @return the matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C(
-		long kaleoInstanceTokenId, boolean completed)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param start the lower bound of the range of kaleo timer instance tokens
-	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
-	* @return the range of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C(
-		long kaleoInstanceTokenId, boolean completed, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param start the lower bound of the range of kaleo timer instance tokens
-	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C(
-		long kaleoInstanceTokenId, boolean completed, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_First(
-		long kaleoInstanceTokenId, boolean completed,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_First(
-		long kaleoInstanceTokenId, boolean completed,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_Last(
-		long kaleoInstanceTokenId, boolean completed,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_Last(
-		long kaleoInstanceTokenId, boolean completed,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo timer instance tokens before and after the current kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* @param kaleoTimerInstanceTokenId the primary key of the current kaleo timer instance token
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a kaleo timer instance token with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken[] findByKITI_C_PrevAndNext(
-		long kaleoTimerInstanceTokenId, long kaleoInstanceTokenId,
-		boolean completed,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @return the matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C_B(
-		long kaleoInstanceTokenId, boolean completed, boolean blocking)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @param start the lower bound of the range of kaleo timer instance tokens
-	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
-	* @return the range of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C_B(
-		long kaleoInstanceTokenId, boolean completed, boolean blocking,
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @param start the lower bound of the range of kaleo timer instance tokens
-	* @param end the upper bound of the range of kaleo timer instance tokens (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken> findByKITI_C_B(
-		long kaleoInstanceTokenId, boolean completed, boolean blocking,
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_B_First(
-		long kaleoInstanceTokenId, boolean completed, boolean blocking,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the first kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_B_First(
-		long kaleoInstanceTokenId, boolean completed, boolean blocking,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken findByKITI_C_B_Last(
-		long kaleoInstanceTokenId, boolean completed, boolean blocking,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Returns the last kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo timer instance token, or <code>null</code> if a matching kaleo timer instance token could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken fetchByKITI_C_B_Last(
-		long kaleoInstanceTokenId, boolean completed, boolean blocking,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo timer instance tokens before and after the current kaleo timer instance token in the ordered set where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* @param kaleoTimerInstanceTokenId the primary key of the current kaleo timer instance token
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next kaleo timer instance token
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException if a kaleo timer instance token with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken[] findByKITI_C_B_PrevAndNext(
-		long kaleoTimerInstanceTokenId, long kaleoInstanceTokenId,
-		boolean completed, boolean blocking,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
 	* Returns all the kaleo timer instance tokens.
 	*
 	* @return the kaleo timer instance tokens
@@ -539,7 +854,7 @@ public interface KaleoTimerInstanceTokenPersistence extends BasePersistence<Kale
 	* Returns a range of all the kaleo timer instance tokens.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo timer instance tokens
@@ -555,7 +870,7 @@ public interface KaleoTimerInstanceTokenPersistence extends BasePersistence<Kale
 	* Returns an ordered range of all the kaleo timer instance tokens.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerInstanceTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo timer instance tokens
@@ -570,100 +885,11 @@ public interface KaleoTimerInstanceTokenPersistence extends BasePersistence<Kale
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the kaleo timer instance tokens where kaleoInstanceId = &#63; from the database.
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByKaleoInstanceId(long kaleoInstanceId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the kaleo timer instance token where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63; from the database.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param kaleoTimerId the kaleo timer ID
-	* @return the kaleo timer instance token that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken removeByKITI_KTI(
-		long kaleoInstanceTokenId, long kaleoTimerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
-
-	/**
-	* Removes all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; from the database.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByKITI_C(long kaleoInstanceTokenId, boolean completed)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63; from the database.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByKITI_C_B(long kaleoInstanceTokenId, boolean completed,
-		boolean blocking)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the kaleo timer instance tokens from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo timer instance tokens where kaleoInstanceId = &#63;.
-	*
-	* @param kaleoInstanceId the kaleo instance ID
-	* @return the number of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKaleoInstanceId(long kaleoInstanceId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and kaleoTimerId = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param kaleoTimerId the kaleo timer ID
-	* @return the number of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKITI_KTI(long kaleoInstanceTokenId, long kaleoTimerId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @return the number of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKITI_C(long kaleoInstanceTokenId, boolean completed)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo timer instance tokens where kaleoInstanceTokenId = &#63; and completed = &#63; and blocking = &#63;.
-	*
-	* @param kaleoInstanceTokenId the kaleo instance token ID
-	* @param completed the completed
-	* @param blocking the blocking
-	* @return the number of matching kaleo timer instance tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKITI_C_B(long kaleoInstanceTokenId, boolean completed,
-		boolean blocking)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
