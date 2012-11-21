@@ -20,6 +20,12 @@ import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.struts.StrutsAction;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.PortletURLFactoryUtil;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,18 +41,24 @@ public class CompatUpdatePasswordAction extends BaseStrutsAction {
 			HttpServletResponse response)
 		throws Exception {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		NoRedirectServletResponse noRedirectServletResponse =
 			new NoRedirectServletResponse(response);
 
-		String forward = originalStrutsAction.execute(request, response);
+		String forward = originalStrutsAction.execute(
+			request, noRedirectServletResponse);
 
-		String location = noRedirectServletResponse.getRedirectLocation();
-
-		if (Validator.isNotNull(location)) {
+		if (Validator.isNull(forward)) {
 			String redirect = ParamUtil.getString(request, WebKeys.REFERER);
 
 			if (Validator.isNull(redirect)) {
-				redirect = location;
+				PortletURL portletURL = PortletURLFactoryUtil.create(
+					request, PortletKeys.LOGIN, themeDisplay.getPlid(),
+					PortletRequest.RENDER_PHASE);
+
+				redirect = portletURL.toString();
 			}
 
 			response.sendRedirect(redirect);
