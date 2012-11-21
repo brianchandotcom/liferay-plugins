@@ -16,15 +16,19 @@ package com.liferay.localization.util;
 
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
@@ -47,6 +51,7 @@ import java.util.Map;
 /**
  * @author Eric Min
  * @author Brian Wing Shun Chan
+ * @author Hugo Huijser
  */
 public class InstanceUtil implements PortletPropsKeys {
 
@@ -174,7 +179,7 @@ public class InstanceUtil implements PortletPropsKeys {
 		}
 	}
 
-	private static void _localizeUsers(long companyId) throws Exception {
+	private static void _localizeUsers(final long companyId) throws Exception {
 		Company company = CompanyLocalServiceUtil.getCompany(companyId);
 
 		ExpandoBridge expandoBridge = company.getExpandoBridge();
@@ -206,9 +211,25 @@ public class InstanceUtil implements PortletPropsKeys {
 
 			@Override
 			protected void addCriteria(DynamicQuery dynamicQuery) {
-				Property property = PropertyFactoryUtil.forName("createDate");
+				Property property1 = PropertyFactoryUtil.forName("createDate");
 
-				dynamicQuery.add(property.eqProperty("modifiedDate"));
+				Criterion criterion1 = property1.eqProperty("modifiedDate");
+
+				try {
+					String emailAddress = PrefsPropsUtil.getString(
+						companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+
+					Property property2 = PropertyFactoryUtil.forName(
+						"emailAddress");
+
+					Criterion criterion2 = property2.eq(emailAddress);
+
+					dynamicQuery.add(
+						RestrictionsFactoryUtil.or(criterion1, criterion2));
+				}
+				catch (SystemException se) {
+					dynamicQuery.add(criterion1);
+				}
 			}
 
 			@Override
