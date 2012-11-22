@@ -38,66 +38,6 @@ public interface FooPersistence extends BasePersistence<Foo> {
 	 */
 
 	/**
-	* Caches the foo in the entity cache if it is enabled.
-	*
-	* @param foo the foo
-	*/
-	public void cacheResult(com.liferay.testpacl.model.Foo foo);
-
-	/**
-	* Caches the foos in the entity cache if it is enabled.
-	*
-	* @param foos the foos
-	*/
-	public void cacheResult(java.util.List<com.liferay.testpacl.model.Foo> foos);
-
-	/**
-	* Creates a new foo with the primary key. Does not add the foo to the database.
-	*
-	* @param fooId the primary key for the new foo
-	* @return the new foo
-	*/
-	public com.liferay.testpacl.model.Foo create(long fooId);
-
-	/**
-	* Removes the foo with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param fooId the primary key of the foo
-	* @return the foo that was removed
-	* @throws com.liferay.testpacl.NoSuchFooException if a foo with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testpacl.model.Foo remove(long fooId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.testpacl.NoSuchFooException;
-
-	public com.liferay.testpacl.model.Foo updateImpl(
-		com.liferay.testpacl.model.Foo foo)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the foo with the primary key or throws a {@link com.liferay.testpacl.NoSuchFooException} if it could not be found.
-	*
-	* @param fooId the primary key of the foo
-	* @return the foo
-	* @throws com.liferay.testpacl.NoSuchFooException if a foo with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testpacl.model.Foo findByPrimaryKey(long fooId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.testpacl.NoSuchFooException;
-
-	/**
-	* Returns the foo with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param fooId the primary key of the foo
-	* @return the foo, or <code>null</code> if a foo with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testpacl.model.Foo fetchByPrimaryKey(long fooId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the foos where field2 = &#63;.
 	*
 	* @param field2 the field2
@@ -112,7 +52,7 @@ public interface FooPersistence extends BasePersistence<Foo> {
 	* Returns a range of all the foos where field2 = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param field2 the field2
@@ -129,7 +69,7 @@ public interface FooPersistence extends BasePersistence<Foo> {
 	* Returns an ordered range of all the foos where field2 = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param field2 the field2
@@ -213,6 +153,85 @@ public interface FooPersistence extends BasePersistence<Foo> {
 			com.liferay.testpacl.NoSuchFooException;
 
 	/**
+	* Removes all the foos where field2 = &#63; from the database.
+	*
+	* @param field2 the field2
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByField2(boolean field2)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of foos where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @return the number of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByField2(boolean field2)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the foo in the entity cache if it is enabled.
+	*
+	* @param foo the foo
+	*/
+	public void cacheResult(com.liferay.testpacl.model.Foo foo);
+
+	/**
+	* Caches the foos in the entity cache if it is enabled.
+	*
+	* @param foos the foos
+	*/
+	public void cacheResult(java.util.List<com.liferay.testpacl.model.Foo> foos);
+
+	/**
+	* Creates a new foo with the primary key. Does not add the foo to the database.
+	*
+	* @param fooId the primary key for the new foo
+	* @return the new foo
+	*/
+	public com.liferay.testpacl.model.Foo create(long fooId);
+
+	/**
+	* Removes the foo with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param fooId the primary key of the foo
+	* @return the foo that was removed
+	* @throws com.liferay.testpacl.NoSuchFooException if a foo with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testpacl.model.Foo remove(long fooId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testpacl.NoSuchFooException;
+
+	public com.liferay.testpacl.model.Foo updateImpl(
+		com.liferay.testpacl.model.Foo foo)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the foo with the primary key or throws a {@link com.liferay.testpacl.NoSuchFooException} if it could not be found.
+	*
+	* @param fooId the primary key of the foo
+	* @return the foo
+	* @throws com.liferay.testpacl.NoSuchFooException if a foo with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testpacl.model.Foo findByPrimaryKey(long fooId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testpacl.NoSuchFooException;
+
+	/**
+	* Returns the foo with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param fooId the primary key of the foo
+	* @return the foo, or <code>null</code> if a foo with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testpacl.model.Foo fetchByPrimaryKey(long fooId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the foos.
 	*
 	* @return the foos
@@ -225,7 +244,7 @@ public interface FooPersistence extends BasePersistence<Foo> {
 	* Returns a range of all the foos.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of foos
@@ -240,7 +259,7 @@ public interface FooPersistence extends BasePersistence<Foo> {
 	* Returns an ordered range of all the foos.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of foos
@@ -255,30 +274,11 @@ public interface FooPersistence extends BasePersistence<Foo> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the foos where field2 = &#63; from the database.
-	*
-	* @param field2 the field2
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByField2(boolean field2)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the foos from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of foos where field2 = &#63;.
-	*
-	* @param field2 the field2
-	* @return the number of matching foos
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByField2(boolean field2)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

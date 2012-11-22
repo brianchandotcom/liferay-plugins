@@ -111,83 +111,6 @@ public class AttachmentUtil {
 	}
 
 	/**
-	* Caches the attachment in the entity cache if it is enabled.
-	*
-	* @param attachment the attachment
-	*/
-	public static void cacheResult(com.liferay.mail.model.Attachment attachment) {
-		getPersistence().cacheResult(attachment);
-	}
-
-	/**
-	* Caches the attachments in the entity cache if it is enabled.
-	*
-	* @param attachments the attachments
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.mail.model.Attachment> attachments) {
-		getPersistence().cacheResult(attachments);
-	}
-
-	/**
-	* Creates a new attachment with the primary key. Does not add the attachment to the database.
-	*
-	* @param attachmentId the primary key for the new attachment
-	* @return the new attachment
-	*/
-	public static com.liferay.mail.model.Attachment create(long attachmentId) {
-		return getPersistence().create(attachmentId);
-	}
-
-	/**
-	* Removes the attachment with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param attachmentId the primary key of the attachment
-	* @return the attachment that was removed
-	* @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment remove(long attachmentId)
-		throws com.liferay.mail.NoSuchAttachmentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(attachmentId);
-	}
-
-	public static com.liferay.mail.model.Attachment updateImpl(
-		com.liferay.mail.model.Attachment attachment)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(attachment);
-	}
-
-	/**
-	* Returns the attachment with the primary key or throws a {@link com.liferay.mail.NoSuchAttachmentException} if it could not be found.
-	*
-	* @param attachmentId the primary key of the attachment
-	* @return the attachment
-	* @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment findByPrimaryKey(
-		long attachmentId)
-		throws com.liferay.mail.NoSuchAttachmentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(attachmentId);
-	}
-
-	/**
-	* Returns the attachment with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param attachmentId the primary key of the attachment
-	* @return the attachment, or <code>null</code> if a attachment with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.mail.model.Attachment fetchByPrimaryKey(
-		long attachmentId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(attachmentId);
-	}
-
-	/**
 	* Returns all the attachments where messageId = &#63;.
 	*
 	* @param messageId the message ID
@@ -204,7 +127,7 @@ public class AttachmentUtil {
 	* Returns a range of all the attachments where messageId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param messageId the message ID
@@ -223,7 +146,7 @@ public class AttachmentUtil {
 	* Returns an ordered range of all the attachments where messageId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param messageId the message ID
@@ -330,6 +253,106 @@ public class AttachmentUtil {
 	}
 
 	/**
+	* Removes all the attachments where messageId = &#63; from the database.
+	*
+	* @param messageId the message ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByMessageId(long messageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByMessageId(messageId);
+	}
+
+	/**
+	* Returns the number of attachments where messageId = &#63;.
+	*
+	* @param messageId the message ID
+	* @return the number of matching attachments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByMessageId(long messageId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByMessageId(messageId);
+	}
+
+	/**
+	* Caches the attachment in the entity cache if it is enabled.
+	*
+	* @param attachment the attachment
+	*/
+	public static void cacheResult(com.liferay.mail.model.Attachment attachment) {
+		getPersistence().cacheResult(attachment);
+	}
+
+	/**
+	* Caches the attachments in the entity cache if it is enabled.
+	*
+	* @param attachments the attachments
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.mail.model.Attachment> attachments) {
+		getPersistence().cacheResult(attachments);
+	}
+
+	/**
+	* Creates a new attachment with the primary key. Does not add the attachment to the database.
+	*
+	* @param attachmentId the primary key for the new attachment
+	* @return the new attachment
+	*/
+	public static com.liferay.mail.model.Attachment create(long attachmentId) {
+		return getPersistence().create(attachmentId);
+	}
+
+	/**
+	* Removes the attachment with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param attachmentId the primary key of the attachment
+	* @return the attachment that was removed
+	* @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment remove(long attachmentId)
+		throws com.liferay.mail.NoSuchAttachmentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(attachmentId);
+	}
+
+	public static com.liferay.mail.model.Attachment updateImpl(
+		com.liferay.mail.model.Attachment attachment)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(attachment);
+	}
+
+	/**
+	* Returns the attachment with the primary key or throws a {@link com.liferay.mail.NoSuchAttachmentException} if it could not be found.
+	*
+	* @param attachmentId the primary key of the attachment
+	* @return the attachment
+	* @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment findByPrimaryKey(
+		long attachmentId)
+		throws com.liferay.mail.NoSuchAttachmentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(attachmentId);
+	}
+
+	/**
+	* Returns the attachment with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param attachmentId the primary key of the attachment
+	* @return the attachment, or <code>null</code> if a attachment with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.mail.model.Attachment fetchByPrimaryKey(
+		long attachmentId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(attachmentId);
+	}
+
+	/**
 	* Returns all the attachments.
 	*
 	* @return the attachments
@@ -344,7 +367,7 @@ public class AttachmentUtil {
 	* Returns a range of all the attachments.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of attachments
@@ -362,7 +385,7 @@ public class AttachmentUtil {
 	* Returns an ordered range of all the attachments.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AttachmentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of attachments
@@ -379,17 +402,6 @@ public class AttachmentUtil {
 	}
 
 	/**
-	* Removes all the attachments where messageId = &#63; from the database.
-	*
-	* @param messageId the message ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByMessageId(long messageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByMessageId(messageId);
-	}
-
-	/**
 	* Removes all the attachments from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -397,18 +409,6 @@ public class AttachmentUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of attachments where messageId = &#63;.
-	*
-	* @param messageId the message ID
-	* @return the number of matching attachments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByMessageId(long messageId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByMessageId(messageId);
 	}
 
 	/**

@@ -38,72 +38,6 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 	 */
 
 	/**
-	* Caches the o auth consumer in the entity cache if it is enabled.
-	*
-	* @param oAuthConsumer the o auth consumer
-	*/
-	public void cacheResult(
-		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer);
-
-	/**
-	* Caches the o auth consumers in the entity cache if it is enabled.
-	*
-	* @param oAuthConsumers the o auth consumers
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.opensocial.model.OAuthConsumer> oAuthConsumers);
-
-	/**
-	* Creates a new o auth consumer with the primary key. Does not add the o auth consumer to the database.
-	*
-	* @param oAuthConsumerId the primary key for the new o auth consumer
-	* @return the new o auth consumer
-	*/
-	public com.liferay.opensocial.model.OAuthConsumer create(
-		long oAuthConsumerId);
-
-	/**
-	* Removes the o auth consumer with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param oAuthConsumerId the primary key of the o auth consumer
-	* @return the o auth consumer that was removed
-	* @throws com.liferay.opensocial.NoSuchOAuthConsumerException if a o auth consumer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.OAuthConsumer remove(
-		long oAuthConsumerId)
-		throws com.liferay.opensocial.NoSuchOAuthConsumerException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.opensocial.model.OAuthConsumer updateImpl(
-		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the o auth consumer with the primary key or throws a {@link com.liferay.opensocial.NoSuchOAuthConsumerException} if it could not be found.
-	*
-	* @param oAuthConsumerId the primary key of the o auth consumer
-	* @return the o auth consumer
-	* @throws com.liferay.opensocial.NoSuchOAuthConsumerException if a o auth consumer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.OAuthConsumer findByPrimaryKey(
-		long oAuthConsumerId)
-		throws com.liferay.opensocial.NoSuchOAuthConsumerException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the o auth consumer with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param oAuthConsumerId the primary key of the o auth consumer
-	* @return the o auth consumer, or <code>null</code> if a o auth consumer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.OAuthConsumer fetchByPrimaryKey(
-		long oAuthConsumerId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the o auth consumers where gadgetKey = &#63;.
 	*
 	* @param gadgetKey the gadget key
@@ -118,7 +52,7 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 	* Returns a range of all the o auth consumers where gadgetKey = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param gadgetKey the gadget key
@@ -135,7 +69,7 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 	* Returns an ordered range of all the o auth consumers where gadgetKey = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param gadgetKey the gadget key
@@ -223,6 +157,25 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the o auth consumers where gadgetKey = &#63; from the database.
+	*
+	* @param gadgetKey the gadget key
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByGadgetKey(java.lang.String gadgetKey)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of o auth consumers where gadgetKey = &#63;.
+	*
+	* @param gadgetKey the gadget key
+	* @return the number of matching o auth consumers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByGadgetKey(java.lang.String gadgetKey)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the o auth consumer where gadgetKey = &#63; and serviceName = &#63; or throws a {@link com.liferay.opensocial.NoSuchOAuthConsumerException} if it could not be found.
 	*
 	* @param gadgetKey the gadget key
@@ -263,6 +216,97 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the o auth consumer where gadgetKey = &#63; and serviceName = &#63; from the database.
+	*
+	* @param gadgetKey the gadget key
+	* @param serviceName the service name
+	* @return the o auth consumer that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.OAuthConsumer removeByG_S(
+		java.lang.String gadgetKey, java.lang.String serviceName)
+		throws com.liferay.opensocial.NoSuchOAuthConsumerException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of o auth consumers where gadgetKey = &#63; and serviceName = &#63;.
+	*
+	* @param gadgetKey the gadget key
+	* @param serviceName the service name
+	* @return the number of matching o auth consumers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByG_S(java.lang.String gadgetKey,
+		java.lang.String serviceName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the o auth consumer in the entity cache if it is enabled.
+	*
+	* @param oAuthConsumer the o auth consumer
+	*/
+	public void cacheResult(
+		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer);
+
+	/**
+	* Caches the o auth consumers in the entity cache if it is enabled.
+	*
+	* @param oAuthConsumers the o auth consumers
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.opensocial.model.OAuthConsumer> oAuthConsumers);
+
+	/**
+	* Creates a new o auth consumer with the primary key. Does not add the o auth consumer to the database.
+	*
+	* @param oAuthConsumerId the primary key for the new o auth consumer
+	* @return the new o auth consumer
+	*/
+	public com.liferay.opensocial.model.OAuthConsumer create(
+		long oAuthConsumerId);
+
+	/**
+	* Removes the o auth consumer with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param oAuthConsumerId the primary key of the o auth consumer
+	* @return the o auth consumer that was removed
+	* @throws com.liferay.opensocial.NoSuchOAuthConsumerException if a o auth consumer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.OAuthConsumer remove(
+		long oAuthConsumerId)
+		throws com.liferay.opensocial.NoSuchOAuthConsumerException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.opensocial.model.OAuthConsumer updateImpl(
+		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the o auth consumer with the primary key or throws a {@link com.liferay.opensocial.NoSuchOAuthConsumerException} if it could not be found.
+	*
+	* @param oAuthConsumerId the primary key of the o auth consumer
+	* @return the o auth consumer
+	* @throws com.liferay.opensocial.NoSuchOAuthConsumerException if a o auth consumer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.OAuthConsumer findByPrimaryKey(
+		long oAuthConsumerId)
+		throws com.liferay.opensocial.NoSuchOAuthConsumerException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the o auth consumer with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param oAuthConsumerId the primary key of the o auth consumer
+	* @return the o auth consumer, or <code>null</code> if a o auth consumer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.OAuthConsumer fetchByPrimaryKey(
+		long oAuthConsumerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the o auth consumers.
 	*
 	* @return the o auth consumers
@@ -275,7 +319,7 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 	* Returns a range of all the o auth consumers.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of o auth consumers
@@ -291,7 +335,7 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 	* Returns an ordered range of all the o auth consumers.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of o auth consumers
@@ -306,55 +350,11 @@ public interface OAuthConsumerPersistence extends BasePersistence<OAuthConsumer>
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the o auth consumers where gadgetKey = &#63; from the database.
-	*
-	* @param gadgetKey the gadget key
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGadgetKey(java.lang.String gadgetKey)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the o auth consumer where gadgetKey = &#63; and serviceName = &#63; from the database.
-	*
-	* @param gadgetKey the gadget key
-	* @param serviceName the service name
-	* @return the o auth consumer that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.OAuthConsumer removeByG_S(
-		java.lang.String gadgetKey, java.lang.String serviceName)
-		throws com.liferay.opensocial.NoSuchOAuthConsumerException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the o auth consumers from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of o auth consumers where gadgetKey = &#63;.
-	*
-	* @param gadgetKey the gadget key
-	* @return the number of matching o auth consumers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGadgetKey(java.lang.String gadgetKey)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of o auth consumers where gadgetKey = &#63; and serviceName = &#63;.
-	*
-	* @param gadgetKey the gadget key
-	* @param serviceName the service name
-	* @return the number of matching o auth consumers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByG_S(java.lang.String gadgetKey,
-		java.lang.String serviceName)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

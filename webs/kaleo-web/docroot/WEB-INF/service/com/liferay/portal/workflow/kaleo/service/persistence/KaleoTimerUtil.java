@@ -110,86 +110,6 @@ public class KaleoTimerUtil {
 	}
 
 	/**
-	* Caches the kaleo timer in the entity cache if it is enabled.
-	*
-	* @param kaleoTimer the kaleo timer
-	*/
-	public static void cacheResult(
-		com.liferay.portal.workflow.kaleo.model.KaleoTimer kaleoTimer) {
-		getPersistence().cacheResult(kaleoTimer);
-	}
-
-	/**
-	* Caches the kaleo timers in the entity cache if it is enabled.
-	*
-	* @param kaleoTimers the kaleo timers
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> kaleoTimers) {
-		getPersistence().cacheResult(kaleoTimers);
-	}
-
-	/**
-	* Creates a new kaleo timer with the primary key. Does not add the kaleo timer to the database.
-	*
-	* @param kaleoTimerId the primary key for the new kaleo timer
-	* @return the new kaleo timer
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer create(
-		long kaleoTimerId) {
-		return getPersistence().create(kaleoTimerId);
-	}
-
-	/**
-	* Removes the kaleo timer with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param kaleoTimerId the primary key of the kaleo timer
-	* @return the kaleo timer that was removed
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerException if a kaleo timer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer remove(
-		long kaleoTimerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerException {
-		return getPersistence().remove(kaleoTimerId);
-	}
-
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoTimer kaleoTimer)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(kaleoTimer);
-	}
-
-	/**
-	* Returns the kaleo timer with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTimerException} if it could not be found.
-	*
-	* @param kaleoTimerId the primary key of the kaleo timer
-	* @return the kaleo timer
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerException if a kaleo timer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer findByPrimaryKey(
-		long kaleoTimerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTimerException {
-		return getPersistence().findByPrimaryKey(kaleoTimerId);
-	}
-
-	/**
-	* Returns the kaleo timer with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param kaleoTimerId the primary key of the kaleo timer
-	* @return the kaleo timer, or <code>null</code> if a kaleo timer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer fetchByPrimaryKey(
-		long kaleoTimerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(kaleoTimerId);
-	}
-
-	/**
 	* Returns all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63;.
 	*
 	* @param kaleoClassName the kaleo class name
@@ -207,7 +127,7 @@ public class KaleoTimerUtil {
 	* Returns a range of all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoClassName the kaleo class name
@@ -228,7 +148,7 @@ public class KaleoTimerUtil {
 	* Returns an ordered range of all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoClassName the kaleo class name
@@ -346,6 +266,33 @@ public class KaleoTimerUtil {
 	}
 
 	/**
+	* Removes all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63; from the database.
+	*
+	* @param kaleoClassName the kaleo class name
+	* @param kaleoClassPK the kaleo class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByKCN_KCPK(java.lang.String kaleoClassName,
+		long kaleoClassPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByKCN_KCPK(kaleoClassName, kaleoClassPK);
+	}
+
+	/**
+	* Returns the number of kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63;.
+	*
+	* @param kaleoClassName the kaleo class name
+	* @param kaleoClassPK the kaleo class p k
+	* @return the number of matching kaleo timers
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByKCN_KCPK(java.lang.String kaleoClassName,
+		long kaleoClassPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByKCN_KCPK(kaleoClassName, kaleoClassPK);
+	}
+
+	/**
 	* Returns all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63; and blocking = &#63;.
 	*
 	* @param kaleoClassName the kaleo class name
@@ -366,7 +313,7 @@ public class KaleoTimerUtil {
 	* Returns a range of all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63; and blocking = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoClassName the kaleo class name
@@ -390,7 +337,7 @@ public class KaleoTimerUtil {
 	* Returns an ordered range of all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63; and blocking = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoClassName the kaleo class name
@@ -516,68 +463,6 @@ public class KaleoTimerUtil {
 	}
 
 	/**
-	* Returns all the kaleo timers.
-	*
-	* @return the kaleo timers
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> findAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll();
-	}
-
-	/**
-	* Returns a range of all the kaleo timers.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of kaleo timers
-	* @param end the upper bound of the range of kaleo timers (not inclusive)
-	* @return the range of kaleo timers
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> findAll(
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the kaleo timers.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of kaleo timers
-	* @param end the upper bound of the range of kaleo timers (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of kaleo timers
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> findAll(
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end, orderByComparator);
-	}
-
-	/**
-	* Removes all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63; from the database.
-	*
-	* @param kaleoClassName the kaleo class name
-	* @param kaleoClassPK the kaleo class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByKCN_KCPK(java.lang.String kaleoClassName,
-		long kaleoClassPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByKCN_KCPK(kaleoClassName, kaleoClassPK);
-	}
-
-	/**
 	* Removes all the kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63; and blocking = &#63; from the database.
 	*
 	* @param kaleoClassName the kaleo class name
@@ -590,30 +475,6 @@ public class KaleoTimerUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence()
 			.removeByKCN_KCPK_Blocking(kaleoClassName, kaleoClassPK, blocking);
-	}
-
-	/**
-	* Removes all the kaleo timers from the database.
-	*
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of kaleo timers where kaleoClassName = &#63; and kaleoClassPK = &#63;.
-	*
-	* @param kaleoClassName the kaleo class name
-	* @param kaleoClassPK the kaleo class p k
-	* @return the number of matching kaleo timers
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByKCN_KCPK(java.lang.String kaleoClassName,
-		long kaleoClassPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByKCN_KCPK(kaleoClassName, kaleoClassPK);
 	}
 
 	/**
@@ -631,6 +492,145 @@ public class KaleoTimerUtil {
 		return getPersistence()
 				   .countByKCN_KCPK_Blocking(kaleoClassName, kaleoClassPK,
 			blocking);
+	}
+
+	/**
+	* Caches the kaleo timer in the entity cache if it is enabled.
+	*
+	* @param kaleoTimer the kaleo timer
+	*/
+	public static void cacheResult(
+		com.liferay.portal.workflow.kaleo.model.KaleoTimer kaleoTimer) {
+		getPersistence().cacheResult(kaleoTimer);
+	}
+
+	/**
+	* Caches the kaleo timers in the entity cache if it is enabled.
+	*
+	* @param kaleoTimers the kaleo timers
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> kaleoTimers) {
+		getPersistence().cacheResult(kaleoTimers);
+	}
+
+	/**
+	* Creates a new kaleo timer with the primary key. Does not add the kaleo timer to the database.
+	*
+	* @param kaleoTimerId the primary key for the new kaleo timer
+	* @return the new kaleo timer
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer create(
+		long kaleoTimerId) {
+		return getPersistence().create(kaleoTimerId);
+	}
+
+	/**
+	* Removes the kaleo timer with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param kaleoTimerId the primary key of the kaleo timer
+	* @return the kaleo timer that was removed
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerException if a kaleo timer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer remove(
+		long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerException {
+		return getPersistence().remove(kaleoTimerId);
+	}
+
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer updateImpl(
+		com.liferay.portal.workflow.kaleo.model.KaleoTimer kaleoTimer)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(kaleoTimer);
+	}
+
+	/**
+	* Returns the kaleo timer with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTimerException} if it could not be found.
+	*
+	* @param kaleoTimerId the primary key of the kaleo timer
+	* @return the kaleo timer
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTimerException if a kaleo timer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer findByPrimaryKey(
+		long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTimerException {
+		return getPersistence().findByPrimaryKey(kaleoTimerId);
+	}
+
+	/**
+	* Returns the kaleo timer with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param kaleoTimerId the primary key of the kaleo timer
+	* @return the kaleo timer, or <code>null</code> if a kaleo timer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTimer fetchByPrimaryKey(
+		long kaleoTimerId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(kaleoTimerId);
+	}
+
+	/**
+	* Returns all the kaleo timers.
+	*
+	* @return the kaleo timers
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> findAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll();
+	}
+
+	/**
+	* Returns a range of all the kaleo timers.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
+	* </p>
+	*
+	* @param start the lower bound of the range of kaleo timers
+	* @param end the upper bound of the range of kaleo timers (not inclusive)
+	* @return the range of kaleo timers
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> findAll(
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the kaleo timers.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTimerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
+	* </p>
+	*
+	* @param start the lower bound of the range of kaleo timers
+	* @param end the upper bound of the range of kaleo timers (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of kaleo timers
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTimer> findAll(
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end, orderByComparator);
+	}
+
+	/**
+	* Removes all the kaleo timers from the database.
+	*
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeAll();
 	}
 
 	/**

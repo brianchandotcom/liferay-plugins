@@ -37,72 +37,6 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 	 */
 
 	/**
-	* Caches the kaleo task in the entity cache if it is enabled.
-	*
-	* @param kaleoTask the kaleo task
-	*/
-	public void cacheResult(
-		com.liferay.portal.workflow.kaleo.model.KaleoTask kaleoTask);
-
-	/**
-	* Caches the kaleo tasks in the entity cache if it is enabled.
-	*
-	* @param kaleoTasks the kaleo tasks
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTask> kaleoTasks);
-
-	/**
-	* Creates a new kaleo task with the primary key. Does not add the kaleo task to the database.
-	*
-	* @param kaleoTaskId the primary key for the new kaleo task
-	* @return the new kaleo task
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTask create(
-		long kaleoTaskId);
-
-	/**
-	* Removes the kaleo task with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param kaleoTaskId the primary key of the kaleo task
-	* @return the kaleo task that was removed
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTaskException if a kaleo task with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTask remove(
-		long kaleoTaskId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
-
-	public com.liferay.portal.workflow.kaleo.model.KaleoTask updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoTask kaleoTask)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo task with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTaskException} if it could not be found.
-	*
-	* @param kaleoTaskId the primary key of the kaleo task
-	* @return the kaleo task
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTaskException if a kaleo task with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTask findByPrimaryKey(
-		long kaleoTaskId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
-
-	/**
-	* Returns the kaleo task with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param kaleoTaskId the primary key of the kaleo task
-	* @return the kaleo task, or <code>null</code> if a kaleo task with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTask fetchByPrimaryKey(
-		long kaleoTaskId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the kaleo tasks where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -117,7 +51,7 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 	* Returns a range of all the kaleo tasks where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTaskModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -134,7 +68,7 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 	* Returns an ordered range of all the kaleo tasks where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTaskModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -222,6 +156,25 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
 
 	/**
+	* Removes all the kaleo tasks where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo tasks where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching kaleo tasks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the kaleo tasks where kaleoDefinitionId = &#63;.
 	*
 	* @param kaleoDefinitionId the kaleo definition ID
@@ -236,7 +189,7 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 	* Returns a range of all the kaleo tasks where kaleoDefinitionId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTaskModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoDefinitionId the kaleo definition ID
@@ -253,7 +206,7 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 	* Returns an ordered range of all the kaleo tasks where kaleoDefinitionId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTaskModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoDefinitionId the kaleo definition ID
@@ -341,6 +294,25 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
 
 	/**
+	* Removes all the kaleo tasks where kaleoDefinitionId = &#63; from the database.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo tasks where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the number of matching kaleo tasks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKaleoDefinitionId(long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the kaleo task where kaleoNodeId = &#63; or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTaskException} if it could not be found.
 	*
 	* @param kaleoNodeId the kaleo node ID
@@ -377,6 +349,94 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the kaleo task where kaleoNodeId = &#63; from the database.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the kaleo task that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTask removeByKaleoNodeId(
+		long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
+
+	/**
+	* Returns the number of kaleo tasks where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the number of matching kaleo tasks
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKaleoNodeId(long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the kaleo task in the entity cache if it is enabled.
+	*
+	* @param kaleoTask the kaleo task
+	*/
+	public void cacheResult(
+		com.liferay.portal.workflow.kaleo.model.KaleoTask kaleoTask);
+
+	/**
+	* Caches the kaleo tasks in the entity cache if it is enabled.
+	*
+	* @param kaleoTasks the kaleo tasks
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTask> kaleoTasks);
+
+	/**
+	* Creates a new kaleo task with the primary key. Does not add the kaleo task to the database.
+	*
+	* @param kaleoTaskId the primary key for the new kaleo task
+	* @return the new kaleo task
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTask create(
+		long kaleoTaskId);
+
+	/**
+	* Removes the kaleo task with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param kaleoTaskId the primary key of the kaleo task
+	* @return the kaleo task that was removed
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTaskException if a kaleo task with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTask remove(
+		long kaleoTaskId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
+
+	public com.liferay.portal.workflow.kaleo.model.KaleoTask updateImpl(
+		com.liferay.portal.workflow.kaleo.model.KaleoTask kaleoTask)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the kaleo task with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTaskException} if it could not be found.
+	*
+	* @param kaleoTaskId the primary key of the kaleo task
+	* @return the kaleo task
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTaskException if a kaleo task with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTask findByPrimaryKey(
+		long kaleoTaskId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
+
+	/**
+	* Returns the kaleo task with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param kaleoTaskId the primary key of the kaleo task
+	* @return the kaleo task, or <code>null</code> if a kaleo task with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTask fetchByPrimaryKey(
+		long kaleoTaskId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the kaleo tasks.
 	*
 	* @return the kaleo tasks
@@ -389,7 +449,7 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 	* Returns a range of all the kaleo tasks.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTaskModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo tasks
@@ -405,7 +465,7 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 	* Returns an ordered range of all the kaleo tasks.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTaskModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo tasks
@@ -420,71 +480,11 @@ public interface KaleoTaskPersistence extends BasePersistence<KaleoTask> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the kaleo tasks where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the kaleo tasks where kaleoDefinitionId = &#63; from the database.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the kaleo task where kaleoNodeId = &#63; from the database.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @return the kaleo task that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTask removeByKaleoNodeId(
-		long kaleoNodeId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTaskException;
-
-	/**
 	* Removes all the kaleo tasks from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo tasks where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching kaleo tasks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo tasks where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @return the number of matching kaleo tasks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKaleoDefinitionId(long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo tasks where kaleoNodeId = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @return the number of matching kaleo tasks
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKaleoNodeId(long kaleoNodeId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

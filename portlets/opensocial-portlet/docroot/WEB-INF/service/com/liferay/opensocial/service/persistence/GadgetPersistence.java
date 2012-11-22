@@ -38,67 +38,6 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	 */
 
 	/**
-	* Caches the gadget in the entity cache if it is enabled.
-	*
-	* @param gadget the gadget
-	*/
-	public void cacheResult(com.liferay.opensocial.model.Gadget gadget);
-
-	/**
-	* Caches the gadgets in the entity cache if it is enabled.
-	*
-	* @param gadgets the gadgets
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.opensocial.model.Gadget> gadgets);
-
-	/**
-	* Creates a new gadget with the primary key. Does not add the gadget to the database.
-	*
-	* @param gadgetId the primary key for the new gadget
-	* @return the new gadget
-	*/
-	public com.liferay.opensocial.model.Gadget create(long gadgetId);
-
-	/**
-	* Removes the gadget with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param gadgetId the primary key of the gadget
-	* @return the gadget that was removed
-	* @throws com.liferay.opensocial.NoSuchGadgetException if a gadget with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.Gadget remove(long gadgetId)
-		throws com.liferay.opensocial.NoSuchGadgetException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.opensocial.model.Gadget updateImpl(
-		com.liferay.opensocial.model.Gadget gadget)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the gadget with the primary key or throws a {@link com.liferay.opensocial.NoSuchGadgetException} if it could not be found.
-	*
-	* @param gadgetId the primary key of the gadget
-	* @return the gadget
-	* @throws com.liferay.opensocial.NoSuchGadgetException if a gadget with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.Gadget findByPrimaryKey(long gadgetId)
-		throws com.liferay.opensocial.NoSuchGadgetException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the gadget with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param gadgetId the primary key of the gadget
-	* @return the gadget, or <code>null</code> if a gadget with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.Gadget fetchByPrimaryKey(long gadgetId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the gadgets where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -113,7 +52,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns a range of all the gadgets where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -130,7 +69,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns an ordered range of all the gadgets where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -232,7 +171,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns a range of all the gadgets that the user has permission to view where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -249,7 +188,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns an ordered range of all the gadgets that the user has permissions to view where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -281,6 +220,35 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the gadgets where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of gadgets where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching gadgets
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of gadgets that the user has permission to view where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching gadgets that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the gadgets where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -296,7 +264,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns a range of all the gadgets where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -314,7 +282,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns an ordered range of all the gadgets where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -423,7 +391,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns a range of all the gadgets that the user has permission to view where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -441,7 +409,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns an ordered range of all the gadgets that the user has permissions to view where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -475,6 +443,38 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the gadgets where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of gadgets where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching gadgets
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of gadgets that the user has permission to view where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching gadgets that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the gadgets where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -489,7 +489,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns a range of all the gadgets where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -506,7 +506,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns an ordered range of all the gadgets where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -608,7 +608,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns a range of all the gadgets that the user has permission to view where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -625,7 +625,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns an ordered range of all the gadgets that the user has permissions to view where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -655,6 +655,35 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.opensocial.NoSuchGadgetException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the gadgets where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of gadgets where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching gadgets
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of gadgets that the user has permission to view where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching gadgets that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public int filterCountByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
 	* Returns the gadget where companyId = &#63; and url = &#63; or throws a {@link com.liferay.opensocial.NoSuchGadgetException} if it could not be found.
@@ -696,6 +725,91 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the gadget where companyId = &#63; and url = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param url the url
+	* @return the gadget that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.Gadget removeByC_U(long companyId,
+		java.lang.String url)
+		throws com.liferay.opensocial.NoSuchGadgetException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of gadgets where companyId = &#63; and url = &#63;.
+	*
+	* @param companyId the company ID
+	* @param url the url
+	* @return the number of matching gadgets
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_U(long companyId, java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the gadget in the entity cache if it is enabled.
+	*
+	* @param gadget the gadget
+	*/
+	public void cacheResult(com.liferay.opensocial.model.Gadget gadget);
+
+	/**
+	* Caches the gadgets in the entity cache if it is enabled.
+	*
+	* @param gadgets the gadgets
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.opensocial.model.Gadget> gadgets);
+
+	/**
+	* Creates a new gadget with the primary key. Does not add the gadget to the database.
+	*
+	* @param gadgetId the primary key for the new gadget
+	* @return the new gadget
+	*/
+	public com.liferay.opensocial.model.Gadget create(long gadgetId);
+
+	/**
+	* Removes the gadget with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param gadgetId the primary key of the gadget
+	* @return the gadget that was removed
+	* @throws com.liferay.opensocial.NoSuchGadgetException if a gadget with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.Gadget remove(long gadgetId)
+		throws com.liferay.opensocial.NoSuchGadgetException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.opensocial.model.Gadget updateImpl(
+		com.liferay.opensocial.model.Gadget gadget)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the gadget with the primary key or throws a {@link com.liferay.opensocial.NoSuchGadgetException} if it could not be found.
+	*
+	* @param gadgetId the primary key of the gadget
+	* @return the gadget
+	* @throws com.liferay.opensocial.NoSuchGadgetException if a gadget with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.Gadget findByPrimaryKey(long gadgetId)
+		throws com.liferay.opensocial.NoSuchGadgetException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the gadget with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param gadgetId the primary key of the gadget
+	* @return the gadget, or <code>null</code> if a gadget with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.opensocial.model.Gadget fetchByPrimaryKey(long gadgetId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the gadgets.
 	*
 	* @return the gadgets
@@ -708,7 +822,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns a range of all the gadgets.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of gadgets
@@ -724,7 +838,7 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 	* Returns an ordered range of all the gadgets.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from GadgetModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of gadgets
@@ -739,125 +853,11 @@ public interface GadgetPersistence extends BasePersistence<Gadget> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the gadgets where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the gadgets where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the gadgets where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the gadget where companyId = &#63; and url = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param url the url
-	* @return the gadget that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.opensocial.model.Gadget removeByC_U(long companyId,
-		java.lang.String url)
-		throws com.liferay.opensocial.NoSuchGadgetException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the gadgets from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of gadgets where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching gadgets
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of gadgets that the user has permission to view where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching gadgets that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of gadgets where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching gadgets
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of gadgets that the user has permission to view where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching gadgets that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of gadgets where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching gadgets
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of gadgets that the user has permission to view where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching gadgets that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of gadgets where companyId = &#63; and url = &#63;.
-	*
-	* @param companyId the company ID
-	* @param url the url
-	* @return the number of matching gadgets
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_U(long companyId, java.lang.String url)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

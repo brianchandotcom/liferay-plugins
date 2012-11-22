@@ -111,86 +111,6 @@ public class KBCommentUtil {
 	}
 
 	/**
-	* Caches the k b comment in the entity cache if it is enabled.
-	*
-	* @param kbComment the k b comment
-	*/
-	public static void cacheResult(
-		com.liferay.knowledgebase.model.KBComment kbComment) {
-		getPersistence().cacheResult(kbComment);
-	}
-
-	/**
-	* Caches the k b comments in the entity cache if it is enabled.
-	*
-	* @param kbComments the k b comments
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.knowledgebase.model.KBComment> kbComments) {
-		getPersistence().cacheResult(kbComments);
-	}
-
-	/**
-	* Creates a new k b comment with the primary key. Does not add the k b comment to the database.
-	*
-	* @param kbCommentId the primary key for the new k b comment
-	* @return the new k b comment
-	*/
-	public static com.liferay.knowledgebase.model.KBComment create(
-		long kbCommentId) {
-		return getPersistence().create(kbCommentId);
-	}
-
-	/**
-	* Removes the k b comment with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param kbCommentId the primary key of the k b comment
-	* @return the k b comment that was removed
-	* @throws com.liferay.knowledgebase.NoSuchCommentException if a k b comment with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.knowledgebase.model.KBComment remove(
-		long kbCommentId)
-		throws com.liferay.knowledgebase.NoSuchCommentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(kbCommentId);
-	}
-
-	public static com.liferay.knowledgebase.model.KBComment updateImpl(
-		com.liferay.knowledgebase.model.KBComment kbComment)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(kbComment);
-	}
-
-	/**
-	* Returns the k b comment with the primary key or throws a {@link com.liferay.knowledgebase.NoSuchCommentException} if it could not be found.
-	*
-	* @param kbCommentId the primary key of the k b comment
-	* @return the k b comment
-	* @throws com.liferay.knowledgebase.NoSuchCommentException if a k b comment with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.knowledgebase.model.KBComment findByPrimaryKey(
-		long kbCommentId)
-		throws com.liferay.knowledgebase.NoSuchCommentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(kbCommentId);
-	}
-
-	/**
-	* Returns the k b comment with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param kbCommentId the primary key of the k b comment
-	* @return the k b comment, or <code>null</code> if a k b comment with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.knowledgebase.model.KBComment fetchByPrimaryKey(
-		long kbCommentId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(kbCommentId);
-	}
-
-	/**
 	* Returns all the k b comments where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -207,7 +127,7 @@ public class KBCommentUtil {
 	* Returns a range of all the k b comments where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -226,7 +146,7 @@ public class KBCommentUtil {
 	* Returns an ordered range of all the k b comments where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -327,6 +247,29 @@ public class KBCommentUtil {
 	}
 
 	/**
+	* Removes all the k b comments where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of k b comments where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching k b comments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns the k b comment where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.knowledgebase.NoSuchCommentException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -372,6 +315,34 @@ public class KBCommentUtil {
 	}
 
 	/**
+	* Removes the k b comment where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the k b comment that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.knowledgebase.model.KBComment removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.knowledgebase.NoSuchCommentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of k b comments where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching k b comments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
+	}
+
+	/**
 	* Returns all the k b comments where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -389,7 +360,7 @@ public class KBCommentUtil {
 	* Returns a range of all the k b comments where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -409,7 +380,7 @@ public class KBCommentUtil {
 	* Returns an ordered range of all the k b comments where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -522,6 +493,31 @@ public class KBCommentUtil {
 	}
 
 	/**
+	* Removes all the k b comments where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of k b comments where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching k b comments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
+	}
+
+	/**
 	* Returns all the k b comments where groupId = &#63;.
 	*
 	* @param groupId the group ID
@@ -538,7 +534,7 @@ public class KBCommentUtil {
 	* Returns a range of all the k b comments where groupId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param groupId the group ID
@@ -557,7 +553,7 @@ public class KBCommentUtil {
 	* Returns an ordered range of all the k b comments where groupId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param groupId the group ID
@@ -660,6 +656,29 @@ public class KBCommentUtil {
 	}
 
 	/**
+	* Removes all the k b comments where groupId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByGroupId(groupId);
+	}
+
+	/**
+	* Returns the number of k b comments where groupId = &#63;.
+	*
+	* @param groupId the group ID
+	* @return the number of matching k b comments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByGroupId(groupId);
+	}
+
+	/**
 	* Returns all the k b comments where groupId = &#63; and classNameId = &#63;.
 	*
 	* @param groupId the group ID
@@ -677,7 +696,7 @@ public class KBCommentUtil {
 	* Returns a range of all the k b comments where groupId = &#63; and classNameId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param groupId the group ID
@@ -697,7 +716,7 @@ public class KBCommentUtil {
 	* Returns an ordered range of all the k b comments where groupId = &#63; and classNameId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param groupId the group ID
@@ -811,6 +830,31 @@ public class KBCommentUtil {
 	}
 
 	/**
+	* Removes all the k b comments where groupId = &#63; and classNameId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C(long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C(groupId, classNameId);
+	}
+
+	/**
+	* Returns the number of k b comments where groupId = &#63; and classNameId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param classNameId the class name ID
+	* @return the number of matching k b comments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C(long groupId, long classNameId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C(groupId, classNameId);
+	}
+
+	/**
 	* Returns all the k b comments where classNameId = &#63; and classPK = &#63;.
 	*
 	* @param classNameId the class name ID
@@ -828,7 +872,7 @@ public class KBCommentUtil {
 	* Returns a range of all the k b comments where classNameId = &#63; and classPK = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param classNameId the class name ID
@@ -848,7 +892,7 @@ public class KBCommentUtil {
 	* Returns an ordered range of all the k b comments where classNameId = &#63; and classPK = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param classNameId the class name ID
@@ -962,6 +1006,31 @@ public class KBCommentUtil {
 	}
 
 	/**
+	* Removes all the k b comments where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_C(classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of k b comments where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching k b comments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_C(long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_C(classNameId, classPK);
+	}
+
+	/**
 	* Returns the k b comment where userId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.knowledgebase.NoSuchCommentException} if it could not be found.
 	*
 	* @param userId the user ID
@@ -1011,6 +1080,116 @@ public class KBCommentUtil {
 	}
 
 	/**
+	* Removes the k b comment where userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the k b comment that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.knowledgebase.model.KBComment removeByU_C_C(
+		long userId, long classNameId, long classPK)
+		throws com.liferay.knowledgebase.NoSuchCommentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByU_C_C(userId, classNameId, classPK);
+	}
+
+	/**
+	* Returns the number of k b comments where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	*
+	* @param userId the user ID
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching k b comments
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_C_C(long userId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByU_C_C(userId, classNameId, classPK);
+	}
+
+	/**
+	* Caches the k b comment in the entity cache if it is enabled.
+	*
+	* @param kbComment the k b comment
+	*/
+	public static void cacheResult(
+		com.liferay.knowledgebase.model.KBComment kbComment) {
+		getPersistence().cacheResult(kbComment);
+	}
+
+	/**
+	* Caches the k b comments in the entity cache if it is enabled.
+	*
+	* @param kbComments the k b comments
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.knowledgebase.model.KBComment> kbComments) {
+		getPersistence().cacheResult(kbComments);
+	}
+
+	/**
+	* Creates a new k b comment with the primary key. Does not add the k b comment to the database.
+	*
+	* @param kbCommentId the primary key for the new k b comment
+	* @return the new k b comment
+	*/
+	public static com.liferay.knowledgebase.model.KBComment create(
+		long kbCommentId) {
+		return getPersistence().create(kbCommentId);
+	}
+
+	/**
+	* Removes the k b comment with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param kbCommentId the primary key of the k b comment
+	* @return the k b comment that was removed
+	* @throws com.liferay.knowledgebase.NoSuchCommentException if a k b comment with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.knowledgebase.model.KBComment remove(
+		long kbCommentId)
+		throws com.liferay.knowledgebase.NoSuchCommentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(kbCommentId);
+	}
+
+	public static com.liferay.knowledgebase.model.KBComment updateImpl(
+		com.liferay.knowledgebase.model.KBComment kbComment)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(kbComment);
+	}
+
+	/**
+	* Returns the k b comment with the primary key or throws a {@link com.liferay.knowledgebase.NoSuchCommentException} if it could not be found.
+	*
+	* @param kbCommentId the primary key of the k b comment
+	* @return the k b comment
+	* @throws com.liferay.knowledgebase.NoSuchCommentException if a k b comment with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.knowledgebase.model.KBComment findByPrimaryKey(
+		long kbCommentId)
+		throws com.liferay.knowledgebase.NoSuchCommentException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(kbCommentId);
+	}
+
+	/**
+	* Returns the k b comment with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param kbCommentId the primary key of the k b comment
+	* @return the k b comment, or <code>null</code> if a k b comment with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.knowledgebase.model.KBComment fetchByPrimaryKey(
+		long kbCommentId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(kbCommentId);
+	}
+
+	/**
 	* Returns all the k b comments.
 	*
 	* @return the k b comments
@@ -1025,7 +1204,7 @@ public class KBCommentUtil {
 	* Returns a range of all the k b comments.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of k b comments
@@ -1043,7 +1222,7 @@ public class KBCommentUtil {
 	* Returns an ordered range of all the k b comments.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KBCommentModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of k b comments
@@ -1060,95 +1239,6 @@ public class KBCommentUtil {
 	}
 
 	/**
-	* Removes all the k b comments where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the k b comment where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the k b comment that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.knowledgebase.model.KBComment removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.knowledgebase.NoSuchCommentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the k b comments where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the k b comments where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByGroupId(groupId);
-	}
-
-	/**
-	* Removes all the k b comments where groupId = &#63; and classNameId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C(long groupId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C(groupId, classNameId);
-	}
-
-	/**
-	* Removes all the k b comments where classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Removes the k b comment where userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the k b comment that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.knowledgebase.model.KBComment removeByU_C_C(
-		long userId, long classNameId, long classPK)
-		throws com.liferay.knowledgebase.NoSuchCommentException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByU_C_C(userId, classNameId, classPK);
-	}
-
-	/**
 	* Removes all the k b comments from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1156,96 +1246,6 @@ public class KBCommentUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of k b comments where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching k b comments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of k b comments where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching k b comments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of k b comments where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching k b comments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of k b comments where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching k b comments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByGroupId(groupId);
-	}
-
-	/**
-	* Returns the number of k b comments where groupId = &#63; and classNameId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param classNameId the class name ID
-	* @return the number of matching k b comments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C(long groupId, long classNameId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C(groupId, classNameId);
-	}
-
-	/**
-	* Returns the number of k b comments where classNameId = &#63; and classPK = &#63;.
-	*
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching k b comments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_C(long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_C(classNameId, classPK);
-	}
-
-	/**
-	* Returns the number of k b comments where userId = &#63; and classNameId = &#63; and classPK = &#63;.
-	*
-	* @param userId the user ID
-	* @param classNameId the class name ID
-	* @param classPK the class p k
-	* @return the number of matching k b comments
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_C_C(long userId, long classNameId, long classPK)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByU_C_C(userId, classNameId, classPK);
 	}
 
 	/**

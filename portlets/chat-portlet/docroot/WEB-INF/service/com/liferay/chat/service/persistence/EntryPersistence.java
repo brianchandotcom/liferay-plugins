@@ -38,67 +38,6 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	 */
 
 	/**
-	* Caches the entry in the entity cache if it is enabled.
-	*
-	* @param entry the entry
-	*/
-	public void cacheResult(com.liferay.chat.model.Entry entry);
-
-	/**
-	* Caches the entries in the entity cache if it is enabled.
-	*
-	* @param entries the entries
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.chat.model.Entry> entries);
-
-	/**
-	* Creates a new entry with the primary key. Does not add the entry to the database.
-	*
-	* @param entryId the primary key for the new entry
-	* @return the new entry
-	*/
-	public com.liferay.chat.model.Entry create(long entryId);
-
-	/**
-	* Removes the entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the entry
-	* @return the entry that was removed
-	* @throws com.liferay.chat.NoSuchEntryException if a entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.chat.model.Entry remove(long entryId)
-		throws com.liferay.chat.NoSuchEntryException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.chat.model.Entry updateImpl(
-		com.liferay.chat.model.Entry entry)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the entry with the primary key or throws a {@link com.liferay.chat.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the entry
-	* @return the entry
-	* @throws com.liferay.chat.NoSuchEntryException if a entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.chat.model.Entry findByPrimaryKey(long entryId)
-		throws com.liferay.chat.NoSuchEntryException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the entry
-	* @return the entry, or <code>null</code> if a entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.chat.model.Entry fetchByPrimaryKey(long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the entries where createDate = &#63;.
 	*
 	* @param createDate the create date
@@ -113,7 +52,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries where createDate = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -130,7 +69,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries where createDate = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -217,6 +156,25 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the entries where createDate = &#63; from the database.
+	*
+	* @param createDate the create date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCreateDate(long createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of entries where createDate = &#63;.
+	*
+	* @param createDate the create date
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCreateDate(long createDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the entries where fromUserId = &#63;.
 	*
 	* @param fromUserId the from user ID
@@ -231,7 +189,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries where fromUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param fromUserId the from user ID
@@ -248,7 +206,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries where fromUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param fromUserId the from user ID
@@ -335,6 +293,25 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the entries where fromUserId = &#63; from the database.
+	*
+	* @param fromUserId the from user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByFromUserId(long fromUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of entries where fromUserId = &#63;.
+	*
+	* @param fromUserId the from user ID
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByFromUserId(long fromUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the entries where toUserId = &#63;.
 	*
 	* @param toUserId the to user ID
@@ -349,7 +326,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries where toUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param toUserId the to user ID
@@ -366,7 +343,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries where toUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param toUserId the to user ID
@@ -450,6 +427,25 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the entries where toUserId = &#63; from the database.
+	*
+	* @param toUserId the to user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByToUserId(long toUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of entries where toUserId = &#63;.
+	*
+	* @param toUserId the to user ID
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByToUserId(long toUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the entries where createDate = &#63; and fromUserId = &#63;.
 	*
 	* @param createDate the create date
@@ -465,7 +461,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries where createDate = &#63; and fromUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -483,7 +479,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries where createDate = &#63; and fromUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -577,6 +573,27 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the entries where createDate = &#63; and fromUserId = &#63; from the database.
+	*
+	* @param createDate the create date
+	* @param fromUserId the from user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_F(long createDate, long fromUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of entries where createDate = &#63; and fromUserId = &#63;.
+	*
+	* @param createDate the create date
+	* @param fromUserId the from user ID
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_F(long createDate, long fromUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the entries where createDate = &#63; and toUserId = &#63;.
 	*
 	* @param createDate the create date
@@ -592,7 +609,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries where createDate = &#63; and toUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -610,7 +627,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries where createDate = &#63; and toUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -704,6 +721,27 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the entries where createDate = &#63; and toUserId = &#63; from the database.
+	*
+	* @param createDate the create date
+	* @param toUserId the to user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_T(long createDate, long toUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of entries where createDate = &#63; and toUserId = &#63;.
+	*
+	* @param createDate the create date
+	* @param toUserId the to user ID
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_T(long createDate, long toUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the entries where createDate = &#63; and fromUserId = &#63; and toUserId = &#63;.
 	*
 	* @param createDate the create date
@@ -720,7 +758,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries where createDate = &#63; and fromUserId = &#63; and toUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -739,7 +777,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries where createDate = &#63; and fromUserId = &#63; and toUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param createDate the create date
@@ -839,6 +877,29 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the entries where createDate = &#63; and fromUserId = &#63; and toUserId = &#63; from the database.
+	*
+	* @param createDate the create date
+	* @param fromUserId the from user ID
+	* @param toUserId the to user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByC_F_T(long createDate, long fromUserId, long toUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of entries where createDate = &#63; and fromUserId = &#63; and toUserId = &#63;.
+	*
+	* @param createDate the create date
+	* @param fromUserId the from user ID
+	* @param toUserId the to user ID
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByC_F_T(long createDate, long fromUserId, long toUserId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the entries where fromUserId = &#63; and toUserId = &#63; and content = &#63;.
 	*
 	* @param fromUserId the from user ID
@@ -855,7 +916,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries where fromUserId = &#63; and toUserId = &#63; and content = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param fromUserId the from user ID
@@ -874,7 +935,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries where fromUserId = &#63; and toUserId = &#63; and content = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param fromUserId the from user ID
@@ -975,6 +1036,92 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the entries where fromUserId = &#63; and toUserId = &#63; and content = &#63; from the database.
+	*
+	* @param fromUserId the from user ID
+	* @param toUserId the to user ID
+	* @param content the content
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByF_T_C(long fromUserId, long toUserId,
+		java.lang.String content)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of entries where fromUserId = &#63; and toUserId = &#63; and content = &#63;.
+	*
+	* @param fromUserId the from user ID
+	* @param toUserId the to user ID
+	* @param content the content
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByF_T_C(long fromUserId, long toUserId,
+		java.lang.String content)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the entry in the entity cache if it is enabled.
+	*
+	* @param entry the entry
+	*/
+	public void cacheResult(com.liferay.chat.model.Entry entry);
+
+	/**
+	* Caches the entries in the entity cache if it is enabled.
+	*
+	* @param entries the entries
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.chat.model.Entry> entries);
+
+	/**
+	* Creates a new entry with the primary key. Does not add the entry to the database.
+	*
+	* @param entryId the primary key for the new entry
+	* @return the new entry
+	*/
+	public com.liferay.chat.model.Entry create(long entryId);
+
+	/**
+	* Removes the entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the entry
+	* @return the entry that was removed
+	* @throws com.liferay.chat.NoSuchEntryException if a entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.chat.model.Entry remove(long entryId)
+		throws com.liferay.chat.NoSuchEntryException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.chat.model.Entry updateImpl(
+		com.liferay.chat.model.Entry entry)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the entry with the primary key or throws a {@link com.liferay.chat.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the entry
+	* @return the entry
+	* @throws com.liferay.chat.NoSuchEntryException if a entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.chat.model.Entry findByPrimaryKey(long entryId)
+		throws com.liferay.chat.NoSuchEntryException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the entry
+	* @return the entry, or <code>null</code> if a entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.chat.model.Entry fetchByPrimaryKey(long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the entries.
 	*
 	* @return the entries
@@ -987,7 +1134,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns a range of all the entries.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of entries
@@ -1002,7 +1149,7 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 	* Returns an ordered range of all the entries.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from EntryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of entries
@@ -1017,158 +1164,11 @@ public interface EntryPersistence extends BasePersistence<Entry> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the entries where createDate = &#63; from the database.
-	*
-	* @param createDate the create date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCreateDate(long createDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the entries where fromUserId = &#63; from the database.
-	*
-	* @param fromUserId the from user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByFromUserId(long fromUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the entries where toUserId = &#63; from the database.
-	*
-	* @param toUserId the to user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByToUserId(long toUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the entries where createDate = &#63; and fromUserId = &#63; from the database.
-	*
-	* @param createDate the create date
-	* @param fromUserId the from user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_F(long createDate, long fromUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the entries where createDate = &#63; and toUserId = &#63; from the database.
-	*
-	* @param createDate the create date
-	* @param toUserId the to user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_T(long createDate, long toUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the entries where createDate = &#63; and fromUserId = &#63; and toUserId = &#63; from the database.
-	*
-	* @param createDate the create date
-	* @param fromUserId the from user ID
-	* @param toUserId the to user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByC_F_T(long createDate, long fromUserId, long toUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the entries where fromUserId = &#63; and toUserId = &#63; and content = &#63; from the database.
-	*
-	* @param fromUserId the from user ID
-	* @param toUserId the to user ID
-	* @param content the content
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByF_T_C(long fromUserId, long toUserId,
-		java.lang.String content)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of entries where createDate = &#63;.
-	*
-	* @param createDate the create date
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCreateDate(long createDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of entries where fromUserId = &#63;.
-	*
-	* @param fromUserId the from user ID
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByFromUserId(long fromUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of entries where toUserId = &#63;.
-	*
-	* @param toUserId the to user ID
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByToUserId(long toUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of entries where createDate = &#63; and fromUserId = &#63;.
-	*
-	* @param createDate the create date
-	* @param fromUserId the from user ID
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_F(long createDate, long fromUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of entries where createDate = &#63; and toUserId = &#63;.
-	*
-	* @param createDate the create date
-	* @param toUserId the to user ID
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_T(long createDate, long toUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of entries where createDate = &#63; and fromUserId = &#63; and toUserId = &#63;.
-	*
-	* @param createDate the create date
-	* @param fromUserId the from user ID
-	* @param toUserId the to user ID
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByC_F_T(long createDate, long fromUserId, long toUserId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of entries where fromUserId = &#63; and toUserId = &#63; and content = &#63;.
-	*
-	* @param fromUserId the from user ID
-	* @param toUserId the to user ID
-	* @param content the content
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByF_T_C(long fromUserId, long toUserId,
-		java.lang.String content)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

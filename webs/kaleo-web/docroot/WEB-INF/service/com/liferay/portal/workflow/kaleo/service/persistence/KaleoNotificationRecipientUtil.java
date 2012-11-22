@@ -114,86 +114,6 @@ public class KaleoNotificationRecipientUtil {
 	}
 
 	/**
-	* Caches the kaleo notification recipient in the entity cache if it is enabled.
-	*
-	* @param kaleoNotificationRecipient the kaleo notification recipient
-	*/
-	public static void cacheResult(
-		com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient kaleoNotificationRecipient) {
-		getPersistence().cacheResult(kaleoNotificationRecipient);
-	}
-
-	/**
-	* Caches the kaleo notification recipients in the entity cache if it is enabled.
-	*
-	* @param kaleoNotificationRecipients the kaleo notification recipients
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient> kaleoNotificationRecipients) {
-		getPersistence().cacheResult(kaleoNotificationRecipients);
-	}
-
-	/**
-	* Creates a new kaleo notification recipient with the primary key. Does not add the kaleo notification recipient to the database.
-	*
-	* @param kaleoNotificationRecipientId the primary key for the new kaleo notification recipient
-	* @return the new kaleo notification recipient
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient create(
-		long kaleoNotificationRecipientId) {
-		return getPersistence().create(kaleoNotificationRecipientId);
-	}
-
-	/**
-	* Removes the kaleo notification recipient with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
-	* @return the kaleo notification recipient that was removed
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient remove(
-		long kaleoNotificationRecipientId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException {
-		return getPersistence().remove(kaleoNotificationRecipientId);
-	}
-
-	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient kaleoNotificationRecipient)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(kaleoNotificationRecipient);
-	}
-
-	/**
-	* Returns the kaleo notification recipient with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException} if it could not be found.
-	*
-	* @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
-	* @return the kaleo notification recipient
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient findByPrimaryKey(
-		long kaleoNotificationRecipientId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException {
-		return getPersistence().findByPrimaryKey(kaleoNotificationRecipientId);
-	}
-
-	/**
-	* Returns the kaleo notification recipient with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
-	* @return the kaleo notification recipient, or <code>null</code> if a kaleo notification recipient with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient fetchByPrimaryKey(
-		long kaleoNotificationRecipientId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(kaleoNotificationRecipientId);
-	}
-
-	/**
 	* Returns all the kaleo notification recipients where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -210,7 +130,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns a range of all the kaleo notification recipients where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -229,7 +149,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns an ordered range of all the kaleo notification recipients where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -336,6 +256,29 @@ public class KaleoNotificationRecipientUtil {
 	}
 
 	/**
+	* Removes all the kaleo notification recipients where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of kaleo notification recipients where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching kaleo notification recipients
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
 	* Returns all the kaleo notification recipients where kaleoDefinitionId = &#63;.
 	*
 	* @param kaleoDefinitionId the kaleo definition ID
@@ -352,7 +295,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns a range of all the kaleo notification recipients where kaleoDefinitionId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoDefinitionId the kaleo definition ID
@@ -372,7 +315,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns an ordered range of all the kaleo notification recipients where kaleoDefinitionId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoDefinitionId the kaleo definition ID
@@ -484,6 +427,29 @@ public class KaleoNotificationRecipientUtil {
 	}
 
 	/**
+	* Removes all the kaleo notification recipients where kaleoDefinitionId = &#63; from the database.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByKaleoDefinitionId(long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByKaleoDefinitionId(kaleoDefinitionId);
+	}
+
+	/**
+	* Returns the number of kaleo notification recipients where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the number of matching kaleo notification recipients
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByKaleoDefinitionId(long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByKaleoDefinitionId(kaleoDefinitionId);
+	}
+
+	/**
 	* Returns all the kaleo notification recipients where kaleoNotificationId = &#63;.
 	*
 	* @param kaleoNotificationId the kaleo notification ID
@@ -500,7 +466,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns a range of all the kaleo notification recipients where kaleoNotificationId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoNotificationId the kaleo notification ID
@@ -520,7 +486,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns an ordered range of all the kaleo notification recipients where kaleoNotificationId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param kaleoNotificationId the kaleo notification ID
@@ -632,6 +598,109 @@ public class KaleoNotificationRecipientUtil {
 	}
 
 	/**
+	* Removes all the kaleo notification recipients where kaleoNotificationId = &#63; from the database.
+	*
+	* @param kaleoNotificationId the kaleo notification ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByKaleoNotificationId(long kaleoNotificationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByKaleoNotificationId(kaleoNotificationId);
+	}
+
+	/**
+	* Returns the number of kaleo notification recipients where kaleoNotificationId = &#63;.
+	*
+	* @param kaleoNotificationId the kaleo notification ID
+	* @return the number of matching kaleo notification recipients
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByKaleoNotificationId(long kaleoNotificationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByKaleoNotificationId(kaleoNotificationId);
+	}
+
+	/**
+	* Caches the kaleo notification recipient in the entity cache if it is enabled.
+	*
+	* @param kaleoNotificationRecipient the kaleo notification recipient
+	*/
+	public static void cacheResult(
+		com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient kaleoNotificationRecipient) {
+		getPersistence().cacheResult(kaleoNotificationRecipient);
+	}
+
+	/**
+	* Caches the kaleo notification recipients in the entity cache if it is enabled.
+	*
+	* @param kaleoNotificationRecipients the kaleo notification recipients
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient> kaleoNotificationRecipients) {
+		getPersistence().cacheResult(kaleoNotificationRecipients);
+	}
+
+	/**
+	* Creates a new kaleo notification recipient with the primary key. Does not add the kaleo notification recipient to the database.
+	*
+	* @param kaleoNotificationRecipientId the primary key for the new kaleo notification recipient
+	* @return the new kaleo notification recipient
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient create(
+		long kaleoNotificationRecipientId) {
+		return getPersistence().create(kaleoNotificationRecipientId);
+	}
+
+	/**
+	* Removes the kaleo notification recipient with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
+	* @return the kaleo notification recipient that was removed
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient remove(
+		long kaleoNotificationRecipientId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException {
+		return getPersistence().remove(kaleoNotificationRecipientId);
+	}
+
+	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient updateImpl(
+		com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient kaleoNotificationRecipient)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(kaleoNotificationRecipient);
+	}
+
+	/**
+	* Returns the kaleo notification recipient with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException} if it could not be found.
+	*
+	* @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
+	* @return the kaleo notification recipient
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient findByPrimaryKey(
+		long kaleoNotificationRecipientId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException {
+		return getPersistence().findByPrimaryKey(kaleoNotificationRecipientId);
+	}
+
+	/**
+	* Returns the kaleo notification recipient with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
+	* @return the kaleo notification recipient, or <code>null</code> if a kaleo notification recipient with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient fetchByPrimaryKey(
+		long kaleoNotificationRecipientId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(kaleoNotificationRecipientId);
+	}
+
+	/**
 	* Returns all the kaleo notification recipients.
 	*
 	* @return the kaleo notification recipients
@@ -646,7 +715,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns a range of all the kaleo notification recipients.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo notification recipients
@@ -664,7 +733,7 @@ public class KaleoNotificationRecipientUtil {
 	* Returns an ordered range of all the kaleo notification recipients.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoNotificationRecipientModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo notification recipients
@@ -681,39 +750,6 @@ public class KaleoNotificationRecipientUtil {
 	}
 
 	/**
-	* Removes all the kaleo notification recipients where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes all the kaleo notification recipients where kaleoDefinitionId = &#63; from the database.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByKaleoDefinitionId(long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByKaleoDefinitionId(kaleoDefinitionId);
-	}
-
-	/**
-	* Removes all the kaleo notification recipients where kaleoNotificationId = &#63; from the database.
-	*
-	* @param kaleoNotificationId the kaleo notification ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByKaleoNotificationId(long kaleoNotificationId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByKaleoNotificationId(kaleoNotificationId);
-	}
-
-	/**
 	* Removes all the kaleo notification recipients from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -721,42 +757,6 @@ public class KaleoNotificationRecipientUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of kaleo notification recipients where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching kaleo notification recipients
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of kaleo notification recipients where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @return the number of matching kaleo notification recipients
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByKaleoDefinitionId(long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByKaleoDefinitionId(kaleoDefinitionId);
-	}
-
-	/**
-	* Returns the number of kaleo notification recipients where kaleoNotificationId = &#63;.
-	*
-	* @param kaleoNotificationId the kaleo notification ID
-	* @return the number of matching kaleo notification recipients
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByKaleoNotificationId(long kaleoNotificationId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByKaleoNotificationId(kaleoNotificationId);
 	}
 
 	/**
