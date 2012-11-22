@@ -111,6 +111,149 @@ public class SVNRepositoryUtil {
 	}
 
 	/**
+	* Returns the first s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	*
+	* @param url the url
+	* @return the first matching s v n repository
+	* @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository findByUrl_First(
+		java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.socialcoding.NoSuchSVNRepositoryException {
+		return getPersistence().findByUrl_First(url);
+	}
+
+	/**
+	* Returns the first s v n repository in the ordered set where url = &#63;.
+	*
+	* @param url the url
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s v n repository
+	* @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository findByUrl_First(
+		java.lang.String url,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.socialcoding.NoSuchSVNRepositoryException {
+		return getPersistence().findByUrl_First(url, orderByComparator);
+	}
+
+	/**
+	* Returns the first s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	*
+	* @param url the url
+	* @return the first matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository fetchByUrl_First(
+		java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUrl_First(url);
+	}
+
+	/**
+	* Returns the first s v n repository in the ordered set where url = &#63;.
+	*
+	* @param url the url
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository fetchByUrl_First(
+		java.lang.String url,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUrl_First(url, orderByComparator);
+	}
+
+	/**
+	* Returns the last s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	*
+	* @param url the url
+	* @return the last matching s v n repository
+	* @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository findByUrl_Last(
+		java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.socialcoding.NoSuchSVNRepositoryException {
+		return getPersistence().findByUrl_Last(url);
+	}
+
+	/**
+	* Returns the last s v n repository in the ordered set where url = &#63;.
+	*
+	* @param url the url
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s v n repository
+	* @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository findByUrl_Last(
+		java.lang.String url,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.socialcoding.NoSuchSVNRepositoryException {
+		return getPersistence().findByUrl_Last(url, orderByComparator);
+	}
+
+	/**
+	* Returns the last s v n repository in the default ordered set defined by {@link SVNRepositoryModelImpl#ORDER_BY_JPQL} where url = &#63;.
+	*
+	* @param url the url
+	* @return the last matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository fetchByUrl_Last(
+		java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUrl_Last(url);
+	}
+
+	/**
+	* Returns the last s v n repository in the ordered set where url = &#63;.
+	*
+	* @param url the url
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.SVNRepository fetchByUrl_Last(
+		java.lang.String url,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUrl_Last(url, orderByComparator);
+	}
+
+	/**
+	* Removes all the s v n repositories where url = &#63; from the database.
+	*
+	* @param url the url
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUrl(java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUrl(url);
+	}
+
+	/**
+	* Returns the number of s v n repositories where url = &#63;.
+	*
+	* @param url the url
+	* @return the number of matching s v n repositories
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUrl(java.lang.String url)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUrl(url);
+	}
+
+	/**
 	* Caches the s v n repository in the entity cache if it is enabled.
 	*
 	* @param svnRepository the s v n repository
@@ -191,48 +334,6 @@ public class SVNRepositoryUtil {
 	}
 
 	/**
-	* Returns the s v n repository where url = &#63; or throws a {@link com.liferay.socialcoding.NoSuchSVNRepositoryException} if it could not be found.
-	*
-	* @param url the url
-	* @return the matching s v n repository
-	* @throws com.liferay.socialcoding.NoSuchSVNRepositoryException if a matching s v n repository could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.SVNRepository findByUrl(
-		java.lang.String url)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.socialcoding.NoSuchSVNRepositoryException {
-		return getPersistence().findByUrl(url);
-	}
-
-	/**
-	* Returns the s v n repository where url = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param url the url
-	* @return the matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.SVNRepository fetchByUrl(
-		java.lang.String url)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUrl(url);
-	}
-
-	/**
-	* Returns the s v n repository where url = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param url the url
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching s v n repository, or <code>null</code> if a matching s v n repository could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.SVNRepository fetchByUrl(
-		java.lang.String url, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUrl(url, retrieveFromCache);
-	}
-
-	/**
 	* Returns all the s v n repositories.
 	*
 	* @return the s v n repositories
@@ -247,7 +348,7 @@ public class SVNRepositoryUtil {
 	* Returns a range of all the s v n repositories.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from SVNRepositoryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of s v n repositories
@@ -265,7 +366,7 @@ public class SVNRepositoryUtil {
 	* Returns an ordered range of all the s v n repositories.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from SVNRepositoryModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of s v n repositories
@@ -282,20 +383,6 @@ public class SVNRepositoryUtil {
 	}
 
 	/**
-	* Removes the s v n repository where url = &#63; from the database.
-	*
-	* @param url the url
-	* @return the s v n repository that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.SVNRepository removeByUrl(
-		java.lang.String url)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.socialcoding.NoSuchSVNRepositoryException {
-		return getPersistence().removeByUrl(url);
-	}
-
-	/**
 	* Removes all the s v n repositories from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -303,18 +390,6 @@ public class SVNRepositoryUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of s v n repositories where url = &#63;.
-	*
-	* @param url the url
-	* @return the number of matching s v n repositories
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUrl(java.lang.String url)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUrl(url);
 	}
 
 	/**

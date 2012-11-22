@@ -98,7 +98,7 @@ public class KaleoTaskLocalServiceImpl extends KaleoTaskLocalServiceBaseImpl {
 	public KaleoTask getKaleoNodeKaleoTask(long kaleoNodeId)
 		throws PortalException, SystemException {
 
-		return kaleoTaskPersistence.findByKaleoNodeId(kaleoNodeId);
+		return kaleoTaskPersistence.findByKaleoNodeId_First(kaleoNodeId);
 	}
 
 }

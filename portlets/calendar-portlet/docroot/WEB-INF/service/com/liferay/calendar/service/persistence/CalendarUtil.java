@@ -110,6 +110,1469 @@ public class CalendarUtil {
 	}
 
 	/**
+	* Returns all the calendars where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByResourceBlockId(
+		long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByResourceBlockId(resourceBlockId);
+	}
+
+	/**
+	* Returns a range of all the calendars where resourceBlockId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param resourceBlockId the resource block ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @return the range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByResourceBlockId(
+		long resourceBlockId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByResourceBlockId(resourceBlockId, start, end);
+	}
+
+	/**
+	* Returns the calendars before and after the current calendar in the ordered set where resourceBlockId = &#63;.
+	*
+	* @param calendarId the primary key of the current calendar
+	* @param resourceBlockId the resource block ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar[] findByResourceBlockId_PrevAndNext(
+		long calendarId, long resourceBlockId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByResourceBlockId_PrevAndNext(calendarId,
+			resourceBlockId, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the calendars where resourceBlockId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param resourceBlockId the resource block ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByResourceBlockId(
+		long resourceBlockId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByResourceBlockId(resourceBlockId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByResourceBlockId_First(
+		long resourceBlockId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByResourceBlockId_First(resourceBlockId);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByResourceBlockId_First(
+		long resourceBlockId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByResourceBlockId_First(resourceBlockId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByResourceBlockId_First(
+		long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByResourceBlockId_First(resourceBlockId);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByResourceBlockId_First(
+		long resourceBlockId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByResourceBlockId_First(resourceBlockId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByResourceBlockId_Last(
+		long resourceBlockId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByResourceBlockId_Last(resourceBlockId);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByResourceBlockId_Last(
+		long resourceBlockId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByResourceBlockId_Last(resourceBlockId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByResourceBlockId_Last(
+		long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByResourceBlockId_Last(resourceBlockId);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByResourceBlockId_Last(
+		long resourceBlockId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByResourceBlockId_Last(resourceBlockId,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the calendars where resourceBlockId = &#63; from the database.
+	*
+	* @param resourceBlockId the resource block ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByResourceBlockId(long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByResourceBlockId(resourceBlockId);
+	}
+
+	/**
+	* Returns the number of calendars where resourceBlockId = &#63;.
+	*
+	* @param resourceBlockId the resource block ID
+	* @return the number of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByResourceBlockId(long resourceBlockId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByResourceBlockId(resourceBlockId);
+	}
+
+	/**
+	* Returns all the calendars where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid(uuid);
+	}
+
+	/**
+	* Returns a range of all the calendars where uuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @return the range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid(
+		java.lang.String uuid, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid(uuid, start, end);
+	}
+
+	/**
+	* Returns the calendars before and after the current calendar in the ordered set where uuid = &#63;.
+	*
+	* @param calendarId the primary key of the current calendar
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar[] findByUuid_PrevAndNext(
+		long calendarId, java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUuid_PrevAndNext(calendarId, uuid, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the calendars where uuid = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid(
+		java.lang.String uuid, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid(uuid, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_First(uuid);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_First(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_First(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_First(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_Last(uuid);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_Last(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_Last(uuid, orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_Last(
+		java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_Last(
+		java.lang.String uuid,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
+	}
+
+	/**
+	* Removes all the calendars where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of calendars where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
+	* Returns the calendar where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.calendar.NoSuchCalendarException} if it could not be found.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the calendar where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the calendar where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUUID_G(
+		java.lang.String uuid, long groupId, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUUID_G(uuid, groupId, retrieveFromCache);
+	}
+
+	/**
+	* Removes the calendar where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the calendar that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of calendars where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns all the calendars where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid_C(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns a range of all the calendars where uuid = &#63; and companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @return the range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid_C(
+		java.lang.String uuid, long companyId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_C(uuid, companyId, start, end);
+	}
+
+	/**
+	* Returns the calendars before and after the current calendar in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param calendarId the primary key of the current calendar
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar[] findByUuid_C_PrevAndNext(
+		long calendarId, java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUuid_C_PrevAndNext(calendarId, uuid, companyId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the calendars where uuid = &#63; and companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid_C(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUuid_C(uuid, companyId, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_C_First(uuid, companyId);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_C_First(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_C_First(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_First(uuid, companyId);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_C_First(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByUuid_C_Last(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByUuid_C_Last(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByUuid_C_Last(uuid, companyId);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByUuid_C_Last(
+		java.lang.String uuid, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
+	}
+
+	/**
+	* Removes all the calendars where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of calendars where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns all the calendars where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C(
+		long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_C(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns a range of all the calendars where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @return the range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C(
+		long groupId, long calendarResourceId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C(groupId, calendarResourceId, start, end);
+	}
+
+	/**
+	* Returns the calendars before and after the current calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param calendarId the primary key of the current calendar
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar[] findByG_C_PrevAndNext(
+		long calendarId, long groupId, long calendarResourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_PrevAndNext(calendarId, groupId,
+			calendarResourceId, orderByComparator);
+	}
+
+	/**
+	* Returns all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C(
+		long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterFindByG_C(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns a range of all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @return the range of matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C(
+		long groupId, long calendarResourceId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_C(groupId, calendarResourceId, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the calendars that the user has permissions to view where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C(
+		long groupId, long calendarResourceId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_C(groupId, calendarResourceId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the calendars before and after the current calendar in the ordered set of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param calendarId the primary key of the current calendar
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar[] filterFindByG_C_PrevAndNext(
+		long calendarId, long groupId, long calendarResourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_C_PrevAndNext(calendarId, groupId,
+			calendarResourceId, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the calendars where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C(
+		long groupId, long calendarResourceId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C(groupId, calendarResourceId, start, end,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_First(
+		long groupId, long calendarResourceId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_C_First(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_First(
+		long groupId, long calendarResourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_First(groupId, calendarResourceId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_First(
+		long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_First(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_First(
+		long groupId, long calendarResourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_First(groupId, calendarResourceId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_Last(
+		long groupId, long calendarResourceId)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByG_C_Last(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_Last(
+		long groupId, long calendarResourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_Last(groupId, calendarResourceId,
+			orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_Last(
+		long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByG_C_Last(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_Last(
+		long groupId, long calendarResourceId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_Last(groupId, calendarResourceId,
+			orderByComparator);
+	}
+
+	/**
+	* Removes all the calendars where groupId = &#63; and calendarResourceId = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C(long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_C(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns the number of calendars where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the number of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C(long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_C(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns the number of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @return the number of matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C(long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByG_C(groupId, calendarResourceId);
+	}
+
+	/**
+	* Returns all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C_D(
+		long groupId, long calendarResourceId, boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D(groupId, calendarResourceId, defaultCalendar);
+	}
+
+	/**
+	* Returns a range of all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @return the range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C_D(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D(groupId, calendarResourceId, defaultCalendar,
+			start, end);
+	}
+
+	/**
+	* Returns the calendars before and after the current calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param calendarId the primary key of the current calendar
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar[] findByG_C_D_PrevAndNext(
+		long calendarId, long groupId, long calendarResourceId,
+		boolean defaultCalendar,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D_PrevAndNext(calendarId, groupId,
+			calendarResourceId, defaultCalendar, orderByComparator);
+	}
+
+	/**
+	* Returns all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C_D(
+		long groupId, long calendarResourceId, boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_C_D(groupId, calendarResourceId,
+			defaultCalendar);
+	}
+
+	/**
+	* Returns a range of all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @return the range of matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C_D(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_C_D(groupId, calendarResourceId,
+			defaultCalendar, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the calendars that the user has permissions to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C_D(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_C_D(groupId, calendarResourceId,
+			defaultCalendar, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the calendars before and after the current calendar in the ordered set of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param calendarId the primary key of the current calendar
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar[] filterFindByG_C_D_PrevAndNext(
+		long calendarId, long groupId, long calendarResourceId,
+		boolean defaultCalendar,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterFindByG_C_D_PrevAndNext(calendarId, groupId,
+			calendarResourceId, defaultCalendar, orderByComparator);
+	}
+
+	/**
+	* Returns an ordered range of all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param start the lower bound of the range of calendars
+	* @param end the upper bound of the range of calendars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C_D(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D(groupId, calendarResourceId, defaultCalendar,
+			start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_D_First(
+		long groupId, long calendarResourceId, boolean defaultCalendar)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D_First(groupId, calendarResourceId,
+			defaultCalendar);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_D_First(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D_First(groupId, calendarResourceId,
+			defaultCalendar, orderByComparator);
+	}
+
+	/**
+	* Returns the first calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_D_First(
+		long groupId, long calendarResourceId, boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_D_First(groupId, calendarResourceId,
+			defaultCalendar);
+	}
+
+	/**
+	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_D_First(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_D_First(groupId, calendarResourceId,
+			defaultCalendar, orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_D_Last(
+		long groupId, long calendarResourceId, boolean defaultCalendar)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D_Last(groupId, calendarResourceId,
+			defaultCalendar);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar
+	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar findByG_C_D_Last(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.calendar.NoSuchCalendarException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByG_C_D_Last(groupId, calendarResourceId,
+			defaultCalendar, orderByComparator);
+	}
+
+	/**
+	* Returns the last calendar in the default ordered set defined by {@link CalendarModelImpl#ORDER_BY_JPQL} where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_D_Last(
+		long groupId, long calendarResourceId, boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_D_Last(groupId, calendarResourceId,
+			defaultCalendar);
+	}
+
+	/**
+	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.calendar.model.Calendar fetchByG_C_D_Last(
+		long groupId, long calendarResourceId, boolean defaultCalendar,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .fetchByG_C_D_Last(groupId, calendarResourceId,
+			defaultCalendar, orderByComparator);
+	}
+
+	/**
+	* Removes all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63; from the database.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_C_D(long groupId, long calendarResourceId,
+		boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByG_C_D(groupId, calendarResourceId, defaultCalendar);
+	}
+
+	/**
+	* Returns the number of calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the number of matching calendars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_C_D(long groupId, long calendarResourceId,
+		boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByG_C_D(groupId, calendarResourceId, defaultCalendar);
+	}
+
+	/**
+	* Returns the number of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
+	*
+	* @param groupId the group ID
+	* @param calendarResourceId the calendar resource ID
+	* @param defaultCalendar the default calendar
+	* @return the number of matching calendars that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByG_C_D(long groupId, long calendarResourceId,
+		boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .filterCountByG_C_D(groupId, calendarResourceId,
+			defaultCalendar);
+	}
+
+	/**
 	* Caches the calendar in the entity cache if it is enabled.
 	*
 	* @param calendar the calendar
@@ -187,980 +1650,6 @@ public class CalendarUtil {
 	}
 
 	/**
-	* Returns all the calendars where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @return the matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByResourceBlockId(
-		long resourceBlockId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByResourceBlockId(resourceBlockId);
-	}
-
-	/**
-	* Returns a range of all the calendars where resourceBlockId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param resourceBlockId the resource block ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @return the range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByResourceBlockId(
-		long resourceBlockId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByResourceBlockId(resourceBlockId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the calendars where resourceBlockId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param resourceBlockId the resource block ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByResourceBlockId(
-		long resourceBlockId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByResourceBlockId(resourceBlockId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByResourceBlockId_First(
-		long resourceBlockId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByResourceBlockId_First(resourceBlockId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByResourceBlockId_First(
-		long resourceBlockId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByResourceBlockId_First(resourceBlockId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByResourceBlockId_Last(
-		long resourceBlockId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByResourceBlockId_Last(resourceBlockId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByResourceBlockId_Last(
-		long resourceBlockId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByResourceBlockId_Last(resourceBlockId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the calendars before and after the current calendar in the ordered set where resourceBlockId = &#63;.
-	*
-	* @param calendarId the primary key of the current calendar
-	* @param resourceBlockId the resource block ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar[] findByResourceBlockId_PrevAndNext(
-		long calendarId, long resourceBlockId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByResourceBlockId_PrevAndNext(calendarId,
-			resourceBlockId, orderByComparator);
-	}
-
-	/**
-	* Returns all the calendars where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid(
-		java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid(uuid);
-	}
-
-	/**
-	* Returns a range of all the calendars where uuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @return the range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid(
-		java.lang.String uuid, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid(uuid, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the calendars where uuid = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid(
-		java.lang.String uuid, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid(uuid, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByUuid_First(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid_First(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByUuid_First(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUuid_First(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByUuid_Last(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByUuid_Last(
-		java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUuid_Last(uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the calendars before and after the current calendar in the ordered set where uuid = &#63;.
-	*
-	* @param calendarId the primary key of the current calendar
-	* @param uuid the uuid
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar[] findByUuid_PrevAndNext(
-		long calendarId, java.lang.String uuid,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUuid_PrevAndNext(calendarId, uuid, orderByComparator);
-	}
-
-	/**
-	* Returns the calendar where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.calendar.NoSuchCalendarException} if it could not be found.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the calendar where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the calendar where uuid = &#63; and groupId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByUUID_G(
-		java.lang.String uuid, long groupId, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByUUID_G(uuid, groupId, retrieveFromCache);
-	}
-
-	/**
-	* Returns all the calendars where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid_C(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns a range of all the calendars where uuid = &#63; and companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @return the range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid_C(
-		java.lang.String uuid, long companyId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByUuid_C(uuid, companyId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the calendars where uuid = &#63; and companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByUuid_C(
-		java.lang.String uuid, long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUuid_C(uuid, companyId, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByUuid_C_First(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUuid_C_First(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByUuid_C_First(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByUuid_C_First(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByUuid_C_Last(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUuid_C_Last(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByUuid_C_Last(
-		java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByUuid_C_Last(uuid, companyId, orderByComparator);
-	}
-
-	/**
-	* Returns the calendars before and after the current calendar in the ordered set where uuid = &#63; and companyId = &#63;.
-	*
-	* @param calendarId the primary key of the current calendar
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar[] findByUuid_C_PrevAndNext(
-		long calendarId, java.lang.String uuid, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByUuid_C_PrevAndNext(calendarId, uuid, companyId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns all the calendars where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @return the matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C(
-		long groupId, long calendarResourceId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByG_C(groupId, calendarResourceId);
-	}
-
-	/**
-	* Returns a range of all the calendars where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @return the range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C(
-		long groupId, long calendarResourceId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C(groupId, calendarResourceId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the calendars where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C(
-		long groupId, long calendarResourceId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C(groupId, calendarResourceId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByG_C_First(
-		long groupId, long calendarResourceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_First(groupId, calendarResourceId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByG_C_First(
-		long groupId, long calendarResourceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_First(groupId, calendarResourceId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByG_C_Last(
-		long groupId, long calendarResourceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_Last(groupId, calendarResourceId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByG_C_Last(
-		long groupId, long calendarResourceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_Last(groupId, calendarResourceId,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the calendars before and after the current calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param calendarId the primary key of the current calendar
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar[] findByG_C_PrevAndNext(
-		long calendarId, long groupId, long calendarResourceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_PrevAndNext(calendarId, groupId,
-			calendarResourceId, orderByComparator);
-	}
-
-	/**
-	* Returns all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @return the matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C(
-		long groupId, long calendarResourceId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterFindByG_C(groupId, calendarResourceId);
-	}
-
-	/**
-	* Returns a range of all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @return the range of matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C(
-		long groupId, long calendarResourceId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByG_C(groupId, calendarResourceId, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the calendars that the user has permissions to view where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C(
-		long groupId, long calendarResourceId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByG_C(groupId, calendarResourceId, start, end,
-			orderByComparator);
-	}
-
-	/**
-	* Returns the calendars before and after the current calendar in the ordered set of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param calendarId the primary key of the current calendar
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar[] filterFindByG_C_PrevAndNext(
-		long calendarId, long groupId, long calendarResourceId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByG_C_PrevAndNext(calendarId, groupId,
-			calendarResourceId, orderByComparator);
-	}
-
-	/**
-	* Returns all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @return the matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C_D(
-		long groupId, long calendarResourceId, boolean defaultCalendar)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_D(groupId, calendarResourceId, defaultCalendar);
-	}
-
-	/**
-	* Returns a range of all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @return the range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C_D(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_D(groupId, calendarResourceId, defaultCalendar,
-			start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> findByG_C_D(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_D(groupId, calendarResourceId, defaultCalendar,
-			start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByG_C_D_First(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_D_First(groupId, calendarResourceId,
-			defaultCalendar, orderByComparator);
-	}
-
-	/**
-	* Returns the first calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByG_C_D_First(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_D_First(groupId, calendarResourceId,
-			defaultCalendar, orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar findByG_C_D_Last(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_D_Last(groupId, calendarResourceId,
-			defaultCalendar, orderByComparator);
-	}
-
-	/**
-	* Returns the last calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching calendar, or <code>null</code> if a matching calendar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar fetchByG_C_D_Last(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByG_C_D_Last(groupId, calendarResourceId,
-			defaultCalendar, orderByComparator);
-	}
-
-	/**
-	* Returns the calendars before and after the current calendar in the ordered set where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param calendarId the primary key of the current calendar
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar[] findByG_C_D_PrevAndNext(
-		long calendarId, long groupId, long calendarResourceId,
-		boolean defaultCalendar,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByG_C_D_PrevAndNext(calendarId, groupId,
-			calendarResourceId, defaultCalendar, orderByComparator);
-	}
-
-	/**
-	* Returns all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @return the matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C_D(
-		long groupId, long calendarResourceId, boolean defaultCalendar)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByG_C_D(groupId, calendarResourceId,
-			defaultCalendar);
-	}
-
-	/**
-	* Returns a range of all the calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @return the range of matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C_D(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByG_C_D(groupId, calendarResourceId,
-			defaultCalendar, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the calendars that the user has permissions to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param start the lower bound of the range of calendars
-	* @param end the upper bound of the range of calendars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.calendar.model.Calendar> filterFindByG_C_D(
-		long groupId, long calendarResourceId, boolean defaultCalendar,
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByG_C_D(groupId, calendarResourceId,
-			defaultCalendar, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the calendars before and after the current calendar in the ordered set of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param calendarId the primary key of the current calendar
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next calendar
-	* @throws com.liferay.calendar.NoSuchCalendarException if a calendar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar[] filterFindByG_C_D_PrevAndNext(
-		long calendarId, long groupId, long calendarResourceId,
-		boolean defaultCalendar,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByG_C_D_PrevAndNext(calendarId, groupId,
-			calendarResourceId, defaultCalendar, orderByComparator);
-	}
-
-	/**
 	* Returns all the calendars.
 	*
 	* @return the calendars
@@ -1175,7 +1664,7 @@ public class CalendarUtil {
 	* Returns a range of all the calendars.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of calendars
@@ -1193,7 +1682,7 @@ public class CalendarUtil {
 	* Returns an ordered range of all the calendars.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from CalendarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of calendars
@@ -1210,82 +1699,6 @@ public class CalendarUtil {
 	}
 
 	/**
-	* Removes all the calendars where resourceBlockId = &#63; from the database.
-	*
-	* @param resourceBlockId the resource block ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByResourceBlockId(long resourceBlockId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByResourceBlockId(resourceBlockId);
-	}
-
-	/**
-	* Removes all the calendars where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the calendar where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the calendar that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.calendar.model.Calendar removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.calendar.NoSuchCalendarException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the calendars where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the calendars where groupId = &#63; and calendarResourceId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C(long groupId, long calendarResourceId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_C(groupId, calendarResourceId);
-	}
-
-	/**
-	* Removes all the calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_C_D(long groupId, long calendarResourceId,
-		boolean defaultCalendar)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByG_C_D(groupId, calendarResourceId, defaultCalendar);
-	}
-
-	/**
 	* Removes all the calendars from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -1293,115 +1706,6 @@ public class CalendarUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of calendars where resourceBlockId = &#63;.
-	*
-	* @param resourceBlockId the resource block ID
-	* @return the number of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByResourceBlockId(long resourceBlockId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByResourceBlockId(resourceBlockId);
-	}
-
-	/**
-	* Returns the number of calendars where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of calendars where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of calendars where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of calendars where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @return the number of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C(long groupId, long calendarResourceId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_C(groupId, calendarResourceId);
-	}
-
-	/**
-	* Returns the number of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @return the number of matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C(long groupId, long calendarResourceId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByG_C(groupId, calendarResourceId);
-	}
-
-	/**
-	* Returns the number of calendars where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @return the number of matching calendars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_C_D(long groupId, long calendarResourceId,
-		boolean defaultCalendar)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByG_C_D(groupId, calendarResourceId, defaultCalendar);
-	}
-
-	/**
-	* Returns the number of calendars that the user has permission to view where groupId = &#63; and calendarResourceId = &#63; and defaultCalendar = &#63;.
-	*
-	* @param groupId the group ID
-	* @param calendarResourceId the calendar resource ID
-	* @param defaultCalendar the default calendar
-	* @return the number of matching calendars that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByG_C_D(long groupId, long calendarResourceId,
-		boolean defaultCalendar)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterCountByG_C_D(groupId, calendarResourceId,
-			defaultCalendar);
 	}
 
 	/**

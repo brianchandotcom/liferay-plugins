@@ -48,13 +48,14 @@ public class SVNRepositoryLocalServiceImpl
 	public SVNRepository getSVNRepository(String url)
 		throws PortalException, SystemException {
 
-		return svnRepositoryPersistence.findByUrl(url);
+		return svnRepositoryPersistence.findByUrl_First(url);
 	}
 
 	public void updateSVNRepository(String url)
 		throws PortalException, SystemException {
 
-		SVNRepository svnRepository = svnRepositoryPersistence.fetchByUrl(url);
+		SVNRepository svnRepository = svnRepositoryPersistence.fetchByUrl_First(
+			url);
 
 		if (svnRepository == null) {
 			long svnRepositoryId = counterLocalService.increment();

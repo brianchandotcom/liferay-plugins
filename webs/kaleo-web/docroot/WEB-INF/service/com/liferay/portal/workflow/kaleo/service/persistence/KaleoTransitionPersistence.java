@@ -37,6 +37,830 @@ public interface KaleoTransitionPersistence extends BasePersistence<KaleoTransit
 	 */
 
 	/**
+	* Returns all the kaleo transitions where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByCompanyId(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the kaleo transitions where companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param start the lower bound of the range of kaleo transitions
+	* @param end the upper bound of the range of kaleo transitions (not inclusive)
+	* @return the range of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByCompanyId(
+		long companyId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the kaleo transitions before and after the current kaleo transition in the ordered set where companyId = &#63;.
+	*
+	* @param kaleoTransitionId the primary key of the current kaleo transition
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition[] findByCompanyId_PrevAndNext(
+		long kaleoTransitionId, long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns an ordered range of all the kaleo transitions where companyId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param companyId the company ID
+	* @param start the lower bound of the range of kaleo transitions
+	* @param end the upper bound of the range of kaleo transitions (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByCompanyId(
+		long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByCompanyId_First(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByCompanyId_First(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByCompanyId_First(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByCompanyId_Last(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByCompanyId_Last(
+		long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByCompanyId_Last(
+		long companyId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo transitions where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo transitions where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the kaleo transitions where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoDefinitionId(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the kaleo transitions where kaleoDefinitionId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @param start the lower bound of the range of kaleo transitions
+	* @param end the upper bound of the range of kaleo transitions (not inclusive)
+	* @return the range of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoDefinitionId(
+		long kaleoDefinitionId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoTransitionId the primary key of the current kaleo transition
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition[] findByKaleoDefinitionId_PrevAndNext(
+		long kaleoTransitionId, long kaleoDefinitionId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns an ordered range of all the kaleo transitions where kaleoDefinitionId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @param start the lower bound of the range of kaleo transitions
+	* @param end the upper bound of the range of kaleo transitions (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoDefinitionId(
+		long kaleoDefinitionId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoDefinitionId_First(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoDefinitionId_First(
+		long kaleoDefinitionId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoDefinitionId_First(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoDefinitionId_First(
+		long kaleoDefinitionId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoDefinitionId_Last(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoDefinitionId_Last(
+		long kaleoDefinitionId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoDefinitionId_Last(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoDefinitionId_Last(
+		long kaleoDefinitionId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo transitions where kaleoDefinitionId = &#63; from the database.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo transitions where kaleoDefinitionId = &#63;.
+	*
+	* @param kaleoDefinitionId the kaleo definition ID
+	* @return the number of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKaleoDefinitionId(long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns all the kaleo transitions where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoNodeId(
+		long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the kaleo transitions where kaleoNodeId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param start the lower bound of the range of kaleo transitions
+	* @param end the upper bound of the range of kaleo transitions (not inclusive)
+	* @return the range of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoNodeId(
+		long kaleoNodeId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	*
+	* @param kaleoTransitionId the primary key of the current kaleo transition
+	* @param kaleoNodeId the kaleo node ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition[] findByKaleoNodeId_PrevAndNext(
+		long kaleoTransitionId, long kaleoNodeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns an ordered range of all the kaleo transitions where kaleoNodeId = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param start the lower bound of the range of kaleo transitions
+	* @param end the upper bound of the range of kaleo transitions (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoNodeId(
+		long kaleoNodeId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoNodeId_First(
+		long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoNodeId_First(
+		long kaleoNodeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoNodeId_First(
+		long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoNodeId_First(
+		long kaleoNodeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoNodeId_Last(
+		long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoNodeId_Last(
+		long kaleoNodeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoNodeId_Last(
+		long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoNodeId_Last(
+		long kaleoNodeId,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo transitions where kaleoNodeId = &#63; from the database.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKaleoNodeId(long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo transitions where kaleoNodeId = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @return the number of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKaleoNodeId(long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_N_First(
+		long kaleoNodeId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_N_First(
+		long kaleoNodeId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_N_First(
+		long kaleoNodeId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_N_First(
+		long kaleoNodeId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_N_Last(
+		long kaleoNodeId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_N_Last(
+		long kaleoNodeId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_N_Last(
+		long kaleoNodeId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_N_Last(
+		long kaleoNodeId, java.lang.String name,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo transitions where kaleoNodeId = &#63; and name = &#63; from the database.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKNI_N(long kaleoNodeId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo transitions where kaleoNodeId = &#63; and name = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param name the name
+	* @return the number of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKNI_N(long kaleoNodeId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_DT_First(
+		long kaleoNodeId, boolean defaultTransition)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_DT_First(
+		long kaleoNodeId, boolean defaultTransition,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the first kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_DT_First(
+		long kaleoNodeId, boolean defaultTransition)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_DT_First(
+		long kaleoNodeId, boolean defaultTransition,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_DT_Last(
+		long kaleoNodeId, boolean defaultTransition)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition
+	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_DT_Last(
+		long kaleoNodeId, boolean defaultTransition,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
+
+	/**
+	* Returns the last kaleo transition in the default ordered set defined by {@link KaleoTransitionModelImpl#ORDER_BY_JPQL} where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_DT_Last(
+		long kaleoNodeId, boolean defaultTransition)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_DT_Last(
+		long kaleoNodeId, boolean defaultTransition,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the kaleo transitions where kaleoNodeId = &#63; and defaultTransition = &#63; from the database.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByKNI_DT(long kaleoNodeId, boolean defaultTransition)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of kaleo transitions where kaleoNodeId = &#63; and defaultTransition = &#63;.
+	*
+	* @param kaleoNodeId the kaleo node ID
+	* @param defaultTransition the default transition
+	* @return the number of matching kaleo transitions
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByKNI_DT(long kaleoNodeId, boolean defaultTransition)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the kaleo transition in the entity cache if it is enabled.
 	*
 	* @param kaleoTransition the kaleo transition
@@ -103,441 +927,6 @@ public interface KaleoTransitionPersistence extends BasePersistence<KaleoTransit
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns all the kaleo transitions where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByCompanyId(
-		long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the kaleo transitions where companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param companyId the company ID
-	* @param start the lower bound of the range of kaleo transitions
-	* @param end the upper bound of the range of kaleo transitions (not inclusive)
-	* @return the range of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByCompanyId(
-		long companyId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the kaleo transitions where companyId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param companyId the company ID
-	* @param start the lower bound of the range of kaleo transitions
-	* @param end the upper bound of the range of kaleo transitions (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByCompanyId(
-		long companyId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first kaleo transition in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByCompanyId_First(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the first kaleo transition in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByCompanyId_First(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last kaleo transition in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByCompanyId_Last(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the last kaleo transition in the ordered set where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByCompanyId_Last(
-		long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo transitions before and after the current kaleo transition in the ordered set where companyId = &#63;.
-	*
-	* @param kaleoTransitionId the primary key of the current kaleo transition
-	* @param companyId the company ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition[] findByCompanyId_PrevAndNext(
-		long kaleoTransitionId, long companyId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns all the kaleo transitions where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @return the matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoDefinitionId(
-		long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the kaleo transitions where kaleoDefinitionId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @param start the lower bound of the range of kaleo transitions
-	* @param end the upper bound of the range of kaleo transitions (not inclusive)
-	* @return the range of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoDefinitionId(
-		long kaleoDefinitionId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the kaleo transitions where kaleoDefinitionId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @param start the lower bound of the range of kaleo transitions
-	* @param end the upper bound of the range of kaleo transitions (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoDefinitionId(
-		long kaleoDefinitionId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoDefinitionId_First(
-		long kaleoDefinitionId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the first kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoDefinitionId_First(
-		long kaleoDefinitionId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoDefinitionId_Last(
-		long kaleoDefinitionId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the last kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoDefinitionId_Last(
-		long kaleoDefinitionId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoTransitionId the primary key of the current kaleo transition
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition[] findByKaleoDefinitionId_PrevAndNext(
-		long kaleoTransitionId, long kaleoDefinitionId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns all the kaleo transitions where kaleoNodeId = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @return the matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoNodeId(
-		long kaleoNodeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the kaleo transitions where kaleoNodeId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param start the lower bound of the range of kaleo transitions
-	* @param end the upper bound of the range of kaleo transitions (not inclusive)
-	* @return the range of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoNodeId(
-		long kaleoNodeId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the kaleo transitions where kaleoNodeId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param start the lower bound of the range of kaleo transitions
-	* @param end the upper bound of the range of kaleo transitions (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> findByKaleoNodeId(
-		long kaleoNodeId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoNodeId_First(
-		long kaleoNodeId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the first kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoNodeId_First(
-		long kaleoNodeId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKaleoNodeId_Last(
-		long kaleoNodeId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the last kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKaleoNodeId_Last(
-		long kaleoNodeId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo transitions before and after the current kaleo transition in the ordered set where kaleoNodeId = &#63;.
-	*
-	* @param kaleoTransitionId the primary key of the current kaleo transition
-	* @param kaleoNodeId the kaleo node ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a kaleo transition with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition[] findByKaleoNodeId_PrevAndNext(
-		long kaleoTransitionId, long kaleoNodeId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the kaleo transition where kaleoNodeId = &#63; and name = &#63; or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTransitionException} if it could not be found.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param name the name
-	* @return the matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_N(
-		long kaleoNodeId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the kaleo transition where kaleoNodeId = &#63; and name = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param name the name
-	* @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_N(
-		long kaleoNodeId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo transition where kaleoNodeId = &#63; and name = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param name the name
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_N(
-		long kaleoNodeId, java.lang.String name, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchTransitionException} if it could not be found.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param defaultTransition the default transition
-	* @return the matching kaleo transition
-	* @throws com.liferay.portal.workflow.kaleo.NoSuchTransitionException if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition findByKNI_DT(
-		long kaleoNodeId, boolean defaultTransition)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Returns the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param defaultTransition the default transition
-	* @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_DT(
-		long kaleoNodeId, boolean defaultTransition)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param defaultTransition the default transition
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching kaleo transition, or <code>null</code> if a matching kaleo transition could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition fetchByKNI_DT(
-		long kaleoNodeId, boolean defaultTransition, boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the kaleo transitions.
 	*
 	* @return the kaleo transitions
@@ -550,7 +939,7 @@ public interface KaleoTransitionPersistence extends BasePersistence<KaleoTransit
 	* Returns a range of all the kaleo transitions.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo transitions
@@ -566,7 +955,7 @@ public interface KaleoTransitionPersistence extends BasePersistence<KaleoTransit
 	* Returns an ordered range of all the kaleo transitions.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from KaleoTransitionModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of kaleo transitions
@@ -581,116 +970,11 @@ public interface KaleoTransitionPersistence extends BasePersistence<KaleoTransit
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the kaleo transitions where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the kaleo transitions where kaleoDefinitionId = &#63; from the database.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the kaleo transitions where kaleoNodeId = &#63; from the database.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByKaleoNodeId(long kaleoNodeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the kaleo transition where kaleoNodeId = &#63; and name = &#63; from the database.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param name the name
-	* @return the kaleo transition that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition removeByKNI_N(
-		long kaleoNodeId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
-	* Removes the kaleo transition where kaleoNodeId = &#63; and defaultTransition = &#63; from the database.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param defaultTransition the default transition
-	* @return the kaleo transition that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.portal.workflow.kaleo.model.KaleoTransition removeByKNI_DT(
-		long kaleoNodeId, boolean defaultTransition)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.workflow.kaleo.NoSuchTransitionException;
-
-	/**
 	* Removes all the kaleo transitions from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo transitions where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo transitions where kaleoDefinitionId = &#63;.
-	*
-	* @param kaleoDefinitionId the kaleo definition ID
-	* @return the number of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKaleoDefinitionId(long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo transitions where kaleoNodeId = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @return the number of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKaleoNodeId(long kaleoNodeId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo transitions where kaleoNodeId = &#63; and name = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param name the name
-	* @return the number of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKNI_N(long kaleoNodeId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of kaleo transitions where kaleoNodeId = &#63; and defaultTransition = &#63;.
-	*
-	* @param kaleoNodeId the kaleo node ID
-	* @param defaultTransition the default transition
-	* @return the number of matching kaleo transitions
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByKNI_DT(long kaleoNodeId, boolean defaultTransition)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

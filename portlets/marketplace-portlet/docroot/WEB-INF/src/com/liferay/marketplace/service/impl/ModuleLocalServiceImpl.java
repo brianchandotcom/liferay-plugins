@@ -44,7 +44,7 @@ public class ModuleLocalServiceImpl extends ModuleLocalServiceBaseImpl {
 	public Module fetchModule(long appId, String contextName)
 		throws SystemException {
 
-		return modulePersistence.fetchByA_C(appId, contextName);
+		return modulePersistence.fetchByA_C_First(appId, contextName);
 	}
 
 	public List<Module> getModules(long appId) throws SystemException {

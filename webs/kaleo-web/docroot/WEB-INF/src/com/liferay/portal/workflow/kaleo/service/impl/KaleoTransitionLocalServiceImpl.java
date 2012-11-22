@@ -94,13 +94,13 @@ public class KaleoTransitionLocalServiceImpl
 	public KaleoTransition getDefaultKaleoTransition(long kaleoNodeId)
 		throws PortalException, SystemException {
 
-		return kaleoTransitionPersistence.findByKNI_DT(kaleoNodeId, true);
+		return kaleoTransitionPersistence.findByKNI_DT_First(kaleoNodeId, true);
 	}
 
 	public KaleoTransition getKaleoTransition(long kaleoNodeId, String name)
 		throws PortalException, SystemException {
 
-		return kaleoTransitionPersistence.findByKNI_N(kaleoNodeId, name);
+		return kaleoTransitionPersistence.findByKNI_N_First(kaleoNodeId, name);
 	}
 
 	public List<KaleoTransition> getKaleoTransitions(long kaleoNodeId)

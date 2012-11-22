@@ -99,13 +99,13 @@ public class OAuthConsumerLocalServiceImpl
 			String gadgetKey, String serviceName)
 		throws SystemException {
 
-		return oAuthConsumerPersistence.fetchByG_S(gadgetKey, serviceName);
+		return oAuthConsumerPersistence.fetchByG_S_First(gadgetKey, serviceName);
 	}
 
 	public OAuthConsumer getOAuthConsumer(String gadgetKey, String serviceName)
 		throws PortalException, SystemException {
 
-		return oAuthConsumerPersistence.findByG_S(gadgetKey, serviceName);
+		return oAuthConsumerPersistence.findByG_S_First(gadgetKey, serviceName);
 	}
 
 	public List<OAuthConsumer> getOAuthConsumers(String gadgetKey)

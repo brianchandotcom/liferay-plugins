@@ -166,7 +166,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 	public void deleteUserThread(long userId, long mbThreadId)
 		throws PortalException, SystemException {
 
-		UserThread userThread = userThreadPersistence.findByU_M(
+		UserThread userThread = userThreadPersistence.findByU_M_First(
 			userId, mbThreadId);
 
 		userThread.setDeleted(true);
@@ -183,7 +183,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 	public UserThread getUserThread(long userId, long mbThreadId)
 		throws PortalException, SystemException {
 
-		return userThreadPersistence.findByU_M(userId, mbThreadId);
+		return userThreadPersistence.findByU_M_First(userId, mbThreadId);
 	}
 
 	public int getUserUserThreadCount(long userId, boolean deleted)
@@ -222,7 +222,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 	public void markUserThreadAsRead(long userId, long mbThreadId)
 		throws PortalException, SystemException {
 
-		UserThread userThread = userThreadPersistence.findByU_M(
+		UserThread userThread = userThreadPersistence.findByU_M_First(
 			userId, mbThreadId);
 
 		userThread.setRead(true);
@@ -233,7 +233,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 	public void markUserThreadAsUnread(long userId, long mbThreadId)
 		throws PortalException, SystemException {
 
-		UserThread userThread = userThreadPersistence.findByU_M(
+		UserThread userThread = userThreadPersistence.findByU_M_First(
 			userId, mbThreadId);
 
 		userThread.setRead(false);

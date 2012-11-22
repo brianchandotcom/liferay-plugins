@@ -238,7 +238,7 @@ public class KaleoTimerInstanceTokenLocalServiceImpl
 			long kaleoInstanceTokenId, long kaleoTimerId)
 		throws PortalException, SystemException {
 
-		return kaleoTimerInstanceTokenPersistence.findByKITI_KTI(
+		return kaleoTimerInstanceTokenPersistence.findByKITI_KTI_First(
 			kaleoInstanceTokenId, kaleoTimerId);
 	}
 

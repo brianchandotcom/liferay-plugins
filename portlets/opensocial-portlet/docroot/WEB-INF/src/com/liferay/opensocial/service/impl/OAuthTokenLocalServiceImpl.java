@@ -81,7 +81,7 @@ public class OAuthTokenLocalServiceImpl extends OAuthTokenLocalServiceBaseImpl {
 			String tokenName)
 		throws SystemException {
 
-		return oAuthTokenPersistence.fetchByU_G_S_M_T(
+		return oAuthTokenPersistence.fetchByU_G_S_M_T_First(
 			userId, gadgetKey, serviceName, moduleId, tokenName);
 	}
 
@@ -90,7 +90,7 @@ public class OAuthTokenLocalServiceImpl extends OAuthTokenLocalServiceBaseImpl {
 			String tokenName)
 		throws PortalException, SystemException {
 
-		return oAuthTokenPersistence.findByU_G_S_M_T(
+		return oAuthTokenPersistence.findByU_G_S_M_T_First(
 			userId, gadgetKey, serviceName, moduleId, tokenName);
 	}
 

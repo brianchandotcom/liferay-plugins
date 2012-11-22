@@ -78,7 +78,7 @@ public class KaleoConditionLocalServiceImpl
 	public KaleoCondition getKaleoNodeKaleoCondition(long kaleoNodeId)
 		throws PortalException, SystemException {
 
-		return kaleoConditionPersistence.findByKaleoNodeId(kaleoNodeId);
+		return kaleoConditionPersistence.findByKaleoNodeId_First(kaleoNodeId);
 	}
 
 }

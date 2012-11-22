@@ -101,7 +101,7 @@ public class FolderLocalServiceImpl extends FolderLocalServiceBaseImpl {
 	public Folder getFolder(long accountId, String fullName)
 		throws PortalException, SystemException {
 
-		return folderPersistence.findByA_F(accountId, fullName);
+		return folderPersistence.findByA_F_First(accountId, fullName);
 	}
 
 	public List<Folder> getFolders(long accountId) throws SystemException {

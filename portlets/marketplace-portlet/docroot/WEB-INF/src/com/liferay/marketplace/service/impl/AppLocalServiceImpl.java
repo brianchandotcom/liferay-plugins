@@ -133,13 +133,13 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 	}
 
 	public App fetchRemoteApp(long remoteAppId) throws SystemException {
-		return appPersistence.fetchByRemoteAppId(remoteAppId);
+		return appPersistence.fetchByRemoteAppId_First(remoteAppId);
 	}
 
 	public void installApp(long remoteAppId)
 		throws PortalException, SystemException {
 
-		App app = appPersistence.findByRemoteAppId(remoteAppId);
+		App app = appPersistence.findByRemoteAppId_First(remoteAppId);
 
 		if (!DLStoreUtil.hasFile(
 				app.getCompanyId(), CompanyConstants.SYSTEM,
@@ -267,7 +267,7 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 			properties.getProperty("supersedes-remote-app-ids"), 0L);
 
 		for (long supersedesRemoteAppId : supersedesRemoteAppIds) {
-			App supersedesApp = appPersistence.fetchByRemoteAppId(
+			App supersedesApp = appPersistence.fetchByRemoteAppId_First(
 				supersedesRemoteAppId);
 
 			if ((supersedesApp != null) && supersedesApp.isInstalled()) {
@@ -279,7 +279,7 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 	public void uninstallApp(long remoteAppId)
 		throws PortalException, SystemException {
 
-		App app = appPersistence.findByRemoteAppId(remoteAppId);
+		App app = appPersistence.findByRemoteAppId_First(remoteAppId);
 
 		List<Module> modules = modulePersistence.findByAppId(app.getAppId());
 
@@ -386,7 +386,7 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 		}
 
 		if (remoteAppId > 0) {
-			App app = appPersistence.fetchByRemoteAppId(remoteAppId);
+			App app = appPersistence.fetchByRemoteAppId_First(remoteAppId);
 
 			if (app != null) {
 				throw new DuplicateAppException();

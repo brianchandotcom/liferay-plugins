@@ -219,7 +219,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 			long wsrpConsumerId, String portletHandle)
 		throws PortalException, SystemException {
 
-		return wsrpConsumerPortletPersistence.findByW_P(
+		return wsrpConsumerPortletPersistence.findByW_P_First(
 			wsrpConsumerId, portletHandle);
 	}
 

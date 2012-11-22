@@ -182,7 +182,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 	public Message getMessage(long folderId, long remoteMessageId)
 		throws PortalException, SystemException {
 
-		return messagePersistence.findByF_R(folderId, remoteMessageId);
+		return messagePersistence.findByF_R_First(folderId, remoteMessageId);
 	}
 
 	public Message getRemoteMessage(long folderId, boolean oldest)

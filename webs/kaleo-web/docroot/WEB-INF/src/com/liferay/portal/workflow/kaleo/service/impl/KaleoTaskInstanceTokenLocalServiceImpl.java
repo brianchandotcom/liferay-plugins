@@ -295,7 +295,7 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 			long kaleoInstanceId, long kaleoTaskId)
 		throws PortalException, SystemException {
 
-		return kaleoTaskInstanceTokenPersistence.findByKII_KTI(
+		return kaleoTaskInstanceTokenPersistence.findByKII_KTI_First(
 			kaleoInstanceId, kaleoTaskId);
 	}
 

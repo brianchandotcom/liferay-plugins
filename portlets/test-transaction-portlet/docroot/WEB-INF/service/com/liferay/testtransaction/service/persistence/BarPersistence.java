@@ -38,6 +38,192 @@ public interface BarPersistence extends BasePersistence<Bar> {
 	 */
 
 	/**
+	* Returns all the bars where text = &#63;.
+	*
+	* @param text the text
+	* @return the matching bars
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.testtransaction.model.Bar> findByText(
+		java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns a range of all the bars where text = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from BarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param text the text
+	* @param start the lower bound of the range of bars
+	* @param end the upper bound of the range of bars (not inclusive)
+	* @return the range of matching bars
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.testtransaction.model.Bar> findByText(
+		java.lang.String text, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the bars before and after the current bar in the ordered set where text = &#63;.
+	*
+	* @param barId the primary key of the current bar
+	* @param text the text
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next bar
+	* @throws com.liferay.testtransaction.NoSuchBarException if a bar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar[] findByText_PrevAndNext(
+		long barId, java.lang.String text,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testtransaction.NoSuchBarException;
+
+	/**
+	* Returns an ordered range of all the bars where text = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from BarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
+	* </p>
+	*
+	* @param text the text
+	* @param start the lower bound of the range of bars
+	* @param end the upper bound of the range of bars (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching bars
+	* @throws SystemException if a system exception occurred
+	*/
+	public java.util.List<com.liferay.testtransaction.model.Bar> findByText(
+		java.lang.String text, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first bar in the default ordered set defined by {@link BarModelImpl#ORDER_BY_JPQL} where text = &#63;.
+	*
+	* @param text the text
+	* @return the first matching bar
+	* @throws com.liferay.testtransaction.NoSuchBarException if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar findByText_First(
+		java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testtransaction.NoSuchBarException;
+
+	/**
+	* Returns the first bar in the ordered set where text = &#63;.
+	*
+	* @param text the text
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching bar
+	* @throws com.liferay.testtransaction.NoSuchBarException if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar findByText_First(
+		java.lang.String text,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testtransaction.NoSuchBarException;
+
+	/**
+	* Returns the first bar in the default ordered set defined by {@link BarModelImpl#ORDER_BY_JPQL} where text = &#63;.
+	*
+	* @param text the text
+	* @return the first matching bar, or <code>null</code> if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar fetchByText_First(
+		java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the first bar in the ordered set where text = &#63;.
+	*
+	* @param text the text
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching bar, or <code>null</code> if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar fetchByText_First(
+		java.lang.String text,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last bar in the default ordered set defined by {@link BarModelImpl#ORDER_BY_JPQL} where text = &#63;.
+	*
+	* @param text the text
+	* @return the last matching bar
+	* @throws com.liferay.testtransaction.NoSuchBarException if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar findByText_Last(
+		java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testtransaction.NoSuchBarException;
+
+	/**
+	* Returns the last bar in the ordered set where text = &#63;.
+	*
+	* @param text the text
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching bar
+	* @throws com.liferay.testtransaction.NoSuchBarException if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar findByText_Last(
+		java.lang.String text,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testtransaction.NoSuchBarException;
+
+	/**
+	* Returns the last bar in the default ordered set defined by {@link BarModelImpl#ORDER_BY_JPQL} where text = &#63;.
+	*
+	* @param text the text
+	* @return the last matching bar, or <code>null</code> if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar fetchByText_Last(
+		java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the last bar in the ordered set where text = &#63;.
+	*
+	* @param text the text
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching bar, or <code>null</code> if a matching bar could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.testtransaction.model.Bar fetchByText_Last(
+		java.lang.String text,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes all the bars where text = &#63; from the database.
+	*
+	* @param text the text
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByText(java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of bars where text = &#63;.
+	*
+	* @param text the text
+	* @return the number of matching bars
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByText(java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Caches the bar in the entity cache if it is enabled.
 	*
 	* @param bar the bar
@@ -99,125 +285,6 @@ public interface BarPersistence extends BasePersistence<Bar> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns all the bars where text = &#63;.
-	*
-	* @param text the text
-	* @return the matching bars
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.testtransaction.model.Bar> findByText(
-		java.lang.String text)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the bars where text = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param text the text
-	* @param start the lower bound of the range of bars
-	* @param end the upper bound of the range of bars (not inclusive)
-	* @return the range of matching bars
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.testtransaction.model.Bar> findByText(
-		java.lang.String text, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the bars where text = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param text the text
-	* @param start the lower bound of the range of bars
-	* @param end the upper bound of the range of bars (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching bars
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.testtransaction.model.Bar> findByText(
-		java.lang.String text, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the first bar in the ordered set where text = &#63;.
-	*
-	* @param text the text
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching bar
-	* @throws com.liferay.testtransaction.NoSuchBarException if a matching bar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testtransaction.model.Bar findByText_First(
-		java.lang.String text,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.testtransaction.NoSuchBarException;
-
-	/**
-	* Returns the first bar in the ordered set where text = &#63;.
-	*
-	* @param text the text
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching bar, or <code>null</code> if a matching bar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testtransaction.model.Bar fetchByText_First(
-		java.lang.String text,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last bar in the ordered set where text = &#63;.
-	*
-	* @param text the text
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching bar
-	* @throws com.liferay.testtransaction.NoSuchBarException if a matching bar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testtransaction.model.Bar findByText_Last(
-		java.lang.String text,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.testtransaction.NoSuchBarException;
-
-	/**
-	* Returns the last bar in the ordered set where text = &#63;.
-	*
-	* @param text the text
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching bar, or <code>null</code> if a matching bar could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testtransaction.model.Bar fetchByText_Last(
-		java.lang.String text,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the bars before and after the current bar in the ordered set where text = &#63;.
-	*
-	* @param barId the primary key of the current bar
-	* @param text the text
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next bar
-	* @throws com.liferay.testtransaction.NoSuchBarException if a bar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.testtransaction.model.Bar[] findByText_PrevAndNext(
-		long barId, java.lang.String text,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.testtransaction.NoSuchBarException;
-
-	/**
 	* Returns all the bars.
 	*
 	* @return the bars
@@ -230,7 +297,7 @@ public interface BarPersistence extends BasePersistence<Bar> {
 	* Returns a range of all the bars.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from BarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of bars
@@ -246,7 +313,7 @@ public interface BarPersistence extends BasePersistence<Bar> {
 	* Returns an ordered range of all the bars.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from BarModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted in portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of bars
@@ -261,30 +328,11 @@ public interface BarPersistence extends BasePersistence<Bar> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the bars where text = &#63; from the database.
-	*
-	* @param text the text
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByText(java.lang.String text)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the bars from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of bars where text = &#63;.
-	*
-	* @param text the text
-	* @return the number of matching bars
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByText(java.lang.String text)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

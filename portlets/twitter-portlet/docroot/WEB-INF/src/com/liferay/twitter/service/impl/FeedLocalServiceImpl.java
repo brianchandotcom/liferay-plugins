@@ -126,7 +126,7 @@ public class FeedLocalServiceImpl extends FeedLocalServiceBaseImpl {
 
 		Date now = new Date();
 
-		Feed feed = feedPersistence.fetchByC_TSN(
+		Feed feed = feedPersistence.fetchByC_TSN_First(
 			user.getCompanyId(), twitterScreenName);
 
 		JSONArray jsonArray = null;
