@@ -38,72 +38,6 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	 */
 
 	/**
-	* Caches the user thread in the entity cache if it is enabled.
-	*
-	* @param userThread the user thread
-	*/
-	public void cacheResult(
-		com.liferay.privatemessaging.model.UserThread userThread);
-
-	/**
-	* Caches the user threads in the entity cache if it is enabled.
-	*
-	* @param userThreads the user threads
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.privatemessaging.model.UserThread> userThreads);
-
-	/**
-	* Creates a new user thread with the primary key. Does not add the user thread to the database.
-	*
-	* @param userThreadId the primary key for the new user thread
-	* @return the new user thread
-	*/
-	public com.liferay.privatemessaging.model.UserThread create(
-		long userThreadId);
-
-	/**
-	* Removes the user thread with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param userThreadId the primary key of the user thread
-	* @return the user thread that was removed
-	* @throws com.liferay.privatemessaging.NoSuchUserThreadException if a user thread with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.privatemessaging.model.UserThread remove(
-		long userThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.privatemessaging.NoSuchUserThreadException;
-
-	public com.liferay.privatemessaging.model.UserThread updateImpl(
-		com.liferay.privatemessaging.model.UserThread userThread)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the user thread with the primary key or throws a {@link com.liferay.privatemessaging.NoSuchUserThreadException} if it could not be found.
-	*
-	* @param userThreadId the primary key of the user thread
-	* @return the user thread
-	* @throws com.liferay.privatemessaging.NoSuchUserThreadException if a user thread with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.privatemessaging.model.UserThread findByPrimaryKey(
-		long userThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.privatemessaging.NoSuchUserThreadException;
-
-	/**
-	* Returns the user thread with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param userThreadId the primary key of the user thread
-	* @return the user thread, or <code>null</code> if a user thread with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.privatemessaging.model.UserThread fetchByPrimaryKey(
-		long userThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the user threads where mbThreadId = &#63;.
 	*
 	* @param mbThreadId the mb thread ID
@@ -118,7 +52,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns a range of all the user threads where mbThreadId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param mbThreadId the mb thread ID
@@ -135,7 +69,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns an ordered range of all the user threads where mbThreadId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param mbThreadId the mb thread ID
@@ -223,6 +157,25 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 			com.liferay.privatemessaging.NoSuchUserThreadException;
 
 	/**
+	* Removes all the user threads where mbThreadId = &#63; from the database.
+	*
+	* @param mbThreadId the mb thread ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByMBThreadId(long mbThreadId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user threads where mbThreadId = &#63;.
+	*
+	* @param mbThreadId the mb thread ID
+	* @return the number of matching user threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByMBThreadId(long mbThreadId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user threads where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -236,7 +189,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns a range of all the user threads where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -253,7 +206,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns an ordered range of all the user threads where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -341,6 +294,25 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 			com.liferay.privatemessaging.NoSuchUserThreadException;
 
 	/**
+	* Removes all the user threads where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user threads where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching user threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the user thread where userId = &#63; and mbThreadId = &#63; or throws a {@link com.liferay.privatemessaging.NoSuchUserThreadException} if it could not be found.
 	*
 	* @param userId the user ID
@@ -380,6 +352,30 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the user thread where userId = &#63; and mbThreadId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param mbThreadId the mb thread ID
+	* @return the user thread that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.privatemessaging.model.UserThread removeByU_M(
+		long userId, long mbThreadId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.privatemessaging.NoSuchUserThreadException;
+
+	/**
+	* Returns the number of user threads where userId = &#63; and mbThreadId = &#63;.
+	*
+	* @param userId the user ID
+	* @param mbThreadId the mb thread ID
+	* @return the number of matching user threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByU_M(long userId, long mbThreadId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user threads where userId = &#63; and deleted = &#63;.
 	*
 	* @param userId the user ID
@@ -395,7 +391,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns a range of all the user threads where userId = &#63; and deleted = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -413,7 +409,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns an ordered range of all the user threads where userId = &#63; and deleted = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -507,6 +503,27 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 			com.liferay.privatemessaging.NoSuchUserThreadException;
 
 	/**
+	* Removes all the user threads where userId = &#63; and deleted = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param deleted the deleted
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByU_D(long userId, boolean deleted)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user threads where userId = &#63; and deleted = &#63;.
+	*
+	* @param userId the user ID
+	* @param deleted the deleted
+	* @return the number of matching user threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByU_D(long userId, boolean deleted)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user threads where userId = &#63; and read = &#63; and deleted = &#63;.
 	*
 	* @param userId the user ID
@@ -523,7 +540,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns a range of all the user threads where userId = &#63; and read = &#63; and deleted = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -542,7 +559,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns an ordered range of all the user threads where userId = &#63; and read = &#63; and deleted = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -642,6 +659,95 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 			com.liferay.privatemessaging.NoSuchUserThreadException;
 
 	/**
+	* Removes all the user threads where userId = &#63; and read = &#63; and deleted = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param read the read
+	* @param deleted the deleted
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByU_R_D(long userId, boolean read, boolean deleted)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of user threads where userId = &#63; and read = &#63; and deleted = &#63;.
+	*
+	* @param userId the user ID
+	* @param read the read
+	* @param deleted the deleted
+	* @return the number of matching user threads
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByU_R_D(long userId, boolean read, boolean deleted)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the user thread in the entity cache if it is enabled.
+	*
+	* @param userThread the user thread
+	*/
+	public void cacheResult(
+		com.liferay.privatemessaging.model.UserThread userThread);
+
+	/**
+	* Caches the user threads in the entity cache if it is enabled.
+	*
+	* @param userThreads the user threads
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.privatemessaging.model.UserThread> userThreads);
+
+	/**
+	* Creates a new user thread with the primary key. Does not add the user thread to the database.
+	*
+	* @param userThreadId the primary key for the new user thread
+	* @return the new user thread
+	*/
+	public com.liferay.privatemessaging.model.UserThread create(
+		long userThreadId);
+
+	/**
+	* Removes the user thread with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param userThreadId the primary key of the user thread
+	* @return the user thread that was removed
+	* @throws com.liferay.privatemessaging.NoSuchUserThreadException if a user thread with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.privatemessaging.model.UserThread remove(
+		long userThreadId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.privatemessaging.NoSuchUserThreadException;
+
+	public com.liferay.privatemessaging.model.UserThread updateImpl(
+		com.liferay.privatemessaging.model.UserThread userThread)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the user thread with the primary key or throws a {@link com.liferay.privatemessaging.NoSuchUserThreadException} if it could not be found.
+	*
+	* @param userThreadId the primary key of the user thread
+	* @return the user thread
+	* @throws com.liferay.privatemessaging.NoSuchUserThreadException if a user thread with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.privatemessaging.model.UserThread findByPrimaryKey(
+		long userThreadId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.privatemessaging.NoSuchUserThreadException;
+
+	/**
+	* Returns the user thread with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param userThreadId the primary key of the user thread
+	* @return the user thread, or <code>null</code> if a user thread with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.privatemessaging.model.UserThread fetchByPrimaryKey(
+		long userThreadId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the user threads.
 	*
 	* @return the user threads
@@ -654,7 +760,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns a range of all the user threads.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of user threads
@@ -670,7 +776,7 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 	* Returns an ordered range of all the user threads.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from UserThreadModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of user threads
@@ -685,117 +791,11 @@ public interface UserThreadPersistence extends BasePersistence<UserThread> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the user threads where mbThreadId = &#63; from the database.
-	*
-	* @param mbThreadId the mb thread ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByMBThreadId(long mbThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user threads where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the user thread where userId = &#63; and mbThreadId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param mbThreadId the mb thread ID
-	* @return the user thread that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.privatemessaging.model.UserThread removeByU_M(
-		long userId, long mbThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.privatemessaging.NoSuchUserThreadException;
-
-	/**
-	* Removes all the user threads where userId = &#63; and deleted = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param deleted the deleted
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByU_D(long userId, boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the user threads where userId = &#63; and read = &#63; and deleted = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param read the read
-	* @param deleted the deleted
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByU_R_D(long userId, boolean read, boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the user threads from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user threads where mbThreadId = &#63;.
-	*
-	* @param mbThreadId the mb thread ID
-	* @return the number of matching user threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByMBThreadId(long mbThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user threads where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching user threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user threads where userId = &#63; and mbThreadId = &#63;.
-	*
-	* @param userId the user ID
-	* @param mbThreadId the mb thread ID
-	* @return the number of matching user threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByU_M(long userId, long mbThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user threads where userId = &#63; and deleted = &#63;.
-	*
-	* @param userId the user ID
-	* @param deleted the deleted
-	* @return the number of matching user threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByU_D(long userId, boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of user threads where userId = &#63; and read = &#63; and deleted = &#63;.
-	*
-	* @param userId the user ID
-	* @param read the read
-	* @param deleted the deleted
-	* @return the number of matching user threads
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByU_R_D(long userId, boolean read, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

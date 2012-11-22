@@ -111,86 +111,6 @@ public class OAuthTokenUtil {
 	}
 
 	/**
-	* Caches the o auth token in the entity cache if it is enabled.
-	*
-	* @param oAuthToken the o auth token
-	*/
-	public static void cacheResult(
-		com.liferay.opensocial.model.OAuthToken oAuthToken) {
-		getPersistence().cacheResult(oAuthToken);
-	}
-
-	/**
-	* Caches the o auth tokens in the entity cache if it is enabled.
-	*
-	* @param oAuthTokens the o auth tokens
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.opensocial.model.OAuthToken> oAuthTokens) {
-		getPersistence().cacheResult(oAuthTokens);
-	}
-
-	/**
-	* Creates a new o auth token with the primary key. Does not add the o auth token to the database.
-	*
-	* @param oAuthTokenId the primary key for the new o auth token
-	* @return the new o auth token
-	*/
-	public static com.liferay.opensocial.model.OAuthToken create(
-		long oAuthTokenId) {
-		return getPersistence().create(oAuthTokenId);
-	}
-
-	/**
-	* Removes the o auth token with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param oAuthTokenId the primary key of the o auth token
-	* @return the o auth token that was removed
-	* @throws com.liferay.opensocial.NoSuchOAuthTokenException if a o auth token with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.opensocial.model.OAuthToken remove(
-		long oAuthTokenId)
-		throws com.liferay.opensocial.NoSuchOAuthTokenException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(oAuthTokenId);
-	}
-
-	public static com.liferay.opensocial.model.OAuthToken updateImpl(
-		com.liferay.opensocial.model.OAuthToken oAuthToken)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(oAuthToken);
-	}
-
-	/**
-	* Returns the o auth token with the primary key or throws a {@link com.liferay.opensocial.NoSuchOAuthTokenException} if it could not be found.
-	*
-	* @param oAuthTokenId the primary key of the o auth token
-	* @return the o auth token
-	* @throws com.liferay.opensocial.NoSuchOAuthTokenException if a o auth token with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.opensocial.model.OAuthToken findByPrimaryKey(
-		long oAuthTokenId)
-		throws com.liferay.opensocial.NoSuchOAuthTokenException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(oAuthTokenId);
-	}
-
-	/**
-	* Returns the o auth token with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param oAuthTokenId the primary key of the o auth token
-	* @return the o auth token, or <code>null</code> if a o auth token with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.opensocial.model.OAuthToken fetchByPrimaryKey(
-		long oAuthTokenId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(oAuthTokenId);
-	}
-
-	/**
 	* Returns all the o auth tokens where gadgetKey = &#63; and serviceName = &#63;.
 	*
 	* @param gadgetKey the gadget key
@@ -208,7 +128,7 @@ public class OAuthTokenUtil {
 	* Returns a range of all the o auth tokens where gadgetKey = &#63; and serviceName = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param gadgetKey the gadget key
@@ -228,7 +148,7 @@ public class OAuthTokenUtil {
 	* Returns an ordered range of all the o auth tokens where gadgetKey = &#63; and serviceName = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param gadgetKey the gadget key
@@ -344,6 +264,33 @@ public class OAuthTokenUtil {
 	}
 
 	/**
+	* Removes all the o auth tokens where gadgetKey = &#63; and serviceName = &#63; from the database.
+	*
+	* @param gadgetKey the gadget key
+	* @param serviceName the service name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByG_S(java.lang.String gadgetKey,
+		java.lang.String serviceName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByG_S(gadgetKey, serviceName);
+	}
+
+	/**
+	* Returns the number of o auth tokens where gadgetKey = &#63; and serviceName = &#63;.
+	*
+	* @param gadgetKey the gadget key
+	* @param serviceName the service name
+	* @return the number of matching o auth tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByG_S(java.lang.String gadgetKey,
+		java.lang.String serviceName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByG_S(gadgetKey, serviceName);
+	}
+
+	/**
 	* Returns the o auth token where userId = &#63; and gadgetKey = &#63; and serviceName = &#63; and moduleId = &#63; and tokenName = &#63; or throws a {@link com.liferay.opensocial.NoSuchOAuthTokenException} if it could not be found.
 	*
 	* @param userId the user ID
@@ -407,68 +354,6 @@ public class OAuthTokenUtil {
 	}
 
 	/**
-	* Returns all the o auth tokens.
-	*
-	* @return the o auth tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.opensocial.model.OAuthToken> findAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll();
-	}
-
-	/**
-	* Returns a range of all the o auth tokens.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of o auth tokens
-	* @param end the upper bound of the range of o auth tokens (not inclusive)
-	* @return the range of o auth tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.opensocial.model.OAuthToken> findAll(
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the o auth tokens.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of o auth tokens
-	* @param end the upper bound of the range of o auth tokens (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of o auth tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.opensocial.model.OAuthToken> findAll(
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end, orderByComparator);
-	}
-
-	/**
-	* Removes all the o auth tokens where gadgetKey = &#63; and serviceName = &#63; from the database.
-	*
-	* @param gadgetKey the gadget key
-	* @param serviceName the service name
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByG_S(java.lang.String gadgetKey,
-		java.lang.String serviceName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByG_S(gadgetKey, serviceName);
-	}
-
-	/**
 	* Removes the o auth token where userId = &#63; and gadgetKey = &#63; and serviceName = &#63; and moduleId = &#63; and tokenName = &#63; from the database.
 	*
 	* @param userId the user ID
@@ -490,30 +375,6 @@ public class OAuthTokenUtil {
 	}
 
 	/**
-	* Removes all the o auth tokens from the database.
-	*
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of o auth tokens where gadgetKey = &#63; and serviceName = &#63;.
-	*
-	* @param gadgetKey the gadget key
-	* @param serviceName the service name
-	* @return the number of matching o auth tokens
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByG_S(java.lang.String gadgetKey,
-		java.lang.String serviceName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByG_S(gadgetKey, serviceName);
-	}
-
-	/**
 	* Returns the number of o auth tokens where userId = &#63; and gadgetKey = &#63; and serviceName = &#63; and moduleId = &#63; and tokenName = &#63;.
 	*
 	* @param userId the user ID
@@ -530,6 +391,145 @@ public class OAuthTokenUtil {
 		return getPersistence()
 				   .countByU_G_S_M_T(userId, gadgetKey, serviceName, moduleId,
 			tokenName);
+	}
+
+	/**
+	* Caches the o auth token in the entity cache if it is enabled.
+	*
+	* @param oAuthToken the o auth token
+	*/
+	public static void cacheResult(
+		com.liferay.opensocial.model.OAuthToken oAuthToken) {
+		getPersistence().cacheResult(oAuthToken);
+	}
+
+	/**
+	* Caches the o auth tokens in the entity cache if it is enabled.
+	*
+	* @param oAuthTokens the o auth tokens
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.opensocial.model.OAuthToken> oAuthTokens) {
+		getPersistence().cacheResult(oAuthTokens);
+	}
+
+	/**
+	* Creates a new o auth token with the primary key. Does not add the o auth token to the database.
+	*
+	* @param oAuthTokenId the primary key for the new o auth token
+	* @return the new o auth token
+	*/
+	public static com.liferay.opensocial.model.OAuthToken create(
+		long oAuthTokenId) {
+		return getPersistence().create(oAuthTokenId);
+	}
+
+	/**
+	* Removes the o auth token with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param oAuthTokenId the primary key of the o auth token
+	* @return the o auth token that was removed
+	* @throws com.liferay.opensocial.NoSuchOAuthTokenException if a o auth token with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.opensocial.model.OAuthToken remove(
+		long oAuthTokenId)
+		throws com.liferay.opensocial.NoSuchOAuthTokenException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(oAuthTokenId);
+	}
+
+	public static com.liferay.opensocial.model.OAuthToken updateImpl(
+		com.liferay.opensocial.model.OAuthToken oAuthToken)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(oAuthToken);
+	}
+
+	/**
+	* Returns the o auth token with the primary key or throws a {@link com.liferay.opensocial.NoSuchOAuthTokenException} if it could not be found.
+	*
+	* @param oAuthTokenId the primary key of the o auth token
+	* @return the o auth token
+	* @throws com.liferay.opensocial.NoSuchOAuthTokenException if a o auth token with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.opensocial.model.OAuthToken findByPrimaryKey(
+		long oAuthTokenId)
+		throws com.liferay.opensocial.NoSuchOAuthTokenException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(oAuthTokenId);
+	}
+
+	/**
+	* Returns the o auth token with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param oAuthTokenId the primary key of the o auth token
+	* @return the o auth token, or <code>null</code> if a o auth token with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.opensocial.model.OAuthToken fetchByPrimaryKey(
+		long oAuthTokenId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(oAuthTokenId);
+	}
+
+	/**
+	* Returns all the o auth tokens.
+	*
+	* @return the o auth tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.opensocial.model.OAuthToken> findAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll();
+	}
+
+	/**
+	* Returns a range of all the o auth tokens.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
+	* </p>
+	*
+	* @param start the lower bound of the range of o auth tokens
+	* @param end the upper bound of the range of o auth tokens (not inclusive)
+	* @return the range of o auth tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.opensocial.model.OAuthToken> findAll(
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the o auth tokens.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from OAuthTokenModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
+	* </p>
+	*
+	* @param start the lower bound of the range of o auth tokens
+	* @param end the upper bound of the range of o auth tokens (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of o auth tokens
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.opensocial.model.OAuthToken> findAll(
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end, orderByComparator);
+	}
+
+	/**
+	* Removes all the o auth tokens from the database.
+	*
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeAll();
 	}
 
 	/**

@@ -109,83 +109,6 @@ public class FooUtil {
 	}
 
 	/**
-	* Caches the foo in the entity cache if it is enabled.
-	*
-	* @param foo the foo
-	*/
-	public static void cacheResult(
-		com.liferay.sampleservicebuilder.model.Foo foo) {
-		getPersistence().cacheResult(foo);
-	}
-
-	/**
-	* Caches the foos in the entity cache if it is enabled.
-	*
-	* @param foos the foos
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.sampleservicebuilder.model.Foo> foos) {
-		getPersistence().cacheResult(foos);
-	}
-
-	/**
-	* Creates a new foo with the primary key. Does not add the foo to the database.
-	*
-	* @param fooId the primary key for the new foo
-	* @return the new foo
-	*/
-	public static com.liferay.sampleservicebuilder.model.Foo create(long fooId) {
-		return getPersistence().create(fooId);
-	}
-
-	/**
-	* Removes the foo with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param fooId the primary key of the foo
-	* @return the foo that was removed
-	* @throws com.liferay.sampleservicebuilder.NoSuchFooException if a foo with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.sampleservicebuilder.model.Foo remove(long fooId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.sampleservicebuilder.NoSuchFooException {
-		return getPersistence().remove(fooId);
-	}
-
-	public static com.liferay.sampleservicebuilder.model.Foo updateImpl(
-		com.liferay.sampleservicebuilder.model.Foo foo)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(foo);
-	}
-
-	/**
-	* Returns the foo with the primary key or throws a {@link com.liferay.sampleservicebuilder.NoSuchFooException} if it could not be found.
-	*
-	* @param fooId the primary key of the foo
-	* @return the foo
-	* @throws com.liferay.sampleservicebuilder.NoSuchFooException if a foo with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.sampleservicebuilder.model.Foo findByPrimaryKey(
-		long fooId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.sampleservicebuilder.NoSuchFooException {
-		return getPersistence().findByPrimaryKey(fooId);
-	}
-
-	/**
-	* Returns the foo with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param fooId the primary key of the foo
-	* @return the foo, or <code>null</code> if a foo with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.sampleservicebuilder.model.Foo fetchByPrimaryKey(
-		long fooId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(fooId);
-	}
-
-	/**
 	* Returns all the foos where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -202,7 +125,7 @@ public class FooUtil {
 	* Returns a range of all the foos where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -221,7 +144,7 @@ public class FooUtil {
 	* Returns an ordered range of all the foos where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -322,6 +245,29 @@ public class FooUtil {
 	}
 
 	/**
+	* Removes all the foos where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of foos where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns the foo where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.sampleservicebuilder.NoSuchFooException} if it could not be found.
 	*
 	* @param uuid the uuid
@@ -367,6 +313,34 @@ public class FooUtil {
 	}
 
 	/**
+	* Removes the foo where uuid = &#63; and groupId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the foo that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.sampleservicebuilder.model.Foo removeByUUID_G(
+		java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.sampleservicebuilder.NoSuchFooException {
+		return getPersistence().removeByUUID_G(uuid, groupId);
+	}
+
+	/**
+	* Returns the number of foos where uuid = &#63; and groupId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param groupId the group ID
+	* @return the number of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUUID_G(java.lang.String uuid, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUUID_G(uuid, groupId);
+	}
+
+	/**
 	* Returns all the foos where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -384,7 +358,7 @@ public class FooUtil {
 	* Returns a range of all the foos where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -404,7 +378,7 @@ public class FooUtil {
 	* Returns an ordered range of all the foos where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -517,6 +491,31 @@ public class FooUtil {
 	}
 
 	/**
+	* Removes all the foos where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of foos where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
+	}
+
+	/**
 	* Returns all the foos where field2 = &#63;.
 	*
 	* @param field2 the field2
@@ -533,7 +532,7 @@ public class FooUtil {
 	* Returns a range of all the foos where field2 = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param field2 the field2
@@ -552,7 +551,7 @@ public class FooUtil {
 	* Returns an ordered range of all the foos where field2 = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param field2 the field2
@@ -654,6 +653,106 @@ public class FooUtil {
 	}
 
 	/**
+	* Removes all the foos where field2 = &#63; from the database.
+	*
+	* @param field2 the field2
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByField2(boolean field2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByField2(field2);
+	}
+
+	/**
+	* Returns the number of foos where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @return the number of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByField2(boolean field2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByField2(field2);
+	}
+
+	/**
+	* Caches the foo in the entity cache if it is enabled.
+	*
+	* @param foo the foo
+	*/
+	public static void cacheResult(
+		com.liferay.sampleservicebuilder.model.Foo foo) {
+		getPersistence().cacheResult(foo);
+	}
+
+	/**
+	* Caches the foos in the entity cache if it is enabled.
+	*
+	* @param foos the foos
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.sampleservicebuilder.model.Foo> foos) {
+		getPersistence().cacheResult(foos);
+	}
+
+	/**
+	* Creates a new foo with the primary key. Does not add the foo to the database.
+	*
+	* @param fooId the primary key for the new foo
+	* @return the new foo
+	*/
+	public static com.liferay.sampleservicebuilder.model.Foo create(long fooId) {
+		return getPersistence().create(fooId);
+	}
+
+	/**
+	* Removes the foo with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param fooId the primary key of the foo
+	* @return the foo that was removed
+	* @throws com.liferay.sampleservicebuilder.NoSuchFooException if a foo with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.sampleservicebuilder.model.Foo remove(long fooId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.sampleservicebuilder.NoSuchFooException {
+		return getPersistence().remove(fooId);
+	}
+
+	public static com.liferay.sampleservicebuilder.model.Foo updateImpl(
+		com.liferay.sampleservicebuilder.model.Foo foo)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(foo);
+	}
+
+	/**
+	* Returns the foo with the primary key or throws a {@link com.liferay.sampleservicebuilder.NoSuchFooException} if it could not be found.
+	*
+	* @param fooId the primary key of the foo
+	* @return the foo
+	* @throws com.liferay.sampleservicebuilder.NoSuchFooException if a foo with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.sampleservicebuilder.model.Foo findByPrimaryKey(
+		long fooId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.sampleservicebuilder.NoSuchFooException {
+		return getPersistence().findByPrimaryKey(fooId);
+	}
+
+	/**
+	* Returns the foo with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param fooId the primary key of the foo
+	* @return the foo, or <code>null</code> if a foo with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.sampleservicebuilder.model.Foo fetchByPrimaryKey(
+		long fooId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(fooId);
+	}
+
+	/**
 	* Returns all the foos.
 	*
 	* @return the foos
@@ -668,7 +767,7 @@ public class FooUtil {
 	* Returns a range of all the foos.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of foos
@@ -686,7 +785,7 @@ public class FooUtil {
 	* Returns an ordered range of all the foos.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from FooModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of foos
@@ -703,55 +802,6 @@ public class FooUtil {
 	}
 
 	/**
-	* Removes all the foos where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes the foo where uuid = &#63; and groupId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the foo that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.sampleservicebuilder.model.Foo removeByUUID_G(
-		java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.sampleservicebuilder.NoSuchFooException {
-		return getPersistence().removeByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Removes all the foos where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the foos where field2 = &#63; from the database.
-	*
-	* @param field2 the field2
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByField2(boolean field2)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByField2(field2);
-	}
-
-	/**
 	* Removes all the foos from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -759,56 +809,6 @@ public class FooUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of foos where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching foos
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of foos where uuid = &#63; and groupId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param groupId the group ID
-	* @return the number of matching foos
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUUID_G(java.lang.String uuid, long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUUID_G(uuid, groupId);
-	}
-
-	/**
-	* Returns the number of foos where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching foos
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of foos where field2 = &#63;.
-	*
-	* @param field2 the field2
-	* @return the number of matching foos
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByField2(boolean field2)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByField2(field2);
 	}
 
 	/**

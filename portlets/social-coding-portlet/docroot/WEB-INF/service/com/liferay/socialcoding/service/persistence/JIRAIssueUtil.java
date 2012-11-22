@@ -111,86 +111,6 @@ public class JIRAIssueUtil {
 	}
 
 	/**
-	* Caches the j i r a issue in the entity cache if it is enabled.
-	*
-	* @param jiraIssue the j i r a issue
-	*/
-	public static void cacheResult(
-		com.liferay.socialcoding.model.JIRAIssue jiraIssue) {
-		getPersistence().cacheResult(jiraIssue);
-	}
-
-	/**
-	* Caches the j i r a issues in the entity cache if it is enabled.
-	*
-	* @param jiraIssues the j i r a issues
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.socialcoding.model.JIRAIssue> jiraIssues) {
-		getPersistence().cacheResult(jiraIssues);
-	}
-
-	/**
-	* Creates a new j i r a issue with the primary key. Does not add the j i r a issue to the database.
-	*
-	* @param jiraIssueId the primary key for the new j i r a issue
-	* @return the new j i r a issue
-	*/
-	public static com.liferay.socialcoding.model.JIRAIssue create(
-		long jiraIssueId) {
-		return getPersistence().create(jiraIssueId);
-	}
-
-	/**
-	* Removes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param jiraIssueId the primary key of the j i r a issue
-	* @return the j i r a issue that was removed
-	* @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.JIRAIssue remove(
-		long jiraIssueId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.socialcoding.NoSuchJIRAIssueException {
-		return getPersistence().remove(jiraIssueId);
-	}
-
-	public static com.liferay.socialcoding.model.JIRAIssue updateImpl(
-		com.liferay.socialcoding.model.JIRAIssue jiraIssue)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(jiraIssue);
-	}
-
-	/**
-	* Returns the j i r a issue with the primary key or throws a {@link com.liferay.socialcoding.NoSuchJIRAIssueException} if it could not be found.
-	*
-	* @param jiraIssueId the primary key of the j i r a issue
-	* @return the j i r a issue
-	* @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.JIRAIssue findByPrimaryKey(
-		long jiraIssueId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.socialcoding.NoSuchJIRAIssueException {
-		return getPersistence().findByPrimaryKey(jiraIssueId);
-	}
-
-	/**
-	* Returns the j i r a issue with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param jiraIssueId the primary key of the j i r a issue
-	* @return the j i r a issue, or <code>null</code> if a j i r a issue with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.JIRAIssue fetchByPrimaryKey(
-		long jiraIssueId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(jiraIssueId);
-	}
-
-	/**
 	* Returns all the j i r a issues where projectId = &#63;.
 	*
 	* @param projectId the project ID
@@ -207,7 +127,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where projectId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -226,7 +146,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where projectId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -333,6 +253,29 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where projectId = &#63; from the database.
+	*
+	* @param projectId the project ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByProjectId(long projectId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByProjectId(projectId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where projectId = &#63;.
+	*
+	* @param projectId the project ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByProjectId(long projectId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByProjectId(projectId);
+	}
+
+	/**
 	* Returns the j i r a issue where key = &#63; or throws a {@link com.liferay.socialcoding.NoSuchJIRAIssueException} if it could not be found.
 	*
 	* @param key the key
@@ -375,6 +318,32 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes the j i r a issue where key = &#63; from the database.
+	*
+	* @param key the key
+	* @return the j i r a issue that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.JIRAIssue removeByKey(
+		java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.socialcoding.NoSuchJIRAIssueException {
+		return getPersistence().removeByKey(key);
+	}
+
+	/**
+	* Returns the number of j i r a issues where key = &#63;.
+	*
+	* @param key the key
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByKey(java.lang.String key)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByKey(key);
+	}
+
+	/**
 	* Returns all the j i r a issues where reporterJiraUserId = &#63;.
 	*
 	* @param reporterJiraUserId the reporter jira user ID
@@ -391,7 +360,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where reporterJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param reporterJiraUserId the reporter jira user ID
@@ -411,7 +380,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where reporterJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param reporterJiraUserId the reporter jira user ID
@@ -523,6 +492,31 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where reporterJiraUserId = &#63; from the database.
+	*
+	* @param reporterJiraUserId the reporter jira user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByReporterJiraUserId(
+		java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByReporterJiraUserId(reporterJiraUserId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where reporterJiraUserId = &#63;.
+	*
+	* @param reporterJiraUserId the reporter jira user ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByReporterJiraUserId(
+		java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByReporterJiraUserId(reporterJiraUserId);
+	}
+
+	/**
 	* Returns all the j i r a issues where assigneeJiraUserId = &#63;.
 	*
 	* @param assigneeJiraUserId the assignee jira user ID
@@ -539,7 +533,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where assigneeJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param assigneeJiraUserId the assignee jira user ID
@@ -559,7 +553,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where assigneeJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param assigneeJiraUserId the assignee jira user ID
@@ -671,6 +665,31 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where assigneeJiraUserId = &#63; from the database.
+	*
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByAssigneeJiraUserId(
+		java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByAssigneeJiraUserId(assigneeJiraUserId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where assigneeJiraUserId = &#63;.
+	*
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByAssigneeJiraUserId(
+		java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByAssigneeJiraUserId(assigneeJiraUserId);
+	}
+
+	/**
 	* Returns all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
 	*
 	* @param modifiedDate the modified date
@@ -688,7 +707,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -708,7 +727,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -822,6 +841,31 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; from the database.
+	*
+	* @param modifiedDate the modified date
+	* @param projectId the project ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByMD_P(java.util.Date modifiedDate, long projectId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByMD_P(modifiedDate, projectId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
+	*
+	* @param modifiedDate the modified date
+	* @param projectId the project ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByMD_P(java.util.Date modifiedDate, long projectId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByMD_P(modifiedDate, projectId);
+	}
+
+	/**
 	* Returns all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
 	*
 	* @param projectId the project ID
@@ -839,7 +883,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -860,7 +904,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -979,6 +1023,33 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; from the database.
+	*
+	* @param projectId the project ID
+	* @param reporterJiraUserId the reporter jira user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByP_RJUI(long projectId,
+		java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByP_RJUI(projectId, reporterJiraUserId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
+	*
+	* @param projectId the project ID
+	* @param reporterJiraUserId the reporter jira user ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByP_RJUI(long projectId,
+		java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByP_RJUI(projectId, reporterJiraUserId);
+	}
+
+	/**
 	* Returns all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
 	*
 	* @param projectId the project ID
@@ -996,7 +1067,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -1017,7 +1088,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -1136,6 +1207,33 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; from the database.
+	*
+	* @param projectId the project ID
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByP_AJUI(long projectId,
+		java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByP_AJUI(projectId, assigneeJiraUserId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
+	*
+	* @param projectId the project ID
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByP_AJUI(long projectId,
+		java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByP_AJUI(projectId, assigneeJiraUserId);
+	}
+
+	/**
 	* Returns all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
 	*
 	* @param modifiedDate the modified date
@@ -1156,7 +1254,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -1180,7 +1278,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -1310,6 +1408,37 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63; from the database.
+	*
+	* @param modifiedDate the modified date
+	* @param projectId the project ID
+	* @param reporterJiraUserId the reporter jira user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByMD_P_RJUI(java.util.Date modifiedDate,
+		long projectId, java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByMD_P_RJUI(modifiedDate, projectId, reporterJiraUserId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
+	*
+	* @param modifiedDate the modified date
+	* @param projectId the project ID
+	* @param reporterJiraUserId the reporter jira user ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByMD_P_RJUI(java.util.Date modifiedDate,
+		long projectId, java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByMD_P_RJUI(modifiedDate, projectId, reporterJiraUserId);
+	}
+
+	/**
 	* Returns all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
 	*
 	* @param modifiedDate the modified date
@@ -1330,7 +1459,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -1354,7 +1483,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -1484,6 +1613,37 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63; from the database.
+	*
+	* @param modifiedDate the modified date
+	* @param projectId the project ID
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByMD_P_AJUI(java.util.Date modifiedDate,
+		long projectId, java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence()
+			.removeByMD_P_AJUI(modifiedDate, projectId, assigneeJiraUserId);
+	}
+
+	/**
+	* Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
+	*
+	* @param modifiedDate the modified date
+	* @param projectId the project ID
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByMD_P_AJUI(java.util.Date modifiedDate,
+		long projectId, java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByMD_P_AJUI(modifiedDate, projectId, assigneeJiraUserId);
+	}
+
+	/**
 	* Returns all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
 	*
 	* @param projectId the project ID
@@ -1504,7 +1664,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -1528,7 +1688,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -1658,6 +1818,36 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63; from the database.
+	*
+	* @param projectId the project ID
+	* @param reporterJiraUserId the reporter jira user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByP_RJUI_S(long projectId,
+		java.lang.String reporterJiraUserId, java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByP_RJUI_S(projectId, reporterJiraUserId, status);
+	}
+
+	/**
+	* Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
+	*
+	* @param projectId the project ID
+	* @param reporterJiraUserId the reporter jira user ID
+	* @param status the status
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByP_RJUI_S(long projectId,
+		java.lang.String reporterJiraUserId, java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByP_RJUI_S(projectId, reporterJiraUserId, status);
+	}
+
+	/**
 	* Returns all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
 	*
 	* @param projectId the project ID
@@ -1678,7 +1868,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -1702,7 +1892,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param projectId the project ID
@@ -1832,6 +2022,116 @@ public class JIRAIssueUtil {
 	}
 
 	/**
+	* Removes all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63; from the database.
+	*
+	* @param projectId the project ID
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @param status the status
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByP_AJUI_S(long projectId,
+		java.lang.String assigneeJiraUserId, java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByP_AJUI_S(projectId, assigneeJiraUserId, status);
+	}
+
+	/**
+	* Returns the number of j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
+	*
+	* @param projectId the project ID
+	* @param assigneeJiraUserId the assignee jira user ID
+	* @param status the status
+	* @return the number of matching j i r a issues
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByP_AJUI_S(long projectId,
+		java.lang.String assigneeJiraUserId, java.lang.String status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .countByP_AJUI_S(projectId, assigneeJiraUserId, status);
+	}
+
+	/**
+	* Caches the j i r a issue in the entity cache if it is enabled.
+	*
+	* @param jiraIssue the j i r a issue
+	*/
+	public static void cacheResult(
+		com.liferay.socialcoding.model.JIRAIssue jiraIssue) {
+		getPersistence().cacheResult(jiraIssue);
+	}
+
+	/**
+	* Caches the j i r a issues in the entity cache if it is enabled.
+	*
+	* @param jiraIssues the j i r a issues
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.socialcoding.model.JIRAIssue> jiraIssues) {
+		getPersistence().cacheResult(jiraIssues);
+	}
+
+	/**
+	* Creates a new j i r a issue with the primary key. Does not add the j i r a issue to the database.
+	*
+	* @param jiraIssueId the primary key for the new j i r a issue
+	* @return the new j i r a issue
+	*/
+	public static com.liferay.socialcoding.model.JIRAIssue create(
+		long jiraIssueId) {
+		return getPersistence().create(jiraIssueId);
+	}
+
+	/**
+	* Removes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param jiraIssueId the primary key of the j i r a issue
+	* @return the j i r a issue that was removed
+	* @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.JIRAIssue remove(
+		long jiraIssueId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.socialcoding.NoSuchJIRAIssueException {
+		return getPersistence().remove(jiraIssueId);
+	}
+
+	public static com.liferay.socialcoding.model.JIRAIssue updateImpl(
+		com.liferay.socialcoding.model.JIRAIssue jiraIssue)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(jiraIssue);
+	}
+
+	/**
+	* Returns the j i r a issue with the primary key or throws a {@link com.liferay.socialcoding.NoSuchJIRAIssueException} if it could not be found.
+	*
+	* @param jiraIssueId the primary key of the j i r a issue
+	* @return the j i r a issue
+	* @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.JIRAIssue findByPrimaryKey(
+		long jiraIssueId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.socialcoding.NoSuchJIRAIssueException {
+		return getPersistence().findByPrimaryKey(jiraIssueId);
+	}
+
+	/**
+	* Returns the j i r a issue with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param jiraIssueId the primary key of the j i r a issue
+	* @return the j i r a issue, or <code>null</code> if a j i r a issue with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.socialcoding.model.JIRAIssue fetchByPrimaryKey(
+		long jiraIssueId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(jiraIssueId);
+	}
+
+	/**
 	* Returns all the j i r a issues.
 	*
 	* @return the j i r a issues
@@ -1846,7 +2146,7 @@ public class JIRAIssueUtil {
 	* Returns a range of all the j i r a issues.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of j i r a issues
@@ -1864,7 +2164,7 @@ public class JIRAIssueUtil {
 	* Returns an ordered range of all the j i r a issues.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from JIRAIssueModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of j i r a issues
@@ -1881,151 +2181,6 @@ public class JIRAIssueUtil {
 	}
 
 	/**
-	* Removes all the j i r a issues where projectId = &#63; from the database.
-	*
-	* @param projectId the project ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByProjectId(long projectId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByProjectId(projectId);
-	}
-
-	/**
-	* Removes the j i r a issue where key = &#63; from the database.
-	*
-	* @param key the key
-	* @return the j i r a issue that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.socialcoding.model.JIRAIssue removeByKey(
-		java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.socialcoding.NoSuchJIRAIssueException {
-		return getPersistence().removeByKey(key);
-	}
-
-	/**
-	* Removes all the j i r a issues where reporterJiraUserId = &#63; from the database.
-	*
-	* @param reporterJiraUserId the reporter jira user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByReporterJiraUserId(
-		java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByReporterJiraUserId(reporterJiraUserId);
-	}
-
-	/**
-	* Removes all the j i r a issues where assigneeJiraUserId = &#63; from the database.
-	*
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByAssigneeJiraUserId(
-		java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByAssigneeJiraUserId(assigneeJiraUserId);
-	}
-
-	/**
-	* Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; from the database.
-	*
-	* @param modifiedDate the modified date
-	* @param projectId the project ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByMD_P(java.util.Date modifiedDate, long projectId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByMD_P(modifiedDate, projectId);
-	}
-
-	/**
-	* Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; from the database.
-	*
-	* @param projectId the project ID
-	* @param reporterJiraUserId the reporter jira user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByP_RJUI(long projectId,
-		java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByP_RJUI(projectId, reporterJiraUserId);
-	}
-
-	/**
-	* Removes all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; from the database.
-	*
-	* @param projectId the project ID
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByP_AJUI(long projectId,
-		java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByP_AJUI(projectId, assigneeJiraUserId);
-	}
-
-	/**
-	* Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63; from the database.
-	*
-	* @param modifiedDate the modified date
-	* @param projectId the project ID
-	* @param reporterJiraUserId the reporter jira user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByMD_P_RJUI(java.util.Date modifiedDate,
-		long projectId, java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByMD_P_RJUI(modifiedDate, projectId, reporterJiraUserId);
-	}
-
-	/**
-	* Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63; from the database.
-	*
-	* @param modifiedDate the modified date
-	* @param projectId the project ID
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByMD_P_AJUI(java.util.Date modifiedDate,
-		long projectId, java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence()
-			.removeByMD_P_AJUI(modifiedDate, projectId, assigneeJiraUserId);
-	}
-
-	/**
-	* Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63; from the database.
-	*
-	* @param projectId the project ID
-	* @param reporterJiraUserId the reporter jira user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByP_RJUI_S(long projectId,
-		java.lang.String reporterJiraUserId, java.lang.String status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByP_RJUI_S(projectId, reporterJiraUserId, status);
-	}
-
-	/**
-	* Removes all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63; from the database.
-	*
-	* @param projectId the project ID
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @param status the status
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByP_AJUI_S(long projectId,
-		java.lang.String assigneeJiraUserId, java.lang.String status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByP_AJUI_S(projectId, assigneeJiraUserId, status);
-	}
-
-	/**
 	* Removes all the j i r a issues from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -2033,161 +2188,6 @@ public class JIRAIssueUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of j i r a issues where projectId = &#63;.
-	*
-	* @param projectId the project ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByProjectId(long projectId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByProjectId(projectId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where key = &#63;.
-	*
-	* @param key the key
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByKey(java.lang.String key)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByKey(key);
-	}
-
-	/**
-	* Returns the number of j i r a issues where reporterJiraUserId = &#63;.
-	*
-	* @param reporterJiraUserId the reporter jira user ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByReporterJiraUserId(
-		java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByReporterJiraUserId(reporterJiraUserId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where assigneeJiraUserId = &#63;.
-	*
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByAssigneeJiraUserId(
-		java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByAssigneeJiraUserId(assigneeJiraUserId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
-	*
-	* @param modifiedDate the modified date
-	* @param projectId the project ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByMD_P(java.util.Date modifiedDate, long projectId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByMD_P(modifiedDate, projectId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
-	*
-	* @param projectId the project ID
-	* @param reporterJiraUserId the reporter jira user ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByP_RJUI(long projectId,
-		java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByP_RJUI(projectId, reporterJiraUserId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
-	*
-	* @param projectId the project ID
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByP_AJUI(long projectId,
-		java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByP_AJUI(projectId, assigneeJiraUserId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
-	*
-	* @param modifiedDate the modified date
-	* @param projectId the project ID
-	* @param reporterJiraUserId the reporter jira user ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByMD_P_RJUI(java.util.Date modifiedDate,
-		long projectId, java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByMD_P_RJUI(modifiedDate, projectId, reporterJiraUserId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
-	*
-	* @param modifiedDate the modified date
-	* @param projectId the project ID
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByMD_P_AJUI(java.util.Date modifiedDate,
-		long projectId, java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByMD_P_AJUI(modifiedDate, projectId, assigneeJiraUserId);
-	}
-
-	/**
-	* Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
-	*
-	* @param projectId the project ID
-	* @param reporterJiraUserId the reporter jira user ID
-	* @param status the status
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByP_RJUI_S(long projectId,
-		java.lang.String reporterJiraUserId, java.lang.String status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByP_RJUI_S(projectId, reporterJiraUserId, status);
-	}
-
-	/**
-	* Returns the number of j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
-	*
-	* @param projectId the project ID
-	* @param assigneeJiraUserId the assignee jira user ID
-	* @param status the status
-	* @return the number of matching j i r a issues
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByP_AJUI_S(long projectId,
-		java.lang.String assigneeJiraUserId, java.lang.String status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .countByP_AJUI_S(projectId, assigneeJiraUserId, status);
 	}
 
 	/**

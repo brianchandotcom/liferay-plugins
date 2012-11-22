@@ -112,86 +112,6 @@ public class WSRPConsumerPortletUtil {
 	}
 
 	/**
-	* Caches the w s r p consumer portlet in the entity cache if it is enabled.
-	*
-	* @param wsrpConsumerPortlet the w s r p consumer portlet
-	*/
-	public static void cacheResult(
-		com.liferay.wsrp.model.WSRPConsumerPortlet wsrpConsumerPortlet) {
-		getPersistence().cacheResult(wsrpConsumerPortlet);
-	}
-
-	/**
-	* Caches the w s r p consumer portlets in the entity cache if it is enabled.
-	*
-	* @param wsrpConsumerPortlets the w s r p consumer portlets
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.wsrp.model.WSRPConsumerPortlet> wsrpConsumerPortlets) {
-		getPersistence().cacheResult(wsrpConsumerPortlets);
-	}
-
-	/**
-	* Creates a new w s r p consumer portlet with the primary key. Does not add the w s r p consumer portlet to the database.
-	*
-	* @param wsrpConsumerPortletId the primary key for the new w s r p consumer portlet
-	* @return the new w s r p consumer portlet
-	*/
-	public static com.liferay.wsrp.model.WSRPConsumerPortlet create(
-		long wsrpConsumerPortletId) {
-		return getPersistence().create(wsrpConsumerPortletId);
-	}
-
-	/**
-	* Removes the w s r p consumer portlet with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
-	* @return the w s r p consumer portlet that was removed
-	* @throws com.liferay.wsrp.NoSuchConsumerPortletException if a w s r p consumer portlet with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.wsrp.model.WSRPConsumerPortlet remove(
-		long wsrpConsumerPortletId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.wsrp.NoSuchConsumerPortletException {
-		return getPersistence().remove(wsrpConsumerPortletId);
-	}
-
-	public static com.liferay.wsrp.model.WSRPConsumerPortlet updateImpl(
-		com.liferay.wsrp.model.WSRPConsumerPortlet wsrpConsumerPortlet)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(wsrpConsumerPortlet);
-	}
-
-	/**
-	* Returns the w s r p consumer portlet with the primary key or throws a {@link com.liferay.wsrp.NoSuchConsumerPortletException} if it could not be found.
-	*
-	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
-	* @return the w s r p consumer portlet
-	* @throws com.liferay.wsrp.NoSuchConsumerPortletException if a w s r p consumer portlet with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.wsrp.model.WSRPConsumerPortlet findByPrimaryKey(
-		long wsrpConsumerPortletId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.wsrp.NoSuchConsumerPortletException {
-		return getPersistence().findByPrimaryKey(wsrpConsumerPortletId);
-	}
-
-	/**
-	* Returns the w s r p consumer portlet with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
-	* @return the w s r p consumer portlet, or <code>null</code> if a w s r p consumer portlet with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.wsrp.model.WSRPConsumerPortlet fetchByPrimaryKey(
-		long wsrpConsumerPortletId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(wsrpConsumerPortletId);
-	}
-
-	/**
 	* Returns all the w s r p consumer portlets where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -208,7 +128,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns a range of all the w s r p consumer portlets where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -227,7 +147,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns an ordered range of all the w s r p consumer portlets where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -329,6 +249,29 @@ public class WSRPConsumerPortletUtil {
 	}
 
 	/**
+	* Removes all the w s r p consumer portlets where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of w s r p consumer portlets where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching w s r p consumer portlets
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns all the w s r p consumer portlets where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -346,7 +289,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns a range of all the w s r p consumer portlets where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -366,7 +309,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns an ordered range of all the w s r p consumer portlets where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -479,6 +422,31 @@ public class WSRPConsumerPortletUtil {
 	}
 
 	/**
+	* Removes all the w s r p consumer portlets where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid_C(uuid, companyId);
+	}
+
+	/**
+	* Returns the number of w s r p consumer portlets where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching w s r p consumer portlets
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid_C(uuid, companyId);
+	}
+
+	/**
 	* Returns all the w s r p consumer portlets where wsrpConsumerId = &#63;.
 	*
 	* @param wsrpConsumerId the wsrp consumer ID
@@ -495,7 +463,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns a range of all the w s r p consumer portlets where wsrpConsumerId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param wsrpConsumerId the wsrp consumer ID
@@ -514,7 +482,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns an ordered range of all the w s r p consumer portlets where wsrpConsumerId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param wsrpConsumerId the wsrp consumer ID
@@ -623,6 +591,29 @@ public class WSRPConsumerPortletUtil {
 	}
 
 	/**
+	* Removes all the w s r p consumer portlets where wsrpConsumerId = &#63; from the database.
+	*
+	* @param wsrpConsumerId the wsrp consumer ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByWsrpConsumerId(long wsrpConsumerId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByWsrpConsumerId(wsrpConsumerId);
+	}
+
+	/**
+	* Returns the number of w s r p consumer portlets where wsrpConsumerId = &#63;.
+	*
+	* @param wsrpConsumerId the wsrp consumer ID
+	* @return the number of matching w s r p consumer portlets
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByWsrpConsumerId(long wsrpConsumerId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByWsrpConsumerId(wsrpConsumerId);
+	}
+
+	/**
 	* Returns the w s r p consumer portlet where wsrpConsumerId = &#63; and portletHandle = &#63; or throws a {@link com.liferay.wsrp.NoSuchConsumerPortletException} if it could not be found.
 	*
 	* @param wsrpConsumerId the wsrp consumer ID
@@ -670,6 +661,115 @@ public class WSRPConsumerPortletUtil {
 	}
 
 	/**
+	* Removes the w s r p consumer portlet where wsrpConsumerId = &#63; and portletHandle = &#63; from the database.
+	*
+	* @param wsrpConsumerId the wsrp consumer ID
+	* @param portletHandle the portlet handle
+	* @return the w s r p consumer portlet that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.wsrp.model.WSRPConsumerPortlet removeByW_P(
+		long wsrpConsumerId, java.lang.String portletHandle)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.wsrp.NoSuchConsumerPortletException {
+		return getPersistence().removeByW_P(wsrpConsumerId, portletHandle);
+	}
+
+	/**
+	* Returns the number of w s r p consumer portlets where wsrpConsumerId = &#63; and portletHandle = &#63;.
+	*
+	* @param wsrpConsumerId the wsrp consumer ID
+	* @param portletHandle the portlet handle
+	* @return the number of matching w s r p consumer portlets
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByW_P(long wsrpConsumerId,
+		java.lang.String portletHandle)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByW_P(wsrpConsumerId, portletHandle);
+	}
+
+	/**
+	* Caches the w s r p consumer portlet in the entity cache if it is enabled.
+	*
+	* @param wsrpConsumerPortlet the w s r p consumer portlet
+	*/
+	public static void cacheResult(
+		com.liferay.wsrp.model.WSRPConsumerPortlet wsrpConsumerPortlet) {
+		getPersistence().cacheResult(wsrpConsumerPortlet);
+	}
+
+	/**
+	* Caches the w s r p consumer portlets in the entity cache if it is enabled.
+	*
+	* @param wsrpConsumerPortlets the w s r p consumer portlets
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.wsrp.model.WSRPConsumerPortlet> wsrpConsumerPortlets) {
+		getPersistence().cacheResult(wsrpConsumerPortlets);
+	}
+
+	/**
+	* Creates a new w s r p consumer portlet with the primary key. Does not add the w s r p consumer portlet to the database.
+	*
+	* @param wsrpConsumerPortletId the primary key for the new w s r p consumer portlet
+	* @return the new w s r p consumer portlet
+	*/
+	public static com.liferay.wsrp.model.WSRPConsumerPortlet create(
+		long wsrpConsumerPortletId) {
+		return getPersistence().create(wsrpConsumerPortletId);
+	}
+
+	/**
+	* Removes the w s r p consumer portlet with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
+	* @return the w s r p consumer portlet that was removed
+	* @throws com.liferay.wsrp.NoSuchConsumerPortletException if a w s r p consumer portlet with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.wsrp.model.WSRPConsumerPortlet remove(
+		long wsrpConsumerPortletId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.wsrp.NoSuchConsumerPortletException {
+		return getPersistence().remove(wsrpConsumerPortletId);
+	}
+
+	public static com.liferay.wsrp.model.WSRPConsumerPortlet updateImpl(
+		com.liferay.wsrp.model.WSRPConsumerPortlet wsrpConsumerPortlet)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(wsrpConsumerPortlet);
+	}
+
+	/**
+	* Returns the w s r p consumer portlet with the primary key or throws a {@link com.liferay.wsrp.NoSuchConsumerPortletException} if it could not be found.
+	*
+	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
+	* @return the w s r p consumer portlet
+	* @throws com.liferay.wsrp.NoSuchConsumerPortletException if a w s r p consumer portlet with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.wsrp.model.WSRPConsumerPortlet findByPrimaryKey(
+		long wsrpConsumerPortletId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.wsrp.NoSuchConsumerPortletException {
+		return getPersistence().findByPrimaryKey(wsrpConsumerPortletId);
+	}
+
+	/**
+	* Returns the w s r p consumer portlet with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
+	* @return the w s r p consumer portlet, or <code>null</code> if a w s r p consumer portlet with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.wsrp.model.WSRPConsumerPortlet fetchByPrimaryKey(
+		long wsrpConsumerPortletId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(wsrpConsumerPortletId);
+	}
+
+	/**
 	* Returns all the w s r p consumer portlets.
 	*
 	* @return the w s r p consumer portlets
@@ -684,7 +784,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns a range of all the w s r p consumer portlets.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of w s r p consumer portlets
@@ -702,7 +802,7 @@ public class WSRPConsumerPortletUtil {
 	* Returns an ordered range of all the w s r p consumer portlets.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerPortletModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of w s r p consumer portlets
@@ -719,55 +819,6 @@ public class WSRPConsumerPortletUtil {
 	}
 
 	/**
-	* Removes all the w s r p consumer portlets where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes all the w s r p consumer portlets where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Removes all the w s r p consumer portlets where wsrpConsumerId = &#63; from the database.
-	*
-	* @param wsrpConsumerId the wsrp consumer ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByWsrpConsumerId(long wsrpConsumerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByWsrpConsumerId(wsrpConsumerId);
-	}
-
-	/**
-	* Removes the w s r p consumer portlet where wsrpConsumerId = &#63; and portletHandle = &#63; from the database.
-	*
-	* @param wsrpConsumerId the wsrp consumer ID
-	* @param portletHandle the portlet handle
-	* @return the w s r p consumer portlet that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.wsrp.model.WSRPConsumerPortlet removeByW_P(
-		long wsrpConsumerId, java.lang.String portletHandle)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.wsrp.NoSuchConsumerPortletException {
-		return getPersistence().removeByW_P(wsrpConsumerId, portletHandle);
-	}
-
-	/**
 	* Removes all the w s r p consumer portlets from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -775,57 +826,6 @@ public class WSRPConsumerPortletUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of w s r p consumer portlets where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching w s r p consumer portlets
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of w s r p consumer portlets where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching w s r p consumer portlets
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid_C(uuid, companyId);
-	}
-
-	/**
-	* Returns the number of w s r p consumer portlets where wsrpConsumerId = &#63;.
-	*
-	* @param wsrpConsumerId the wsrp consumer ID
-	* @return the number of matching w s r p consumer portlets
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByWsrpConsumerId(long wsrpConsumerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByWsrpConsumerId(wsrpConsumerId);
-	}
-
-	/**
-	* Returns the number of w s r p consumer portlets where wsrpConsumerId = &#63; and portletHandle = &#63;.
-	*
-	* @param wsrpConsumerId the wsrp consumer ID
-	* @param portletHandle the portlet handle
-	* @return the number of matching w s r p consumer portlets
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByW_P(long wsrpConsumerId,
-		java.lang.String portletHandle)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByW_P(wsrpConsumerId, portletHandle);
 	}
 
 	/**

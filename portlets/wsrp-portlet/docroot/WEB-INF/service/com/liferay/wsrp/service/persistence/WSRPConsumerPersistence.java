@@ -38,69 +38,6 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	 */
 
 	/**
-	* Caches the w s r p consumer in the entity cache if it is enabled.
-	*
-	* @param wsrpConsumer the w s r p consumer
-	*/
-	public void cacheResult(com.liferay.wsrp.model.WSRPConsumer wsrpConsumer);
-
-	/**
-	* Caches the w s r p consumers in the entity cache if it is enabled.
-	*
-	* @param wsrpConsumers the w s r p consumers
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.wsrp.model.WSRPConsumer> wsrpConsumers);
-
-	/**
-	* Creates a new w s r p consumer with the primary key. Does not add the w s r p consumer to the database.
-	*
-	* @param wsrpConsumerId the primary key for the new w s r p consumer
-	* @return the new w s r p consumer
-	*/
-	public com.liferay.wsrp.model.WSRPConsumer create(long wsrpConsumerId);
-
-	/**
-	* Removes the w s r p consumer with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param wsrpConsumerId the primary key of the w s r p consumer
-	* @return the w s r p consumer that was removed
-	* @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.wsrp.model.WSRPConsumer remove(long wsrpConsumerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.wsrp.NoSuchConsumerException;
-
-	public com.liferay.wsrp.model.WSRPConsumer updateImpl(
-		com.liferay.wsrp.model.WSRPConsumer wsrpConsumer)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the w s r p consumer with the primary key or throws a {@link com.liferay.wsrp.NoSuchConsumerException} if it could not be found.
-	*
-	* @param wsrpConsumerId the primary key of the w s r p consumer
-	* @return the w s r p consumer
-	* @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.wsrp.model.WSRPConsumer findByPrimaryKey(
-		long wsrpConsumerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.wsrp.NoSuchConsumerException;
-
-	/**
-	* Returns the w s r p consumer with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param wsrpConsumerId the primary key of the w s r p consumer
-	* @return the w s r p consumer, or <code>null</code> if a w s r p consumer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.wsrp.model.WSRPConsumer fetchByPrimaryKey(
-		long wsrpConsumerId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the w s r p consumers where uuid = &#63;.
 	*
 	* @param uuid the uuid
@@ -115,7 +52,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns a range of all the w s r p consumers where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -132,7 +69,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns an ordered range of all the w s r p consumers where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -220,6 +157,25 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 			com.liferay.wsrp.NoSuchConsumerException;
 
 	/**
+	* Removes all the w s r p consumers where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of w s r p consumers where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching w s r p consumers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	*
 	* @param uuid the uuid
@@ -235,7 +191,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns a range of all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -253,7 +209,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns an ordered range of all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -347,6 +303,27 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 			com.liferay.wsrp.NoSuchConsumerException;
 
 	/**
+	* Removes all the w s r p consumers where uuid = &#63; and companyId = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of w s r p consumers where uuid = &#63; and companyId = &#63;.
+	*
+	* @param uuid the uuid
+	* @param companyId the company ID
+	* @return the number of matching w s r p consumers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByUuid_C(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the w s r p consumers where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -361,7 +338,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns a range of all the w s r p consumers where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -378,7 +355,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns an ordered range of all the w s r p consumers where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -466,6 +443,88 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 			com.liferay.wsrp.NoSuchConsumerException;
 
 	/**
+	* Removes all the w s r p consumers where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of w s r p consumers where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching w s r p consumers
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the w s r p consumer in the entity cache if it is enabled.
+	*
+	* @param wsrpConsumer the w s r p consumer
+	*/
+	public void cacheResult(com.liferay.wsrp.model.WSRPConsumer wsrpConsumer);
+
+	/**
+	* Caches the w s r p consumers in the entity cache if it is enabled.
+	*
+	* @param wsrpConsumers the w s r p consumers
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.wsrp.model.WSRPConsumer> wsrpConsumers);
+
+	/**
+	* Creates a new w s r p consumer with the primary key. Does not add the w s r p consumer to the database.
+	*
+	* @param wsrpConsumerId the primary key for the new w s r p consumer
+	* @return the new w s r p consumer
+	*/
+	public com.liferay.wsrp.model.WSRPConsumer create(long wsrpConsumerId);
+
+	/**
+	* Removes the w s r p consumer with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param wsrpConsumerId the primary key of the w s r p consumer
+	* @return the w s r p consumer that was removed
+	* @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.wsrp.model.WSRPConsumer remove(long wsrpConsumerId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.wsrp.NoSuchConsumerException;
+
+	public com.liferay.wsrp.model.WSRPConsumer updateImpl(
+		com.liferay.wsrp.model.WSRPConsumer wsrpConsumer)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the w s r p consumer with the primary key or throws a {@link com.liferay.wsrp.NoSuchConsumerException} if it could not be found.
+	*
+	* @param wsrpConsumerId the primary key of the w s r p consumer
+	* @return the w s r p consumer
+	* @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.wsrp.model.WSRPConsumer findByPrimaryKey(
+		long wsrpConsumerId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.wsrp.NoSuchConsumerException;
+
+	/**
+	* Returns the w s r p consumer with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param wsrpConsumerId the primary key of the w s r p consumer
+	* @return the w s r p consumer, or <code>null</code> if a w s r p consumer with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.wsrp.model.WSRPConsumer fetchByPrimaryKey(
+		long wsrpConsumerId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the w s r p consumers.
 	*
 	* @return the w s r p consumers
@@ -478,7 +537,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns a range of all the w s r p consumers.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of w s r p consumers
@@ -494,7 +553,7 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 	* Returns an ordered range of all the w s r p consumers.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from WSRPConsumerModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of w s r p consumers
@@ -509,70 +568,11 @@ public interface WSRPConsumerPersistence extends BasePersistence<WSRPConsumer> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the w s r p consumers where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the w s r p consumers where uuid = &#63; and companyId = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes all the w s r p consumers where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the w s r p consumers from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of w s r p consumers where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching w s r p consumers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of w s r p consumers where uuid = &#63; and companyId = &#63;.
-	*
-	* @param uuid the uuid
-	* @param companyId the company ID
-	* @return the number of matching w s r p consumers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByUuid_C(java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of w s r p consumers where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching w s r p consumers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByCompanyId(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

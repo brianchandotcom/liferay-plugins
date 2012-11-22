@@ -38,69 +38,6 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 	 */
 
 	/**
-	* Caches the akismet data in the entity cache if it is enabled.
-	*
-	* @param akismetData the akismet data
-	*/
-	public void cacheResult(com.liferay.akismet.model.AkismetData akismetData);
-
-	/**
-	* Caches the akismet datas in the entity cache if it is enabled.
-	*
-	* @param akismetDatas the akismet datas
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.akismet.model.AkismetData> akismetDatas);
-
-	/**
-	* Creates a new akismet data with the primary key. Does not add the akismet data to the database.
-	*
-	* @param akismetDataId the primary key for the new akismet data
-	* @return the new akismet data
-	*/
-	public com.liferay.akismet.model.AkismetData create(long akismetDataId);
-
-	/**
-	* Removes the akismet data with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param akismetDataId the primary key of the akismet data
-	* @return the akismet data that was removed
-	* @throws com.liferay.akismet.NoSuchDataException if a akismet data with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.akismet.model.AkismetData remove(long akismetDataId)
-		throws com.liferay.akismet.NoSuchDataException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.akismet.model.AkismetData updateImpl(
-		com.liferay.akismet.model.AkismetData akismetData)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the akismet data with the primary key or throws a {@link com.liferay.akismet.NoSuchDataException} if it could not be found.
-	*
-	* @param akismetDataId the primary key of the akismet data
-	* @return the akismet data
-	* @throws com.liferay.akismet.NoSuchDataException if a akismet data with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.akismet.model.AkismetData findByPrimaryKey(
-		long akismetDataId)
-		throws com.liferay.akismet.NoSuchDataException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the akismet data with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param akismetDataId the primary key of the akismet data
-	* @return the akismet data, or <code>null</code> if a akismet data with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.akismet.model.AkismetData fetchByPrimaryKey(
-		long akismetDataId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the akismet datas where modifiedDate &lt; &#63;.
 	*
 	* @param modifiedDate the modified date
@@ -115,7 +52,7 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 	* Returns a range of all the akismet datas where modifiedDate &lt; &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AkismetDataModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -132,7 +69,7 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 	* Returns an ordered range of all the akismet datas where modifiedDate &lt; &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AkismetDataModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param modifiedDate the modified date
@@ -220,6 +157,25 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the akismet datas where modifiedDate &lt; &#63; from the database.
+	*
+	* @param modifiedDate the modified date
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByLtModifiedDate(java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of akismet datas where modifiedDate &lt; &#63;.
+	*
+	* @param modifiedDate the modified date
+	* @return the number of matching akismet datas
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByLtModifiedDate(java.util.Date modifiedDate)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the akismet data where mbMessageId = &#63; or throws a {@link com.liferay.akismet.NoSuchDataException} if it could not be found.
 	*
 	* @param mbMessageId the mb message ID
@@ -256,6 +212,91 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the akismet data where mbMessageId = &#63; from the database.
+	*
+	* @param mbMessageId the mb message ID
+	* @return the akismet data that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.akismet.model.AkismetData removeByMBMessageId(
+		long mbMessageId)
+		throws com.liferay.akismet.NoSuchDataException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of akismet datas where mbMessageId = &#63;.
+	*
+	* @param mbMessageId the mb message ID
+	* @return the number of matching akismet datas
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByMBMessageId(long mbMessageId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the akismet data in the entity cache if it is enabled.
+	*
+	* @param akismetData the akismet data
+	*/
+	public void cacheResult(com.liferay.akismet.model.AkismetData akismetData);
+
+	/**
+	* Caches the akismet datas in the entity cache if it is enabled.
+	*
+	* @param akismetDatas the akismet datas
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.akismet.model.AkismetData> akismetDatas);
+
+	/**
+	* Creates a new akismet data with the primary key. Does not add the akismet data to the database.
+	*
+	* @param akismetDataId the primary key for the new akismet data
+	* @return the new akismet data
+	*/
+	public com.liferay.akismet.model.AkismetData create(long akismetDataId);
+
+	/**
+	* Removes the akismet data with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param akismetDataId the primary key of the akismet data
+	* @return the akismet data that was removed
+	* @throws com.liferay.akismet.NoSuchDataException if a akismet data with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.akismet.model.AkismetData remove(long akismetDataId)
+		throws com.liferay.akismet.NoSuchDataException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.akismet.model.AkismetData updateImpl(
+		com.liferay.akismet.model.AkismetData akismetData)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the akismet data with the primary key or throws a {@link com.liferay.akismet.NoSuchDataException} if it could not be found.
+	*
+	* @param akismetDataId the primary key of the akismet data
+	* @return the akismet data
+	* @throws com.liferay.akismet.NoSuchDataException if a akismet data with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.akismet.model.AkismetData findByPrimaryKey(
+		long akismetDataId)
+		throws com.liferay.akismet.NoSuchDataException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the akismet data with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param akismetDataId the primary key of the akismet data
+	* @return the akismet data, or <code>null</code> if a akismet data with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.akismet.model.AkismetData fetchByPrimaryKey(
+		long akismetDataId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the akismet datas.
 	*
 	* @return the akismet datas
@@ -268,7 +309,7 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 	* Returns a range of all the akismet datas.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AkismetDataModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of akismet datas
@@ -284,7 +325,7 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 	* Returns an ordered range of all the akismet datas.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. When orderByComparator is specified, the query will include the given ORDER BY logic. When orderByComparator is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), the query will include the default ORDER BY logic from AkismetDataModelImpl. If both orderByComparator and pagination are absent, for performance reason, the query will not have a ORDER BY clause, on returning the result set will be sorted on portal side by PK ASC order.
 	* </p>
 	*
 	* @param start the lower bound of the range of akismet datas
@@ -299,52 +340,11 @@ public interface AkismetDataPersistence extends BasePersistence<AkismetData> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the akismet datas where modifiedDate &lt; &#63; from the database.
-	*
-	* @param modifiedDate the modified date
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByLtModifiedDate(java.util.Date modifiedDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the akismet data where mbMessageId = &#63; from the database.
-	*
-	* @param mbMessageId the mb message ID
-	* @return the akismet data that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.akismet.model.AkismetData removeByMBMessageId(
-		long mbMessageId)
-		throws com.liferay.akismet.NoSuchDataException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the akismet datas from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of akismet datas where modifiedDate &lt; &#63;.
-	*
-	* @param modifiedDate the modified date
-	* @return the number of matching akismet datas
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByLtModifiedDate(java.util.Date modifiedDate)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of akismet datas where mbMessageId = &#63;.
-	*
-	* @param mbMessageId the mb message ID
-	* @return the number of matching akismet datas
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByMBMessageId(long mbMessageId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
