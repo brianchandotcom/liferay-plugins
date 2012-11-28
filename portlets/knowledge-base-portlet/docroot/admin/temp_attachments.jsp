@@ -21,28 +21,31 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 
 long resourcePrimKey = BeanParamUtil.getLong(kbArticle, request, "resourcePrimKey");
 
-List<FileEntry> attachmentsFileEntries = new ArrayList<FileEntry>();
+String dirName = ParamUtil.getString(request, "dirName");
 
-if (kbArticle != null) {
-	attachmentsFileEntries = kbArticle.getAttachmentsFileEntries();
+String[] fileNames = new String[0];
+
+if (Validator.isNotNull(dirName) && DLStoreUtil.hasDirectory(company.getCompanyId(), CompanyConstants.SYSTEM, dirName)) {
+	fileNames = DLStoreUtil.getFileNames(company.getCompanyId(), CompanyConstants.SYSTEM, dirName);
 }
 %>
 
 <div class="kb-attachments">
 
 	<%
-	for (FileEntry fileEntry : attachmentsFileEntries) {
+	for (String fileName : fileNames) {
 	%>
 
 		<div>
 			<liferay-portlet:resourceURL id="attachment" var="clipURL">
-				<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+				<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
+				<portlet:param name="fileName" value="<%= fileName %>" />
 			</liferay-portlet:resourceURL>
 
 			<liferay-ui:icon
 				image="clip"
 				label="<%= true %>"
-				message='<%= fileEntry.getTitle() + " (" + TextFormatter.formatKB(fileEntry.getSize(), locale) + "k)" %>'
+				message='<%= FileUtil.getShortFileName(fileName) + " (" + TextFormatter.formatKB(DLStoreUtil.getFileSize(company.getCompanyId(), CompanyConstants.SYSTEM, fileName), locale) + "k)" %>'
 				method="get"
 				url="<%= clipURL %>"
 			/>
@@ -68,6 +71,6 @@ if (kbArticle != null) {
 	%>
 
 	<div class="kb-edit-link">
-		<aui:a href="javascript:;" onClick="<%= taglibOnClick %>"><liferay-ui:message key='<%= (!attachmentsFileEntries.isEmpty()) ? "attachments" : "add-attachments" %>' /> &raquo;</aui:a>
+		<aui:a href="javascript:;" onClick="<%= taglibOnClick %>"><liferay-ui:message key='<%= (fileNames.length != 0) ? "attachments" : "add-attachments" %>' /> &raquo;</aui:a>
 	</div>
 </div>
