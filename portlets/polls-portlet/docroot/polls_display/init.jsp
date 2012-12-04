@@ -16,17 +16,17 @@
 
 <%@ include file="/html/portlet/init.jsp" %>
 
-<%@ page import="com.liferay.portlet.polls.DuplicateVoteException" %><%@
-page import="com.liferay.portlet.polls.NoSuchChoiceException" %><%@
-page import="com.liferay.portlet.polls.NoSuchQuestionException" %><%@
-page import="com.liferay.portlet.polls.model.PollsChoice" %><%@
-page import="com.liferay.portlet.polls.model.PollsQuestion" %><%@
-page import="com.liferay.portlet.polls.model.PollsVote" %><%@
-page import="com.liferay.portlet.polls.service.PollsQuestionLocalServiceUtil" %><%@
-page import="com.liferay.portlet.polls.service.PollsVoteLocalServiceUtil" %><%@
-page import="com.liferay.portlet.polls.service.permission.PollsPermission" %><%@
-page import="com.liferay.portlet.polls.service.permission.PollsQuestionPermission" %><%@
-page import="com.liferay.portlet.polls.util.PollsUtil" %>
+<%@ page import="com.liferay.polls.DuplicateVoteException" %><%@
+page import="com.liferay.polls.NoSuchChoiceException" %><%@
+page import="com.liferay.polls.NoSuchQuestionException" %><%@
+page import="com.liferay.polls.model.PollsChoice" %><%@
+page import="com.liferay.polls.model.PollsQuestion" %><%@
+page import="com.liferay.polls.model.PollsVote" %><%@
+page import="com.liferay.polls.service.PollsQuestionLocalServiceUtil" %><%@
+page import="com.liferay.polls.service.PollsVoteLocalServiceUtil" %><%@
+page import="com.liferay.polls.service.permission.PollsPermission" %><%@
+page import="com.liferay.polls.service.permission.PollsQuestionPermission" %><%@
+page import="com.liferay.polls.util.PollsUtil" %>
 
 <%
 PortletPreferences preferences = renderRequest.getPreferences();

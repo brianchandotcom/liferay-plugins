@@ -12,14 +12,14 @@
  * details.
  */
 
-package com.liferay.portlet.polls.service.permission;
+package com.liferay.polls.service.permission;
 
+import com.liferay.polls.model.PollsQuestion;
+import com.liferay.polls.service.PollsQuestionLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portlet.polls.model.PollsQuestion;
-import com.liferay.portlet.polls.service.PollsQuestionLocalServiceUtil;
 
 /**
  * @author Brian Wing Shun Chan

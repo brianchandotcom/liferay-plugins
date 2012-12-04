@@ -14,9 +14,7 @@
 
 package com.liferay.polls.service.impl;
 
-import com.liferay.portlet.polls.service.base.PollsChoiceServiceBaseImpl;
-
-import com.liferay.portlet.polls.service.base.PollsChoiceServiceBaseImpl;
+import com.liferay.polls.service.base.PollsChoiceServiceBaseImpl;
 
 /**
  * @author Brian Wing Shun Chan

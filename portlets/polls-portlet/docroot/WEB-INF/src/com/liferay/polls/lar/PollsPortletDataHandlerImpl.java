@@ -12,8 +12,19 @@
  * details.
  */
 
-package com.liferay.portlet.polls.lar;
+package com.liferay.polls.lar;
 
+import com.liferay.polls.DuplicateVoteException;
+import com.liferay.polls.model.PollsChoice;
+import com.liferay.polls.model.PollsQuestion;
+import com.liferay.polls.model.PollsVote;
+import com.liferay.polls.service.PollsChoiceLocalServiceUtil;
+import com.liferay.polls.service.PollsQuestionLocalServiceUtil;
+import com.liferay.polls.service.PollsVoteLocalServiceUtil;
+import com.liferay.polls.service.persistence.PollsChoiceFinderUtil;
+import com.liferay.polls.service.persistence.PollsChoiceUtil;
+import com.liferay.polls.service.persistence.PollsQuestionUtil;
+import com.liferay.polls.service.persistence.PollsVoteUtil;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
@@ -26,17 +37,6 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.polls.DuplicateVoteException;
-import com.liferay.portlet.polls.model.PollsChoice;
-import com.liferay.portlet.polls.model.PollsQuestion;
-import com.liferay.portlet.polls.model.PollsVote;
-import com.liferay.portlet.polls.service.PollsChoiceLocalServiceUtil;
-import com.liferay.portlet.polls.service.PollsQuestionLocalServiceUtil;
-import com.liferay.portlet.polls.service.PollsVoteLocalServiceUtil;
-import com.liferay.portlet.polls.service.persistence.PollsChoiceFinderUtil;
-import com.liferay.portlet.polls.service.persistence.PollsChoiceUtil;
-import com.liferay.portlet.polls.service.persistence.PollsQuestionUtil;
-import com.liferay.portlet.polls.service.persistence.PollsVoteUtil;
 
 import java.util.Calendar;
 import java.util.Date;

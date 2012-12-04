@@ -12,8 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.polls.util;
+package com.liferay.polls.util;
 
+import com.liferay.polls.NoSuchVoteException;
+import com.liferay.polls.model.PollsChoice;
+import com.liferay.polls.model.PollsQuestion;
+import com.liferay.polls.service.PollsChoiceLocalServiceUtil;
+import com.liferay.polls.service.PollsVoteLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CookieKeys;
@@ -23,11 +28,6 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
-import com.liferay.portlet.polls.NoSuchVoteException;
-import com.liferay.portlet.polls.model.PollsChoice;
-import com.liferay.portlet.polls.model.PollsQuestion;
-import com.liferay.portlet.polls.service.PollsChoiceLocalServiceUtil;
-import com.liferay.portlet.polls.service.PollsVoteLocalServiceUtil;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;

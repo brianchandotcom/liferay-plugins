@@ -14,11 +14,6 @@
 
 package com.liferay.polls.service.impl;
 
-import com.liferay.portal.NoSuchUserException;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.ServiceContext;
 import com.liferay.polls.DuplicateVoteException;
 import com.liferay.polls.NoSuchQuestionException;
 import com.liferay.polls.QuestionExpiredException;
@@ -26,6 +21,11 @@ import com.liferay.polls.model.PollsChoice;
 import com.liferay.polls.model.PollsQuestion;
 import com.liferay.polls.model.PollsVote;
 import com.liferay.polls.service.base.PollsVoteLocalServiceBaseImpl;
+import com.liferay.portal.NoSuchUserException;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
 
 import java.util.Date;
 import java.util.List;

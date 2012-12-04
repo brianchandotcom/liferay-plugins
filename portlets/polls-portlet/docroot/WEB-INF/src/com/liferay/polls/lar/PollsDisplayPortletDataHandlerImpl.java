@@ -12,8 +12,13 @@
  * details.
  */
 
-package com.liferay.portlet.polls.lar;
+package com.liferay.polls.lar;
 
+import com.liferay.polls.NoSuchQuestionException;
+import com.liferay.polls.model.PollsChoice;
+import com.liferay.polls.model.PollsQuestion;
+import com.liferay.polls.model.PollsVote;
+import com.liferay.polls.service.persistence.PollsQuestionUtil;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
@@ -27,11 +32,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portlet.polls.NoSuchQuestionException;
-import com.liferay.portlet.polls.model.PollsChoice;
-import com.liferay.portlet.polls.model.PollsQuestion;
-import com.liferay.portlet.polls.model.PollsVote;
-import com.liferay.portlet.polls.service.persistence.PollsQuestionUtil;
 
 import java.util.Map;
 
