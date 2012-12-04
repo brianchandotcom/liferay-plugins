@@ -62,6 +62,13 @@ public class PollsVoteServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.polls.model.PollsVote addVote(long questionId,
+		long choiceId, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().addVote(questionId, choiceId, serviceContext);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -352,7 +352,7 @@ public class PollsChoiceWrapper implements PollsChoice,
 		return new PollsChoiceWrapper((PollsChoice)_pollsChoice.clone());
 	}
 
-	public int compareTo(PollsChoice pollsChoice) {
+	public int compareTo(com.liferay.polls.model.PollsChoice pollsChoice) {
 		return _pollsChoice.compareTo(pollsChoice);
 	}
 
@@ -361,15 +361,15 @@ public class PollsChoiceWrapper implements PollsChoice,
 		return _pollsChoice.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<PollsChoice> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.liferay.polls.model.PollsChoice> toCacheModel() {
 		return _pollsChoice.toCacheModel();
 	}
 
-	public PollsChoice toEscapedModel() {
+	public com.liferay.polls.model.PollsChoice toEscapedModel() {
 		return new PollsChoiceWrapper(_pollsChoice.toEscapedModel());
 	}
 
-	public PollsChoice toUnescapedModel() {
+	public com.liferay.polls.model.PollsChoice toUnescapedModel() {
 		return new PollsChoiceWrapper(_pollsChoice.toUnescapedModel());
 	}
 

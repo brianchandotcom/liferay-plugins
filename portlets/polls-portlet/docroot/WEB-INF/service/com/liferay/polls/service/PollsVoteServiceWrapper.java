@@ -55,6 +55,13 @@ public class PollsVoteServiceWrapper implements PollsVoteService,
 		return _pollsVoteService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public com.liferay.polls.model.PollsVote addVote(long questionId,
+		long choiceId, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteService.addVote(questionId, choiceId, serviceContext);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */

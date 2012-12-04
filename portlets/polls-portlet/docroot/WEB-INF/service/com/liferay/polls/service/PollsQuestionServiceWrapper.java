@@ -57,6 +57,49 @@ public class PollsQuestionServiceWrapper implements PollsQuestionService,
 			arguments);
 	}
 
+	public com.liferay.polls.model.PollsQuestion addQuestion(
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int expirationDateMonth, int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute, boolean neverExpire,
+		java.util.List<com.liferay.polls.model.PollsChoice> choices,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionService.addQuestion(titleMap, descriptionMap,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire, choices,
+			serviceContext);
+	}
+
+	public void deleteQuestion(long questionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionService.deleteQuestion(questionId);
+	}
+
+	public com.liferay.polls.model.PollsQuestion getQuestion(long questionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionService.getQuestion(questionId);
+	}
+
+	public com.liferay.polls.model.PollsQuestion updateQuestion(
+		long questionId,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int expirationDateMonth, int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute, boolean neverExpire,
+		java.util.List<com.liferay.polls.model.PollsChoice> choices,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionService.updateQuestion(questionId, titleMap,
+			descriptionMap, expirationDateMonth, expirationDateDay,
+			expirationDateYear, expirationDateHour, expirationDateMinute,
+			neverExpire, choices, serviceContext);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */

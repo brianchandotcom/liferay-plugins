@@ -105,6 +105,31 @@ public class PollsChoiceLocalServiceClpInvoker {
 		_methodName46 = "setBeanIdentifier";
 
 		_methodParameterTypes46 = new String[] { "java.lang.String" };
+
+		_methodName51 = "addChoice";
+
+		_methodParameterTypes51 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
+				"com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName52 = "getChoice";
+
+		_methodParameterTypes52 = new String[] { "long" };
+
+		_methodName53 = "getChoices";
+
+		_methodParameterTypes53 = new String[] { "long" };
+
+		_methodName54 = "getChoicesCount";
+
+		_methodParameterTypes54 = new String[] { "long" };
+
+		_methodName55 = "updateChoice";
+
+		_methodParameterTypes55 = new String[] {
+				"long", "long", "java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -202,6 +227,35 @@ public class PollsChoiceLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+			return PollsChoiceLocalServiceUtil.addChoice(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(com.liferay.portal.service.ServiceContext)arguments[3]);
+		}
+
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+			return PollsChoiceLocalServiceUtil.getChoice(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+			return PollsChoiceLocalServiceUtil.getChoices(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+			return PollsChoiceLocalServiceUtil.getChoicesCount(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return PollsChoiceLocalServiceUtil.updateChoice(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2], (java.lang.String)arguments[3]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -239,4 +293,14 @@ public class PollsChoiceLocalServiceClpInvoker {
 	private String[] _methodParameterTypes45;
 	private String _methodName46;
 	private String[] _methodParameterTypes46;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
+	private String _methodName52;
+	private String[] _methodParameterTypes52;
+	private String _methodName53;
+	private String[] _methodParameterTypes53;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
 }

@@ -275,6 +275,119 @@ public class PollsQuestionLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.polls.model.PollsQuestion addQuestion(
+		long userId,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int expirationDateMonth, int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute, boolean neverExpire,
+		java.util.List<com.liferay.polls.model.PollsChoice> choices,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addQuestion(userId, titleMap, descriptionMap,
+			expirationDateMonth, expirationDateDay, expirationDateYear,
+			expirationDateHour, expirationDateMinute, neverExpire, choices,
+			serviceContext);
+	}
+
+	public static void addQuestionResources(long questionId,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addQuestionResources(questionId, addGroupPermissions,
+			addGuestPermissions);
+	}
+
+	public static void addQuestionResources(long questionId,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addQuestionResources(questionId, groupPermissions, guestPermissions);
+	}
+
+	public static void addQuestionResources(
+		com.liferay.polls.model.PollsQuestion question,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addQuestionResources(question, addGroupPermissions,
+			addGuestPermissions);
+	}
+
+	public static void addQuestionResources(
+		com.liferay.polls.model.PollsQuestion question,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addQuestionResources(question, groupPermissions, guestPermissions);
+	}
+
+	public static void deleteQuestion(long questionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteQuestion(questionId);
+	}
+
+	public static void deleteQuestion(
+		com.liferay.polls.model.PollsQuestion question)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteQuestion(question);
+	}
+
+	public static void deleteQuestions(long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteQuestions(groupId);
+	}
+
+	public static com.liferay.polls.model.PollsQuestion getQuestion(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getQuestion(questionId);
+	}
+
+	public static java.util.List<com.liferay.polls.model.PollsQuestion> getQuestions(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getQuestions(groupId);
+	}
+
+	public static java.util.List<com.liferay.polls.model.PollsQuestion> getQuestions(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getQuestions(groupId, start, end);
+	}
+
+	public static int getQuestionsCount(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getQuestionsCount(groupId);
+	}
+
+	public static com.liferay.polls.model.PollsQuestion updateQuestion(
+		long userId, long questionId,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int expirationDateMonth, int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute, boolean neverExpire,
+		java.util.List<com.liferay.polls.model.PollsChoice> choices,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateQuestion(userId, questionId, titleMap,
+			descriptionMap, expirationDateMonth, expirationDateDay,
+			expirationDateYear, expirationDateHour, expirationDateMinute,
+			neverExpire, choices, serviceContext);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

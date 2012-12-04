@@ -30,6 +30,12 @@ public class PollsVoteServiceClpInvoker {
 		_methodName31 = "setBeanIdentifier";
 
 		_methodParameterTypes31 = new String[] { "java.lang.String" };
+
+		_methodName36 = "addVote";
+
+		_methodParameterTypes36 = new String[] {
+				"long", "long", "com.liferay.portal.service.ServiceContext"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -46,6 +52,13 @@ public class PollsVoteServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName36.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
+			return PollsVoteServiceUtil.addVote(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(com.liferay.portal.service.ServiceContext)arguments[2]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -53,4 +66,6 @@ public class PollsVoteServiceClpInvoker {
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
+	private String _methodName36;
+	private String[] _methodParameterTypes36;
 }

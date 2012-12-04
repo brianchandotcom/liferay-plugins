@@ -105,6 +105,33 @@ public class PollsVoteLocalServiceClpInvoker {
 		_methodName46 = "setBeanIdentifier";
 
 		_methodParameterTypes46 = new String[] { "java.lang.String" };
+
+		_methodName51 = "addVote";
+
+		_methodParameterTypes51 = new String[] {
+				"long", "long", "long",
+				"com.liferay.portal.service.ServiceContext"
+			};
+
+		_methodName52 = "getChoiceVotes";
+
+		_methodParameterTypes52 = new String[] { "long", "int", "int" };
+
+		_methodName53 = "getChoiceVotesCount";
+
+		_methodParameterTypes53 = new String[] { "long" };
+
+		_methodName54 = "getQuestionVotes";
+
+		_methodParameterTypes54 = new String[] { "long", "int", "int" };
+
+		_methodName55 = "getQuestionVotesCount";
+
+		_methodParameterTypes55 = new String[] { "long" };
+
+		_methodName56 = "getVote";
+
+		_methodParameterTypes56 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -202,6 +229,44 @@ public class PollsVoteLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+			return PollsVoteLocalServiceUtil.addVote(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				(com.liferay.portal.service.ServiceContext)arguments[3]);
+		}
+
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+			return PollsVoteLocalServiceUtil.getChoiceVotes(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue());
+		}
+
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+			return PollsVoteLocalServiceUtil.getChoiceVotesCount(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+			return PollsVoteLocalServiceUtil.getQuestionVotes(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue());
+		}
+
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return PollsVoteLocalServiceUtil.getQuestionVotesCount(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+			return PollsVoteLocalServiceUtil.getVote(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -239,4 +304,16 @@ public class PollsVoteLocalServiceClpInvoker {
 	private String[] _methodParameterTypes45;
 	private String _methodName46;
 	private String[] _methodParameterTypes46;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
+	private String _methodName52;
+	private String[] _methodParameterTypes52;
+	private String _methodName53;
+	private String[] _methodParameterTypes53;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
+	private String _methodName56;
+	private String[] _methodParameterTypes56;
 }

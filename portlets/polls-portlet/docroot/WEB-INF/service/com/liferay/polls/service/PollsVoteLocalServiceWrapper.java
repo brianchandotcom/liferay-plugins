@@ -250,6 +250,44 @@ public class PollsVoteLocalServiceWrapper implements PollsVoteLocalService,
 			arguments);
 	}
 
+	public com.liferay.polls.model.PollsVote addVote(long userId,
+		long questionId, long choiceId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteLocalService.addVote(userId, questionId, choiceId,
+			serviceContext);
+	}
+
+	public java.util.List<com.liferay.polls.model.PollsVote> getChoiceVotes(
+		long choiceId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteLocalService.getChoiceVotes(choiceId, start, end);
+	}
+
+	public int getChoiceVotesCount(long choiceId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteLocalService.getChoiceVotesCount(choiceId);
+	}
+
+	public java.util.List<com.liferay.polls.model.PollsVote> getQuestionVotes(
+		long questionId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteLocalService.getQuestionVotes(questionId, start, end);
+	}
+
+	public int getQuestionVotesCount(long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteLocalService.getQuestionVotesCount(questionId);
+	}
+
+	public com.liferay.polls.model.PollsVote getVote(long questionId,
+		long userId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteLocalService.getVote(questionId, userId);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */
