@@ -14,21 +14,59 @@
 
 package com.liferay.polls.model.impl;
 
+import com.liferay.polls.model.PollsChoice;
+import com.liferay.polls.service.PollsChoiceLocalServiceUtil;
+import com.liferay.polls.service.PollsVoteLocalServiceUtil;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.service.ServiceContext;
+
+import java.util.Date;
+import java.util.List;
+
 /**
- * The extended model implementation for the PollsQuestion service. Represents a row in the &quot;Polls_PollsQuestion&quot; database table, with each column mapped to a property of this class.
- *
- * <p>
- * Helper methods and all application logic should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.polls.model.PollsQuestion} interface.
- * </p>
- *
  * @author Brian Wing Shun Chan
  */
 public class PollsQuestionImpl extends PollsQuestionBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. All methods that expect a polls question model instance should use the {@link com.liferay.polls.model.PollsQuestion} interface instead.
-	 */
+
 	public PollsQuestionImpl() {
 	}
+
+	public List<PollsChoice> getChoices() throws SystemException {
+		return PollsChoiceLocalServiceUtil.getChoices(getQuestionId());
+	}
+
+	public int getVotesCount() throws SystemException {
+		return PollsVoteLocalServiceUtil.getQuestionVotesCount(getQuestionId());
+	}
+
+	public boolean isExpired() {
+		Date expirationDate = getExpirationDate();
+
+		if ((expirationDate != null) && (expirationDate.before(new Date()))) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isExpired(
+			ServiceContext serviceContext, Date defaultCreateDate) {
+
+		Date expirationDate = getExpirationDate();
+
+		if (expirationDate == null) {
+			return false;
+		}
+
+		Date createDate = serviceContext.getCreateDate(defaultCreateDate);
+
+		if (createDate.after(expirationDate)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 }
