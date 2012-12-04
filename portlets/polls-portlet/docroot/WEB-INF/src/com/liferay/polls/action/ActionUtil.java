@@ -40,7 +40,7 @@ public class ActionUtil {
 			question = PollsQuestionServiceUtil.getQuestion(questionId);
 		}
 
-		request.setAttribute(PollsKeys.POLLS_QUESTION, question);
+		request.setAttribute(PollsConstants.POLLS_QUESTION, question);
 	}
 
 	public static void getQuestion(PortletRequest portletRequest)

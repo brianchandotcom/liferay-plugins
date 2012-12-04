@@ -109,10 +109,10 @@ if (choiceName > 0) {
 				String paramName = null;
 
 				if (deleteChoice && (i >= choiceName)) {
-					paramName = EditQuestionAction.CHOICE_DESCRIPTION_PREFIX + ((char)(96 + i + 1));
+					paramName = PollsConstants.CHOICE_DESCRIPTION_PREFIX + ((char)(96 + i + 1));
 				}
 				else {
-					paramName = EditQuestionAction.CHOICE_DESCRIPTION_PREFIX + c;
+					paramName = PollsConstants.CHOICE_DESCRIPTION_PREFIX + c;
 				}
 
 				if ((question != null) && ((i - 1) < choices.size())) {
@@ -123,7 +123,7 @@ if (choiceName > 0) {
 				<div class="choice <%= (i == choicesCount) ? "last-choice" : StringPool.BLANK %>">
 					<aui:model-context bean="<%= choice %>" model="<%= PollsChoice.class %>" />
 
-					<aui:input name="<%= EditQuestionAction.CHOICE_NAME_PREFIX + c %>" type="hidden" value="<%= c %>" />
+					<aui:input name="<%= PollsConstants.CHOICE_NAME_PREFIX + c %>" type="hidden" value="<%= c %>" />
 
 					<aui:input fieldParam="<%= paramName %>" label="<%= c + StringPool.PERIOD %>" name="description" />
 
@@ -161,7 +161,7 @@ if (choiceName > 0) {
 	function <portlet:namespace />addPollChoice() {
 		<liferay-portlet:renderURL allowEmptyParam="<%= true %>" var="addPollChoiceURL">
 			<liferay-portlet:param name="jspPage" value="/polls/edit_question.jsp" />
-			<liferay-portlet:param name="<%= EditQuestionAction.CHOICE_DESCRIPTION_PREFIX + (char)(96 + choicesCount + 1) %>" value="" />
+			<liferay-portlet:param name="<%= PollsConstants.CHOICE_DESCRIPTION_PREFIX + (char)(96 + choicesCount + 1) %>" value="" />
 		</liferay-portlet:renderURL>
 
 		document.<portlet:namespace />fm.<portlet:namespace />choicesCount.value = '<%= choicesCount + 1 %>';
