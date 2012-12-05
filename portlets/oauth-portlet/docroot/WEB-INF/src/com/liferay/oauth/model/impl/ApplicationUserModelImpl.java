@@ -68,6 +68,8 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 		};
 	public static final String TABLE_SQL_CREATE = "create table OAuth_ApplicationUser (oaauId LONG not null primary key,userId LONG,applicationId LONG,accessToken VARCHAR(75) null,accessSecret VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table OAuth_ApplicationUser";
+	public static final String ORDER_BY_JPQL = " ORDER BY applicationUser.oaauId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY OAuth_ApplicationUser.oaauId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -83,6 +85,7 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 	public static long ACCESSTOKEN_COLUMN_BITMASK = 1L;
 	public static long APPLICATIONID_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long OAAUID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.oauth.model.ApplicationUser"));
 
@@ -270,13 +273,12 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 
 	@Override
 	public ApplicationUser toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ApplicationUser)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ApplicationUser)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -437,7 +439,7 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 	}
 
 	private static ClassLoader _classLoader = ApplicationUser.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ApplicationUser.class
 		};
 	private long _oaauId;
@@ -452,5 +454,5 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 	private String _originalAccessToken;
 	private String _accessSecret;
 	private long _columnBitmask;
-	private ApplicationUser _escapedModelProxy;
+	private ApplicationUser _escapedModel;
 }

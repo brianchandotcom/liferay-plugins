@@ -111,84 +111,6 @@ public class ApplicationUtil {
 	}
 
 	/**
-	* Caches the application in the entity cache if it is enabled.
-	*
-	* @param application the application
-	*/
-	public static void cacheResult(
-		com.liferay.oauth.model.Application application) {
-		getPersistence().cacheResult(application);
-	}
-
-	/**
-	* Caches the applications in the entity cache if it is enabled.
-	*
-	* @param applications the applications
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.oauth.model.Application> applications) {
-		getPersistence().cacheResult(applications);
-	}
-
-	/**
-	* Creates a new application with the primary key. Does not add the application to the database.
-	*
-	* @param applicationId the primary key for the new application
-	* @return the new application
-	*/
-	public static com.liferay.oauth.model.Application create(long applicationId) {
-		return getPersistence().create(applicationId);
-	}
-
-	/**
-	* Removes the application with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param applicationId the primary key of the application
-	* @return the application that was removed
-	* @throws com.liferay.oauth.NoSuchApplicationException if a application with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.Application remove(long applicationId)
-		throws com.liferay.oauth.NoSuchApplicationException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(applicationId);
-	}
-
-	public static com.liferay.oauth.model.Application updateImpl(
-		com.liferay.oauth.model.Application application)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(application);
-	}
-
-	/**
-	* Returns the application with the primary key or throws a {@link com.liferay.oauth.NoSuchApplicationException} if it could not be found.
-	*
-	* @param applicationId the primary key of the application
-	* @return the application
-	* @throws com.liferay.oauth.NoSuchApplicationException if a application with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.Application findByPrimaryKey(
-		long applicationId)
-		throws com.liferay.oauth.NoSuchApplicationException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(applicationId);
-	}
-
-	/**
-	* Returns the application with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param applicationId the primary key of the application
-	* @return the application, or <code>null</code> if a application with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.Application fetchByPrimaryKey(
-		long applicationId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(applicationId);
-	}
-
-	/**
 	* Returns all the applications where companyId = &#63;.
 	*
 	* @param companyId the company ID
@@ -205,7 +127,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -224,7 +146,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -347,7 +269,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications that the user has permission to view where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -366,7 +288,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications that the user has permissions to view where companyId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -403,6 +325,41 @@ public class ApplicationUtil {
 		return getPersistence()
 				   .filterFindByCompanyId_PrevAndNext(applicationId, companyId,
 			orderByComparator);
+	}
+
+	/**
+	* Removes all the applications where companyId = &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of applications where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching applications
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByCompanyId(companyId);
+	}
+
+	/**
+	* Returns the number of applications that the user has permission to view where companyId = &#63;.
+	*
+	* @param companyId the company ID
+	* @return the number of matching applications that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByCompanyId(long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByCompanyId(companyId);
 	}
 
 	/**
@@ -449,6 +406,32 @@ public class ApplicationUtil {
 	}
 
 	/**
+	* Removes the application where consumerKey = &#63; from the database.
+	*
+	* @param consumerKey the consumer key
+	* @return the application that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.oauth.model.Application removeByConsumerKey(
+		java.lang.String consumerKey)
+		throws com.liferay.oauth.NoSuchApplicationException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByConsumerKey(consumerKey);
+	}
+
+	/**
+	* Returns the number of applications where consumerKey = &#63;.
+	*
+	* @param consumerKey the consumer key
+	* @return the number of matching applications
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByConsumerKey(java.lang.String consumerKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByConsumerKey(consumerKey);
+	}
+
+	/**
 	* Returns all the applications where companyId = &#63; and name LIKE &#63;.
 	*
 	* @param companyId the company ID
@@ -466,7 +449,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications where companyId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -486,7 +469,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications where companyId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -616,7 +599,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications that the user has permission to view where companyId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -636,7 +619,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications that the user has permissions to view where companyId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param companyId the company ID
@@ -678,6 +661,44 @@ public class ApplicationUtil {
 	}
 
 	/**
+	* Removes all the applications where companyId = &#63; and name LIKE &#63; from the database.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByC_N(long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByC_N(companyId, name);
+	}
+
+	/**
+	* Returns the number of applications where companyId = &#63; and name LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the number of matching applications
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByC_N(long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByC_N(companyId, name);
+	}
+
+	/**
+	* Returns the number of applications that the user has permission to view where companyId = &#63; and name LIKE &#63;.
+	*
+	* @param companyId the company ID
+	* @param name the name
+	* @return the number of matching applications that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByC_N(long companyId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByC_N(companyId, name);
+	}
+
+	/**
 	* Returns all the applications where userId = &#63; and name LIKE &#63;.
 	*
 	* @param userId the user ID
@@ -695,7 +716,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications where userId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -715,7 +736,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications where userId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -841,7 +862,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications that the user has permission to view where userId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -861,7 +882,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications that the user has permissions to view where userId = &#63; and name LIKE &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -902,6 +923,44 @@ public class ApplicationUtil {
 	}
 
 	/**
+	* Removes all the applications where userId = &#63; and name LIKE &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param name the name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByU_N(long userId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByU_N(userId, name);
+	}
+
+	/**
+	* Returns the number of applications where userId = &#63; and name LIKE &#63;.
+	*
+	* @param userId the user ID
+	* @param name the name
+	* @return the number of matching applications
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_N(long userId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByU_N(userId, name);
+	}
+
+	/**
+	* Returns the number of applications that the user has permission to view where userId = &#63; and name LIKE &#63;.
+	*
+	* @param userId the user ID
+	* @param name the name
+	* @return the number of matching applications that the user has permission to view
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int filterCountByU_N(long userId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().filterCountByU_N(userId, name);
+	}
+
+	/**
 	* Returns all the applications where userId = &#63;.
 	*
 	* @param userId the user ID
@@ -917,7 +976,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -936,7 +995,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -1054,7 +1113,7 @@ public class ApplicationUtil {
 	* Returns a range of all the applications that the user has permission to view where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -1073,7 +1132,7 @@ public class ApplicationUtil {
 	* Returns an ordered range of all the applications that the user has permissions to view where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -1112,104 +1171,6 @@ public class ApplicationUtil {
 	}
 
 	/**
-	* Returns all the applications.
-	*
-	* @return the applications
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.oauth.model.Application> findAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll();
-	}
-
-	/**
-	* Returns a range of all the applications.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of applications
-	* @param end the upper bound of the range of applications (not inclusive)
-	* @return the range of applications
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.oauth.model.Application> findAll(
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the applications.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	* </p>
-	*
-	* @param start the lower bound of the range of applications
-	* @param end the upper bound of the range of applications (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of applications
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.oauth.model.Application> findAll(
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findAll(start, end, orderByComparator);
-	}
-
-	/**
-	* Removes all the applications where companyId = &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByCompanyId(companyId);
-	}
-
-	/**
-	* Removes the application where consumerKey = &#63; from the database.
-	*
-	* @param consumerKey the consumer key
-	* @return the application that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.Application removeByConsumerKey(
-		java.lang.String consumerKey)
-		throws com.liferay.oauth.NoSuchApplicationException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByConsumerKey(consumerKey);
-	}
-
-	/**
-	* Removes all the applications where companyId = &#63; and name LIKE &#63; from the database.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByC_N(long companyId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByC_N(companyId, name);
-	}
-
-	/**
-	* Removes all the applications where userId = &#63; and name LIKE &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param name the name
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByU_N(long userId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByU_N(userId, name);
-	}
-
-	/**
 	* Removes all the applications where userId = &#63; from the database.
 	*
 	* @param userId the user ID
@@ -1218,104 +1179,6 @@ public class ApplicationUtil {
 	public static void removeByUserId(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes all the applications from the database.
-	*
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of applications where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching applications
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of applications that the user has permission to view where companyId = &#63;.
-	*
-	* @param companyId the company ID
-	* @return the number of matching applications that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByCompanyId(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByCompanyId(companyId);
-	}
-
-	/**
-	* Returns the number of applications where consumerKey = &#63;.
-	*
-	* @param consumerKey the consumer key
-	* @return the number of matching applications
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByConsumerKey(java.lang.String consumerKey)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByConsumerKey(consumerKey);
-	}
-
-	/**
-	* Returns the number of applications where companyId = &#63; and name LIKE &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the number of matching applications
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByC_N(long companyId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByC_N(companyId, name);
-	}
-
-	/**
-	* Returns the number of applications that the user has permission to view where companyId = &#63; and name LIKE &#63;.
-	*
-	* @param companyId the company ID
-	* @param name the name
-	* @return the number of matching applications that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByC_N(long companyId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByC_N(companyId, name);
-	}
-
-	/**
-	* Returns the number of applications where userId = &#63; and name LIKE &#63;.
-	*
-	* @param userId the user ID
-	* @param name the name
-	* @return the number of matching applications
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_N(long userId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByU_N(userId, name);
-	}
-
-	/**
-	* Returns the number of applications that the user has permission to view where userId = &#63; and name LIKE &#63;.
-	*
-	* @param userId the user ID
-	* @param name the name
-	* @return the number of matching applications that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByU_N(long userId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByU_N(userId, name);
 	}
 
 	/**
@@ -1340,6 +1203,143 @@ public class ApplicationUtil {
 	public static int filterCountByUserId(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().filterCountByUserId(userId);
+	}
+
+	/**
+	* Caches the application in the entity cache if it is enabled.
+	*
+	* @param application the application
+	*/
+	public static void cacheResult(
+		com.liferay.oauth.model.Application application) {
+		getPersistence().cacheResult(application);
+	}
+
+	/**
+	* Caches the applications in the entity cache if it is enabled.
+	*
+	* @param applications the applications
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.oauth.model.Application> applications) {
+		getPersistence().cacheResult(applications);
+	}
+
+	/**
+	* Creates a new application with the primary key. Does not add the application to the database.
+	*
+	* @param applicationId the primary key for the new application
+	* @return the new application
+	*/
+	public static com.liferay.oauth.model.Application create(long applicationId) {
+		return getPersistence().create(applicationId);
+	}
+
+	/**
+	* Removes the application with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param applicationId the primary key of the application
+	* @return the application that was removed
+	* @throws com.liferay.oauth.NoSuchApplicationException if a application with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.oauth.model.Application remove(long applicationId)
+		throws com.liferay.oauth.NoSuchApplicationException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(applicationId);
+	}
+
+	public static com.liferay.oauth.model.Application updateImpl(
+		com.liferay.oauth.model.Application application)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(application);
+	}
+
+	/**
+	* Returns the application with the primary key or throws a {@link com.liferay.oauth.NoSuchApplicationException} if it could not be found.
+	*
+	* @param applicationId the primary key of the application
+	* @return the application
+	* @throws com.liferay.oauth.NoSuchApplicationException if a application with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.oauth.model.Application findByPrimaryKey(
+		long applicationId)
+		throws com.liferay.oauth.NoSuchApplicationException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(applicationId);
+	}
+
+	/**
+	* Returns the application with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param applicationId the primary key of the application
+	* @return the application, or <code>null</code> if a application with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.oauth.model.Application fetchByPrimaryKey(
+		long applicationId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(applicationId);
+	}
+
+	/**
+	* Returns all the applications.
+	*
+	* @return the applications
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.oauth.model.Application> findAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll();
+	}
+
+	/**
+	* Returns a range of all the applications.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param start the lower bound of the range of applications
+	* @param end the upper bound of the range of applications (not inclusive)
+	* @return the range of applications
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.oauth.model.Application> findAll(
+		int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the applications.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param start the lower bound of the range of applications
+	* @param end the upper bound of the range of applications (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of applications
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.oauth.model.Application> findAll(
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findAll(start, end, orderByComparator);
+	}
+
+	/**
+	* Removes all the applications from the database.
+	*
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeAll()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeAll();
 	}
 
 	/**

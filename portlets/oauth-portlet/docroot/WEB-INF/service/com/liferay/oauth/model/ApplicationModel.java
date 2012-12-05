@@ -307,6 +307,8 @@ public interface ApplicationModel extends AuditedModel, BaseModel<Application> {
 
 	public Application toEscapedModel();
 
+	public Application toUnescapedModel();
+
 	public String toString();
 
 	public String toXmlString();

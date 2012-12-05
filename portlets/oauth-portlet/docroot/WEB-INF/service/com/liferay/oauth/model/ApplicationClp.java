@@ -18,14 +18,13 @@ import com.liferay.oauth.service.ApplicationLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -311,7 +310,7 @@ public class ApplicationClp extends BaseModelImpl<Application>
 
 	@Override
 	public Application toEscapedModel() {
-		return (Application)Proxy.newProxyInstance(Application.class.getClassLoader(),
+		return (Application)ProxyUtil.newProxyInstance(Application.class.getClassLoader(),
 			new Class[] { Application.class }, new AutoEscapeBeanHandler(this));
 	}
 

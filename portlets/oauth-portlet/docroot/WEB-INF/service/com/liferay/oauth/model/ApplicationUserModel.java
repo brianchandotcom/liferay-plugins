@@ -173,6 +173,8 @@ public interface ApplicationUserModel extends BaseModel<ApplicationUser> {
 
 	public ApplicationUser toEscapedModel();
 
+	public ApplicationUser toUnescapedModel();
+
 	public String toString();
 
 	public String toXmlString();

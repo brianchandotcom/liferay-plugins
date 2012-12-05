@@ -499,6 +499,10 @@ public class ApplicationWrapper implements Application,
 		return new ApplicationWrapper(_application.toEscapedModel());
 	}
 
+	public com.liferay.oauth.model.Application toUnescapedModel() {
+		return new ApplicationWrapper(_application.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _application.toString();

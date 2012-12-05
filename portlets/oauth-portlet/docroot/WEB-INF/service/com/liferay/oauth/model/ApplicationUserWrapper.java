@@ -274,6 +274,10 @@ public class ApplicationUserWrapper implements ApplicationUser,
 		return new ApplicationUserWrapper(_applicationUser.toEscapedModel());
 	}
 
+	public com.liferay.oauth.model.ApplicationUser toUnescapedModel() {
+		return new ApplicationUserWrapper(_applicationUser.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _applicationUser.toString();
