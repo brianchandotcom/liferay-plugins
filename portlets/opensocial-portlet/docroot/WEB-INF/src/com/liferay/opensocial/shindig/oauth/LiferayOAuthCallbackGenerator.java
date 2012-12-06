@@ -14,10 +14,10 @@
 
 package com.liferay.opensocial.shindig.oauth;
 
-import com.liferay.opensocial.shindig.config.LiferayJsonContainerConfig;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
+import com.liferay.opensocial.shindig.config.LiferayJsonContainerConfig;
 
 import org.apache.shindig.common.crypto.BlobCrypter;
 import org.apache.shindig.config.ContainerConfig;

@@ -450,6 +450,7 @@ public class ShindigUtil {
 
 	@Inject
 	private static ContainerConfig _containerConfig;
+
 	private static String _contextPath;
 
 	private static AutoResetThreadLocal<String> _host =

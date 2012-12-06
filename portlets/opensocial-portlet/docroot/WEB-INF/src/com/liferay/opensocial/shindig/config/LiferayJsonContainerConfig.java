@@ -49,17 +49,6 @@ public class LiferayJsonContainerConfig extends JsonContainerConfig {
 	}
 
 	@Override
-	public String getString(String container, String property) {
-		String value = super.getString(container, property);
-
-		if (Validator.isNotNull(value)) {
-			value = replaceTokens(value);
-		}
-
-		return value;
-	}
-
-	@Override
 	@SuppressWarnings("unchecked")
 	public Object getProperty(String container, String property) {
 		Object value = super.getProperty(container, property);
@@ -82,11 +71,22 @@ public class LiferayJsonContainerConfig extends JsonContainerConfig {
 		return value;
 	}
 
-	public String replaceTokens(String value) {
-		String dynamicHost = ShindigUtil.getHost();
+	@Override
+	public String getString(String container, String property) {
+		String value = super.getString(container, property);
 
-		if (Validator.isNull(dynamicHost)) {
-			dynamicHost = "%host%";
+		if (Validator.isNotNull(value)) {
+			value = replaceTokens(value);
+		}
+
+		return value;
+	}
+
+	public String replaceTokens(String value) {
+		String host = ShindigUtil.getHost();
+
+		if (Validator.isNull(host)) {
+			host = "%host%";
 		}
 
 		return StringUtil.replace(
@@ -94,9 +94,26 @@ public class LiferayJsonContainerConfig extends JsonContainerConfig {
 				"%host%",
 				"%context%"},
 			new String[] {
-				dynamicHost,
-				ShindigUtil.getContextPath()}
+				host, ShindigUtil.getContextPath()}
 		);
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private List<?> replaceList(List<?> list) {
+		List newList = new ArrayList();
+
+		for (Object object : list) {
+			if (object instanceof String) {
+				String value = replaceTokens((String)object);
+
+				newList.add(value);
+			}
+			else {
+				newList.add(object);
+			}
+		}
+
+		return Collections.unmodifiableList(newList);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -127,24 +144,6 @@ public class LiferayJsonContainerConfig extends JsonContainerConfig {
 		}
 
 		return Collections.unmodifiableMap(newMap);
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private List<?> replaceList(List<?> list) {
-		List newList = new ArrayList();
-
-		for (Object object : list) {
-			if (object instanceof String) {
-				String value = replaceTokens((String)object);
-
-				newList.add(value);
-			}
-			else {
-				newList.add(object);
-			}
-		}
-
-		return Collections.unmodifiableList(newList);
 	}
 
 }
