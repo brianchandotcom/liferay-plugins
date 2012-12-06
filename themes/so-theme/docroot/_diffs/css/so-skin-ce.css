@@ -127,6 +127,7 @@ a:hover {
 		border-width: 0 1px 1px 0;
 		position: relative;
 		zoom: 1;
+		z-index: 3;
 	}
 
 	.portlet-layout {
@@ -265,6 +266,7 @@ a:hover {
 
 #so-sidebar {
 	border-right: 1px solid $gray-dark;
+	padding-bottom: 31px;
 
 	.portlet-msg, .portlet-msg-alert, .portlet-msg-error, .portlet-msg-info, .portlet-msg-success {
 		margin: 0 0 10px;
