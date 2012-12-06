@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/polls_display/init.jsp" %>
+<%@ include file="/polls_display/init.jsp" %>
 
 <%
 String redirect = ParamUtil.getString(request, "redirect");
@@ -45,11 +45,11 @@ if (scopeGroupId != themeDisplay.getCompanyGroupId()) {
 					<aui:option value="" />
 
 					<%
-					for (PollsQuestion question : questions) {
-						question = question.toEscapedModel();
+					for (PollsQuestion curQuestion : questions) {
+						curQuestion = curQuestion.toEscapedModel();
 					%>
 
-						<aui:option label="<%= question.getTitle(locale) %>" selected="<%= questionId == question.getQuestionId() %>" value="<%= question.getQuestionId() %>" />
+						<aui:option label="<%= curQuestion.getTitle(locale) %>" selected="<%= questionId == curQuestion.getQuestionId() %>" value="<%= curQuestion.getQuestionId() %>" />
 
 					<%
 					}
