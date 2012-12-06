@@ -31,4 +31,15 @@ public interface PollsQuestion extends PollsQuestionModel, PersistedModel {
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.polls.model.impl.PollsQuestionImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public java.util.List<com.liferay.polls.model.PollsChoice> getChoices()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int getVotesCount()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public boolean isExpired();
+
+	public boolean isExpired(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Date defaultCreateDate);
 }

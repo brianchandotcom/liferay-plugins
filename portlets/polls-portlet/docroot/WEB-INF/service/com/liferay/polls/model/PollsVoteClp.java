@@ -215,6 +215,10 @@ public class PollsVoteClp extends BaseModelImpl<PollsVote> implements PollsVote 
 		_voteDate = voteDate;
 	}
 
+	public com.liferay.polls.model.PollsChoice getChoice() {
+		throw new UnsupportedOperationException();
+	}
+
 	public BaseModel<?> getPollsVoteRemoteModel() {
 		return _pollsVoteRemoteModel;
 	}

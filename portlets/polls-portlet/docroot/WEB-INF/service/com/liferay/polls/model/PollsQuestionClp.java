@@ -446,6 +446,24 @@ public class PollsQuestionClp extends BaseModelImpl<PollsQuestion>
 		_lastVoteDate = lastVoteDate;
 	}
 
+	public java.util.List<com.liferay.polls.model.PollsChoice> getChoices() {
+		throw new UnsupportedOperationException();
+	}
+
+	public boolean isExpired() {
+		throw new UnsupportedOperationException();
+	}
+
+	public int getVotesCount() {
+		throw new UnsupportedOperationException();
+	}
+
+	public boolean isExpired(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Date defaultCreateDate) {
+		throw new UnsupportedOperationException();
+	}
+
 	public BaseModel<?> getPollsQuestionRemoteModel() {
 		return _pollsQuestionRemoteModel;
 	}

@@ -23,6 +23,7 @@ import com.liferay.polls.service.PollsQuestionLocalService;
 import com.liferay.polls.service.PollsQuestionService;
 import com.liferay.polls.service.PollsVoteLocalService;
 import com.liferay.polls.service.PollsVoteService;
+import com.liferay.polls.service.persistence.PollsChoiceFinder;
 import com.liferay.polls.service.persistence.PollsChoicePersistence;
 import com.liferay.polls.service.persistence.PollsQuestionPersistence;
 import com.liferay.polls.service.persistence.PollsVotePersistence;
@@ -316,6 +317,24 @@ public abstract class PollsVoteLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
+	 * Returns the polls choice finder.
+	 *
+	 * @return the polls choice finder
+	 */
+	public PollsChoiceFinder getPollsChoiceFinder() {
+		return pollsChoiceFinder;
+	}
+
+	/**
+	 * Sets the polls choice finder.
+	 *
+	 * @param pollsChoiceFinder the polls choice finder
+	 */
+	public void setPollsChoiceFinder(PollsChoiceFinder pollsChoiceFinder) {
+		this.pollsChoiceFinder = pollsChoiceFinder;
+	}
+
+	/**
 	 * Returns the polls question local service.
 	 *
 	 * @return the polls question local service
@@ -604,6 +623,8 @@ public abstract class PollsVoteLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected PollsChoiceService pollsChoiceService;
 	@BeanReference(type = PollsChoicePersistence.class)
 	protected PollsChoicePersistence pollsChoicePersistence;
+	@BeanReference(type = PollsChoiceFinder.class)
+	protected PollsChoiceFinder pollsChoiceFinder;
 	@BeanReference(type = PollsQuestionLocalService.class)
 	protected PollsQuestionLocalService pollsQuestionLocalService;
 	@BeanReference(type = PollsQuestionService.class)

@@ -387,6 +387,11 @@ public class PollsChoiceWrapper implements PollsChoice,
 		_pollsChoice.persist();
 	}
 
+	public int getVotesCount()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsChoice.getVotesCount();
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedModel}
 	 */

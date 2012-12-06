@@ -691,6 +691,26 @@ public class PollsQuestionWrapper implements PollsQuestion,
 		_pollsQuestion.persist();
 	}
 
+	public java.util.List<com.liferay.polls.model.PollsChoice> getChoices()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestion.getChoices();
+	}
+
+	public int getVotesCount()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestion.getVotesCount();
+	}
+
+	public boolean isExpired() {
+		return _pollsQuestion.isExpired();
+	}
+
+	public boolean isExpired(
+		com.liferay.portal.service.ServiceContext serviceContext,
+		java.util.Date defaultCreateDate) {
+		return _pollsQuestion.isExpired(serviceContext, defaultCreateDate);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedModel}
 	 */

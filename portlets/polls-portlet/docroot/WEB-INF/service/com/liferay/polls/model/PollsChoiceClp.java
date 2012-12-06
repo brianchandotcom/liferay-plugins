@@ -243,6 +243,10 @@ public class PollsChoiceClp extends BaseModelImpl<PollsChoice>
 		}
 	}
 
+	public int getVotesCount() {
+		throw new UnsupportedOperationException();
+	}
+
 	public BaseModel<?> getPollsChoiceRemoteModel() {
 		return _pollsChoiceRemoteModel;
 	}
