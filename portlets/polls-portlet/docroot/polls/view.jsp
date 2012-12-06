@@ -14,7 +14,7 @@
  */
 --%>
 
-<%@ include file="/html/portlet/polls/init.jsp" %>
+<%@ include file="/polls/init.jsp" %>
 
 <aui:form method="post" name="fm">
 
@@ -22,107 +22,137 @@
 	PortletURL portletURL = renderResponse.createRenderURL();
 
 	portletURL.setParameter("jspPage", "/polls/view_question.jsp");
-
-	List<String> headerNames = new ArrayList<String>();
-
-	headerNames.add("question");
-	headerNames.add("num-of-votes");
-	headerNames.add("last-vote-date");
-	headerNames.add("expiration-date");
-	headerNames.add(StringPool.BLANK);
-
-	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA, portletURL, headerNames, null);
-
-	int total = PollsQuestionLocalServiceUtil.getQuestionsCount(scopeGroupId);
-
-	searchContainer.setTotal(total);
-
-	List results = PollsQuestionLocalServiceUtil.getQuestions(scopeGroupId, searchContainer.getStart(), searchContainer.getEnd());
-
-	searchContainer.setResults(results);
-
-	List resultRows = searchContainer.getResultRows();
-
-	for (int i = 0; i < results.size(); i++) {
-		PollsQuestion question = (PollsQuestion)results.get(i);
-
-		question = question.toEscapedModel();
-
-		ResultRow row = new ResultRow(question, question.getQuestionId(), i);
-
-		PortletURL rowURL = renderResponse.createRenderURL();
-
-		rowURL.setParameter("struts_action", "/polls/view_question");
-        rowURL.setParameter("jspPage", "/polls/view_question.jsp");
-		rowURL.setParameter("redirect", currentURL);
-		rowURL.setParameter("questionId", String.valueOf(question.getQuestionId()));
-
-		// Title
-
-		row.addText(question.getTitle(locale), rowURL);
-
-		// Number of votes
-
-		int votesCount = PollsVoteLocalServiceUtil.getQuestionVotesCount(question.getQuestionId());
-
-		row.addText(String.valueOf(votesCount), rowURL);
-
-		// Last vote date
-
-		if (question.getLastVoteDate() == null) {
-			row.addText(LanguageUtil.get(pageContext, "never"), rowURL);
-		}
-		else {
-			row.addText(dateFormatDateTime.format(question.getLastVoteDate()), rowURL);
-		}
-
-		// Expiration date
-
-		if (question.getExpirationDate() == null) {
-			row.addText(LanguageUtil.get(pageContext, "never"), rowURL);
-		}
-		else {
-			row.addText(dateFormatDateTime.format(question.getExpirationDate()), rowURL);
-		}
-
-		// Action
-
-		row.addJSP("right", SearchEntry.DEFAULT_VALIGN, "/html/portlet/polls/question_action.jsp");
-
-		// Add result row
-
-		resultRows.add(row);
-	}
-
-	boolean showAddPollButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_QUESTION);
-	boolean showPermissionsButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS);
 	%>
 
-	<aui:fieldset>
-		<c:if test="<%= showAddPollButton || showPermissionsButton %>">
-			<aui:button-row>
-				<c:if test="<%= showAddPollButton %>">
-					<portlet:renderURL var="editQuestionURL">
-						<portlet:param name="jspPage" value="/polls/edit_question.jsp" />
-						<portlet:param name="redirect" value="<%= currentURL %>" />
-					</portlet:renderURL>
+	<liferay-ui:search-container
+		curParam="<%= SearchContainer.DEFAULT_CUR_PARAM %>"
+		delta="<%= SearchContainer.DEFAULT_DELTA %>"
+		deltaConfigurable="<%= false %>"
+		headerNames="question,num-of-votes,last-vote-date,expiration-date, "
+		iteratorURL="<%= portletURL %>"
+	>
 
-					<aui:button href="<%= editQuestionURL %>" value="add-question" />
-				</c:if>
+		<liferay-ui:search-container-results
+			results="<%= PollsQuestionLocalServiceUtil.getQuestions(scopeGroupId, searchContainer.getStart(), searchContainer.getEnd()) %>"
+			total="<%= PollsQuestionLocalServiceUtil.getQuestionsCount(scopeGroupId) %>"
+		/>
 
-				<c:if test="<%= showPermissionsButton %>">
-					<liferay-security:permissionsURL
-						modelResource="com.liferay.portlet.polls"
-						modelResourceDescription="<%= HtmlUtil.escape(themeDisplay.getScopeGroupName()) %>"
-						resourcePrimKey="<%= String.valueOf(scopeGroupId) %>"
-						var="permissionsURL"
-					/>
+		<liferay-ui:search-container-row
+			className="com.liferay.polls.model.PollsQuestion"
+			escapedModel="<%= true %>"
+			keyProperty="questionId"
+			modelVar="question"
+		>
+			<liferay-portlet:renderURL varImpl="rowURL">
+				<portlet:param name="jspPage" value="/polls/view_question.jsp" />
+				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="questionId" value="<%= String.valueOf(question.getQuestionId()) %>" />
+			</liferay-portlet:renderURL>
 
-					<aui:button href="<%= permissionsURL %>" value="permissions" />
-				</c:if>
-			</aui:button-row>
-		</c:if>
+			<!-- Title -->
 
-		<liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
-	</aui:fieldset>
+			<liferay-ui:search-container-column-text
+				href="<%= rowURL %>"
+				name="question"
+				orderable="<%= false %>"
+				value="<%= question.getTitle(locale) %>"
+			/>
+
+			<%
+
+			// Number of votes
+
+			int votesCount = PollsVoteLocalServiceUtil.getQuestionVotesCount(question.getQuestionId());
+			%>
+
+			<liferay-ui:search-container-column-text
+				href="<%= rowURL %>"
+				name="num-of-votes"
+				orderable="<%= false %>"
+				value="<%= String.valueOf(votesCount) %>"
+			/>
+
+			<%
+
+			// Last vote date
+
+			String lastVoteDate = StringPool.BLANK;
+
+			if (question.getLastVoteDate() == null) {
+				lastVoteDate = LanguageUtil.get(pageContext, "never");
+			}
+			else {
+				lastVoteDate = dateFormatDateTime.format(question.getLastVoteDate());
+			}
+			%>
+
+			<liferay-ui:search-container-column-text
+				href="<%= rowURL %>"
+				name="last-vote-date"
+				orderable="<%= false %>"
+				value="<%= lastVoteDate %>"
+			/>
+
+			<%
+
+			// Expiration date
+
+			String expirationDate = StringPool.BLANK;
+
+			if (question.getExpirationDate() == null) {
+				expirationDate = LanguageUtil.get(pageContext, "never");
+			}
+			else {
+				expirationDate = dateFormatDateTime.format(question.getExpirationDate());
+			}
+			%>
+
+			<liferay-ui:search-container-column-text
+				href="<%= rowURL %>"
+				name="expiration-date"
+				orderable="<%= false %>"
+				value="<%= expirationDate %>"
+			/>
+
+			<!-- Action -->
+
+			<liferay-ui:search-container-column-jsp
+				align="right"
+				path="/polls/question_action.jsp"
+			/>
+		</liferay-ui:search-container-row>
+
+		<%
+		boolean showAddPollButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_QUESTION);
+		boolean showPermissionsButton = PollsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS);
+		%>
+
+		<aui:fieldset>
+			<c:if test="<%= showAddPollButton || showPermissionsButton %>">
+				<aui:button-row>
+					<c:if test="<%= showAddPollButton %>">
+						<portlet:renderURL var="editQuestionURL">
+							<portlet:param name="jspPage" value="/polls/edit_question.jsp" />
+							<portlet:param name="redirect" value="<%= currentURL %>" />
+						</portlet:renderURL>
+
+						<aui:button href="<%= editQuestionURL %>" value="add-question" />
+					</c:if>
+
+					<c:if test="<%= showPermissionsButton %>">
+						<liferay-security:permissionsURL
+							modelResource="com.liferay.polls"
+							modelResourceDescription="<%= HtmlUtil.escape(themeDisplay.getScopeGroupName()) %>"
+							resourcePrimKey="<%= String.valueOf(scopeGroupId) %>"
+							var="permissionsURL"
+						/>
+
+						<aui:button href="<%= permissionsURL %>" value="permissions" />
+					</c:if>
+				</aui:button-row>
+			</c:if>
+		</aui:fieldset>
+
+		<liferay-ui:search-iterator />
+	</liferay-ui:search-container>
 </aui:form>

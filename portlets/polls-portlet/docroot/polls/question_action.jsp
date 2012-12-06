@@ -14,9 +14,13 @@
  */
 --%>
 
-<%@ include file="/html/portlet/polls/init.jsp" %>
+<%@ include file="/polls/init.jsp" %>
 
 <%
+SearchContainer searchContainer = (SearchContainer)request.getAttribute("liferay-ui:search:searchContainer");
+
+String redirect = searchContainer.getIteratorURL().toString();
+
 ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 
 PollsQuestion question = (PollsQuestion)row.getObject();
