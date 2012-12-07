@@ -153,8 +153,9 @@
 
 		<replace file="tmp/WEB-INF/classes/containers/default/container.js">
 			<replacefilter token="${SERVER_HOST}:${SERVER_PORT}" value="%host%" />
-			<replacefilter token="/gadgets/" value="/opensocial-portlet/gadgets/" />
-			<replacefilter token="/rpc" value="/opensocial-portlet/rpc" />
+			<replacefilter token="/container/" value="%context%/container/" />
+			<replacefilter token="/gadgets/" value="%context%/gadgets/" />
+			<replacefilter token="/rpc" value="%context%/rpc" />
 		</replace>
 
 		<replace file="tmp/WEB-INF/classes/containers/default/container.js">
@@ -162,7 +163,7 @@
 			<replacevalue><![CDATA[
 				"home" : {
 			      "isOnlyVisible" : true,
-			      "urlTemplate" : "http://%host%/opensocial-portlet/gadgets/home{var}"
+			      "urlTemplate" : "http://%host%%context%/gadgets/home{var}"
 			    },
 				"profile" : {]]>
 			</replacevalue>
@@ -175,7 +176,7 @@
 		</antcall>
 
 		<replace file="tmp/WEB-INF/classes/config/oauth.json">
-			<replacefilter token="http://localhost:8080/" value="http://localhost:8080/opensocial-portlet/" />
+			<replacefilter token="http://localhost:8080/" value="http://localhost:8080%context%/" />
 		</replace>
 
 		<!-- Configure shindig.properties -->
@@ -210,7 +211,7 @@
 		/>
 
 		<replace file="tmp/WEB-INF/classes/shindig.properties">
-			<replacefilter token="/gadgets/" value="/opensocial-portlet/gadgets/" />
+			<replacefilter token="/gadgets/" value="%context%/gadgets/" />
 		</replace>
 
 		<!-- Fix shiro.tld -->

@@ -143,6 +143,10 @@ public class ShindigUtil {
 		return sb.toString();
 	}
 
+	public static String getContextPath() {
+		return _contextPath;
+	}
+
 	public static String getFileEntryURL(String portalURL, long fileEntryId)
 		throws PortalException, SystemException {
 
@@ -375,6 +379,10 @@ public class ShindigUtil {
 		return false;
 	}
 
+	public static void setContextPath(String contextPath) {
+		_contextPath = contextPath;
+	}
+
 	public static void setHost(String host) {
 		_host.set(host);
 	}
@@ -442,6 +450,8 @@ public class ShindigUtil {
 
 	@Inject
 	private static ContainerConfig _containerConfig;
+
+	private static String _contextPath;
 
 	private static AutoResetThreadLocal<String> _host =
 		new AutoResetThreadLocal<String>(
