@@ -313,12 +313,6 @@ public class ApplicationLocalServiceWrapper implements ApplicationLocalService,
 	}
 
 	public java.util.List<com.liferay.oauth.model.Application> getApplications(
-		long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplications(companyId);
-	}
-
-	public java.util.List<com.liferay.oauth.model.Application> getApplications(
 		long companyId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -326,60 +320,25 @@ public class ApplicationLocalServiceWrapper implements ApplicationLocalService,
 			orderByComparator);
 	}
 
-	public java.util.List<com.liferay.oauth.model.Application> getApplications(
-		long companyId, java.lang.String name, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplications(companyId, name, start,
-			end, orderByComparator);
-	}
-
-	public java.util.List<com.liferay.oauth.model.Application> getApplicationsByCN(
-		long companyId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplicationsByCN(companyId, name);
-	}
-
-	public java.util.List<com.liferay.oauth.model.Application> getApplicationsByON(
-		long userId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplicationsByON(userId, name);
-	}
-
-	public java.util.List<com.liferay.oauth.model.Application> getApplicationsByON(
-		long userId, java.lang.String name, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplicationsByON(userId, name,
-			start, end, orderByComparator);
-	}
-
-	public java.util.List<com.liferay.oauth.model.Application> getApplicationsByOwner(
-		long userId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplicationsByOwner(userId, start,
-			end, orderByComparator);
-	}
-
-	public int getApplicationsByUserIdCount(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplicationsByUserIdCount(userId);
-	}
-
 	public int getApplicationsCount(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _applicationLocalService.getApplicationsCount(companyId);
 	}
 
-	public int getApplicationsCountByCN(long companyId, java.lang.String name)
+	public java.util.List<com.liferay.oauth.model.Application> search(
+		long companyId, java.lang.String keywords,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplicationsCountByCN(companyId, name);
+		return _applicationLocalService.search(companyId, keywords, params,
+			start, end, orderByComparator);
 	}
 
-	public int getApplicationsCountByON(long userId, java.lang.String name)
+	public int searchCount(long companyId, java.lang.String keywords,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.getApplicationsCountByON(userId, name);
+		return _applicationLocalService.searchCount(companyId, keywords, params);
 	}
 
 	/**
@@ -387,16 +346,15 @@ public class ApplicationLocalServiceWrapper implements ApplicationLocalService,
 	* method will update name, description, website, callbackURL and
 	* access level.
 	*/
-	public com.liferay.oauth.model.Application updateApplication(long userId,
+	public com.liferay.oauth.model.Application updateApplication(
 		long applicationId, java.lang.String name,
 		java.lang.String description, java.lang.String website,
 		java.lang.String callBackURL,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _applicationLocalService.updateApplication(userId,
-			applicationId, name, description, website, callBackURL,
-			serviceContext);
+		return _applicationLocalService.updateApplication(applicationId, name,
+			description, website, callBackURL, serviceContext);
 	}
 
 	public com.liferay.oauth.model.Application updateLogo(long applicationId,

@@ -16,9 +16,11 @@ package com.liferay.oauth.model.impl;
 
 import com.liferay.oauth.model.ApplicationUser;
 import com.liferay.oauth.model.ApplicationUserModel;
+import com.liferay.oauth.model.ApplicationUserSoap;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -35,7 +37,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,6 +55,7 @@ import java.util.Map;
  * @see com.liferay.oauth.model.ApplicationUserModel
  * @generated
  */
+@JSON(strict = true)
 public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 	implements ApplicationUserModel {
 	/*
@@ -86,6 +91,50 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 	public static long APPLICATIONID_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
 	public static long OAAUID_COLUMN_BITMASK = 8L;
+
+	/**
+	 * Converts the soap model instance into a normal model instance.
+	 *
+	 * @param soapModel the soap model instance to convert
+	 * @return the normal model instance
+	 */
+	public static ApplicationUser toModel(ApplicationUserSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
+		ApplicationUser model = new ApplicationUserImpl();
+
+		model.setOaauId(soapModel.getOaauId());
+		model.setUserId(soapModel.getUserId());
+		model.setApplicationId(soapModel.getApplicationId());
+		model.setAccessToken(soapModel.getAccessToken());
+		model.setAccessSecret(soapModel.getAccessSecret());
+
+		return model;
+	}
+
+	/**
+	 * Converts the soap model instances into normal model instances.
+	 *
+	 * @param soapModels the soap model instances to convert
+	 * @return the normal model instances
+	 */
+	public static List<ApplicationUser> toModels(
+		ApplicationUserSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
+		List<ApplicationUser> models = new ArrayList<ApplicationUser>(soapModels.length);
+
+		for (ApplicationUserSoap soapModel : soapModels) {
+			models.add(toModel(soapModel));
+		}
+
+		return models;
+	}
+
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.oauth.model.ApplicationUser"));
 
@@ -162,6 +211,7 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 		}
 	}
 
+	@JSON
 	public long getOaauId() {
 		return _oaauId;
 	}
@@ -170,6 +220,7 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 		_oaauId = oaauId;
 	}
 
+	@JSON
 	public long getUserId() {
 		return _userId;
 	}
@@ -198,6 +249,7 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 		return _originalUserId;
 	}
 
+	@JSON
 	public long getApplicationId() {
 		return _applicationId;
 	}
@@ -218,6 +270,7 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 		return _originalApplicationId;
 	}
 
+	@JSON
 	public String getAccessToken() {
 		if (_accessToken == null) {
 			return StringPool.BLANK;
@@ -241,6 +294,7 @@ public class ApplicationUserModelImpl extends BaseModelImpl<ApplicationUser>
 		return GetterUtil.getString(_originalAccessToken);
 	}
 
+	@JSON
 	public String getAccessSecret() {
 		if (_accessSecret == null) {
 			return StringPool.BLANK;

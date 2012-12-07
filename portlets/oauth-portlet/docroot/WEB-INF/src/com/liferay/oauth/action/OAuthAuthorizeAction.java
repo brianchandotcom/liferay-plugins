@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -54,13 +55,11 @@ public class OAuthAuthorizeAction extends BaseStrutsAction {
 		}
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
-
-		String redirect;
+			WebKeys.THEME_DISPLAY);
 
 		PortletURL portletURL = PortletURLFactoryUtil.create(
-				request, PORTLET_ID, themeDisplay.getPlid(),
-				PortletRequest.RENDER_PHASE);
+			request, OAuthConstants.OAUTH_AUTHORIZE, themeDisplay.getPlid(),
+			PortletRequest.RENDER_PHASE);
 
 		portletURL.setWindowState(getWindowState(request));
 		portletURL.setPortletMode(PortletMode.VIEW);
@@ -69,7 +68,7 @@ public class OAuthAuthorizeAction extends BaseStrutsAction {
 			request.getParameter(OAuthConstants.OAUTH_TOKEN));
 		portletURL.setParameter("saveLastPath", "0");
 
-		redirect = portletURL.toString();
+		String redirect = portletURL.toString();
 
 		response.sendRedirect(redirect);
 
@@ -89,8 +88,8 @@ public class OAuthAuthorizeAction extends BaseStrutsAction {
 	}
 
 	protected boolean isSignedIn() {
-		PermissionChecker permissionChecker = PermissionThreadLocal
-			.getPermissionChecker();
+		PermissionChecker permissionChecker =
+			PermissionThreadLocal.getPermissionChecker();
 
 		if ((permissionChecker == null) || !permissionChecker.isSignedIn()) {
 			return false;
@@ -100,28 +99,28 @@ public class OAuthAuthorizeAction extends BaseStrutsAction {
 	}
 
 	protected String redirectToLogin(
-		HttpServletRequest request, HttpServletResponse response)
+			HttpServletRequest request, HttpServletResponse response)
 		throws IOException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
 		String uri = request.getRequestURI();
 		String queryString = request.getQueryString();
 
-		StringBundler sb = new StringBundler();
+		StringBundler sb = new StringBundler(4);
+
 		sb.append(themeDisplay.getPathMain());
 		sb.append("/portal/login?redirect=");
 		sb.append(HttpUtil.encodeURL(uri));
+
 		if (Validator.isNotNull(queryString)) {
-			sb.append(HttpUtil.encodeURL("?"+queryString));
+			sb.append(HttpUtil.encodeURL(StringPool.QUESTION + queryString));
 		}
 
 		response.sendRedirect(sb.toString());
 
 		return null;
 	}
-
-	private static final String PORTLET_ID = "3_WAR_oauthportlet";
 
 }

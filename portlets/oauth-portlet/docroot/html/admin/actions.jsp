@@ -25,24 +25,17 @@ ResultRow row = (ResultRow)request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_
 
 Application app = (Application)row.getObject();
 %>
+		<liferay-portlet:actionURL name="deleteApplication" var="deleteURL">
+			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="applicationId" value="<%= String.valueOf(app.getApplicationId()) %>" />
+		</liferay-portlet:actionURL>
+
 
 <liferay-ui:icon-menu>
-	<liferay-portlet:renderURL var="viewURL">
-		<portlet:param name="mvcPath" value="/html/admin/view_application.jsp" />
-		<portlet:param name="referer" value="<%= currentURL %>" />
-		<portlet:param name="applicationId" value="<%= String.valueOf(app.getApplicationId()) %>" />
-	</liferay-portlet:renderURL>
-
-	<liferay-ui:icon
-		image="view"
-		method="get"
-		url="<%= viewURL %>"
-	/>
-
 	<c:if test='<%= permissionChecker.hasPermission(layout.getGroupId(), "com.liferay.oauth", layout.getGroupId(), ActionKeys.UPDATE) %>'>
 		<liferay-portlet:renderURL var="editURL">
 			<portlet:param name="mvcPath" value="/html/admin/edit.jsp" />
-			<portlet:param name="referer" value="<%= currentURL %>" />
+			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="applicationId" value="<%= String.valueOf(app.getApplicationId()) %>" />
 		</liferay-portlet:renderURL>
 
@@ -54,13 +47,11 @@ Application app = (Application)row.getObject();
 	</c:if>
 
 	<c:if test='<%= permissionChecker.hasPermission(layout.getGroupId(), "com.liferay.oauth", layout.getGroupId(), ActionKeys.DELETE) %>'>
-		<liferay-portlet:actionURL name="deleteApplication" var="deleteURL">
-			<portlet:param name="referer" value="<%= currentURL %>" />
-			<portlet:param name="applicationId" value="<%= String.valueOf(app.getApplicationId()) %>" />
-		</liferay-portlet:actionURL>
-
 		<liferay-ui:icon-delete
 			url="<%= deleteURL %>"
 		/>
 	</c:if>
 </liferay-ui:icon-menu>
+
+		(<%= deleteURL %>)
+

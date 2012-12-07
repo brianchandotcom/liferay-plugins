@@ -56,20 +56,21 @@ public class OAuthApplicationUserSearch
 
 	public OAuthApplicationUserSearch(
 			PortletRequest portletRequest, PortletURL iteratorURL) {
+
 		super(
 			portletRequest, new OAuthApplicationDisplayTerms(portletRequest),
 			new OAuthApplicationSearchTerms(portletRequest), DEFAULT_CUR_PARAM,
 			DEFAULT_DELTA, iteratorURL, headerNames, NO_APPLICATION_USERS);
 
 		OAuthApplicationDisplayTerms displayTerms =
-				(OAuthApplicationDisplayTerms)getDisplayTerms();
+			(OAuthApplicationDisplayTerms)getDisplayTerms();
 
 		iteratorURL.setParameter(NAME, displayTerms.getName());
 
 		try {
 			PortalPreferences preferences =
-					PortletPreferencesFactoryUtil.getPortalPreferences(
-						portletRequest);
+				PortletPreferencesFactoryUtil.getPortalPreferences(
+					portletRequest);
 
 				String orderByCol = ParamUtil.getString(
 					portletRequest, "orderByCol");
@@ -95,8 +96,8 @@ public class OAuthApplicationUserSearch
 					setOrderByType(orderByType);
 
 					OrderByComparator orderByComparator =
-									getOAuthApplicationOrderByComparator(
-										orderByCol, orderByType);
+						getOAuthApplicationOrderByComparator(
+							orderByCol, orderByType);
 
 					setOrderByComparator(orderByComparator);
 				}
@@ -107,17 +108,19 @@ public class OAuthApplicationUserSearch
 	}
 
 	protected OrderByComparator getOAuthApplicationOrderByComparator(
-			final String orderByColumn, final String orderByType) {
+		final String orderByColumn, final String orderByType) {
+
 		return getOAuthApplicationOrderByComparator(
-				ASC.equals(orderByType), orderByColumn);
+			ASC.equals(orderByType), orderByColumn);
 	}
 
 	protected OrderByComparator getOAuthApplicationOrderByComparator(
-			final boolean ascending, final String orderByColumn) {
+		final boolean ascending, final String orderByColumn) {
+
 		return new OAuthApplicationOrderByComparator(ascending, orderByColumn);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-			OAuthApplicationUserSearch.class);
+		OAuthApplicationUserSearch.class);
 
 }

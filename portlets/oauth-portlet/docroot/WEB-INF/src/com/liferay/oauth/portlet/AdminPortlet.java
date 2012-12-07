@@ -16,6 +16,7 @@ package com.liferay.oauth.portlet;
 
 import com.liferay.oauth.model.Application;
 import com.liferay.oauth.service.ApplicationLocalServiceUtil;
+import com.liferay.oauth.service.ApplicationServiceUtil;
 import com.liferay.oauth.util.OAuthConstants;
 import com.liferay.portal.ImageTypeException;
 import com.liferay.portal.RequiredFieldException;
@@ -30,7 +31,13 @@ import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
-import com.liferay.portal.kernel.util.*;
+import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.TempFileUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -38,7 +45,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 
@@ -47,7 +54,15 @@ import java.io.InputStream;
 
 import java.net.MalformedURLException;
 
-import javax.portlet.*;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.MimeResponse;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 /**
  *
@@ -59,6 +74,7 @@ public class AdminPortlet extends MVCPortlet {
 	public void addApplication(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortletException {
+
 		String name = ParamUtil.getString(actionRequest, OAuthConstants.NAME);
 		String description = ParamUtil.getString(
 			actionRequest, OAuthConstants.DESCRIPTION);
@@ -71,7 +87,6 @@ public class AdminPortlet extends MVCPortlet {
 			OAuthConstants.ACCESS_TYPE_READ);
 
 		try {
-
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				actionRequest);
 
@@ -85,20 +100,22 @@ public class AdminPortlet extends MVCPortlet {
 		catch (Exception e) {
 			if (e instanceof SystemException) {
 				_log.error(e, e);
+
+				SessionErrors.add(actionRequest, e.getClass().getName(), e);
 			}
-			else if (e instanceof RequiredFieldException ||
-					 e instanceof MalformedURLException) {
+			else if ((e instanceof RequiredFieldException) ||
+					 (e instanceof MalformedURLException)) {
 
 				SessionErrors.add(actionRequest, e.getClass().getName(), e);
 			}
 			else {
-				throw new PortletException(e.fillInStackTrace());
+				throw new PortletException(e);
 			}
 		}
 	}
 
 	public void addTempImageFile(
-		ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
@@ -127,14 +144,14 @@ public class AdminPortlet extends MVCPortlet {
 		throws IOException, PortletException {
 
 		long applicationId = ParamUtil.getLong(
-				actionRequest, OAuthConstants.APPLICATION_ID);
+			actionRequest, OAuthConstants.APPLICATION_ID);
 
 		try {
 			if (applicationId > 0) {
 				ServiceContext serviceContext =
 						ServiceContextFactory.getInstance(actionRequest);
 
-				ApplicationLocalServiceUtil.deleteApplication(
+				ApplicationServiceUtil.deleteApplication(
 					applicationId, serviceContext);
 			}
 			else {
@@ -161,20 +178,20 @@ public class AdminPortlet extends MVCPortlet {
 		long applicationId = ParamUtil.getLong(
 			renderRequest, OAuthConstants.APPLICATION_ID);
 
-		if (applicationId > 0) {
-			try {
+		try {
+			if (applicationId > 0) {
 				Application application =
 					ApplicationLocalServiceUtil.fetchApplication(applicationId);
 
 				renderRequest.setAttribute(OAuthConstants.BEAN_ID, application);
 			}
-			catch (Exception e) {
-				if (e instanceof SystemException) {
-					SessionErrors.add(renderRequest, e.getClass().getName(), e);
-				}
-				else {
-					throw new PortletException(e.fillInStackTrace());
-				}
+		}
+		catch (Exception e) {
+			if (e instanceof SystemException) {
+				SessionErrors.add(renderRequest, e.getClass().getName(), e);
+			}
+			else {
+				throw new PortletException(e.fillInStackTrace());
 			}
 		}
 
@@ -182,13 +199,14 @@ public class AdminPortlet extends MVCPortlet {
 	}
 
 	public void saveTempImageFile(
-		ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		long applicationId = ParamUtil.getLong(
 			actionRequest, "applicationId", 0);
 
 		String tempFilePath = getTempImageFilePath(actionRequest);
+
 		InputStream tempImageStream = null;
 
 		try {
@@ -233,7 +251,7 @@ public class AdminPortlet extends MVCPortlet {
 
 	@Override
 	public void serveResource(
-		ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws IOException, PortletException {
 
 		try {
@@ -260,44 +278,37 @@ public class AdminPortlet extends MVCPortlet {
 
 		long applicationId = ParamUtil.getLong(
 			actionRequest, OAuthConstants.APPLICATION_ID);
+		String name = ParamUtil.getString(
+			actionRequest, OAuthConstants.NAME);
+		String description = ParamUtil.getString(
+			actionRequest, OAuthConstants.DESCRIPTION);
+		String website = ParamUtil.getString(
+			actionRequest, OAuthConstants.WEBSITE);
+		String callBackURL = ParamUtil.getString(
+			actionRequest, OAuthConstants.CALLBACK_URL);
 
-		if (applicationId > 0) {
-			String name = ParamUtil.getString(
-				actionRequest, OAuthConstants.NAME);
-			String description = ParamUtil.getString(
-				actionRequest, OAuthConstants.DESCRIPTION);
-			String website = ParamUtil.getString(
-				actionRequest, OAuthConstants.WEBSITE);
-			String callBackURL = ParamUtil.getString(
-				actionRequest, OAuthConstants.CALLBACK_URL);
-
-			try {
+		try {
+			if (applicationId > 0) {
 				Application application =
 					ApplicationLocalServiceUtil.fetchApplication(applicationId);
 
 				ServiceContext serviceContext =
-						ServiceContextFactory.getInstance(actionRequest);
+					ServiceContextFactory.getInstance(actionRequest);
 
-				application = ApplicationLocalServiceUtil
-					.updateApplication(
-						serviceContext.getUserId(), applicationId, name,
-						description, website, callBackURL, serviceContext);
+				application = ApplicationServiceUtil.updateApplication(
+					applicationId, name, description, website, callBackURL,
+					serviceContext);
 
 				actionRequest.setAttribute(OAuthConstants.BEAN_ID, application);
 			}
-			catch (Exception e) {
-				if (e instanceof SystemException) {
-					SessionErrors.add(actionRequest, e.getClass().getName(), e);
-				}
-				else {
-					throw new PortletException(e);
-				}
-			}
 		}
-		else {
-			SessionErrors.add(
-				actionRequest,
-				"can-not-complete-operation-without-application-id");
+		catch (Exception e) {
+			if (e instanceof SystemException) {
+				SessionErrors.add(actionRequest, e.getClass().getName(), e);
+			}
+			else {
+				throw new PortletException(e);
+			}
 		}
 	}
 
@@ -372,11 +383,11 @@ public class AdminPortlet extends MVCPortlet {
 	protected void saveTempImageFile(long applicationId, byte[] bytes)
 		throws Exception {
 
-		ApplicationLocalServiceUtil.updateLogo(applicationId, bytes);
+		ApplicationServiceUtil.updateLogo(applicationId, bytes);
 	}
 
 	protected void serveTempImageFile(
-		MimeResponse mimeResponse, InputStream tempImageStream)
+			MimeResponse mimeResponse, InputStream tempImageStream)
 		throws Exception {
 
 		ImageBag imageBag = ImageToolUtil.read(tempImageStream);

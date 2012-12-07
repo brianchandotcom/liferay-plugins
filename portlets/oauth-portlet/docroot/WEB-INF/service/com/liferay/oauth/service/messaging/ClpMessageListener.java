@@ -15,7 +15,9 @@
 package com.liferay.oauth.service.messaging;
 
 import com.liferay.oauth.service.ApplicationLocalServiceUtil;
+import com.liferay.oauth.service.ApplicationServiceUtil;
 import com.liferay.oauth.service.ApplicationUserLocalServiceUtil;
+import com.liferay.oauth.service.ApplicationUserServiceUtil;
 import com.liferay.oauth.service.ClpSerializer;
 
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
@@ -38,7 +40,10 @@ public class ClpMessageListener extends BaseMessageListener {
 				servletContextName.equals(getServletContextName())) {
 			ApplicationLocalServiceUtil.clearService();
 
+			ApplicationServiceUtil.clearService();
 			ApplicationUserLocalServiceUtil.clearService();
+
+			ApplicationUserServiceUtil.clearService();
 		}
 	}
 }

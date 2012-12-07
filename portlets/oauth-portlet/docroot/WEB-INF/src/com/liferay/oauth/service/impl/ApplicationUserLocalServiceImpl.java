@@ -14,7 +14,6 @@
 
 package com.liferay.oauth.service.impl;
 
-import com.liferay.oauth.NoSuchApplicationUserException;
 import com.liferay.oauth.model.ApplicationUser;
 import com.liferay.oauth.service.base.ApplicationUserLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -41,30 +40,13 @@ import java.util.List;
  */
 public class ApplicationUserLocalServiceImpl
 	extends ApplicationUserLocalServiceBaseImpl {
-	/**
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link com.liferay.oauth.service.ApplicationUserLocalServiceUtil} to access the application user local service.
-	 */
-	/**
-	 * Add new user's authorization for an existing application that is
-	 * registered to use OAuth feature. All optional fields will be set to null
-	 * or initial value (depending on data type). Method creates necessary
-	 * resources used later by permissions algorithm.
-	 *
-	 * @param applicationId
-	 * @param userId
-	 * @param accessSecret
-	 * @param accessToken
-	 * @param serviceContext
-	 * @return
-	 * @throws PortalException
-	 * @throws SystemException
-	 */
+
 	public ApplicationUser addApplicationUser(
-		long userId, long applicationId, String accessToken,
-		String accessSecret, ServiceContext serviceContext)
+			long userId, long applicationId, String accessToken,
+			String accessSecret, ServiceContext serviceContext)
 		throws PortalException, SystemException {
+
+		// ApplicationUser
 
 		long oaauId = counterLocalService.increment();
 
@@ -76,8 +58,9 @@ public class ApplicationUserLocalServiceImpl
 		applicationUser.setAccessToken(accessToken);
 		applicationUser.setAccessSecret(accessSecret);
 
-		applicationUser = applicationUserPersistence.update(
-			applicationUser, false);
+		applicationUserPersistence.update(applicationUser);
+
+		// Resources
 
 		resourceLocalService.addResources(
 			serviceContext.getCompanyId(), serviceContext.getScopeGroupId(),
@@ -88,20 +71,22 @@ public class ApplicationUserLocalServiceImpl
 	}
 
 	public ApplicationUser deleteApplicationUser(
-		ApplicationUser applicationUser, ServiceContext serviceContext)
+			ApplicationUser applicationUser, ServiceContext serviceContext)
 		throws PortalException, SystemException {
+
+		// Resources
 
 		resourceLocalService.deleteResource(
 			serviceContext.getCompanyId(), ApplicationUser.class.getName(),
 			ResourceConstants.SCOPE_COMPANY, applicationUser.getPrimaryKey());
 
-		applicationUser = applicationUserPersistence.remove(applicationUser);
+		applicationUserPersistence.remove(applicationUser);
 
 		return applicationUser;
 	}
 
 	public ApplicationUser deleteApplicationUser(
-		long userId, long applicationId, ServiceContext serviceContext)
+			long userId, long applicationId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		ApplicationUser applicationUser = applicationUserPersistence.findByU_AP(
@@ -110,39 +95,28 @@ public class ApplicationUserLocalServiceImpl
 		return deleteApplicationUser(applicationUser, serviceContext);
 	}
 
-	/**
-	 * Return ApplicationUser with accessToken given by parameter.
-	 * @param accessToken
-	 * @return
-	 * @throws SystemException
-	 */
-	public ApplicationUser getApplicationUserByAccessToken(String accessToken)
+	public ApplicationUser fetchApplicationUser(String accessToken)
 		throws SystemException {
 
-		if (null == accessToken) {
-			throw new SystemException("AccessToken can not be null.");
-		}
-
-		/*
-		 * accessToken value if defined it is unique across applicationUser
-		 * entity.
-		 * */
-		List<ApplicationUser> applicationUserLst =
-					applicationUserPersistence.findByAccessToken(accessToken);
-
-		if (applicationUserLst.size() > 1) {
-			throw new SystemException("No unique ApplicationUser.");
-		}
-		else if (applicationUserLst.size() == 1) {
-			return applicationUserLst.get(0);
-		}
-
-		throw new SystemException("No such ApplicationUser.");
+		return applicationUserPersistence.fetchByAccessToken(accessToken);
 	}
 
-	public ApplicationUser getApplicationUserByApplicationId(
+	public ApplicationUser fetchApplicationUser(
 			long userId, long applicationId)
-		throws NoSuchApplicationUserException, SystemException {
+		throws SystemException {
+
+		return applicationUserPersistence.fetchByU_AP(userId, applicationId);
+	}
+
+	public ApplicationUser getApplicationUser(String accessToken)
+		throws PortalException, SystemException {
+
+		return applicationUserPersistence.findByAccessToken(accessToken);
+	}
+
+	public ApplicationUser getApplicationUser(
+			long userId, long applicationId)
+		throws PortalException, SystemException {
 
 		return applicationUserPersistence.findByU_AP(userId, applicationId);
 	}
@@ -154,36 +128,17 @@ public class ApplicationUserLocalServiceImpl
 	}
 
 	public List<ApplicationUser> getApplicationUsers(
-		long applicationId, int start, int end,
-		OrderByComparator orderByComparator)
+			long applicationId, int start, int end,
+			OrderByComparator orderByComparator)
 		throws SystemException {
 
 		return applicationUserPersistence.findByApplicationId(
 			applicationId, start, end, orderByComparator);
 	}
 
-	public List<ApplicationUser> getApplicationUsersByOwnerId(
-		long ownerId, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-
-		return applicationUserFinder.findByO(
-			ownerId, start, end, orderByComparator);
-	}
-
-	public int getApplicationUsersByOwnerIdCount(long ownerId)
-					throws SystemException {
-
-					return applicationUserFinder.countByO(ownerId);
-				}
-
-	public List<ApplicationUser> getApplicationUsersByUserId(long userId)
-		throws SystemException {
-
-		return applicationUserPersistence.findByUserId(userId);
-	}
-
 	public List<ApplicationUser> getApplicationUsersByUserId(
-		long userId, int start, int end, OrderByComparator orderByComparator)
+			long userId, int start, int end,
+			OrderByComparator orderByComparator)
 		throws SystemException {
 
 		return applicationUserPersistence.findByUserId(
@@ -202,32 +157,18 @@ public class ApplicationUserLocalServiceImpl
 		return applicationUserPersistence.countByApplicationId(applicationId);
 	}
 
-	/**
-	 * Update user's authorization for an existing application that is
-	 * registered to use OAuth feature. If entity doesn't exist new one (with
-	 * resources for later permissions check) will be created.
-	 *
-	 * @param applicationId
-	 * @param userId
-	 * @param accessSecret
-	 * @param accessToken
-	 * @param serviceContext
-	 * @return
-	 * @throws PortalException
-	 * @throws SystemException
-	 */
 	public ApplicationUser updateApplicationUser(
-		long userId, long applicationId, String accessToken,
-		String accessSecret, ServiceContext serviceContext)
+			long userId, long applicationId, String accessToken,
+			String accessSecret, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		ApplicationUser applicationUser =
-			applicationUserPersistence.fetchByU_AP(userId, applicationId);
+		ApplicationUser applicationUser = applicationUserPersistence.findByU_AP(
+			userId, applicationId);
 
 		applicationUser.setAccessToken(accessToken);
 		applicationUser.setAccessSecret(accessSecret);
 
-		applicationUserPersistence.update(applicationUser, false);
+		applicationUserPersistence.update(applicationUser);
 
 		return applicationUser;
 	}

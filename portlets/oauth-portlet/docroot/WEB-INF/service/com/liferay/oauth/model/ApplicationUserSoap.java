@@ -20,9 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used by SOAP remote services.
+ * This class is used by SOAP remote services, specifically {@link com.liferay.oauth.service.http.ApplicationUserServiceSoap}.
  *
  * @author    Brian Wing Shun Chan
+ * @see       com.liferay.oauth.service.http.ApplicationUserServiceSoap
  * @generated
  */
 public class ApplicationUserSoap implements Serializable {

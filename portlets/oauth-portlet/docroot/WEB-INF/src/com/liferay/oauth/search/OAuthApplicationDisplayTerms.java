@@ -27,7 +27,7 @@ import javax.portlet.PortletRequest;
  *
  */
 public class OAuthApplicationDisplayTerms extends DisplayTerms
-		implements OAuthConstants {
+	implements OAuthConstants {
 
 	public OAuthApplicationDisplayTerms(PortletRequest portletRequest) {
 		super(portletRequest);

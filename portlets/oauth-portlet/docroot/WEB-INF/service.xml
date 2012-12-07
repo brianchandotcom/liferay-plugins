@@ -3,7 +3,7 @@
 
 <service-builder package-path="com.liferay.oauth" auto-namespace-tables="true">
 	<namespace>OAuth</namespace>
-	<entity name="Application" local-service="true" remote-service="false">
+	<entity name="Application" local-service="true" remote-service="true">
 
 		<!-- PK fields -->
 
@@ -38,17 +38,17 @@
 		</finder>
 		<finder name="C_N" return-type="Collection">
 			<finder-column name="companyId" />
-			<finder-column name="name" comparator="LIKE" />
+			<finder-column name="name" case-sensitive="false" comparator="LIKE" />
 		</finder>
 		<finder name="U_N" return-type="Collection" >
 			<finder-column name="userId" />
-			<finder-column name="name" comparator="LIKE" />
+			<finder-column name="name" case-sensitive="false" comparator="LIKE" />
 		</finder>
 		<finder name="UserId" return-type="Collection" >
 			<finder-column name="userId" />
 		</finder>
 	</entity>
-	<entity name="ApplicationUser" local-service="true" remote-service="false">
+	<entity name="ApplicationUser" local-service="true" remote-service="true">
 
 		<!-- PK fields -->
 
@@ -63,7 +63,7 @@
 
 		<!-- Finder methods -->
 
-		<finder name="AccessToken" return-type="Collection">
+		<finder name="AccessToken" return-type="ApplicationUser" unique="true">
 			<finder-column name="accessToken" />
 		</finder>
 		<finder name="ApplicationId" return-type="Collection" >

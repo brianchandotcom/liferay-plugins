@@ -26,7 +26,8 @@ public class OAuthAccessorImpl implements OAuthAccessor, Serializable {
 	}
 
 	public OAuthAccessorImpl(OAuthConsumer oAuthConsumer) {
-		this(new net.oauth.OAuthAccessor((net.oauth.OAuthConsumer)
+		this(
+			new net.oauth.OAuthAccessor((net.oauth.OAuthConsumer)
 				oAuthConsumer.getWrappedOAuthConsumer()));
 
 		this._oAuthConsumer = oAuthConsumer;

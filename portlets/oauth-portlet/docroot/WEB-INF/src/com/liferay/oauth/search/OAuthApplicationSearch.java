@@ -40,7 +40,7 @@ import javax.portlet.PortletURL;
  *
  */
 public class OAuthApplicationSearch extends SearchContainer<Application>
-		implements OAuthConstants {
+	implements OAuthConstants {
 
 	static List<String> headerNames = new ArrayList<String>();
 	static Map<String, String> orderableHeaders = new HashMap<String, String>();
@@ -54,20 +54,21 @@ public class OAuthApplicationSearch extends SearchContainer<Application>
 
 	public OAuthApplicationSearch(
 			PortletRequest portletRequest, PortletURL iteratorURL) {
+
 		super(
 			portletRequest, new OAuthApplicationDisplayTerms(portletRequest),
 			new OAuthApplicationSearchTerms(portletRequest), DEFAULT_CUR_PARAM,
 			DEFAULT_DELTA, iteratorURL, headerNames, NO_APPLICATIONS);
 
 		OAuthApplicationDisplayTerms displayTerms =
-				(OAuthApplicationDisplayTerms)getDisplayTerms();
+			(OAuthApplicationDisplayTerms)getDisplayTerms();
 
 		iteratorURL.setParameter(NAME, displayTerms.getName());
 
 		try {
 			PortalPreferences preferences =
-					PortletPreferencesFactoryUtil.getPortalPreferences(
-						portletRequest);
+				PortletPreferencesFactoryUtil.getPortalPreferences(
+					portletRequest);
 
 				String orderByCol = ParamUtil.getString(
 					portletRequest, "orderByCol");
@@ -92,8 +93,8 @@ public class OAuthApplicationSearch extends SearchContainer<Application>
 					setOrderByCol(orderByCol);
 					setOrderByType(orderByType);
 					setOrderByComparator(
-							getOAuthApplicationOrderByComparator(
-									orderByCol, orderByType));
+						getOAuthApplicationOrderByComparator(
+							orderByCol, orderByType));
 				}
 		}
 		catch (Exception e) {
@@ -102,17 +103,19 @@ public class OAuthApplicationSearch extends SearchContainer<Application>
 	}
 
 	protected OrderByComparator getOAuthApplicationOrderByComparator(
-			final String orderByColumn, final String orderByType) {
+		final String orderByColumn, final String orderByType) {
+
 		return getOAuthApplicationOrderByComparator(
-				ASC.equals(orderByType), orderByColumn);
+			ASC.equals(orderByType), orderByColumn);
 	}
 
 	protected OrderByComparator getOAuthApplicationOrderByComparator(
-			final boolean ascending, final String orderByColumn) {
+		final boolean ascending, final String orderByColumn) {
+
 		return new OAuthApplicationOrderByComparator(ascending, orderByColumn);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-			OAuthApplicationSearch.class);
+		OAuthApplicationSearch.class);
 
 }

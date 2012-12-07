@@ -37,22 +37,14 @@ String logoURL = themeDisplay.getPathImage() + "/logo?img_id=" + app.getLogoId()
 <liferay-ui:message key="callback-url" />: <%= app.getCallBackURL() %> <br />
 
 <aui:field-wrapper helpMessage="application-credentials-description" label="application-credentials">
-		<liferay-ui:message key="consumer-key" />: <%= app.getConsumerKey() %> <br />
-		<liferay-ui:message key="consumer-secret" />: <%= app.getConsumerSecret() %>
+	<liferay-ui:message key="consumer-key" />: <%= app.getConsumerKey() %> <br />
+	<liferay-ui:message key="consumer-secret" />: <%= app.getConsumerSecret() %>
 </aui:field-wrapper>
 
 <aui:field-wrapper label="logo">
 	<img class="lfr-portrait-preview-img" src="<%= HtmlUtil.escape(logoURL) %>" />
 </aui:field-wrapper>
 
-<liferay-portlet:actionURL name="updateApplication" var="updateApplicationURL">
-	<portlet:param name="applicationId" value="<%= String.valueOf(app.getApplicationId()) %>" />
-	<portlet:param name="mvcPath" value="/html/admin/edit.jsp" />
-	<portlet:param name="referer" value="<%= backURL %>" />
-</liferay-portlet:actionURL>
-<aui:form action="<%= updateApplicationURL %>" method="get">
-	<aui:button-row>
-		<aui:button type="submit" value="update" />
-		<aui:button href="<%= backURL %>" value="back" />
-	</aui:button-row>
-</aui:form>
+<aui:button-row>
+	<aui:button href="<%= redirect %>" type="cancel" />
+</aui:button-row>

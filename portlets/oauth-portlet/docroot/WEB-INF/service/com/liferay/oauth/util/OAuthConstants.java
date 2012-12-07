@@ -64,6 +64,8 @@ public interface OAuthConstants {
 
 	public static final String OAUTH_ADMIN = "1_WAR_oauthportlet";
 
+	public static final String OAUTH_AUTHORIZE = "3_WAR_oauthportlet";
+
 	public static final String OAUTH_CALLBACK = "oauth_callback";
 
 	public static final String OAUTH_TOKEN = "oauth_token";

@@ -317,12 +317,6 @@ public class ApplicationLocalServiceUtil {
 	}
 
 	public static java.util.List<com.liferay.oauth.model.Application> getApplications(
-		long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getApplications(companyId);
-	}
-
-	public static java.util.List<com.liferay.oauth.model.Application> getApplications(
 		long companyId, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -330,64 +324,26 @@ public class ApplicationLocalServiceUtil {
 				   .getApplications(companyId, start, end, orderByComparator);
 	}
 
-	public static java.util.List<com.liferay.oauth.model.Application> getApplications(
-		long companyId, java.lang.String name, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getApplications(companyId, name, start, end,
-			orderByComparator);
-	}
-
-	public static java.util.List<com.liferay.oauth.model.Application> getApplicationsByCN(
-		long companyId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getApplicationsByCN(companyId, name);
-	}
-
-	public static java.util.List<com.liferay.oauth.model.Application> getApplicationsByON(
-		long userId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getApplicationsByON(userId, name);
-	}
-
-	public static java.util.List<com.liferay.oauth.model.Application> getApplicationsByON(
-		long userId, java.lang.String name, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getApplicationsByON(userId, name, start, end,
-			orderByComparator);
-	}
-
-	public static java.util.List<com.liferay.oauth.model.Application> getApplicationsByOwner(
-		long userId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getApplicationsByOwner(userId, start, end, orderByComparator);
-	}
-
-	public static int getApplicationsByUserIdCount(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getApplicationsByUserIdCount(userId);
-	}
-
 	public static int getApplicationsCount(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getApplicationsCount(companyId);
 	}
 
-	public static int getApplicationsCountByCN(long companyId,
-		java.lang.String name)
+	public static java.util.List<com.liferay.oauth.model.Application> search(
+		long companyId, java.lang.String keywords,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params,
+		int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getApplicationsCountByCN(companyId, name);
+		return getService()
+				   .search(companyId, keywords, params, start, end,
+			orderByComparator);
 	}
 
-	public static int getApplicationsCountByON(long userId,
-		java.lang.String name)
+	public static int searchCount(long companyId, java.lang.String keywords,
+		java.util.LinkedHashMap<java.lang.String, java.lang.Object> params)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getApplicationsCountByON(userId, name);
+		return getService().searchCount(companyId, keywords, params);
 	}
 
 	/**
@@ -396,14 +352,14 @@ public class ApplicationLocalServiceUtil {
 	* access level.
 	*/
 	public static com.liferay.oauth.model.Application updateApplication(
-		long userId, long applicationId, java.lang.String name,
+		long applicationId, java.lang.String name,
 		java.lang.String description, java.lang.String website,
 		java.lang.String callBackURL,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .updateApplication(userId, applicationId, name, description,
+				   .updateApplication(applicationId, name, description,
 			website, callBackURL, serviceContext);
 	}
 

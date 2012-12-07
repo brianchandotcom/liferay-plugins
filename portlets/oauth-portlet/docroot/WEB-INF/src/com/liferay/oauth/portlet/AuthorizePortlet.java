@@ -44,10 +44,10 @@ public class AuthorizePortlet extends MVCPortlet {
 			OAuthAccessor accessor = OAuthUtil.getAccessor(requestMessage);
 
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
-					request);
+				request);
 
 			OAuthUtil.authorize(
-					accessor, serviceContext.getUserId(), serviceContext);
+				accessor, serviceContext.getUserId(), serviceContext);
 
 			returnToConsumer(request, response, accessor);
 		}
@@ -120,7 +120,8 @@ public class AuthorizePortlet extends MVCPortlet {
 		if (OAuthConstants.NONE.equals(callback) ) {
 			request.setAttribute(OAuthConstants.VERIFIER, verifier);
 			request.setAttribute(OAuthConstants.OAUTH_ACCESSOR, accessor);
-		} else {
+		}
+		else {
 
 			// if callback is not passed in, use the callback from config
 

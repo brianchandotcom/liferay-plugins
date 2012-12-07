@@ -22,9 +22,11 @@ import com.liferay.oauth.model.Application;
 public class OAuthConsumerImpl implements OAuthConsumer {
 
 	public OAuthConsumerImpl(Application oAuthApplication) {
-		this(new net.oauth.OAuthConsumer(oAuthApplication.getCallBackURL(),
-		oAuthApplication.getConsumerKey(), oAuthApplication.getConsumerSecret(),
-		null));
+		this(
+			new net.oauth.OAuthConsumer(
+				oAuthApplication.getCallBackURL(),
+				oAuthApplication.getConsumerKey(),
+				oAuthApplication.getConsumerSecret(), null));
 
 		this._oAuthApplication = oAuthApplication;
 	}

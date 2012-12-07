@@ -63,11 +63,11 @@ boolean verifyStep = Validator.isNotNull(oauthURL);
 
 		int oAuthAppsCnt = 0;
 
-		allOAuthApps = ApplicationLocalServiceUtil.getApplications(themeDisplay.getCompanyId());
+		allOAuthApps = ApplicationLocalServiceUtil.getApplications(themeDisplay.getCompanyId(), -1, -1, null);
 
 		unapprovedOAuthApps.addAll(allOAuthApps);
 
-		List<ApplicationUser> approved = ApplicationUserLocalServiceUtil.getApplicationUsersByUserId(themeDisplay.getUserId());
+		List<ApplicationUser> approved = ApplicationUserLocalServiceUtil.getApplicationUsersByUserId(themeDisplay.getUserId(), -1, -1, null);
 
 		for (Application a : allOAuthApps) {
 			for (ApplicationUser oaau : approved) {

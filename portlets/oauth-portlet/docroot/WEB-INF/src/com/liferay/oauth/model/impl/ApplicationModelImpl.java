@@ -16,9 +16,11 @@ package com.liferay.oauth.model.impl;
 
 import com.liferay.oauth.model.Application;
 import com.liferay.oauth.model.ApplicationModel;
+import com.liferay.oauth.model.ApplicationSoap;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -35,8 +37,10 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +56,7 @@ import java.util.Map;
  * @see com.liferay.oauth.model.ApplicationModel
  * @generated
  */
+@JSON(strict = true)
 public class ApplicationModelImpl extends BaseModelImpl<Application>
 	implements ApplicationModel {
 	/*
@@ -97,6 +102,58 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 	public static long NAME_COLUMN_BITMASK = 4L;
 	public static long USERID_COLUMN_BITMASK = 8L;
 	public static long APPLICATIONID_COLUMN_BITMASK = 16L;
+
+	/**
+	 * Converts the soap model instance into a normal model instance.
+	 *
+	 * @param soapModel the soap model instance to convert
+	 * @return the normal model instance
+	 */
+	public static Application toModel(ApplicationSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
+		Application model = new ApplicationImpl();
+
+		model.setApplicationId(soapModel.getApplicationId());
+		model.setCompanyId(soapModel.getCompanyId());
+		model.setUserId(soapModel.getUserId());
+		model.setUserName(soapModel.getUserName());
+		model.setCreateDate(soapModel.getCreateDate());
+		model.setModifiedDate(soapModel.getModifiedDate());
+		model.setName(soapModel.getName());
+		model.setDescription(soapModel.getDescription());
+		model.setWebsite(soapModel.getWebsite());
+		model.setCallBackURL(soapModel.getCallBackURL());
+		model.setAccessLevel(soapModel.getAccessLevel());
+		model.setConsumerKey(soapModel.getConsumerKey());
+		model.setConsumerSecret(soapModel.getConsumerSecret());
+		model.setLogoId(soapModel.getLogoId());
+
+		return model;
+	}
+
+	/**
+	 * Converts the soap model instances into normal model instances.
+	 *
+	 * @param soapModels the soap model instances to convert
+	 * @return the normal model instances
+	 */
+	public static List<Application> toModels(ApplicationSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
+		List<Application> models = new ArrayList<Application>(soapModels.length);
+
+		for (ApplicationSoap soapModel : soapModels) {
+			models.add(toModel(soapModel));
+		}
+
+		return models;
+	}
+
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.oauth.model.Application"));
 
@@ -236,6 +293,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		}
 	}
 
+	@JSON
 	public long getApplicationId() {
 		return _applicationId;
 	}
@@ -244,6 +302,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_applicationId = applicationId;
 	}
 
+	@JSON
 	public long getCompanyId() {
 		return _companyId;
 	}
@@ -264,6 +323,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		return _originalCompanyId;
 	}
 
+	@JSON
 	public long getUserId() {
 		return _userId;
 	}
@@ -292,6 +352,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		return _originalUserId;
 	}
 
+	@JSON
 	public String getUserName() {
 		if (_userName == null) {
 			return StringPool.BLANK;
@@ -305,6 +366,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_userName = userName;
 	}
 
+	@JSON
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -313,6 +375,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_createDate = createDate;
 	}
 
+	@JSON
 	public Date getModifiedDate() {
 		return _modifiedDate;
 	}
@@ -321,6 +384,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_modifiedDate = modifiedDate;
 	}
 
+	@JSON
 	public String getName() {
 		if (_name == null) {
 			return StringPool.BLANK;
@@ -344,6 +408,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		return GetterUtil.getString(_originalName);
 	}
 
+	@JSON
 	public String getDescription() {
 		if (_description == null) {
 			return StringPool.BLANK;
@@ -357,6 +422,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_description = description;
 	}
 
+	@JSON
 	public String getWebsite() {
 		if (_website == null) {
 			return StringPool.BLANK;
@@ -370,6 +436,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_website = website;
 	}
 
+	@JSON
 	public String getCallBackURL() {
 		if (_callBackURL == null) {
 			return StringPool.BLANK;
@@ -383,6 +450,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_callBackURL = callBackURL;
 	}
 
+	@JSON
 	public int getAccessLevel() {
 		return _accessLevel;
 	}
@@ -391,6 +459,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_accessLevel = accessLevel;
 	}
 
+	@JSON
 	public String getConsumerKey() {
 		if (_consumerKey == null) {
 			return StringPool.BLANK;
@@ -414,6 +483,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		return GetterUtil.getString(_originalConsumerKey);
 	}
 
+	@JSON
 	public String getConsumerSecret() {
 		if (_consumerSecret == null) {
 			return StringPool.BLANK;
@@ -427,6 +497,7 @@ public class ApplicationModelImpl extends BaseModelImpl<Application>
 		_consumerSecret = consumerSecret;
 	}
 
+	@JSON
 	public long getLogoId() {
 		return _logoId;
 	}

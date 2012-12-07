@@ -55,7 +55,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 
 	public OAuth_1_0_AImpl(OAuthValidator oAuthValidator) {
-
 		this._oAuthValidator = oAuthValidator;
 	}
 
@@ -66,7 +65,7 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 	}
 
 	public void authorize(
-		OAuthAccessor accessor, long userId, ServiceContext serviceContext)
+			OAuthAccessor accessor, long userId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		Boolean authorized = (Boolean)accessor.getProperty(
@@ -74,23 +73,24 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 
 		if ((authorized != null) && authorized.equals(Boolean.TRUE) &&
 			(accessor.getRequestToken() != null)) {
+
 			throw new OAuthException(OAuthConstants.TOKEN_EXPIRED);
 		}
 
 		// first remove the accessor from cache
 
-		_portalCache.remove(accessor.getRequestToken());
+		_cache.remove(accessor.getRequestToken());
 
 		accessor.setProperty("user", userId);
 		accessor.setProperty(OAuthConstants.AUTHORIZED, Boolean.TRUE);
 
 		// update token in local cache
 
-		_portalCache.put(accessor.getRequestToken(), (Serializable) accessor);
+		_cache.put(accessor.getRequestToken(), (Serializable) accessor);
 	}
 
 	public void formEncode(
-		String oauthToken, String tokenSecret, OutputStream out)
+			String oauthToken, String tokenSecret, OutputStream out)
 		throws IOException {
 
 		OAuth.formEncode(
@@ -100,7 +100,7 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 	}
 
 	public void generateAccessToken(
-		OAuthAccessor accessor, long userId, ServiceContext serviceContext)
+			OAuthAccessor accessor, long userId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		Boolean authorized = (Boolean)accessor.getProperty(
@@ -108,6 +108,7 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 
 		if ((authorized != null) && authorized.equals(Boolean.TRUE) &&
 			(accessor.getAccessToken() != null)) {
+
 			throw new OAuthException(OAuthConstants.TOKEN_EXPIRED);
 		}
 
@@ -126,30 +127,26 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 		accessor.setTokenSecret(secret);
 		accessor.setRequestToken(null);
 
-		ApplicationUser applicationUser = null;
-
-		try {
-		applicationUser =
-			ApplicationUserLocalServiceUtil.getApplicationUserByApplicationId(
-			userId, application.getApplicationId());
-		}catch (NoSuchApplicationUserException e){}
+		ApplicationUser applicationUser =
+			ApplicationUserLocalServiceUtil.fetchApplicationUser(
+				userId, application.getApplicationId());
 
 		if (applicationUser == null) {
 			ApplicationUserLocalServiceUtil.addApplicationUser(
 				userId, application.getApplicationId(),
 				accessor.getAccessToken(), accessor.getTokenSecret(),
 				serviceContext);
-		}else {
-			applicationUser.setAccessToken(accessor.getAccessToken());
-			applicationUser.setAccessSecret(accessor.getTokenSecret());
-
+		}
+		else {
 			ApplicationUserLocalServiceUtil.updateApplicationUser(
-				applicationUser);
+				userId, applicationUser.getApplicationId(),
+				accessor.getAccessToken(), accessor.getAccessToken(),
+				serviceContext);
 		}
 
 		// first remove the accessor from cache
 
-		_portalCache.remove(token);
+		_cache.remove(token);
 
 		accessor.setRequestToken(null);
 		accessor.setTokenSecret(secret);
@@ -157,14 +154,13 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 
 		// update token in local cache
 
-		_portalCache.put(token, (Serializable) accessor);
+		_cache.put(token, (Serializable)accessor);
 	}
 
 	/**
 	 * Generate a fresh request token and secret for a consumer.
 	 */
 	public void generateRequestToken(OAuthAccessor accessor) {
-
 		OAuthConsumer consumer = accessor.getConsumer();
 		Application application = consumer.getApplication();
 
@@ -173,7 +169,6 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 		// Generate token and secret based on consumerKey
 
 		String token = randomizeToken(consumerKey);
-
 		String secret = randomizeToken(consumerKey.concat(token));
 
 		accessor.setRequestToken(token);
@@ -182,7 +177,7 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 
 		// add to the local cache
 
-		_portalCache.put(token, (Serializable) accessor);
+		_cache.put(token, (Serializable)accessor);
 	}
 
 	/**
@@ -202,7 +197,7 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 			throw new OAuthException(ioe);
 		}
 
-		OAuthAccessor accessor = (OAuthAccessor)_portalCache.get(consumerToken);
+		OAuthAccessor accessor = (OAuthAccessor)_cache.get(consumerToken);
 
 		if (accessor == null) {
 			throw new OAuthException(OAuthConstants.TOKEN_EXPIRED);
@@ -216,7 +211,7 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 
 		String consumerKey = requestMessage.getConsumerKey();
 
-		Application application = ApplicationLocalServiceUtil.getApplication(
+		Application application = ApplicationLocalServiceUtil.fetchApplication(
 			consumerKey);
 
 		if (application == null) {
@@ -227,22 +222,18 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 	}
 
 	public OAuthMessage getMessage(HttpServletRequest request) {
-
 		return getMessage(request, null);
 	}
 
 	public OAuthMessage getMessage(HttpServletRequest request, String url) {
-
 		return new OAuthMessageImpl(OAuthServlet.getMessage(request, url));
 	}
 
 	public OAuthMessage getMessage(PortletRequest portletRequest) {
-
 		return getMessage(portletRequest, null);
 	}
 
 	public OAuthMessage getMessage(PortletRequest portletRequest, String url) {
-
 		HttpServletRequest request = PortalUtil.getHttpServletRequest(
 			portletRequest);
 
@@ -250,8 +241,8 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 	}
 
 	public void handleException(
-		HttpServletRequest request, HttpServletResponse response,
-		Exception exception, boolean sendBody)
+			HttpServletRequest request, HttpServletResponse response,
+			Exception exception, boolean sendBody)
 		throws IOException, ServletException {
 
 		String realm = Http.HTTP_WITH_SLASH;
@@ -263,22 +254,16 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 		realm += request.getLocalName();
 
 		if (exception.getCause() != null) {
-			exception = (Exception) exception.getCause();
+			exception = (Exception)exception.getCause();
 		}
 
 		OAuthServlet.handleException(response, exception, realm, sendBody);
 	}
 
 	public String randomizeToken(String token) {
+		String random = PwdGenerator.getPassword(12);
 
-		token =
-			token.concat(
-				PwdGenerator.getPassword(
-					PwdGenerator.KEY1
-					.concat(PwdGenerator.KEY2)
-					.concat(PwdGenerator.KEY3), 12));
-
-		return DigestUtils.md5Hex(token);
+		return DigestUtils.md5Hex(token.concat(random));
 	}
 
 	public void validateMessage(OAuthMessage message, OAuthAccessor accessor)
@@ -287,10 +272,8 @@ public class OAuth_1_0_AImpl implements com.liferay.oauth.OAuth {
 		_oAuthValidator.validateMessage(message, accessor);
 	}
 
-	private static final String _CACHE_NAME = OAuth_1_0_AImpl.class.getName();
-
-	private static PortalCache<String, Serializable> _portalCache =
-		MultiVMPoolUtil.getCache(_CACHE_NAME);
+	private static final PortalCache<String, Serializable> _cache =
+		MultiVMPoolUtil.getCache(OAuth_1_0_AImpl.class.getName());
 
 	private OAuthValidator _oAuthValidator;
 

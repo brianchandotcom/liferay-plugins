@@ -111,231 +111,60 @@ public class ApplicationUserUtil {
 	}
 
 	/**
-	* Returns all the application users where accessToken = &#63;.
+	* Returns the application user where accessToken = &#63; or throws a {@link com.liferay.oauth.NoSuchApplicationUserException} if it could not be found.
 	*
 	* @param accessToken the access token
-	* @return the matching application users
+	* @return the matching application user
+	* @throws com.liferay.oauth.NoSuchApplicationUserException if a matching application user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static java.util.List<com.liferay.oauth.model.ApplicationUser> findByAccessToken(
+	public static com.liferay.oauth.model.ApplicationUser findByAccessToken(
 		java.lang.String accessToken)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.oauth.NoSuchApplicationUserException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().findByAccessToken(accessToken);
 	}
 
 	/**
-	* Returns a range of all the application users where accessToken = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationUserModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
+	* Returns the application user where accessToken = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	*
 	* @param accessToken the access token
-	* @param start the lower bound of the range of application users
-	* @param end the upper bound of the range of application users (not inclusive)
-	* @return the range of matching application users
+	* @return the matching application user, or <code>null</code> if a matching application user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static java.util.List<com.liferay.oauth.model.ApplicationUser> findByAccessToken(
-		java.lang.String accessToken, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByAccessToken(accessToken, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the application users where accessToken = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationUserModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param accessToken the access token
-	* @param start the lower bound of the range of application users
-	* @param end the upper bound of the range of application users (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching application users
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.oauth.model.ApplicationUser> findByAccessToken(
-		java.lang.String accessToken, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByAccessToken(accessToken, start, end, orderByComparator);
-	}
-
-	/**
-	* Returns the first application user in the ordered set where accessToken = &#63;.
-	*
-	* @param accessToken the access token
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching application user
-	* @throws com.liferay.oauth.NoSuchApplicationUserException if a matching application user could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.ApplicationUser findByAccessToken_First(
-		java.lang.String accessToken,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.oauth.NoSuchApplicationUserException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByAccessToken_First(accessToken, orderByComparator);
-	}
-
-	/**
-	* Returns the first application user in the ordered set where accessToken = &#63;.
-	*
-	* @param accessToken the access token
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching application user, or <code>null</code> if a matching application user could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.ApplicationUser fetchByAccessToken_First(
-		java.lang.String accessToken,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByAccessToken_First(accessToken, orderByComparator);
-	}
-
-	/**
-	* Returns the last application user in the ordered set where accessToken = &#63;.
-	*
-	* @param accessToken the access token
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching application user
-	* @throws com.liferay.oauth.NoSuchApplicationUserException if a matching application user could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.ApplicationUser findByAccessToken_Last(
-		java.lang.String accessToken,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.oauth.NoSuchApplicationUserException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByAccessToken_Last(accessToken, orderByComparator);
-	}
-
-	/**
-	* Returns the last application user in the ordered set where accessToken = &#63;.
-	*
-	* @param accessToken the access token
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching application user, or <code>null</code> if a matching application user could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.ApplicationUser fetchByAccessToken_Last(
-		java.lang.String accessToken,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .fetchByAccessToken_Last(accessToken, orderByComparator);
-	}
-
-	/**
-	* Returns the application users before and after the current application user in the ordered set where accessToken = &#63;.
-	*
-	* @param oaauId the primary key of the current application user
-	* @param accessToken the access token
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next application user
-	* @throws com.liferay.oauth.NoSuchApplicationUserException if a application user with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.oauth.model.ApplicationUser[] findByAccessToken_PrevAndNext(
-		long oaauId, java.lang.String accessToken,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.oauth.NoSuchApplicationUserException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .findByAccessToken_PrevAndNext(oaauId, accessToken,
-			orderByComparator);
-	}
-
-	/**
-	* Returns all the application users that the user has permission to view where accessToken = &#63;.
-	*
-	* @param accessToken the access token
-	* @return the matching application users that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.oauth.model.ApplicationUser> filterFindByAccessToken(
+	public static com.liferay.oauth.model.ApplicationUser fetchByAccessToken(
 		java.lang.String accessToken)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterFindByAccessToken(accessToken);
+		return getPersistence().fetchByAccessToken(accessToken);
 	}
 
 	/**
-	* Returns a range of all the application users that the user has permission to view where accessToken = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationUserModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
+	* Returns the application user where accessToken = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	*
 	* @param accessToken the access token
-	* @param start the lower bound of the range of application users
-	* @param end the upper bound of the range of application users (not inclusive)
-	* @return the range of matching application users that the user has permission to view
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching application user, or <code>null</code> if a matching application user could not be found
 	* @throws SystemException if a system exception occurred
 	*/
-	public static java.util.List<com.liferay.oauth.model.ApplicationUser> filterFindByAccessToken(
-		java.lang.String accessToken, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterFindByAccessToken(accessToken, start, end);
-	}
-
-	/**
-	* Returns an ordered range of all the application users that the user has permissions to view where accessToken = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.oauth.model.impl.ApplicationUserModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param accessToken the access token
-	* @param start the lower bound of the range of application users
-	* @param end the upper bound of the range of application users (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching application users that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static java.util.List<com.liferay.oauth.model.ApplicationUser> filterFindByAccessToken(
-		java.lang.String accessToken, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+	public static com.liferay.oauth.model.ApplicationUser fetchByAccessToken(
+		java.lang.String accessToken, boolean retrieveFromCache)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence()
-				   .filterFindByAccessToken(accessToken, start, end,
-			orderByComparator);
+				   .fetchByAccessToken(accessToken, retrieveFromCache);
 	}
 
 	/**
-	* Returns the application users before and after the current application user in the ordered set of application users that the user has permission to view where accessToken = &#63;.
+	* Removes the application user where accessToken = &#63; from the database.
 	*
-	* @param oaauId the primary key of the current application user
 	* @param accessToken the access token
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next application user
-	* @throws com.liferay.oauth.NoSuchApplicationUserException if a application user with the primary key could not be found
+	* @return the application user that was removed
 	* @throws SystemException if a system exception occurred
 	*/
-	public static com.liferay.oauth.model.ApplicationUser[] filterFindByAccessToken_PrevAndNext(
-		long oaauId, java.lang.String accessToken,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+	public static com.liferay.oauth.model.ApplicationUser removeByAccessToken(
+		java.lang.String accessToken)
 		throws com.liferay.oauth.NoSuchApplicationUserException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence()
-				   .filterFindByAccessToken_PrevAndNext(oaauId, accessToken,
-			orderByComparator);
-	}
-
-	/**
-	* Removes all the application users where accessToken = &#63; from the database.
-	*
-	* @param accessToken the access token
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByAccessToken(java.lang.String accessToken)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByAccessToken(accessToken);
+		return getPersistence().removeByAccessToken(accessToken);
 	}
 
 	/**
@@ -348,18 +177,6 @@ public class ApplicationUserUtil {
 	public static int countByAccessToken(java.lang.String accessToken)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getPersistence().countByAccessToken(accessToken);
-	}
-
-	/**
-	* Returns the number of application users that the user has permission to view where accessToken = &#63;.
-	*
-	* @param accessToken the access token
-	* @return the number of matching application users that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int filterCountByAccessToken(java.lang.String accessToken)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().filterCountByAccessToken(accessToken);
 	}
 
 	/**

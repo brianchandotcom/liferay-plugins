@@ -24,8 +24,8 @@ String verifier = (String)request.getAttribute(OAuthConstants.VERIFIER);
 String callback = ParamUtil.getString(request, OAuthConstants.OAUTH_CALLBACK, OAuthConstants.NONE);
 
 boolean tokenExpired =
-		GetterUtil.get(SessionErrors.contains(renderRequest, OAuthConstants.TOKEN_EXPIRED), false) ||
-		OAuthConstants.TOKEN_EXPIRED.equals(SessionErrors.get(renderRequest, OAuthException.class));
+	GetterUtil.get(SessionErrors.contains(renderRequest, OAuthConstants.TOKEN_EXPIRED), false) ||
+	OAuthConstants.TOKEN_EXPIRED.equals(SessionErrors.get(renderRequest, OAuthException.class));
 %>
 
 <c:if test="<%= tokenExpired %>">

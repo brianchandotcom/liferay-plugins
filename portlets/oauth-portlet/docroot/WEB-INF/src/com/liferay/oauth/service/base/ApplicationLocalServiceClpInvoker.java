@@ -98,110 +98,78 @@ public class ApplicationLocalServiceClpInvoker {
 				"com.liferay.oauth.model.Application"
 			};
 
-		_methodName37 = "getBeanIdentifier";
+		_methodName39 = "getBeanIdentifier";
 
-		_methodParameterTypes37 = new String[] {  };
+		_methodParameterTypes39 = new String[] {  };
 
-		_methodName38 = "setBeanIdentifier";
+		_methodName40 = "setBeanIdentifier";
 
-		_methodParameterTypes38 = new String[] { "java.lang.String" };
+		_methodParameterTypes40 = new String[] { "java.lang.String" };
 
-		_methodName43 = "addApplication";
+		_methodName45 = "addApplication";
 
-		_methodParameterTypes43 = new String[] {
+		_methodParameterTypes45 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "int",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName44 = "deleteApplication";
+		_methodName46 = "deleteApplication";
 
-		_methodParameterTypes44 = new String[] {
+		_methodParameterTypes46 = new String[] {
 				"com.liferay.oauth.model.Application",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName45 = "deleteApplication";
+		_methodName47 = "deleteApplication";
 
-		_methodParameterTypes45 = new String[] {
+		_methodParameterTypes47 = new String[] {
 				"long", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName46 = "fetchApplication";
+		_methodName48 = "fetchApplication";
 
-		_methodParameterTypes46 = new String[] { "java.lang.String" };
+		_methodParameterTypes48 = new String[] { "java.lang.String" };
 
-		_methodName47 = "getApplication";
+		_methodName49 = "getApplication";
 
-		_methodParameterTypes47 = new String[] { "java.lang.String" };
-
-		_methodName48 = "getApplications";
-
-		_methodParameterTypes48 = new String[] { "long" };
-
-		_methodName49 = "getApplications";
-
-		_methodParameterTypes49 = new String[] {
-				"long", "int", "int",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			};
+		_methodParameterTypes49 = new String[] { "java.lang.String" };
 
 		_methodName50 = "getApplications";
 
 		_methodParameterTypes50 = new String[] {
-				"long", "java.lang.String", "int", "int",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			};
-
-		_methodName51 = "getApplicationsByCN";
-
-		_methodParameterTypes51 = new String[] { "long", "java.lang.String" };
-
-		_methodName52 = "getApplicationsByON";
-
-		_methodParameterTypes52 = new String[] { "long", "java.lang.String" };
-
-		_methodName53 = "getApplicationsByON";
-
-		_methodParameterTypes53 = new String[] {
-				"long", "java.lang.String", "int", "int",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			};
-
-		_methodName54 = "getApplicationsByOwner";
-
-		_methodParameterTypes54 = new String[] {
 				"long", "int", "int",
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			};
 
-		_methodName55 = "getApplicationsByUserIdCount";
+		_methodName51 = "getApplicationsCount";
 
-		_methodParameterTypes55 = new String[] { "long" };
+		_methodParameterTypes51 = new String[] { "long" };
 
-		_methodName56 = "getApplicationsCount";
+		_methodName52 = "search";
 
-		_methodParameterTypes56 = new String[] { "long" };
+		_methodParameterTypes52 = new String[] {
+				"long", "java.lang.String", "java.util.LinkedHashMap", "int",
+				"int", "com.liferay.portal.kernel.util.OrderByComparator"
+			};
 
-		_methodName57 = "getApplicationsCountByCN";
+		_methodName53 = "searchCount";
 
-		_methodParameterTypes57 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes53 = new String[] {
+				"long", "java.lang.String", "java.util.LinkedHashMap"
+			};
 
-		_methodName58 = "getApplicationsCountByON";
+		_methodName54 = "updateApplication";
 
-		_methodParameterTypes58 = new String[] { "long", "java.lang.String" };
-
-		_methodName59 = "updateApplication";
-
-		_methodParameterTypes59 = new String[] {
-				"long", "long", "java.lang.String", "java.lang.String",
+		_methodParameterTypes54 = new String[] {
+				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName60 = "updateLogo";
+		_methodName55 = "updateLogo";
 
-		_methodParameterTypes60 = new String[] { "long", "byte[][]" };
+		_methodParameterTypes55 = new String[] { "long", "byte[][]" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -287,20 +255,20 @@ public class ApplicationLocalServiceClpInvoker {
 			return ApplicationLocalServiceUtil.updateApplication((com.liferay.oauth.model.Application)arguments[0]);
 		}
 
-		if (_methodName37.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes37, parameterTypes)) {
+		if (_methodName39.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes39, parameterTypes)) {
 			return ApplicationLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName38.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
+		if (_methodName40.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes40, parameterTypes)) {
 			ApplicationLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName43.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
+		if (_methodName45.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
 			return ApplicationLocalServiceUtil.addApplication(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
@@ -308,112 +276,68 @@ public class ApplicationLocalServiceClpInvoker {
 				(com.liferay.portal.service.ServiceContext)arguments[6]);
 		}
 
-		if (_methodName44.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
+		if (_methodName46.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
 			return ApplicationLocalServiceUtil.deleteApplication((com.liferay.oauth.model.Application)arguments[0],
 				(com.liferay.portal.service.ServiceContext)arguments[1]);
 		}
 
-		if (_methodName45.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+		if (_methodName47.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
 			return ApplicationLocalServiceUtil.deleteApplication(((Long)arguments[0]).longValue(),
 				(com.liferay.portal.service.ServiceContext)arguments[1]);
 		}
 
-		if (_methodName46.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
-			return ApplicationLocalServiceUtil.fetchApplication((java.lang.String)arguments[0]);
-		}
-
-		if (_methodName47.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplication((java.lang.String)arguments[0]);
-		}
-
 		if (_methodName48.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplications(((Long)arguments[0]).longValue());
+			return ApplicationLocalServiceUtil.fetchApplication((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName49.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplications(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue(),
-				(com.liferay.portal.kernel.util.OrderByComparator)arguments[3]);
+			return ApplicationLocalServiceUtil.getApplication((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName50.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
 			return ApplicationLocalServiceUtil.getApplications(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1],
-				((Integer)arguments[2]).intValue(),
-				((Integer)arguments[3]).intValue(),
-				(com.liferay.portal.kernel.util.OrderByComparator)arguments[4]);
-		}
-
-		if (_methodName51.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplicationsByCN(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
-		}
-
-		if (_methodName52.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplicationsByON(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
-		}
-
-		if (_methodName53.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplicationsByON(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1],
-				((Integer)arguments[2]).intValue(),
-				((Integer)arguments[3]).intValue(),
-				(com.liferay.portal.kernel.util.OrderByComparator)arguments[4]);
-		}
-
-		if (_methodName54.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplicationsByOwner(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
 				(com.liferay.portal.kernel.util.OrderByComparator)arguments[3]);
 		}
 
-		if (_methodName55.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplicationsByUserIdCount(((Long)arguments[0]).longValue());
-		}
-
-		if (_methodName56.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
 			return ApplicationLocalServiceUtil.getApplicationsCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName57.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplicationsCountByCN(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+			return ApplicationLocalServiceUtil.search(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				(java.util.LinkedHashMap<java.lang.String, java.lang.Object>)arguments[2],
+				((Integer)arguments[3]).intValue(),
+				((Integer)arguments[4]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[5]);
 		}
 
-		if (_methodName58.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
-			return ApplicationLocalServiceUtil.getApplicationsCountByON(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+			return ApplicationLocalServiceUtil.searchCount(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				(java.util.LinkedHashMap<java.lang.String, java.lang.Object>)arguments[2]);
 		}
 
-		if (_methodName59.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
 			return ApplicationLocalServiceUtil.updateApplication(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue(),
-				(java.lang.String)arguments[2], (java.lang.String)arguments[3],
-				(java.lang.String)arguments[4], (java.lang.String)arguments[5],
-				(com.liferay.portal.service.ServiceContext)arguments[6]);
+				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
+				(java.lang.String)arguments[3], (java.lang.String)arguments[4],
+				(com.liferay.portal.service.ServiceContext)arguments[5]);
 		}
 
-		if (_methodName60.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
 			return ApplicationLocalServiceUtil.updateLogo(((Long)arguments[0]).longValue(),
 				(byte[])arguments[1]);
 		}
@@ -451,14 +375,10 @@ public class ApplicationLocalServiceClpInvoker {
 	private String[] _methodParameterTypes13;
 	private String _methodName14;
 	private String[] _methodParameterTypes14;
-	private String _methodName37;
-	private String[] _methodParameterTypes37;
-	private String _methodName38;
-	private String[] _methodParameterTypes38;
-	private String _methodName43;
-	private String[] _methodParameterTypes43;
-	private String _methodName44;
-	private String[] _methodParameterTypes44;
+	private String _methodName39;
+	private String[] _methodParameterTypes39;
+	private String _methodName40;
+	private String[] _methodParameterTypes40;
 	private String _methodName45;
 	private String[] _methodParameterTypes45;
 	private String _methodName46;
@@ -481,14 +401,4 @@ public class ApplicationLocalServiceClpInvoker {
 	private String[] _methodParameterTypes54;
 	private String _methodName55;
 	private String[] _methodParameterTypes55;
-	private String _methodName56;
-	private String[] _methodParameterTypes56;
-	private String _methodName57;
-	private String[] _methodParameterTypes57;
-	private String _methodName58;
-	private String[] _methodParameterTypes58;
-	private String _methodName59;
-	private String[] _methodParameterTypes59;
-	private String _methodName60;
-	private String[] _methodParameterTypes60;
 }

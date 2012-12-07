@@ -28,8 +28,6 @@ import java.io.IOException;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
 
 /**
  *
@@ -41,22 +39,17 @@ public class AuthorizationsPortlet extends MVCPortlet {
 	public void deleteOAuthAppUsr(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortletException {
+
 		long applicationId = ParamUtil.getLong(
-				actionRequest, OAuthConstants.APPLICATION_ID, 0L);
+			actionRequest, OAuthConstants.APPLICATION_ID);
 
 		try {
 			if (applicationId > 0) {
 				ServiceContext serviceContext =
-						ServiceContextFactory.getInstance(actionRequest);
+					ServiceContextFactory.getInstance(actionRequest);
 
-				ApplicationUserLocalServiceUtil
-					.deleteApplicationUser(
-						applicationId, serviceContext.getUserId(),
-						serviceContext);
-			}
-			else {
-				SessionErrors.add(
-						actionRequest, "cant-complete-operation-without-id");
+				ApplicationUserLocalServiceUtil.deleteApplicationUser(
+					applicationId, serviceContext.getUserId(), serviceContext);
 			}
 		}
 		catch (Exception e) {
@@ -67,20 +60,6 @@ public class AuthorizationsPortlet extends MVCPortlet {
 				throw new PortletException(e.fillInStackTrace());
 			}
 		}
-
-	}
-
-	@Override
-	public void processAction(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws IOException, PortletException {
-		super.processAction(actionRequest, actionResponse);
-	}
-
-	@Override
-	public void render(RenderRequest request, RenderResponse response)
-			throws IOException, PortletException {
-		super.render(request, response);
 	}
 
 }

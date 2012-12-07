@@ -18,9 +18,10 @@ import com.liferay.counter.service.CounterLocalService;
 
 import com.liferay.oauth.model.ApplicationUser;
 import com.liferay.oauth.service.ApplicationLocalService;
+import com.liferay.oauth.service.ApplicationService;
 import com.liferay.oauth.service.ApplicationUserLocalService;
+import com.liferay.oauth.service.ApplicationUserService;
 import com.liferay.oauth.service.persistence.ApplicationPersistence;
-import com.liferay.oauth.service.persistence.ApplicationUserFinder;
 import com.liferay.oauth.service.persistence.ApplicationUserPersistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -277,6 +278,24 @@ public abstract class ApplicationUserLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the application remote service.
+	 *
+	 * @return the application remote service
+	 */
+	public ApplicationService getApplicationService() {
+		return applicationService;
+	}
+
+	/**
+	 * Sets the application remote service.
+	 *
+	 * @param applicationService the application remote service
+	 */
+	public void setApplicationService(ApplicationService applicationService) {
+		this.applicationService = applicationService;
+	}
+
+	/**
 	 * Returns the application persistence.
 	 *
 	 * @return the application persistence
@@ -315,6 +334,25 @@ public abstract class ApplicationUserLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the application user remote service.
+	 *
+	 * @return the application user remote service
+	 */
+	public ApplicationUserService getApplicationUserService() {
+		return applicationUserService;
+	}
+
+	/**
+	 * Sets the application user remote service.
+	 *
+	 * @param applicationUserService the application user remote service
+	 */
+	public void setApplicationUserService(
+		ApplicationUserService applicationUserService) {
+		this.applicationUserService = applicationUserService;
+	}
+
+	/**
 	 * Returns the application user persistence.
 	 *
 	 * @return the application user persistence
@@ -331,25 +369,6 @@ public abstract class ApplicationUserLocalServiceBaseImpl
 	public void setApplicationUserPersistence(
 		ApplicationUserPersistence applicationUserPersistence) {
 		this.applicationUserPersistence = applicationUserPersistence;
-	}
-
-	/**
-	 * Returns the application user finder.
-	 *
-	 * @return the application user finder
-	 */
-	public ApplicationUserFinder getApplicationUserFinder() {
-		return applicationUserFinder;
-	}
-
-	/**
-	 * Sets the application user finder.
-	 *
-	 * @param applicationUserFinder the application user finder
-	 */
-	public void setApplicationUserFinder(
-		ApplicationUserFinder applicationUserFinder) {
-		this.applicationUserFinder = applicationUserFinder;
 	}
 
 	/**
@@ -524,14 +543,16 @@ public abstract class ApplicationUserLocalServiceBaseImpl
 
 	@BeanReference(type = ApplicationLocalService.class)
 	protected ApplicationLocalService applicationLocalService;
+	@BeanReference(type = ApplicationService.class)
+	protected ApplicationService applicationService;
 	@BeanReference(type = ApplicationPersistence.class)
 	protected ApplicationPersistence applicationPersistence;
 	@BeanReference(type = ApplicationUserLocalService.class)
 	protected ApplicationUserLocalService applicationUserLocalService;
+	@BeanReference(type = ApplicationUserService.class)
+	protected ApplicationUserService applicationUserService;
 	@BeanReference(type = ApplicationUserPersistence.class)
 	protected ApplicationUserPersistence applicationUserPersistence;
-	@BeanReference(type = ApplicationUserFinder.class)
-	protected ApplicationUserFinder applicationUserFinder;
 	@BeanReference(type = CounterLocalService.class)
 	protected CounterLocalService counterLocalService;
 	@BeanReference(type = ResourceLocalService.class)

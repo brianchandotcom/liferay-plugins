@@ -255,21 +255,6 @@ public class ApplicationUserLocalServiceWrapper
 			arguments);
 	}
 
-	/**
-	* Add new user's authorization for an existing application that is
-	* registered to use OAuth feature. All optional fields will be set to null
-	* or initial value (depending on data type). Method creates necessary
-	* resources used later by permissions algorithm.
-	*
-	* @param applicationId
-	* @param userId
-	* @param accessSecret
-	* @param accessToken
-	* @param serviceContext
-	* @return
-	* @throws PortalException
-	* @throws SystemException
-	*/
 	public com.liferay.oauth.model.ApplicationUser addApplicationUser(
 		long userId, long applicationId, java.lang.String accessToken,
 		java.lang.String accessSecret,
@@ -298,24 +283,31 @@ public class ApplicationUserLocalServiceWrapper
 			applicationId, serviceContext);
 	}
 
-	/**
-	* Return ApplicationUser with accessToken given by parameter.
-	*
-	* @param accessToken
-	* @return
-	* @throws SystemException
-	*/
-	public com.liferay.oauth.model.ApplicationUser getApplicationUserByAccessToken(
+	public com.liferay.oauth.model.ApplicationUser fetchApplicationUser(
 		java.lang.String accessToken)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationUserLocalService.getApplicationUserByAccessToken(accessToken);
+		return _applicationUserLocalService.fetchApplicationUser(accessToken);
 	}
 
-	public com.liferay.oauth.model.ApplicationUser getApplicationUserByApplicationId(
+	public com.liferay.oauth.model.ApplicationUser fetchApplicationUser(
 		long userId, long applicationId)
-		throws com.liferay.oauth.NoSuchApplicationUserException,
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _applicationUserLocalService.fetchApplicationUser(userId,
+			applicationId);
+	}
+
+	public com.liferay.oauth.model.ApplicationUser getApplicationUser(
+		java.lang.String accessToken)
+		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _applicationUserLocalService.getApplicationUserByApplicationId(userId,
+		return _applicationUserLocalService.getApplicationUser(accessToken);
+	}
+
+	public com.liferay.oauth.model.ApplicationUser getApplicationUser(
+		long userId, long applicationId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _applicationUserLocalService.getApplicationUser(userId,
 			applicationId);
 	}
 
@@ -331,24 +323,6 @@ public class ApplicationUserLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _applicationUserLocalService.getApplicationUsers(applicationId,
 			start, end, orderByComparator);
-	}
-
-	public java.util.List<com.liferay.oauth.model.ApplicationUser> getApplicationUsersByOwnerId(
-		long ownerId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationUserLocalService.getApplicationUsersByOwnerId(ownerId,
-			start, end, orderByComparator);
-	}
-
-	public int getApplicationUsersByOwnerIdCount(long ownerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationUserLocalService.getApplicationUsersByOwnerIdCount(ownerId);
-	}
-
-	public java.util.List<com.liferay.oauth.model.ApplicationUser> getApplicationUsersByUserId(
-		long userId) throws com.liferay.portal.kernel.exception.SystemException {
-		return _applicationUserLocalService.getApplicationUsersByUserId(userId);
 	}
 
 	public java.util.List<com.liferay.oauth.model.ApplicationUser> getApplicationUsersByUserId(
@@ -369,20 +343,6 @@ public class ApplicationUserLocalServiceWrapper
 		return _applicationUserLocalService.getApplicationUsersCount(applicationId);
 	}
 
-	/**
-	* Update user's authorization for an existing application that is
-	* registered to use OAuth feature. If entity doesn't exist new one (with
-	* resources for later permissions check) will be created.
-	*
-	* @param applicationId
-	* @param userId
-	* @param accessSecret
-	* @param accessToken
-	* @param serviceContext
-	* @return
-	* @throws PortalException
-	* @throws SystemException
-	*/
 	public com.liferay.oauth.model.ApplicationUser updateApplicationUser(
 		long userId, long applicationId, java.lang.String accessToken,
 		java.lang.String accessSecret,

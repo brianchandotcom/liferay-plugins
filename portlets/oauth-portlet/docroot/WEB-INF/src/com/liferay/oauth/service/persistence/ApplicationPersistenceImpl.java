@@ -2099,8 +2099,8 @@ public class ApplicationPersistenceImpl extends BasePersistenceImpl<Application>
 
 	private static final String _FINDER_COLUMN_C_N_COMPANYID_2 = "application.companyId = ? AND ";
 	private static final String _FINDER_COLUMN_C_N_NAME_1 = "application.name LIKE NULL";
-	private static final String _FINDER_COLUMN_C_N_NAME_2 = "application.name LIKE ?";
-	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(application.name IS NULL OR application.name LIKE ?)";
+	private static final String _FINDER_COLUMN_C_N_NAME_2 = "lower(application.name) LIKE lower(CAST_TEXT(?))";
+	private static final String _FINDER_COLUMN_C_N_NAME_3 = "(application.name IS NULL OR lower(application.name) LIKE lower(CAST_TEXT(?)))";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_U_N = new FinderPath(ApplicationModelImpl.ENTITY_CACHE_ENABLED,
 			ApplicationModelImpl.FINDER_CACHE_ENABLED, ApplicationImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByU_N",
@@ -3042,8 +3042,8 @@ public class ApplicationPersistenceImpl extends BasePersistenceImpl<Application>
 
 	private static final String _FINDER_COLUMN_U_N_USERID_2 = "application.userId = ? AND ";
 	private static final String _FINDER_COLUMN_U_N_NAME_1 = "application.name LIKE NULL";
-	private static final String _FINDER_COLUMN_U_N_NAME_2 = "application.name LIKE ?";
-	private static final String _FINDER_COLUMN_U_N_NAME_3 = "(application.name IS NULL OR application.name LIKE ?)";
+	private static final String _FINDER_COLUMN_U_N_NAME_2 = "lower(application.name) LIKE lower(CAST_TEXT(?))";
+	private static final String _FINDER_COLUMN_U_N_NAME_3 = "(application.name IS NULL OR lower(application.name) LIKE lower(CAST_TEXT(?)))";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_USERID = new FinderPath(ApplicationModelImpl.ENTITY_CACHE_ENABLED,
 			ApplicationModelImpl.FINDER_CACHE_ENABLED, ApplicationImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUserId",

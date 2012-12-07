@@ -17,6 +17,9 @@
 <%@ include file="/html/init.jsp" %>
 
 <%
+String redirect = ParamUtil.getString(request, "redirect");
+String backURL = ParamUtil.getString(request, "backURL");
+
 Application app = (Application)request.getAttribute(OAuthConstants.BEAN_ID);
 
 String actionName = "addApplication";
@@ -27,20 +30,22 @@ if ((null != app) && (0L != app.getApplicationId())) {
 	actionName = "updateApplication";
 	isNew = false;
 }
-
-String backURL = ParamUtil.getString(request, "referer");
 %>
-
-<h3><liferay-ui:message key="<%= actionName %>" /></h3>
-<liferay-ui:error-marker key="errorSection" value="details" />
 
 <liferay-portlet:actionURL name="<%= actionName %>" var="addApplicationURL">
 	<portlet:param name="mvcPath" value="/html/admin/edit.jsp" />
-	<portlet:param name="referer" value="<%= backURL %>" />
 </liferay-portlet:actionURL>
 
 <aui:form action="<%= addApplicationURL %>" method="post" name="fm">
-	<aui:input id="applicationId" name="applicationId" type="hidden" value='<%= isNew ? "" : app.getApplicationId() %>'/>
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="backURL" type="hidden" value="<%= backURL %>" />
+	<aui:input name="applicationId" type="hidden" value='<%= isNew ? "" : app.getApplicationId() %>'/>
+
+	<liferay-ui:header
+		backURL="<%= backURL %>"
+		localizeTitle="<%= (app == null) %>"
+		title='<%= (app == null) ? "new-application" : app.getName() %>'
+	/>
 
 	<liferay-ui:error exception="<%= MalformedURLException.class %>" message="please-enter-a-valid-url" />
 	<liferay-ui:error exception="<%= RequiredFieldException.class %>" message="this-field-is-required" />
@@ -51,11 +56,14 @@ String backURL = ParamUtil.getString(request, "referer");
 		<aui:input label="name" name="<%= OAuthConstants.NAME %>">
 			<aui:validator name="required" />
 		</aui:input>
+
 		<aui:input cols="65" label="description" name="<%= OAuthConstants.DESCRIPTION %>" rows="5" type="textarea" />
+
 		<aui:input label="website" name="<%= OAuthConstants.WEBSITE %>">
 			<aui:validator name="required" />
 			<aui:validator name="url" />
 		</aui:input>
+
 		<aui:input label="callback-url" name="<%= OAuthConstants.CALLBACK_URL %>">
 			<aui:validator name="required" />
 			<aui:validator name="url" />
@@ -79,7 +87,10 @@ String backURL = ParamUtil.getString(request, "referer");
 				<portlet:param name="applicationId" value="<%= StringUtil.valueOf(app.getApplicationId()) %>" />
 			</portlet:renderURL>
 
-			<h3><liferay-ui:message key="logo" /></h3>
+			<h3>
+				<liferay-ui:message key="logo" />
+			</h3>
+
 			<liferay-ui:logo-selector
 				defaultLogoURL='<%= themeDisplay.getPathImage() + "/logo?img_id=0" %>'
 				editLogoURL="<%= editApplicationLogoURL %>"
@@ -89,7 +100,8 @@ String backURL = ParamUtil.getString(request, "referer");
 
 		<aui:button-row>
 			<aui:button type="submit" />
-			<aui:button href="<%= backURL %>" value="back" />
+
+			<aui:button href="<%= redirect %>" type="cancel" />
 		</aui:button-row>
 	</aui:fieldset>
 </aui:form>

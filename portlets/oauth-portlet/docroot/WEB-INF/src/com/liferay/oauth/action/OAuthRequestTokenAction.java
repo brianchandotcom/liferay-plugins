@@ -66,11 +66,13 @@ public class OAuthRequestTokenAction extends BaseStrutsAction {
 			response.setContentType("text/plain");
 
 			OutputStream out = response.getOutputStream();
+
 			OAuthUtil.formEncode(
 				accessor.getRequestToken(), accessor.getTokenSecret(), out);
 
 			out.close();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			OAuthUtil.handleException(request, response, e, true);
 		}
 

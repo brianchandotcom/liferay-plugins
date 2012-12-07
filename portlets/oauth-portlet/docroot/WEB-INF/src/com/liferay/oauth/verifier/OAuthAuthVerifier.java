@@ -33,12 +33,11 @@ import java.util.Properties;
 public class OAuthAuthVerifier implements AuthVerifier {
 
 	public String getAuthType() {
-
 		return "OAuth";
 	}
 
 	public AuthVerifierResult verify(
-		AccessControlContext accessControlContext, Properties properties)
+			AccessControlContext accessControlContext, Properties properties)
 		throws AuthException {
 
 		AuthVerifierResult result = new AuthVerifierResult();
@@ -54,11 +53,11 @@ public class OAuthAuthVerifier implements AuthVerifier {
 
 		try {
 			applicationUser =
-				ApplicationUserLocalServiceUtil
-					.getApplicationUserByAccessToken(accessToken);
-
-		} catch (SystemException e) {
-			throw new AuthException(e);
+				ApplicationUserLocalServiceUtil.fetchApplicationUser(
+					accessToken);
+		}
+		catch (SystemException se) {
+			throw new AuthException(se);
 		}
 
 		if (applicationUser == null) {
