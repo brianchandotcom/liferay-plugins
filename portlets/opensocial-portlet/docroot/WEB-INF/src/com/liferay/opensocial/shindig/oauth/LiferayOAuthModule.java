@@ -18,6 +18,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
 import org.apache.shindig.common.crypto.BlobCrypter;
+import org.apache.shindig.gadgets.oauth.OAuthCallbackGenerator;
 import org.apache.shindig.gadgets.oauth.OAuthFetcherConfig;
 import org.apache.shindig.gadgets.oauth.OAuthModule.OAuthCrypterProvider;
 import org.apache.shindig.gadgets.oauth.OAuthModule.OAuthRequestProvider;
@@ -34,6 +35,8 @@ public class LiferayOAuthModule extends AbstractModule {
 		bind(BlobCrypter.class).annotatedWith(
 			Names.named(OAuthFetcherConfig.OAUTH_STATE_CRYPTER)).toProvider(
 				OAuthCrypterProvider.class);
+		bind(OAuthCallbackGenerator.class).to(
+			LiferayOAuthCallbackGenerator.class);
 		bind(OAuthRequest.class).toProvider(OAuthRequestProvider.class);
 		bind(OAuthStore.class).toProvider(LiferayOAuthStoreProvider.class);
 	}

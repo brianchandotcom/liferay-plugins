@@ -30,6 +30,7 @@ import com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -45,6 +46,12 @@ public class OpenSocialServletContextListener
 
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		registerPortalLifecycle();
+
+		ServletContext servletContext = servletContextEvent.getServletContext();
+
+		String contextPath = servletContext.getContextPath();
+
+		ShindigUtil.setContextPath(contextPath);
 	}
 
 	protected void checkExpando() throws Exception {

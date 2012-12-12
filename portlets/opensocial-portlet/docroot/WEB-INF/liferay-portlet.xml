@@ -49,7 +49,7 @@
 		<footer-portlet-javascript>/editor/CodeMirror_2.0_52_g68d004c/mode/javascript/javascript.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/editor/js/gadget-editor-tabs.js</footer-portlet-javascript>
 		<footer-portlet-javascript>/editor/js/gadget-editor-tree.js</footer-portlet-javascript>
-		<footer-portlet-javascript>/editor/js/main.js</footer-portlet-javascript>
+		<footer-portlet-javascript>/editor/js/javascript.jsp</footer-portlet-javascript>
 		<css-class-wrapper>opensocial-portlet-editor</css-class-wrapper>
 	</portlet>
 	<role-mapper>

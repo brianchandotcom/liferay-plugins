@@ -1,3 +1,5 @@
+<%@ page contentType="text/javascript; charset=UTF-8" %>
+
 AUI.add(
 	'opensocial-editor',
 	function(A) {
@@ -2100,7 +2102,7 @@ AUI.add(
 						instance._loadingMask.show();
 
 						Liferay.Service(
-							'/opensocial-portlet.gadget/delete-gadget',
+							'<%= request.getContextPath() %>.gadget/delete-gadget',
 							{
 								gadgetId: gadgetId
 							},
