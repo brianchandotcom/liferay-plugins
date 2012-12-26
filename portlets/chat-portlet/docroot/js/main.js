@@ -1109,6 +1109,8 @@ AUI().use(
 
 					instance._cacheLoaded = true;
 					instance._initialRequest = false;
+
+					instance._chatContainer.one('.chat-tabs > .buddy-list').removeClass('loading');
 				}
 			},
 
