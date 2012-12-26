@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.wsrp.util.PortletPropsValues;
@@ -25,6 +26,7 @@ import com.liferay.wsrp.util.WebKeys;
 
 import java.io.IOException;
 
+import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -44,12 +46,10 @@ public class ProxyServlet extends HttpServlet {
 		throws IOException {
 
 		try {
-			String urlString = ParamUtil.getString(request, "url");
-
-			URL url = new URL(urlString);
+			String url = ParamUtil.getString(request, "url");
 
 			if (isAllowedURL(url)) {
-				proxyURL(request, response, url);
+				proxyURL(request, response, new URL(url));
 			}
 		}
 		catch (Exception e) {
@@ -60,21 +60,28 @@ public class ProxyServlet extends HttpServlet {
 		}
 	}
 
-	protected boolean isAllowedURL(URL url) throws Exception {
-		if (PortletPropsValues.PROXY_URL_IPS_ALLOWED.length == 0) {
+	protected boolean isAllowedURL(String url) throws Exception {
+		String[] allowedIps = PortletPropsValues.PROXY_URL_IPS_ALLOWED;
+
+		if (allowedIps.length == 0) {
 			return true;
 		}
-		else {
-			String serverIp = PortalUtil.getComputerAddress();
 
-			for (String ip : PortletPropsValues.PROXY_URL_IPS_ALLOWED) {
-				String host = url.getHost();
+		String domain = HttpUtil.getDomain(url);
 
-				if ((ip.equals(_SERVER_IP) && host.equals(serverIp)) ||
-					host.equals(ip)) {
+		InetAddress inetAddress = InetAddress.getByName(domain);
 
-					return true;
-				}
+		String hostAddress = inetAddress.getHostAddress();
+
+		String serverIp = PortalUtil.getComputerAddress();
+
+		boolean serverIpIsHostAddress = serverIp.equals(hostAddress);
+
+		for (String ip : allowedIps) {
+			if ((serverIpIsHostAddress && ip.equals("SERVER_IP")) ||
+				ip.equals(hostAddress)) {
+
+				return true;
 			}
 		}
 
