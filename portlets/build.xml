@@ -6,6 +6,37 @@
 
 	<import file="../build-common-plugins.xml" />
 
+	<target name="check-dependencies">
+		<condition property="portlet.framework.name" value="${portlet.framework}">
+			<not>
+				<isset property="portlet.framework.name" />
+			</not>
+		</condition>
+
+		<propertycopy from="dependency.jar.urls[${portlet.framework.name}]" name="dependency.jars.urls" />
+
+		<for list="${dependency.jars.urls}" param="dependency.jar.url">
+			<sequential>
+				<local name="dependency.jar.filename" />
+
+				<basename file="@{dependency.jar.url}" property="dependency.jar.filename" />
+
+				<if>
+					<not>
+						<available file="${project.dir}/tools/portlet_${portlet.framework.name}_tmpl/docroot/WEB-INF/lib/${dependency.jar.filename}" />
+					</not>
+					<then>
+						<get
+							dest="${project.dir}/tools/portlet_${portlet.framework.name}_tmpl/docroot/WEB-INF/lib"
+							src="@{dependency.jar.url}"
+							verbose="true"
+						/>
+					</then>
+				</if>
+			</sequential>
+		</for>
+	</target>
+
 	<target name="create">
 		<if>
 			<or>
@@ -68,16 +99,30 @@
 						<if>
 							<or>
 								<equals arg1="${portlet.framework}" arg2="icefaces" />
+								<equals arg1="${portlet.framework}" arg2="jsf" />
 								<equals arg1="${portlet.framework}" arg2="liferay_faces_alloy" />
 								<equals arg1="${portlet.framework}" arg2="primefaces" />
 								<equals arg1="${portlet.framework}" arg2="richfaces" />
 							</or>
 							<then>
+								<antcall target="check-dependencies">
+									<param name="portlet.framework.name" value="jsf" />
+								</antcall>
+
 								<copy todir="${portlet.dir}">
 									<fileset
 										dir="${project.dir}/tools/portlet_jsf_tmpl"
 									/>
 								</copy>
+
+								<if>
+									<not>
+										<equals arg1="${portlet.framework}" arg2="jsf" />
+									</not>
+									<then>
+										<antcall target="check-dependencies" />
+									</then>
+								</if>
 							</then>
 						</if>
 

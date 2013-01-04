@@ -55,6 +55,19 @@
 	</target>
 
 	<target name="init-scala">
+		<if>
+			<not>
+				<available file="${project.dir}/lib/scala-compiler.jar" />
+			</not>
+			<then>
+				<get
+					dest="${project.dir}/lib/scala-compiler.jar"
+					src="${scala.compiler.url}"
+					verbose="true"
+				/>
+			</then>
+		</if>
+
 		<taskdef resource="scala/tools/ant/antlib.xml">
 			<classpath>
 				<pathelement location="${project.dir}/lib/scala-compiler.jar" />

@@ -22,3 +22,5 @@ _sass_cache_*.css
 
 /build.*.properties
 /dist
+/lib/scala-compiler.jar
+/tools/*/*/*/lib
