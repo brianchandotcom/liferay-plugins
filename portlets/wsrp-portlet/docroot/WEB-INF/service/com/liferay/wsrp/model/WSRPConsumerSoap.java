@@ -40,6 +40,7 @@ public class WSRPConsumerSoap implements Serializable {
 		soapModel.setWsdl(model.getWsdl());
 		soapModel.setRegistrationContextString(model.getRegistrationContextString());
 		soapModel.setRegistrationPropertiesString(model.getRegistrationPropertiesString());
+		soapModel.setAddDefaultResource(model.getAddDefaultResource());
 		soapModel.setForwardCookies(model.getForwardCookies());
 		soapModel.setForwardHeaders(model.getForwardHeaders());
 		soapModel.setMarkupCharacterSets(model.getMarkupCharacterSets());
@@ -176,6 +177,18 @@ public class WSRPConsumerSoap implements Serializable {
 		_registrationPropertiesString = registrationPropertiesString;
 	}
 
+	public boolean getAddDefaultResource() {
+		return _addDefaultResource;
+	}
+
+	public boolean isAddDefaultResource() {
+		return _addDefaultResource;
+	}
+
+	public void setAddDefaultResource(boolean addDefaultResource) {
+		_addDefaultResource = addDefaultResource;
+	}
+
 	public String getForwardCookies() {
 		return _forwardCookies;
 	}
@@ -210,6 +223,7 @@ public class WSRPConsumerSoap implements Serializable {
 	private String _wsdl;
 	private String _registrationContextString;
 	private String _registrationPropertiesString;
+	private boolean _addDefaultResource;
 	private String _forwardCookies;
 	private String _forwardHeaders;
 	private String _markupCharacterSets;

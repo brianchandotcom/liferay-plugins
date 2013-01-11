@@ -148,40 +148,44 @@ public class WSRPConsumerPortletLocalServiceClpInvoker {
 
 		_methodParameterTypes52 = new String[] {  };
 
-		_methodName53 = "getWSRPConsumerPortlet";
+		_methodName53 = "getPortletId";
 
-		_methodParameterTypes53 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes53 = new String[] { "java.lang.String" };
 
 		_methodName54 = "getWSRPConsumerPortlet";
 
-		_methodParameterTypes54 = new String[] { "java.lang.String" };
+		_methodParameterTypes54 = new String[] { "long", "java.lang.String" };
 
-		_methodName55 = "getWSRPConsumerPortlets";
+		_methodName55 = "getWSRPConsumerPortlet";
 
-		_methodParameterTypes55 = new String[] { "long", "int", "int" };
+		_methodParameterTypes55 = new String[] { "java.lang.String" };
 
-		_methodName56 = "getWSRPConsumerPortletsCount";
+		_methodName56 = "getWSRPConsumerPortlets";
 
-		_methodParameterTypes56 = new String[] { "long" };
+		_methodParameterTypes56 = new String[] { "long", "int", "int" };
 
-		_methodName57 = "initFailedWSRPConsumerPortlets";
+		_methodName57 = "getWSRPConsumerPortletsCount";
 
-		_methodParameterTypes57 = new String[] {  };
+		_methodParameterTypes57 = new String[] { "long" };
 
-		_methodName58 = "initWSRPConsumerPortlet";
+		_methodName58 = "initFailedWSRPConsumerPortlets";
 
-		_methodParameterTypes58 = new String[] {
+		_methodParameterTypes58 = new String[] {  };
+
+		_methodName59 = "initWSRPConsumerPortlet";
+
+		_methodParameterTypes59 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName59 = "initWSRPConsumerPortlets";
+		_methodName60 = "initWSRPConsumerPortlets";
 
-		_methodParameterTypes59 = new String[] {  };
+		_methodParameterTypes60 = new String[] {  };
 
-		_methodName60 = "updateWSRPConsumerPortlet";
+		_methodName61 = "updateWSRPConsumerPortlet";
 
-		_methodParameterTypes60 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes61 = new String[] { "long", "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -334,36 +338,41 @@ public class WSRPConsumerPortletLocalServiceClpInvoker {
 
 		if (_methodName53.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
-			return WSRPConsumerPortletLocalServiceUtil.getWSRPConsumerPortlet(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
+			return WSRPConsumerPortletLocalServiceUtil.getPortletId((java.lang.String)arguments[0]);
 		}
 
 		if (_methodName54.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
-			return WSRPConsumerPortletLocalServiceUtil.getWSRPConsumerPortlet((java.lang.String)arguments[0]);
+			return WSRPConsumerPortletLocalServiceUtil.getWSRPConsumerPortlet(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
 		}
 
 		if (_methodName55.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return WSRPConsumerPortletLocalServiceUtil.getWSRPConsumerPortlet((java.lang.String)arguments[0]);
+		}
+
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
 			return WSRPConsumerPortletLocalServiceUtil.getWSRPConsumerPortlets(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName56.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+		if (_methodName57.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
 			return WSRPConsumerPortletLocalServiceUtil.getWSRPConsumerPortletsCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName57.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
+		if (_methodName58.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
 			WSRPConsumerPortletLocalServiceUtil.initFailedWSRPConsumerPortlets();
 
 			return null;
 		}
 
-		if (_methodName58.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
+		if (_methodName59.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
 			WSRPConsumerPortletLocalServiceUtil.initWSRPConsumerPortlet(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -373,15 +382,15 @@ public class WSRPConsumerPortletLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName59.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
+		if (_methodName60.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
 			WSRPConsumerPortletLocalServiceUtil.initWSRPConsumerPortlets();
 
 			return null;
 		}
 
-		if (_methodName60.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
+		if (_methodName61.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
 			return WSRPConsumerPortletLocalServiceUtil.updateWSRPConsumerPortlet(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1]);
 		}
@@ -455,4 +464,6 @@ public class WSRPConsumerPortletLocalServiceClpInvoker {
 	private String[] _methodParameterTypes59;
 	private String _methodName60;
 	private String[] _methodParameterTypes60;
+	private String _methodName61;
+	private String[] _methodParameterTypes61;
 }
