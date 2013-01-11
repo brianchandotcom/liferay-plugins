@@ -219,6 +219,8 @@ public class AdminPortlet extends MVCPortlet {
 		String markupCharacterSets =
 			MarkupCharacterSetsUtil.getSupportedMarkupCharacterSets(
 				ParamUtil.getString(actionRequest, "markupCharacterSets"));
+		boolean addDefaultResource = ParamUtil.getBoolean(
+			actionRequest, "addDefaultResource", false);
 
 		if (wsrpConsumerId <= 0) {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
@@ -227,12 +229,12 @@ public class AdminPortlet extends MVCPortlet {
 			WSRPConsumerLocalServiceUtil.addWSRPConsumer(
 				themeDisplay.getCompanyId(), adminPortletId, name, url,
 				forwardCookies, forwardHeaders, markupCharacterSets,
-				serviceContext);
+				addDefaultResource, serviceContext);
 		}
 		else {
 			WSRPConsumerLocalServiceUtil.updateWSRPConsumer(
 				wsrpConsumerId, adminPortletId, name, url, forwardCookies,
-				forwardHeaders, markupCharacterSets);
+				forwardHeaders, markupCharacterSets, addDefaultResource);
 		}
 	}
 

@@ -338,7 +338,7 @@ public class ConsumerPortlet extends GenericPortlet {
 
 		processBlockingInteractionResponse(
 			actionRequest, actionResponse, wsrpConsumerManager, serviceHolder,
-			blockingInteractionResponse);
+			blockingInteractionResponse, wsrpConsumer.getAddDefaultResource());
 	}
 
 	protected void doProcessEvent(
@@ -398,17 +398,26 @@ public class ConsumerPortlet extends GenericPortlet {
 		MarkupContext markupContext =
 			(MarkupContext)portletSession.getAttribute(WebKeys.MARKUP_CONTEXT);
 
+		WSRPConsumerPortlet wsrpConsumerPortlet = getWSRPConsumerPortlet();
+
+		WSRPConsumer wsrpConsumer =
+			WSRPConsumerLocalServiceUtil.getWSRPConsumer(
+				wsrpConsumerPortlet.getWsrpConsumerId());
+
 		if (markupContext != null) {
 			portletSession.removeAttribute(WebKeys.MARKUP_CONTEXT);
 		}
 		else {
 			MarkupResponse markupResponse = getMarkupResponse(
-				renderRequest, renderResponse);
+				renderRequest, renderResponse, wsrpConsumer,
+				wsrpConsumerPortlet);
 
 			markupContext = markupResponse.getMarkupContext();
 		}
 
-		processMimeResponse(renderRequest, renderResponse, markupContext);
+		processMimeResponse(
+			renderRequest, renderResponse, markupContext,
+			wsrpConsumer.getAddDefaultResource());
 	}
 
 	protected void doServeResource(
@@ -433,7 +442,15 @@ public class ConsumerPortlet extends GenericPortlet {
 			getResource(resourceRequest, resourceResponse);
 		}
 		else if (Validator.isNotNull(url)) {
-			proxyURL(resourceRequest, resourceResponse, url);
+			WSRPConsumerPortlet wsrpConsumerPortlet = getWSRPConsumerPortlet();
+
+			WSRPConsumer wsrpConsumer =
+				WSRPConsumerLocalServiceUtil.getWSRPConsumer(
+					wsrpConsumerPortlet.getWsrpConsumerId());
+
+			proxyURL(
+				resourceRequest, resourceResponse, url,
+				wsrpConsumer.getAddDefaultResource());
 		}
 		else if (Validator.isNotNull(resourceID)) {
 			getResource(resourceRequest, resourceResponse);
@@ -508,16 +525,11 @@ public class ConsumerPortlet extends GenericPortlet {
 	}
 
 	protected MarkupResponse getMarkupResponse(
-			PortletRequest portletRequest, PortletResponse portletResponse)
+			PortletRequest portletRequest, PortletResponse portletResponse,
+			WSRPConsumer wsrpConsumer, WSRPConsumerPortlet wsrpConsumerPortlet)
 		throws Exception {
 
 		PortletSession portletSession = portletRequest.getPortletSession();
-
-		WSRPConsumerPortlet wsrpConsumerPortlet = getWSRPConsumerPortlet();
-
-		WSRPConsumer wsrpConsumer =
-			WSRPConsumerLocalServiceUtil.getWSRPConsumer(
-				wsrpConsumerPortlet.getWsrpConsumerId());
 
 		WSRPConsumerManager wsrpConsumerManager =
 			WSRPConsumerManagerFactory.getWSRPConsumerManager(wsrpConsumer);
@@ -775,9 +787,11 @@ public class ConsumerPortlet extends GenericPortlet {
 		oasis.names.tc.wsrp.v2.types.ResourceResponse wsrpResourceResponse =
 			markupService.getResource(getResource);
 
+		boolean addDefaultResource = wsrpConsumer.getAddDefaultResource();
+
 		processResourceResponse(
 			resourceRequest, resourceResponse, wsrpConsumerManager,
-			serviceHolder, wsrpResourceResponse);
+			serviceHolder, wsrpResourceResponse, addDefaultResource);
 	}
 
 	protected ServiceHolder getServiceHolder(
@@ -1314,13 +1328,15 @@ public class ConsumerPortlet extends GenericPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse,
 			WSRPConsumerManager wsrpConsumerManager,
 			ServiceHolder serviceHolder,
-			BlockingInteractionResponse blockingInteractionResponse)
+			BlockingInteractionResponse blockingInteractionResponse,
+			boolean addDefaultResource)
 		throws Exception {
 
 		String redirectURL = blockingInteractionResponse.getRedirectURL();
 
 		if (Validator.isNotNull(redirectURL)) {
-			sendRedirect(actionRequest, actionResponse, redirectURL);
+			sendRedirect(
+				actionRequest, actionResponse, redirectURL, addDefaultResource);
 
 			return;
 		}
@@ -1441,7 +1457,7 @@ public class ConsumerPortlet extends GenericPortlet {
 	protected void processMimeResponse(
 			PortletRequest portletRequest,
 			javax.portlet.MimeResponse jxMimeResponse,
-			MimeResponse mimeResponse)
+			MimeResponse mimeResponse, boolean addDefaultResource)
 		throws Exception {
 
 		String contentType = GetterUtil.get(
@@ -1467,7 +1483,7 @@ public class ConsumerPortlet extends GenericPortlet {
 			}
 
 			itemString = rewriteURLs(
-				portletRequest, jxMimeResponse, itemString);
+				portletRequest, jxMimeResponse, itemString, addDefaultResource);
 		}
 
 		if (Validator.isNotNull(itemString)) {
@@ -1620,7 +1636,8 @@ public class ConsumerPortlet extends GenericPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			WSRPConsumerManager wsrpConsumerManager,
 			ServiceHolder serviceHolder,
-			oasis.names.tc.wsrp.v2.types.ResourceResponse wsrpResourceResponse)
+			oasis.names.tc.wsrp.v2.types.ResourceResponse wsrpResourceResponse,
+			boolean addDefaultResource)
 		throws Exception {
 
 		PortletSession portletSession = resourceRequest.getPortletSession();
@@ -1677,7 +1694,9 @@ public class ConsumerPortlet extends GenericPortlet {
 			}
 		}
 
-		processMimeResponse(resourceRequest, resourceResponse, resourceContext);
+		processMimeResponse(
+			resourceRequest, resourceResponse, resourceContext,
+			addDefaultResource);
 	}
 
 	protected void processUpdateResponse(
@@ -1767,7 +1786,7 @@ public class ConsumerPortlet extends GenericPortlet {
 
 	protected void proxyURL(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
-			String url)
+			String url, boolean addDefaultResource)
 		throws Exception {
 
 		PortletSession portletSession = resourceRequest.getPortletSession();
@@ -1824,7 +1843,8 @@ public class ConsumerPortlet extends GenericPortlet {
 
 		if (ParamUtil.getBoolean(resourceRequest, "wsrp-requiresRewrite")) {
 			String content = rewriteURLs(
-				resourceRequest, resourceResponse, new String(bytes, charSet));
+				resourceRequest, resourceResponse, new String(bytes, charSet),
+				addDefaultResource);
 
 			PortletResponseUtil.write(resourceResponse, content);
 		}
@@ -1835,7 +1855,7 @@ public class ConsumerPortlet extends GenericPortlet {
 
 	protected String rewriteURL(
 			PortletRequest portletRequest, PortletResponse portletResponse,
-			Map<String, String> parameterMap)
+			Map<String, String> parameterMap, boolean addDefaultResource)
 		throws Exception {
 
 		LiferayPortletResponse liferayPortletResponse =
@@ -1862,6 +1882,9 @@ public class ConsumerPortlet extends GenericPortlet {
 					portletRequest, liferayPortletURL, parameterMap);
 			}
 		}
+
+		secureLiferayPortletURL(
+			portletRequest, liferayPortletURL, addDefaultResource);
 
 		for (Map.Entry<String, String> parameter : parameterMap.entrySet()) {
 			String name = parameter.getKey();
@@ -1930,7 +1953,7 @@ public class ConsumerPortlet extends GenericPortlet {
 
 	protected String rewriteURLs(
 			PortletRequest portletRequest, PortletResponse portletResponse,
-			String content)
+			String content, boolean addDefaultResource)
 		throws Exception {
 
 		Matcher rewriteMatcher = _rewritePattern.matcher(content);
@@ -1966,7 +1989,8 @@ public class ConsumerPortlet extends GenericPortlet {
 				}
 
 				String rewrittenURL = rewriteURL(
-					portletRequest, portletResponse, parameterMap);
+					portletRequest, portletResponse, parameterMap,
+					addDefaultResource);
 
 				rewriteMatcher.appendReplacement(sb, rewrittenURL);
 			}
@@ -1975,7 +1999,8 @@ public class ConsumerPortlet extends GenericPortlet {
 				parameterMap.put("wsrp-windowState", "wsrp:normal");
 
 				String rewrittenURL = rewriteURL(
-					portletRequest, portletResponse, parameterMap);
+					portletRequest, portletResponse, parameterMap,
+					addDefaultResource);
 
 				String replacement = "location.href = '" + rewrittenURL + "'";
 
@@ -1986,7 +2011,8 @@ public class ConsumerPortlet extends GenericPortlet {
 				parameterMap.put("wsrp-windowState", "wsrp:normal");
 
 				String rewrittenURL = rewriteURL(
-					portletRequest, portletResponse, parameterMap);
+					portletRequest, portletResponse, parameterMap,
+					addDefaultResource);
 
 				String replacement = "href=\"" + rewrittenURL + "\"";
 
@@ -1997,6 +2023,30 @@ public class ConsumerPortlet extends GenericPortlet {
 		rewriteMatcher.appendTail(sb);
 
 		return sb.toString();
+	}
+
+	protected void secureLiferayPortletURL(
+			PortletRequest portletRequest, LiferayPortletURL liferayPortletURL,
+			boolean addDefaultResource)
+		throws Exception {
+
+		if (addDefaultResource) {
+			HttpServletRequest request = PortalUtil.getHttpServletRequest(
+				portletRequest);
+
+			ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
+			WSRPConsumerPortlet wsrpConsumerPortlet = getWSRPConsumerPortlet();
+
+			String portletId = WSRPConsumerPortletLocalServiceUtil.getPortletId(
+				wsrpConsumerPortlet.getUuid());
+
+			String authToken = AuthTokenUtil.getToken(
+				request, themeDisplay.getPlid(), portletId);
+
+			liferayPortletURL.setParameter("p_p_auth", authToken);
+		}
 	}
 
 	protected void secureResourceURL(
@@ -2032,10 +2082,11 @@ public class ConsumerPortlet extends GenericPortlet {
 
 	protected void sendRedirect(
 			ActionRequest actionRequest, ActionResponse actionResponse,
-			String redirectURL)
+			String redirectURL, boolean addDefaultResource)
 		throws Exception {
 
-		redirectURL = rewriteURLs(actionRequest, actionResponse, redirectURL);
+		redirectURL = rewriteURLs(
+			actionRequest, actionResponse, redirectURL, addDefaultResource);
 
 		actionResponse.sendRedirect(redirectURL);
 	}
