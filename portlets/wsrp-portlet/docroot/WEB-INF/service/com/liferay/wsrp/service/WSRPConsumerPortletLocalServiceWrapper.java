@@ -304,6 +304,11 @@ public class WSRPConsumerPortletLocalServiceWrapper
 		_wsrpConsumerPortletLocalService.destroyWSRPConsumerPortlets();
 	}
 
+	public java.lang.String getPortletId(
+		java.lang.String wsrpConsumerPortletUuid) {
+		return _wsrpConsumerPortletLocalService.getPortletId(wsrpConsumerPortletUuid);
+	}
+
 	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
 		long wsrpConsumerId, java.lang.String portletHandle)
 		throws com.liferay.portal.kernel.exception.PortalException,

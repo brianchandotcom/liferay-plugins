@@ -79,6 +79,14 @@ WSRPConsumer wsrpConsumer = WSRPConsumerLocalServiceUtil.fetchWSRPConsumer(wsrpC
 		<liferay-ui:input-field bean="<%= wsrpConsumer %>" field="markupCharacterSets" model="<%= WSRPConsumer.class %>" />
 	</td>
 </tr>
+	<tr>
+		<td>
+			<liferay-ui:message key="add-default-resource" /><liferay-ui:icon-help message="add-default-resource-help" />
+		</td>
+		<td>
+			<liferay-ui:input-field bean="<%= wsrpConsumer %>" field="addDefaultResource" model="<%= WSRPConsumer.class %>" />
+		</td>
+	</tr>
 </table>
 
 <br />

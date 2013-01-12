@@ -265,12 +265,14 @@ public class WSRPConsumerLocalServiceUtil {
 		long companyId, java.lang.String adminPortletId, java.lang.String name,
 		java.lang.String url, java.lang.String forwardCookies,
 		java.lang.String forwardHeaders, java.lang.String markupCharacterSets,
+		boolean addDefaultResource,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .addWSRPConsumer(companyId, adminPortletId, name, url,
-			forwardCookies, forwardHeaders, markupCharacterSets, serviceContext);
+			forwardCookies, forwardHeaders, markupCharacterSets,
+			addDefaultResource, serviceContext);
 	}
 
 	public static com.liferay.wsrp.model.WSRPConsumer getWSRPConsumer(
@@ -318,12 +320,13 @@ public class WSRPConsumerLocalServiceUtil {
 		long wsrpConsumerId, java.lang.String adminPortletId,
 		java.lang.String name, java.lang.String url,
 		java.lang.String forwardCookies, java.lang.String forwardHeaders,
-		java.lang.String markupCharacterSets)
+		java.lang.String markupCharacterSets, boolean addDefaultResource)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .updateWSRPConsumer(wsrpConsumerId, adminPortletId, name,
-			url, forwardCookies, forwardHeaders, markupCharacterSets);
+			url, forwardCookies, forwardHeaders, markupCharacterSets,
+			addDefaultResource);
 	}
 
 	public static void clearService() {

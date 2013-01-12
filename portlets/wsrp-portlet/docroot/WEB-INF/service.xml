@@ -22,6 +22,7 @@
 		<column name="wsdl" type="String" />
 		<column name="registrationContextString" type="String" />
 		<column name="registrationPropertiesString" type="String" />
+		<column name="addDefaultResource" type="boolean" />
 		<column name="forwardCookies" type="String" />
 		<column name="forwardHeaders" type="String" />
 		<column name="markupCharacterSets" type="String" />

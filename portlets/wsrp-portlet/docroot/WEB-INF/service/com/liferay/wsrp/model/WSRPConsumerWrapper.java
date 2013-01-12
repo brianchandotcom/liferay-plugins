@@ -58,6 +58,7 @@ public class WSRPConsumerWrapper implements WSRPConsumer,
 			getRegistrationContextString());
 		attributes.put("registrationPropertiesString",
 			getRegistrationPropertiesString());
+		attributes.put("addDefaultResource", getAddDefaultResource());
 		attributes.put("forwardCookies", getForwardCookies());
 		attributes.put("forwardHeaders", getForwardHeaders());
 		attributes.put("markupCharacterSets", getMarkupCharacterSets());
@@ -126,6 +127,13 @@ public class WSRPConsumerWrapper implements WSRPConsumer,
 
 		if (registrationPropertiesString != null) {
 			setRegistrationPropertiesString(registrationPropertiesString);
+		}
+
+		Boolean addDefaultResource = (Boolean)attributes.get(
+				"addDefaultResource");
+
+		if (addDefaultResource != null) {
+			setAddDefaultResource(addDefaultResource);
 		}
 
 		String forwardCookies = (String)attributes.get("forwardCookies");
@@ -346,6 +354,33 @@ public class WSRPConsumerWrapper implements WSRPConsumer,
 	public void setRegistrationPropertiesString(
 		java.lang.String registrationPropertiesString) {
 		_wsrpConsumer.setRegistrationPropertiesString(registrationPropertiesString);
+	}
+
+	/**
+	* Returns the add default resource of this w s r p consumer.
+	*
+	* @return the add default resource of this w s r p consumer
+	*/
+	public boolean getAddDefaultResource() {
+		return _wsrpConsumer.getAddDefaultResource();
+	}
+
+	/**
+	* Returns <code>true</code> if this w s r p consumer is add default resource.
+	*
+	* @return <code>true</code> if this w s r p consumer is add default resource; <code>false</code> otherwise
+	*/
+	public boolean isAddDefaultResource() {
+		return _wsrpConsumer.isAddDefaultResource();
+	}
+
+	/**
+	* Sets whether this w s r p consumer is add default resource.
+	*
+	* @param addDefaultResource the add default resource of this w s r p consumer
+	*/
+	public void setAddDefaultResource(boolean addDefaultResource) {
+		_wsrpConsumer.setAddDefaultResource(addDefaultResource);
 	}
 
 	/**

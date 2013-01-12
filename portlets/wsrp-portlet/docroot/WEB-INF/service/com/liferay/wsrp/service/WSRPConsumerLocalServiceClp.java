@@ -112,7 +112,8 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 		_methodParameterTypes18 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String", "com.liferay.portal.service.ServiceContext"
+				"java.lang.String", "boolean",
+				"com.liferay.portal.service.ServiceContext"
 			};
 
 		_methodName19 = "getWSRPConsumer";
@@ -148,7 +149,7 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 		_methodParameterTypes25 = new String[] {
 				"long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String"
+				"java.lang.String", "boolean"
 			};
 	}
 
@@ -658,6 +659,7 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 		java.lang.String adminPortletId, java.lang.String name,
 		java.lang.String url, java.lang.String forwardCookies,
 		java.lang.String forwardHeaders, java.lang.String markupCharacterSets,
+		boolean addDefaultResource,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -680,6 +682,8 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 					ClpSerializer.translateInput(forwardHeaders),
 						
 					ClpSerializer.translateInput(markupCharacterSets),
+						
+					addDefaultResource,
 						
 					ClpSerializer.translateInput(serviceContext)
 					});
@@ -902,7 +906,7 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 		long wsrpConsumerId, java.lang.String adminPortletId,
 		java.lang.String name, java.lang.String url,
 		java.lang.String forwardCookies, java.lang.String forwardHeaders,
-		java.lang.String markupCharacterSets)
+		java.lang.String markupCharacterSets, boolean addDefaultResource)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -923,7 +927,9 @@ public class WSRPConsumerLocalServiceClp implements WSRPConsumerLocalService {
 						
 					ClpSerializer.translateInput(forwardHeaders),
 						
-					ClpSerializer.translateInput(markupCharacterSets)
+					ClpSerializer.translateInput(markupCharacterSets),
+						
+					addDefaultResource
 					});
 		}
 		catch (Throwable t) {

@@ -140,40 +140,44 @@ public class WSRPConsumerPortletLocalServiceClp
 
 		_methodParameterTypes23 = new String[] {  };
 
-		_methodName24 = "getWSRPConsumerPortlet";
+		_methodName24 = "getPortletId";
 
-		_methodParameterTypes24 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes24 = new String[] { "java.lang.String" };
 
 		_methodName25 = "getWSRPConsumerPortlet";
 
-		_methodParameterTypes25 = new String[] { "java.lang.String" };
+		_methodParameterTypes25 = new String[] { "long", "java.lang.String" };
 
-		_methodName26 = "getWSRPConsumerPortlets";
+		_methodName26 = "getWSRPConsumerPortlet";
 
-		_methodParameterTypes26 = new String[] { "long", "int", "int" };
+		_methodParameterTypes26 = new String[] { "java.lang.String" };
 
-		_methodName27 = "getWSRPConsumerPortletsCount";
+		_methodName27 = "getWSRPConsumerPortlets";
 
-		_methodParameterTypes27 = new String[] { "long" };
+		_methodParameterTypes27 = new String[] { "long", "int", "int" };
 
-		_methodName28 = "initFailedWSRPConsumerPortlets";
+		_methodName28 = "getWSRPConsumerPortletsCount";
 
-		_methodParameterTypes28 = new String[] {  };
+		_methodParameterTypes28 = new String[] { "long" };
 
-		_methodName29 = "initWSRPConsumerPortlet";
+		_methodName29 = "initFailedWSRPConsumerPortlets";
 
-		_methodParameterTypes29 = new String[] {
+		_methodParameterTypes29 = new String[] {  };
+
+		_methodName30 = "initWSRPConsumerPortlet";
+
+		_methodParameterTypes30 = new String[] {
 				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.lang.String"
 			};
 
-		_methodName30 = "initWSRPConsumerPortlets";
+		_methodName31 = "initWSRPConsumerPortlets";
 
-		_methodParameterTypes30 = new String[] {  };
+		_methodParameterTypes31 = new String[] {  };
 
-		_methodName31 = "updateWSRPConsumerPortlet";
+		_methodName32 = "updateWSRPConsumerPortlet";
 
-		_methodParameterTypes31 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes32 = new String[] { "long", "java.lang.String" };
 	}
 
 	public com.liferay.wsrp.model.WSRPConsumerPortlet addWSRPConsumerPortlet(
@@ -890,6 +894,32 @@ public class WSRPConsumerPortletLocalServiceClp
 		}
 	}
 
+	public java.lang.String getPortletId(
+		java.lang.String wsrpConsumerPortletUuid) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
+					new Object[] {
+						ClpSerializer.translateInput(wsrpConsumerPortletUuid)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
 	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
 		long wsrpConsumerId, java.lang.String portletHandle)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -897,8 +927,8 @@ public class WSRPConsumerPortletLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24,
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
 					new Object[] {
 						wsrpConsumerId,
 						
@@ -935,8 +965,8 @@ public class WSRPConsumerPortletLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25,
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
 					new Object[] {
 						ClpSerializer.translateInput(wsrpConsumerPortletUuid)
 					});
@@ -970,8 +1000,8 @@ public class WSRPConsumerPortletLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26,
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
 					new Object[] { wsrpConsumerId, start, end });
 		}
 		catch (Throwable t) {
@@ -998,8 +1028,8 @@ public class WSRPConsumerPortletLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27, new Object[] { wsrpConsumerId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28, new Object[] { wsrpConsumerId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1022,8 +1052,8 @@ public class WSRPConsumerPortletLocalServiceClp
 
 	public void initFailedWSRPConsumerPortlets() {
 		try {
-			_invokableLocalService.invokeMethod(_methodName28,
-				_methodParameterTypes28, new Object[] {  });
+			_invokableLocalService.invokeMethod(_methodName29,
+				_methodParameterTypes29, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1044,8 +1074,8 @@ public class WSRPConsumerPortletLocalServiceClp
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName29,
-				_methodParameterTypes29,
+			_invokableLocalService.invokeMethod(_methodName30,
+				_methodParameterTypes30,
 				new Object[] {
 					companyId,
 					
@@ -1084,8 +1114,8 @@ public class WSRPConsumerPortletLocalServiceClp
 	public void initWSRPConsumerPortlets()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName30,
-				_methodParameterTypes30, new Object[] {  });
+			_invokableLocalService.invokeMethod(_methodName31,
+				_methodParameterTypes31, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1111,8 +1141,8 @@ public class WSRPConsumerPortletLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName31,
-					_methodParameterTypes31,
+			returnObj = _invokableLocalService.invokeMethod(_methodName32,
+					_methodParameterTypes32,
 					new Object[] {
 						wsrpConsumerPortletId,
 						
@@ -1205,4 +1235,6 @@ public class WSRPConsumerPortletLocalServiceClp
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
 }

@@ -9,6 +9,7 @@ create table WSRP_WSRPConsumer (
 	wsdl TEXT null,
 	registrationContextString TEXT null,
 	registrationPropertiesString STRING null,
+	addDefaultResource BOOLEAN,
 	forwardCookies VARCHAR(255) null,
 	forwardHeaders VARCHAR(255) null,
 	markupCharacterSets VARCHAR(255) null

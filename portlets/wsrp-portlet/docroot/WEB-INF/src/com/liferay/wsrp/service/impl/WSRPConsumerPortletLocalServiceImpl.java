@@ -221,6 +221,16 @@ public class WSRPConsumerPortletLocalServiceImpl
 		}
 	}
 
+	public String getPortletId(String wsrpConsumerPortletUuid) {
+		String portletId = ConsumerPortlet.PORTLET_NAME_PREFIX.concat(
+			wsrpConsumerPortletUuid);
+
+		portletId = PortalUtil.getJsSafePortletId(
+			PortalUUIDUtil.toJsSafeUuid(portletId));
+
+		return portletId;
+	}
+
 	public WSRPConsumerPortlet getWSRPConsumerPortlet(
 			long wsrpConsumerId, String portletHandle)
 		throws PortalException, SystemException {
@@ -536,6 +546,8 @@ public class WSRPConsumerPortletLocalServiceImpl
 
 		PortletDescription portletDescription = null;
 
+		portlet.setAddDefaultResource(wsrpConsumer.getAddDefaultResource());
+
 		try {
 			WSRPConsumerManager wsrpConsumerManager =
 				WSRPConsumerManagerFactory.getWSRPConsumerManager(wsrpConsumer);
@@ -580,16 +592,6 @@ public class WSRPConsumerPortletLocalServiceImpl
 		PortletBagPool.put(portletId, portletBag);
 
 		return portlet;
-	}
-
-	protected String getPortletId(String wsrpConsumerPortletUuid) {
-		String portletId = ConsumerPortlet.PORTLET_NAME_PREFIX.concat(
-			wsrpConsumerPortletUuid);
-
-		portletId = PortalUtil.getJsSafePortletId(
-			PortalUUIDUtil.toJsSafeUuid(portletId));
-
-		return portletId;
 	}
 
 	protected String getProxyURL(String url) {

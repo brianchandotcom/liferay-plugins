@@ -69,11 +69,12 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			{ "wsdl", Types.CLOB },
 			{ "registrationContextString", Types.CLOB },
 			{ "registrationPropertiesString", Types.VARCHAR },
+			{ "addDefaultResource", Types.BOOLEAN },
 			{ "forwardCookies", Types.VARCHAR },
 			{ "forwardHeaders", Types.VARCHAR },
 			{ "markupCharacterSets", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table WSRP_WSRPConsumer (uuid_ VARCHAR(75) null,wsrpConsumerId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,url STRING null,wsdl TEXT null,registrationContextString TEXT null,registrationPropertiesString STRING null,forwardCookies VARCHAR(255) null,forwardHeaders VARCHAR(255) null,markupCharacterSets VARCHAR(255) null)";
+	public static final String TABLE_SQL_CREATE = "create table WSRP_WSRPConsumer (uuid_ VARCHAR(75) null,wsrpConsumerId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,url STRING null,wsdl TEXT null,registrationContextString TEXT null,registrationPropertiesString STRING null,addDefaultResource BOOLEAN,forwardCookies VARCHAR(255) null,forwardHeaders VARCHAR(255) null,markupCharacterSets VARCHAR(255) null)";
 	public static final String TABLE_SQL_DROP = "drop table WSRP_WSRPConsumer";
 	public static final String ORDER_BY_JPQL = " ORDER BY wsrpConsumer.name ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY WSRP_WSRPConsumer.name ASC";
@@ -138,6 +139,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			getRegistrationContextString());
 		attributes.put("registrationPropertiesString",
 			getRegistrationPropertiesString());
+		attributes.put("addDefaultResource", getAddDefaultResource());
 		attributes.put("forwardCookies", getForwardCookies());
 		attributes.put("forwardHeaders", getForwardHeaders());
 		attributes.put("markupCharacterSets", getMarkupCharacterSets());
@@ -207,6 +209,13 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 
 		if (registrationPropertiesString != null) {
 			setRegistrationPropertiesString(registrationPropertiesString);
+		}
+
+		Boolean addDefaultResource = (Boolean)attributes.get(
+				"addDefaultResource");
+
+		if (addDefaultResource != null) {
+			setAddDefaultResource(addDefaultResource);
 		}
 
 		String forwardCookies = (String)attributes.get("forwardCookies");
@@ -362,6 +371,18 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		_registrationPropertiesString = registrationPropertiesString;
 	}
 
+	public boolean getAddDefaultResource() {
+		return _addDefaultResource;
+	}
+
+	public boolean isAddDefaultResource() {
+		return _addDefaultResource;
+	}
+
+	public void setAddDefaultResource(boolean addDefaultResource) {
+		_addDefaultResource = addDefaultResource;
+	}
+
 	public String getForwardCookies() {
 		if (_forwardCookies == null) {
 			return StringPool.BLANK;
@@ -442,6 +463,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		wsrpConsumerImpl.setWsdl(getWsdl());
 		wsrpConsumerImpl.setRegistrationContextString(getRegistrationContextString());
 		wsrpConsumerImpl.setRegistrationPropertiesString(getRegistrationPropertiesString());
+		wsrpConsumerImpl.setAddDefaultResource(getAddDefaultResource());
 		wsrpConsumerImpl.setForwardCookies(getForwardCookies());
 		wsrpConsumerImpl.setForwardHeaders(getForwardHeaders());
 		wsrpConsumerImpl.setMarkupCharacterSets(getMarkupCharacterSets());
@@ -582,6 +604,8 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			wsrpConsumerCacheModel.registrationPropertiesString = null;
 		}
 
+		wsrpConsumerCacheModel.addDefaultResource = getAddDefaultResource();
+
 		wsrpConsumerCacheModel.forwardCookies = getForwardCookies();
 
 		String forwardCookies = wsrpConsumerCacheModel.forwardCookies;
@@ -612,7 +636,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -634,6 +658,8 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		sb.append(getRegistrationContextString());
 		sb.append(", registrationPropertiesString=");
 		sb.append(getRegistrationPropertiesString());
+		sb.append(", addDefaultResource=");
+		sb.append(getAddDefaultResource());
 		sb.append(", forwardCookies=");
 		sb.append(getForwardCookies());
 		sb.append(", forwardHeaders=");
@@ -646,7 +672,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(46);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.wsrp.model.WSRPConsumer");
@@ -693,6 +719,10 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		sb.append(getRegistrationPropertiesString());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>addDefaultResource</column-name><column-value><![CDATA[");
+		sb.append(getAddDefaultResource());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>forwardCookies</column-name><column-value><![CDATA[");
 		sb.append(getForwardCookies());
 		sb.append("]]></column-value></column>");
@@ -727,6 +757,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 	private String _wsdl;
 	private String _registrationContextString;
 	private String _registrationPropertiesString;
+	private boolean _addDefaultResource;
 	private String _forwardCookies;
 	private String _forwardHeaders;
 	private String _markupCharacterSets;

@@ -38,7 +38,7 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -60,6 +60,8 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 		sb.append(registrationContextString);
 		sb.append(", registrationPropertiesString=");
 		sb.append(registrationPropertiesString);
+		sb.append(", addDefaultResource=");
+		sb.append(addDefaultResource);
 		sb.append(", forwardCookies=");
 		sb.append(forwardCookies);
 		sb.append(", forwardHeaders=");
@@ -133,6 +135,8 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 			wsrpConsumerImpl.setRegistrationPropertiesString(registrationPropertiesString);
 		}
 
+		wsrpConsumerImpl.setAddDefaultResource(addDefaultResource);
+
 		if (forwardCookies == null) {
 			wsrpConsumerImpl.setForwardCookies(StringPool.BLANK);
 		}
@@ -170,6 +174,7 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 		wsdl = objectInput.readUTF();
 		registrationContextString = objectInput.readUTF();
 		registrationPropertiesString = objectInput.readUTF();
+		addDefaultResource = objectInput.readBoolean();
 		forwardCookies = objectInput.readUTF();
 		forwardHeaders = objectInput.readUTF();
 		markupCharacterSets = objectInput.readUTF();
@@ -224,6 +229,8 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 			objectOutput.writeUTF(registrationPropertiesString);
 		}
 
+		objectOutput.writeBoolean(addDefaultResource);
+
 		if (forwardCookies == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
@@ -256,6 +263,7 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 	public String wsdl;
 	public String registrationContextString;
 	public String registrationPropertiesString;
+	public boolean addDefaultResource;
 	public String forwardCookies;
 	public String forwardHeaders;
 	public String markupCharacterSets;

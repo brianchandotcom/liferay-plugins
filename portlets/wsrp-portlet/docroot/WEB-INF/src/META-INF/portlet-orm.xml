@@ -25,6 +25,7 @@
 			<basic name="wsdl" />
 			<basic name="registrationContextString" />
 			<basic name="registrationPropertiesString" />
+			<basic name="addDefaultResource" />
 			<basic name="forwardCookies" />
 			<basic name="forwardHeaders" />
 			<basic name="markupCharacterSets" />

@@ -207,6 +207,27 @@ public interface WSRPConsumerModel extends BaseModel<WSRPConsumer> {
 		String registrationPropertiesString);
 
 	/**
+	 * Returns the add default resource of this w s r p consumer.
+	 *
+	 * @return the add default resource of this w s r p consumer
+	 */
+	public boolean getAddDefaultResource();
+
+	/**
+	 * Returns <code>true</code> if this w s r p consumer is add default resource.
+	 *
+	 * @return <code>true</code> if this w s r p consumer is add default resource; <code>false</code> otherwise
+	 */
+	public boolean isAddDefaultResource();
+
+	/**
+	 * Sets whether this w s r p consumer is add default resource.
+	 *
+	 * @param addDefaultResource the add default resource of this w s r p consumer
+	 */
+	public void setAddDefaultResource(boolean addDefaultResource);
+
+	/**
 	 * Returns the forward cookies of this w s r p consumer.
 	 *
 	 * @return the forward cookies of this w s r p consumer
