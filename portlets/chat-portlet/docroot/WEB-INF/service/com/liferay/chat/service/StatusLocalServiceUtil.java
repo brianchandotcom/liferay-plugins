@@ -263,9 +263,11 @@ public class StatusLocalServiceUtil {
 	}
 
 	public static java.util.List<java.lang.Object[]> getGroupStatuses(
-		long userId, long modifiedDate, int start, int end)
+		long userId, long modifiedDate, java.lang.String[] siteNames,
+		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getGroupStatuses(userId, modifiedDate, start, end);
+		return getService()
+				   .getGroupStatuses(userId, modifiedDate, siteNames, start, end);
 	}
 
 	public static java.util.List<java.lang.Object[]> getSocialStatuses(
