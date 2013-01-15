@@ -38,9 +38,12 @@ public class StatusFinderUtil {
 	}
 
 	public static java.util.List<java.lang.Object[]> findByUsersGroups(
-		long userId, long modifiedDate, int start, int end)
+		long userId, long modifiedDate, java.lang.String[] siteNames,
+		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getFinder().findByUsersGroups(userId, modifiedDate, start, end);
+		return getFinder()
+				   .findByUsersGroups(userId, modifiedDate, siteNames, start,
+			end);
 	}
 
 	public static StatusFinder getFinder() {
