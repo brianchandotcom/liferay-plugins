@@ -19,12 +19,13 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.search.BaseIndexSearcher;
+import com.liferay.portal.kernel.search.DelegatingQuerySuggester;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.DocumentImpl;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.HitsImpl;
+import com.liferay.portal.kernel.search.IndexSearcher;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.QueryConfig;
 import com.liferay.portal.kernel.search.QueryTranslatorUtil;
@@ -70,7 +71,8 @@ import org.apache.solr.common.params.FacetParams;
  * @author Zsolt Berentey
  * @author Raymond Augé
  */
-public class SolrIndexSearcher extends BaseIndexSearcher {
+public class SolrIndexSearcherImpl
+	extends DelegatingQuerySuggester implements IndexSearcher {
 
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
