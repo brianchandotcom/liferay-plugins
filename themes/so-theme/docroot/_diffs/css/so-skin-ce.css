@@ -891,6 +891,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	.taglib-page-iterator {
 		word-break: break-all;
 	}
+
+	.search-results .journal-article-page-number {
+		display: inline-block;
+	}
 }
 
 .profile-page .so-portlet-activities {
@@ -1201,6 +1205,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 		.half-hour {
 			border-bottom-style: solid;
+			height: 24px;
 		}
 
 		.half-hour, .night-hour {
@@ -1210,6 +1215,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		.event-box {
 			background: $gray-medium;
 			border: 1px solid #CCC;
+			margin-top: 1px;
+			padding-top: 6px;
 		}
 	}
 
