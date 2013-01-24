@@ -120,7 +120,7 @@
 		This must be the last entry since the fields element is an ordered set.
 		-->
 
-		<dynamicField name="*" type="string" indexed="true" multiValued="true" stored="true" />
+		<dynamicField name="*" omitNorms="false" type="string" indexed="true" multiValued="true" stored="true" />
 	</fields>
 	<uniqueKey>uid</uniqueKey>
 	<!-- Copy fields used for suggester.  Copies from normal search index into the suggester -->
