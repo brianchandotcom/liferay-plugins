@@ -28,6 +28,7 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.so.model.FavoriteSiteClp;
 import com.liferay.so.model.MemberRequestClp;
 import com.liferay.so.model.ProjectsEntryClp;
+import com.liferay.so.model.SocialActivityGroupingClp;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -116,6 +117,10 @@ public class ClpSerializer {
 			return translateInputProjectsEntry(oldModel);
 		}
 
+		if (oldModelClassName.equals(SocialActivityGroupingClp.class.getName())) {
+			return translateInputSocialActivityGrouping(oldModel);
+		}
+
 		return oldModel;
 	}
 
@@ -161,6 +166,17 @@ public class ClpSerializer {
 		return newModel;
 	}
 
+	public static Object translateInputSocialActivityGrouping(
+		BaseModel<?> oldModel) {
+		SocialActivityGroupingClp oldClpModel = (SocialActivityGroupingClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getSocialActivityGroupingRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
 	public static Object translateInput(Object obj) {
 		if (obj instanceof BaseModel<?>) {
 			return translateInput((BaseModel<?>)obj);
@@ -191,6 +207,11 @@ public class ClpSerializer {
 		if (oldModelClassName.equals(
 					"com.liferay.so.model.impl.ProjectsEntryImpl")) {
 			return translateOutputProjectsEntry(oldModel);
+		}
+
+		if (oldModelClassName.equals(
+					"com.liferay.so.model.impl.SocialActivityGroupingImpl")) {
+			return translateOutputSocialActivityGrouping(oldModel);
 		}
 
 		return oldModel;
@@ -301,6 +322,11 @@ public class ClpSerializer {
 			return new com.liferay.so.NoSuchProjectsEntryException();
 		}
 
+		if (className.equals(
+					"com.liferay.so.NoSuchSocialActivityGroupingException")) {
+			return new com.liferay.so.NoSuchSocialActivityGroupingException();
+		}
+
 		return throwable;
 	}
 
@@ -330,6 +356,17 @@ public class ClpSerializer {
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
 		newModel.setProjectsEntryRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputSocialActivityGrouping(
+		BaseModel<?> oldModel) {
+		SocialActivityGroupingClp newModel = new SocialActivityGroupingClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setSocialActivityGroupingRemoteModel(oldModel);
 
 		return newModel;
 	}

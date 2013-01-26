@@ -21,6 +21,7 @@ import com.liferay.so.service.ClpSerializer;
 import com.liferay.so.service.FavoriteSiteLocalServiceUtil;
 import com.liferay.so.service.MemberRequestLocalServiceUtil;
 import com.liferay.so.service.ProjectsEntryLocalServiceUtil;
+import com.liferay.so.service.SocialActivityGroupingLocalServiceUtil;
 import com.liferay.so.service.SocialOfficeServiceUtil;
 
 /**
@@ -43,6 +44,8 @@ public class ClpMessageListener extends BaseMessageListener {
 			MemberRequestLocalServiceUtil.clearService();
 
 			ProjectsEntryLocalServiceUtil.clearService();
+
+			SocialActivityGroupingLocalServiceUtil.clearService();
 
 			SocialOfficeServiceUtil.clearService();
 		}

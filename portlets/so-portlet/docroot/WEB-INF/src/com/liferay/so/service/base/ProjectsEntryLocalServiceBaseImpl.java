@@ -39,11 +39,13 @@ import com.liferay.so.model.ProjectsEntry;
 import com.liferay.so.service.FavoriteSiteLocalService;
 import com.liferay.so.service.MemberRequestLocalService;
 import com.liferay.so.service.ProjectsEntryLocalService;
+import com.liferay.so.service.SocialActivityGroupingLocalService;
 import com.liferay.so.service.SocialOfficeService;
 import com.liferay.so.service.persistence.FavoriteSiteFinder;
 import com.liferay.so.service.persistence.FavoriteSitePersistence;
 import com.liferay.so.service.persistence.MemberRequestPersistence;
 import com.liferay.so.service.persistence.ProjectsEntryPersistence;
+import com.liferay.so.service.persistence.SocialActivityGroupingPersistence;
 
 import java.io.Serializable;
 
@@ -393,6 +395,44 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the social activity grouping local service.
+	 *
+	 * @return the social activity grouping local service
+	 */
+	public SocialActivityGroupingLocalService getSocialActivityGroupingLocalService() {
+		return socialActivityGroupingLocalService;
+	}
+
+	/**
+	 * Sets the social activity grouping local service.
+	 *
+	 * @param socialActivityGroupingLocalService the social activity grouping local service
+	 */
+	public void setSocialActivityGroupingLocalService(
+		SocialActivityGroupingLocalService socialActivityGroupingLocalService) {
+		this.socialActivityGroupingLocalService = socialActivityGroupingLocalService;
+	}
+
+	/**
+	 * Returns the social activity grouping persistence.
+	 *
+	 * @return the social activity grouping persistence
+	 */
+	public SocialActivityGroupingPersistence getSocialActivityGroupingPersistence() {
+		return socialActivityGroupingPersistence;
+	}
+
+	/**
+	 * Sets the social activity grouping persistence.
+	 *
+	 * @param socialActivityGroupingPersistence the social activity grouping persistence
+	 */
+	public void setSocialActivityGroupingPersistence(
+		SocialActivityGroupingPersistence socialActivityGroupingPersistence) {
+		this.socialActivityGroupingPersistence = socialActivityGroupingPersistence;
+	}
+
+	/**
 	 * Returns the social office remote service.
 	 *
 	 * @return the social office remote service
@@ -594,6 +634,10 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	protected ProjectsEntryLocalService projectsEntryLocalService;
 	@BeanReference(type = ProjectsEntryPersistence.class)
 	protected ProjectsEntryPersistence projectsEntryPersistence;
+	@BeanReference(type = SocialActivityGroupingLocalService.class)
+	protected SocialActivityGroupingLocalService socialActivityGroupingLocalService;
+	@BeanReference(type = SocialActivityGroupingPersistence.class)
+	protected SocialActivityGroupingPersistence socialActivityGroupingPersistence;
 	@BeanReference(type = SocialOfficeService.class)
 	protected SocialOfficeService socialOfficeService;
 	@BeanReference(type = CounterLocalService.class)

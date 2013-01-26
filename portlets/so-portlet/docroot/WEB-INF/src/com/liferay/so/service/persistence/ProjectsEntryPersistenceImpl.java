@@ -42,6 +42,7 @@ import com.liferay.so.NoSuchProjectsEntryException;
 import com.liferay.so.model.ProjectsEntry;
 import com.liferay.so.model.impl.ProjectsEntryImpl;
 import com.liferay.so.model.impl.ProjectsEntryModelImpl;
+import com.liferay.so.service.persistence.ProjectsEntryPersistence;
 
 import java.io.Serializable;
 

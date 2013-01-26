@@ -75,6 +75,31 @@
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
+	<mapped-superclass class="com.liferay.so.model.impl.SocialActivityGroupingModelImpl">
+		<attributes>
+			<id name="activityGroupingId" />
+			<basic name="groupId" />
+			<basic name="companyId" />
+			<basic name="userId" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="classNameId" />
+			<basic name="classPK" />
+			<basic name="type">
+				<column name="TYPE_" />
+			</basic>
+			<basic name="activityIds" />
+			<transient name="className" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
 	<entity class="com.liferay.so.model.impl.FavoriteSiteImpl" name="FavoriteSite">
 		<table name="SO_FavoriteSite" />
 		<attributes />
@@ -85,6 +110,10 @@
 	</entity>
 	<entity class="com.liferay.so.model.impl.ProjectsEntryImpl" name="ProjectsEntry">
 		<table name="SO_ProjectsEntry" />
+		<attributes />
+	</entity>
+	<entity class="com.liferay.so.model.impl.SocialActivityGroupingImpl" name="SocialActivityGrouping">
+		<table name="SO_SocialActivityGrouping" />
 		<attributes />
 	</entity>
 </entity-mappings>

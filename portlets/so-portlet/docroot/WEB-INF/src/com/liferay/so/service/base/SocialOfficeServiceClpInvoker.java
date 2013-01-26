@@ -23,56 +23,56 @@ import java.util.Arrays;
  */
 public class SocialOfficeServiceClpInvoker {
 	public SocialOfficeServiceClpInvoker() {
-		_methodName34 = "getBeanIdentifier";
-
-		_methodParameterTypes34 = new String[] {  };
-
-		_methodName35 = "setBeanIdentifier";
-
-		_methodParameterTypes35 = new String[] { "java.lang.String" };
-
-		_methodName38 = "getUserSocialOfficeGroupIds";
+		_methodName38 = "getBeanIdentifier";
 
 		_methodParameterTypes38 = new String[] {  };
 
-		_methodName39 = "isSocialOfficeGroup";
+		_methodName39 = "setBeanIdentifier";
 
-		_methodParameterTypes39 = new String[] { "long" };
+		_methodParameterTypes39 = new String[] { "java.lang.String" };
+
+		_methodName42 = "getUserSocialOfficeGroupIds";
+
+		_methodParameterTypes42 = new String[] {  };
+
+		_methodName43 = "isSocialOfficeGroup";
+
+		_methodParameterTypes43 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		if (_methodName34.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
+		if (_methodName38.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
 			return SocialOfficeServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName35.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes35, parameterTypes)) {
+		if (_methodName39.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes39, parameterTypes)) {
 			SocialOfficeServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName38.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
+		if (_methodName42.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
 			return SocialOfficeServiceUtil.getUserSocialOfficeGroupIds();
 		}
 
-		if (_methodName39.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes39, parameterTypes)) {
+		if (_methodName43.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
 			return SocialOfficeServiceUtil.isSocialOfficeGroup(((Long)arguments[0]).longValue());
 		}
 
 		throw new UnsupportedOperationException();
 	}
 
-	private String _methodName34;
-	private String[] _methodParameterTypes34;
-	private String _methodName35;
-	private String[] _methodParameterTypes35;
 	private String _methodName38;
 	private String[] _methodParameterTypes38;
 	private String _methodName39;
 	private String[] _methodParameterTypes39;
+	private String _methodName42;
+	private String[] _methodParameterTypes42;
+	private String _methodName43;
+	private String[] _methodParameterTypes43;
 }

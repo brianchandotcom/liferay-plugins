@@ -43,6 +43,7 @@ import com.liferay.so.NoSuchMemberRequestException;
 import com.liferay.so.model.MemberRequest;
 import com.liferay.so.model.impl.MemberRequestImpl;
 import com.liferay.so.model.impl.MemberRequestModelImpl;
+import com.liferay.so.service.persistence.MemberRequestPersistence;
 
 import java.io.Serializable;
 

@@ -33,3 +33,16 @@ create table SO_ProjectsEntry (
 	endDate DATE null,
 	data_ VARCHAR(1000) null
 );
+
+create table SO_SocialActivityGrouping (
+	activityGroupingId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	createDate DATE null,
+	modifiedDate DATE null,
+	classNameId LONG,
+	classPK LONG,
+	type_ INTEGER,
+	activityIds VARCHAR(75) null
+);

@@ -8,5 +8,7 @@
 	<bean id="com.liferay.so.service.persistence.MemberRequestPersistence" class="com.liferay.so.service.persistence.MemberRequestPersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.so.service.ProjectsEntryLocalService" class="com.liferay.so.service.impl.ProjectsEntryLocalServiceImpl" />
 	<bean id="com.liferay.so.service.persistence.ProjectsEntryPersistence" class="com.liferay.so.service.persistence.ProjectsEntryPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.so.service.SocialActivityGroupingLocalService" class="com.liferay.so.service.impl.SocialActivityGroupingLocalServiceImpl" />
+	<bean id="com.liferay.so.service.persistence.SocialActivityGroupingPersistence" class="com.liferay.so.service.persistence.SocialActivityGroupingPersistenceImpl" parent="basePersistence" />
 	<bean id="com.liferay.so.service.SocialOfficeService" class="com.liferay.so.service.impl.SocialOfficeServiceImpl" />
 </beans>
