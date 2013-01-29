@@ -189,6 +189,23 @@ public class CalendarBookingServiceSoap {
 		}
 	}
 
+	public static com.liferay.calendar.model.CalendarBookingSoap[] getCalendarBookings(
+		long calendarId, long startTime, long endTime, int limit)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.calendar.model.CalendarBooking> returnValue =
+				CalendarBookingServiceUtil.getCalendarBookings(calendarId,
+					startTime, endTime, limit);
+
+			return com.liferay.calendar.model.CalendarBookingSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.calendar.model.CalendarBookingSoap[] getChildCalendarBookings(
 		long parentCalendarBookingId) throws RemoteException {
 		try {

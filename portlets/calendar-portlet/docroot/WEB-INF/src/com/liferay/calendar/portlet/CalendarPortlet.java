@@ -38,6 +38,7 @@ import com.liferay.calendar.util.CalendarDataHandlerFactory;
 import com.liferay.calendar.util.CalendarResourceUtil;
 import com.liferay.calendar.util.CalendarUtil;
 import com.liferay.calendar.util.JCalendarUtil;
+import com.liferay.calendar.util.RSSUtil;
 import com.liferay.calendar.util.WebKeys;
 import com.liferay.calendar.util.comparator.CalendarResourceNameComparator;
 import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
@@ -52,6 +53,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
@@ -80,6 +82,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -100,6 +103,7 @@ import javax.portlet.ResourceResponse;
  * @author Fabio Pezzutto
  * @author Andrea Di Giorgi
  * @author Marcellus Tavares
+ * @author Bruno Basto
  */
 public class CalendarPortlet extends MVCPortlet {
 
@@ -151,6 +155,44 @@ public class CalendarPortlet extends MVCPortlet {
 		super.render(renderRequest, renderResponse);
 	}
 
+	public void serveCalendarBookingsRSS(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws Exception {
+
+		if (!PortalUtil.isRSSFeedsEnabled()) {
+			PortalUtil.sendRSSFeedsDisabledError(
+				resourceRequest, resourceResponse);
+
+			return;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long calendarId = ParamUtil.getLong(resourceRequest, "calendarId");
+		int max = ParamUtil.getInteger(
+			resourceRequest, "max", SearchContainer.DEFAULT_DELTA);
+		String type = ParamUtil.getString(
+			resourceRequest, "type", RSSUtil.FORMAT_DEFAULT);
+		double version = ParamUtil.getDouble(
+			resourceRequest, "version", RSSUtil.VERSION_DEFAULT);
+		String displayStyle = ParamUtil.getString(
+			resourceRequest, "displayStyle", RSSUtil.DISPLAY_STYLE_DEFAULT);
+		long timeInterval = ParamUtil.getLong(
+			resourceRequest, "timeInterval", RSSUtil.TIME_INTERVAL_DEFAULT);
+
+		long startTime = (new Date()).getTime();
+		long endTime = startTime + timeInterval;
+
+		String rss = CalendarBookingServiceUtil.getCalendarBookingsRSS(
+			calendarId, startTime, endTime, max, displayStyle, type, version,
+			themeDisplay);
+
+		PortletResponseUtil.sendFile(
+			resourceRequest, resourceResponse, null, rss.getBytes(),
+			ContentTypes.TEXT_XML_UTF8);
+	}
+
 	@Override
 	public void serveResource(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
@@ -161,6 +203,9 @@ public class CalendarPortlet extends MVCPortlet {
 
 			if (resourceID.equals("calendarBookingInvitees")) {
 				serveCalendarBookingInvitees(resourceRequest, resourceResponse);
+			}
+			else if (resourceID.equals("calendarBookingsRSS")) {
+				serveCalendarBookingsRSS(resourceRequest, resourceResponse);
 			}
 			else if (resourceID.equals("calendarRenderingRules")) {
 				serveCalendarRenderingRules(resourceRequest, resourceResponse);
