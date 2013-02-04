@@ -35,13 +35,30 @@
 
 	<!-- Solr search engine adapter -->
 
+	<bean id="com.liferay.portal.search.solr.SolrQuerySuggesterImpl" class="com.liferay.portal.search.solr.SolrQuerySuggesterImpl">
+		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="spellCheckURLPrefix" value="/liferay_spellCheck" />
+		<property name="suggesterURL" value="/select" />
+	</bean>
+	<bean id="com.liferay.portal.search.solr.SolrSpellCheckIndexWriterImpl" class="com.liferay.portal.search.solr.SolrSpellCheckIndexWriterImpl">
+		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="spellCheckURLPrefix" value="/liferay_spellCheck" />
+		<property name="supportedLocales">
+			<set>
+				<value>en_US</value>
+				<value>es_ES</value>
+			</set>
+		</property>
+	</bean>
 	<bean id="com.liferay.portal.search.solr.SolrIndexSearcher" class="com.liferay.portal.search.solr.SolrIndexSearcher">
+		<property name="querySuggester" ref="com.liferay.portal.search.solr.SolrQuerySuggesterImpl" />
 		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
 		<property name="swallowException" value="true" />
 	</bean>
 	<bean id="com.liferay.portal.search.solr.SolrIndexWriter" class="com.liferay.portal.search.solr.SolrIndexWriter">
 		<property name="commit" value="true" />
 		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="spellCheckIndexWriter" ref="com.liferay.portal.search.solr.SolrSpellCheckIndexWriterImpl" />
 	</bean>
 	<bean id="com.liferay.portal.search.solr.SolrSearchEngineImpl" class="com.liferay.portal.kernel.search.BaseSearchEngine">
 		<property name="clusteredWrite" value="false" />
