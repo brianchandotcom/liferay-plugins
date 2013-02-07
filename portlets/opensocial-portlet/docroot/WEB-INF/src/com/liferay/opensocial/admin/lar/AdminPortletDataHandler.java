@@ -55,7 +55,7 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 			GadgetLocalServiceUtil.deleteGadget(gadget);
 		}
 
-		return null;
+		return portletPreferences;
 	}
 
 	@Override
@@ -64,9 +64,7 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		Document document = SAXReaderUtil.createDocument();
-
-		Element rootElement = document.addElement("opensocial-data");
+		Element rootElement = addExportRootElement();
 
 		Element gadgetsElement = rootElement.addElement("gadgets");
 
@@ -78,7 +76,7 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 			exportGadget(portletDataContext, gadgetsElement, gadget);
 		}
 
-		return document.formattedString();
+		return rootElement.formattedString();
 	}
 
 	@Override

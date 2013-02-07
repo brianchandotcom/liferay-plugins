@@ -88,17 +88,19 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		if (!portletDataContext.addPrimaryKey(
+		if (portletDataContext.addPrimaryKey(
 				AdminPortletDataHandler.class, "deleteData")) {
 
-			KBArticleLocalServiceUtil.deleteGroupKBArticles(
-				portletDataContext.getScopeGroupId());
-
-			KBTemplateLocalServiceUtil.deleteGroupKBTemplates(
-				portletDataContext.getScopeGroupId());
+			return portletPreferences;
 		}
 
-		return null;
+		KBArticleLocalServiceUtil.deleteGroupKBArticles(
+			portletDataContext.getScopeGroupId());
+
+		KBTemplateLocalServiceUtil.deleteGroupKBTemplates(
+			portletDataContext.getScopeGroupId());
+
+		return portletPreferences;
 	}
 
 	@Override
@@ -111,9 +113,7 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 			"com.liferay.knowledgebase.admin",
 			portletDataContext.getScopeGroupId());
 
-		Document document = SAXReaderUtil.createDocument();
-
-		Element rootElement = document.addElement("knowledge-base-admin-data");
+		Element rootElement = addExportRootElement();
 
 		rootElement.addAttribute(
 			"group-id", String.valueOf(portletDataContext.getScopeGroupId()));
@@ -122,7 +122,7 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 		exportKBTemplates(portletDataContext, rootElement);
 		exportKBComments(portletDataContext, rootElement);
 
-		return document.formattedString();
+		return rootElement.formattedString();
 	}
 
 	@Override

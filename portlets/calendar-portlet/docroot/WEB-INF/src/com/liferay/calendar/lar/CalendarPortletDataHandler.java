@@ -69,12 +69,14 @@ public class CalendarPortletDataHandler extends BasePortletDataHandler {
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		if (!portletDataContext.addPrimaryKey(
+		if (portletDataContext.addPrimaryKey(
 				CalendarPortletDataHandler.class, "deleteData")) {
 
-			CalendarResourceLocalServiceUtil.deleteCalendarResources(
-				portletDataContext.getScopeGroupId());
+			return portletPreferences;
 		}
+
+		CalendarResourceLocalServiceUtil.deleteCalendarResources(
+			portletDataContext.getScopeGroupId());
 
 		return portletPreferences;
 	}
@@ -89,9 +91,7 @@ public class CalendarPortletDataHandler extends BasePortletDataHandler {
 			"com.liferay.portlet.calendar",
 			portletDataContext.getScopeGroupId());
 
-		Document document = SAXReaderUtil.createDocument();
-
-		Element rootElement = document.addElement("calendar-data");
+		Element rootElement = addExportRootElement();
 
 		rootElement.addAttribute(
 			"group-id", String.valueOf(portletDataContext.getScopeGroupId()));
@@ -117,7 +117,7 @@ public class CalendarPortletDataHandler extends BasePortletDataHandler {
 			}
 		}
 
-		return document.formattedString();
+		return rootElement.formattedString();
 	}
 
 	@Override
