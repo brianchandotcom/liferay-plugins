@@ -433,10 +433,10 @@ public class FileSystemImporter extends BaseImporter {
 
 		setServiceContext(fileName);
 
-		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
-			groupId, ddmStructureKey);
-
 		long classNameId = PortalUtil.getClassNameId(DDMStructure.class);
+
+		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
+			groupId, classNameId, ddmStructureKey);
 
 		DDMTemplate ddmTemplate = DDMTemplateLocalServiceUtil.addTemplate(
 			userId, groupId, classNameId, ddmStructure.getStructureId(),
