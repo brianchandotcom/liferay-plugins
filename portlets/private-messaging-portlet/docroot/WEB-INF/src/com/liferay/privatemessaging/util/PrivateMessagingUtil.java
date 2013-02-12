@@ -24,9 +24,11 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
@@ -42,6 +44,7 @@ import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.privatemessaging.NoSuchUserThreadException;
 import com.liferay.privatemessaging.model.UserThread;
 import com.liferay.privatemessaging.service.UserThreadLocalServiceUtil;
+import com.liferay.so.sites.util.SitesUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -70,15 +73,11 @@ public class PrivateMessagingUtil {
 			List<Group> usersGroups = GroupLocalServiceUtil.getUserGroups(
 				userId, true);
 
-			long[] usersGroupsIds = new long[usersGroups.size()];
-
-			for (int i = 0; i < usersGroups.size(); i++) {
-				Group group = usersGroups.get(i);
-
-				usersGroupsIds[i] = group.getGroupId();
-			}
-
-			params.put("usersGroups", usersGroupsIds);
+			params.put(
+				"usersGroups",
+				SitesUtil.filterGroups(
+					usersGroups,
+					PortletPropsValues.AUTOCOMPLETE_RECIPIENT_SITE_EXCLUDES));
 		}
 		else if (!type.equals("all")) {
 			params.put(
