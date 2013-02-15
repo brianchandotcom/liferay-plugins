@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
@@ -130,7 +131,16 @@ public class StatusFinderImpl
 
 			String sql = CustomSQLUtil.get(FIND_BY_USERS_GROUPS);
 
-			sql = sql.concat(buildExcludeGroupsSQL(groupNames));
+			String replacement = null;
+
+			if (groupNames.length > 0) {
+				replacement = _buildGroupFilterQuery(groupNames);
+			}
+			else {
+				replacement = StringPool.BLANK;
+			}
+
+			sql = StringUtil.replace(sql, "[$GROUPS_FILTER$]", replacement);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -145,9 +155,11 @@ public class StatusFinderImpl
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(userId);
+
+			_setGroupNames(qPos, groupNames);
+
 			qPos.add(modifiedDate);
 			qPos.add(userId);
-			qPos.add(groupNames);
 
 			return (List<Object[]>)QueryUtil.list(q, getDialect(), start, end);
 		}
@@ -159,16 +171,13 @@ public class StatusFinderImpl
 		}
 	}
 
-	protected String buildExcludeGroupsSQL(String[] groupNames) {
-		if (groupNames.length == 0) {
-			return StringPool.BLANK;
-		}
+	private String _buildGroupFilterQuery(String[] groupNames) {
+		StringBundler sb = new StringBundler(groupNames.length * 2 + 4);
 
-		StringBundler sb = new StringBundler(groupNames.length * 2 + 3);
-
-		sb.append("AND (User_.userId NOT IN (SELECT userId FROM Users_Groups ");
-		sb.append("INNER JOIN Group_ ON (Users_Groups.groupId = ");
-		sb.append("Group_.groupId) WHERE Group_.name IN (");
+		sb.append("(User_.userId NOT IN (");
+		sb.append("SELECT userId FROM Users_Groups INNER JOIN Group_ ON ");
+		sb.append("(Users_Groups.groupId = Group_.groupId) WHERE Group_.name");
+		sb.append(" IN (");
 
 		for (int i = 0; i < groupNames.length; i++) {
 			sb.append(StringPool.QUESTION);
@@ -178,9 +187,17 @@ public class StatusFinderImpl
 			}
 		}
 
-		sb.append(")))");
+		sb.append(" ))) AND");
 
 		return sb.toString();
+	}
+
+	private void _setGroupNames(QueryPos qPos, String[] names) {
+		if ((names != null) && (names.length > 0)) {
+			for (String name : names) {
+				qPos.add(name);
+			}
+		}
 	}
 
 }
