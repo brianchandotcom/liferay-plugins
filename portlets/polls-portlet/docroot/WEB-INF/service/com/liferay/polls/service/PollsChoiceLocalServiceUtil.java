@@ -25,7 +25,7 @@ import com.liferay.portal.service.InvokableLocalService;
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
- * @author Juan Fernï¿½ndez
+ * @author Juan Fernández
  * @see PollsChoiceLocalService
  * @see com.liferay.polls.service.base.PollsChoiceLocalServiceBaseImpl
  * @see com.liferay.polls.service.impl.PollsChoiceLocalServiceImpl
@@ -257,6 +257,40 @@ public class PollsChoiceLocalServiceUtil {
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	public static com.liferay.polls.model.PollsChoice addChoice(
+		long questionId, java.lang.String name, java.lang.String description,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addChoice(questionId, name, description, serviceContext);
+	}
+
+	public static com.liferay.polls.model.PollsChoice getChoice(long choiceId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getChoice(choiceId);
+	}
+
+	public static java.util.List<com.liferay.polls.model.PollsChoice> getChoices(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getChoices(questionId);
+	}
+
+	public static int getChoicesCount(long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getChoicesCount(questionId);
+	}
+
+	public static com.liferay.polls.model.PollsChoice updateChoice(
+		long choiceId, long questionId, java.lang.String name,
+		java.lang.String description)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().updateChoice(choiceId, questionId, name, description);
 	}
 
 	public static void clearService() {

@@ -21,7 +21,7 @@ import com.liferay.portal.service.ServiceWrapper;
  * This class is a wrapper for {@link PollsQuestionLocalService}.
  * </p>
  *
- * @author    Juan Fernï¿½ndez
+ * @author    Juan Fernández
  * @see       PollsQuestionLocalService
  * @generated
  */
@@ -270,6 +270,112 @@ public class PollsQuestionLocalServiceWrapper
 		throws java.lang.Throwable {
 		return _pollsQuestionLocalService.invokeMethod(name, parameterTypes,
 			arguments);
+	}
+
+	public com.liferay.polls.model.PollsQuestion addQuestion(long userId,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int expirationDateMonth, int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute, boolean neverExpire,
+		java.util.List<com.liferay.polls.model.PollsChoice> choices,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionLocalService.addQuestion(userId, titleMap,
+			descriptionMap, expirationDateMonth, expirationDateDay,
+			expirationDateYear, expirationDateHour, expirationDateMinute,
+			neverExpire, choices, serviceContext);
+	}
+
+	public void addQuestionResources(long questionId,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionLocalService.addQuestionResources(questionId,
+			addGroupPermissions, addGuestPermissions);
+	}
+
+	public void addQuestionResources(long questionId,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionLocalService.addQuestionResources(questionId,
+			groupPermissions, guestPermissions);
+	}
+
+	public void addQuestionResources(
+		com.liferay.polls.model.PollsQuestion question,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionLocalService.addQuestionResources(question,
+			addGroupPermissions, addGuestPermissions);
+	}
+
+	public void addQuestionResources(
+		com.liferay.polls.model.PollsQuestion question,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionLocalService.addQuestionResources(question,
+			groupPermissions, guestPermissions);
+	}
+
+	public void deleteQuestion(long questionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionLocalService.deleteQuestion(questionId);
+	}
+
+	public void deleteQuestion(com.liferay.polls.model.PollsQuestion question)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionLocalService.deleteQuestion(question);
+	}
+
+	public void deleteQuestions(long groupId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_pollsQuestionLocalService.deleteQuestions(groupId);
+	}
+
+	public com.liferay.polls.model.PollsQuestion getQuestion(long questionId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionLocalService.getQuestion(questionId);
+	}
+
+	public java.util.List<com.liferay.polls.model.PollsQuestion> getQuestions(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionLocalService.getQuestions(groupId);
+	}
+
+	public java.util.List<com.liferay.polls.model.PollsQuestion> getQuestions(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionLocalService.getQuestions(groupId, start, end);
+	}
+
+	public int getQuestionsCount(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionLocalService.getQuestionsCount(groupId);
+	}
+
+	public com.liferay.polls.model.PollsQuestion updateQuestion(long userId,
+		long questionId,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int expirationDateMonth, int expirationDateDay, int expirationDateYear,
+		int expirationDateHour, int expirationDateMinute, boolean neverExpire,
+		java.util.List<com.liferay.polls.model.PollsChoice> choices,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsQuestionLocalService.updateQuestion(userId, questionId,
+			titleMap, descriptionMap, expirationDateMonth, expirationDateDay,
+			expirationDateYear, expirationDateHour, expirationDateMinute,
+			neverExpire, choices, serviceContext);
 	}
 
 	/**

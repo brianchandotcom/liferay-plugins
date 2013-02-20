@@ -21,7 +21,7 @@ import com.liferay.portal.service.ServiceWrapper;
  * This class is a wrapper for {@link PollsVoteService}.
  * </p>
  *
- * @author    Juan Fernï¿½ndez
+ * @author    Juan Fernández
  * @see       PollsVoteService
  * @generated
  */
@@ -53,6 +53,13 @@ public class PollsVoteServiceWrapper implements PollsVoteService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _pollsVoteService.invokeMethod(name, parameterTypes, arguments);
+	}
+
+	public com.liferay.polls.model.PollsVote addVote(long questionId,
+		long choiceId, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVoteService.addVote(questionId, choiceId, serviceContext);
 	}
 
 	/**

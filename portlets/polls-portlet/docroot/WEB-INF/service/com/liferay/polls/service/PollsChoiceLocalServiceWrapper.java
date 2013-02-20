@@ -21,7 +21,7 @@ import com.liferay.portal.service.ServiceWrapper;
  * This class is a wrapper for {@link PollsChoiceLocalService}.
  * </p>
  *
- * @author    Juan Fernï¿½ndez
+ * @author    Juan Fernández
  * @see       PollsChoiceLocalService
  * @generated
  */
@@ -252,6 +252,40 @@ public class PollsChoiceLocalServiceWrapper implements PollsChoiceLocalService,
 		throws java.lang.Throwable {
 		return _pollsChoiceLocalService.invokeMethod(name, parameterTypes,
 			arguments);
+	}
+
+	public com.liferay.polls.model.PollsChoice addChoice(long questionId,
+		java.lang.String name, java.lang.String description,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsChoiceLocalService.addChoice(questionId, name,
+			description, serviceContext);
+	}
+
+	public com.liferay.polls.model.PollsChoice getChoice(long choiceId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsChoiceLocalService.getChoice(choiceId);
+	}
+
+	public java.util.List<com.liferay.polls.model.PollsChoice> getChoices(
+		long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsChoiceLocalService.getChoices(questionId);
+	}
+
+	public int getChoicesCount(long questionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _pollsChoiceLocalService.getChoicesCount(questionId);
+	}
+
+	public com.liferay.polls.model.PollsChoice updateChoice(long choiceId,
+		long questionId, java.lang.String name, java.lang.String description)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsChoiceLocalService.updateChoice(choiceId, questionId,
+			name, description);
 	}
 
 	/**

@@ -25,7 +25,7 @@ import java.util.Map;
  * This class is a wrapper for {@link PollsVote}.
  * </p>
  *
- * @author    Juan Fernï¿½ndez
+ * @author    Juan Fernández
  * @see       PollsVote
  * @generated
  */
@@ -389,6 +389,12 @@ public class PollsVoteWrapper implements PollsVote, ModelWrapper<PollsVote> {
 	public void persist()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_pollsVote.persist();
+	}
+
+	public com.liferay.polls.model.PollsChoice getChoice()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _pollsVote.getChoice();
 	}
 
 	/**
