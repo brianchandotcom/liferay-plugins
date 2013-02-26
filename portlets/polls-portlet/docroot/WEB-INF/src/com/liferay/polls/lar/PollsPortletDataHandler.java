@@ -58,8 +58,8 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 		setDataLocalized(true);
 		setExportControls(
 			new PortletDataHandlerBoolean(
-				NAMESPACE, "pollsQuestions", true, true),
-			new PortletDataHandlerBoolean(NAMESPACE, "pollsVotes"));
+				NAMESPACE, "questions", true, true),
+			new PortletDataHandlerBoolean(NAMESPACE, "votes"));
 	}
 
 	protected static void exportPollsChoice(
