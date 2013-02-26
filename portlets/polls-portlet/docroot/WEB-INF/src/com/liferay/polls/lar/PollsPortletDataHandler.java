@@ -86,7 +86,7 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 		throws Exception {
 
 		if (!portletDataContext.isWithinDateRange(
-			pollsQuestion.getModifiedDate())) {
+				pollsQuestion.getModifiedDate())) {
 
 			return;
 		}
@@ -406,6 +406,7 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 
 		for (Element pollsQuestionElement :
 				pollsQuestionsElement.elements("pollsQuestion")) {
+
 			String path = pollsQuestionElement.attributeValue("path");
 
 			if (!portletDataContext.isPathNotProcessed(path)) {
@@ -439,6 +440,7 @@ public class PollsPortletDataHandler extends BasePortletDataHandler {
 
 			for (Element pollsVoteElement :
 					pollsVotesElement.elements("pollsVote")) {
+
 				String path = pollsVoteElement.attributeValue("path");
 
 				if (!portletDataContext.isPathNotProcessed(path)) {
