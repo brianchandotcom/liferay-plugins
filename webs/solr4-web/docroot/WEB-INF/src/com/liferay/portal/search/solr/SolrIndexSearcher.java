@@ -448,7 +448,9 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 				String sortFieldName = sort.getFieldName();
 
-				if (DocumentImpl.isSortableTextField(sortFieldName)) {
+				Document document = new DocumentImpl();
+
+				if (document.isSortableTextField(sortFieldName)) {
 					sortFieldName = DocumentImpl.getSortableFieldName(
 						sortFieldName);
 				}
