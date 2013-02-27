@@ -29,6 +29,9 @@ import com.liferay.portal.model.ContactConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -308,7 +311,8 @@ public class JabberImpl implements Jabber {
 	}
 
 	protected Connection connect()
-		throws PortalException, SystemException, XMPPException {
+		throws PortalException, SystemException, UnknownHostException,
+			   XMPPException {
 
 		long userId = -1;
 		String password = null;
@@ -317,7 +321,8 @@ public class JabberImpl implements Jabber {
 	}
 
 	protected Connection connect(long userId, String password)
-		throws PortalException, SystemException, XMPPException {
+		throws PortalException, SystemException, UnknownHostException,
+			   XMPPException {
 
 		Connection connection = getConnection(userId);
 
@@ -360,13 +365,23 @@ public class JabberImpl implements Jabber {
 		return _connections.get(userId);
 	}
 
-	protected ConnectionConfiguration getConnectionConfiguration() {
+	protected ConnectionConfiguration getConnectionConfiguration()
+		throws UnknownHostException {
+
 		if (_connectionConfiguration != null) {
 			return _connectionConfiguration;
 		}
 
+		String jabberHost = PortletPropsValues.JABBER_HOST
+
+		if (!Validator.isIPAddress(jabberHost)) {
+			InetAddress inetAddress = InetAddress.getByName(jabberHost);
+
+			jabberHost = inetAddress.getHostAddress();
+		}
+
 		_connectionConfiguration = new ConnectionConfiguration(
-			PortletPropsValues.JABBER_HOST, PortletPropsValues.JABBER_PORT,
+			jabberHost, PortletPropsValues.JABBER_PORT,
 			PortletPropsValues.JABBER_SERVICE_NAME);
 
 		_connectionConfiguration.setSendPresence(false);
@@ -392,7 +407,8 @@ public class JabberImpl implements Jabber {
 	}
 
 	protected void importUser(long userId, String password)
-		throws PortalException, SystemException, XMPPException {
+		throws PortalException, SystemException, UnknownHostException,
+			   XMPPException {
 
 		Connection connection = connect();
 
