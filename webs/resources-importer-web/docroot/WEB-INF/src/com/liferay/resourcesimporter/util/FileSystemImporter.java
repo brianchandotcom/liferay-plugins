@@ -17,6 +17,8 @@ package com.liferay.resourcesimporter.util;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.scripting.ScriptingUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
@@ -552,7 +554,7 @@ public class FileSystemImporter extends BaseImporter {
 	protected void doExecuteScript(String languageType, String name, InputStream inputStream)
 		throws Exception {
 
-		System.out.println(
+		_log.info(
 			"Executing Script " + name + " of type " + languageType);
 
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(
@@ -610,9 +612,6 @@ public class FileSystemImporter extends BaseImporter {
 
 				try {
 					inputStream = servletContext.getResourceAsStream(filePath);
-
-					//inputStream = new BufferedInputStream(
-					//	new FileInputStream(file));
 
 					doExecuteScript(
 						supportedLanguage, file.getName(), inputStream);
@@ -997,4 +996,6 @@ public class FileSystemImporter extends BaseImporter {
 		"\\[\\$FILE=([^\\$]+)\\$\\]");
 	private File _resourcesDir;
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		FileSystemImporter.class);
 }
