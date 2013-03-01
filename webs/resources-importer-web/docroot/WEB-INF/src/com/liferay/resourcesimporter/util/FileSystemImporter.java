@@ -18,11 +18,15 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.scripting.ScriptingUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.PortalClassInvoker;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -40,16 +44,19 @@ import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.LayoutTypePortletConstants;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.RepositoryLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ThemeLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.PortletConfigFactoryUtil;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.asset.model.AssetTag;
 import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
@@ -78,9 +85,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletContext;
 import javax.portlet.PortletPreferences;
 
 /**
@@ -539,6 +549,27 @@ public class FileSystemImporter extends BaseImporter {
 			serviceContext);
 	}
 
+	protected void doExecuteScript(String languageType, String name, InputStream inputStream)
+		throws Exception {
+
+		System.out.println(
+			"Executing Script " + name + " of type " + languageType);
+
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(
+			companyId, servletContextName);
+
+		PortletConfig portletConfig = getPortletConfig(portlet);
+		PortletContext portletContext = getPortletContext(portlet);
+
+		Map<String, Object> portletObjects = new HashMap<String, Object>();
+
+		portletObjects.put("portletConfig", portletConfig);
+		portletObjects.put("portletContext", portletContext);
+
+		ScriptingUtil.getScripting().exec(
+			null, portletObjects, languageType, StringUtil.read(inputStream));
+	}
+
 	protected void doImportResources() throws Exception {
 		serviceContext = new ServiceContext();
 
@@ -553,6 +584,47 @@ public class FileSystemImporter extends BaseImporter {
 		setupAssets("assets.json");
 		setupSettings("settings.json");
 		setupSitemap("sitemap.json");
+
+		executeScripts(_SCRIPTS_DIR_NAME);
+	}
+
+	protected void executeScripts(String scriptsDirName)
+		throws Exception {
+
+		Set<String> supportedLanguages =
+			ScriptingUtil.getScripting().getSupportedLanguages();
+
+		for (String supportedLanguage : supportedLanguages) {
+
+			Set<String> filePaths = servletContext.getResourcePaths(
+				resourcesDir + "/" + scriptsDirName + "/" + supportedLanguage);
+
+			if (Validator.isNull(filePaths)) {
+				continue;
+			}
+
+			for (String filePath : filePaths) {
+				File file = new File(filePath);
+
+				InputStream inputStream = null;
+
+				try {
+					inputStream = servletContext.getResourceAsStream(filePath);
+
+					//inputStream = new BufferedInputStream(
+					//	new FileInputStream(file));
+
+					doExecuteScript(
+						supportedLanguage, file.getName(), inputStream);
+				}
+				finally {
+					if (inputStream != null) {
+						inputStream.close();
+					}
+				}
+			}
+
+		}
 	}
 
 	protected String getDDMTemplateLanguage(String fileName) {
@@ -651,6 +723,25 @@ public class FileSystemImporter extends BaseImporter {
 		map.put(locale, value);
 
 		return map;
+	}
+
+	protected PortletConfig getPortletConfig(Portlet portlet) {
+		return PortletConfigFactoryUtil.create(portlet, servletContext);
+	}
+
+	protected PortletContext getPortletContext(Portlet portlet) throws Exception {
+		MethodKey methodKey = new MethodKey(
+			ClassResolverUtil.resolveByPortalClassLoader(
+				"com.liferay.portlet.PortletContextFactory"),
+			"create",
+			new Class[] {
+				ClassResolverUtil.resolveByPortalClassLoader("com.liferay.portal.model.Portlet"),
+				ClassResolverUtil.resolveByPortalClassLoader("javax.servlet.ServletContext")
+			});
+
+		return (PortletContext) PortalClassInvoker.invoke(
+			true, methodKey,
+			new Object[] {portlet, servletContext});
 	}
 
 	protected boolean isJournalStructureXSD(String xsd) throws Exception {
@@ -893,6 +984,9 @@ public class FileSystemImporter extends BaseImporter {
 
 	private static final String _JOURNAL_DDM_TEMPLATES_DIR_NAME =
 		"/journal/templates/";
+
+	private static final String _SCRIPTS_DIR_NAME =
+		"/scripts/";
 
 	private Map<String, JSONObject> _assetJSONObjectMap =
 		new HashMap<String, JSONObject>();
