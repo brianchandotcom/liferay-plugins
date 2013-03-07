@@ -44,6 +44,8 @@
 
 	<taskdef classpathref="ivy.lib.path" resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" />
 
+	<java classname="com.liferay.portal.tools.ivy.ThreadLocalLeakCleaner" classpath="${app.server.lib.portal.dir}/portal-impl.jar" />
+
 	<ivy:settings file="${project.dir}/ivy-settings.xml" />
 
 	<ivy:resolve file="${project.dir}/ivy.xml" />
