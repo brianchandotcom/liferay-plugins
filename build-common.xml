@@ -18,8 +18,28 @@
 	<property name="ivy.home" value="${project.location.absolute}/.ivy" />
 	<property name="ivy.install.version" value="2.2.0" />
 	<property name="ivy.jar.dir" value="${ivy.home}/lib" />
+	<property name="ivy.jar.url" value="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" />
+
+	<checksum file="${project.dir}/ivy.xml" />
+
+	<available file="${ivy.jar.dir}/ivy-${ivy.install.version}.jar" property="ivy.jar.available"/>
 
 	<script language="javascript">
+		importClass(java.io.File);
+
+		var ivyXML = new File(project.getProperty("project.location.absolute") + "/ivy.xml.MD5");
+		var now = new Date();
+
+		if (ivyXML.lastModified() > (now.getTime() - 1000)) {
+			println("Resolving plugin dependencies");
+		}
+
+		if (!project.getProperty("ivy.jar.available")) {
+			println("Getting: " + project.getProperty("ivy.jar.url"));
+
+			println("To: " + project.getProperty("ivy.jar.dir"));
+		}
+
 		var buildListeners = project.getBuildListeners();
 
 		var logger = buildListeners.firstElement();
@@ -32,7 +52,7 @@
 	<get
 		dest="${ivy.jar.dir}"
 		skipexisting="true"
-		src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+		src="${ivy.jar.url}"
 	/>
 
 	<path id="ivy.lib.path">
