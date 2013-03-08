@@ -5,6 +5,7 @@
 	<portlet>
 		<portlet-name>1</portlet-name>
 		<icon>/polls/icon.png</icon>
+		<portlet-data-handler-class>com.liferay.polls.lar.PollsPortletDataHandler</portlet-data-handler-class>
 		<header-portlet-css>/polls/css/main.css</header-portlet-css>
 		<css-class-wrapper>polls-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
@@ -12,6 +13,7 @@
 	<portlet>
 		<portlet-name>2</portlet-name>
 		<icon>/polls_display/icon.png</icon>
+		<portlet-data-handler-class>com.liferay.polls.lar.PollsDisplayPortletDataHandler</portlet-data-handler-class>
 		<header-portlet-css>/polls_display/css/main.css</header-portlet-css>
 		<css-class-wrapper>polls-display-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
