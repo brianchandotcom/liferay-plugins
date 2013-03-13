@@ -20,9 +20,7 @@ import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.wsrp.NoSuchConsumerException;
 import com.liferay.wsrp.NoSuchConsumerPortletException;
@@ -86,12 +84,12 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 	}
 
 	@Override
-	protected String doExportData(
+	protected void doExportData(
 			PortletDataContext portletDataContext, String portletId,
 			PortletPreferences portletPreferences)
 		throws Exception {
 
-		Element rootElement = addExportRootElement();
+		Element rootElement = portletDataContext.getRootElement();
 
 		if (portletDataContext.getBooleanParameter(
 				NAMESPACE, "wsrp-producers")) {
@@ -126,19 +124,15 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 					portletDataContext, wsrpConsumersElement, wsrpConsumer);
 			}
 		}
-
-		return rootElement.formattedString();
 	}
 
 	@Override
 	protected PortletPreferences doImportData(
 			PortletDataContext portletDataContext, String portletId,
-			PortletPreferences portletPreferences, String data)
+			PortletPreferences portletPreferences)
 		throws Exception {
 
-		Document document = SAXReaderUtil.read(data);
-
-		Element rootElement = document.getRootElement();
+		Element rootElement = portletDataContext.getRootElement();
 
 		if (portletDataContext.getBooleanParameter(
 				NAMESPACE, "wsrp-producers")) {
