@@ -18,11 +18,11 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
-import com.liferay.portlet.social.model.SocialActivityFeedEntry;
 import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.portlet.social.service.SocialRelationLocalServiceUtil;
 import com.liferay.socialnetworking.model.WallEntry;
@@ -38,67 +38,87 @@ public class WallActivityInterpreter extends BaseSocialActivityInterpreter {
 	}
 
 	@Override
-	protected SocialActivityFeedEntry doInterpret(
-			SocialActivity activity, ThemeDisplay themeDisplay)
+	protected String getBody(SocialActivity activity, ThemeDisplay themeDisplay)
 		throws Exception {
+
+		WallEntry wallEntry = WallEntryLocalServiceUtil.getWallEntry(
+			activity.getClassPK());
+
+		String entryComments = getValue(
+			activity.getExtraData(), "comments", wallEntry.getComments());
+
+		String link = getLink(activity, themeDisplay);
+
+		return wrapLink(link, entryComments);
+	}
+
+	@Override
+	protected String getLink(SocialActivity activity, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		User receiverUser = UserLocalServiceUtil.getUserById(
+			activity.getReceiverUserId());
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(themeDisplay.getPortalURL());
+		sb.append(themeDisplay.getPathFriendlyURLPublic());
+		sb.append(StringPool.SLASH);
+		sb.append(HtmlUtil.escapeURL(receiverUser.getScreenName()));
+		sb.append("/profile/-/wall/");
+		sb.append(activity.getClassPK());
+
+		return sb.toString();
+	}
+
+	@Override
+	protected Object[] getTitleArguments(
+			String groupName, SocialActivity activity, String link,
+			String title, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		int activityType = activity.getType();
+
+		if (activityType != WallActivityKeys.ADD_ENTRY) {
+			return new Object[0];
+		}
 
 		String creatorUserName = getUserName(
 			activity.getUserId(), themeDisplay);
 		String receiverUserName = getUserName(
 			activity.getReceiverUserId(), themeDisplay);
 
-		User receiverUser = UserLocalServiceUtil.getUserById(
-			activity.getReceiverUserId());
+		return new Object[] {creatorUserName, receiverUserName};
+	}
+
+	@Override
+	protected String getTitlePattern(String groupName, SocialActivity activity)
+		throws Exception {
+
+		int activityType = activity.getType();
+
+		if (activityType == WallActivityKeys.ADD_ENTRY) {
+			return "activity-social-networking-wall-add-entry";
+		}
+
+		return StringPool.BLANK;
+	}
+
+	@Override
+	protected boolean hasPermissions(
+			PermissionChecker permissionChecker, SocialActivity activity,
+			String actionId, ThemeDisplay themeDisplay)
+		throws Exception {
 
 		if (!SocialRelationLocalServiceUtil.hasRelation(
 				themeDisplay.getUserId(), activity.getReceiverUserId(),
 				SocialRelationConstants.TYPE_BI_FRIEND) &&
 			(themeDisplay.getUserId() != activity.getReceiverUserId())) {
 
-			return null;
+			return false;
 		}
 
-		int activityType = activity.getType();
-
-		// Link
-
-		WallEntry wallEntry = WallEntryLocalServiceUtil.getWallEntry(
-			activity.getClassPK());
-
-		String link =
-			themeDisplay.getPortalURL() +
-				themeDisplay.getPathFriendlyURLPublic() + StringPool.SLASH +
-					HtmlUtil.escapeURL(receiverUser.getScreenName()) +
-						"/profile/-/wall/" + activity.getClassPK();
-
-		// Title
-
-		String title = StringPool.BLANK;
-
-		if (activityType == WallActivityKeys.ADD_ENTRY) {
-			title = themeDisplay.translate(
-				"activity-social-networking-wall-add-entry",
-				new Object[] {creatorUserName, receiverUserName});
-		}
-
-		// Body
-
-		StringBundler sb = new StringBundler(5);
-
-		sb.append("<a href=\"");
-		sb.append(link);
-		sb.append("\">");
-
-		String entryComments = getValue(
-			activity.getExtraData(), "comments", wallEntry.getComments());
-
-		sb.append(entryComments);
-
-		sb.append("</a>");
-
-		String body = sb.toString();
-
-		return new SocialActivityFeedEntry(link, title, body);
+		return true;
 	}
 
 	private static final String[] _CLASS_NAMES = new String[] {

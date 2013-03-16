@@ -15,11 +15,12 @@
 package com.liferay.socialcoding.svn.social;
 
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
-import com.liferay.portlet.social.model.SocialActivityFeedEntry;
 import com.liferay.socialcoding.model.SVNRepository;
 import com.liferay.socialcoding.model.SVNRevision;
 import com.liferay.socialcoding.service.SVNRevisionLocalServiceUtil;
@@ -34,51 +35,73 @@ public class SVNActivityInterpreter extends BaseSocialActivityInterpreter {
 	}
 
 	@Override
-	protected SocialActivityFeedEntry doInterpret(
-			SocialActivity activity, ThemeDisplay themeDisplay)
-		throws Exception {
+	protected String getBody(SocialActivity activity, ThemeDisplay themeDisplay)
+			throws Exception {
 
-		String creatorUserName = getUserName(
-			activity.getUserId(), themeDisplay);
-
-		int activityType = activity.getType();
-
-		// Link
+		String link = getLink(activity, themeDisplay);
 
 		SVNRevision svnRevision = SVNRevisionLocalServiceUtil.getSVNRevision(
 			activity.getClassPK());
 
-		String link = svnRevision.getWebRevisionNumberURL();
+		return wrapLink(link, HtmlUtil.escape(svnRevision.getComments()));
+	}
 
-		// Title
+	@Override
+	protected String getLink(SocialActivity activity, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		SVNRevision svnRevision = SVNRevisionLocalServiceUtil.getSVNRevision(
+			activity.getClassPK());
+
+		return svnRevision.getWebRevisionNumberURL();
+	}
+
+	@Override
+	protected Object[] getTitleArguments(
+			String groupName, SocialActivity activity, String link,
+			String title, ThemeDisplay themeDisplay)
+			throws Exception {
+
+		int activityType = activity.getType();
+
+		if (activityType != SVNActivityKeys.ADD_REVISION) {
+			return new Object[0];
+		}
+
+		String creatorUserName = getUserName(
+			activity.getUserId(), themeDisplay);
+
+		SVNRevision svnRevision = SVNRevisionLocalServiceUtil.getSVNRevision(
+			activity.getClassPK());
 
 		SVNRepository svnRepository = svnRevision.getSVNRepository();
 
-		String title = StringPool.BLANK;
+		return new Object[] {
+			creatorUserName, String.valueOf(svnRevision.getRevisionNumber()),
+			svnRepository.getShortURL()
+		};
+	}
+
+	@Override
+	protected String getTitlePattern(String groupName, SocialActivity activity)
+			throws Exception {
+
+		int activityType = activity.getType();
 
 		if (activityType == SVNActivityKeys.ADD_REVISION) {
-			title = themeDisplay.translate(
-				"activity-social-coding-svn-add-revision",
-				new Object[] {
-					creatorUserName,
-					String.valueOf(svnRevision.getRevisionNumber()),
-					svnRepository.getShortURL()
-				});
+			return "activity-social-coding-svn-add-revision";
 		}
 
-		// Body
+		return StringPool.BLANK;
+	}
 
-		StringBuilder sb = new StringBuilder();
+	@Override
+	protected boolean hasPermissions(
+			PermissionChecker permissionChecker, SocialActivity activity,
+			String actionId, ThemeDisplay themeDisplay)
+		throws Exception {
 
-		sb.append("<a href=\"");
-		sb.append(link);
-		sb.append("\" target=\"_blank\">");
-		sb.append(HtmlUtil.escape(svnRevision.getComments()));
-		sb.append("</a>");
-
-		String body = sb.toString();
-
-		return new SocialActivityFeedEntry(link, title, body);
+		return true;
 	}
 
 	private static final String[] _CLASS_NAMES = new String[] {
