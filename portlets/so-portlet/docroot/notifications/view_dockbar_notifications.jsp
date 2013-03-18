@@ -126,8 +126,8 @@ while (iterator.hasNext()) {
 	<span class="notification-count"><%= notificationEvents.size() %></span>
 </a>
 
-<aui:script use="aui-base">
-	var userNotificationEvents = A.one('.dockbar .user-notification-events');
+<aui:script use="aui-base,aui-io">
+	var userNotificationEvents = A.one('#<portlet:namespace />notificationsMenuContainer');
 	var userNotificationsContainer = userNotificationEvents.one('.user-notification-events-container');
 
 	<c:if test="<%= notificationEvents.size() > 0 %>">
@@ -141,6 +141,31 @@ while (iterator.hasNext()) {
 				}
 			},
 			'.user-notification-event-content'
+		);
+
+		userNotificationsContainer.delegate(
+			'click',
+			function(event) {
+				event.preventDefault();
+
+				var row = event.currentTarget.ancestor('.user-notification-event-content');
+				var loadingRow = A.Node.create('<div class="loading-animation"></div>');
+
+				row.hide().placeAfter(loadingRow);
+
+				A.io.request(
+					event.currentTarget.attr('href'),
+					{
+						on: {
+							success: function() {
+								row.remove();
+								loadingRow.remove();
+							}
+						}
+					}
+				);
+			},
+			'a'
 		);
 
 		var dismissNotifications = userNotificationEvents.one('.dismiss-notifications');
