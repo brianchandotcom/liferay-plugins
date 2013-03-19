@@ -11,7 +11,9 @@
 	<classpathentry kind="lib" path="/portal-trunk/lib/development/servlet-api.jar" />
 	<classpathentry kind="lib" path="/portal-trunk/lib/global/portlet.jar" />
 	<classpathentry kind="lib" path="/portal-trunk/lib/portal/commons-logging.jar" />
+	<classpathentry kind="lib" path="/portal-trunk/lib/portal/freemarker.jar" />
 	<classpathentry kind="lib" path="/portal-trunk/lib/portal/log4j.jar" />
+	<classpathentry kind="lib" path="/portal-trunk/osgi/lib/common/core/osgi.core.jar" />
 	<classpathentry kind="lib" path="/portal-trunk/portal-service/portal-service.jar" />
 	<classpathentry kind="lib" path="/portal-trunk/util-bridges/util-bridges.jar" />
 	<classpathentry kind="lib" path="/portal-trunk/util-java/util-java.jar" />
