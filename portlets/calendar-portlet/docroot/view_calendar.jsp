@@ -40,7 +40,11 @@ for (long calendarId : calendarIds) {
 	Calendar calendar = CalendarLocalServiceUtil.fetchCalendar(calendarId);
 
 	if ((calendar != null) && (CalendarPermission.contains(permissionChecker, calendar, ActionKeys.VIEW))) {
-		otherCalendars.add(calendar);
+		CalendarResource calendarResource = calendar.getCalendarResource();
+
+		if (calendarResource.isActive()) {
+			otherCalendars.add(calendar);
+		}
 	}
 }
 
