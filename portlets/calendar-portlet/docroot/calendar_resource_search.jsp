@@ -32,14 +32,14 @@ CalendarResourceDisplayTerms displayTerms = new CalendarResourceDisplayTerms(ren
 
 		<aui:input name="<%= displayTerms.DESCRIPTION %>" value="<%= displayTerms.getDescription() %>" />
 
-		<aui:select name="<%= displayTerms.ACTIVE %>" value="<%= displayTerms.isActive() %>">
-			<aui:option label="yes" value="true" />
-			<aui:option label="no" value="false" />
+		<aui:select name="<%= displayTerms.ACTIVE %>">
+			<aui:option label="yes" selected="<%= displayTerms.isActive() %>" value="true" />
+			<aui:option label="no" selected="<%= !displayTerms.isActive() %>" value="false" />
 		</aui:select>
 
-		<aui:select name="<%= displayTerms.SCOPE %>" value="<%= displayTerms.getScope() %>">
-			<aui:option label="current" value="<%= themeDisplay.getScopeGroupId() %>" />
-			<aui:option label="global" value="<%= themeDisplay.getCompanyGroupId() %>" />
+		<aui:select name="<%= displayTerms.SCOPE %>">
+			<aui:option label="current" selected="<%= (displayTerms.getScope() == themeDisplay.getScopeGroupId()) %>" value="<%= themeDisplay.getScopeGroupId() %>" />
+			<aui:option label="global" selected="<%= (displayTerms.getScope() == themeDisplay.getCompanyGroupId()) %>" value="<%= themeDisplay.getCompanyGroupId() %>" />
 		</aui:select>
 	</aui:fieldset>
 </liferay-ui:search-toggle>
