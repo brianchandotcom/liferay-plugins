@@ -80,7 +80,7 @@ if (user2 != null) {
 			},
 			icon: 'add-coworker',
 			id: '<portlet:namespace />addConnectionButton',
-			label: '<%= UnicodeLanguageUtil.get(pageContext, "add-connection") %>',
+			label: '<%= UnicodeLanguageUtil.get(pageContext, "connect") %>',
 			visible: <%= showAddAsConnectionButton %>
 		}
 	);
@@ -92,7 +92,7 @@ if (user2 != null) {
 			},
 			icon: 'remove-coworker',
 			id: '<portlet:namespace />removeConnectionButton',
-			label: '<%= UnicodeLanguageUtil.get(pageContext, "remove-connection") %>',
+			label: '<%= UnicodeLanguageUtil.get(pageContext, "disconnect") %>',
 			visible: <%= showRemoveAsConnectionButton %>
 		}
 	);
@@ -209,19 +209,6 @@ if (user2 != null) {
 			label: '<%= UnicodeLanguageUtil.get(pageContext, "vcard") %>'
 		}
 	);
-
-	<c:if test="<%= Validator.isNotNull(userDisplayURL) %>">
-		contactsToolbarChildren.push(
-			{
-				handler: function(event) {
-					location.href= '<%= userDisplayURL %>';
-				},
-				icon: 'user',
-				id: '<portlet:namespace />gotoProfileButton',
-				label: '<%= UnicodeLanguageUtil.get(pageContext, "profile") %>'
-			}
-		);
-	</c:if>
 
 	var contactsToolbar = new A.Toolbar(
 		{
