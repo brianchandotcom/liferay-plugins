@@ -25,7 +25,7 @@ portletURL.setParameter("tabs1", tabs1);
 %>
 
 <liferay-ui:tabs
-	names="calendar,resources"
+	names='<%= themeDisplay.isSignedIn() ? "calendar,resources" : "calendar" %>'
 	url="<%= portletURL.toString() %>"
 />
 
