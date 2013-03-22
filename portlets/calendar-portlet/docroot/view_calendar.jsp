@@ -141,12 +141,14 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 	</c:if>
 
 	var syncCalendarsMap = function() {
-		Liferay.CalendarUtil.syncCalendarsMap(
-			window.<portlet:namespace />myCalendarList,
-			window.<portlet:namespace />otherCalendarList,
-			window.<portlet:namespace />siteCalendarList
-		);
-	}
+		var calendarLists = [window.<portlet:namespace />myCalendarList, window.<portlet:namespace />otherCalendarList];
+
+		<c:if test="<%= groupCalendarResource != null %>">
+			calendarLists.push(window.<portlet:namespace />siteCalendarList);
+		</c:if>
+
+		Liferay.CalendarUtil.syncCalendarsMap.apply(this, calendarLists);
+	};
 
 	window.<portlet:namespace />myCalendarList = new Liferay.CalendarList(
 		{
@@ -200,27 +202,29 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 		}
 	).render();
 
-	window.<portlet:namespace />siteCalendarList = new Liferay.CalendarList(
-		{
-			after: {
-				calendarsChange: syncCalendarsMap,
-				'scheduler-calendar:visibleChange': function(event) {
-					syncCalendarsMap();
+	<c:if test="<%= groupCalendarResource != null %>">
+		window.<portlet:namespace />siteCalendarList = new Liferay.CalendarList(
+			{
+				after: {
+					calendarsChange: syncCalendarsMap,
+					'scheduler-calendar:visibleChange': function(event) {
+						syncCalendarsMap();
 
-					<portlet:namespace />refreshVisibleCalendarRenderingRules();
-				}
-			},
-			boundingBox: '#<portlet:namespace />siteCalendarList',
+						<portlet:namespace />refreshVisibleCalendarRenderingRules();
+					}
+				},
+				boundingBox: '#<portlet:namespace />siteCalendarList',
 
-			<%
-			updateCalendarsJSONArray(request, groupCalendarsJSONArray);
-			%>
+				<%
+				updateCalendarsJSONArray(request, groupCalendarsJSONArray);
+				%>
 
-			calendars: <%= groupCalendarsJSONArray %>,
-			scheduler: <portlet:namespace />scheduler,
-			simpleMenu: window.<portlet:namespace />calendarsMenu
-		}
-	).render();
+				calendars: <%= groupCalendarsJSONArray %>,
+				scheduler: <portlet:namespace />scheduler,
+				simpleMenu: window.<portlet:namespace />calendarsMenu
+			}
+		).render();
+	</c:if>
 
 	syncCalendarsMap();
 
