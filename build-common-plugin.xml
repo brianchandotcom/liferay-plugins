@@ -1034,29 +1034,29 @@ Please find a solution that does not require portal-impl.jar.
 		<unzip dest="tmp" src="${original.war.file}" />
 	</target>
 
-    <target name="report-test-coverage">
-   		<if>
-   			<equals arg1="${junit.code.coverage}" arg2="true" />
-   			<then>
-   				<mkdir dir="docroot/WEB-INF/test-coverage/${test.type}" />
+	<target name="report-test-coverage">
+		<if>
+			<equals arg1="${junit.code.coverage}" arg2="true" />
+			<then>
+				<mkdir dir="docroot/WEB-INF/test-coverage/${test.type}" />
 
-   				<if>
-   					<available file="docroot/WEB-INF/test-coverage/${test.type}/cobertura.ser" type="file" />
-   					<then>
-   						<cobertura-report
-   							datafile="docroot/WEB-INF/test-coverage/${test.type}/cobertura.ser"
-   							destdir="docroot/WEB-INF/test-coverage/${test.type}"
-   							format="${junit.cobertura.report.format}"
-   						>
-   							<fileset dir="docroot/WEB-INF/src">
-   								<include name="**/*.java" />
-   							</fileset>
-   						</cobertura-report>
-   					</then>
-   				</if>
-   			</then>
-   		</if>
-   	</target>
+				<if>
+					<available file="docroot/WEB-INF/test-coverage/${test.type}/cobertura.ser" type="file" />
+					<then>
+						<cobertura-report
+							datafile="docroot/WEB-INF/test-coverage/${test.type}/cobertura.ser"
+							destdir="docroot/WEB-INF/test-coverage/${test.type}"
+							format="${junit.cobertura.report.format}"
+						>
+							<fileset dir="docroot/WEB-INF/src">
+								<include name="**/*.java" />
+							</fileset>
+						</cobertura-report>
+					</then>
+				</if>
+			</then>
+		</if>
+	</target>
 
 	<target name="shrink-zip-cmd">
 		<tstamp>
@@ -1154,7 +1154,7 @@ Please find a solution that does not require portal-impl.jar.
 		<if>
 			<available file="docroot/WEB-INF/test/${test.type}" type="dir" />
 			<then>
-                <junit dir="${project.dir}" fork="on" forkmode="once" outputtoformatters="false" printsummary="on" showoutput="true">
+				<junit dir="${project.dir}" fork="on" forkmode="once" outputtoformatters="false" printsummary="on" showoutput="true">
 				    <sysproperty key="junit.cobertura.agent" value="${junit.cobertura.agent}" />
 					<sysproperty key="junit.code.coverage" value="${junit.code.coverage}" />
 					<sysproperty key="junit.debug" value="${junit.debug}" />
