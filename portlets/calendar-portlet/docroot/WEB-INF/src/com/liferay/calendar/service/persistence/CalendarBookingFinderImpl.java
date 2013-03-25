@@ -474,8 +474,13 @@ public class CalendarBookingFinderImpl
 			sql = CustomSQLUtil.replaceKeywords(
 				sql, "description", StringPool.LIKE, false, descriptions);
 			sql = CustomSQLUtil.replaceKeywords(
-				sql, "lower(location)", StringPool.LIKE, false, locations);
+				sql, "lower(location)", StringPool.LIKE, true, locations);
 			sql = CustomSQLUtil.replaceAndOperator(sql, andOperator);
+
+			if (CustomSQLUtil.isVendorHSQL()) {
+				sql = StringUtil.replace(
+					sql, "? = -1", "CAST(? AS BIGINT) = -1");
+			}
 
 			StringBundler sb = new StringBundler();
 
