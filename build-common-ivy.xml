@@ -80,11 +80,28 @@
 
 	<mkdir dir="${ivy.jar.dir}" />
 
-	<get
-		dest="${ivy.jar.dir}"
-		skipexisting="true"
-		src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
-	/>
+	<script classpathref="beanshell.classpath" language="beanshell">
+		<![CDATA[
+			import org.apache.tools.ant.taskdefs.Get;
+
+			String ivyInstallVersion = project.getProperty("ivy.install.version");
+			String ivyJarDir = project.getProperty("ivy.jar.dir");
+
+			File file = new File(ivyJarDir + "/ivy-" + ivyInstallVersion + ".jar");
+
+			if (!file.exists()) {
+				Get get = project.createTask("get");
+
+				get.setDest(file);
+
+				URL url = new URL("http://repo2.maven.org/maven2/org/apache/ivy/ivy/" + ivyInstallVersion + "/ivy-" + ivyInstallVersion + ".jar");
+
+				get.setSrc(url);
+
+				get.perform();
+			}
+		]]>
+	</script>
 
 	<path id="ivy.lib.path">
 		<fileset
