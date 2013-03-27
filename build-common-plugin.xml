@@ -43,6 +43,17 @@
 		</else>
 	</if>
 
+	<property name="junit.cobertura.agent" value="-javaagent:${junit.cobertura.agent.jar}=${junit.cobertura.includes};${junit.cobertura.excludes}" />
+
+	<if>
+		<not>
+			<equals arg1="${junit.debug}" arg2="true" />
+		</not>
+		<then>
+			<var name="junit.debug.jpda" value="" />
+		</then>
+	</if>
+
 	<macrodef name="classpath-to-jar">
 		<attribute name="classpathref" />
 		<attribute name="jarfile" />
@@ -468,8 +479,8 @@
 			</then>
 		</if>
 
-		<delete dir="test-classes" />
-		<delete dir="test-results" />
+		<delete dir="docroot/WEB-INF/test-classes" />
+		<delete dir="docroot/WEB-INF/test-results" />
 		<delete dir="tmp" />
 		<delete file="${plugin.file}" />
 		<delete file="${plugin.src.file}" />
@@ -693,14 +704,14 @@ Please find a solution that does not require portal-impl.jar.
 
 	<target name="compile-test-cmd">
 		<if>
-			<available file="test/${test.type}" type="dir" />
+			<available file="docroot/WEB-INF/test/${test.type}" type="dir" />
 			<then>
-				<mkdir dir="test-classes/${test.type}" />
-				<mkdir dir="test-results/${test.type}" />
+				<mkdir dir="docroot/WEB-INF/test-classes/${test.type}" />
+				<mkdir dir="docroot/WEB-INF/test-results/${test.type}" />
 
-				<copy todir="test-classes/${test.type}">
-					<fileset dir="test" includes="*.properties" />
-					<fileset dir="test/${test.type}" includes="**/*.png,**/*.properties,**/*.xml" />
+				<copy todir="docroot/WEB-INF/test-classes/${test.type}">
+				    <fileset dir="docroot/WEB-INF/test" includes="*.properties" />
+					<fileset dir="docroot/WEB-INF/test/${test.type}" includes="**/*.png,**/*.properties,**/dependencies/**,**/*.xml" />
 				</copy>
 
 				<if>
@@ -723,8 +734,8 @@ Please find a solution that does not require portal-impl.jar.
 
 				<antcall target="compile-java">
 					<param name="javac.classpathref" value="test.classpath" />
-					<param name="javac.destdir" value="test-classes/${test.type}" />
-					<param name="javac.srcdir" value="test/${test.type}" />
+					<param name="javac.destdir" value="docroot/WEB-INF/test-classes/${test.type}" />
+					<param name="javac.srcdir" value="docroot/WEB-INF/test/${test.type}" />
 					<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
 				</antcall>
 			</then>
@@ -1023,6 +1034,30 @@ Please find a solution that does not require portal-impl.jar.
 		<unzip dest="tmp" src="${original.war.file}" />
 	</target>
 
+	<target name="report-test-coverage">
+		<if>
+			<equals arg1="${junit.code.coverage}" arg2="true" />
+			<then>
+				<mkdir dir="docroot/WEB-INF/test-coverage/${test.type}" />
+
+				<if>
+					<available file="docroot/WEB-INF/test-coverage/${test.type}/cobertura.ser" type="file" />
+					<then>
+						<cobertura-report
+							datafile="docroot/WEB-INF/test-coverage/${test.type}/cobertura.ser"
+							destdir="docroot/WEB-INF/test-coverage/${test.type}"
+							format="${junit.cobertura.report.format}"
+						>
+							<fileset dir="docroot/WEB-INF/src">
+								<include name="**/*.java" />
+							</fileset>
+						</cobertura-report>
+					</then>
+				</if>
+			</then>
+		</if>
+	</target>
+
 	<target name="shrink-zip-cmd">
 		<tstamp>
 			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
@@ -1047,8 +1082,8 @@ Please find a solution that does not require portal-impl.jar.
 	</target>
 
 	<target name="test">
-		<delete dir="test-classes" />
-		<delete dir="test-results" />
+		<delete dir="docroot/WEB-INF/test-classes" />
+		<delete dir="docroot/WEB-INF/test-results" />
 
 		<antcall target="compile" />
 		<antcall target="compile-test" />
@@ -1077,19 +1112,19 @@ Please find a solution that does not require portal-impl.jar.
 
 	<target name="test-class" depends="compile,compile-test">
 		<if>
-			<available file="test/integration" type="dir" />
+			<available file="docroot/WEB-INF/test/integration" type="dir" />
 			<then>
 				<resourcecount property="test.integration.count">
-					<fileset dir="test-classes/integration" includes="**/${class}.class" />
+					<fileset dir="docroot/WEB-INF/test-classes/integration" includes="**/${class}.class" />
 				</resourcecount>
 			</then>
 		</if>
 
 		<if>
-			<available file="test/unit" type="dir" />
+			<available file="docroot/WEB-INF/test/unit" type="dir" />
 			<then>
 				<resourcecount property="test.unit.count">
-					<fileset dir="test-classes/unit" includes="**/${class}.class" />
+					<fileset dir="docroot/WEB-INF/test-classes/unit" includes="**/${class}.class" />
 				</resourcecount>
 			</then>
 		</if>
@@ -1117,10 +1152,14 @@ Please find a solution that does not require portal-impl.jar.
 
 	<target name="test-cmd">
 		<if>
-			<available file="test/${test.type}" type="dir" />
+			<available file="docroot/WEB-INF/test/${test.type}" type="dir" />
 			<then>
 				<junit dir="${project.dir}" fork="on" forkmode="once" outputtoformatters="false" printsummary="on" showoutput="true">
-					<sysproperty key="net.sourceforge.cobertura.datafile" file="test-coverage/cobertura.ser" />
+				    <sysproperty key="junit.cobertura.agent" value="${junit.cobertura.agent}" />
+					<sysproperty key="junit.code.coverage" value="${junit.code.coverage}" />
+					<sysproperty key="junit.debug" value="${junit.debug}" />
+					<sysproperty key="net.sourceforge.cobertura.datafile" file="docroot/WEB-INF/test-coverage/${test.type}/cobertura.ser" />
+					<jvmarg line="${junit.cobertura.agent}" />
 					<jvmarg line="${junit.debug.jpda}" />
 					<jvmarg value="-Xmx${junit.java.mx}" />
 					<jvmarg value="-XX:MaxPermSize=${junit.java.maxpermsize}" />
@@ -1128,12 +1167,12 @@ Please find a solution that does not require portal-impl.jar.
 					<jvmarg value="-Dfile.encoding=UTF-8" />
 					<jvmarg value="-Djava.net.preferIPv4Stack=true" />
 					<jvmarg value="-Duser.timezone=GMT" />
-					<classpath location="test-coverage" />
+					<classpath location="docroot/WEB-INF/test-coverage" />
 					<classpath refid="test.classpath" />
 					<formatter type="brief" usefile="false" />
 					<formatter type="xml" />
-					<batchtest todir="test-results/${test.type}">
-						<fileset dir="test-classes/${test.type}" includes="**/${class}.class">
+					<batchtest todir="docroot/WEB-INF/test-results/${test.type}">
+						<fileset dir="docroot/WEB-INF/test-classes/${test.type}" includes="**/${class}.class">
 							<exclude name="${junit.test.excludes}" />
 						</fileset>
 					</batchtest>
@@ -1148,6 +1187,10 @@ Please find a solution that does not require portal-impl.jar.
 		<ant target="test-cmd" inheritrefs="true">
 			<property name="test.type" value="integration" />
 		</ant>
+
+		<antcall target="report-test-coverage">
+			<param name="test.type" value="integration" />
+		</antcall>
 	</target>
 
 	<target name="test-unit" depends="compile,compile-test-unit">
@@ -1156,6 +1199,10 @@ Please find a solution that does not require portal-impl.jar.
 		<ant target="test-cmd" inheritrefs="true">
 			<property name="test.type" value="unit" />
 		</ant>
+
+		<antcall target="report-test-coverage">
+			<param name="test.type" value="unit" />
+		</antcall>
 	</target>
 
 	<target name="war" depends="compile">
