@@ -268,6 +268,11 @@ public interface KaleoTransitionLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoTransitionsByKaleoDefinitionId(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getKaleoTransitionsCount(long kaleoNodeId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }

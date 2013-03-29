@@ -138,9 +138,13 @@ public class KaleoTransitionLocalServiceClp
 
 		_methodParameterTypes23 = new String[] { "long" };
 
-		_methodName24 = "getKaleoTransitionsCount";
+		_methodName24 = "getKaleoTransitionsByKaleoDefinitionId";
 
 		_methodParameterTypes24 = new String[] { "long" };
+
+		_methodName25 = "getKaleoTransitionsCount";
+
+		_methodParameterTypes25 = new String[] { "long" };
 	}
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoTransition addKaleoTransition(
@@ -832,13 +836,41 @@ public class KaleoTransitionLocalServiceClp
 		return (java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition>)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public int getKaleoTransitionsCount(long kaleoNodeId)
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoTransitionsByKaleoDefinitionId(
+		long kaleoDefinitionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24, new Object[] { kaleoNodeId });
+					_methodParameterTypes24, new Object[] { kaleoDefinitionId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	public int getKaleoTransitionsCount(long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25, new Object[] { kaleoNodeId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -908,4 +940,6 @@ public class KaleoTransitionLocalServiceClp
 	private String[] _methodParameterTypes23;
 	private String _methodName24;
 	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
 }
