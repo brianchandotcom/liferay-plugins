@@ -54,11 +54,6 @@
 			<finder-column name="fromUserId" />
 			<finder-column name="toUserId" />
 		</finder>
-		<finder name="F_T_C" return-type="Collection">
-			<finder-column name="fromUserId" />
-			<finder-column name="toUserId" />
-			<finder-column name="content" />
-		</finder>
 	</entity>
 	<entity name="Status" local-service="true" remote-service="false">
 

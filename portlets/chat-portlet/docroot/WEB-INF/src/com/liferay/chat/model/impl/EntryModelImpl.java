@@ -82,10 +82,9 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.chat.model.Entry"),
 			true);
-	public static long CONTENT_COLUMN_BITMASK = 1L;
-	public static long CREATEDATE_COLUMN_BITMASK = 2L;
-	public static long FROMUSERID_COLUMN_BITMASK = 4L;
-	public static long TOUSERID_COLUMN_BITMASK = 8L;
+	public static long CREATEDATE_COLUMN_BITMASK = 1L;
+	public static long FROMUSERID_COLUMN_BITMASK = 2L;
+	public static long TOUSERID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.chat.model.Entry"));
 
@@ -263,17 +262,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	}
 
 	public void setContent(String content) {
-		_columnBitmask |= CONTENT_COLUMN_BITMASK;
-
-		if (_originalContent == null) {
-			_originalContent = _content;
-		}
-
 		_content = content;
-	}
-
-	public String getOriginalContent() {
-		return GetterUtil.getString(_originalContent);
 	}
 
 	public int getFlag() {
@@ -395,8 +384,6 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 		entryModelImpl._setOriginalToUserId = false;
 
-		entryModelImpl._originalContent = entryModelImpl._content;
-
 		entryModelImpl._columnBitmask = 0;
 	}
 
@@ -498,7 +485,6 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	private long _originalToUserId;
 	private boolean _setOriginalToUserId;
 	private String _content;
-	private String _originalContent;
 	private int _flag;
 	private long _columnBitmask;
 	private Entry _escapedModel;
