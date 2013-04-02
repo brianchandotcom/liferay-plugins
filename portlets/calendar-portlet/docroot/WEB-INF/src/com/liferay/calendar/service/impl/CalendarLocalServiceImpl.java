@@ -15,6 +15,7 @@
 package com.liferay.calendar.service.impl;
 
 import com.liferay.calendar.CalendarNameException;
+import com.liferay.calendar.RequiredCalendarException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.service.base.CalendarLocalServiceBaseImpl;
 import com.liferay.calendar.util.PortletPropsValues;
@@ -90,6 +91,10 @@ public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 	@Override
 	public Calendar deleteCalendar(Calendar calendar)
 		throws PortalException, SystemException {
+
+		if (calendar.isDefaultCalendar()) {
+			throw new RequiredCalendarException();
+		}
 
 		// Calendar
 
