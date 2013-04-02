@@ -356,7 +356,8 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 				}
 			},
 			date: new Date(<%= String.valueOf(date) %>),
-			locale: 'en'
+			locale: 'en',
+			'strings.first_weekday': <%= weekStartsOn %>
 		}
 	).render('#<portlet:namespace />miniCalendarContainer');
 
