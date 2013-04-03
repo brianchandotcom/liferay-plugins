@@ -299,6 +299,12 @@ public class KaleoTransitionLocalServiceWrapper
 		return _kaleoTransitionLocalService.getKaleoTransitions(kaleoNodeId);
 	}
 
+	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoTransitionsByKaleoDefinitionId(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _kaleoTransitionLocalService.getKaleoTransitionsByKaleoDefinitionId(kaleoDefinitionId);
+	}
+
 	public int getKaleoTransitionsCount(long kaleoNodeId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _kaleoTransitionLocalService.getKaleoTransitionsCount(kaleoNodeId);

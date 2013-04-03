@@ -29,28 +29,10 @@ public class Task extends Node {
 		return _assignments;
 	}
 
-	public State getStartState() {
-		return _startState;
-	}
-
-	public State getTargetState() {
-		return _targetState;
-	}
-
 	public void setAssignments(Set<Assignment> assignments) {
 		_assignments = assignments;
 	}
 
-	public void setStartState(State startState) {
-		_startState = startState;
-	}
-
-	public void setTargetState(State targetState) {
-		_targetState = targetState;
-	}
-
 	private Set<Assignment> _assignments;
-	private State _startState;
-	private State _targetState;
 
 }

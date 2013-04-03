@@ -303,6 +303,13 @@ public class KaleoTransitionLocalServiceUtil {
 		return getService().getKaleoTransitions(kaleoNodeId);
 	}
 
+	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoTransitionsByKaleoDefinitionId(
+		long kaleoDefinitionId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getKaleoTransitionsByKaleoDefinitionId(kaleoDefinitionId);
+	}
+
 	public static int getKaleoTransitionsCount(long kaleoNodeId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getKaleoTransitionsCount(kaleoNodeId);
