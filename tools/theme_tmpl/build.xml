@@ -2,7 +2,26 @@
 <!DOCTYPE project>
 
 <project name="@theme.name@-theme" basedir="." default="deploy">
-	<import file="../build-common-theme.xml" />
+	<property environment="env"/>
+
+	<condition property="project.dir" value="${env.LIFERAY_SDK_HOME}">
+		<isset property="env.LIFERAY_SDK_HOME" />
+	</condition>
+
+	<property name="project.dir" value="../.." />
+
+	<fail>
+		<condition>
+			<not>
+				<available file="${project.dir}/themes/build-common-theme.xml" />
+			</not>
+		</condition>
+.
+
+Please set the environment variable LIFERAY_SDK_HOME.
+	</fail>
+
+	<import file="${project.dir}/themes/build-common-theme.xml" />
 
 	<property name="theme.parent" value="_styled" />
 </project>

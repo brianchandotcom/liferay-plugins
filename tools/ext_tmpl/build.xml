@@ -2,5 +2,24 @@
 <!DOCTYPE project>
 
 <project name="@ext.name@-ext" basedir="." default="deploy">
-	<import file="../build-common-ext.xml" />
+	<property environment="env"/>
+
+	<condition property="project.dir" value="${env.LIFERAY_SDK_HOME}">
+		<isset property="env.LIFERAY_SDK_HOME" />
+	</condition>
+
+	<property name="project.dir" value="../.." />
+
+	<fail>
+		<condition>
+			<not>
+				<available file="${project.dir}/ext/build-common-ext.xml" />
+			</not>
+		</condition>
+.
+
+Please set the environment variable LIFERAY_SDK_HOME.
+	</fail>
+
+	<import file="${project.dir}/ext/build-common-ext.xml" />
 </project>
