@@ -2,7 +2,26 @@
 <!DOCTYPE project>
 
 <project name="@portlet.name@-portlet" basedir="." default="deploy">
-	<import file="../build-common-portlet.xml" />
+	<property environment="env"/>
+
+	<condition property="project.dir" value="${env.LIFERAY_SDK_HOME}">
+		<isset property="env.LIFERAY_SDK_HOME" />
+	</condition>
+
+	<property name="project.dir" value="../.." />
+
+	<fail>
+		<condition>
+			<not>
+				<available file="${project.dir}/portlets/build-common-portlet.xml" />
+			</not>
+		</condition>
+.
+
+Please set the environment variable LIFERAY_SDK_HOME.
+	</fail>
+
+	<import file="${project.dir}/portlets/build-common-portlet.xml" />
 
 	<target name="compile">
 		<antcall target="build-common-plugin.compile" />

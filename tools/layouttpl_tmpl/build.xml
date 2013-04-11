@@ -4,5 +4,24 @@
 <project name="@layouttpl.name@-layouttpl" basedir="." default="deploy">
 	<property name="plugin.version" value="1" />
 
-	<import file="../build-common-layouttpl.xml" />
+	<property environment="env"/>
+
+	<condition property="project.dir" value="${env.LIFERAY_SDK_HOME}">
+		<isset property="env.LIFERAY_SDK_HOME" />
+	</condition>
+
+	<property name="project.dir" value="../.." />
+
+	<fail>
+		<condition>
+			<not>
+				<available file="${project.dir}/layouttpl/build-common-layouttpl.xml" />
+			</not>
+		</condition>
+.
+
+Please set the environment variable LIFERAY_SDK_HOME.
+	</fail>
+
+	<import file="${project.dir}/layouttpl/build-common-layouttpl.xml" />
 </project>
