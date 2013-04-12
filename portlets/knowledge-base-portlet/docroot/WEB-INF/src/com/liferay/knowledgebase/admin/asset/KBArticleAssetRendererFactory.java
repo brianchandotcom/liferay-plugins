@@ -14,7 +14,6 @@
 
 package com.liferay.knowledgebase.admin.asset;
 
-import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.permission.AdminPermission;
@@ -51,19 +50,22 @@ public class KBArticleAssetRendererFactory extends BaseAssetRendererFactory {
 		if (type == TYPE_LATEST_APPROVED) {
 			kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
 				classPK, WorkflowConstants.STATUS_APPROVED);
+		}
+		else {
+			kbArticle = KBArticleLocalServiceUtil.fetchKBArticle(classPK);
 
-			return new KBArticleAssetRenderer(kbArticle);
+			if (kbArticle == null) {
+				kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
+					classPK, WorkflowConstants.STATUS_ANY);
+			}
 		}
 
-		try {
-			kbArticle = KBArticleLocalServiceUtil.getKBArticle(classPK);
-		}
-		catch (NoSuchArticleException nsae) {
-			kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
-				classPK, WorkflowConstants.STATUS_ANY);
-		}
+		KBArticleAssetRenderer kbArticleAssetRenderer =
+			new KBArticleAssetRenderer(kbArticle);
 
-		return new KBArticleAssetRenderer(kbArticle);
+		kbArticleAssetRenderer.setAssetRendererType(type);
+
+		return kbArticleAssetRenderer;
 	}
 
 	public String getClassName() {
