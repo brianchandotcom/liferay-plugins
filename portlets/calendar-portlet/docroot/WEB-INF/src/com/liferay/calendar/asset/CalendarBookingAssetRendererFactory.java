@@ -51,7 +51,7 @@ public class CalendarBookingAssetRendererFactory
 		CalendarBooking calendarBooking =
 			CalendarBookingLocalServiceUtil.getCalendarBooking(classPK);
 
-		return new CalendarBookingAssetRenderer(calendarBooking);
+		return new CalendarBookingAssetRenderer(calendarBooking, type);
 	}
 
 	public String getClassName() {

@@ -41,8 +41,12 @@ import javax.portlet.RenderResponse;
  */
 public class CalendarBookingAssetRenderer extends BaseAssetRenderer {
 
-	public CalendarBookingAssetRenderer(CalendarBooking calendarBooking) {
+	public CalendarBookingAssetRenderer(
+		CalendarBooking calendarBooking, int assetRendererType) {
+
 		_calendarBooking = calendarBooking;
+
+		setAssetRendererType(assetRendererType);
 	}
 
 	public String getClassName() {

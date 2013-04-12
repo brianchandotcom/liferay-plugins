@@ -39,8 +39,10 @@ import javax.portlet.RenderResponse;
  */
 public class KBArticleAssetRenderer extends BaseAssetRenderer {
 
-	public KBArticleAssetRenderer(KBArticle kbArticle) {
+	public KBArticleAssetRenderer(KBArticle kbArticle, int assetRendererType) {
 		_kbArticle = kbArticle;
+
+		setAssetRendererType(assetRendererType);
 	}
 
 	public String getClassName() {
