@@ -24,4 +24,5 @@ ivy.xml.MD5
 
 /build.*.properties
 /dist
+/modules/*/*.jar
 /tools/*/*/*/lib
