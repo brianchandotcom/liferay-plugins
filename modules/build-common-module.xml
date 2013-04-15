@@ -102,7 +102,7 @@
 						<if>
 							<available file="${project.dir}/modules/@{import.module.current}/osgi-lib" />
 							<then>
-								<copy todir="modules">
+								<copy todir="osgi-lib">
 									<fileset dir="${project.dir}/modules/@{import.module.current}/osgi-lib" includes="*.jar" />
 								</copy>
 							</then>
@@ -120,8 +120,10 @@
 	</target>
 
 	<target name="deploy" depends="jar">
-		<copy file="${jar.file}.jar" todir="${osgi.auto.deploy.dir}" />
-		<copy file="osgi-lib/*.jar" todir="${osgi.auto.deploy.dir}" />
+		<copy file="${project.dir}/dist/${jar.file}.jar" todir="${osgi.auto.deploy.dir}" />
+		<copy failonerror="false" todir="${osgi.auto.deploy.dir}">
+			<fileset dir="osgi-lib" includes="*.jar" />
+		</copy>
 	</target>
 
 	<target name="manifest">
