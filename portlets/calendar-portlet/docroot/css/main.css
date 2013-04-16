@@ -394,6 +394,16 @@
 	background: url(@theme_image_path@/common/rss.png) 8px center no-repeat;
 }
 
+.property-list {
+	margin-left: 0;
+	margin-top: 0;
+	padding: 0;
+
+	dt {
+		font-weight: bold;
+	}
+}
+	
 .rss-time-interval {
 	margin-top: -1em;
 	margin-left: 2em;
