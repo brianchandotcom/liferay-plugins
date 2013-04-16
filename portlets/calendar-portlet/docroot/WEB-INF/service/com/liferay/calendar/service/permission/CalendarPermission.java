@@ -15,9 +15,12 @@
 package com.liferay.calendar.service.permission;
 
 import com.liferay.calendar.model.Calendar;
+import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.service.CalendarLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 
@@ -58,9 +61,11 @@ public class CalendarPermission {
 			return true;
 		}
 
+		long resourceGroupId = getResourceGroupId(calendar);
+
 		return permissionChecker.hasPermission(
-			calendar.getGroupId(), Calendar.class.getName(),
-			calendar.getCalendarId(), actionId);
+			resourceGroupId, Calendar.class.getName(), calendar.getCalendarId(),
+			actionId);
 	}
 
 	public static boolean contains(
@@ -72,5 +77,22 @@ public class CalendarPermission {
 
 		return contains(permissionChecker, calendar, actionId);
 	}
+
+	public static long getResourceGroupId(Calendar calendar) {
+		try {
+			CalendarResource calendarResource = calendar.getCalendarResource();
+
+			if (calendarResource.isGroup()) {
+				return calendarResource.getClassPK();
+			}
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+		}
+
+		return calendar.getGroupId();
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(CalendarPermission.class);
 
 }

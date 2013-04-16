@@ -290,6 +290,25 @@ public class CalendarLocalServiceUtil {
 			descriptionMap, color, defaultCalendar, serviceContext);
 	}
 
+	public static void addCalendarResources(
+		com.liferay.calendar.model.Calendar calendar,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addCalendarResources(calendar, addGroupPermissions,
+			addGuestPermissions);
+	}
+
+	public static void addCalendarResources(
+		com.liferay.calendar.model.Calendar calendar,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.addCalendarResources(calendar, groupPermissions, guestPermissions);
+	}
+
 	public static java.util.List<com.liferay.calendar.model.Calendar> getCalendarResourceCalendars(
 		long groupId, long calendarResourceId)
 		throws com.liferay.portal.kernel.exception.SystemException {

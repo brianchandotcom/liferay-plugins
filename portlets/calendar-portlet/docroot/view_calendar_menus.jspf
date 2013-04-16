@@ -127,6 +127,16 @@
 
 					var activeCalendar = calendarList.activeItem;
 
+					var classNameId = activeCalendar.get('classNameId');
+
+					var groupClassNameId = <%= PortalUtil.getClassNameId(Group.class) %>;
+
+					var resourceGroupId = activeCalendar.get('groupId');
+
+					if (classNameId === groupClassNameId) {
+						resourceGroupId = activeCalendar.get('classPK');
+					}
+
 					<liferay-security:permissionsURL
 						modelResource="<%= Calendar.class.getName() %>"
 						modelResourceDescription="{modelResourceDescription}"
@@ -138,7 +148,7 @@
 					window.location.href = A.Lang.sub(
 						decodeURIComponent('<%= permissionsURL %>'),
 						{
-							resourceGroupId: activeCalendar.get('groupId'),
+							resourceGroupId: resourceGroupId,
 							resourcePrimKey: activeCalendar.get('calendarId'),
 							modelResourceDescription: activeCalendar.get('name')
 						}

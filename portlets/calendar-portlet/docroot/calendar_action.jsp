@@ -75,7 +75,7 @@ Calendar calendar = (Calendar)row.getObject();
 		<liferay-security:permissionsURL
 			modelResource="<%= Calendar.class.getName() %>"
 			modelResourceDescription="<%= calendar.getName(locale) %>"
-			resourceGroupId="<%= calendar.getGroupId() %>"
+			resourceGroupId="<%= CalendarPermission.getResourceGroupId(calendar) %>"
 			resourcePrimKey="<%= String.valueOf(calendar.getCalendarId()) %>"
 			var="permissionsURL"
 		/>
