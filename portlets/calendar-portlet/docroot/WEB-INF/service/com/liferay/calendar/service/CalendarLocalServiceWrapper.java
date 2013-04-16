@@ -281,6 +281,24 @@ public class CalendarLocalServiceWrapper implements CalendarLocalService,
 			defaultCalendar, serviceContext);
 	}
 
+	public void addCalendarResources(
+		com.liferay.calendar.model.Calendar calendar,
+		boolean addGroupPermissions, boolean addGuestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_calendarLocalService.addCalendarResources(calendar,
+			addGroupPermissions, addGuestPermissions);
+	}
+
+	public void addCalendarResources(
+		com.liferay.calendar.model.Calendar calendar,
+		java.lang.String[] groupPermissions, java.lang.String[] guestPermissions)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_calendarLocalService.addCalendarResources(calendar, groupPermissions,
+			guestPermissions);
+	}
+
 	public java.util.List<com.liferay.calendar.model.Calendar> getCalendarResourceCalendars(
 		long groupId, long calendarResourceId)
 		throws com.liferay.portal.kernel.exception.SystemException {
