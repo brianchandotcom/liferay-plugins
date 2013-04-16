@@ -18,12 +18,14 @@ import com.liferay.calendar.CalendarNameException;
 import com.liferay.calendar.RequiredCalendarException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.service.base.CalendarLocalServiceBaseImpl;
+import com.liferay.calendar.service.permission.CalendarPermission;
 import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.PermissionedModel;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -37,6 +39,7 @@ import java.util.Map;
  * @author Eduardo Lundgren
  * @author Fabio Pezzutto
  * @author Andrea Di Giorgi
+ * @author Marcellus Tavares
  */
 public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 
@@ -79,13 +82,51 @@ public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 
 		// Resources
 
-		resourceLocalService.addModelResources(calendar, serviceContext);
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
+
+			addCalendarResources(
+				calendar, serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
+		}
+		else {
+			addCalendarResources(
+				calendar, serviceContext.getGroupPermissions(),
+				serviceContext.getGuestPermissions());
+		}
 
 		// Calendar
 
 		updateDefaultCalendar(calendar);
 
 		return calendar;
+	}
+
+	public void addCalendarResources(
+			Calendar calendar, boolean addGroupPermissions,
+			boolean addGuestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.addResources(
+			calendar.getCompanyId(),
+			CalendarPermission.getResourceGroupId(calendar),
+			calendar.getUserId(), Calendar.class.getName(),
+			String.valueOf(calendar.getCalendarId()), false,
+			addGroupPermissions, addGuestPermissions,
+			(PermissionedModel)calendar);
+	}
+
+	public void addCalendarResources(
+			Calendar calendar, String[] groupPermissions,
+			String[] guestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.addModelResources(
+			calendar.getCompanyId(),
+			CalendarPermission.getResourceGroupId(calendar),
+			calendar.getUserId(), Calendar.class.getName(),
+			String.valueOf(calendar.getCalendarId()), groupPermissions,
+			guestPermissions, (PermissionedModel)calendar);
 	}
 
 	@Override
