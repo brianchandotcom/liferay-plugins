@@ -114,6 +114,36 @@ public class RecurrenceUtil {
 		return expandedCalendarBookings;
 	}
 
+	public static int getIndexOfInstance(
+		String recurrence, long recurrenceStartTime, long instanceStartTime) {
+
+		int count = 0;
+
+		DateValue instanceDateValue = _toDateValue(instanceStartTime);
+
+		try {
+			RecurrenceIterator recurrenceIterator =
+				RecurrenceIteratorFactory.createRecurrenceIterator(
+					recurrence, _toDateValue(recurrenceStartTime),
+					TimeUtils.utcTimezone());
+
+			while (recurrenceIterator.hasNext()) {
+				DateValue dateValue = recurrenceIterator.next();
+
+				if (dateValue.compareTo(instanceDateValue) >= 0) {
+					break;
+				}
+
+				count++;
+			}
+		}
+		catch (ParseException e) {
+			_log.error("Unable to parse data ", e);
+		}
+
+		return count;
+	}
+
 	private static CalendarBooking _copyCalendarBooking(
 		CalendarBooking calendarBooking, DateValue startDateValue) {
 

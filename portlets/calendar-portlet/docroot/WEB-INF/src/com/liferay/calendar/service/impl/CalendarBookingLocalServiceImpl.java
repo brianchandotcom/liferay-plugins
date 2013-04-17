@@ -239,11 +239,9 @@ public class CalendarBookingLocalServiceImpl
 	}
 
 	public void deleteCalendarBookingInstance(
-			long calendarBookingId, long startTime, boolean allFollowing)
+			CalendarBooking calendarBooking, long startTime,
+			boolean allFollowing)
 		throws PortalException, SystemException {
-
-		CalendarBooking calendarBooking =
-			calendarBookingPersistence.findByPrimaryKey(calendarBookingId);
 
 		java.util.Calendar startTimeJCalendar = JCalendarUtil.getJCalendar(
 			startTime);
@@ -273,6 +271,16 @@ public class CalendarBookingLocalServiceImpl
 			RecurrenceSerializer.serialize(recurrenceObj));
 
 		calendarBookingPersistence.update(calendarBooking);
+	}
+
+	public void deleteCalendarBookingInstance(
+			long calendarBookingId, long startTime, boolean allFollowing)
+		throws PortalException, SystemException {
+
+		CalendarBooking calendarBooking =
+			calendarBookingPersistence.findByPrimaryKey(calendarBookingId);
+
+		deleteCalendarBookingInstance(calendarBooking, startTime, allFollowing);
 	}
 
 	public void deleteCalendarBookings(long calendarId)
@@ -595,10 +603,31 @@ public class CalendarBookingLocalServiceImpl
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		deleteCalendarBookingInstance(
-			calendarBookingId, startTime, allFollowing);
+		CalendarBooking calendarBooking =
+			calendarBookingPersistence.findByPrimaryKey(calendarBookingId);
 
-		if (!allFollowing) {
+		String originalRecurrence = calendarBooking.getRecurrence();
+
+		deleteCalendarBookingInstance(calendarBooking, startTime, allFollowing);
+
+		if (allFollowing) {
+			Recurrence recurrenceObj = RecurrenceSerializer.deserialize(
+				recurrence);
+
+			if (originalRecurrence.equals(recurrence) && 
+					(recurrenceObj.getCount() > 0)) {
+
+				int index = RecurrenceUtil.getIndexOfInstance(
+					recurrence, calendarBooking.getStartTime(), startTime);
+
+				int newCount = recurrenceObj.getCount() - index;
+
+				recurrenceObj.setCount(newCount);
+
+				recurrence = RecurrenceSerializer.serialize(recurrenceObj);
+			}
+		}
+		else {
 			recurrence = StringPool.BLANK;
 		}
 
