@@ -6,7 +6,7 @@
 	<import file="../../build-common-osgi-plugin.xml" />
 
 	<path id="plugin-lib.classpath">
-		<fileset dir="lib/portal-provided" includes="axis.jar,org.osgi.*.jar" />
+		<fileset dir="lib" includes="portal-provided/axis.jar,portal-provided/org.osgi.*.jar" />
 	</path>
 
 	<property name="import.shared" value="log-bridge-shared" />
