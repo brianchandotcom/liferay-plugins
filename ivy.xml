@@ -6,6 +6,7 @@
 		<dependency name="antelopetasks" org="org.tigris.antelope" rev="3.2.10" />
 		<dependency name="bnd" org="biz.aQute" rev="1.50.0" />
 		<dependency name="ccpp" org="javax.ccpp" rev="1.0" />
+		<dependency name="commons-io" org="commons-io" rev="2.1"/>
 		<dependency name="ecj" org="org.eclipse.jdt.core.compiler" rev="3.7.2" />
 		<dependency name="jalopy" org="jalopy" rev="1.5rc3" />
 		<dependency name="jargs" org="net.sf" rev="1.0" />
@@ -17,6 +18,10 @@
 		<dependency name="org.osgi.compendium" org="org.osgi" rev="4.3.1" />
 		<dependency name="org.osgi.core" org="org.osgi" rev="4.3.1" />
 		<dependency name="powermock-api-mockito" org="org.powermock" rev="1.5" />
+		<dependency name="powermock-api-support" org="org.powermock" rev="1.5" />
+		<dependency name="powermock-core" org="org.powermock" rev="1.5" />
+		<dependency name="powermock-module-junit4" org="org.powermock" rev="1.5" />
+		<dependency name="powermock-module-junit4-common" org="org.powermock" rev="1.5" />
 		<dependency name="qdox" org="com.thoughtworks.qdox" rev="1.12.1" />
 		<dependency name="scala-compiler" org="org.scala-lang" rev="2.9.2" />
 		<dependency name="serializer" org="xalan" rev="2.7.1" />
