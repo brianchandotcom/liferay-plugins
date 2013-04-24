@@ -61,14 +61,14 @@
 								<then>
 									<ivy:retrieve
 										log="download-only"
-										pattern="@{ivy.xml.dir}/lib/[artifact].[ext]"
+										pattern="@{ivy.xml.dir}/lib/([conf]/)[artifact].[ext]"
 										type="jar"
 									/>
 								</then>
 								<else>
 									<ivy:retrieve
 										log="download-only"
-										pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact].[ext]"
+										pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/([conf]/)[artifact].[ext]"
 										type="jar"
 									/>
 								</else>
