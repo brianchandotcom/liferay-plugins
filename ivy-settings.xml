@@ -1,11 +1,26 @@
 <ivysettings>
 	<settings defaultResolver="default" />
 
+	<credentials host="${sonatype.snapshot.hostname}" realm="${sonatype.snapshot.realm}" username="${sonatype.snapshot.username}" passwd="${sonatype.snapshot.password}" />
+	<credentials host="${sonatype.staging.hostname}" realm="${sonatype.staging.realm}" username="${sonatype.staging.username}" passwd="${sonatype.staging.password}" />
+
 	<resolvers>
+		<filesystem name="local-m2" m2compatible="true">
+			<artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]"/>
+		</filesystem>
+
 		<ibiblio m2compatible="true" name="jboss-nexus" root="https://repository.jboss.org/nexus/content/repositories/releases" usepoms="false" />
 		<ibiblio m2compatible="true" name="jboss-thirdparty" root="https://repository.jboss.org/nexus/content/repositories/thirdparty-releases" usepoms="false" />
 		<ibiblio m2compatible="true" name="maven2" root="http://repo1.maven.org/maven2/" usepoms="false" />
 		<ibiblio m2compatible="true" name="primefaces" root="http://repository.primefaces.org/" usepoms="false" />
+
+		<url name="sonatype-m2-snapshot" m2compatible="true">
+			<artifact pattern="${sonatype.snapshot.url}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+		</url>
+
+		<url name="sonatype-m2-staging" m2compatible="true">
+			<artifact pattern="${sonatype.staging.url}/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
+		</url>
 
 		<chain name="default" dual="true">
 			<resolver ref="jboss-nexus" />
@@ -14,4 +29,8 @@
 			<resolver ref="primefaces" />
 		</chain>
 	</resolvers>
+
+	<signers>
+		<pgp name="${pgp.generator}" keyId="${pgp.keyname}" password="${pgp.passphrase}" />
+	</signers>
 </ivysettings>

@@ -24,6 +24,10 @@
 			dir="${ivy.home}"
 			includes="ivy-${ivy.install.version}.jar"
 		/>
+		<fileset dir="${project.dir}/lib">
+			<include name="bcpg-jdk16.jar" />
+			<include name="bcprov-jdk16.jar" />
+		</fileset>
 	</path>
 
 	<taskdef classpathref="ivy.lib.path" resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" />
@@ -84,4 +88,72 @@
 			</if>
 		</sequential>
 	</for>
+	
+	<target name="publish">
+
+		<ivy:settings file="${project.dir}/ivy-settings.xml" />
+		<ivy:resolve />
+
+		<!-- Property defaults below can be overridden in the plugin's build.xml descriptor -->
+		<property name="ivy.pom.developer" value="Brian Wing Shun Chan" />
+		<property name="ivy.pom.description" value="${plugin.name}" />
+		<property name="ivy.pom.name" value="${plugin.name}" />
+		<property name="ivy.pom.template.filename" value="maven-central-plugin.pom" />
+		<property name="ivy.pom.packaging" value="${plugin.packaging}" />
+		<property name="ivy.pom.version" value="${plugin.full.version}${plugin.version.qualifier}" />
+
+		<ivy:makepom
+			description="${ivy.pom.description}"
+			ivyfile="ivy.xml"
+			pomfile="${plugin.pom.file}"
+			templatefile="${project.dir}/tools/pom_tmpl/${ivy.pom.template.filename}">
+
+			<mapping conf="compile" scope="compile" />
+			<mapping conf="provided" scope="provided" />
+
+		</ivy:makepom>
+
+		<ivy:publish resolver="${ivy.publish.resolver}" forcedeliver="true" overwrite="true" publishivy="false">
+			<artifacts pattern="${project.dir}/dist/${plugin.name}-${plugin.full.version}-[type].[ext]" />
+			<artifacts pattern="${project.dir}/dist/${plugin.name}-${plugin.full.version}.[ext]" />
+		</ivy:publish>
+
+	</target>
+
+	<target name="publish-local-m2-release">
+
+		<antcall target="publish">
+			<param name="ivy.publish.resolver" value="local-m2"/>
+			<param name="plugin.version.qualifier" value="" />
+		</antcall>
+
+	</target>
+
+	<target name="publish-local-m2-snapshot">
+
+		<antcall target="publish">
+			<param name="ivy.publish.resolver" value="local-m2"/>
+			<param name="plugin.version.qualifier" value="-SNAPSHOT" />
+		</antcall>
+
+	</target>
+
+	<target name="publish-central-m2-release">
+
+		<antcall target="publish">
+			<param name="ivy.publish.resolver" value="sonatype-m2-staging"/>
+			<param name="plugin.version.qualifier" value="" />
+		</antcall>
+
+	</target>
+
+	<target name="publish-central-m2-snapshot">
+
+		<antcall target="publish">
+			<param name="ivy.publish.resolver" value="sonatype-m2-snapshot"/>
+			<param name="plugin.version.qualifier" value="-SNAPSHOT" />
+		</antcall>
+
+	</target>
+
 </project>

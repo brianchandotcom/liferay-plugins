@@ -181,6 +181,29 @@ ECJ was automatically installed. Please rerun your task.
 		<delete file="ServiceBuilder.temp" />
 	</target>
 
+
+	<target name="jar-javadoc">
+		<jar
+			basedir="javadoc"
+			jarfile="${plugin.javadoc.file}"
+		/>
+	</target>
+
+	<target name="jar-source">
+		<jar
+			basedir="src"
+			jarfile="${plugin.sources.file}"
+		/>
+	</target>
+
+	<target name="javadoc">
+		<javadoc
+			classpathref="${javac.classpathref}"
+			destdir="javadoc"
+			sourcepath="${javac.srcdir}">
+		</javadoc>
+	</target>
+
 	<target name="print-current-time">
 		<tstamp>
 			<format property="current.time" pattern="MMMM d, yyyy 'at' hh:mm aa" />
