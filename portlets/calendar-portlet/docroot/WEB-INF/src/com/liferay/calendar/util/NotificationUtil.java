@@ -16,7 +16,9 @@ package com.liferay.calendar.util;
 
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
+import com.liferay.calendar.model.CalendarNotificationTemplate;
 import com.liferay.calendar.model.CalendarResource;
+import com.liferay.calendar.notification.NotificationField;
 import com.liferay.calendar.notification.NotificationRecipient;
 import com.liferay.calendar.notification.NotificationSender;
 import com.liferay.calendar.notification.NotificationSenderFactory;
@@ -25,14 +27,13 @@ import com.liferay.calendar.notification.NotificationTemplateContextFactory;
 import com.liferay.calendar.notification.NotificationTemplateType;
 import com.liferay.calendar.notification.NotificationType;
 import com.liferay.calendar.service.permission.CalendarPermission;
+import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.configuration.Filter;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.CamelCaseUtil;
-import com.liferay.portal.kernel.util.CharPool;
-import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
@@ -40,81 +41,87 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.ContentUtil;
 import com.liferay.util.portlet.PortletProps;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.portlet.PortletPreferences;
+import java.util.Map;
 
 /**
  * @author Eduardo Lundgren
+ * @author Marcellus Tavares
  */
 public class NotificationUtil {
 
-	public static String getEmailFromAddress(
-			PortletPreferences preferences, long companyId)
-		throws SystemException {
+	public static User getDefaultSender(Calendar calendar) throws Exception {
+		CalendarResource calendarResource = calendar.getCalendarResource();
 
-		return PortalUtil.getEmailFromAddress(
-			preferences, companyId,
-			PortletPropsValues.CALENDAR_NOTIFICATION_FROM_ADDRESS);
+		User user = UserLocalServiceUtil.getDefaultUser(
+			calendarResource.getCompanyId());
+
+		if (calendarResource.isUser()) {
+			user = UserLocalServiceUtil.getUser(calendarResource.getClassPK());
+		}
+
+		return user;
 	}
 
-	public static String getEmailFromName(
-			PortletPreferences preferences, long companyId)
-		throws SystemException {
-
-		return PortalUtil.getEmailFromName(
-			preferences, companyId,
-			PortletPropsValues.CALENDAR_NOTIFICATION_FROM_NAME);
-	}
-
-	public static String getNotificationTemplateContent(
-		String propertyName, NotificationType notificationType,
-		NotificationTemplateType notificationTemplateType) {
+	public static String getDefaultTemplate(
+			NotificationType notificationType,
+			NotificationTemplateType notificationTemplateType,
+			NotificationField notificationField)
+		throws Exception {
 
 		Filter filter = new Filter(
 			notificationType.toString(), notificationTemplateType.toString());
+
+		String propertyName =
+			PortletPropsKeys.CALENDAR_NOTIFICATION_PREFIX + StringPool.PERIOD +
+			notificationField.toString();
 
 		String templatePath = PortletProps.get(propertyName, filter);
 
 		return ContentUtil.get(templatePath);
 	}
 
-	public static String getNotificationTemplateContent(
-		String propertyName, NotificationType notificationType,
-		NotificationTemplateType notificationTemplateType,
-		NotificationTemplateContext notificationTemplateContext) {
+	public static String getTemplate(
+			CalendarNotificationTemplate calendarNotificationTemplate,
+			NotificationType notificationType,
+			NotificationTemplateType notificationTemplateType,
+			NotificationField notificationField)
+		throws Exception {
 
-		String preferenceName = getPreferenceName(
-			propertyName, notificationType, notificationTemplateType);
+		String defaultTemplate = getDefaultTemplate(
+			notificationType, notificationTemplateType, notificationField);
 
-		String value = notificationTemplateContext.getString(preferenceName);
-
-		if (Validator.isNotNull(value)) {
-			return value;
-		}
-
-		return getNotificationTemplateContent(
-			propertyName, notificationType, notificationTemplateType);
+		return BeanPropertiesUtil.getString(
+			calendarNotificationTemplate, notificationField.toString(),
+			defaultTemplate);
 	}
 
-	public static String getPreferenceName(
-		String propertyName, NotificationType notificationType,
-		NotificationTemplateType notificationTemplateType) {
+	public static String getTemplateProperty(
+		CalendarNotificationTemplate calendarNotificationTemplate,
+		String propertyName) {
 
-		StringBundler sb = new StringBundler(3);
+		return getTemplateProperty(
+			calendarNotificationTemplate, propertyName, StringPool.BLANK);
+	}
 
-		sb.append(CamelCaseUtil.toCamelCase(propertyName, CharPool.PERIOD));
-		sb.append(StringUtil.upperCaseFirstLetter(notificationType.toString()));
-		sb.append(
-			StringUtil.upperCaseFirstLetter(
-				notificationTemplateType.toString()));
+	public static String getTemplateProperty(
+		CalendarNotificationTemplate calendarNotificationTemplate,
+		String propertyName, String defaultValue) {
 
-		return sb.toString();
+		if (calendarNotificationTemplate == null) {
+			return defaultValue;
+		}
+
+		UnicodeProperties typeSettingsProperties =
+			calendarNotificationTemplate.getTypeSettingsProperties();
+
+		return typeSettingsProperties.get(propertyName);
 	}
 
 	public static void notifyCalendarBookingInvites(
@@ -135,11 +142,11 @@ public class NotificationUtil {
 
 			NotificationTemplateContext notificationTemplateContext =
 				NotificationTemplateContextFactory.getInstance(
+					notificationType, NotificationTemplateType.INVITE,
 					calendarBooking, user);
 
 			notificationSender.sendNotification(
-				notificationRecipient, NotificationTemplateType.INVITE,
-				notificationTemplateContext);
+				notificationRecipient, notificationTemplateContext);
 		}
 	}
 
@@ -161,10 +168,6 @@ public class NotificationUtil {
 				return;
 			}
 
-			NotificationTemplateContext notificationTemplateContext =
-				NotificationTemplateContextFactory.getInstance(
-					calendarBooking, user);
-
 			NotificationType notificationType = null;
 
 			long diff = (startTime - nowTime) / _CHECK_INTERVAL;
@@ -183,16 +186,47 @@ public class NotificationUtil {
 					calendarBooking.getSecondReminderNotificationType();
 			}
 
+			NotificationTemplateContext notificationTemplateContext =
+				NotificationTemplateContextFactory.getInstance(
+					notificationType, NotificationTemplateType.REMINDER,
+					calendarBooking, user);
+
 			if (notificationType != null) {
 				NotificationSender notificationSender =
 					NotificationSenderFactory.getNotificationSender(
 						notificationType.toString());
 
 				notificationSender.sendNotification(
-					notificationRecipient, NotificationTemplateType.REMINDER,
-					notificationTemplateContext);
+					notificationRecipient, notificationTemplateContext);
 			}
 		}
+	}
+
+	public static String processNotificationTemplate(
+			String notificationTemplate,
+			Map<String, Serializable> notificationContext)
+		throws Exception {
+
+		return StringUtil.replace(
+				notificationTemplate,
+			new String[] {
+				"[$BOOKING_LOCATION$]", "[$BOOKING_START_DATE$]",
+				"[$BOOKING_END_DATE$]", "[$BOOKING_TITLE$]", "[$FROM_ADDRESS$]",
+				"[$FROM_NAME$]", "[$PORTAL_URL$]", "[$TO_ADDRESS$]",
+				"[$TO_NAME$]", "[$PORTLET_NAME$]"
+			},
+			new String[] {
+				GetterUtil.getString(notificationContext.get("location")),
+				GetterUtil.getString(notificationContext.get("startTime")),
+				GetterUtil.getString(notificationContext.get("endTime")),
+				GetterUtil.getString(notificationContext.get("title")),
+				GetterUtil.getString(notificationContext.get("fromAddress")),
+				GetterUtil.getString(notificationContext.get("fromName")),
+				GetterUtil.getString(notificationContext.get("portalUrl")),
+				GetterUtil.getString(notificationContext.get("toAddress")),
+				GetterUtil.getString(notificationContext.get("toName")),
+				GetterUtil.getString(notificationContext.get("portletName")),
+			});
 	}
 
 	private static List<NotificationRecipient> _getNotificationRecipients(
