@@ -20,10 +20,6 @@
 
 	<target name="clean">
 		<delete dir="classes" />
-		<delete dir="javadoc" />
-		<delete file="${plugin.pom.file}" />
-		<delete file="${plugin.sources.file}" />
-		<delete file="${plugin.javadoc.file}" />
 
 		<antcall target="build-common-plugin.clean" />
 	</target>
@@ -54,9 +50,6 @@
 		</antcall>
 	</target>
 
-	<target name="deploy" depends="jar">
-	</target>
-
 	<target name="jar" depends="compile">
 		<mkdir dir="${project.dir}/dist" />
 
@@ -67,52 +60,13 @@
 	</target>
 
 	<target name="javadoc">
-		<if>
-			<available file="src" />
-			<then>
-				<if>
-					<available file="lib" />
-					<then>
-						<path id="plugin-lib.classpath">
-							<fileset dir="lib" includes="*.jar" />
-							<pathelement location="classes" />
-							<pathelement location="${project.dir}/shared/portal-compat-shared/classes" />
-						</path>
-					</then>
-					<else>
-						<path id="plugin-lib.classpath">
-							<pathelement location="classes" />
-							<pathelement location="${project.dir}/shared/portal-compat-shared/classes" />
-						</path>
-					</else>
-				</if>
-				<antcall target="build-common.javadoc">
-					<param name="javac.classpathref" value="plugin.classpath" />
-					<param name="javac.srcdir" value="src" />
-					<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
-				</antcall>
-			</then>
-		</if>
+		<antcall target="build-common-plugin.javadoc">
+			<param name="javac.classpathref" value="plugin.classpath" />
+			<param name="javac.srcdir" value="src" />
+		</antcall>
 	</target>
 
 	<target name="war">
 		<antcall target="jar" />
 	</target>
-
-	<target name="publish-local-m2-release" depends="jar,javadoc,jar-javadoc,jar-source">
-		<antcall target="build-common-ivy.publish-local-m2-release" />
-	</target>
-
-	<target name="publish-local-m2-snapshot" depends="jar,javadoc,jar-javadoc,jar-source">
-		<antcall target="build-common-ivy.publish-local-m2-snapshot" />
-	</target>
-
-	<target name="publish-central-m2-release" depends="jar,javadoc,jar-javadoc,jar-source">
-		<antcall target="build-common-ivy.publish-central-m2-release" />
-	</target>
-
-	<target name="publish-central-m2-snapshot" depends="jar,javadoc,jar-javadoc,jar-source">
-		<antcall target="build-common-ivy.publish-central-m2-snapshot" />
-	</target>
-			
 </project>
