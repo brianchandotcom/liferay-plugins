@@ -15,6 +15,7 @@
 
 	<import file="build-common-ivy.xml" />
 
+	<property file="${project.dir}/build.liferay-cli.properties" />
 	<property file="${project.dir}/build.${user.name}.properties" />
 	<property file="${project.dir}/build.${env.COMPUTERNAME}.properties" />
 	<property file="${project.dir}/build.${env.HOST}.properties" />
