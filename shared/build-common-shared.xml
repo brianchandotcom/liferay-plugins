@@ -62,6 +62,36 @@
 		/>
 	</target>
 
+	<target name="javadoc">
+		<if>
+			<available file="src" />
+			<then>
+				<if>
+					<available file="lib" />
+					<then>
+						<path id="plugin-lib.classpath">
+							<fileset dir="lib" includes="*.jar" />
+							<pathelement location="classes" />
+							<pathelement location="${project.dir}/shared/portal-compat-shared/classes" />
+						</path>
+					</then>
+					<else>
+						<path id="plugin-lib.classpath">
+							<pathelement location="classes" />
+							<pathelement location="${project.dir}/shared/portal-compat-shared/classes" />
+						</path>
+					</else>
+				</if>
+
+				<antcall target="build-common-plugin.javadoc">
+					<param name="javac.classpathref" value="plugin.classpath" />
+					<param name="javac.srcdir" value="src" />
+					<reference refid="plugin-lib.classpath" torefid="plugin-lib.classpath" />
+				</antcall>
+			</then>
+		</if>
+	</target>
+
 	<target name="war">
 		<antcall target="jar" />
 	</target>
