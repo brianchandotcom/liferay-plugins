@@ -62,7 +62,7 @@ import java.util.Set;
  * Caching information and settings can be found in <code>portal.properties</code>
  * </p>
  *
- * @author Juan Fern√°ndez
+ * @author Juan FernÃ¡ndez
  * @see PollsQuestionPersistence
  * @see PollsQuestionUtil
  * @generated
