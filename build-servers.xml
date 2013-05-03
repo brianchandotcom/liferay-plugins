@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="build-servers" xmlns:antelope="antlib:ise.antelope.tasks">
+	<import file="build-common.xml" />
+
+	<propertycopy from="app.server.${app.server.type}.zip.url" name="app.server.zip.url" />
+
+	<basename file="${app.server.zip.url}" property="app.server.zip.name" suffix=".zip" />
+
+	<antelope:stringutil property="app.server.zip.version" string="${app.server.zip.name}">
+		<replace regex="liferay-portal-${app.server.type}-" replacement="" />
+	</antelope:stringutil>
+
+	<property location="${sdk.dir}/../../servers/${app.server.zip.version}/liferay-portal-${app.server.type}" name="liferay-cli.app.server.parent.dir" />
+
+	<target name="install-server">
+		<if>
+			<not>
+				<available file="${sdk.dir}/../../bundles/${app.server.zip.version}/liferay-portal-${app.server.type}.zip" />
+			</not>
+			<then>
+				<mkdir dir="${sdk.dir}/../../bundles/${app.server.zip.version}" />
+
+				<get
+					dest="${sdk.dir}/../../bundles/${app.server.zip.version}/liferay-portal-${app.server.type}.zip"
+					password="${liferay-cli.password}"
+					src="${app.server.zip.url}"
+					username="${liferay-cli.username}"
+					verbose="true"
+				/>
+			</then>
+		</if>
+
+		<antelope:stringutil string="${app.server.zip.version}" property="app.server.zip.version.endindex">
+			<lastindexof string="-" />
+		</antelope:stringutil>
+
+		<antelope:stringutil string="${app.server.zip.version}" property="app.server.zip.version.without.timestamp">
+			<substring endindex="${app.server.zip.version.endindex}" />
+		</antelope:stringutil>
+
+		<unzip
+			dest="${sdk.dir}/../../servers/${app.server.zip.version}/liferay-portal-${app.server.type}"
+			src="${sdk.dir}/../../bundles/${app.server.zip.version}/liferay-portal-${app.server.type}.zip"
+		>
+			<mapper>
+				<globmapper
+					from="liferay-portal-${app.server.zip.version.without.timestamp}/*"
+					to="*"
+				/>
+			</mapper>
+		</unzip>
+
+		<chmod perm="a+x">
+			<fileset dir="${sdk.dir}/../../servers/${app.server.zip.version}/liferay-portal-${app.server.type}">
+				<include name="**/*.sh" />
+			</fileset>
+
+			<fileset dir="${sdk.dir}/../../servers/${app.server.zip.version}/liferay-portal-${app.server.type}">
+				<exclude name="**/*.*" />
+			</fileset>
+		</chmod>
+
+		<propertyfile file="${sdk.dir}/cli.properties">
+			<entry key="app.server.parent.dir" value="${liferay-cli.app.server.parent.dir}" />
+			<entry key="app.server.type" value="${app.server.type}" />
+		</propertyfile>
+	</target>
+
+	<target name="select-app-server-type">
+		<propertyfile file="${sdk.dir}/cli.properties">
+			<entry key="app.server.parent.dir" value="${liferay-cli.app.server.parent.dir}" />
+			<entry key="app.server.type" value="${app.server.type}" />
+		</propertyfile>
+	</target>
+
+	<target name="run-server">
+		<propertycopy from="app.server.${app.server.type}.dir" name="app.server.dir" />
+
+		<switch value="${app.server.type}">
+			<case value="geronimo">
+				<exec dir="." executable="cmd" osfamily="winnt">
+					<arg line="/c '${app.server.dir}/bin/geronimo.bat run'" />
+				</exec>
+
+				<exec dir="." executable="sh" osfamily="unix">
+					<arg line="-c '${app.server.dir}/bin/geronimo.sh run'" />
+				</exec>
+			</case>
+			<case value="glassfish">
+				<exec dir="." executable="cmd" osfamily="winnt">
+					<arg line="/c '${app.server.dir}/bin/asadmin.bat start-domain --verbose'" />
+				</exec>
+
+				<exec dir="." executable="sh" osfamily="unix">
+					<arg line="-c '${app.server.dir}/bin/asadmin start-domain --verbose'" />
+				</exec>
+			</case>
+			<case value="jboss">
+					<exec dir="." executable="cmd" osfamily="winnt">
+						<arg line="/c '${app.server.dir}/bin/standalone.bat'" />
+					</exec>
+
+					<exec dir="." executable="sh" osfamily="unix">
+						<arg line="-c '${app.server.dir}/bin/standalone.sh'" />
+					</exec>
+			</case>
+			<case value="jetty">
+					<exec dir="." executable="cmd" osfamily="winnt">
+						<arg line="/c '${app.server.dir}/bin/run.bat'" />
+					</exec>
+
+					<exec dir="." executable="sh" osfamily="unix">
+						<arg line="-c '${app.server.dir}/bin/run.sh'" />
+					</exec>
+			</case>
+			<case value="jonas">
+					<exec dir="." executable="cmd" osfamily="winnt">
+						<arg line="/c '${app.server.dir}/bin/jonas.bat start -fg'" />
+					</exec>
+
+					<exec dir="." executable="sh" osfamily="unix">
+						<arg line="-c '${app.server.dir}/bin/jonas start -fg'" />
+					</exec>
+			</case>
+			<case value="resin">
+					<exec dir="." executable="cmd" osfamily="winnt">
+						<arg line="/c '${app.server.dir}/bin/run.bat console'" />
+					</exec>
+
+					<exec dir="." executable="sh" osfamily="unix">
+						<arg line="-c '${app.server.dir}/bin/run.sh console'" />
+					</exec>
+			</case>
+			<case value="tomcat">
+				<exec dir="." executable="cmd" osfamily="winnt">
+					<arg line="/c '${app.server.dir}/bin/catalina.bat run'" />
+				</exec>
+
+				<exec dir="." executable="sh" osfamily="unix">
+					<arg line="-c '${app.server.dir}/bin/catalina.sh run'" />
+				</exec>
+			</case>
+		</switch>
+	</target>
+</project>
