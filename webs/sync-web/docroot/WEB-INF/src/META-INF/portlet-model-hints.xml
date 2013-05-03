@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.sync.model.DLSync">
+		<field name="syncId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createDate" type="long" />
+		<field name="modifiedDate" type="long" />
+		<field name="fileId" type="long" />
+		<field name="fileUuid" type="String" />
+		<field name="repositoryId" type="long" />
+		<field name="parentFolderId" type="long" />
+		<field name="name" type="String" />
+		<field name="checksum" type="String" />
+		<field name="description" type="String" />
+		<field name="event" type="String" />
+		<field name="lockUserId" type="long" />
+		<field name="lockUserName" type="String" />
+		<field name="size" type="long" />
+		<field name="type" type="String" />
+		<field name="version" type="String" />
+	</model>
+</model-hints>

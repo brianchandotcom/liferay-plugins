@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.liferay.sync.model.DLSync" />
+	<class name="com.liferay.sync.model.impl.DLSyncImpl" table="Sync_DLSync">
+		<cache usage="read-write" />
+		<id name="syncId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createDate" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="modifiedDate" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="fileId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="fileUuid" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="repositoryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="parentFolderId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="name" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="checksum" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="description" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="event" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="lockUserId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="lockUserName" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="size" type="com.liferay.portal.dao.orm.hibernate.LongType" column="size_" />
+		<property name="type" type="com.liferay.portal.dao.orm.hibernate.StringType" column="type_" />
+		<property name="version" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+</hibernate-mapping>

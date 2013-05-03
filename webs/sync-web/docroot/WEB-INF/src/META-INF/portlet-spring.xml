@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean id="com.liferay.sync.service.DLSyncLocalService" class="com.liferay.sync.service.impl.DLSyncLocalServiceImpl" />
+	<bean id="com.liferay.sync.service.DLSyncService" class="com.liferay.sync.service.impl.DLSyncServiceImpl" />
+	<bean id="com.liferay.sync.service.persistence.DLSyncPersistence" class="com.liferay.sync.service.persistence.DLSyncPersistenceImpl" parent="basePersistence" />
+</beans>
