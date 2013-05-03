@@ -697,18 +697,15 @@ public class DLSyncClp extends BaseModelImpl<DLSync> implements DLSync {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof DLSyncClp)) {
 			return false;
 		}
 
-		DLSyncClp dlSync = null;
-
-		try {
-			dlSync = (DLSyncClp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		DLSyncClp dlSync = (DLSyncClp)obj;
 
 		long primaryKey = dlSync.getPrimaryKey();
 

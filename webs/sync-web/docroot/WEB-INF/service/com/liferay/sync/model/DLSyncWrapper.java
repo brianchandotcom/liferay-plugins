@@ -565,7 +565,7 @@ public class DLSyncWrapper implements DLSync, ModelWrapper<DLSync> {
 		return new DLSyncWrapper((DLSync)_dlSync.clone());
 	}
 
-	public int compareTo(DLSync dlSync) {
+	public int compareTo(com.liferay.sync.model.DLSync dlSync) {
 		return _dlSync.compareTo(dlSync);
 	}
 
@@ -574,15 +574,15 @@ public class DLSyncWrapper implements DLSync, ModelWrapper<DLSync> {
 		return _dlSync.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<DLSync> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<com.liferay.sync.model.DLSync> toCacheModel() {
 		return _dlSync.toCacheModel();
 	}
 
-	public DLSync toEscapedModel() {
+	public com.liferay.sync.model.DLSync toEscapedModel() {
 		return new DLSyncWrapper(_dlSync.toEscapedModel());
 	}
 
-	public DLSync toUnescapedModel() {
+	public com.liferay.sync.model.DLSync toUnescapedModel() {
 		return new DLSyncWrapper(_dlSync.toUnescapedModel());
 	}
 
