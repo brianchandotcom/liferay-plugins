@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
+
+<service-builder package-path="com.liferay.sync">
+	<namespace>Sync</namespace>
+
+	<entity name="DLSync" local-service="true" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="syncId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createDate" type="long" />
+		<column name="modifiedDate" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="fileId" type="long" />
+		<column name="fileUuid" type="String" />
+		<column name="repositoryId" type="long" />
+		<column name="parentFolderId" type="long" />
+		<column name="name" type="String" />
+		<column name="checksum" type="String" />
+		<column name="description" type="String" />
+		<column name="event" type="String" />
+		<column name="lockUserId" type="long" />
+		<column name="lockUserName" type="String" />
+		<column name="size" type="long" />
+		<column name="type" type="String" />
+		<column name="version" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="companyId" />
+			<order-column name="modifiedDate" />
+			<order-column name="repositoryId" />
+		</order>
+
+		<finder name="C_M_R" return-type="Collection">
+			<finder-column name="companyId" />
+			<finder-column name="modifiedDate" comparator="&gt;" />
+			<finder-column name="repositoryId" />
+		</finder>
+		<finder name="FileId" return-type="DLSync" unique="true">
+			<finder-column name="fileId" />
+		</finder>
+
+		<!-- References -->
+
+		<reference package-path="com.liferay.portal" entity="Group" />
+		<reference package-path="com.liferay.portal" entity="Repository" />
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
+
+		<!-- Transactions -->
+
+		<tx-required>getFileDeltaAsStream</tx-required>
+	</entity>
+
+</service-builder>
