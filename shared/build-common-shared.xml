@@ -50,9 +50,6 @@
 		</antcall>
 	</target>
 
-	<target name="deploy" depends="jar">
-	</target>
-
 	<target name="jar" depends="compile">
 		<mkdir dir="${sdk.dir}/dist" />
 
@@ -60,6 +57,13 @@
 			basedir="classes"
 			jarfile="${plugin.file}"
 		/>
+	</target>
+
+	<target name="javadoc">
+		<antcall target="build-common-plugin.javadoc">
+			<param name="javac.classpathref" value="plugin.classpath" />
+			<param name="javac.srcdir" value="src" />
+		</antcall>
 	</target>
 
 	<target name="war">
