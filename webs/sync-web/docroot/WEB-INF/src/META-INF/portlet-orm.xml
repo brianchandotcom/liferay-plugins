@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="com.liferay.sync.model.impl.DLSyncModelImpl">
+		<attributes>
+			<id name="syncId" />
+			<basic name="companyId" />
+			<basic name="createDate" />
+			<basic name="modifiedDate" />
+			<basic name="fileId" />
+			<basic name="fileUuid" />
+			<basic name="repositoryId" />
+			<basic name="parentFolderId" />
+			<basic name="name" />
+			<basic name="checksum" />
+			<basic name="description" />
+			<basic name="event" />
+			<basic name="lockUserId" />
+			<basic name="lockUserName" />
+			<basic name="size">
+				<column name="SIZE_" />
+			</basic>
+			<basic name="type">
+				<column name="TYPE_" />
+			</basic>
+			<basic name="version" />
+			<transient name="lockUserUuid" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="com.liferay.sync.model.impl.DLSyncImpl" name="DLSync">
+		<table name="Sync_DLSync" />
+		<attributes />
+	</entity>
+</entity-mappings>
