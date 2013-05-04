@@ -15,6 +15,8 @@
 
 	<import file="build-common-ivy.xml" />
 
+	<property file="${sdk.dir}/cli.properties" />
+
 	<property file="${sdk.dir}/build.${user.name}.properties" />
 	<property file="${sdk.dir}/build.${env.COMPUTERNAME}.properties" />
 	<property file="${sdk.dir}/build.${env.HOST}.properties" />
