@@ -25,7 +25,7 @@ import java.util.Map;
  * This class is a wrapper for {@link PollsQuestion}.
  * </p>
  *
- * @author    Juan Fern√°ndez
+ * @author    Juan FernÃ¡ndez
  * @see       PollsQuestion
  * @generated
  */
