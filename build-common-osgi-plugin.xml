@@ -4,6 +4,8 @@
 <project name="build-common-osgi-plugin" xmlns:antelope="antlib:ise.antelope.tasks">
 	<import file="build-common-plugin.xml" />
 
+	<property name="project.dir" value="${sdk.dir}" />
+
 	<antelope:stringutil string="${plugin.file}" property="plugin.file">
 		<antelope:replace regex="\.war" replacement="\.jar" />
 	</antelope:stringutil>
