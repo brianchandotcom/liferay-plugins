@@ -16,17 +16,19 @@
 
 <%@ include file="/init.jsp" %>
 
-<div class="loading-animation">
-	<iframe class="aui-helper-hidden-accessible" frameborder="0" id="<portlet:namespace />frame" name="<portlet:namespace />frame" scrolling="no" src="about:blank"></iframe>
-</div>
+<div class="<%= StringUtil.lowerCase(ReleaseInfo.getCodeName()) %>">
+	<div class="loading-animation">
+		<iframe class="aui-helper-hidden-accessible" frameborder="0" id="<portlet:namespace />frame" name="<portlet:namespace />frame" scrolling="no" src="about:blank"></iframe>
+	</div>
 
-<form action="<%= iFrameURL %>" id="<portlet:namespace />fm" method="post" target="<portlet:namespace />frame">
-<input name="referer" type="hidden" value="<%= referer %>" />
-<input name="mpClientURL" type="hidden" value="<%= themeDisplay.getPortalURL() + themeDisplay.getURLCurrent() %>" />
-</form>
+	<form action="<%= iFrameURL %>" id="<portlet:namespace />fm" method="post" target="<portlet:namespace />frame">
+	<input name="referer" type="hidden" value="<%= referer %>" />
+	<input name="mpClientURL" type="hidden" value="<%= themeDisplay.getPortalURL() + themeDisplay.getURLCurrent() %>" />
+	</form>
 
-<div class="aui-helper-hidden time-out-message portlet-msg-error">
-	<liferay-ui:message key="could-not-connect-to-the-liferay-marketplace" />
+	<div class="time-out-message aui-helper-hidden hide portlet-msg-error alert alert-error">
+		<liferay-ui:message key="could-not-connect-to-the-liferay-marketplace" />
+	</div>
 </div>
 
 <aui:script use="aui-base,aui-io,liferay-marketplace-messenger">
