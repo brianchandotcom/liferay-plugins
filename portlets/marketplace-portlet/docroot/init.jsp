@@ -26,8 +26,10 @@
 <%@ page import="com.liferay.marketplace.util.MarketplaceConstants" %><%@
 page import="com.liferay.marketplace.util.PortletKeys" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.ReleaseInfo" %><%@
 page import="com.liferay.portal.kernel.util.ServerDetector" %><%@
-page import="com.liferay.portal.kernel.util.StringPool" %>
+page import="com.liferay.portal.kernel.util.StringPool" %><%@
+page import="com.liferay.portal.kernel.util.StringUtil" %>
 
 <%@ page import="javax.portlet.WindowState" %>
 
