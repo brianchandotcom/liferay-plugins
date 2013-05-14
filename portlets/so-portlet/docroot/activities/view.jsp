@@ -27,60 +27,13 @@ PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setParameter("tabs1", tabs1);
 
 SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, 10, portletURL, null, null);
-
-List<SocialActivitySet> results = null;
-int total = 0;
 %>
 
 <c:choose>
-	<c:when test="<%= group.isUser() && (themeDisplay.getUserId() == group.getClassPK()) && !layout.isPublicLayout() %>">
-		<liferay-ui:tabs
-			names="all,connections,following,my-sites"
-			url="<%= portletURL.toString() %>"
-			value="<%= tabs1 %>"
-		/>
-
-		<%
-		if (tabs1.equals("connections")) {
-			results = SocialActivitySetLocalServiceUtil.getRelationActivitySets(themeDisplay.getUserId(), SocialRelationConstants.TYPE_BI_CONNECTION, searchContainer.getStart(), searchContainer.getEnd());
-			total = SocialActivitySetLocalServiceUtil.getRelationActivitySetsCount(themeDisplay.getUserId(), SocialRelationConstants.TYPE_BI_CONNECTION);
-		}
-		else if (tabs1.equals("following")) {
-			results = SocialActivitySetLocalServiceUtil.getRelationActivitySets(themeDisplay.getUserId(), SocialRelationConstants.TYPE_UNI_FOLLOWER, searchContainer.getStart(), searchContainer.getEnd());
-			total = SocialActivitySetLocalServiceUtil.getRelationActivitySetsCount(themeDisplay.getUserId(), SocialRelationConstants.TYPE_UNI_FOLLOWER);
-		}
-		else if (tabs1.equals("my-sites")) {
-			results = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySets(themeDisplay.getUserId(), searchContainer.getStart(), searchContainer.getEnd());
-			total = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySetsCount(themeDisplay.getUserId());
-		}
-		else {
-			results = SocialActivitySetLocalServiceUtil.getUserActivitySets(themeDisplay.getUserId(), searchContainer.getStart(), searchContainer.getEnd());
-			total = SocialActivitySetLocalServiceUtil.getUserActivitySetsCount(themeDisplay.getUserId());
-		}
-
-		searchContainer.setResults(results);
-		searchContainer.setTotal(total);
-		%>
-
-		<%@ include file="/activities/view_activities.jspf" %>
+	<c:when test="<%= GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SOCIAL_ACTIVITY_SETS_ENABLED)) %>">
+		<%@ include file="/activities/view_activity_sets.jspf" %>
 	</c:when>
 	<c:otherwise>
-
-		<%
-		results = SocialActivitySetLocalServiceUtil.getGroupActivitySets(group.getGroupId(), searchContainer.getStart(), searchContainer.getEnd());
-		total = SocialActivitySetLocalServiceUtil.getGroupActivitySetsCount(group.getGroupId());
-
-		searchContainer.setResults(results);
-		searchContainer.setTotal(total);
-		%>
-
 		<%@ include file="/activities/view_activities.jspf" %>
 	</c:otherwise>
 </c:choose>
-
-<c:if test="<%= (!results.isEmpty()) %>">
-	<liferay-ui:search-paginator
-		searchContainer="<%= searchContainer %>"
-		type="article"
-	/>
-</c:if>
