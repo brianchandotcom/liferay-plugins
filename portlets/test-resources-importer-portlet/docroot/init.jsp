@@ -47,7 +47,8 @@ page import="com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServ
 page import="com.liferay.portlet.journal.model.JournalArticle" %><%@
 page import="com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil" %>
 
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Locale" %><%@
+page import="java.util.Map" %>
 
 <portlet:defineObjects />
 
