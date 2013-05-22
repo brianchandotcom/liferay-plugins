@@ -22,6 +22,7 @@ import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.workflow.kaleo.definition.ExecutionType;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient;
@@ -41,13 +42,14 @@ public abstract class BaseNotificationSender implements NotificationSender {
 	public void sendNotification(
 			List<KaleoNotificationRecipient> kaleoNotificationRecipients,
 			String defaultSubject, String notificationMessage,
-			ExecutionContext executionContext)
+			ExecutionType executionType, ExecutionContext executionContext)
 		throws NotificationMessageSenderException {
 
 		try {
 			Set<NotificationRecipient> notificationRecipients =
 				getNotificationRecipients(
-					kaleoNotificationRecipients, executionContext);
+					kaleoNotificationRecipients, executionType,
+					executionContext);
 
 			if (notificationRecipients.isEmpty()) {
 				return;
@@ -172,16 +174,16 @@ public abstract class BaseNotificationSender implements NotificationSender {
 
 	protected Set<NotificationRecipient> getNotificationRecipients(
 			List<KaleoNotificationRecipient> kaleoNotificationRecipients,
-			ExecutionContext executionContext)
+			ExecutionType executionType, ExecutionContext executionContext)
 		throws Exception {
 
 		Set<NotificationRecipient> notificationRecipients =
 			new HashSet<NotificationRecipient>();
 
-		if (kaleoNotificationRecipients.isEmpty()) {
-			addAssignedRecipients(notificationRecipients, executionContext);
+		if (kaleoNotificationRecipients.isEmpty() ||
+			ExecutionType.ON_ASSIGNMENT.equals(executionType)) {
 
-			return notificationRecipients;
+			addAssignedRecipients(notificationRecipients, executionContext);
 		}
 
 		for (KaleoNotificationRecipient kaleoNotificationRecipient :

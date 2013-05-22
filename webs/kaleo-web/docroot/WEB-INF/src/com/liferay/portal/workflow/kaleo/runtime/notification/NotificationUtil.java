@@ -72,6 +72,9 @@ public class NotificationUtil {
 				getKaleoNotificationRecipients(
 					kaleoNotification.getKaleoNotificationId());
 
+		ExecutionType executionType = ExecutionType.parse(
+			kaleoNotification.getExecutionType());
+
 		for (String notificationType : notificationTypes) {
 			NotificationSender notificationSender =
 				NotificationSenderFactory.getNotificationSender(
@@ -79,7 +82,7 @@ public class NotificationUtil {
 
 			notificationSender.sendNotification(
 				kaleoNotificationRecipient, notificationSubject,
-				notificationMessage, executionContext);
+				notificationMessage, executionType, executionContext);
 		}
 	}
 
