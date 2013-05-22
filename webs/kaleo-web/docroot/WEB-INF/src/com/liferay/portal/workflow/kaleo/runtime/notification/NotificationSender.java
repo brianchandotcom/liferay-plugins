@@ -14,6 +14,7 @@
 
 package com.liferay.portal.workflow.kaleo.runtime.notification;
 
+import com.liferay.portal.workflow.kaleo.definition.ExecutionType;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 
@@ -27,7 +28,7 @@ public interface NotificationSender {
 	public void sendNotification(
 			List<KaleoNotificationRecipient> notificationRecipients,
 			String subject, String notificationMessage,
-			ExecutionContext executionContext)
+			ExecutionType executionType, ExecutionContext executionContext)
 		throws NotificationMessageSenderException;
 
 }
