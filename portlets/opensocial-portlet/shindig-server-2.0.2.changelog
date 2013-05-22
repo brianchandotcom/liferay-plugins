@@ -1,0 +1,82 @@
+==============================
+Apache Shindig 2.0.2 Changelog
+==============================
+
+Apache Shindig 2.0.2 source has been patched with the following changes:
+
+==========================================================================================
+Fix typo in MediaItem from DURATION to duration (Shindig SVN commit: 1057964)
+==========================================================================================
+	--- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/MediaItem.java
+	+++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/MediaItem.java
+	@@ -36,7 +36,7 @@ public interface MediaItem {
+	     ALBUM_ID("albumId"),
+	     CREATED("created"),
+	     DESCRIPTION("description"),
+	-    DURATION("duration"),
+	+    DURATION("DURATION"),
+	     FILE_SIZE("fileSize"),
+	     ID("id"),
+	     LANGUAGE("language"),
+
+==========================================================================================
+SHINDIG-1497 - pubsub2 breaks due to exception after drag and drop of gadget
+==========================================================================================
+	--- a/features/src/main/javascript/features/rpc/rpc.js
+	+++ b/features/src/main/javascript/features/rpc/rpc.js
+	@@ -369,10 +369,10 @@ if (!gadgets.rpc) { // make lib resilient to double-inclusion
+	       id = String(id);
+
+	       // Try window.frames first
+	-      // var target = window.frames[id];
+	-      // if (target) {
+	-      //   return target;
+	-      // }
+	+      var target = window.frames[id];
+	+      if (target) {
+	+        return target;
+	+      }
+
+	       // Fall back to getElementById()
+	       target = document.getElementById(id);
+	@@ -446,7 +446,7 @@ if (!gadgets.rpc) { // make lib resilient to double-inclusion
+	    * @return {boolean}
+	    */
+	     function callSameDomain(target, rpc) {
+	-      //if (typeof sameDomain[target] === 'undefined') {
+	+      if (typeof sameDomain[target] === 'undefined') {
+	         // Seed with a negative, typed value to avoid
+	         // hitting this code path repeatedly.
+	         sameDomain[target] = false;
+	@@ -465,7 +465,7 @@ if (!gadgets.rpc) { // make lib resilient to double-inclusion
+	           // more meaningful error to the caller.
+	           gadgets.error('Same domain call failed: parent= incorrectly set.');
+	         }
+	-      //}
+	+      }
+
+	       if (typeof sameDomain[target] === 'function') {
+	         // Call target's receive method
+
+==========================================================================================
+LPS-21488 - OpenSocial - Allow users to access OAuth gadgets on non-private pages
+==========================================================================================
+	--- a/java/gadgets/src/main/java/org/apache/shindig/gadgets/oauth/OAuthRequest.java
+	+++ b/java/gadgets/src/main/java/org/apache/shindig/gadgets/oauth/OAuthRequest.java
+	@@ -323,11 +323,11 @@ public class OAuthRequest {
+	     if (!fetcherConfig.isViewerAccessTokensEnabled() && !pageOwner.equals(pageViewer)) {
+	       throw new OAuthRequestException(OAuthError.NOT_OWNER);
+	     }
+	-    // if (stateOwner != null && !stateOwner.equals(pageViewer)) {
+	-    //   throw new OAuthRequestException(OAuthError.UNKNOWN_PROBLEM,
+	-    //       "Client state belongs to a different person " +
+	-    //       "(state owner=" + stateOwner + ", pageViewer=" + pageViewer + ')');
+	-    // }
+	+    if (stateOwner != null && !stateOwner.equals(pageViewer)) {
+	+      throw new OAuthRequestException(OAuthError.UNKNOWN_PROBLEM,
+	+          "Client state belongs to a different person " +
+	+          "(state owner=" + stateOwner + ", pageViewer=" + pageViewer + ')');
+	+    }
+	   }
+
+	   private void fetchRequestToken() throws OAuthRequestException, OAuthProtocolException {
