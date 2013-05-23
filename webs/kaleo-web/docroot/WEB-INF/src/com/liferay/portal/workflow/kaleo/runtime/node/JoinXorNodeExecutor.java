@@ -16,13 +16,11 @@ package com.liferay.portal.workflow.kaleo.runtime.node;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
 import com.liferay.portal.workflow.kaleo.model.KaleoTimer;
 import com.liferay.portal.workflow.kaleo.model.KaleoTransition;
-import com.liferay.portal.workflow.kaleo.model.impl.KaleoInstanceTokenImpl;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.graph.PathElement;
 
@@ -34,11 +32,46 @@ import java.util.Map;
 /**
  * @author Michael C. Han
  */
-public class StateNodeExecutor extends BaseNodeExecutor {
+public class JoinXorNodeExecutor extends BaseNodeExecutor {
 
 	@Override
 	protected boolean doEnter(
-		KaleoNode currentKaleoNode, ExecutionContext executionContext) {
+			KaleoNode currentKaleoNode, ExecutionContext executionContext)
+		throws PortalException, SystemException {
+
+		KaleoInstanceToken kaleoInstanceToken =
+			executionContext.getKaleoInstanceToken();
+
+		kaleoInstanceToken =
+			kaleoInstanceTokenLocalService.getKaleoInstanceToken(
+				kaleoInstanceToken.getKaleoInstanceTokenId());
+
+		if (kaleoInstanceToken.isCompleted()) {
+			return false;
+		}
+
+		kaleoInstanceToken =
+			kaleoInstanceTokenLocalService.completeKaleoInstanceToken(
+				kaleoInstanceToken.getKaleoInstanceTokenId());
+
+		KaleoInstanceToken parentKaleoInstanceToken =
+			kaleoInstanceToken.getParentKaleoInstanceToken();
+
+		if (!parentKaleoInstanceToken.
+				hasIncompleteChildrenKaleoInstanceToken()) {
+
+			return false;
+		}
+
+		List<KaleoInstanceToken> childrenKaleoInstanceTokens =
+			parentKaleoInstanceToken.getChildrenKaleoInstanceTokens();
+
+		for (KaleoInstanceToken childKaleoInstanceTokens :
+				childrenKaleoInstanceTokens) {
+
+			kaleoInstanceTokenLocalService.completeKaleoInstanceToken(
+				childKaleoInstanceTokens.getKaleoInstanceTokenId());
+		}
 
 		return true;
 	}
@@ -56,36 +89,25 @@ public class StateNodeExecutor extends BaseNodeExecutor {
 		KaleoInstanceToken kaleoInstanceToken =
 			executionContext.getKaleoInstanceToken();
 
-		String transitionName = executionContext.getTransitionName();
+		KaleoInstanceToken parentKaleoInstanceToken =
+			kaleoInstanceToken.getParentKaleoInstanceToken();
 
-		if (!currentKaleoNode.hasKaleoTransition()) {
-			kaleoInstanceToken =
-				kaleoInstanceTokenLocalService.completeKaleoInstanceToken(
-					kaleoInstanceToken.getKaleoInstanceTokenId());
-
-			if (kaleoInstanceToken.getParentKaleoInstanceTokenId() ==
-					KaleoInstanceTokenImpl.
-						DEFAULT_PARENT_KALEO_INSTANCE_TOKEN_ID) {
-
-				kaleoInstanceLocalService.completeKaleoInstance(
-					kaleoInstanceToken.getKaleoInstanceId());
-			}
+		if (parentKaleoInstanceToken.getCurrentKaleoNodeId() ==
+				currentKaleoNode.getKaleoNodeId()) {
 
 			return;
 		}
 
-		KaleoTransition kaleoTransition = null;
+		parentKaleoInstanceToken =
+			kaleoInstanceTokenLocalService.updateKaleoInstanceToken(
+				parentKaleoInstanceToken.getKaleoInstanceTokenId(),
+				currentKaleoNode.getKaleoNodeId());
 
-		if (Validator.isNull(transitionName)) {
-			kaleoTransition = currentKaleoNode.getDefaultKaleoTransition();
-		}
-		else {
-			kaleoTransition = currentKaleoNode.getKaleoTransition(
-				transitionName);
-		}
+		KaleoTransition kaleoTransition =
+			currentKaleoNode.getDefaultKaleoTransition();
 
 		ExecutionContext newExecutionContext = new ExecutionContext(
-			kaleoInstanceToken, workflowContext, serviceContext);
+			parentKaleoInstanceToken, workflowContext, serviceContext);
 
 		PathElement pathElement = new PathElement(
 			currentKaleoNode, kaleoTransition.getTargetKaleoNode(),
