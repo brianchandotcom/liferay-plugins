@@ -12,13 +12,24 @@
  * details.
  */
 
-package com.liferay.portal.workflow.kaleo.definition;
+package com.liferay.portal.workflow.kaleo.hook.upgrade;
+
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoNotificationRecipient;
 
 /**
  * @author Michael C. Han
  */
-public enum RecipientType {
+public class UpgradeProcess_1_2_0 extends UpgradeProcess {
 
-	ADDRESS, ASSIGNEES, ROLE, USER
+	@Override
+	public int getThreshold() {
+		return 120;
+	}
+
+	@Override
+	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeKaleoNotificationRecipient.class);
+	}
 
 }
