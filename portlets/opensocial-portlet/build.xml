@@ -323,6 +323,30 @@
 				/>
 			</then>
 		</if>
+
+		<!-- LPS-14616 -->
+
+		<zip
+			basedir="patches/shindig-social-api-2.0.2"
+			destfile="tmp/WEB-INF/lib/shindig-social-api-2.0.2.jar"
+			update="yes"
+		/>
+
+		<!-- LPS-15003 -->
+
+		<zip
+			basedir="patches/shindig-features-2.0.2"
+			destfile="tmp/WEB-INF/lib/shindig-features-2.0.2.jar"
+			update="yes"
+		/>
+
+		<!-- LPS-21488 -->
+
+		<zip
+			basedir="patches/shindig-gadgets-2.0.2"
+			destfile="tmp/WEB-INF/lib/shindig-gadgets-2.0.2.jar"
+			update="yes"
+		/>
 	</target>
 
 	<target name="merge-backup-file">

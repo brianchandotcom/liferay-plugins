@@ -1,0 +1,21 @@
+diff --git a/java/gadgets/src/main/java/org/apache/shindig/gadgets/oauth/OAuthRequest.java b/java/gadgets/src/main/java/org/apache/shindig/gadgets/oauth/OAuthRequest.java
+index b9d1310..9d74ddf 100644
+--- a/java/gadgets/src/main/java/org/apache/shindig/gadgets/oauth/OAuthRequest.java
++++ b/java/gadgets/src/main/java/org/apache/shindig/gadgets/oauth/OAuthRequest.java
+@@ -323,11 +323,11 @@ public class OAuthRequest {
+     if (!fetcherConfig.isViewerAccessTokensEnabled() && !pageOwner.equals(pageViewer)) {
+       throw new OAuthRequestException(OAuthError.NOT_OWNER);
+     }
+-    if (stateOwner != null && !stateOwner.equals(pageViewer)) {
+-      throw new OAuthRequestException(OAuthError.UNKNOWN_PROBLEM,
+-          "Client state belongs to a different person " +
+-          "(state owner=" + stateOwner + ", pageViewer=" + pageViewer + ')');
+-    }
++    // if (stateOwner != null && !stateOwner.equals(pageViewer)) {
++    //   throw new OAuthRequestException(OAuthError.UNKNOWN_PROBLEM,
++    //       "Client state belongs to a different person " +
++    //       "(state owner=" + stateOwner + ", pageViewer=" + pageViewer + ')');
++    // }
+   }
+
+   private void fetchRequestToken() throws OAuthRequestException, OAuthProtocolException {

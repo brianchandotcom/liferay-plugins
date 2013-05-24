@@ -1,0 +1,13 @@
+diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/MediaItem.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/mod
+index 12faa2f..10da062 100644
+--- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/MediaItem.java
++++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/MediaItem.java
+@@ -36,7 +36,7 @@ public interface MediaItem {
+     ALBUM_ID("albumId"),
+     CREATED("created"),
+     DESCRIPTION("description"),
+-    DURATION("DURATION"),
++    DURATION("duration"),
+     FILE_SIZE("fileSize"),
+     ID("id"),
+     LANGUAGE("language"),
