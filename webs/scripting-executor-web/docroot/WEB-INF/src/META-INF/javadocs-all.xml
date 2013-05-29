@@ -2,9 +2,94 @@
 
 <javadocs>
 	<javadoc>
-		<name>com.liferay.scriptingexecutor.messaging.ScriptingExecutorMessageListener</name>
+		<name>ScriptingExecutorMessageListener</name>
 		<type>com.liferay.scriptingexecutor.messaging.ScriptingExecutorMessageListener</type>
-		<author><![CDATA[Brian Wing Shun Chan]]></author>
+		<author><![CDATA[Michael C. Han]]></author>
+		<method>
+			<name>deploy</name>
+			<param>
+				<name>servletContext</name>
+				<type>javax.servlet.ServletContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>doReceive</name>
+			<param>
+				<name>message</name>
+				<type>com.liferay.portal.kernel.messaging.Message</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
+			<name>executeScripts</name>
+			<param>
+				<name>servletContext</name>
+				<type>javax.servlet.ServletContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>language</name>
+				<type>java.lang.String</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>classLoader</name>
+				<type>java.lang.ClassLoader</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+		</method>
+		<method>
+			<name>getLanguage</name>
+			<param>
+				<name>pluginPackageProperties</name>
+				<type>java.util.Properties</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+		</method>
+		<method>
+			<name>getPluginPackageProperties</name>
+			<param>
+				<name>servletContext</name>
+				<type>javax.servlet.ServletContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+		</method>
+		<method>
+			<name>undeploy</name>
+			<param>
+				<name>servletContext</name>
+				<type>javax.servlet.ServletContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<field>
+			<name>_SCRIPTS_DIR</name>
+		</field>
+		<field>
+			<name>_log</name>
+		</field>
 	</javadoc>
 	<javadoc>
 		<name>ClassLoaderUtil</name>
