@@ -12,18 +12,14 @@
  * details.
  */
 
-package com.liferay.scriptingexecutor.servlet;
+package com.liferay.scriptingexecutor.messaging;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.DestinationNames;
-import com.liferay.portal.kernel.messaging.HotDeployMessageListener;
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
-import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.scripting.ScriptingUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
-import com.liferay.portal.kernel.util.BasePortalLifecycle;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -41,104 +37,67 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 
 /**
  * @author Michael C. Han
  */
-public class ScriptingExecutorServletContextListener
-	extends BasePortalLifecycle implements ServletContextListener {
+public class ScriptingExecutorMessageListener extends BaseMessageListener {
 
-	@Override
-	public void contextDestroyed(ServletContextEvent servletContextEvent) {
-		portalDestroy();
-	}
+	protected void deploy(ServletContext servletContext) throws Exception {
+		URL url = servletContext.getResource(_SCRIPTS_DIR);
 
-	@Override
-	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		registerPortalLifecycle();
-	}
+		if (url == null) {
+			return;
+		}
 
-	@Override
-	protected void doPortalDestroy() throws Exception {
-		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
-	}
+		Set<String> supportedLanguages = ScriptingUtil.getSupportedLanguages();
 
-	@Override
-	protected void doPortalInit() {
-		_hotDeployMessageListener = new HotDeployMessageListener() {
+		Properties pluginPackageProperties = getPluginPackageProperties(
+			servletContext);
 
-			@Override
-			protected void onDeploy(Message message) throws Exception {
-				ServletContext servletContext = ServletContextPool.get(
-					message.getString("servletContextName"));
+		String language = getLanguage(pluginPackageProperties);
 
-				URL url = servletContext.getResource(_SCRIPTS_DIR);
-
-				if (url == null) {
-					return;
-				}
-
-				Set<String> supportedLanguages =
-					ScriptingUtil.getSupportedLanguages();
-
-				Properties pluginPackageProperties = getPluginPackageProperties(
-					servletContext);
-
-				String language = getLanguage(pluginPackageProperties);
-
-				if (!supportedLanguages.contains(language)) {
-					if (_log.isWarnEnabled()) {
-						_log.warn("Unsupported language " + language);
-					}
-
-					return;
-				}
-
-				String requiredDeploymentContexts =
-					pluginPackageProperties.getProperty(
-						"required-deployment-contexts");
-
-				if (Validator.isNull(requiredDeploymentContexts)) {
-					return;
-				}
-
-				ClassLoader classLoader =
-					ClassLoaderUtil.getAggregatePluginsClassLoader(
-						StringUtil.split(requiredDeploymentContexts), false);
-
-				executeScripts(servletContext, language, classLoader);
+		if (!supportedLanguages.contains(language)) {
+			if (_log.isWarnEnabled()) {
+				_log.warn("Unsupported language " + language);
 			}
 
-			@Override
-			protected void onUndeploy(Message message) throws Exception {
-				ServletContext servletContext = ServletContextPool.get(
-					message.getString("servletContextName"));
+			return;
+		}
 
-				if (servletContext != null) {
-					Properties pluginPackageProperties =
-						getPluginPackageProperties(servletContext);
+		String requiredDeploymentContexts = pluginPackageProperties.getProperty(
+			"required-deployment-contexts");
 
-					String language = getLanguage(pluginPackageProperties);
+		if (Validator.isNull(requiredDeploymentContexts)) {
+			return;
+		}
 
-					ScriptingUtil.clearCache(language);
-				}
-				else {
-					Set<String> supportedLanguages =
-						ScriptingUtil.getSupportedLanguages();
+		ClassLoader classLoader =
+			ClassLoaderUtil.getAggregatePluginsClassLoader(
+				StringUtil.split(requiredDeploymentContexts), false);
 
-					for (String supportedLanguage : supportedLanguages) {
-						ScriptingUtil.clearCache(supportedLanguage);
-					}
-				}
-			}
+		executeScripts(servletContext, language, classLoader);
+	}
 
-		};
+	@Override
+	protected void doReceive(Message message) throws Exception {
+		String command = message.getString("command");
 
-		MessageBusUtil.registerMessageListener(
-			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
+		if (!command.equals("deploy") && !command.equals("undeploy")) {
+			return;
+		}
+
+		String servletContextName = message.getString("servletContextName");
+
+		ServletContext servletContext = ServletContextPool.get(
+			servletContextName);
+
+		if (command.equals("deploy")) {
+			deploy(servletContext);
+		}
+		else if (command.equals("undeploy")) {
+			undeploy(servletContext);
+		}
 	}
 
 	protected void executeScripts(
@@ -203,11 +162,28 @@ public class ScriptingExecutorServletContextListener
 		return properties;
 	}
 
+	protected void undeploy(ServletContext servletContext) throws Exception {
+		if (servletContext != null) {
+			Properties pluginPackageProperties = getPluginPackageProperties(
+				servletContext);
+
+			String language = getLanguage(pluginPackageProperties);
+
+			ScriptingUtil.clearCache(language);
+		}
+		else {
+			Set<String> supportedLanguages =
+				ScriptingUtil.getSupportedLanguages();
+
+			for (String supportedLanguage : supportedLanguages) {
+				ScriptingUtil.clearCache(supportedLanguage);
+			}
+		}
+	}
+
 	private static final String _SCRIPTS_DIR = "/WEB-INF/classes/scripts/";
 
 	private static Log _log = LogFactoryUtil.getLog(
-		ScriptingExecutorServletContextListener.class);
-
-	private MessageListener _hotDeployMessageListener;
+		ScriptingExecutorMessageListener.class);
 
 }
