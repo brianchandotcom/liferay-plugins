@@ -2,32 +2,16 @@
 
 <javadocs>
 	<javadoc>
-		<name>com.liferay.scriptingexecutor.messaging.ScriptingExecutorMessageListener</name>
+		<name>ScriptingExecutorMessageListener</name>
 		<type>com.liferay.scriptingexecutor.messaging.ScriptingExecutorMessageListener</type>
-		<author><![CDATA[Brian Wing Shun Chan]]></author>
-	</javadoc>
-	<javadoc>
-		<name>ScriptingExecutorServletContextListener</name>
-		<type>com.liferay.scriptingexecutor.servlet.ScriptingExecutorServletContextListener</type>
 		<author><![CDATA[Michael C. Han]]></author>
 		<method>
-			<name>contextDestroyed</name>
+			<name>deploy</name>
 			<param>
-				<name>servletContextEvent</name>
-				<type>javax.servlet.ServletContextEvent</type>
+				<name>servletContext</name>
+				<type>javax.servlet.ServletContext</type>
 				<comment><![CDATA[]]></comment>
 			</param>
-		</method>
-		<method>
-			<name>contextInitialized</name>
-			<param>
-				<name>servletContextEvent</name>
-				<type>javax.servlet.ServletContextEvent</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-		</method>
-		<method>
-			<name>doPortalDestroy</name>
 			<throws>
 				<name>Exception</name>
 				<type>java.lang.Exception</type>
@@ -35,7 +19,17 @@
 			</throws>
 		</method>
 		<method>
-			<name>doPortalInit</name>
+			<name>doReceive</name>
+			<param>
+				<name>message</name>
+				<type>com.liferay.portal.kernel.messaging.Message</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
 		</method>
 		<method>
 			<name>executeScripts</name>
@@ -77,14 +71,24 @@
 				<comment><![CDATA[]]></comment>
 			</return>
 		</method>
+		<method>
+			<name>undeploy</name>
+			<param>
+				<name>servletContext</name>
+				<type>javax.servlet.ServletContext</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
 		<field>
 			<name>_SCRIPTS_DIR</name>
 		</field>
 		<field>
 			<name>_log</name>
-		</field>
-		<field>
-			<name>_hotDeployMessageListener</name>
 		</field>
 	</javadoc>
 	<javadoc>
