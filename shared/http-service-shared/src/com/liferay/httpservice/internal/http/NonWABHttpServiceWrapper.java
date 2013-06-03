@@ -16,18 +16,16 @@ package com.liferay.httpservice.internal.http;
 
 import com.liferay.httpservice.internal.servlet.BundleServletContext;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
+import javax.servlet.Filter;
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import org.osgi.service.http.HttpContext;
+import org.osgi.service.http.NamespaceException;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.Filter;
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
-
-import org.osgi.service.http.HttpContext;
-import org.osgi.service.http.NamespaceException;
 
 /**
  * @author Raymond Augé
@@ -74,16 +72,16 @@ public class NonWABHttpServiceWrapper extends HttpServiceWrapper {
 		_registrations.add(servletName);
 	}
 
-	/**
-	 * @deprecated As of 6.2.0
-	 */
 	@Override
 	public void registerServlet(
-		String urlPattern, Servlet servlet,
-		@SuppressWarnings("rawtypes") Dictionary initParameters,
-		HttpContext httpContext) {
+			String urlPattern, Servlet servlet,
+			@SuppressWarnings("rawtypes") Dictionary initParameters,
+			HttpContext httpContext)
+		throws NamespaceException, ServletException {
 
-		throw new UnsupportedOperationException();
+		super.registerServlet(urlPattern, servlet, initParameters, httpContext);
+
+		_registrations.add(urlPattern);
 	}
 
 	@Override
