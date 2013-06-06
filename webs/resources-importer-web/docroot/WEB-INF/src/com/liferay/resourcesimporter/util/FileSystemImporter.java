@@ -227,7 +227,9 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
-	protected void addLayout(long parentLayoutId, JSONObject layoutJSONObject)
+	protected void addLayout(
+			boolean privateLayout, long parentLayoutId,
+			JSONObject layoutJSONObject)
 		throws Exception {
 
 		Map<Locale, String> nameMap = new HashMap<Locale, String>();
@@ -303,7 +305,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = layoutJSONObject.getJSONArray("layouts");
 
-		addLayouts(layout.getLayoutId(), layoutsJSONArray);
+		addLayouts(privateLayout, layout.getLayoutId(), layoutsJSONArray);
 	}
 
 	protected void addLayoutColumn(
@@ -406,7 +408,9 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
-	protected void addLayouts(long parentLayoutId, JSONArray layoutsJSONArray)
+	protected void addLayouts(
+			boolean privateLayout, long parentLayoutId,
+			JSONArray layoutsJSONArray)
 		throws Exception {
 
 		if (layoutsJSONArray == null) {
@@ -416,7 +420,7 @@ public class FileSystemImporter extends BaseImporter {
 		for (int i = 0; i < layoutsJSONArray.length(); i++) {
 			JSONObject layoutJSONObject = layoutsJSONArray.getJSONObject(i);
 
-			addLayout(parentLayoutId, layoutJSONObject);
+			addLayout(privateLayout, parentLayoutId, layoutJSONObject);
 		}
 	}
 
@@ -869,7 +873,30 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = jsonObject.getJSONArray("layouts");
 
-		addLayouts(LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, layoutsJSONArray);
+		if (layoutsJSONArray != null) {
+			addLayouts(
+				false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+				layoutsJSONArray);
+		}
+		else {
+			JSONArray publicPagesJSONArray = jsonObject.getJSONArray(
+				"publicPages");
+
+			if (publicPagesJSONArray != null) {
+				addLayouts(
+					false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+					publicPagesJSONArray);
+			}
+
+			JSONArray privatePagesJSONArray = jsonObject.getJSONArray(
+				"privatePages");
+
+			if (privatePagesJSONArray != null) {
+				addLayouts(
+					true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+					privatePagesJSONArray);
+			}
+		}
 	}
 
 	protected void updateLayoutSetThemeId(JSONObject sitemapJSONObject)

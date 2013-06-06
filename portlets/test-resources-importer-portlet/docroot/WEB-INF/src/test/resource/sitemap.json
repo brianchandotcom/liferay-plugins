@@ -1,5 +1,12 @@
 {
-	"layouts": [
+	"privatePages": [
+		{
+			"friendlyURL": "/private-page",
+			"name": "Private Page",
+			"title": "Private Page"
+		}
+	],
+	"publicPages": [
 		{
 			"columns": [
 				[
