@@ -72,14 +72,6 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 				NAMESPACE, "kb-articles", true, true),
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "kb-templates-and-kb-comments", true, true));
-		setExportMetadataControls(
-			new PortletDataHandlerBoolean(
-				NAMESPACE, "kb-articles", true,
-				new PortletDataHandlerControl[] {
-					new PortletDataHandlerBoolean(NAMESPACE, "categories"),
-					new PortletDataHandlerBoolean(NAMESPACE, "ratings"),
-					new PortletDataHandlerBoolean(NAMESPACE, "tags")
-				}));
 	}
 
 	@Override
