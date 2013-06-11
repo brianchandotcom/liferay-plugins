@@ -19,11 +19,13 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortlet;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.testmisc.util.PortletKeys;
 import com.liferay.util.portlet.PortletRequestUtil;
 
 import java.io.File;
@@ -48,6 +50,20 @@ import javax.servlet.http.HttpServletResponse;
  * @author Amos Fong
  */
 public class TestPortlet extends LiferayPortlet {
+
+	public void addPortalMessage(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		SessionMessages.add(
+			actionRequest, SessionMessages.KEY_PORTAL_MESSAGES_CSS_CLASS,
+			"alert-info");
+		SessionMessages.add(
+			actionRequest, SessionMessages.KEY_PORTAL_MESSAGES_JSP_PATH,
+			"/portal_message/portal_message.jsp");
+		SessionMessages.add(
+			actionRequest, SessionMessages.KEY_PORTAL_MESSAGES_PORTLET_ID,
+			PortletKeys.TEST_MISC);
+	}
 
 	@Override
 	public void doDispatch(
