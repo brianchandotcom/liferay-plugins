@@ -23,7 +23,9 @@ import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.testmisc.util.PortletKeys;
 import com.liferay.util.portlet.PortletRequestUtil;
 
 import java.io.File;
@@ -42,12 +44,31 @@ import javax.portlet.ResourceResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Brian Wing Shun Chan
  * @author Amos Fong
  */
 public class TestPortlet extends LiferayPortlet {
+
+	public void addPortalMessage(
+		ActionRequest actionRequest, ActionResponse actionResponse) {
+
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(
+			actionRequest);
+
+		HttpSession session = request.getSession();
+
+		session.setAttribute(
+			WebKeys.LIFERAY_SHARED_PORTAL_MESSAGES_CSS_CLASS, "alert-info");
+		session.setAttribute(
+			WebKeys.LIFERAY_SHARED_PORTAL_MESSAGES_JSP_PATH,
+			"/portal_message/portal_message.jsp");
+		session.setAttribute(
+			WebKeys.LIFERAY_SHARED_PORTAL_MESSAGES_PORTLET_ID,
+			PortletKeys.TEST_MISC);
+	}
 
 	@Override
 	public void doDispatch(
