@@ -54,13 +54,15 @@ public class TestPortlet extends LiferayPortlet {
 	public void addPortalMessage(
 		ActionRequest actionRequest, ActionResponse actionResponse) {
 
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(
+			actionRequest);
+
 		PortalMessages.add(
-			actionRequest, PortalMessages.KEY_JSP_PATH,
+			request, PortalMessages.KEY_JSP_PATH,
 			"/portal_message/portal_message.jsp");
 
 		PortalMessages.add(
-			actionRequest, PortalMessages.KEY_PORTLET_ID,
-			PortletKeys.TEST_MISC);
+			request, PortalMessages.KEY_PORTLET_ID, PortletKeys.TEST_MISC);
 	}
 
 	@Override
