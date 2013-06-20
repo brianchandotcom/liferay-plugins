@@ -198,28 +198,28 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 				<aui:layout cssClass="calendar-booking-invitations">
 					<aui:column columnWidth="25" first="true">
-						<label class="aui-field-label">
+						<label class="field-label">
 							<liferay-ui:message key="pending" /> (<span id="<portlet:namespace />pendingCounter"><%= pendingCalendarsJSONArray.length() %></span>)
 						</label>
 
 						<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListPending"></div>
 					</aui:column>
 					<aui:column columnWidth="25">
-						<label class="aui-field-label">
+						<label class="field-label">
 							<liferay-ui:message key="accepted" /> (<span id="<portlet:namespace />acceptedCounter"><%= acceptedCalendarsJSONArray.length() %></span>)
 						</label>
 
 						<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListAccepted"></div>
 					</aui:column>
 					<aui:column columnWidth="25" last="true">
-						<label class="aui-field-label">
+						<label class="field-label">
 							<liferay-ui:message key="maybe" /> (<span id="<portlet:namespace />maybeCounter"><%= maybeCalendarsJSONArray.length() %></span>)
 						</label>
 
 						<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListMaybe"></div>
 					</aui:column>
 					<aui:column columnWidth="25" last="true">
-						<label class="aui-field-label">
+						<label class="field-label">
 							<liferay-ui:message key="declined" /> (<span id="<portlet:namespace />declinedCounter"><%= declinedCalendarsJSONArray.length() %></span>)
 						</label>
 
@@ -227,14 +227,14 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 					</aui:column>
 
 					<aui:column columnWidth="100">
-						<a class="aui-toggler-header-collapsed calendar-portlet-list-header" href="javascript:;" id="<portlet:namespace />checkAvailability">
+						<div class="toggler-header-collapsed calendar-portlet-list-header" id="<portlet:namespace />checkAvailability">
 							<span class="calendar-portlet-list-arrow"></span>
 
 							<span class="calendar-portlet-list-text"><liferay-ui:message key="resources-availability" /></span>
-						</a>
+						</div>
 
 						<div class="calendar-portlet-availability">
-							<div class="aui-toggler-content-collapsed" id="<portlet:namespace />schedulerContainer">
+							<div class="toggler-content-collapsed" id="<portlet:namespace />schedulerContainer">
 								<div id="<portlet:namespace />message"></div>
 
 								<liferay-util:include page="/scheduler.jsp" servletContext="<%= application %>">
@@ -258,6 +258,18 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 	<aui:button-row>
 		<aui:button type="submit" />
+
+		<c:if test="<%= calendarBooking != null %>">
+			<liferay-security:permissionsURL
+				modelResource="<%= CalendarBooking.class.getName() %>"
+				modelResourceDescription="<%= calendarBooking.getTitle(locale) %>"
+				resourceGroupId="<%= calendarBooking.getGroupId() %>"
+				resourcePrimKey="<%= String.valueOf(calendarBooking.getCalendarBookingId()) %>"
+				var="permissionsCalendarBookingURL"
+			/>
+
+			<aui:button href="<%= permissionsCalendarBookingURL %>" value="permissions" />
+		</c:if>
 
 		<aui:button type="cancel" value="close" />
 	</aui:button-row>

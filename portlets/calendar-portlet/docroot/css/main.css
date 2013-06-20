@@ -5,11 +5,11 @@
 		display: none;
 	}
 
-	.aui-scheduler-view-agenda-info-container {
-		.aui-scheduler-view-agenda-info {
+	.scheduler-view-agenda-info-container {
+		.scheduler-view-agenda-info {
 			line-height: 1.2;
 
-			.aui-scheduler-view-agenda-info-biggie {
+			.scheduler-view-agenda-info-biggie {
 				line-height: 30px;
 			}
 		}
@@ -22,29 +22,13 @@
 
 .calendar-portlet-wrapper {
 	background: #FFF;
-	font-size: 12px;
 
-	.aui-scheduler-event-all-day .aui-scheduler-event-title {
+	.scheduler-event-all-day .scheduler-event-title {
 		display: none;
 	}
 
-	.aui-scheduler-event-disabled {
+	.scheduler-event-disabled {
 		@include opacity(0.8);
-	}
-}
-
-.calendar-portlet-column-options {
-	margin-left: -235px;
-	width: 235px;
-}
-
-.calendar-portlet-column-parent {
-	.aui-fieldset-content {
-		padding-left: 235px;
-
-		.aui-fieldset-content {
-			padding-left: 0;
-		}
 	}
 }
 
@@ -54,25 +38,30 @@
 	}
 }
 
-.aui-scheduler-event-recorder-overlay-header {
-	padding: 5px 25px 5px 10px;
-}
-
-.aui-scheduler-event-recorder-overlay-body select {
+.scheduler-event-recorder-body select {
 	max-width: 340px;
 	width: 100%;
 }
 
-.aui-scheduler-event-recorder-overlay-content {
+.scheduler-event-recorder-popover .popover-title .close {
+	margin-top: 5px;
+}
+
+.scheduler-event-recorder-header .scheduler-event-recorder-content {
 	background: #FAFAFA;
 	border: 1px solid #C4C4C4;
 	outline-width: 0;
 	padding: 7px;
+	width: 445px;
 }
 
-.aui-scheduler-event-recorder-overlay-content:hover {
+.scheduler-event-recorder-header .scheduler-event-recorder-content:hover {
 	background: #FFC;
 	border-color: #FC0;
+}
+
+.scheduler-event-past {
+	opacity: 0.4;
 }
 
 .calendar-portlet-event-loading {
@@ -88,21 +77,20 @@
 	width: 350px;
 }
 
-.calendar-booking-invitations .aui-calendar-list-empty-message {
+.calendar-booking-invitations .calendar-list-empty-message {
 	margin: 4px 0 0 4px;
 }
 
-.aui-calendar-list-empty-message {
+.calendar-list-empty-message {
 	color: #666;
 	margin-top: 4px;
 }
 
-.aui-calendar-list-item {
+.calendar-list-item {
 	color: #222;
 	cursor: pointer;
 	display: block;
-	font-size: 12px;
-	line-height: 20px;
+	line-height: 35px;
 	overflow: hidden;
 	padding: 0 5px;
 	position: relative;
@@ -110,21 +98,21 @@
 	white-space: nowrap;
 }
 
-.aui-calendar-list-item-hover, .aui-calendar-list-item-active {
+.calendar-list-item-hover, .calendar-list-item-active {
 	background-color: #DCE3EA;
 
 	@include force-wrap();
 
-	.aui-calendar-list-item-arrow {
+	.calendar-list-item-arrow {
 		display: block;
 	}
 }
 
-.aui-calendar-list-item-arrow:hover, .aui-calendar-list-item-active .aui-calendar-list-item-arrow {
+.calendar-list-item-arrow:hover, .calendar-list-item-active .calendar-list-item-arrow {
 	background-position: 0 -11px;
 }
 
-.aui-calendar-list-item-arrow {
+.calendar-list-item-arrow {
 	background: url(../images/arrow.png) no-repeat 0 0;
 	border: 1px solid #B5B5B5;
 	display: none;
@@ -133,12 +121,12 @@
 	position: absolute;
 	right: 5px;
 	text-indent: -100px;
-	top: 4px;
+	top: 12px;
 	vertical-align: middle;
 	width: 11px;
 }
 
-.aui-calendar-list-item-color {
+.calendar-list-item-color {
 	border: 1px solid #DCDCDC;
 	display: inline-block;
 	height: 11px;
@@ -148,11 +136,11 @@
 	width: 11px;
 }
 
-.aui-calendar-list-item-label {
+.calendar-list-item-label {
 	line-height: 13px;
 }
 
-.aui-calendar-list-item-hidden .aui-calendar-list-item-label {
+.calendar-list-item-hidden .calendar-list-item-label {
 	color: #555;
 }
 
@@ -160,17 +148,16 @@
 	color: #222;
 	cursor: pointer;
 	display: block;
-	font-size: 13px;
 	font-weight: normal;
-	line-height: 20px;
+	line-height: 35px;
 	margin: 10px 0 0 0;
 	padding: 2px 0;
 	position: relative;
 	text-decoration: none;
 
-	.aui-calendar-list-item-arrow {
+	.calendar-list-item-arrow {
 		display: block;
-		top: 7px;
+		top: 14px;
 	}
 
 	&:hover {
@@ -205,28 +192,27 @@
 	padding: 1px;
 }
 
-.aui-toggler-header-expanded .calendar-portlet-list-arrow {
+.toggler-header-expanded .calendar-portlet-list-arrow {
 	background-position: -66px -18px;
 }
 
-.aui-simple-menu {
+.simple-menu {
 	position: absolute;
 }
 
-.aui-simple-menu-hidden {
+.simple-menu-hidden {
 	display: none;
 }
 
-.aui-simple-menu-content {
+.simple-menu .simple-menu-content {
 	background: none repeat scroll 0 0 #FFF;
 	border: 1px solid rgba(0, 0, 0, 0.2);
-	font-size: 13px;
 	margin: 0;
 	outline: medium none;
 	padding: 6px 0;
 }
 
-.aui-simple-menu-item {
+.simple-menu-item {
 	color: #333;
 	cursor: pointer;
 	list-style-type: none;
@@ -244,22 +230,22 @@
 	}
 }
 
-.aui-simple-menu-separator {
+.simple-menu-separator {
 	border-top: 1px solid #EBEBEB;
 	font-size: 0;
 	height: 0;
 	margin: 6px 0;
 }
 
-.aui-simple-menu-item-hidden {
+.simple-menu-item-hidden {
 	display: none;
 }
 
-.aui-simple-color-picker {
+.simple-color-picker {
 	white-space: normal;
 }
 
-.aui-simple-color-picker-item {
+.simple-color-picker-item {
 	border: 1px solid;
 	cursor: pointer;
 	display: inline-block;
@@ -268,7 +254,7 @@
 	width: 14px;
 }
 
-.aui-simple-color-picker-item:hover, .aui-simple-color-picker-item-selected {
+.simple-color-picker-item:hover, .simple-color-picker-item-selected {
 	border-color: #000 !important;
 }
 
@@ -283,6 +269,10 @@
 	width: 80%;
 }
 
+.calendar-portlet-column-grid .scheduler-base-views {
+	position: absolute;
+}
+
 .calendar-portlet-recurrence-summary {
 	font-weight: bold;
 	text-transform: capitalize;
@@ -293,7 +283,7 @@
 }
 
 .calendar-portlet-recurrence-container {
-	.aui-field-content, .aui-field-wrapper-content {
+	.field-content, .field-wrapper-content {
 		margin: 2px;
 	}
 }
@@ -313,7 +303,7 @@
 		display: inline-block;
 	}
 
-	.aui-field {
+	.field {
 		top: -10px;
 		position: relative;
 	}
@@ -325,26 +315,26 @@
 		width: 420px;
 	}
 
-	.aui-field-input-text {
+	.field-input-text {
 		width: 454px;
 	}
 }
 
 .calendar-portlet-wrapper {
-	.aui-scheduler-event-all-day .aui-scheduler-event-title {
+	.scheduler-event-all-day .scheduler-event-title {
 		display: none;
 	}
 
-	.aui-scheduler-event-disabled {
+	.scheduler-event-disabled {
 		@include opacity(0.8);
 	}
 }
 
-.calendar-booking-invitations .aui-field-label {
+.calendar-booking-invitations .field-label {
 	margin-left: 15px;
 }
 
-.calendar-portlet-time-zone-field .aui-field .aui-field-content {
+.calendar-portlet-time-zone-field .field .field-content {
 	margin: 0;
 }
 
@@ -352,24 +342,19 @@
 	padding: 5px;
 }
 
-.aui-scheduler-view-day .aui-scheduler-view-table .aui-scheduler-view-table-data-col {
+.scheduler-view-day .scheduler-view-table .scheduler-view-table-data-col {
 	padding-top: 5px;
 }
 
-.aui-scheduler-view-table-data-event {
+.scheduler-view-table-data-event {
 	padding: 0 3px 0 3px;
-
-	.aui-scheduler-event-content {
-		font-size: 10px;
-	}
 }
 
-.aui-scheduler-view-day-content .yui3-widget-hd {
+.scheduler-view-day-content .yui3-widget-hd {
 	padding-top: 4px;
 }
 
-.aui-scheduler-view-day-header-day a {
-	font-size: 12px;
+.scheduler-view-day-header-day a {
 	padding: 2px;
 }
 
@@ -378,7 +363,7 @@
 	border: 1px solid #DDD;
 }
 
-.aui-dialog-iframe-popup .calendar-portlet .aui-fieldset {
+.dialog-iframe-popup .calendar-portlet .fieldset {
 	margin-bottom: 2em;
 }
 
@@ -403,19 +388,23 @@
 		font-weight: bold;
 	}
 }
-	
+
 .rss-time-interval {
 	margin-top: -1em;
 	margin-left: 2em;
 }
 
 .yui3-skin-sam {
+	.yui3-calendar-day.yui3-calendar-day-selected {
+		background-color: #EFEFEF;
+	}
+
 	.yui3-calendar-day.lfr-busy-day {
 		background: transparent;
 		position: relative;
 
 		&.yui3-calendar-day-selected {
-			background-color: #B3D4FF;
+			background-color: #EFEFEF;
 		}
 
 		&:hover {
@@ -435,6 +424,10 @@
 		top: 0;
 		width: 0;
 	}
+
+	.yui3-aclist-list {
+		margin: 0;
+	}
 }
 
 .ie6, .ie7 {
@@ -445,7 +438,7 @@
 
 /* --- Extras --- */
 
-.aui-scheduler-event-recorder-overlay-content {
+.scheduler-event-recorder-content {
 	@include background-image(linear-gradient(top, #F7F7F7, white));
 	@include border-radius(2px);
 	@include box-shadow(inset 0 1px 2px #ddd);
@@ -456,19 +449,19 @@
 	@include border-radius(5px);
 }
 
-.calendar-portlet-list-header .aui-calendar-list-item-arrow, .aui-calendar-list-item .aui-calendar-list-item-color, .aui-calendar-list-item .aui-calendar-list-item-arrow {
+.calendar-portlet-list-header .calendar-list-item-arrow, .calendar-list-item .calendar-list-item-color, .calendar-list-item .calendar-list-item-arrow {
 	@include border-radius(3px);
 }
 
-.aui-calendar-list-item-arrow, .aui-calendar-list-item-color, .aui-simple-color-picker-item {
+.calendar-list-item-arrow, .calendar-list-item-color, .simple-color-picker-item {
 	@include border-radius(1px);
 }
 
-.aui-simple-menu-content {
+.simple-menu-content {
 	@include box-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.aui-simple-menu-item {
+.simple-menu-item {
 	@include transition(background .13s);
 
 	&:hover {
@@ -476,10 +469,20 @@
 	}
 }
 
-.aui-simple-color-picker-item {
+.simple-color-picker-item {
 	@include transition(border-color .13s);
 }
 
-.aui-simple-color-picker-item:hover, .aui-simple-color-picker-item-selected {
+.simple-color-picker-item:hover, .simple-color-picker-item-selected {
 	@include transition(border-color 0s);
+}
+
+.calendar-booking-reminders .reminder-type {
+	display: inline-block;
+	margin-bottom: 11px;
+	padding: 4px 6px;
+}
+
+.scheduler-base-controls .calendar-create-event-btn {
+	margin-right: 3px;
 }

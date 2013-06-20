@@ -21,7 +21,9 @@ AUI.add(
 			}
 		);
 
-		var toInt = Lang.toInt;
+		var toInt = function(value) {
+			return Lang.toInt(value, 10, 0);
+		};
 
 		var STR_BLANK = '';
 
@@ -34,6 +36,14 @@ AUI.add(
 		var TPL_INVITEES_URL = '{inviteesURL}&{portletNamespace}parentCalendarBookingId={calendarBookingId}';
 
 		var TPL_RENDERING_RULES_URL = '{renderingRulesURL}&{portletNamespace}calendarIds={calendarIds}&{portletNamespace}startTime={startTime}&{portletNamespace}endTime={endTime}&{portletNamespace}ruleName={ruleName}';
+
+		var CONTROLS_NODE = 'controlsNode';
+
+		var ICON_CREATE_EVENT_NODE = 'iconCreateEventNode';
+
+		var TPL_ICON_CREATE_EVENT_NODE = '<button type="button" class="btn btn-primary calendar-create-event-btn">' +
+											'<i class="icon-plus icon-white"></i> ' + Liferay.Language.get('new-event') +
+										 '</button>';
 
 		var COMPANY_GROUP_ID = toInt(themeDisplay.getCompanyGroupId());
 
@@ -212,7 +222,7 @@ AUI.add(
 
 				var eventRecorder = scheduler.get('eventRecorder');
 
-				eventRecorder.hideOverlay();
+				eventRecorder.hidePopover();
 
 				instance.invokeService(
 					{
@@ -234,7 +244,7 @@ AUI.add(
 				var scheduler = schedulerEvent.get('scheduler');
 				var eventRecorder = scheduler.get('eventRecorder');
 
-				eventRecorder.hideOverlay();
+				eventRecorder.hidePopover();
 
 				instance.invokeService(
 					{
@@ -506,7 +516,7 @@ AUI.add(
 							if (data && !data.exception && scheduler) {
 								var eventRecorder = scheduler.get('eventRecorder');
 
-								eventRecorder.hideOverlay();
+								eventRecorder.hidePopover();
 
 								scheduler.load();
 							}
@@ -1196,6 +1206,12 @@ AUI.add(
 						validator: isFunction
 					},
 
+					iconCreateEventNode: {
+						valueFn: function() {
+							return A.Node.create(TPL_ICON_CREATE_EVENT_NODE);
+						}
+					},
+
 					portletNamespace: {
 						setter: String,
 						validator: isValue,
@@ -1205,6 +1221,11 @@ AUI.add(
 					preventPersistence: {
 						validator: isBoolean,
 						value: false
+					},
+
+					showNewEventBtn: {
+						validator: isBoolean,
+						value: true
 					}
 				},
 
@@ -1216,6 +1237,22 @@ AUI.add(
 					calendarModel: Liferay.SchedulerCalendar,
 					eventModel: Liferay.SchedulerEvent,
 					eventsModel: Liferay.SchedulerEvents,
+
+					renderUI: function() {
+						var instance = this;
+
+						Scheduler.superclass.renderUI.apply(this, arguments);
+
+						var showNewEventBtn = instance.get('showNewEventBtn');
+
+						if (showNewEventBtn) {
+							instance[ICON_CREATE_EVENT_NODE] = instance.get(ICON_CREATE_EVENT_NODE);
+
+							instance[CONTROLS_NODE].prepend(instance[ICON_CREATE_EVENT_NODE]);
+
+							instance[ICON_CREATE_EVENT_NODE].on('click', instance._onClickCreateEvent, instance);
+						}
+					},
 
 					bindUI: function() {
 						var instance = this;
@@ -1455,6 +1492,42 @@ AUI.add(
 						}
 					},
 
+					_onClickCreateEvent: function(event) {
+						var instance = this;
+
+						var recorder = instance.get('eventRecorder');
+
+						var activeViewName = instance.get('activeView').get('name');
+
+						var defaultUserCalendar = CalendarUtil.getDefaultUserCalendar();
+
+						var calendarId = defaultUserCalendar.get('calendarId');
+
+						var editCalendarBookingURL = decodeURIComponent(recorder.get('editCalendarBookingURL'));
+
+						Liferay.Util.openWindow(
+							{
+								dialog: {
+									after: {
+										destroy: function(event) {
+											instance.load();
+										}
+									},
+									destroyOnHide: true,
+									modal: true
+								},
+								title: Liferay.Language.get('add-event'),
+								uri: Lang.sub(
+									editCalendarBookingURL,
+									{
+										activeView: activeViewName,
+										calendarId: calendarId
+									}
+								)
+							}
+						);
+					},
+
 					_onDeleteEvent: function(event) {
 						var instance = this;
 
@@ -1603,6 +1676,40 @@ AUI.add(
 
 					isMasterBooking: Lang.emptyFnFalse,
 
+					populateForm: function() {
+						var instance = this;
+
+						var bodyTemplate = instance.get('bodyTemplate');
+
+						var headerTemplate = instance.get('headerTemplate');
+
+						var templateData = instance.getTemplateData();
+
+						if (A.instanceOf(bodyTemplate, A.Template) && A.instanceOf(headerTemplate, A.Template)) {
+							instance.popover.setStdModContent('body', bodyTemplate.parse(templateData));
+							instance.popover.setStdModContent('header', headerTemplate.parse(templateData));
+
+							instance.popover.addToolbar(instance._getFooterToolbar(), 'footer');
+						}
+						else {
+							SchedulerEventRecorder.superclass.populateForm.apply(instance, arguments);
+						}
+
+						instance.popover.addToolbar(
+							[
+								{
+									cssClass: 'close',
+									label: "\u00D7",
+									on: {
+										click: A.bind(instance._handleCancelEvent, instance)
+									},
+									render: true
+								}
+							],
+							'header'
+						);
+					},
+
 					_handleEventAcceptResponse: function(event) {
 						var instance = this;
 
@@ -1670,9 +1777,8 @@ AUI.add(
 											scheduler.load();
 										}
 									},
-									destroyOnClose: true,
-									modal: true,
-									width: 915
+									destroyOnHide: true,
+									modal: true
 								},
 								refreshWindow: window,
 								title: Liferay.Language.get('edit'),
@@ -1680,47 +1786,7 @@ AUI.add(
 							}
 						);
 
-						instance.hideOverlay();
-					},
-
-					_handlePermissionsEvent: function(event) {
-						var instance = this;
-
-						var scheduler = instance.get('scheduler');
-
-						var permissionsCalendarBookingURL = decodeURIComponent(instance.get('permissionsCalendarBookingURL'));
-
-						var data = instance.serializeForm();
-
-						var schedulerEvent = instance.get('event');
-
-						var calendarId = schedulerEvent.get('calendarId');
-
-						var calendar = CalendarUtil.visibleCalendars[calendarId];
-
-						data.modelResourceDescription = encodeURIComponent(data.content);
-						data.resourceGroupId = calendar.get('resourceGroupId')
-						data.resourcePrimKey = schedulerEvent.get('calendarBookingId');
-
-						Liferay.Util.openWindow(
-							{
-								dialog: {
-									after: {
-										destroy: function(event) {
-											scheduler.load();
-										}
-									},
-									destroyOnClose: true,
-									modal: true,
-									width: 915
-								},
-								refreshWindow: window,
-								title: Liferay.Language.get('permissions'),
-								uri: Lang.sub(permissionsCalendarBookingURL, data)
-							}
-						);
-
-						instance.hideOverlay();
+						instance.hidePopover();
 					},
 
 					_handleViewEvent: function(event) {
@@ -1744,9 +1810,8 @@ AUI.add(
 											scheduler.load();
 										}
 									},
-									destroyOnClose: true,
-									modal: true,
-									width: 915
+									destroyOnHide: true,
+									modal: true
 								},
 								refreshWindow: window,
 								title: Liferay.Language.get('view'),
@@ -1754,17 +1819,41 @@ AUI.add(
 							}
 						);
 
-						instance.hideOverlay();
+						instance.hidePopover();
 					},
 
-					_onOverlayVisibleChange: function(event) {
+					_hasAcceptButton: function(permissions, calendar, status) {
+						return permissions.MANAGE_BOOKINGS && (status !== CalendarWorkflow.STATUS_APPROVED) && (status !== CalendarWorkflow.STATUS_DRAFT);
+					},
+
+					_hasDeclineButton: function(permissions, calendar, status) {
+						return permissions.MANAGE_BOOKINGS && (status !== CalendarWorkflow.STATUS_DRAFT);
+					},
+
+					_hasDeleteButton: function(permissions, calendar, status) {
+						return permissions.MANAGE_BOOKINGS && calendar;
+					},
+
+					_hasEditButton: function(permissions, calendar, status) {
+						return permissions.MANAGE_BOOKINGS;
+					},
+
+					_hasMaybeButton: function(permissions, calendar, status) {
+						return permissions.MANAGE_BOOKINGS && (status !== CalendarWorkflow.STATUS_DRAFT) && (status !== CalendarWorkflow.STATUS_MAYBE);
+					},
+
+					_hasSaveButton: function(permissions, calendar, status) {
+						return permissions.MANAGE_BOOKINGS;
+					},
+
+					_afterPopoverVisibleChange: function(event) {
 						var instance = this;
 
 						var schedulerEvent = instance.get('event');
 
-						var overlayBB = instance.overlay.get('boundingBox');
+						var popoverBB = instance.popover.get('boundingBox');
 
-						overlayBB.toggleClass('calendar-portlet-event-recorder-editing', !!schedulerEvent);
+						popoverBB.toggleClass('calendar-portlet-event-recorder-editing', !!schedulerEvent);
 
 						var defaultUserCalendar = CalendarUtil.getDefaultUserCalendar();
 
@@ -1793,7 +1882,7 @@ AUI.add(
 							}
 						);
 
-						SchedulerEventRecorder.superclass._onOverlayVisibleChange.apply(this, arguments);
+						SchedulerEventRecorder.superclass._afterPopoverVisibleChange.apply(this, arguments);
 
 						var portletNamespace = instance.get('portletNamespace');
 
@@ -1803,21 +1892,19 @@ AUI.add(
 							eventRecorderCalendar.val(calendarId.toString());
 						}
 
-						instance._syncToolbarButtons(event.newVal);
-
 						if (event.newVal) {
 							instance._syncInvitees();
 						}
 					},
 
-					_renderOverlay: function() {
+					_renderPopOver: function() {
 						var instance = this;
 
-						var overlayBB = instance.overlay.get('boundingBox');
+						var popoverBB = instance.popover.get('boundingBox');
 
-						SchedulerEventRecorder.superclass._renderOverlay.apply(this, arguments);
+						SchedulerEventRecorder.superclass._renderPopOver.apply(this, arguments);
 
-						overlayBB.delegate(
+						popoverBB.delegate(
 							['change', 'keypress'],
 							function(event) {
 								var schedulerEvent = instance.get('event') || instance;
@@ -1891,159 +1978,132 @@ AUI.add(
 						messageNode.html(messageHTML);
 					},
 
-					_syncToolbarButtons: function(overlayVisible) {
+					_getFooterToolbar: function() {
 						var instance = this;
 
-						var overlay = instance.overlay;
-						var toolbar = instance.toolbar;
+						var schedulerEvent = instance.get('event');
 
-						if (!overlayVisible) {
-							toolbar.removeAll();
+						var schedulerEventCreated = false;
+
+						if (schedulerEvent) {
+							schedulerEventCreated = true;
 						}
 						else {
-							var schedulerEvent = instance.get('event');
+							schedulerEvent = instance;
+						}
 
-							var schedulerEventCreated = false;
+						var children = [];
+						var editGroup = [];
+						var respondGroup = [];
 
-							if (schedulerEvent) {
-								schedulerEventCreated = true;
-							}
-							else {
-								schedulerEvent = instance;
-							}
+						var status = schedulerEvent.get('status');
+						var calendar = CalendarUtil.availableCalendars[schedulerEvent.get('calendarId')];
 
-							var status = schedulerEvent.get('status');
-							var calendar = CalendarUtil.availableCalendars[schedulerEvent.get('calendarId')];
-
+						if (calendar) {
 							var permissions = calendar.get('permissions');
 
-							toolbar.add(
-								{
-									handler: A.bind(instance._handleCancelEvent, instance),
-									id: 'cancelBtn',
-									label: Liferay.Language.get('close')
-								}
-							);
+							if (instance._hasSaveButton(permissions, calendar, status)) {
+								editGroup.push(
+									{
+										on: {
+											click: A.bind(instance._handleSaveEvent, instance)
+										},
+										icon: 'icon-hdd',
+										id: 'saveBtn',
+										label: Liferay.Language.get('save'),
+										primary: true
+									}
+								);
+							}
 
-							toolbar.add(
-								{
-									id: 'toolbarSpacer1',
-									type: 'ToolbarSpacer'
-								}
-							);
-
-							toolbar.add(
-								{
-									handler: A.bind(instance._handleSaveEvent, instance),
-									id: 'saveBtn',
-									label: Liferay.Language.get('save')
-								}
-							);
-
-							toolbar.add(
-								{
-									handler: A.bind(instance._handleEditEvent, instance),
-									id: 'editBtn',
-									label: Liferay.Language.get('edit')
-								}
-							);
+							if (instance._hasEditButton(permissions, calendar, status)) {
+								editGroup.push(
+									{
+										on: {
+											click: A.bind(instance._handleEditEvent, instance)
+										},
+										icon: 'icon-edit',
+										id: 'editBtn',
+										label: Liferay.Language.get('edit')
+									}
+								);
+							}
 
 							if ((schedulerEventCreated === true) && permissions.VIEW_BOOKING_DETAILS) {
-								toolbar.add(
+								editGroup.push(
 									{
-										handler: A.bind(instance._handleViewEvent, instance),
+										on: {
+											click: A.bind(instance._handleViewEvent, instance)
+										},
+										icon: 'icon-eye-open',
 										id: 'viewBtn',
 										label: Liferay.Language.get('view')
 									}
 								);
 							}
 
-							if ((schedulerEventCreated === true) && permissions.PERMISSIONS) {
-								toolbar.add(
+							if (schedulerEvent.isMasterBooking() && instance._hasDeleteButton(permissions, calendar, status)) {
+								editGroup.push(
 									{
-										handler: A.bind(instance._handlePermissionsEvent, instance),
-										id: 'permissionsBtn',
-										label: Liferay.Language.get('permissions')
-									}
-								);
-							}
-
-							if (schedulerEvent.isMasterBooking()) {
-								toolbar.add(
-									{
-										handler: A.bind(instance._handleDeleteEvent, instance),
+										on: {
+											click: A.bind(instance._handleDeleteEvent, instance)
+										},
+										icon: 'icon-trash',
 										id: 'deleteBtn',
 										label: Liferay.Language.get('delete')
 									}
 								);
 							}
 
-							toolbar.add(
-								{
-									id: 'toolbarSpacer2',
-									type: 'ToolbarSpacer'
-								}
-							);
-
-							toolbar.add(
-								{
-									handler: A.bind(instance._handleEventAcceptResponse, instance),
-									icon: 'circle-check',
-									id: 'acceptBtn',
-									label: Liferay.Language.get('accept')
-								}
-							);
-
-							toolbar.add(
-								{
-									handler: A.bind(instance._handleEventMaybeResponse, instance),
-									icon: 'help',
-									id: 'maybeBtn',
-									label: Liferay.Language.get('maybe')
-								}
-							);
-
-							toolbar.add(
-								{
-									handler: A.bind(instance._handleEventDeclineResponse, instance),
-									icon: 'circle-close',
-									id: 'declineBtn',
-									label: Liferay.Language.get('decline')
-								}
-							);
-
-							if (!permissions.MANAGE_BOOKINGS) {
-								toolbar.remove('acceptBtn');
-								toolbar.remove('declineBtn');
-								toolbar.remove('deleteBtn');
-								toolbar.remove('editBtn');
-								toolbar.remove('maybeBtn');
-								toolbar.remove('saveBtn');
+							if (instance._hasAcceptButton(permissions, calendar, status)) {
+								respondGroup.push(
+									{
+										on: {
+											click: A.bind(instance._handleEventAcceptResponse, instance)
+										},
+										icon: 'icon-ok-sign',
+										id: 'acceptBtn',
+										label: Liferay.Language.get('accept')
+									}
+								);
 							}
 
-							if (!calendar) {
-								toolbar.remove('deleteBtn');
+							if (instance._hasMaybeButton(permissions, calendar, status)) {
+								respondGroup.push(
+									{
+										on: {
+											click: A.bind(instance._handleEventMaybeResponse, instance)
+										},
+										icon: 'icon-question-sign',
+										id: 'maybeBtn',
+										label: Liferay.Language.get('maybe')
+									}
+								);
 							}
 
-							if (status === CalendarWorkflow.STATUS_DRAFT) {
-								toolbar.remove('declineBtn');
-								toolbar.remove('maybeBtn');
+							if (instance._hasDeclineButton(permissions, calendar, status)) {
+								respondGroup.push(
+									{
+										on: {
+											click: A.bind(instance._handleEventDeclineResponse, instance)
+										},
+										icon: ' icon-remove-sign',
+										id: 'declineBtn',
+										label: Liferay.Language.get('decline')
+									}
+								);
 							}
 
-							if (status === CalendarWorkflow.STATUS_MAYBE) {
-								toolbar.remove('maybeBtn');
+							if (editGroup.length) {
+								children.push(editGroup);
 							}
 
-							if (status === CalendarWorkflow.STATUS_APPROVED ||
-								status === CalendarWorkflow.STATUS_DRAFT) {
-
-								toolbar.remove('acceptBtn');
+							if (respondGroup.length) {
+								children.push(respondGroup);
 							}
-
-							var estimatedOverlayWidth = toolbar.get('boundingBox').get('offsetWidth') + 50;
-
-							overlay.set('width', Math.max(300, estimatedOverlayWidth));
 						}
+
+						return children;
 					}
 				}
 			}
@@ -2053,6 +2113,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-io', 'aui-scheduler', 'autocomplete', 'autocomplete-highlighters', 'dd-plugin', 'liferay-calendar-message-util', 'liferay-calendar-recurrence-util', 'liferay-portlet-url', 'liferay-store', 'resize-plugin']
+		requires: ['aui-io', 'aui-scheduler', 'aui-toolbar', 'autocomplete', 'autocomplete-highlighters', 'dd-plugin', 'liferay-calendar-message-util', 'liferay-calendar-recurrence-util', 'liferay-node', 'liferay-portlet-url', 'liferay-store', 'resize-plugin']
 	}
 );
