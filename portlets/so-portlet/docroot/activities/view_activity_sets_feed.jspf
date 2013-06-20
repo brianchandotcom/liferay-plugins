@@ -28,7 +28,7 @@
 		}
 	%>
 
-		<div class="activity-item">
+		<div class="activity-item" id="<portlet:namespace /><%= activitySet.getActivitySetId() %>">
 
 			<%
 			User activitySetUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
@@ -60,11 +60,41 @@
 
 				<div class="activity-footer">
 					<div class="activity-footer-toolbar">
-						<span><%= activityFeedEntry.getLink() %></span>
+						<c:if test="<%= Validator.isNotNull(activityFeedEntry.getLink()) %>">
+							<span><%= activityFeedEntry.getLink() %></span>
+						</c:if>
+
+						<span class="toggle-action aui-helper-hidden">
+							<a class="toggle-entry" data-entryId="<%= activitySet.getActivitySetId() %>" href="javascript:;">
+								<span><liferay-ui:message key="view-more" /></span>
+							</a>
+						</span>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<aui:script use="aui-base">
+			var entry = A.one('#<portlet:namespace /><%= activitySet.getActivitySetId() %>');
+
+			var subentry = entry.one('.activity-subentry');
+
+			if (subentry != null) {
+				var body = entry.one('.grouped-activity-body');
+
+				if (body.outerHeight() > (subentry.outerHeight() * 3)) {
+					var toggle = entry.one('.toggle-action');
+
+					toggle.removeClass('aui-helper-hidden');
+					entry.addClass('toggler-content-collapsed')
+				}
+				else {
+					var bodyContainer = entry.one('.grouped-activity-body-container');
+
+					bodyContainer.setStyle('height', 'auto');
+				}
+			}
+		</aui:script>
 
 	<%
 	}
