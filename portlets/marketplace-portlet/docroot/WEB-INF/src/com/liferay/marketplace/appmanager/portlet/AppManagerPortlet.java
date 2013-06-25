@@ -17,9 +17,16 @@ package com.liferay.marketplace.appmanager.portlet;
 import com.liferay.marketplace.service.AppServiceUtil;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
+import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.upload.UploadException;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.FileUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -32,7 +39,15 @@ import com.liferay.portal.service.PluginSettingLocalServiceUtil;
 import com.liferay.portal.service.PluginSettingServiceUtil;
 import com.liferay.portal.service.PortletServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +61,87 @@ import javax.servlet.ServletContext;
  * @author Ryan Park
  */
 public class AppManagerPortlet extends MVCPortlet {
+
+	public void installLocalApp(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		UploadPortletRequest uploadPortletRequest =
+			PortalUtil.getUploadPortletRequest(actionRequest);
+
+		String fileName = GetterUtil.getString(
+			uploadPortletRequest.getFileName("file"));
+
+		File file = uploadPortletRequest.getFile("file");
+
+		byte[] bytes = FileUtil.getBytes(file);
+
+		if ((bytes == null) || (bytes.length == 0)) {
+			SessionErrors.add(actionRequest, UploadException.class.getName());
+
+			return;
+		}
+
+		String source = file.toString();
+
+		String deployDir = PrefsPropsUtil.getString(
+			PropsKeys.AUTO_DEPLOY_DEPLOY_DIR);
+
+		String destination = deployDir + StringPool.SLASH + fileName;
+
+		FileUtil.copyFile(source, destination);
+
+		SessionMessages.add(actionRequest, "pluginUploaded");
+	}
+
+	public void installRemoteApp(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		String url = ParamUtil.getString(actionRequest, "url");
+
+		File tempFile = null;
+
+		try {
+			URL urlObj = new URL(url);
+
+			InputStream inputStream = urlObj.openStream();
+
+			tempFile = FileUtil.createTempFile();
+
+			FileUtil.write(tempFile, inputStream);
+
+			String deployDir = PrefsPropsUtil.getString(
+				PropsKeys.AUTO_DEPLOY_DEPLOY_DIR);
+
+			String fileName = url.substring(
+				url.lastIndexOf(CharPool.SLASH) + 1);
+
+			String destination = deployDir + StringPool.SLASH + fileName;
+
+			File destinationFile = new File(destination);
+
+			boolean moved = FileUtil.move(tempFile, destinationFile);
+
+			if (!moved) {
+				FileUtil.copyFile(tempFile, destinationFile);
+				FileUtil.delete(tempFile);
+			}
+
+			SessionMessages.add(actionRequest, "pluginDownloaded");
+		}
+		catch (MalformedURLException murle) {
+			SessionErrors.add(actionRequest, "invalidUrl", murle);
+		}
+		catch (IOException ioe) {
+			SessionErrors.add(actionRequest, "errorConnectingToUrl", ioe);
+		}
+		finally {
+			if (tempFile != null) {
+				tempFile.delete();
+			}
+		}
+	}
 
 	public void uninstallApp(
 			ActionRequest actionRequest, ActionResponse actionResponse)
