@@ -662,6 +662,14 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService,
 	}
 
 	@Override
+	public void updateKBArticlePriority(
+		com.liferay.knowledgebase.model.KBArticle kbArticle, double priority)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_kbArticleLocalService.updateKBArticlePriority(kbArticle, priority);
+	}
+
+	@Override
 	public com.liferay.knowledgebase.model.KBArticle updateStatus(long userId,
 		long resourcePrimKey, int status,
 		com.liferay.portal.service.ServiceContext serviceContext)
