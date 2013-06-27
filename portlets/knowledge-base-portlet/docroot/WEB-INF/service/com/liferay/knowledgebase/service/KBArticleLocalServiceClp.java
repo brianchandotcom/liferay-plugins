@@ -325,11 +325,9 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 
 		_methodParameterTypes57 = new String[] { "java.util.Map" };
 
-		_methodName58 = "updateKBArticlePriority";
+		_methodName58 = "updatePriority";
 
-		_methodParameterTypes58 = new String[] {
-				"com.liferay.knowledgebase.model.KBArticle", "double"
-			};
+		_methodParameterTypes58 = new String[] { "long", "double" };
 
 		_methodName59 = "updateStatus";
 
@@ -2315,14 +2313,13 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 	}
 
 	@Override
-	public void updateKBArticlePriority(
-		com.liferay.knowledgebase.model.KBArticle kbArticle, double priority)
+	public void updatePriority(long resourcePrimKey, double priority)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName58,
 				_methodParameterTypes58,
-				new Object[] { ClpSerializer.translateInput(kbArticle), priority });
+				new Object[] { resourcePrimKey, priority });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);

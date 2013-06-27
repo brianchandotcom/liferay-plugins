@@ -498,8 +498,7 @@ public interface KBArticleLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	public void updateKBArticlePriority(
-		com.liferay.knowledgebase.model.KBArticle kbArticle, double priority)
+	public void updatePriority(long resourcePrimKey, double priority)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

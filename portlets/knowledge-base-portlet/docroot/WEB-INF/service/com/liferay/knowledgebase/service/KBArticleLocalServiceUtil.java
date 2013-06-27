@@ -620,11 +620,10 @@ public class KBArticleLocalServiceUtil {
 		getService().updateKBArticlesPriorities(resourcePrimKeyToPriorityMap);
 	}
 
-	public static void updateKBArticlePriority(
-		com.liferay.knowledgebase.model.KBArticle kbArticle, double priority)
+	public static void updatePriority(long resourcePrimKey, double priority)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService().updateKBArticlePriority(kbArticle, priority);
+		getService().updatePriority(resourcePrimKey, priority);
 	}
 
 	public static com.liferay.knowledgebase.model.KBArticle updateStatus(

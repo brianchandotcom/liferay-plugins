@@ -335,11 +335,9 @@ public class KBArticleLocalServiceClpInvoker {
 
 		_methodParameterTypes142 = new String[] { "java.util.Map" };
 
-		_methodName143 = "updateKBArticlePriority";
+		_methodName143 = "updatePriority";
 
-		_methodParameterTypes143 = new String[] {
-				"com.liferay.knowledgebase.model.KBArticle", "double"
-			};
+		_methodParameterTypes143 = new String[] { "long", "double" };
 
 		_methodName144 = "updateStatus";
 
@@ -779,7 +777,7 @@ public class KBArticleLocalServiceClpInvoker {
 
 		if (_methodName143.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes143, parameterTypes)) {
-			KBArticleLocalServiceUtil.updateKBArticlePriority((com.liferay.knowledgebase.model.KBArticle)arguments[0],
+			KBArticleLocalServiceUtil.updatePriority(((Long)arguments[0]).longValue(),
 				((Double)arguments[1]).doubleValue());
 
 			return null;
