@@ -118,6 +118,11 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 	}
 
 	@Override
+	public List<String> getCategories() throws SystemException {
+		return appFinder.findCategories();
+	}
+
+	@Override
 	public List<App> getInstalledApps() throws SystemException {
 		if (_installedApps != null) {
 			return _installedApps;

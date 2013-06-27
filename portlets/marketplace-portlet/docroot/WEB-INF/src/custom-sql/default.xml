@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<custom-sql>
+	<sql id="com.liferay.marketplace.service.persistence.AppFinder.findCategories">
+		<![CDATA[
+			SELECT DISTINCT
+				Marketplace_app.category as category
+			FROM
+				Marketplace_app
+			ORDER BY
+				Marketplace_app.category DESC
+		]]>
+	</sql>
+</custom-sql>
