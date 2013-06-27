@@ -16,6 +16,7 @@ package com.liferay.marketplace.service.base;
 
 import com.liferay.marketplace.model.Module;
 import com.liferay.marketplace.service.ModuleLocalService;
+import com.liferay.marketplace.service.persistence.AppFinder;
 import com.liferay.marketplace.service.persistence.AppPersistence;
 import com.liferay.marketplace.service.persistence.ModulePersistence;
 
@@ -331,6 +332,24 @@ public abstract class ModuleLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
+	 * Returns the app finder.
+	 *
+	 * @return the app finder
+	 */
+	public AppFinder getAppFinder() {
+		return appFinder;
+	}
+
+	/**
+	 * Sets the app finder.
+	 *
+	 * @param appFinder the app finder
+	 */
+	public void setAppFinder(AppFinder appFinder) {
+		this.appFinder = appFinder;
+	}
+
+	/**
 	 * Returns the module local service.
 	 *
 	 * @return the module local service
@@ -549,6 +568,8 @@ public abstract class ModuleLocalServiceBaseImpl extends BaseLocalServiceImpl
 	protected com.liferay.marketplace.service.AppService appService;
 	@BeanReference(type = AppPersistence.class)
 	protected AppPersistence appPersistence;
+	@BeanReference(type = AppFinder.class)
+	protected AppFinder appFinder;
 	@BeanReference(type = com.liferay.marketplace.service.ModuleLocalService.class)
 	protected com.liferay.marketplace.service.ModuleLocalService moduleLocalService;
 	@BeanReference(type = ModulePersistence.class)

@@ -24,68 +24,68 @@ import java.util.Arrays;
  */
 public class AppServiceClpInvoker {
 	public AppServiceClpInvoker() {
-		_methodName22 = "getBeanIdentifier";
+		_methodName24 = "getBeanIdentifier";
 
-		_methodParameterTypes22 = new String[] {  };
+		_methodParameterTypes24 = new String[] {  };
 
-		_methodName23 = "setBeanIdentifier";
+		_methodName25 = "setBeanIdentifier";
 
-		_methodParameterTypes23 = new String[] { "java.lang.String" };
+		_methodParameterTypes25 = new String[] { "java.lang.String" };
 
-		_methodName28 = "deleteApp";
-
-		_methodParameterTypes28 = new String[] { "long" };
-
-		_methodName29 = "installApp";
-
-		_methodParameterTypes29 = new String[] { "long" };
-
-		_methodName30 = "uninstallApp";
+		_methodName30 = "deleteApp";
 
 		_methodParameterTypes30 = new String[] { "long" };
 
-		_methodName31 = "updateApp";
+		_methodName31 = "installApp";
 
-		_methodParameterTypes31 = new String[] {
+		_methodParameterTypes31 = new String[] { "long" };
+
+		_methodName32 = "uninstallApp";
+
+		_methodParameterTypes32 = new String[] { "long" };
+
+		_methodName33 = "updateApp";
+
+		_methodParameterTypes33 = new String[] {
 				"long", "java.lang.String", "java.io.File"
 			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		if (_methodName22.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes22, parameterTypes)) {
+		if (_methodName24.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes24, parameterTypes)) {
 			return AppServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName23.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes23, parameterTypes)) {
+		if (_methodName25.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes25, parameterTypes)) {
 			AppServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
-
-			return null;
-		}
-
-		if (_methodName28.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes28, parameterTypes)) {
-			return AppServiceUtil.deleteApp(((Long)arguments[0]).longValue());
-		}
-
-		if (_methodName29.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes29, parameterTypes)) {
-			AppServiceUtil.installApp(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
 		if (_methodName30.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes30, parameterTypes)) {
+			return AppServiceUtil.deleteApp(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName31.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes31, parameterTypes)) {
+			AppServiceUtil.installApp(((Long)arguments[0]).longValue());
+
+			return null;
+		}
+
+		if (_methodName32.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
 			AppServiceUtil.uninstallApp(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
-		if (_methodName31.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes31, parameterTypes)) {
+		if (_methodName33.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
 			return AppServiceUtil.updateApp(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.io.File)arguments[2]);
 		}
@@ -93,16 +93,16 @@ public class AppServiceClpInvoker {
 		throw new UnsupportedOperationException();
 	}
 
-	private String _methodName22;
-	private String[] _methodParameterTypes22;
-	private String _methodName23;
-	private String[] _methodParameterTypes23;
-	private String _methodName28;
-	private String[] _methodParameterTypes28;
-	private String _methodName29;
-	private String[] _methodParameterTypes29;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
 	private String _methodName30;
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
+	private String _methodName33;
+	private String[] _methodParameterTypes33;
 }
