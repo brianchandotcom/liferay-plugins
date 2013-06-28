@@ -40,6 +40,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.util.ContentUtil;
 import com.liferay.util.portlet.PortletProps;
@@ -128,7 +129,8 @@ public class NotificationUtil {
 	}
 
 	public static void notifyCalendarBookingInvites(
-			CalendarBooking calendarBooking, NotificationType notificationType)
+			CalendarBooking calendarBooking, NotificationType notificationType,
+			ServiceContext serviceContext)
 		throws Exception {
 
 		NotificationSender notificationSender =
@@ -146,7 +148,7 @@ public class NotificationUtil {
 			NotificationTemplateContext notificationTemplateContext =
 				NotificationTemplateContextFactory.getInstance(
 					notificationType, NotificationTemplateType.INVITE,
-					calendarBooking, user);
+					calendarBooking, user, serviceContext);
 
 			notificationSender.sendNotification(
 				notificationRecipient, notificationTemplateContext);
@@ -200,7 +202,7 @@ public class NotificationUtil {
 			NotificationTemplateContext notificationTemplateContext =
 				NotificationTemplateContextFactory.getInstance(
 					notificationType, NotificationTemplateType.REMINDER,
-					calendarBooking, user);
+					calendarBooking, user, null);
 
 			notificationSender.sendNotification(
 				notificationRecipient, notificationTemplateContext);
@@ -213,18 +215,20 @@ public class NotificationUtil {
 		throws Exception {
 
 		return StringUtil.replace(
-				notificationTemplate,
+			notificationTemplate,
 			new String[] {
 				"[$BOOKING_END_DATE$]", "[$BOOKING_LOCATION$]",
 				"[$BOOKING_START_DATE$]", "[$BOOKING_TITLE$]",
-				"[$FROM_ADDRESS$]", "[$FROM_NAME$]", "[$PORTAL_URL$]",
-				"[$PORTLET_NAME$]", "[$TO_ADDRESS$]", "[$TO_NAME$]"
+				"[$BOOKING_URL$]", "[$FROM_ADDRESS$]", "[$FROM_NAME$]",
+				"[$PORTAL_URL$]", "[$PORTLET_NAME$]", "[$TO_ADDRESS$]",
+				"[$TO_NAME$]"
 			},
 			new String[] {
 				GetterUtil.getString(notificationContext.get("endTime")),
 				GetterUtil.getString(notificationContext.get("location")),
 				GetterUtil.getString(notificationContext.get("startTime")),
 				GetterUtil.getString(notificationContext.get("title")),
+				GetterUtil.getString(notificationContext.get("url")),
 				GetterUtil.getString(notificationContext.get("fromAddress")),
 				GetterUtil.getString(notificationContext.get("fromName")),
 				GetterUtil.getString(notificationContext.get("portalUrl")),

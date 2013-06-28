@@ -41,6 +41,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -777,9 +779,12 @@ public class CalendarBookingLocalServiceImpl
 					PortletPropsValues.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
 
 				NotificationUtil.notifyCalendarBookingInvites(
-					childCalendarBooking, notificationType);
+					childCalendarBooking, notificationType, serviceContext);
 			}
 			catch (Exception e) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(e, e);
+				}
 			}
 		}
 	}
@@ -840,5 +845,8 @@ public class CalendarBookingLocalServiceImpl
 
 	@BeanReference(type = CalendarBookingApprovalWorkflow.class)
 	protected CalendarBookingApprovalWorkflow calendarBookingApprovalWorkflow;
+
+	private static Log _log = LogFactoryUtil.getLog(
+		CalendarBookingLocalServiceImpl.class);
 
 }

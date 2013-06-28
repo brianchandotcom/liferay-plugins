@@ -100,6 +100,14 @@ String notificationTemplateBody = BeanPropertiesUtil.getString(calendarNotificat
 			<dd>
 				<liferay-ui:message key="the-booking-title" />
 			</dd>
+			<c:if test="<%= notificationTemplateType == NotificationTemplateType.INVITE %>">
+				<dt>
+					[$BOOKING_URL$]
+				</dt>
+				<dd>
+					<liferay-ui:message key="the-booking-url" />
+				</dd>
+			</c:if>
 			<dt>
 				[$FROM_ADDRESS$]
 			</dt>

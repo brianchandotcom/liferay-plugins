@@ -26,6 +26,9 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.PortletURLFactoryUtil;
 
 import java.io.Serializable;
 
@@ -35,7 +38,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.portlet.ActionRequest;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletURL;
 
 /**
  * @author Eduardo Lundgren
@@ -45,7 +50,8 @@ public class NotificationTemplateContextFactory {
 	public static NotificationTemplateContext getInstance(
 			NotificationType notificationType,
 			NotificationTemplateType notificationTemplateType,
-			CalendarBooking calendarBooking, User user)
+			CalendarBooking calendarBooking, User user,
+			ServiceContext serviceContext)
 		throws Exception {
 
 		CalendarBooking parentCalendarBooking =
@@ -104,6 +110,11 @@ public class NotificationTemplateContextFactory {
 		attributes.put("toAddress", user.getEmailAddress());
 		attributes.put("toName", user.getFullName());
 
+		String calendarBookingURL = _getCalendarBookingURL(
+			calendarBooking.getCalendarBookingId(), serviceContext);
+
+		attributes.put("url", calendarBookingURL);
+
 		notificationTemplateContext.setAttributes(attributes);
 
 		// Content
@@ -144,6 +155,26 @@ public class NotificationTemplateContextFactory {
 
 	public static void setPortletConfig(PortletConfig portletConfig) {
 		_portletConfig = portletConfig;
+	}
+
+	private static String _getCalendarBookingURL(
+		long calendarBookingId, ServiceContext serviceContext) {
+
+		if (serviceContext == null) {
+			return StringPool.BLANK;
+		}
+
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
+		PortletURL portletURL = PortletURLFactoryUtil.create(
+			serviceContext.getRequest(), PortletKeys.CALENDAR,
+			themeDisplay.getPlid(), ActionRequest.RENDER_PHASE);
+
+		portletURL.setParameter("mvcPath", "/view_calendar_booking.jsp");
+		portletURL.setParameter(
+			"calendarBookingId", String.valueOf(calendarBookingId));
+
+		return portletURL.toString();
 	}
 
 	private static PortletConfig _portletConfig;
