@@ -21,7 +21,9 @@ import com.liferay.marketplace.DuplicateAppException;
 import com.liferay.marketplace.model.App;
 import com.liferay.marketplace.model.Module;
 import com.liferay.marketplace.service.base.AppLocalServiceBaseImpl;
+import com.liferay.marketplace.util.comparator.AppCategoryComparator;
 import com.liferay.marketplace.util.comparator.AppTitleComparator;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.deploy.auto.context.AutoDeploymentContext;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -115,6 +117,21 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 	@Override
 	public List<App> getApps(String category) throws SystemException {
 		return appPersistence.findByCategory(category);
+	}
+
+	@Override
+	public List<String> getCategories() throws SystemException {
+		List<App> apps = appPersistence.findAll(
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, new AppCategoryComparator());
+
+		String[] categoriesArray = StringUtil.split(
+			ListUtil.toString(apps, "category"));
+
+		List<String> categories = ListUtil.fromArray(categoriesArray);
+
+		ListUtil.distinct(categories);
+
+		return categories;
 	}
 
 	@Override
