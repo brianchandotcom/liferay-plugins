@@ -33,7 +33,7 @@ import javax.servlet.ServletContext;
 /**
  * @author Ryan Park
  */
-public class PluginComparator implements Comparator<Plugin>, Serializable {
+public class PluginComparator implements Comparator, Serializable {
 
 	public PluginComparator() {
 		_locale = LocaleUtil.getDefault();
@@ -46,14 +46,14 @@ public class PluginComparator implements Comparator<Plugin>, Serializable {
 	}
 
 	@Override
-	public int compare(Plugin plugin1, Plugin plugin2) {
+	public int compare(Object plugin1, Object plugin2) {
 		String name1 = _getName(plugin1);
 		String name2 = _getName(plugin2);
 
 		return name1.compareTo(name2);
 	}
 
-	private String _getName(Plugin plugin) {
+	private String _getName(Object plugin) {
 		String name = StringPool.BLANK;
 
 		if (plugin instanceof LayoutTemplate) {

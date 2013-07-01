@@ -76,9 +76,9 @@ portletURL.setParameter("category", category);
 					while (itr.hasNext()) {
 						Portlet portlet = itr.next();
 
-						String portletId = portlet.getPortletId();
+						String curPortletId = portlet.getPortletId();
 
-						if (portletId.equals(PortletKeys.PORTAL)) {
+						if (curPortletId.equals(PortletKeys.PORTAL)) {
 							itr.remove();
 						}
 						else if (portlet.isSystem()) {
@@ -94,7 +94,7 @@ portletURL.setParameter("category", category);
 				}
 			}
 
-			List<Plugin> plugins = new ArrayList<Plugin>(layoutTemplates.size() + portlets.size() + themes.size());
+			List plugins = new ArrayList(layoutTemplates.size() + portlets.size() + themes.size());
 
 			plugins.addAll(layoutTemplates);
 			plugins.addAll(portlets);
