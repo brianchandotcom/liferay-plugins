@@ -76,9 +76,9 @@ portletURL.setParameter("category", category);
 					while (itr.hasNext()) {
 						Portlet portlet = itr.next();
 
-						String portletId = portlet.getPortletId();
+						String curPortletId = portlet.getPortletId();
 
-						if (portletId.equals(PortletKeys.PORTAL)) {
+						if (curPortletId.equals(PortletKeys.PORTAL)) {
 							itr.remove();
 						}
 						else if (portlet.isSystem()) {
@@ -94,7 +94,7 @@ portletURL.setParameter("category", category);
 				}
 			}
 
-			List<Plugin> plugins = new ArrayList<Plugin>(layoutTemplates.size() + portlets.size() + themes.size());
+			List plugins = new ArrayList(layoutTemplates.size() + portlets.size() + themes.size());
 
 			plugins.addAll(layoutTemplates);
 			plugins.addAll(portlets);
@@ -123,6 +123,10 @@ portletURL.setParameter("category", category);
 						<c:choose>
 							<c:when test="<%= !plugins.isEmpty() %>">
 								<ul class="summary">
+									<li class="switch">
+										<i class="icon-chevron-right"></i>
+									</li>
+
 									<li>
 										<liferay-ui:message key="this-app-contains" />
 									</li>
@@ -206,16 +210,24 @@ portletURL.setParameter("category", category);
 	A.one('.marketplace-portlet .apps').delegate(
 		'click',
 		function(event) {
-			var tab = event.currentTarget;
+			var targetNode = event.currentTarget;
 
-			tab.ancestor('ul').all('li').removeClass('active');
-			tab.ancestor('li').addClass('active');
+			var pluginsContainer = targetNode.ancestor('.plugins');
 
-			var tabbable = tab.ancestor('.tabbable');
+			var pluginSwitch = pluginsContainer.one('.switch i');
+			var pluginList = pluginsContainer.one('.plugin-list');
 
-			tabbable.one('.tab-content').all('.tab-pane').removeClass('active');
-			tabbable.one('.tab-content .' + tab.getAttribute('data-toggle')).addClass('active');
+			if (pluginsContainer.hasClass('active')) {
+				pluginsContainer.removeClass('active');
+
+				pluginSwitch.setAttribute('class', 'icon-chevron-right');
+			}
+			else {
+				pluginsContainer.addClass('active');
+
+				pluginSwitch.setAttribute('class', 'icon-chevron-down');
+			}
 		},
-		'.nav-pills a'
+		'ul.summary'
 	)
 </aui:script>
