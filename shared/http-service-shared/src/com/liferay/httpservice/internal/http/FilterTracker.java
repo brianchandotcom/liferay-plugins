@@ -16,11 +16,13 @@ package com.liferay.httpservice.internal.http;
 
 import com.liferay.httpservice.internal.servlet.BundleServletContext;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.Map;
 
 import javax.servlet.Filter;
 
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpContext;
 
@@ -44,6 +46,12 @@ public class FilterTracker
 
 		String filterName = GetterUtil.getString(
 			serviceReference.getProperty("filterName"));
+
+		if (Validator.isNull(filterName)) {
+			filterName = String.valueOf(
+				serviceReference.getProperty(Constants.SERVICE_ID));
+		}
+
 		String urlPattern = GetterUtil.getString(
 			serviceReference.getProperty("urlPattern"));
 
@@ -58,6 +66,11 @@ public class FilterTracker
 
 		String filterName = GetterUtil.getString(
 			serviceReference.getProperty("filterName"));
+
+		if (Validator.isNull(filterName)) {
+			filterName = String.valueOf(
+				serviceReference.getProperty(Constants.SERVICE_ID));
+		}
 
 		bundleServletContext.unregisterFilter(filterName);
 	}
