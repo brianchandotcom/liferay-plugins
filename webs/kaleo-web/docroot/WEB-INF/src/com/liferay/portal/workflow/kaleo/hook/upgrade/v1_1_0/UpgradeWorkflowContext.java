@@ -14,6 +14,8 @@
 
 package com.liferay.portal.workflow.kaleo.hook.upgrade.v1_1_0;
 
+import com.liferay.portal.kernel.dao.db.DB;
+import com.liferay.portal.kernel.dao.db.DBFactoryUtil;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.Validator;
@@ -34,6 +36,19 @@ import org.jabsorb.JSONSerializer;
  */
 public class UpgradeWorkflowContext extends UpgradeProcess {
 
+	protected String composeNullableCheckForWorkflowContext() {
+		String check = "workflowContext is not null";
+
+		DB db = DBFactoryUtil.getDB();
+		String dbType = db.getType();
+
+		if (DB.TYPE_SYBASE.equals(dbType)) {
+			check = "datalength(workflowContext) > 0";
+		}
+
+		return check;
+	}
+
 	@Override
 	protected void doUpgrade() throws Exception {
 		updateTable("KaleoInstance", "kaleoInstanceId");
@@ -53,8 +68,8 @@ public class UpgradeWorkflowContext extends UpgradeProcess {
 
 			ps = con.prepareStatement(
 				"select " + fieldName + ", workflowContext from " + tableName +
-					" where workflowContext is not null and workflowContext " +
-						"not like '%serializable%'");
+					" where " + composeNullableCheckForWorkflowContext() +
+						" and workflowContext not like '%serializable%'");
 
 			rs = ps.executeQuery();
 
