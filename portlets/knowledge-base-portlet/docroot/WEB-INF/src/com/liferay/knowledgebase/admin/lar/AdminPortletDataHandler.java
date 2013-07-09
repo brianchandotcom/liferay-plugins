@@ -31,10 +31,7 @@ import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.knowledgebase.util.comparator.KBArticleModifiedDateComparator;
 import com.liferay.knowledgebase.util.comparator.KBArticlePriorityComparator;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.lar.BasePortletDataHandler;
-import com.liferay.portal.kernel.lar.DataLevel;
-import com.liferay.portal.kernel.lar.PortletDataContext;
-import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
+import com.liferay.portal.kernel.lar.*;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -66,9 +63,10 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 
 	public AdminPortletDataHandler() {
 		setDataLevel(DataLevel.SITE);
-		setDeletionSystemEventClassNames(
-			KBArticle.class.getName(), KBComment.class.getName(),
-			KBTemplate.class.getName());
+		setDeletionSystemEventStagedModelTypes(
+			new StagedModelType(KBArticle.class),
+			new StagedModelType(KBComment.class),
+			new StagedModelType(KBTemplate.class));
 		setExportControls(
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "kb-articles", true, true),
