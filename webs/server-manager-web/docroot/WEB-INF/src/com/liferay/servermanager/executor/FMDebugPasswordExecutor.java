@@ -14,25 +14,33 @@
 
 package com.liferay.servermanager.executor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Queue;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.servermanager.util.JSONKeys;
 
 /**
- * @author Jonathan Potter
- * @author Brian Wing Shun Chan
  * @author Cindy Li
  */
-public class ServerExecutor extends BaseExecutor {
+public class FMDebugPasswordExecutor extends BaseExecutor {
 
 	@Override
-	protected Map<String, Executor> initNextExecutors() {
-		Map<String, Executor> executors = new HashMap<String, Executor>();
+	public void executeRead(
+		HttpServletRequest request, JSONObject responseJSONObject,
+		Queue<String> arguments) {
 
-		executors.put("debug-port", new DebugPortExecutor());
-		executors.put("freemarker", new FreemarkerExecutor());
-		executors.put("log", new LogExecutor());
+		String fmDebugPassword = System.getProperty("freemarker.debug.password");
 
-		return executors;
+		if (fmDebugPassword == null) {
+			responseJSONObject.put(
+				JSONKeys.ERROR, "Freemarker debugger is not enabled");
+			responseJSONObject.put(JSONKeys.STATUS, 1);
+		}
+		else {
+			responseJSONObject.put(JSONKeys.OUTPUT, fmDebugPassword);
+		}
 	}
 
 }
