@@ -183,7 +183,7 @@ String editCalendarBookingURL = ParamUtil.getString(request, "editCalendarBookin
 					window.location.href = A.Lang.sub(
 						decodeURIComponent('<%= permissionsURL %>'),
 						{
-							resourceGroupId: activeCalendar.get('resourceGroupId'),
+							resourceGroupId: activeCalendar.get('groupId'),
 							resourcePrimKey: activeCalendar.get('calendarId'),
 							modelResourceDescription: activeCalendar.get('name')
 						}
@@ -280,6 +280,10 @@ String editCalendarBookingURL = ParamUtil.getString(request, "editCalendarBookin
 
 					if ((permissions.DELETE === false) || (defaultCalendar === true)) {
 						hiddenItems.push('delete');
+					}
+
+					if (permissions.MANAGE_BOOKINGS === false) {
+						hiddenItems.push('addEvent');
 					}
 
 					if (permissions.PERMISSIONS === false) {
