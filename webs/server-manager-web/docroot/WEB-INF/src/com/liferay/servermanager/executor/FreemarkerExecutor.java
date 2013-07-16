@@ -18,19 +18,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Jonathan Potter
- * @author Brian Wing Shun Chan
  * @author Cindy Li
  */
-public class ServerExecutor extends BaseExecutor {
+public class FreemarkerExecutor extends BaseExecutor {
 
 	@Override
 	protected Map<String, Executor> initNextExecutors() {
 		Map<String, Executor> executors = new HashMap<String, Executor>();
 
-		executors.put("debug-port", new DebugPortExecutor());
-		executors.put("freemarker", new FreemarkerExecutor());
-		executors.put("log", new LogExecutor());
+		executors.put("debug-password", new FMDebugPasswordExecutor());
+		executors.put("debug-port", new FMDebugPortExecutor());
 
 		return executors;
 	}
