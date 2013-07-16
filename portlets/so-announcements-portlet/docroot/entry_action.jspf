@@ -27,7 +27,7 @@
 					<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
 				</portlet:renderURL>
 
-				<a href="<%= "javascript:" + renderResponse.getNamespace() + "editEntry('" + editURL.toString() + "');" %>">
+				<a href="javascript:<portlet:namespace />editEntry('<%= editURL.toString() %>');">
 					<liferay-ui:icon
 						image="edit"
 						label="<%= true %>"
@@ -52,7 +52,7 @@
 
 		<c:if test="<%= themeDisplay.isSignedIn() %>">
 			<span class="action control-entry">
-				<a href="javascript:<%= renderResponse.getNamespace() %>handleEntry(<%= entry.getEntryId() %>);">
+				<a href="javascript:<portlet:namespace />handleEntry(<%= entry.getEntryId() %>);">
 					<liferay-ui:icon
 						image='<%= (flagValue == AnnouncementsFlagConstants.HIDDEN) ? "checked" : "unchecked" %>'
 						label="<%= false %>"
@@ -63,5 +63,29 @@
 				</a>
 			</span>
 		</c:if>
+
+		<span class="toggle action aui-helper-hidden">
+			<a class="toggle-entry" data-entryId="<%= entry.getEntryId() %>" href="javascript:;">
+				<span><liferay-ui:message key="view-more" /></span>
+			</a>
+		</span>
 	</div>
 </div>
+
+<aui:script use="aui-base">
+	var entry = A.one('#<portlet:namespace /><%= entry.getEntryId() %>');
+
+	var content = entry.one('.entry-content');
+
+	if (content.height() > 75) {
+		var toggle = entry.one('.toggle');
+
+		toggle.removeClass('aui-helper-hidden');
+		entry.addClass('announcement-collapsed')
+	}
+	else {
+		var contentContainer = entry.one('.entry-content-container');
+
+		contentContainer.setStyle('height', 'auto');
+	}
+</aui:script>
