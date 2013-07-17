@@ -1831,7 +1831,7 @@ AUI.add(
 							}
 						);
 
-						instance.hidePopover();
+						event.domEvent.preventDefault();
 					},
 
 					_hasAcceptButton: function(permissions, calendar, status) {
