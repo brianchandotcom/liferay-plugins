@@ -54,6 +54,7 @@
 
 	.entry-body {
 		border: 1px solid #C8C9CA;
+		border-bottom-width: 0;
 
 		.icon {
 			height: 16px;
@@ -81,6 +82,8 @@
 	}
 
 	.entry-content-container {
+		max-height: 75px;
+		overflow: hidden;
 		padding: .5em .9em;
 	}
 
@@ -92,17 +95,20 @@
 		}
 	}
 
-	.entry-footer-toolbar {
-		background: #DDD;
+	.entry-footer {
 		border: 1px solid #C8C9CA;
 		border-top-width: 0;
-		margin-top: -1px;
-		padding: .4em 1em .5em;
+	}
+
+	.entry-footer-toolbar {
+		background: #DDD;
+		padding: 0 1em;
 
 		.action {
 			border-left: 1px solid #2571AD;
 			display: inline-block;
 			height: 16px;
+			margin: .5em 0;
 			padding: 0 .6em 0 .5em;
 			vertical-align: middle;
 
@@ -129,6 +135,20 @@
 			cursor: pointer;
 			padding: .2em .5em;
 		}
+
+		.aui-toggler-header-collapsed {
+			background: url(@theme_image_path@/portlet/maximize.png) no-repeat 99% 50%;
+		}
+
+		.aui-toggler-header-expanded {
+			background: url(@theme_image_path@/portlet/minimize.png) no-repeat 99% 50%;
+		}
+
+		.aui-toggler-content-collapsed {
+			display: block;
+			height: 0;
+			overflow: hidden;
+		}
 	}
 
 	.entry {
@@ -139,6 +159,10 @@
 	.entry-scope {
 		color: #555;
 		display: block;
+	}
+
+	.announcement-collapsed .entry-footer-toolbar {
+		border-top: 1px solid #EFEFEF;
 	}
 }
 
@@ -176,6 +200,40 @@
 	.entry {
 		margin: 0;
 		padding: 0;
+	}
+}
+
+.portlet-configuration {
+	.modified-notice {
+		color: #090;
+		font-weight: bold;
+	}
+
+	#soAnnouncementsDisplaySettingsPanel .aui-field-label {
+		display: inline;
+		margin-right: 1em;
+	}
+
+	#soAnnouncementsDisplayPanel {
+		.customize-announcements-displayed {
+			display: block;
+			margin-bottom: 1em;
+
+			.aui-choice-label {
+				font-weight: bold;
+			}
+		}
+		.aui-tabview-list {
+			margin-top: 1em;
+		}
+	}
+}
+
+/* ---------- Internet Explorer ---------- */
+
+.ie6, .ie7 {
+	.so-announcements-portlet .entry-content-container {
+		height: 75px;
 	}
 }
 
