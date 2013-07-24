@@ -34,7 +34,33 @@
 <div class="unread-entries" id="unreadEntries">
 
 	<%
-	LinkedHashMap<Long, long[]> scopes = AnnouncementsUtil.getAnnouncementScopes(user.getUserId());
+	LinkedHashMap<Long, long[]> scopes = new LinkedHashMap<Long, long[]>();
+
+	if (customizeAnnouncementsDisplayed) {
+		long[] selectedScopeGroupsArray = GetterUtil.getLongValues(StringUtil.split(selectedScopeGroups));
+		long[] selectedScopeOrganizationsArray = GetterUtil.getLongValues(StringUtil.split(selectedScopeGroups));
+		long[] selectedScopeRolesArray = GetterUtil.getLongValues(StringUtil.split(selectedScopeGroups));
+		long[] selectedScopeUserGroupsArray = GetterUtil.getLongValues(StringUtil.split(selectedScopeGroups));
+
+		if (selectedScopeGroupsArray.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(Group.class.getName()), selectedScopeGroupsArray);
+		}
+
+		if (selectedScopeOrganizationsArray.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(Organization.class.getName()), selectedScopeOrganizationsArray);
+		}
+
+		if (selectedScopeRolesArray.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(Role.class.getName()), selectedScopeRolesArray);
+		}
+
+		if (selectedScopeUserGroupsArray.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(UserGroup.class.getName()), selectedScopeUserGroupsArray);
+		}
+	}
+	else {
+		scopes = AnnouncementsUtil.getAnnouncementScopes(user.getUserId());
+	}
 
 	scopes.put(new Long(0), new long[] {0});
 
@@ -44,7 +70,7 @@
 
 	portletURL.setParameter("mvcPath", "/view.jsp");
 
-	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "cur1", SearchContainer.DEFAULT_DELTA, portletURL, null, "there-are-no-unread-entries");
+	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "cur1", pageDelta, portletURL, null, "there-are-no-unread-entries");
 
 	List<AnnouncementsEntry> results = null;
 	int total = 0;
@@ -60,7 +86,7 @@
 <%
 flagValue = AnnouncementsFlagConstants.HIDDEN;
 
-searchContainer = new SearchContainer(renderRequest, null, null, "cur2", SearchContainer.DEFAULT_DELTA, portletURL, null, "there-are-no-read-entries");
+searchContainer = new SearchContainer(renderRequest, null, null, "cur2", pageDelta, portletURL, null, "there-are-no-read-entries");
 
 results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue, searchContainer.getStart(), searchContainer.getEnd());
 %>
@@ -71,7 +97,7 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 			<span><%= LanguageUtil.get(pageContext, "read-entries") %></span>
 		</div>
 
-		<div class="content">
+		<div class="content aui-toggler-content aui-toggler-content-collapsed">
 			<%@ include file="/entry_iterator.jspf" %>
 
 			<c:if test="<%= total > 0 %>">
@@ -79,7 +105,40 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 			</c:if>
 		</div>
 	</div>
+
+	<aui:script>
+		AUI().ready(
+			'aui-toggler',
+			function(A) {
+				new A.Toggler(
+					{
+						animated: true,
+						container: '#readEntries',
+						content: '.content',
+						expanded: false,
+						header: '.header',
+						transition: {
+							duration: 0.5,
+							easing: 'ease-in-out'
+						}
+					}
+				);
+			}
+		);
+	</aui:script>
 </c:if>
+
+<aui:script use="aui-base">
+	var announcementEntries = A.one('#p_p_id<portlet:namespace />');
+
+	announcementEntries.delegate(
+		'click',
+		function(event) {
+			Liferay.Announcements.toggleEntry(event,'<portlet:namespace />');
+		},
+		'.toggle-entry'
+	);
+</aui:script>
 
 <aui:script>
 	function <portlet:namespace />addEntry() {
