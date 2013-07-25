@@ -180,34 +180,37 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 				</c:if>
 
 				<aui:layout cssClass="calendar-booking-invitations">
-					<aui:column columnWidth="25" first="true">
+					<aui:column columnWidth="<%= (calendarBooking != null) ? 25 : 50 %>" first="true">
 						<label class="field-label">
 							<liferay-ui:message key="pending" /> (<span id="<portlet:namespace />pendingCounter"><%= pendingCalendarsJSONArray.length() %></span>)
 						</label>
 
 						<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListPending"></div>
 					</aui:column>
-					<aui:column columnWidth="25">
+					<aui:column columnWidth="<%= (calendarBooking != null) ? 25 : 50 %>">
 						<label class="field-label">
 							<liferay-ui:message key="accepted" /> (<span id="<portlet:namespace />acceptedCounter"><%= acceptedCalendarsJSONArray.length() %></span>)
 						</label>
 
 						<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListAccepted"></div>
 					</aui:column>
-					<aui:column columnWidth="25" last="true">
-						<label class="field-label">
-							<liferay-ui:message key="maybe" /> (<span id="<portlet:namespace />maybeCounter"><%= maybeCalendarsJSONArray.length() %></span>)
-						</label>
 
-						<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListMaybe"></div>
-					</aui:column>
-					<aui:column columnWidth="25" last="true">
-						<label class="field-label">
-							<liferay-ui:message key="declined" /> (<span id="<portlet:namespace />declinedCounter"><%= declinedCalendarsJSONArray.length() %></span>)
-						</label>
+					<c:if test="<%= calendarBooking != null %>">
+						<aui:column columnWidth="25" last="true">
+							<label class="field-label">
+								<liferay-ui:message key="maybe" /> (<span id="<portlet:namespace />maybeCounter"><%= maybeCalendarsJSONArray.length() %></span>)
+							</label>
 
-						<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListDeclined"></div>
-					</aui:column>
+							<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListMaybe"></div>
+						</aui:column>
+						<aui:column columnWidth="25" last="true">
+							<label class="field-label">
+								<liferay-ui:message key="declined" /> (<span id="<portlet:namespace />declinedCounter"><%= declinedCalendarsJSONArray.length() %></span>)
+							</label>
+
+							<div class="calendar-portlet-calendar-list" id="<portlet:namespace />calendarListDeclined"></div>
+						</aui:column>
+					</c:if>
 
 					<aui:column columnWidth="100">
 						<div class="toggler-header-collapsed calendar-portlet-list-header" id="<portlet:namespace />checkAvailability">
@@ -380,8 +383,10 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 		Liferay.CalendarUtil.syncCalendarsMap(
 			[
 				window.<portlet:namespace />calendarListAccepted,
-				window.<portlet:namespace />calendarListDeclined,
-				window.<portlet:namespace />calendarListMaybe,
+				<c:if test="<%= calendarBooking != null %>">
+					window.<portlet:namespace />calendarListDeclined,
+					window.<portlet:namespace />calendarListMaybe,
+				</c:if>
 				window.<portlet:namespace />calendarListPending
 			]
 		);
@@ -522,53 +527,55 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 		}
 	).render();
 
-	window.<portlet:namespace />calendarListDeclined = new Liferay.CalendarList(
-		{
-			after: {
-				calendarsChange: function(event) {
-					var instance = this;
+	<c:if test="<%= calendarBooking != null %>">
+		window.<portlet:namespace />calendarListDeclined = new Liferay.CalendarList(
+			{
+				after: {
+					calendarsChange: function(event) {
+						var instance = this;
 
-					A.one('#<portlet:namespace />declinedCounter').html(event.newVal.length);
+						A.one('#<portlet:namespace />declinedCounter').html(event.newVal.length);
 
-					syncCalendarsMap();
+						syncCalendarsMap();
 
-					scheduler.load();
+						scheduler.load();
+					},
+					'scheduler-calendar:visibleChange': syncCalendarsMap
 				},
-				'scheduler-calendar:visibleChange': syncCalendarsMap
-			},
-			boundingBox: '#<portlet:namespace />calendarListDeclined',
-			calendars: <%= declinedCalendarsJSONArray %>,
-			scheduler: <portlet:namespace />scheduler,
-			simpleMenu: calendarsMenu,
-			strings: {
-				emptyMessage: '<liferay-ui:message key="no-declined-invites" />'
+				boundingBox: '#<portlet:namespace />calendarListDeclined',
+				calendars: <%= declinedCalendarsJSONArray %>,
+				scheduler: <portlet:namespace />scheduler,
+				simpleMenu: calendarsMenu,
+				strings: {
+					emptyMessage: '<liferay-ui:message key="no-declined-invites" />'
+				}
 			}
-		}
-	).render();
+		).render();
 
-	window.<portlet:namespace />calendarListMaybe = new Liferay.CalendarList(
-		{
-			after: {
-				calendarsChange: function(event) {
-					var instance = this;
+		window.<portlet:namespace />calendarListMaybe = new Liferay.CalendarList(
+			{
+				after: {
+					calendarsChange: function(event) {
+						var instance = this;
 
-					A.one('#<portlet:namespace />maybeCounter').html(event.newVal.length);
+						A.one('#<portlet:namespace />maybeCounter').html(event.newVal.length);
 
-					syncCalendarsMap();
+						syncCalendarsMap();
 
-					scheduler.load();
+						scheduler.load();
+					},
+					'scheduler-calendar:visibleChange': syncCalendarsMap
 				},
-				'scheduler-calendar:visibleChange': syncCalendarsMap
-			},
-			boundingBox: '#<portlet:namespace />calendarListMaybe',
-			calendars: <%= maybeCalendarsJSONArray %>,
-			scheduler: <portlet:namespace />scheduler,
-			simpleMenu: calendarsMenu,
-			strings: {
-				emptyMessage: '<liferay-ui:message key="no-outstanding-invites" />'
+				boundingBox: '#<portlet:namespace />calendarListMaybe',
+				calendars: <%= maybeCalendarsJSONArray %>,
+				scheduler: <portlet:namespace />scheduler,
+				simpleMenu: calendarsMenu,
+				strings: {
+					emptyMessage: '<liferay-ui:message key="no-outstanding-invites" />'
+				}
 			}
-		}
-	).render();
+		).render();
+	</c:if>
 
 	syncCalendarsMap();
 
@@ -624,7 +631,11 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 				var calendarJSON = Liferay.CalendarUtil.manageableCalendars[calendarId];
 
 				A.Array.each(
-					[<portlet:namespace />calendarListAccepted, <portlet:namespace />calendarListDeclined, <portlet:namespace />calendarListMaybe, <portlet:namespace />calendarListPending],
+					[<portlet:namespace />calendarListAccepted,
+					 <c:if test="<%= calendarBooking != null %>">
+					 	<portlet:namespace />calendarListDeclined, <portlet:namespace />calendarListMaybe,
+				 	 </c:if>
+				 	 <portlet:namespace />calendarListPending],
 					function(calendarList) {
 						calendarList.remove(calendarList.getCalendar(calendarId));
 						calendarList.remove(calendarList.getCalendar(defaultCalendarId));
