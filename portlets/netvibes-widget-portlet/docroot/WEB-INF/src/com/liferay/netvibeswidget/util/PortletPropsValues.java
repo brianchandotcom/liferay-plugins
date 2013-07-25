@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
@@ -12,24 +11,17 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+package com.liferay.netvibeswidget.util;
 
-<html>
+import com.liferay.util.portlet.PortletProps;
 
-<head>
-	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-	<script src="http://www.netvibes.com/js/UWA/Utils/ifproxy.js" type="text/javascript"></script>
-	<title>UWA Container Proxy</title>
-</head>
+/**
+ * @author Vilmos Papp
+ */
+public interface PortletPropsValues {
 
-<body>
+	public static final String UWA_WIDGET_FRAME_URL = PortletProps.get(
+		PortletPropsKeys.UWA_WIDGET_FRAME_URL);
 
-<!--
-http://dev.netvibes.com/doc/uwa/howto/uwa_iframe
--->
-
-</body>
-
-</html>
+}
