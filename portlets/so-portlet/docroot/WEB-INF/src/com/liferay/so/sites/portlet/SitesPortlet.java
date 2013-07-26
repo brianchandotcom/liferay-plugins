@@ -187,7 +187,7 @@ public class SitesPortlet extends MVCPortlet {
 
 		boolean directory = ParamUtil.getBoolean(resourceRequest, "directory");
 		int end = ParamUtil.getInteger(resourceRequest, "end", 10);
-		String keywords = DAOParamUtil.getLike(resourceRequest, "keywords");
+		String keywords = DAOParamUtil.getString(resourceRequest, "keywords");
 		int maxResultSize = ParamUtil.getInteger(
 			resourceRequest, "maxResultSize", 10);
 		String searchTab = ParamUtil.getString(resourceRequest, "searchTab");

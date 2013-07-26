@@ -23,7 +23,7 @@
 String tabs1 = ParamUtil.getString(request, "tabs1");
 
 String keywords = ParamUtil.getString(request, "keywords");
-String searchKeywords = DAOParamUtil.getLike(request, "keywords");
+String searchKeywords = DAOParamUtil.getString(request, "keywords");
 
 List<Group> groups = null;
 int groupsCount = 0;

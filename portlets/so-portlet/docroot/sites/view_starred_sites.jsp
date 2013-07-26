@@ -20,7 +20,7 @@
 <%@ include file="/sites/init.jsp" %>
 
 <%
-String searchName = DAOParamUtil.getLike(request, "name");
+String searchName = DAOParamUtil.getString(request, "name");
 
 List<Group> groups = SitesUtil.getFavoriteSitesGroups(themeDisplay.getUserId(), null, 0, 8);
 

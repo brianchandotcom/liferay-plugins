@@ -23,7 +23,7 @@
 String tabs1 = ParamUtil.getString(request, "tabs1", "my-sites");
 
 String name = ParamUtil.getString(request, "name");
-String searchName = DAOParamUtil.getLike(request, "name");
+String searchName = DAOParamUtil.getString(request, "name");
 
 List<Group> groups = null;
 int groupsCount = 0;
