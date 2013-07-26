@@ -470,6 +470,11 @@
 	@include border-radius(3px);
 }
 
+.calendar-portlet-add-booking-btn-row {
+	margin: 0 0 1em 0;
+	text-align: center;
+}
+
 .calendar-list-item-arrow, .calendar-list-item-color, .simple-color-picker-item {
 	@include border-radius(1px);
 }
@@ -498,8 +503,4 @@
 	display: inline-block;
 	margin-bottom: 11px;
 	padding: 4px 6px;
-}
-
-.scheduler-base-controls .calendar-create-event-btn {
-	margin-right: 3px;
 }
