@@ -35,7 +35,7 @@ page import="com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil" %><
 page import="com.liferay.microblogs.service.MicroblogsEntryServiceUtil" %><%@
 page import="com.liferay.microblogs.service.permission.MicroblogsEntryPermission" %><%@
 page import="com.liferay.microblogs.service.permission.MicroblogsPermission" %><%@
-page import="com.liferay.microblogs.util.MicroblogsUtil" %><%@
+page import="com.liferay.microblogs.service.util.MicroblogsUtil" %><%@
 page import="com.liferay.microblogs.util.WebKeys" %><%@
 page import="com.liferay.microblogs.util.comparator.EntryCreateDateComparator" %><%@
 page import="com.liferay.portal.NoSuchUserException" %><%@
@@ -53,15 +53,14 @@ page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.model.Group" %><%@
 page import="com.liferay.portal.model.User" %><%@
 page import="com.liferay.portal.security.permission.ActionKeys" %><%@
+page import="com.liferay.portal.service.ServiceContextFactory" %><%@
 page import="com.liferay.portal.service.UserLocalServiceUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
 page import="com.liferay.portlet.social.model.SocialRelationConstants" %>
 
 <%@ page import="java.text.Format" %>
 
-<%@ page import="java.util.List" %><%@
-page import="java.util.regex.Matcher" %><%@
-page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.List" %>
 
 <%@ page import="javax.portlet.PortletURL" %><%@
 page import="javax.portlet.WindowState" %>
