@@ -24,12 +24,15 @@ import com.liferay.calendar.service.base.CalendarResourceLocalServiceBaseImpl;
 import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.lar.ExportImportThreadLocal;
+import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
@@ -44,6 +47,7 @@ import java.util.Map;
  * @author Fabio Pezzutto
  * @author Bruno Basto
  * @author Marcellus Tavares
+ * @author Andrea Di Giorgi
  */
 public class CalendarResourceLocalServiceImpl
 	extends CalendarResourceLocalServiceBaseImpl {
@@ -107,13 +111,16 @@ public class CalendarResourceLocalServiceImpl
 
 		// Calendar
 
-		serviceContext.setAddGroupPermissions(true);
-		serviceContext.setAddGuestPermissions(true);
+		if (!ExportImportThreadLocal.isImportInProcess()) {
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
 
-		calendarLocalService.addCalendar(
-			userId, calendarResource.getGroupId(), calendarResourceId, nameMap,
-			descriptionMap, PortletPropsValues.CALENDAR_COLOR_DEFAULT, true,
-			false, false, serviceContext);
+			calendarLocalService.addCalendar(
+				userId, calendarResource.getGroupId(), calendarResourceId,
+				nameMap, descriptionMap,
+				PortletPropsValues.CALENDAR_COLOR_DEFAULT, true, false, false,
+				serviceContext);
+		}
 
 		// Asset
 
@@ -126,6 +133,9 @@ public class CalendarResourceLocalServiceImpl
 	}
 
 	@Override
+	@SystemEvent(
+		action = SystemEventConstants.ACTION_SKIP,
+		type = SystemEventConstants.TYPE_DELETE)
 	public CalendarResource deleteCalendarResource(
 			CalendarResource calendarResource)
 		throws PortalException, SystemException {
@@ -150,6 +160,9 @@ public class CalendarResourceLocalServiceImpl
 
 			resourceLocalService.deleteResource(
 				calendar, ResourceConstants.SCOPE_INDIVIDUAL);
+
+			calendarNotificationTemplateLocalService.
+				deleteCalendarNotificationTemplates(calendar.getCalendarId());
 		}
 
 		// Calendar bookings
@@ -172,7 +185,8 @@ public class CalendarResourceLocalServiceImpl
 		CalendarResource calendarResource =
 			calendarResourcePersistence.findByPrimaryKey(calendarResourceId);
 
-		return deleteCalendarResource(calendarResource);
+		return calendarResourceLocalService.deleteCalendarResource(
+			calendarResource);
 	}
 
 	@Override
@@ -183,7 +197,8 @@ public class CalendarResourceLocalServiceImpl
 			calendarResourcePersistence.findByGroupId(groupId);
 
 		for (CalendarResource calendarResource : calendarResources) {
-			deleteCalendarResource(calendarResource);
+			calendarResourceLocalService.deleteCalendarResource(
+				calendarResource);
 		}
 	}
 
