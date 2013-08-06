@@ -132,17 +132,15 @@ public class ActivitiesPortlet extends MVCPortlet {
 					mbMessage.getUserId());
 
 				if (user != null) {
-					String userDisplayURL = user.getDisplayURL(themeDisplay);
-
-					jsonObject.put("userDisplayURL", userDisplayURL);
+					jsonObject.put(
+						"userDisplayURL", user.getDisplayURL(themeDisplay));
+					jsonObject.put(
+						"userPortraitURL", HtmlUtil.escape(
+						user.getPortraitURL(themeDisplay)));
 				}
 
 				jsonObject.put(
 					"userName", HtmlUtil.escape(mbMessage.getUserName()));
-
-				jsonObject.put(
-					"userPortraitURL", HtmlUtil.escape(
-						user.getPortraitURL(themeDisplay)));
 			}
 
 			jsonObject.put("success", Boolean.TRUE);

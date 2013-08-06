@@ -30,11 +30,21 @@
 					<span class="avatar">
 
 						<%
-						User messageUser = UserLocalServiceUtil.getUser(message.getUserId());
+						User messageUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
+
+						String userDisplayURL = StringPool.BLANK;
+						String userFullName = StringPool.BLANK;
+						String userPortraitURL = StringPool.BLANK;
+
+						if (messageUser != null) {
+							userDisplayURL = activitySetUser.getDisplayURL(themeDisplay);
+							userFullName = activitySetUser.getFullName();
+							userPortraitURL = activitySetUser.getPortraitURL(themeDisplay);
+						}
 						%>
 
-						<a href="<%= messageUser.getDisplayURL(themeDisplay) %>">
-							<img alt="<%= messageUser.getFullName() %>" src="<%= messageUser.getPortraitURL(themeDisplay) %>" />
+						<a href="<%= userDisplayURL %>">
+							<img alt="<%= userFullName %>" src="<%= userPortraitURL %>" />
 						</a>
 					</span>
 				</div>
