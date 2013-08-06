@@ -19,8 +19,10 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroupGroupRole;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.UserGroupGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.definition.RecipientType;
@@ -31,6 +33,7 @@ import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -110,35 +113,14 @@ public abstract class BaseNotificationSender implements NotificationSender {
 			int roleType, ExecutionContext executionContext)
 		throws Exception {
 
-		if (roleType == RoleConstants.TYPE_REGULAR) {
-			List<User> users = UserLocalServiceUtil.getRoleUsers(roleId);
+		List<User> users = getRoleUsers(roleId, roleType, executionContext);
 
-			for (User user : users) {
-				if (user.isActive()) {
-					NotificationRecipient notificationRecipient =
-						new NotificationRecipient(user);
+		for (User user : users) {
+			if (user.isActive()) {
+				NotificationRecipient notificationRecipient =
+					new NotificationRecipient(user);
 
-					notificationRecipients.add(notificationRecipient);
-				}
-			}
-		}
-		else {
-			KaleoInstanceToken kaleoInstanceToken =
-				executionContext.getKaleoInstanceToken();
-
-			List<UserGroupRole> userGroupRoles =
-				UserGroupRoleLocalServiceUtil.getUserGroupRolesByGroupAndRole(
-					kaleoInstanceToken.getGroupId(), roleId);
-
-			for (UserGroupRole userGroupRole : userGroupRoles) {
-				User user = userGroupRole.getUser();
-
-				if (user.isActive()) {
-					NotificationRecipient notificationRecipient =
-						new NotificationRecipient(user);
-
-					notificationRecipients.add(notificationRecipient);
-				}
+				notificationRecipients.add(notificationRecipient);
 			}
 		}
 	}
@@ -228,6 +210,41 @@ public abstract class BaseNotificationSender implements NotificationSender {
 		}
 
 		return notificationRecipients;
+	}
+
+	protected List<User> getRoleUsers(
+			long roleId, int roleType, ExecutionContext executionContext)
+		throws Exception {
+
+		if (roleType == RoleConstants.TYPE_REGULAR) {
+			return UserLocalServiceUtil.getRoleUsers(roleId);
+		}
+
+		List<User> users = new ArrayList<User>();
+
+		KaleoInstanceToken kaleoInstanceToken =
+			executionContext.getKaleoInstanceToken();
+
+		List<UserGroupRole> userGroupRoles =
+			UserGroupRoleLocalServiceUtil.getUserGroupRolesByGroupAndRole(
+				kaleoInstanceToken.getGroupId(), roleId);
+
+		for (UserGroupRole userGroupRole : userGroupRoles) {
+			users.add(userGroupRole.getUser());
+		}
+
+		List<UserGroupGroupRole> userGroupGroupRoles =
+			UserGroupGroupRoleLocalServiceUtil.
+				getUserGroupGroupRolesByGroupAndRole(
+					kaleoInstanceToken.getGroupId(), roleId);
+
+		for (UserGroupGroupRole userGroupGroupRole : userGroupGroupRoles) {
+			users.addAll(
+				UserLocalServiceUtil.getUserGroupUsers(
+					userGroupGroupRole.getUserGroupId()));
+		}
+
+		return users;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
