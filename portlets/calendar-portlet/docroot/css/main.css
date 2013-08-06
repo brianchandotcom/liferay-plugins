@@ -18,8 +18,14 @@
 	}
 
 	.reminder-type {
-		margin-right: 6px;
+		margin: 0 6px 11px 0;
+		padding: 4px 6px;
 	}
+}
+
+.calendar-create-event-btn-row {
+	margin: 0 0 1em 0;
+	text-align: center;
 }
 
 .calendar-list-empty-message {
@@ -481,8 +487,4 @@
 
 .simple-color-picker-item:hover, .simple-color-picker-item-selected {
 	@include transition(border-color 0s);
-}
-
-.scheduler-base-controls .calendar-create-event-btn {
-	margin-right: 3px;
 }
