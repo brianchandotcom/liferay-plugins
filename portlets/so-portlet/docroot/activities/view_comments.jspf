@@ -17,70 +17,66 @@
  */
 --%>
 
-<%
-String className = activitySet.getClassName();
-long classPK = activitySet.getClassPK();
-
-if (activitySet.getActivityCount() > 1 ) {
-	className = SocialActivitySet.class.getName();
-	classPK = activitySet.getActivitySetId();
-}
-
-MBMessageDisplay messageDisplay = MBMessageLocalServiceUtil.getDiscussionMessageDisplay(user.getUserId(), themeDisplay.getScopeGroupId(), className, classPK, WorkflowConstants.STATUS_APPROVED);
-
-MBTreeWalker treeWalker = messageDisplay.getTreeWalker();
-
-List<MBMessage> messages = treeWalker.getMessages();
-
-messages = ListUtil.sort(messages, new MessageCreateDateComparator(true));
-
-int messagesCount = messages.size() - 1;
-%>
-
-<span class="view-comments">
-	<a href="javascript:;"><%= messagesCount > 0 ? messagesCount : StringPool.BLANK %> <liferay-ui:message key='<%= messagesCount > 1 ? "comments" : "comment" %>' /></a>
-</span>
-
 <div class="comments-container">
 	<div class="aui-helper-hidden comments-list">
 
 		<%
-		for (int i = 1; i < messages.size(); i++) {
-			MBMessage message = messages.get(i);
+		for (int i = 1; i < mbMessages.size(); i++) {
+			MBMessage mbMessage = mbMessages.get(i);
 		%>
 
 			<div class="comment-entry">
-				<div class="comment-body">
-					<span class="message"><%= HtmlUtil.escape(message.getBody()) %></span>
+				<div class="user-portrait">
+					<span class="avatar">
+
+						<%
+						User mbMessageUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
+
+						String mbMessageUserDisplayURL = StringPool.BLANK;
+						String mbMessageUserFullName = StringPool.BLANK;
+						String mbMessageUserPortraitURL = StringPool.BLANK;
+
+						if (activitySetUser != null) {
+							mbMessageUserDisplayURL = mbMessageUser.getDisplayURL(themeDisplay);
+							mbMessageUserFullName = mbMessageUser.getFullName();
+							mbMessageUserPortraitURL = mbMessageUser.getPortraitURL(themeDisplay);
+						}
+						%>
+
+						<a href="<%= mbMessageUserDisplayURL %>">
+							<img alt="<%= mbMessageUserFullName %>" src="<%= mbMessageUserPortraitURL %>" />
+						</a>
+					</span>
 				</div>
 
-				<div class="comment-info">
-
-					<%
-					User messageUser = UserLocalServiceUtil.getUser(message.getUserId());
-					%>
-
+				<div class="comment-body">
 					<c:choose>
-						<c:when test="<%= Validator.isNotNull(messageUser.getDisplayURL(themeDisplay)) %>">
-							<span class="user-name"><a href="<%= messageUser.getDisplayURL(themeDisplay) %>"><%= HtmlUtil.escape(message.getUserName()) %></a></span>
+						<c:when test="<%= Validator.isNotNull(mbMessageUser.getDisplayURL(themeDisplay)) %>">
+							<span class="user-name"><a href="<%= mbMessageUser.getDisplayURL(themeDisplay) %>"><%= HtmlUtil.escape(mbMessage.getUserName()) %></a></span>
 						</c:when>
 						<c:otherwise>
-							<span class="user-name"><%= HtmlUtil.escape(message.getUserName()) %></span>
+							<span class="user-name"><%= HtmlUtil.escape(mbMessage.getUserName()) %></span>
 						</c:otherwise>
 					</c:choose>
 
-					<span class="post-date"><%= dateFormatDateTime.format(message.getModifiedDate()) %></span>
+					<span class="message"><%= HtmlUtil.escape(mbMessage.getBody()) %></span>
+				</div>
 
-					<c:if test="<%= DateUtil.compareTo(message.getCreateDate(), message.getModifiedDate()) != 0 %>">
+				<div class="comment-info">
+					<span class="post-date">
+						<%= Time.getRelativeTimeDescription(mbMessage.getModifiedDate(), locale, timeZone) %>
+					</span>
+
+					<c:if test="<%= DateUtil.compareTo(mbMessage.getCreateDate(), mbMessage.getModifiedDate()) != 0 %>">
 						<span class="edit-notice"><liferay-ui:message key="modified" /></span>
 					</c:if>
 
-					<c:if test="<%= message.getUserId() == user.getUserId() %>">
+					<c:if test="<%= mbMessage.getUserId() == user.getUserId() %>">
 						<span class="edit-comment">
-							<a data-messageId="<%= message.getMessageId() %>" href="javascript:;"><liferay-ui:message key="edit" /></a>
+							<a data-mbMessageId="<%= mbMessage.getMessageId() %>" href="javascript:;"><liferay-ui:message key="edit" /></a>
 						</span>
 						<span class="delete-comment">
-							<a data-messageId="<%= message.getMessageId() %>" href="javascript:;"><liferay-ui:message key="delete" /></a>
+							<a data-mbMessageId="<%= mbMessage.getMessageId() %>" href="javascript:;"><liferay-ui:message key="delete" /></a>
 						</span>
 					</c:if>
 				</div>
@@ -100,22 +96,30 @@ int messagesCount = messages.size() - 1;
 		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.ADD %>" />
 		<aui:input name="className" type="hidden" value="<%= className %>" />
 		<aui:input name="classPK" type="hidden" value="<%= classPK %>" />
-		<aui:input name="messageId" type="hidden" value="" />
+		<aui:input name="mbMessageId" type="hidden" value="" />
 
 		<%
-		MBMessage rootMessage = treeWalker.getRoot();
+		MBMessage rootMBMessage = mbTreeWalker.getRoot();
 		%>
 
-		<aui:input name="parentMessageId" type="hidden" value="<%= rootMessage.getMessageId() %>" />
+		<aui:input name="parentMBMessageId" type="hidden" value="<%= rootMBMessage.getMessageId() %>" />
 
 		<%
-		MBThread thread = messageDisplay.getThread();
+		MBThread mbThread = mbMessageDisplay.getThread();
 		%>
 
-		<aui:input name="threadId" type="hidden" value="<%= thread.getThreadId() %>" />
+		<aui:input name="mbThreadId" type="hidden" value="<%= mbThread.getThreadId() %>" />
 
 		<div>
-			<aui:input cssClass="comment-form" label="" name="body" />
+			<div class="user-portrait">
+				<span class="avatar">
+					<a href="<%= user.getDisplayURL(themeDisplay) %>">
+						<img alt="<%= user.getFullName() %>" src="<%= user.getPortraitURL(themeDisplay) %>" />
+					</a>
+				</span>
+			</div>
+
+			<aui:input cssClass="comment-form" label="" name="body" placeholder='<%= LanguageUtil.get(pageContext, "leave-a-comment") %>'/>
 
 			<aui:input name="submit" type="hidden" value="post" />
 		</div>
@@ -126,17 +130,24 @@ int messagesCount = messages.size() - 1;
 	var addNewComment = function(commentsList, responseData) {
 		var commentEntryTemplate =
 			'<div class="comment-entry">' +
+				'<div class="user-portrait">' +
+					'<span class="avatar">' +
+						'<a href="' + '{userDisplayURL}' + '">' +
+							'<img alt="' + '{userName}' + '" src="' + '{userPortraitURL}' + '" />' +
+						'</a>' +
+					'</span>' +
+				'</div>' +
 				'<div class="comment-body">' +
+					'<span class="user-name"><a href="' + '{userDisplayURL}' + '">' + '{userName}' + '</a></span>' +
 					'<span class="message">' + '{body}' + '</span>' +
 				'</div>' +
 				'<div class="comment-info">' +
-					'<span class="user-name"><a href="' + '{userDisplayURL}' + '">' + '{userName}' + '</a></span>' +
 					'<span class="post-date">' + '{modifiedDate}' + '</span>' +
 					'<span class="edit-comment">' +
-						'<a data-messageId="' + '{messageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "edit") %></a>' +
+						'<a data-mbMessageId="' + '{mbMessageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "edit") %></a>' +
 					'</span>' +
 					'<span class="delete-comment">' +
-						'<a data-messageId="' + '{messageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "delete") %></a>' +
+						'<a data-mbMessageId="' + '{mbMessageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "delete") %></a>' +
 					'</span>' +
 				'</div>' +
 			'</div>';
@@ -145,10 +156,11 @@ int messagesCount = messages.size() - 1;
 			commentEntryTemplate,
 			{
 				body: responseData.body,
-				messageId: responseData.messageId,
+				messageId: responseData.mbMessageId,
 				modifiedDate: responseData.modifiedDate,
 				userDisplayURL: responseData.userDisplayURL ? responseData.userDisplayURL : '',
-				userName: responseData.userName
+				userName: responseData.userName,
+				userPortraitURL: responseData.userPortraitURL
 			}
 		);
 
@@ -165,7 +177,7 @@ int messagesCount = messages.size() - 1;
 
 				var currentTarget = event.currentTarget;
 
-				var activityFooterToolbar = currentTarget.ancestor('.activity-footer-toolbar');
+				var activityFooter = currentTarget.ancestor('.activity-footer');
 				var commentsContainer = currentTarget.ancestor('.comments-container');
 
 				var form = commentsContainer.one('form');
@@ -182,13 +194,13 @@ int messagesCount = messages.size() - 1;
 								var responseData = this.get('responseData');
 
 								if (responseData.success) {
-									commentsContainer.removeClass('.aui-helper-hidden');
-
 									var commentsList = commentsContainer.one('.comments-list');
+
+									commentsList.removeClass('aui-helper-hidden');
 
 									addNewComment(commentsList, responseData);
 
-									var viewComments = activityFooterToolbar.one('.view-comments a');
+									var viewComments = activityFooter.one('.view-comments a');
 
 									var viewCommentsHtml = viewComments.get('innerHTML');
 
@@ -202,6 +214,10 @@ int messagesCount = messages.size() - 1;
 										messagesCount +
 										(messagesCount > 1 ? ' <%= UnicodeLanguageUtil.get(pageContext, "comments") %>' : ' <%= UnicodeLanguageUtil.get(pageContext, "comment") %>')
 									);
+
+									var textInput = commentsContainer.one('.comment-form .aui-field-input-text');
+
+									textInput.attr('value', '');
 								}
 							}
 						},

@@ -46,9 +46,9 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 		function(event) {
 			var currentTarget = event.currentTarget;
 
-			var viewComments = currentTarget.ancestor();
+			var activityFooterToolbar = currentTarget.ancestor('.activity-footer-toolbar');
 
-			var commentsContainer = viewComments.siblings('.comments-container');
+			var commentsContainer = activityFooterToolbar.siblings('.comments-container');
 
 			var commentsList = commentsContainer.one('.comments-list');
 
@@ -63,7 +63,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 			if (confirm('<%= UnicodeLanguageUtil.get(pageContext,"are-you-sure-you-want-to-delete-the-selected-entry") %>')) {
 				var currentTarget = event.currentTarget;
 
-				var activityFooterToolbar = currentTarget.ancestor('.activity-footer-toolbar');
+				var activityFooter = currentTarget.ancestor('.activity-footer');
 				var commentEntry = currentTarget.ancestor('.comment-entry')
 				var commentsContainer = currentTarget.ancestor('.comments-container');
 
@@ -73,11 +73,11 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 				cmdInput.val('<%= Constants.DELETE %>');
 
-				var messageId = currentTarget.getAttribute('data-messageId');
+				var mbMessageId = currentTarget.getAttribute('data-mbMessageId');
 
-				var messageIdInput = form.one('#<portlet:namespace />messageId');
+				var mbMessageIdInput = form.one('#<portlet:namespace />mbMessageId');
 
-				messageIdInput.val(messageId);
+				mbMessageIdInput.val(mbMessageId);
 
 				A.io.request(
 					form.attr('action'),
@@ -89,7 +89,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 								if (responseData.success) {
 									commentEntry.remove();
 
-									var viewComments = activityFooterToolbar.one('.view-comments a');
+									var viewComments = activityFooter.one('.view-comments a');
 
 									var viewCommentsHtml = viewComments.get('innerHTML');
 
@@ -118,9 +118,9 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 		function(event) {
 			var currentTarget = event.currentTarget;
 
-			var messageId = currentTarget.getAttribute('data-messageId');
+			var mbMessageId = currentTarget.getAttribute('data-mbMessageId');
 
-			var editForm = A.one('#<portlet:namespace />fm1' + messageId);
+			var editForm = A.one('#<portlet:namespace />fm1' + mbMessageId);
 
 			var commentEntry = currentTarget.ancestor('.comment-entry');
 
@@ -138,16 +138,16 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 				editForm.removeClass('aui-helper-hidden');
 
-				editForm.set('id','<portlet:namespace />fm1' + messageId);
-				editForm.set('name','<portlet:namespace />fm1' + messageId);
+				editForm.set('id','<portlet:namespace />fm1' + mbMessageId);
+				editForm.set('name','<portlet:namespace />fm1' + mbMessageId);
 
 				var cmdInput = editForm.one('#<portlet:namespace /><%= Constants.CMD %>');
 
 				cmdInput.val('<%= Constants.EDIT %>');
 
-				var messageIdInput = editForm.one('#<portlet:namespace />messageId');
+				var mbMessageIdInput = editForm.one('#<portlet:namespace />mbMessageId');
 
-				messageIdInput.val(messageId);
+				mbMessageIdInput.val(mbMessageId);
 
 				var commentBody = commentEntry.one('.comment-body');
 
