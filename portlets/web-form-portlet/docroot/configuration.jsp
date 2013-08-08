@@ -106,7 +106,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="webFormFields" persistState="<%= true %>" title="form-fields">
 			<aui:fieldset cssClass="rows-container webFields">
 				<c:if test="<%= fieldsEditingDisabled %>">
-					<div class="portlet-msg-alert">
+					<div class="alert">
 						<liferay-ui:message key="there-is-existing-form-data-please-export-and-delete-it-before-making-changes-to-the-fields" />
 					</div>
 
@@ -225,11 +225,11 @@ if (!fieldsEditingDisabled) {
 			optionsDiv.hide();
 		}
 
-		var optionalControl = formRow.one('.optional-control');
+		var optionalControl = formRow.one('.optional-control').ancestor();
 		var labelName = formRow.one('.label-name');
 
 		if (value == 'paragraph') {
-			var inputName = labelName.one('input');
+			var inputName = labelName.one('input.field');
 
 			var formFieldsIndex = select.attr('id').match(/\d+$/);
 

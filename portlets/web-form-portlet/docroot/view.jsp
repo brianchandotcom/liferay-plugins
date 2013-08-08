@@ -33,7 +33,7 @@ String successURL = portletPreferences.getValue("successURL", StringPool.BLANK);
 	</c:if>
 
 	<aui:fieldset label="<%= HtmlUtil.escape(title) %>">
-		<em class="description"><%= HtmlUtil.escape(description) %></em>
+		<p class="description"><%= HtmlUtil.escape(description) %></p>
 
 		<liferay-ui:success key="success" message="the-form-information-was-sent-successfully" />
 
@@ -64,15 +64,15 @@ String successURL = portletPreferences.getValue("successURL", StringPool.BLANK);
 				<liferay-ui:error key='<%= "error" + fieldLabel %>' message="<%= fieldValidationErrorMessage %>" />
 
 				<c:if test="<%= Validator.isNotNull(fieldValidationScript) %>">
-					<div class="aui-helper-hidden" id="<portlet:namespace/>validationError<%= fieldName %>">
-						<span class="portlet-msg-error"><%= fieldValidationErrorMessage %></span>
+					<div class="hide" id="<portlet:namespace/>validationError<%= fieldName %>">
+						<span class="alert alert-error"><%= fieldValidationErrorMessage %></span>
 					</div>
 				</c:if>
 			</c:if>
 
 			<c:if test="<%= !fieldOptional %>">
-				<div class="aui-helper-hidden" id="<portlet:namespace/>fieldOptionalError<%= fieldName %>">
-					<span class="portlet-msg-error"><liferay-ui:message key="this-field-is-mandatory" /></span>
+				<div class="hide" id="<portlet:namespace/>fieldOptionalError<%= fieldName %>">
+					<span class="alert alert-error"><liferay-ui:message key="this-field-is-mandatory" /></span>
 				</div>
 			</c:if>
 
@@ -105,11 +105,6 @@ String successURL = portletPreferences.getValue("successURL", StringPool.BLANK);
 					</aui:field-wrapper>
 				</c:when>
 				<c:when test='<%= fieldType.equals("options") %>'>
-
-					<%
-					String[] options = WebFormUtil.split(fieldOptions);
-					%>
-
 					<aui:select cssClass='<%= fieldOptional ? "optional" : StringPool.BLANK %>' label="<%= HtmlUtil.escape(fieldLabel) %>" name="<%= fieldName %>">
 
 						<%
@@ -235,7 +230,7 @@ String successURL = portletPreferences.getValue("successURL", StringPool.BLANK);
 					if (!fieldOptional[key] && currentFieldValue.match(/^\s*$/)) {
 						validationErrors = true;
 
-						A.all('.portlet-msg-success').hide();
+						A.all('.alert-success').hide();
 
 						if (optionalFieldError) {
 							optionalFieldError.show();
@@ -244,7 +239,7 @@ String successURL = portletPreferences.getValue("successURL", StringPool.BLANK);
 					else if (!fieldValidationFunctions[key](currentFieldValue, fieldsMap)) {
 						validationErrors = true;
 
-						A.all('.portlet-msg-success').hide();
+						A.all('.alert-success').hide();
 
 						if (optionalFieldError) {
 							optionalFieldError.hide();
