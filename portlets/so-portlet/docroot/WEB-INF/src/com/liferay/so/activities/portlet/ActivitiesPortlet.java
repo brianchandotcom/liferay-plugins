@@ -17,33 +17,136 @@
 
 package com.liferay.so.activities.portlet;
 
+import com.liferay.microblogs.model.MicroblogsEntry;
+import com.liferay.microblogs.model.MicroblogsEntryConstants;
+import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
+import com.liferay.microblogs.service.MicroblogsEntryServiceUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.messageboards.model.MBMessage;
+import com.liferay.portlet.messageboards.model.MBMessageDisplay;
+import com.liferay.portlet.messageboards.model.MBThread;
+import com.liferay.portlet.messageboards.model.MBTreeWalker;
+import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageServiceUtil;
+import com.liferay.portlet.messageboards.util.comparator.MessageCreateDateComparator;
+import com.liferay.portlet.social.model.SocialActivitySet;
+import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 /**
  * @author Matthew Kong
  */
 public class ActivitiesPortlet extends MVCPortlet {
+
+	public void getMBComments(
+			SocialActivitySet activitySet, ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		String className = activitySet.getClassName();
+		long classPK = activitySet.getClassPK();
+
+		if (activitySet.getActivityCount() > 1 ) {
+			className = SocialActivitySet.class.getName();
+			classPK = activitySet.getActivitySetId();
+		}
+
+		MBMessageDisplay mbMessageDisplay =
+			MBMessageLocalServiceUtil.getDiscussionMessageDisplay(
+				themeDisplay.getUserId(), activitySet.getGroupId(), className,
+				classPK, WorkflowConstants.STATUS_APPROVED);
+
+		MBTreeWalker mbTeeWalker = mbMessageDisplay.getTreeWalker();
+
+		List<MBMessage> mbMessages = mbTeeWalker.getMessages();
+
+		mbMessages = ListUtil.sort(
+			mbMessages, new MessageCreateDateComparator(true));
+
+		for (int i = 1; i < mbMessages.size(); i++) {
+			MBMessage mbMessage = mbMessages.get(i);
+
+			JSONObject messageJSONObject = getJSONObject(
+				mbMessage.getMessageId(), mbMessage.getBody(),
+				mbMessage.getModifiedDate(), mbMessage.getUserId(),
+				mbMessage.getUserName(), themeDisplay);
+
+			jsonArray.put(messageJSONObject);
+		}
+
+		jsonObject.put("comments", jsonArray);
+
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
+
+	public void getMicroblogsComments(
+			SocialActivitySet activitySet, ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		List<MicroblogsEntry> microblogsEntries =
+			MicroblogsEntryLocalServiceUtil.
+				getReceiverMicroblogsEntryMicroblogsEntries(
+					MicroblogsEntryConstants.TYPE_REPLY,
+					activitySet.getClassPK(), QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null);
+
+		for (MicroblogsEntry microblogsEntry : microblogsEntries) {
+			JSONObject microblogsEntryJSONObject = getJSONObject(
+				microblogsEntry.getMicroblogsEntryId(),
+				microblogsEntry.getContent(), microblogsEntry.getModifiedDate(),
+				microblogsEntry.getUserId(), microblogsEntry.getUserName(),
+				themeDisplay);
+
+			jsonArray.put(microblogsEntryJSONObject);
+		}
+
+		jsonObject.put("comments", jsonArray);
+		jsonObject.put("commentsCount", microblogsEntries.size());
+
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
 
 	@Override
 	public void processAction(
@@ -55,10 +158,15 @@ public class ActivitiesPortlet extends MVCPortlet {
 
 		try {
 			if (actionName.equals("updateComment")) {
-				updateComment(actionRequest, actionResponse);
-			}
-			else {
-				super.processAction(actionRequest, actionResponse);
+				String className = ParamUtil.getString(
+					actionRequest, "className");
+
+				if (className.equals(MicroblogsEntry.class.getName())) {
+					updateMicroblogsComment(actionRequest, actionResponse);
+				}
+				else {
+					updateMBComment(actionRequest, actionResponse);
+				}
 			}
 		}
 		catch (Exception e) {
@@ -66,7 +174,47 @@ public class ActivitiesPortlet extends MVCPortlet {
 		}
 	}
 
-	public void updateComment(
+	@Override
+	public void serveResource(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws PortletException {
+
+		try {
+			String resourceID = resourceRequest.getResourceID();
+
+			if (resourceID.equals("getComments")) {
+				long activitySetId = ParamUtil.getLong(
+					resourceRequest, "activitySetId");
+
+				SocialActivitySet activitySet =
+					SocialActivitySetLocalServiceUtil.fetchSocialActivitySet(
+						activitySetId);
+
+				if (activitySet == null) {
+					return;
+				}
+
+				String className = activitySet.getClassName();
+
+				if (className.equals(MicroblogsEntry.class.getName())) {
+					getMicroblogsComments(
+						activitySet, resourceRequest, resourceResponse);
+				}
+				else {
+					getMBComments(
+						activitySet, resourceRequest, resourceResponse);
+				}
+			}
+			else {
+				super.serveResource(resourceRequest, resourceResponse);
+			}
+		}
+		catch (Exception e) {
+			throw new PortletException(e);
+		}
+	}
+
+	public void updateMBComment(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
@@ -77,10 +225,7 @@ public class ActivitiesPortlet extends MVCPortlet {
 
 		String className = ParamUtil.getString(actionRequest, "className");
 		long classPK = ParamUtil.getLong(actionRequest, "classPK");
-		long mbMessageId = ParamUtil.getLong(actionRequest, "mbMessageId");
-		long mbThreadId = ParamUtil.getLong(actionRequest, "mbThreadId");
-		long parentMBMessageId = ParamUtil.getLong(
-			actionRequest, "parentMBMessageId");
+		long mbMessageId = ParamUtil.getLong(actionRequest, "entryId");
 		String body = ParamUtil.getString(actionRequest, "body");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
@@ -105,34 +250,29 @@ public class ActivitiesPortlet extends MVCPortlet {
 					body, serviceContext);
 			}
 			else {
+				MBMessageDisplay mbMessageDisplay =
+					MBMessageLocalServiceUtil.getDiscussionMessageDisplay(
+						themeDisplay.getUserId(), groupId, className, classPK,
+						WorkflowConstants.STATUS_APPROVED);
+
+				MBThread thread = mbMessageDisplay.getThread();
+
+				MBTreeWalker mbTreeWalker = mbMessageDisplay.getTreeWalker();
+
+				MBMessage rootMessage = mbTreeWalker.getRoot();
+
 				mbMessage = MBMessageServiceUtil.addDiscussionMessage(
 					groupId, className, classPK, className, classPK,
-					themeDisplay.getUserId(), mbThreadId, parentMBMessageId,
-					StringPool.BLANK, body, serviceContext);
+					themeDisplay.getUserId(), thread.getThreadId(),
+					rootMessage.getMessageId(), StringPool.BLANK, body,
+					serviceContext);
 			}
 
 			if (mbMessage != null) {
-				jsonObject.put("body", HtmlUtil.escape(mbMessage.getBody()));
-				jsonObject.put("mbMessageId", mbMessage.getMessageId());
-				jsonObject.put(
-					"modifiedDate",
-					Time.getRelativeTimeDescription(
-						mbMessage.getModifiedDate(), themeDisplay.getLocale(),
-						themeDisplay.getTimeZone()));
-
-				User user = UserLocalServiceUtil.fetchUser(
-					mbMessage.getUserId());
-
-				if (user != null) {
-					jsonObject.put(
-						"userDisplayURL", user.getDisplayURL(themeDisplay));
-					jsonObject.put(
-						"userPortraitURL",
-						HtmlUtil.escape(user.getPortraitURL(themeDisplay)));
-				}
-
-				jsonObject.put(
-					"userName", HtmlUtil.escape(mbMessage.getUserName()));
+				jsonObject = getJSONObject(
+					mbMessage.getMessageId(), mbMessage.getBody(),
+					mbMessage.getModifiedDate(), mbMessage.getUserId(),
+					mbMessage.getUserName(), themeDisplay);
 			}
 
 			jsonObject.put("success", Boolean.TRUE);
@@ -142,6 +282,100 @@ public class ActivitiesPortlet extends MVCPortlet {
 		}
 
 		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
+	public void updateMicroblogsComment(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		long classPK = ParamUtil.getLong(actionRequest, "classPK");
+		long microblogsEntryId = ParamUtil.getLong(actionRequest, "entryId");
+		String body = ParamUtil.getString(actionRequest, "body");
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			MicroblogsEntry microblogsEntry = null;
+
+			if (cmd.equals(Constants.DELETE)) {
+				MicroblogsEntryServiceUtil.deleteMicroblogsEntry(classPK);
+			}
+			else if (classPK > 0) {
+				ServiceContext serviceContext =
+					ServiceContextFactory.getInstance(
+						MicroblogsEntry.class.getName(), actionRequest);
+
+				MicroblogsEntry currentMicroblogsEntry =
+					MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(classPK);
+
+				if (cmd.equals(Constants.EDIT) && (microblogsEntryId > 0)) {
+					microblogsEntry =
+						MicroblogsEntryServiceUtil.updateMicroblogsEntry(
+							microblogsEntryId, body,
+							currentMicroblogsEntry.getSocialRelationType(),
+							serviceContext);
+				}
+				else {
+					microblogsEntry =
+						MicroblogsEntryServiceUtil.addMicroblogsEntry(
+							themeDisplay.getUserId(), body,
+							MicroblogsEntryConstants.TYPE_REPLY,
+							currentMicroblogsEntry.getUserId(), classPK,
+							currentMicroblogsEntry.getSocialRelationType(),
+							serviceContext);
+				}
+			}
+
+			if (microblogsEntry != null) {
+				jsonObject = getJSONObject(
+					microblogsEntry.getMicroblogsEntryId(),
+					microblogsEntry.getContent(),
+					microblogsEntry.getModifiedDate(),
+					microblogsEntry.getUserId(), microblogsEntry.getUserName(),
+					themeDisplay);
+			}
+
+			jsonObject.put("success", Boolean.TRUE);
+		}
+		catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
+		}
+
+		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
+	protected JSONObject getJSONObject(
+			long entryId, String body, Date modifiedDate, long userId,
+			String userName, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put("body", HtmlUtil.escape(body));
+		jsonObject.put("entryId", entryId);
+		jsonObject.put(
+			"modifiedDate",
+			Time.getRelativeTimeDescription(
+				modifiedDate, themeDisplay.getLocale(),
+				themeDisplay.getTimeZone()));
+
+		User user = UserLocalServiceUtil.fetchUser(userId);
+
+		if (user != null) {
+			jsonObject.put("userDisplayURL", user.getDisplayURL(themeDisplay));
+			jsonObject.put(
+				"userPortraitURL",
+				HtmlUtil.escape(user.getPortraitURL(themeDisplay)));
+		}
+
+		jsonObject.put("userName", HtmlUtil.escape(userName));
+
+		return jsonObject;
 	}
 
 }

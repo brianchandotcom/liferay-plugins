@@ -18,75 +18,7 @@
 --%>
 
 <div class="comments-container">
-	<div class="aui-helper-hidden comments-list">
-
-		<%
-		for (int i = 1; i < mbMessages.size(); i++) {
-			MBMessage mbMessage = mbMessages.get(i);
-		%>
-
-			<div class="comment-entry">
-				<div class="user-portrait">
-					<span class="avatar">
-
-						<%
-						User mbMessageUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
-
-						String mbMessageUserDisplayURL = StringPool.BLANK;
-						String mbMessageUserFullName = StringPool.BLANK;
-						String mbMessageUserPortraitURL = StringPool.BLANK;
-
-						if (activitySetUser != null) {
-							mbMessageUserDisplayURL = mbMessageUser.getDisplayURL(themeDisplay);
-							mbMessageUserFullName = mbMessageUser.getFullName();
-							mbMessageUserPortraitURL = mbMessageUser.getPortraitURL(themeDisplay);
-						}
-						%>
-
-						<a href="<%= mbMessageUserDisplayURL %>">
-							<img alt="<%= mbMessageUserFullName %>" src="<%= mbMessageUserPortraitURL %>" />
-						</a>
-					</span>
-				</div>
-
-				<div class="comment-body">
-					<c:choose>
-						<c:when test="<%= Validator.isNotNull(mbMessageUser.getDisplayURL(themeDisplay)) %>">
-							<span class="user-name"><a href="<%= mbMessageUser.getDisplayURL(themeDisplay) %>"><%= HtmlUtil.escape(mbMessage.getUserName()) %></a></span>
-						</c:when>
-						<c:otherwise>
-							<span class="user-name"><%= HtmlUtil.escape(mbMessage.getUserName()) %></span>
-						</c:otherwise>
-					</c:choose>
-
-					<span class="message"><%= HtmlUtil.escape(mbMessage.getBody()) %></span>
-				</div>
-
-				<div class="comment-info">
-					<span class="post-date">
-						<%= Time.getRelativeTimeDescription(mbMessage.getModifiedDate(), locale, timeZone) %>
-					</span>
-
-					<c:if test="<%= DateUtil.compareTo(mbMessage.getCreateDate(), mbMessage.getModifiedDate()) != 0 %>">
-						<span class="edit-notice"><liferay-ui:message key="modified" /></span>
-					</c:if>
-
-					<c:if test="<%= mbMessage.getUserId() == user.getUserId() %>">
-						<span class="edit-comment">
-							<a data-mbMessageId="<%= mbMessage.getMessageId() %>" href="javascript:;"><liferay-ui:message key="edit" /></a>
-						</span>
-						<span class="delete-comment">
-							<a data-mbMessageId="<%= mbMessage.getMessageId() %>" href="javascript:;"><liferay-ui:message key="delete" /></a>
-						</span>
-					</c:if>
-				</div>
-			</div>
-
-		<%
-		}
-		%>
-
-	</div>
+	<div class="comments-list"></div>
 
 	<portlet:actionURL name="updateComment" var="updateCommentURL" />
 
@@ -96,19 +28,7 @@
 		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.ADD %>" />
 		<aui:input name="className" type="hidden" value="<%= className %>" />
 		<aui:input name="classPK" type="hidden" value="<%= classPK %>" />
-		<aui:input name="mbMessageId" type="hidden" value="" />
-
-		<%
-		MBMessage rootMBMessage = mbTreeWalker.getRoot();
-		%>
-
-		<aui:input name="parentMBMessageId" type="hidden" value="<%= rootMBMessage.getMessageId() %>" />
-
-		<%
-		MBThread mbThread = mbMessageDisplay.getThread();
-		%>
-
-		<aui:input name="mbThreadId" type="hidden" value="<%= mbThread.getThreadId() %>" />
+		<aui:input name="entryId" type="hidden" value="" />
 
 		<div>
 			<div class="user-portrait">
@@ -127,46 +47,6 @@
 </div>
 
 <aui:script use="aui-base">
-	var addNewComment = function(commentsList, responseData) {
-		var commentEntryTemplate =
-			'<div class="comment-entry">' +
-				'<div class="user-portrait">' +
-					'<span class="avatar">' +
-						'<a href="' + '{userDisplayURL}' + '">' +
-							'<img alt="' + '{userName}' + '" src="' + '{userPortraitURL}' + '" />' +
-						'</a>' +
-					'</span>' +
-				'</div>' +
-				'<div class="comment-body">' +
-					'<span class="user-name"><a href="' + '{userDisplayURL}' + '">' + '{userName}' + '</a></span>' +
-					'<span class="message">' + '{body}' + '</span>' +
-				'</div>' +
-				'<div class="comment-info">' +
-					'<span class="post-date">' + '{modifiedDate}' + '</span>' +
-					'<span class="edit-comment">' +
-						'<a data-mbMessageId="' + '{mbMessageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "edit") %></a>' +
-					'</span>' +
-					'<span class="delete-comment">' +
-						'<a data-mbMessageId="' + '{mbMessageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "delete") %></a>' +
-					'</span>' +
-				'</div>' +
-			'</div>';
-
-		var commentEntryHtml = A.Lang.sub(
-			commentEntryTemplate,
-			{
-				body: responseData.body,
-				messageId: responseData.mbMessageId,
-				modifiedDate: responseData.modifiedDate,
-				userDisplayURL: responseData.userDisplayURL ? responseData.userDisplayURL : '',
-				userName: responseData.userName,
-				userPortraitURL: responseData.userPortraitURL
-			}
-		);
-
-		commentsList.append(commentEntryHtml);
-	}
-
 	var form = A.one('#<portlet:namespace />fm<%= activitySet.getActivitySetId() %>');
 
 	if (form) {
@@ -198,7 +78,7 @@
 
 									commentsList.removeClass('aui-helper-hidden');
 
-									addNewComment(commentsList, responseData);
+									Liferay.SO.Activities.addNewComment(commentsList, responseData);
 
 									var viewComments = activityFooter.one('.view-comments a');
 
