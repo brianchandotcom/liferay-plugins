@@ -59,19 +59,21 @@ boolean helpful = BeanParamUtil.getBoolean(kbComment, request, "helpful", true);
 								<liferay-util:include page="/admin/article_comment.jsp" servletContext="<%= application %>" />
 							</c:if>
 
-							<aui:input label="" name="content" />
+							<aui:model-context bean="<%= null %>" model="<%= KBComment.class %>">
+								<aui:input label="" name="content" />
 
-							<div class="kb-helpful-inputs">
-								<span class="kb-helpful-text"><liferay-ui:message key="was-this-information-helpful" /></span>
+								<div class="kb-helpful-inputs">
+									<span class="kb-helpful-text"><liferay-ui:message key="was-this-information-helpful" /></span>
 
-								<aui:input checked="<%= helpful %>" inlineField="<%= true %>" label="yes" name="helpful" type="radio" value="1" />
+									<aui:input checked="<%= helpful %>" inlineField="<%= true %>" label="yes" name="helpful" type="radio" value="1" />
 
-								<aui:input checked="<%= !helpful %>" inlineField="<%= true %>" label="no" name="helpful" type="radio" value="0" />
-							</div>
+									<aui:input checked="<%= !helpful %>" inlineField="<%= true %>" label="no" name="helpful" type="radio" value="0" />
+								</div>
 
-							<aui:button-row cssClass="kb-submit-buttons">
-								<aui:button type="submit" value="post" />
-							</aui:button-row>
+								<aui:button-row cssClass="kb-submit-buttons">
+									<aui:button type="submit" value="post" />
+								</aui:button-row>
+							</aui:model-context>
 						</liferay-ui:panel>
 					</liferay-ui:panel-container>
 				</c:if>
