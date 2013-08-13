@@ -72,7 +72,8 @@ AUI().use(
 			formatTime: function(time) {
 				var instance = this;
 
-				time = Number(time);
+				time = instance._convertToClientTimestamp(time);
+
 				time = new Date(time);
 
 				var meridian = 'am';
@@ -110,13 +111,23 @@ AUI().use(
 				return themeDisplay.getPathImage() + '/user_portrait?img_id=' + userId;
 			},
 
+			_convertToClientTimestamp: function(time) {
+				var instance = this;
+
+				time = Number(time);
+
+				time += instance._getOffset();
+
+				return time;
+			},
+
 			_getOffset: function() {
 				var instance = this;
 
 				var offset = instance._offset;
 
 				if (Lang.isUndefined(offset)) {
-					var currentChatServerTime = A.one('#currentChatServerTime').val() || 0;
+					var currentChatServerTime = A.one('#currentChatServerTime').val() || now();
 
 					offset = now() - currentChatServerTime;
 
