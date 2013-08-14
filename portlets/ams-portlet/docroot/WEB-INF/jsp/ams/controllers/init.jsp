@@ -24,7 +24,7 @@ page import="com.liferay.util.bridges.alloy.BaseAlloyControllerImpl" %>
 <%@ page import="javax.portlet.PortletURL" %>
 
 <%
-AlloyController alloyController = new AlloyControllerImpl();
+AlloyController alloyController = new BaseAlloyControllerImpl() {};
 
 alloyController.setPageContext(pageContext);
 
