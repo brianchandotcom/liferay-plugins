@@ -148,6 +148,21 @@ public class CalendarPortlet extends MVCPortlet {
 		NotificationTemplateContextFactory.setPortletConfig(getPortletConfig());
 	}
 
+	public void invokeTransition(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long calendarBookingId = ParamUtil.getLong(
+			actionRequest, "calendarBookingId");
+		int status = ParamUtil.getInteger(actionRequest, "status");
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			CalendarBooking.class.getName(), actionRequest);
+
+		CalendarBookingServiceUtil.invokeTransition(
+			calendarBookingId, status, serviceContext);
+	}
+
 	public void moveCalendarBookingToTrash(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
