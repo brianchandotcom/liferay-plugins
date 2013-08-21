@@ -1,92 +1,266 @@
+AUI.add(
+	'liferay-so-scroll',
+	function(A) {
+		var Lang = A.Lang;
+
+		var	isNumber = Lang.isNumber;
+		var	isString = Lang.isString;
+
+		var AVAILABLE = '-available';
+
+		var BOTTOM = 'bottom';
+
+		var DELAY = 'delay';
+
+		var DOC_EL = A.config.doc.documentElement;
+
+		var DOWN = 'down';
+
+		var EDGE = '-edge';
+
+		var EDGE_PROXIMITY = 'edgeProximity';
+
+		var LAST_STATE = 'lastState';
+
+		var MAX_COORDINATE = 'maxCoordinate';
+
+		var SCROLL = 'scroll';
+
+		var START = '-start';
+
+		var Scroll = A.Component.create(
+			{
+				NAME: SCROLL,
+
+				NS: SCROLL,
+
+				ATTRS: {
+					delay: {
+						validator: isNumber,
+						value: null
+					},
+
+					edgeProximity: {
+						setter: function(val) {
+							var value = 0;
+
+							if (isNumber(val)) {
+								value = val;
+							}
+							else if (isString(val)) {
+								value = (Lang.toInt(val) / 100);
+							}
+
+							return value;
+						},
+						value: null
+					},
+
+					lastState: {
+						value: {
+							scrollTop: 0
+						}
+					},
+
+					maxCoordinate: {
+						value: null
+					}
+				},
+
+				EXTENDS: A.Plugin.Base,
+
+				prototype: {
+					initializer: function(config) {
+						var instance = this;
+
+						var host = A.one(config.host);
+
+						instance._host = host;
+
+						instance._resetFn();
+
+						host.on(SCROLL, A.bind('_onScroll', instance));
+
+						instance._createResetTask();
+
+						instance.after('delayChange', instance._createResetTask);
+					},
+
+					_createResetTask: function() {
+						var instance = this;
+
+						instance._resetTask = A.debounce('_resetFn', instance.get(DELAY), instance);
+					},
+
+					_onScroll: function(event) {
+						var instance = this;
+
+						var edgeProximity = instance.get(EDGE_PROXIMITY);
+						var lastState = instance.get(LAST_STATE);
+						var maxCoordinate = instance.get(MAX_COORDINATE);
+
+						var edgeProximityY = edgeProximity;
+
+						var maxCoordinateY = maxCoordinate.y;
+
+						var node = instance._host._node;
+
+						var scrollTop = node.scrollTop || node.scrollY;
+
+						if (edgeProximity % 1) {
+							edgeProximityY *= maxCoordinateY;
+						}
+
+						var scrolledDown = (scrollTop > lastState.scrollTop);
+
+						var availableScrollY = (scrollTop - maxCoordinateY);
+
+						var state = {
+							availableScrollY: availableScrollY,
+							scrollTop: scrollTop,
+							scrolledDown: scrolledDown
+						};
+
+						if (scrolledDown) {
+							instance.fire(DOWN, state);
+
+							if ((availableScrollY + edgeProximityY) >= 0) {
+								instance.fire(BOTTOM + EDGE, state);
+							}
+
+							if (availableScrollY > 0) {
+								instance.fire(DOWN + AVAILABLE, state);
+
+								if (lastState.availableScrollY < 1) {
+									instance.fire(DOWN + AVAILABLE + START, state);
+								}
+							}
+
+							if (!lastState.scrolledDown) {
+								instance.fire(DOWN + START, state);
+							}
+						}
+
+						if ((availableScrollY > 0) || (scrollTop < 0)) {
+							instance._resetFn();
+						}
+
+						instance.set(LAST_STATE, state);
+
+						instance._resetTask();
+					},
+
+					_resetFn: function() {
+						var instance = this;
+
+						var lastState = instance.get(LAST_STATE);
+
+						lastState.availableScrollY = 0;
+
+						instance.set(LAST_STATE, lastState);
+
+						var scrollY = instance._host._node.scrollHeight || DOC_EL.scrollHeight - DOC_EL.clientHeight;
+
+						instance.set(
+							MAX_COORDINATE,
+							{
+								y: scrollY
+							}
+						);
+					}
+				}
+			}
+		);
+
+		Liferay.namespace('SO').Scroll = Scroll;
+	},
+	'',
+	{
+		requires: ['aui-base']
+	}
+);
+
 AUI().use(
 	'aui-base',
 	'transition',
 	function(A) {
-		Liferay.namespace('SO');
+		var TPL_COMMENT_ENTRY = '<div class="comment-entry">' +
+			'<div class="user-portrait">' +
+				'<span class="avatar">' +
+					'<a href={userDisplayURL}>' +
+						'<img alt={userName} src={userPortraitURL} />' +
+					'</a>' +
+				'</span>' +
+			'</div>' +
+			'<div class="comment-body">' +
+				'<span class="user-name"><a href={userDisplayURL}>{userName}</a></span>' +
+				'<span class="message">{body}</span>' +
+			'</div>' +
+			'<div class="comment-info">' +
+				'<span class="post-date">{modifiedDate} </span>' +
+				'<span class="edit-comment">' +
+					'<a data-mbMessageIdOrMicroblogsEntryId={mbMessageIdOrMicroblogsEntryId} href="javascript:;">' + Liferay.Language.get('edit') + '</a>' +
+				'</span>' +
+				'<span class="delete-comment">' +
+					'<a data-mbMessageIdOrMicroblogsEntryId={mbMessageIdOrMicroblogsEntryId} href="javascript:;">' + Liferay.Language.get('delete') + '</a>' +
+				'</span>' +
+			'</div>' +
+		'</div>';
 
-		Liferay.SO.Activities = {
+		var Activities = {
 			addNewComment: function(commentsList, responseData) {
-				var commentEntryTemplate =
-					'<div class="comment-entry">' +
-						'<div class="user-portrait">' +
-							'<span class="avatar">' +
-								'<a href={userDisplayURL}>' +
-									'<img alt={userName} src={userPortraitURL} />' +
-								'</a>' +
-							'</span>' +
-						'</div>' +
-						'<div class="comment-body">' +
-							'<span class="user-name"><a href={userDisplayURL}>{userName}</a></span>' +
-							'<span class="message">{body}</span>' +
-						'</div>' +
-						'<div class="comment-info">' +
-							'<span class="post-date">{modifiedDate} </span>' +
-							'<span class="edit-comment">' +
-								'<a data-mbMessageIdOrMicroblogsEntryId={mbMessageIdOrMicroblogsEntryId} href="javascript:;">' + Liferay.Language.get('edit') + '</a>' +
-							'</span>' +
-							'<span class="delete-comment">' +
-								'<a data-mbMessageIdOrMicroblogsEntryId={mbMessageIdOrMicroblogsEntryId} href="javascript:;">' + Liferay.Language.get('delete') + '</a>' +
-							'</span>' +
-						'</div>' +
-					'</div>';
+				responseData.userDisplayURL = responseData.userDisplayURL || '';
 
-				var commentEntryHtml = A.Lang.sub(
-					commentEntryTemplate,
-					{
-						body: responseData.body,
-						mbMessageIdOrMicroblogsEntryId: responseData.mbMessageIdOrMicroblogsEntryId,
-						modifiedDate: responseData.modifiedDate,
-						userDisplayURL: responseData.userDisplayURL ? responseData.userDisplayURL : '',
-						userName: responseData.userName,
-						userPortraitURL: responseData.userPortraitURL
-					}
-				);
-
-				commentsList.append(commentEntryHtml);
+				commentsList.append(A.Lang.sub(TPL_COMMENT_ENTRY, responseData));
 			},
 
 			toggleEntry: function(event, portletNamespace) {
 				var entryId = event.currentTarget.attr('data-entryId');
 
-				var entry = A.one('#' + portletNamespace + entryId);
+				var entry = A.byIdNS(portletNamespace, entryId);
 
 				var body = entry.one('.grouped-activity-body');
 				var bodyContainer = entry.one('.grouped-activity-body-container');
 				var control = entry.one('.toggle-entry');
 				var subentryHeight = entry.one('.activity-subentry').outerHeight();
 
-				var minHeight = (subentryHeight * 3) + 'px';
+				var minHeight = subentryHeight * 3;
 
 				var bodyHeight = minHeight;
 
-				if (entry.hasClass('toggler-content-collapsed')) {
-					entry.removeClass('toggler-content-collapsed');
+				var collapsed = entry.hasClass('toggler-content-collapsed');
 
-					bodyContainer.setStyle('height', minHeight);
-					bodyContainer.setStyle('maxHeight', 'none');
+				entry.toggleClass('toggler-content-collapsed', !collapsed);
 
-					bodyHeight = body.height() + 'px';
+				var viewText = Liferay.Language.get('view-more');
 
-					if (control) {
-						control.html(Liferay.Language.get('view-less'));
-					}
+				if (collapsed) {
+					bodyContainer.setStyles(
+						{
+							height: minHeight,
+							maxHeight: 'none'
+						}
+					);
+
+					bodyHeight = body.height();
+
+					viewText = Liferay.Language.get('view-less');
 				}
-				else {
-					entry.addClass('toggler-content-collapsed');
 
-					if (control) {
-						control.html(Liferay.Language.get('view-more'));
-					}
+				if (control) {
+					control.html(viewText);
 				}
 
 				bodyContainer.transition(
 					{
 						duration: 0.5,
 						easing: 'ease-in-out',
-						height: bodyHeight
+						height: bodyHeight + 'px'
 					}
 				);
 			}
 		};
+
+		Liferay.namespace('SO').Activities = Activities;
 	}
 );
