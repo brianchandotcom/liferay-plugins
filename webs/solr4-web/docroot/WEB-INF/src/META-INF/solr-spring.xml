@@ -36,11 +36,20 @@
 	<!-- Solr search engine adapter -->
 
 	<bean id="com.liferay.portal.search.solr.SolrIndexSearcher" class="com.liferay.portal.search.solr.SolrIndexSearcher">
+		<property name="querySuggester" ref="com.liferay.portal.search.solr.SolrQuerySuggester" />
 		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
 		<property name="swallowException" value="true" />
 	</bean>
 	<bean id="com.liferay.portal.search.solr.SolrIndexWriter" class="com.liferay.portal.search.solr.SolrIndexWriter">
 		<property name="commit" value="true" />
+		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
+		<property name="spellCheckIndexWriter" ref="com.liferay.portal.search.solr.SolrSpellCheckIndexWriter" />
+	</bean>
+	<bean id="com.liferay.portal.search.solr.SolrQuerySuggester" class="com.liferay.portal.search.solr.SolrQuerySuggester">
+		<property name="distanceThreshold" value="0.6f" />
+		<property name="NGramQueryBuilder">
+			<bean class="com.liferay.portal.search.solr.NGramQueryBuilderImpl" />
+		</property>
 		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
 	</bean>
 	<bean id="com.liferay.portal.search.solr.SolrSearchEngineImpl" class="com.liferay.portal.kernel.search.BaseSearchEngine">
@@ -49,6 +58,11 @@
 		<property name="indexWriter" ref="com.liferay.portal.search.solr.SolrIndexWriter" />
 		<property name="luceneBased" value="true" />
 		<property name="vendor" value="SOLR" />
+	</bean>
+	<bean id="com.liferay.portal.search.solr.SolrSpellCheckIndexWriter" class="com.liferay.portal.search.solr.SolrSpellCheckIndexWriter">
+		<property name="commit" value="true" />
+		<property name="indexWriter" ref="com.liferay.portal.search.solr.SolrIndexWriter" />
+		<property name="solrServer" ref="com.liferay.portal.search.solr.server.BasicAuthSolrServer" />
 	</bean>
 
 	<!-- Configurator -->
