@@ -25,21 +25,99 @@ Group group = themeDisplay.getScopeGroup();
 PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("tabs1", tabs1);
-
-SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, 10, portletURL, null, null);
 %>
 
-<c:choose>
-	<c:when test="<%= GetterUtil.getBoolean(PropsUtil.get(PropsKeys.SOCIAL_ACTIVITY_SETS_ENABLED)) %>">
-		<%@ include file="/activities/view_activity_sets.jspf" %>
-	</c:when>
-	<c:otherwise>
-		<%@ include file="/activities/view_activities.jspf" %>
-	</c:otherwise>
-</c:choose>
+<c:if test="<%= group.isUser() %>">
+	<liferay-ui:tabs
+		names="all,connections,following,my-sites,me"
+		url="<%= portletURL.toString() %>"
+		value="<%= tabs1 %>"
+	/>
+</c:if>
 
-<aui:script use="aui-base">
+<div class="social-activities"></div>
+<div class="loading-bar"></div>
+
+<aui:script use="aui-base,aui-io-request,aui-parse-content,liferay-so-scroll">
 	var activities = A.one('#p_p_id<portlet:namespace />');
+	var body = A.getBody();
+
+	var loadingBar = activities.one('.loading-bar');
+	var socialActivities = activities.one('.social-activities');
+
+	socialActivities.plug(A.Plugin.ParseContent);
+
+	var win = A.getWin();
+
+	win.plug(
+		Liferay.SO.Scroll,
+		{
+			edgeProximity: 0.4
+		}
+	);
+
+	var loading = false;
+	var start = 0;
+
+	var loadNewContent = function() {
+		loadingBar.removeClass('loaded');
+
+		loading = true;
+
+		setTimeout(
+			function() {
+				<portlet:renderURL var="viewActivitySetsURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+					<portlet:param name="mvcPath" value="/activities/view_activity_sets.jsp" />
+					<portlet:param name="tabs1" value="<%= tabs1 %>" />
+				</portlet:renderURL>
+
+				var uri = '<%= viewActivitySetsURL %>';
+
+				uri = Liferay.Util.addParams('start=' + start, uri) || uri;
+
+				A.io.request(
+					uri,
+					{
+						after: {
+							success: function(event, id, obj) {
+								var responseData = this.get('responseData');
+
+								socialActivities.append(responseData);
+
+								start = start + <%= delta %>;
+
+								loadingBar.addClass('loaded');
+
+								loading = false;
+
+								if (body.height() < win.height()) {
+									loadNewContent();
+								}
+							}
+						}
+					}
+				);
+			},
+			1000
+		);
+	}
+
+	if (socialActivities && !loading) {
+		loadNewContent();
+	}
+
+	win.scroll.on(
+		'bottom-edge',
+		function(event) {
+			if (activities.one('.no-activities')) {
+				loading = true;
+			}
+
+			if (!loading) {
+				loadNewContent();
+			}
+		}
+	);
 
 	activities.delegate(
 		'click',
@@ -55,7 +133,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 			var commentEntry = commentsList.one('.comment-entry');
 
 			if (commentEntry) {
-				commentsList.toggleClass('aui-helper-hidden');
+				commentsList.toggle();
 			}
 			else {
 				var uri = '<liferay-portlet:resourceURL id="getComments"></liferay-portlet:resourceURL>';
@@ -70,14 +148,12 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 								var responseData = this.get('responseData');
 
 								if (responseData) {
-									var comments = responseData.comments;
-
-									A.Array.map(
-										comments,
-										function(comment) {
-											Liferay.SO.Activities.addNewComment(commentsList, comment);
+									A.Array.each(
+										responseData.comments,
+										function(item, index, collection) {
+											Liferay.SO.Activities.addNewComment(commentsList, item);
 										}
-									)
+									);
 								}
 							}
 						},
@@ -105,7 +181,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 				cmdInput.val('<%= Constants.DELETE %>');
 
-				var mbMessageIdOrMicroblogsEntryId = currentTarget.getAttribute('data-mbMessageIdOrMicroblogsEntryId');
+				var mbMessageIdOrMicroblogsEntryId = currentTarget.attr('data-mbMessageIdOrMicroblogsEntryId');
 
 				var mbMessageIdOrMicroblogsEntryIdInput = form.one('#<portlet:namespace />mbMessageIdOrMicroblogsEntryId');
 
@@ -123,14 +199,24 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 									var viewComments = activityFooter.one('.view-comments a');
 
-									var viewCommentsHtml = viewComments.get('innerHTML');
+									var viewCommentsHtml = viewComments.html();
 
-									var messagesCount = parseInt(viewCommentsHtml) - 1;
+									var messagesCount = A.Lang.toInt(viewCommentsHtml) - 1;
 
-									viewComments.html(
-										(messagesCount > 0 ? messagesCount : '') +
-										(messagesCount > 1 ? ' <%= UnicodeLanguageUtil.get(pageContext, "comments") %>' : ' <%= UnicodeLanguageUtil.get(pageContext, "comment") %>')
-									);
+									var commentText = '';
+
+									if (messagesCount > 0) {
+										commentText += messagesCount;
+									}
+
+									if (messagesCount > 1) {
+										commentText += ' <%= UnicodeLanguageUtil.get(pageContext, "comments") %>';
+									}
+									else {
+										commentText += ' <%= UnicodeLanguageUtil.get(pageContext, "comment") %>';
+									}
+
+									viewComments.html(commentText);
 								}
 							}
 						},
@@ -158,20 +244,24 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 			var message = commentEntry.one('.comment-body .message');
 
-			message.toggleClass('aui-helper-hidden');
+			message.toggle();
 
 			if (editForm) {
-				editForm.toggleClass('aui-helper-hidden');
+				editForm.toggle();
 			}
 			else {
 				var commentsContainer = currentTarget.ancestor('.comments-container');
 
 				editForm = commentsContainer.one('form').cloneNode(true);
 
-				editForm.removeClass('aui-helper-hidden');
+				editForm.show();
 
-				editForm.set('id','<portlet:namespace />fm1' + mbMessageIdOrMicroblogsEntryId);
-				editForm.set('name','<portlet:namespace />fm1' + mbMessageIdOrMicroblogsEntryId);
+				editForm.attr(
+					{
+						id: '<portlet:namespace />fm1' + mbMessageIdOrMicroblogsEntryId,
+						name: '<portlet:namespace />fm1' + mbMessageIdOrMicroblogsEntryId
+					}
+				);
 
 				var cmdInput = editForm.one('#<portlet:namespace /><%= Constants.CMD %>');
 
@@ -204,9 +294,8 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 											postDate.html(responseData.modifiedDate);
 
-											editForm.toggleClass('aui-helper-hidden');
-
-											message.toggleClass('aui-helper-hidden');
+											editForm.toggle();
+											message.toggle();
 										}
 									}
 								},
@@ -220,7 +309,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 				);
 			}
 
-			var messageHtml = message.get('innerHTML');
+			var messageHtml = message.html();
 
 			var bodyInput = editForm.one('#<portlet:namespace />body');
 
@@ -232,7 +321,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 	activities.delegate(
 		'click',
 		function(event) {
-			Liferay.SO.Activities.toggleEntry(event,'<portlet:namespace />');
+			Liferay.SO.Activities.toggleEntry(event, '<portlet:namespace />');
 		},
 		'.toggle-entry'
 	);
