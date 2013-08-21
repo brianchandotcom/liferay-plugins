@@ -35,6 +35,7 @@
 
 	<property file="${sdk.dir}/build.properties" />
 
+	<propertycopy from="app.server.${app.server.type}.bin.dir" name="app.server.bin.dir" />
 	<propertycopy from="app.server.${app.server.type}.dir" name="app.server.dir" />
 	<propertycopy from="app.server.${app.server.type}.deploy.dir" name="app.server.deploy.dir" />
 	<propertycopy from="app.server.${app.server.type}.lib.global.dir" name="app.server.lib.global.dir" />
