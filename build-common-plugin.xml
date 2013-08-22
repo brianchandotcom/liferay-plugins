@@ -141,39 +141,7 @@
 	</macrodef>
 
 	<path id="jspc.common.classpath">
-		<pathelement path="docroot/WEB-INF/classes" />
-		<pathelement path="${classpath.jsp}" />
-		<pathelement location="${project.dir}/portal-impl/portal-impl.jar" />
-		<pathelement location="${project.dir}/portal-pacl/portal-pacl.jar" />
-		<pathelement location="${project.dir}/portal-service/portal-service.jar" />
-		<pathelement location="${project.dir}/util-bridges/util-bridges.jar" />
-		<pathelement location="${project.dir}/util-java/util-java.jar" />
-		<pathelement location="${project.dir}/util-taglib/util-taglib.jar" />
-		<pathelement location="${project.dir}/lib/development/activation.jar" />
-		<pathelement location="${project.dir}/lib/development/mail.jar" />
-		<pathelement location="${project.dir}/lib/global/portlet.jar" />
-		<pathelement location="${project.dir}/lib/portal/alloy-taglib.jar" />
-		<pathelement location="${project.dir}/lib/portal/ant.jar" />
-		<pathelement location="${project.dir}/lib/portal/backport-concurrent.jar" />
-		<pathelement location="${project.dir}/lib/portal/commons-collections.jar" />
-		<pathelement location="${project.dir}/lib/portal/commons-fileupload.jar" />
-		<pathelement location="${project.dir}/lib/portal/commons-lang.jar" />
-		<pathelement location="${project.dir}/lib/portal/commons-logging.jar" />
-		<pathelement location="${project.dir}/lib/portal/commons-math.jar" />
-		<pathelement location="${project.dir}/lib/portal/displaytag.jar" />
-		<pathelement location="${project.dir}/lib/portal/dom4j.jar" />
-		<pathelement location="${project.dir}/lib/portal/jabsorb.jar" />
-		<pathelement location="${project.dir}/lib/portal/jcifs.jar" />
-		<pathelement location="${project.dir}/lib/portal/jcommon.jar" />
-		<pathelement location="${project.dir}/lib/portal/jdom.jar" />
-		<pathelement location="${project.dir}/lib/portal/jfreechart.jar" />
-		<pathelement location="${project.dir}/lib/portal/jstl-api.jar" />
-		<pathelement location="${project.dir}/lib/portal/jstl-impl.jar" />
-		<pathelement location="${project.dir}/lib/portal/log4j.jar" />
-		<pathelement location="${project.dir}/lib/portal/openid4java.jar" />
-		<pathelement location="${project.dir}/lib/portal/rome.jar" />
-		<pathelement location="${project.dir}/lib/portal/struts.jar" />
-		<pathelement location="${project.dir}/lib/portal/velocity.jar" />
+		<path refid="plugin-lib.classpath" />
 	</path>
 
 	<target name="all">
@@ -526,6 +494,7 @@
 
 	<target name="clean" description="clean">
 		<delete dir="docroot/WEB-INF/classes" />
+		<delete dir="precompile-jsps" />
 
 		<if>
 			<available file="docroot/WEB-INF/.gitignore" />
@@ -810,9 +779,7 @@ Please find a solution that does not require portal-impl.jar.
 		</if>
 	</target>
 
-	<target name="compile-common-jsp">
-		<delete dir="${jspc.classes.dir}" quiet="true" />
-
+	<target name="compile-common-jsp" depends="compile,compile-prepare-jsps">
 		<if>
 			<and>
 				<equals arg1="${app.server.type}" arg2="tomcat" />
@@ -826,44 +793,29 @@ Please find a solution that does not require portal-impl.jar.
 			</else>
 		</if>
 
-		<if>
-			<available file="${app.server.portal.dir}/WEB-INF/classes/com/liferay/portal/deploy/dependencies/touch.jsp" />
-			<then>
-				<move
-					failonerror="false"
-					file="${app.server.portal.dir}/WEB-INF/classes/com/liferay/portal/deploy/dependencies/touch.jsp"
-					tofile="${app.server.portal.dir}/WEB-INF/classes/com/liferay/portal/deploy/dependencies/touch.jsp.tmp"
-				/>
-			</then>
-		</if>
-
 		<java
 			classname="org.apache.jasper.JspC"
 			classpathref="jspc.classpath"
+			failonerror="true"
 			fork="true"
 			jvm="${jspc.java.home}/bin/java"
 			newenvironment="true"
 			outputproperty="jspc.output"
 		>
-			<arg line="${arg.line}" />
+			<arg line="-d ${jspc.classes.dir} -webapp precompile-jsps" />
 		</java>
-
-		<if>
-			<available file="${app.server.portal.dir}/WEB-INF/classes/com/liferay/portal/deploy/dependencies/touch.jsp.tmp" />
-			<then>
-				<move
-					failonerror="false"
-					file="${app.server.portal.dir}/WEB-INF/classes/com/liferay/portal/deploy/dependencies/touch.jsp.tmp"
-					tofile="${app.server.portal.dir}/WEB-INF/classes/com/liferay/portal/deploy/dependencies/touch.jsp"
-				/>
-			</then>
-		</if>
 
 		<echo>${jspc.output}</echo>
 
 		<if>
 			<contains string="${jspc.output}" substring="JasperException" />
 			<then>
+				<delete>
+					<fileset dir="${jspc.classes.dir}" includes="**/*.java" />
+				</delete>
+				
+				<delete dir="precompile-jsps" />
+				
 				<fail>JSPs failed to compile.</fail>
 			</then>
 		</if>
@@ -912,37 +864,64 @@ ${oversize.files.jsp}</fail>
 			deprecation="${javac.deprecation}"
 			destdir="${jspc.classes.dir}"
 			encoding="${javac.encoding}"
+			failonerror="false"
 			includeAntRuntime="false"
 			nowarn="on"
+			errorProperty="jspc.error"
 			srcdir="${jspc.classes.dir}"
 		/>
 
-		<java
-			classname="com.liferay.portal.tools.jspc.common.TimestampUpdater"
-			classpathref="project.classpath"
-			fork="true"
-			newenvironment="true"
-		>
-			<arg line="${jspc.classes.dir}" />
-		</java>
+		<delete>
+			<fileset dir="${jspc.classes.dir}" includes="**/*.java" />
+		</delete>
+		
+		<delete dir="precompile-jsps" />
+
+		<if>
+			<equals arg1="${jspc.error}" arg2="true" />
+			<then>
+				<fail>JSPs failed to compile.</fail>
+			</then>
+		</if>
+	</target>
+
+	<target name="compile-prepare-jsps">
+		<mkdir dir="precompile-jsps" />
+
+		<copy todir="precompile-jsps">
+			<fileset dir="docroot">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<xmlproperty file="docroot/WEB-INF/liferay-hook.xml" prefix="plugin-hook" keepRoot="false" validate="true" />
+
+		<if>
+			<isset property="plugin-hook.custom-jsp-dir" />
+			<then>
+				<delete dir="precompile-jsps/${plugin-hook.custom-jsp-dir}" />
+			</then>
+		</if>
 	</target>
 
 	<target name="compile-jonas">
-		<property name="jspc.classes.dir" value="classes/${app.server.type}" />
+		<property name="jspc.classes.dir" value="docroot/WEB-INF/classes" />
+
+		<mkdir dir="${jspc.classes.dir}" />
 
 		<path id="jspc.classpath">
 			<pathelement location="${env.JAVA_HOME}/jre/lib/rt.jar" />
 			<path refid="jspc.common.classpath" />
+			<pathelement location="${app.server.dir}/lib/ext/portlet.jar" />
+			<pathelement location="${app.server.dir}/lib/ext/portal-service.jar" />
 			<pathelement location="${app.server.dir}/repositories/maven2-internal/org/ow2/jonas/jonas-web-container-tomcat-6.0/${app.server.jonas.version}/jonas-web-container-tomcat-6.0-${app.server.jonas.version}-ipojo.jar" />
 			<pathelement location="${app.server.dir}/repositories/maven2-internal/org/ow2/jonas/osgi/javaee-api/${app.server.jonas.version}/javaee-api-${app.server.jonas.version}.jar" />
 		</path>
 
-		<antcall target="compile-common-jsp" inheritrefs="true">
-			<param name="arg.line" value="-d ${jspc.classes.dir} -webapp ${jsp.precompile.dir}" />
-		</antcall>
+		<antcall target="compile-common-jsp" inheritrefs="true" />
 	</target>
 
-	<target name="compile-resin">
+	<target name="compile-resin" depends="compile,compile-prepare-jsps">
 		<if>
 			<not>
 				<isset property="jdk.6.home" />
@@ -956,33 +935,21 @@ Please set the property "jdk.6.home" in build.properties.
 			</then>
 		</if>
 
-		<property name="jspc.classes.dir" value="classes/${app.server.type}" />
+		<property name="jspc.classes.dir" value="docroot/WEB-INF/classes" />
+
+		<mkdir dir="${jspc.classes.dir}" />
 
 		<path id="jspc.classpath">
 			<pathelement location="${jdk.6.home}/jre/lib/rt.jar" />
 			<pathelement location="${jdk.6.home}/lib/tools.jar" />
 			<path refid="jspc.common.classpath" />
+			<pathelement location="${app.server.dir}/ext-lib/portal-service.jar" />
+			<pathelement location="${app.server.dir}/ext-lib/portlet.jar" />
 			<pathelement location="${app.server.dir}/lib/resin.jar" />
-			<pathelement location="${project.dir}/lib/portal/abdera.jar" />
-			<pathelement location="${project.dir}/lib/portal/axis.jar" />
-			<pathelement location="${project.dir}/lib/portal/commons-beanutils.jar" />
-			<pathelement location="${project.dir}/lib/portal/commons-configuration.jar" />
-			<pathelement location="${project.dir}/lib/portal/commons-digester.jar" />
-			<pathelement location="${project.dir}/lib/portal/commons-httpclient.jar" />
-			<pathelement location="${project.dir}/lib/portal/portletbridge-core.jar" />
-			<pathelement location="${project.dir}/lib/portal/portletbridge-portlet.jar" />
-			<pathelement location="${project.dir}/lib/portal/spring-asm.jar" />
-			<pathelement location="${project.dir}/lib/portal/spring-beans.jar" />
-			<pathelement location="${project.dir}/lib/portal/spring-context.jar" />
-			<pathelement location="${project.dir}/lib/portal/spring-core.jar" />
-			<pathelement location="${project.dir}/lib/portal/spring-expression.jar" />
-			<pathelement location="${project.dir}/lib/portal/spring-web.jar" />
-			<pathelement location="${project.dir}/lib/portal/spring-web-servlet.jar" />
-			<pathelement location="${project.dir}/lib/portal/struts-el.jar" />
-			<pathelement location="${project.dir}/lib/portal/tika-core.jar" />
+			<fileset dir="${app.server.lib.portal.dir}">
+				<include name="**/*.jar" />
+			</fileset>
 		</path>
-
-		<delete dir="${jspc.classes.dir}" quiet="true" />
 
 		<delete file="jspc_error" />
 
@@ -994,8 +961,16 @@ Please set the property "jdk.6.home" in build.properties.
 			newenvironment="true"
 			jvm="${jdk.6.home}\bin\java"
 		>
-			<arg line="docroot ${jspc.classes.dir}" />
+			<arg line="precompile-jsps ${jspc.classes.dir}" />
 		</java>
+
+		<delete dir="precompile-jsps" />
+
+		<delete dir="resin-data" quiet="true" />
+
+		<delete>
+			<fileset dir="${jspc.classes.dir}" includes="**/*.java" />
+		</delete>
 
 		<if>
 			<available file="jspc_error" />
@@ -1005,12 +980,12 @@ Please set the property "jdk.6.home" in build.properties.
 				<fail>${jspc_error.content}</fail>
 			</then>
 		</if>
-
-		<delete dir="resin-data" quiet="true" />
 	</target>
 
 	<target name="compile-tomcat">
-		<property name="jspc.classes.dir" value="classes/${app.server.type}" />
+		<property name="jspc.classes.dir" value="docroot/WEB-INF/classes" />
+
+		<mkdir dir="${jspc.classes.dir}" />
 
 		<if>
 			<and>
@@ -1029,6 +1004,8 @@ Please set the property "jdk.6.home" in build.properties.
 			<pathelement location="${jspc.java.home}/jre/lib/rt.jar" />
 			<path refid="jspc.common.classpath" />
 			<pathelement location="${app.server.dir}/lib/el-api.jar" />
+			<pathelement location="${app.server.dir}/lib/ext/portlet.jar" />
+			<pathelement location="${app.server.dir}/lib/ext/portal-service.jar" />
 			<pathelement location="${app.server.dir}/lib/jasper.jar" />
 			<pathelement location="${app.server.dir}/lib/jasper-el.jar" />
 			<pathelement location="${app.server.dir}/lib/jasper-jdt.jar" />
@@ -1036,12 +1013,9 @@ Please set the property "jdk.6.home" in build.properties.
 			<pathelement location="${app.server.dir}/lib/servlet-api.jar" />
 			<pathelement location="${app.server.dir}/lib/tomcat-api.jar" />
 			<pathelement location="${app.server.dir}/lib/tomcat-util.jar" />
-			<pathelement location="${app.server.bin.dir}/tomcat-juli.jar" />
 		</path>
 
-		<antcall target="compile-common-jsp" inheritrefs="true">
-			<param name="arg.line" value="-d ${jspc.classes.dir} -webapp ${jsp.precompile.dir}" />
-		</antcall>
+		<antcall target="compile-common-jsp" inheritrefs="true" />
 	</target>
 
 	<target name="compile-test">
@@ -1604,44 +1578,25 @@ Please set the property "jdk.6.home" in build.properties.
 		<antcall target="clean-portal-dependencies" />
 
 		<if>
-			<equals arg1="${jsp.precompile}" arg2="on" />
+			<and>
+				<equals arg1="${jsp.precompile}" arg2="on" />
+			</and>
 			<then>
 				<if>
 					<equals arg1="${app.server.type}" arg2="jonas" />
 					<then>
 						<antcall target="compile-jonas" />
-
-						<copy todir="${app.server.dir}/work/jonas/localhost/_" preservelastmodified="true">
-							<fileset dir="classes/${app.server.type}">
-								<exclude name="**/*.jspc_error" />
-								<exclude name="**/*.java" />
-							</fileset>
-						</copy>
 					</then>
 					<elseif>
 						<equals arg1="${app.server.type}" arg2="resin" />
 						<then>
 							<antcall target="compile-resin" />
-
-							<copy todir="${app.server.portal.dir}/WEB-INF/work" preservelastmodified="true">
-								<fileset dir="classes/${app.server.type}">
-									<exclude name="**/*.jspc_error" />
-									<exclude name="**/*.java" />
-								</fileset>
-							</copy>
 						</then>
 					</elseif>
 					<elseif>
 						<equals arg1="${app.server.type}" arg2="tomcat" />
 						<then>
 							<antcall target="compile-tomcat" />
-
-							<copy todir="${app.server.dir}/work/Catalina/localhost/_" preservelastmodified="true">
-								<fileset dir="classes/${app.server.type}">
-									<exclude name="**/*.jspc_error" />
-									<exclude name="**/*.java" />
-								</fileset>
-							</copy>
 						</then>
 					</elseif>
 				</if>
