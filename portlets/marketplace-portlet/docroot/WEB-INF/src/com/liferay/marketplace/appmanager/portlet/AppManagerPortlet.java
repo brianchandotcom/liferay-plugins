@@ -139,7 +139,11 @@ public class AppManagerPortlet extends MVCPortlet {
 				ParamUtil.getString(actionRequest, "contextNames"));
 
 			for (String contextName : contextNames) {
-				DeployManagerUtil.undeploy(contextName);
+				if (!DeployManagerUtil.isRequiredDeploymentContext(
+						contextName)) {
+
+					DeployManagerUtil.undeploy(contextName);
+				}
 			}
 		}
 
