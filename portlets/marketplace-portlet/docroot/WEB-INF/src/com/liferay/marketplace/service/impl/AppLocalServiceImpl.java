@@ -335,6 +335,12 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 		for (Module module : modules) {
 			moduleLocalService.deleteModule(module.getModuleId());
 
+			if (DeployManagerUtil.isRequiredDeploymentContext(
+					module.getContextName())) {
+
+				continue;
+			}
+
 			if (hasDependentApp(module)) {
 				continue;
 			}
