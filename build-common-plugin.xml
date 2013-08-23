@@ -140,6 +140,11 @@
 		</sequential>
 	</macrodef>
 
+	<path id="jspc.common.classpath">
+		<path refid="plugin-lib.classpath" />
+		<pathelement location="${ant.core.lib}" />
+	</path>
+
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="deploy" />
@@ -490,6 +495,7 @@
 
 	<target name="clean" description="clean">
 		<delete dir="docroot/WEB-INF/classes" />
+		<delete dir="precompile-jsps" />
 
 		<if>
 			<available file="docroot/WEB-INF/.gitignore" />
@@ -772,6 +778,252 @@ Please find a solution that does not require portal-impl.jar.
 				</for>
 			</then>
 		</if>
+	</target>
+
+	<target name="compile-common-jsp" depends="compile,compile-prepare-jsps">
+		<if>
+			<and>
+				<equals arg1="${app.server.type}" arg2="tomcat" />
+				<equals arg1="${ant.java.version}" arg2="1.5" />
+			</and>
+			<then>
+				<var name="jspc.java.home" value="${jdk.windows.home}" />
+			</then>
+			<else>
+				<var name="jspc.java.home" value="${env.JAVA_HOME}" />
+			</else>
+		</if>
+
+		<java
+			classname="org.apache.jasper.JspC"
+			classpathref="jspc.classpath"
+			failonerror="true"
+			fork="true"
+			jvm="${jspc.java.home}/bin/java"
+			newenvironment="true"
+			outputproperty="jspc.output"
+		>
+			<arg line="-d ${jspc.classes.dir} -webapp precompile-jsps" />
+		</java>
+
+		<echo>${jspc.output}</echo>
+
+		<if>
+			<contains string="${jspc.output}" substring="JasperException" />
+			<then>
+				<delete>
+					<fileset dir="${jspc.classes.dir}" includes="**/*.java" />
+				</delete>
+
+				<delete dir="precompile-jsps" />
+
+				<fail>JSPs failed to compile.</fail>
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${app.server.type}" arg2="tomcat" />
+			<then>
+				<fileset dir="${jspc.classes.dir}" id="oversize.files">
+					<include name="**/*.java" />
+					<size units="K" value="700" when="more" />
+				</fileset>
+
+				<pathconvert
+					dirsep="/"
+					pathsep="${line.separator}"
+					property="oversize.files.java"
+					refid="oversize.files"
+				/>
+
+				<if>
+					<not>
+						<equals arg1="${oversize.files.java}" arg2="" />
+					</not>
+					<then>
+						<antelope:stringutil property="oversize.files.jsp" string="${oversize.files.java}">
+							<replace regex="\.java" replacement="" />
+							<replace regex="${jspc.classes.dir}/org/apache/jsp" replacement="docroot" />
+							<replace regex="_jsp" replacement=".jsp" />
+							<replace regex="_002d" replacement="-" />
+							<replace regex="_005f" replacement="_" />
+						</antelope:stringutil>
+
+						<fail>
+The following JSPs may be too large for some application servers. See LPS-27841
+for more information.
+
+${oversize.files.jsp}</fail>
+					</then>
+				</if>
+			</then>
+		</if>
+
+		<javac
+			classpathref="jspc.classpath"
+			compiler="${javac.compiler}"
+			deprecation="${javac.deprecation}"
+			destdir="${jspc.classes.dir}"
+			encoding="${javac.encoding}"
+			failonerror="false"
+			includeAntRuntime="false"
+			nowarn="on"
+			errorProperty="jspc.error"
+			srcdir="${jspc.classes.dir}"
+		/>
+
+		<delete>
+			<fileset dir="${jspc.classes.dir}" includes="**/*.java" />
+		</delete>
+
+		<delete dir="precompile-jsps" />
+
+		<if>
+			<equals arg1="${jspc.error}" arg2="true" />
+			<then>
+				<fail>JSPs failed to compile.</fail>
+			</then>
+		</if>
+	</target>
+
+	<target name="compile-prepare-jsps">
+		<mkdir dir="precompile-jsps" />
+
+		<antcallback target="compile-prepare-set-jsps-source" return="jsp.precompile.src.dir" />
+
+		<copy todir="precompile-jsps">
+			<fileset dir="${jsp.precompile.src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+
+		<xmlproperty file="docroot/WEB-INF/liferay-hook.xml" prefix="plugin-hook" keepRoot="false" validate="true" />
+
+		<if>
+			<isset property="plugin-hook.custom-jsp-dir" />
+			<then>
+				<delete dir="precompile-jsps/${plugin-hook.custom-jsp-dir}" />
+			</then>
+		</if>
+	</target>
+
+	<target name="compile-prepare-set-jsps-source">
+		<property name="jsp.precompile.src.dir" value="docroot" />
+	</target>
+
+	<target name="compile-jonas">
+		<property name="jspc.classes.dir" value="docroot/WEB-INF/classes" />
+
+		<mkdir dir="${jspc.classes.dir}" />
+
+		<path id="jspc.classpath">
+			<pathelement location="${env.JAVA_HOME}/jre/lib/rt.jar" />
+			<path refid="jspc.common.classpath" />
+			<pathelement location="${app.server.dir}/lib/ext/portlet.jar" />
+			<pathelement location="${app.server.dir}/lib/ext/portal-service.jar" />
+			<pathelement location="${app.server.dir}/repositories/maven2-internal/org/ow2/jonas/jonas-web-container-tomcat-6.0/${app.server.jonas.version}/jonas-web-container-tomcat-6.0-${app.server.jonas.version}-ipojo.jar" />
+			<pathelement location="${app.server.dir}/repositories/maven2-internal/org/ow2/jonas/osgi/javaee-api/${app.server.jonas.version}/javaee-api-${app.server.jonas.version}.jar" />
+		</path>
+
+		<antcall target="compile-common-jsp" inheritrefs="true" />
+	</target>
+
+	<target name="compile-resin" depends="compile,compile-prepare-jsps">
+		<if>
+			<not>
+				<isset property="jdk.6.home" />
+			</not>
+			<then>
+				<fail>
+.
+
+Please set the property "jdk.6.home" in build.properties.
+				</fail>
+			</then>
+		</if>
+
+		<property name="jspc.classes.dir" value="docroot/WEB-INF/classes" />
+
+		<mkdir dir="${jspc.classes.dir}" />
+
+		<path id="jspc.classpath">
+			<pathelement location="${jdk.6.home}/jre/lib/rt.jar" />
+			<pathelement location="${jdk.6.home}/lib/tools.jar" />
+			<path refid="jspc.common.classpath" />
+			<pathelement location="${app.server.dir}/ext-lib/portal-service.jar" />
+			<pathelement location="${app.server.dir}/ext-lib/portlet.jar" />
+			<pathelement location="${app.server.dir}/lib/resin.jar" />
+			<fileset dir="${app.server.lib.portal.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+
+		<delete file="jspc_error" />
+
+		<java
+			classname="com.liferay.portal.tools.jspc.resin.BatchJspCompiler"
+			classpathref="jspc.classpath"
+			fork="true"
+			maxmemory="512m"
+			newenvironment="true"
+			jvm="${jdk.6.home}\bin\java"
+		>
+			<arg line="precompile-jsps ${jspc.classes.dir}" />
+		</java>
+
+		<delete dir="precompile-jsps" />
+
+		<delete dir="resin-data" quiet="true" />
+
+		<delete>
+			<fileset dir="${jspc.classes.dir}" includes="**/*.java" />
+		</delete>
+
+		<if>
+			<available file="jspc_error" />
+			<then>
+				<loadfile property="jspc_error.content" srcfile="jspc_error" />
+
+				<fail>${jspc_error.content}</fail>
+			</then>
+		</if>
+	</target>
+
+	<target name="compile-tomcat">
+		<property name="jspc.classes.dir" value="docroot/WEB-INF/classes" />
+
+		<mkdir dir="${jspc.classes.dir}" />
+
+		<if>
+			<and>
+				<equals arg1="${app.server.type}" arg2="tomcat" />
+				<equals arg1="${ant.java.version}" arg2="1.5" />
+			</and>
+			<then>
+				<var name="jspc.java.home" value="${jdk.windows.home}" />
+			</then>
+			<else>
+				<var name="jspc.java.home" value="${env.JAVA_HOME}" />
+			</else>
+		</if>
+
+		<path id="jspc.classpath">
+			<pathelement location="${jspc.java.home}/jre/lib/rt.jar" />
+			<path refid="jspc.common.classpath" />
+			<pathelement location="${app.server.dir}/lib/el-api.jar" />
+			<pathelement location="${app.server.dir}/lib/ext/portlet.jar" />
+			<pathelement location="${app.server.dir}/lib/ext/portal-service.jar" />
+			<pathelement location="${app.server.dir}/lib/jasper.jar" />
+			<pathelement location="${app.server.dir}/lib/jasper-el.jar" />
+			<pathelement location="${app.server.dir}/lib/jasper-jdt.jar" />
+			<pathelement location="${app.server.dir}/lib/jsp-api.jar" />
+			<pathelement location="${app.server.dir}/lib/servlet-api.jar" />
+			<pathelement location="${app.server.dir}/lib/tomcat-api.jar" />
+			<pathelement location="${app.server.dir}/lib/tomcat-util.jar" />
+			<pathelement location="${app.server.tomcat.bin.dir}/tomcat-juli.jar" />
+		</path>
+
+		<antcall target="compile-common-jsp" inheritrefs="true" />
 	</target>
 
 	<target name="compile-test">
@@ -1332,6 +1584,32 @@ Please find a solution that does not require portal-impl.jar.
 		<delete file="${plugin.file}" />
 
 		<antcall target="clean-portal-dependencies" />
+
+		<if>
+			<and>
+				<equals arg1="${jsp.precompile}" arg2="on" />
+			</and>
+			<then>
+				<if>
+					<equals arg1="${app.server.type}" arg2="jonas" />
+					<then>
+						<antcall target="compile-jonas" />
+					</then>
+					<elseif>
+						<equals arg1="${app.server.type}" arg2="resin" />
+						<then>
+							<antcall target="compile-resin" />
+						</then>
+					</elseif>
+					<elseif>
+						<equals arg1="${app.server.type}" arg2="tomcat" />
+						<then>
+							<antcall target="compile-tomcat" />
+						</then>
+					</elseif>
+				</if>
+			</then>
+		</if>
 
 		<if>
 			<available file="docroot/WEB-INF/liferay-hook.xml.processed" />
