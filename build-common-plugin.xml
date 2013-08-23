@@ -1013,6 +1013,7 @@ Please set the property "jdk.6.home" in build.properties.
 			<pathelement location="${app.server.dir}/lib/servlet-api.jar" />
 			<pathelement location="${app.server.dir}/lib/tomcat-api.jar" />
 			<pathelement location="${app.server.dir}/lib/tomcat-util.jar" />
+			<pathelement location="${app.server.tomcat.bin.dir}/tomcat-juli.jar" />
 		</path>
 
 		<antcall target="compile-common-jsp" inheritrefs="true" />
