@@ -142,6 +142,7 @@
 
 	<path id="jspc.common.classpath">
 		<path refid="plugin-lib.classpath" />
+		<pathelement location="${ant.core.lib}" />
 	</path>
 
 	<target name="all">
