@@ -14,7 +14,12 @@
 
 package com.liferay.so.activities.hook.social;
 
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -89,6 +94,22 @@ public abstract class SOSocialActivityInterpreter
 		}
 
 		return new SocialActivityFeedEntry(link, title, body);
+	}
+
+	protected List<Long> getActivitySetUserIds(long activitySetId)
+		throws SystemException {
+
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			SocialActivity.class);
+
+		dynamicQuery.setProjection(
+			ProjectionFactoryUtil.distinct(
+				ProjectionFactoryUtil.property("userId")));
+
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.eq("activitySetId", activitySetId));
+
+		return SocialActivityLocalServiceUtil.dynamicQuery(dynamicQuery);
 	}
 
 	protected AssetRenderer getAssetRenderer(String className, long classPK)
@@ -224,7 +245,7 @@ public abstract class SOSocialActivityInterpreter
 	}
 
 	protected String getTitle(
-			long groupId, long userId, long displayDate,
+			long activitySetId, long groupId, long userId, long displayDate,
 			ServiceContext serviceContext)
 		throws Exception {
 
@@ -252,12 +273,36 @@ public abstract class SOSocialActivityInterpreter
 
 		String userName = getUserName(userId, serviceContext);
 
+		int otherUsersCount = 0;
+
+		if (activitySetId > 0) {
+			List<Long> userIds = getActivitySetUserIds(activitySetId);
+
+			otherUsersCount = userIds.size() - 1;
+		}
+
 		if ((groupId != serviceContext.getScopeGroupId()) && (groupId > 0)) {
 			String groupName = getGroupName(groupId, serviceContext);
 
-			Object[] userArguments = new Object[] {userName, groupName};
+			if (otherUsersCount > 0) {
+				Object[] userArguments =
+					new Object[] {userName, otherUsersCount, groupName};
 
-			sb.append(serviceContext.translate("x-in-x", userArguments));
+				sb.append(
+					serviceContext.translate(
+						"x-and-x-others-in-x", userArguments));
+			}
+			else {
+				Object[] userArguments = new Object[] {userName, groupName};
+
+				sb.append(serviceContext.translate("x-in-x", userArguments));
+			}
+		}
+		else if (otherUsersCount > 0) {
+			Object userArguments = new Object[] {userName, otherUsersCount};
+
+			sb.append(
+				serviceContext.translate("x-and-x-others", userArguments));
 		}
 		else {
 			sb.append(userName);
@@ -277,7 +322,7 @@ public abstract class SOSocialActivityInterpreter
 
 		sb.append(
 			getTitle(
-				activity.getGroupId(), activity.getUserId(),
+				0, activity.getGroupId(), activity.getUserId(),
 				activity.getCreateDate(), serviceContext));
 		sb.append("<div class=\"activity-action\">");
 
@@ -301,8 +346,9 @@ public abstract class SOSocialActivityInterpreter
 
 		sb.append(
 			getTitle(
-				activitySet.getGroupId(), activitySet.getUserId(),
-				activitySet.getModifiedDate(), serviceContext));
+				activitySet.getActivitySetId(), activitySet.getGroupId(),
+				activitySet.getUserId(), activitySet.getModifiedDate(),
+				serviceContext));
 		sb.append("<div class=\"activity-action\">");
 
 		String titlePattern = getTitlePattern(null, activitySet);
@@ -352,12 +398,21 @@ public abstract class SOSocialActivityInterpreter
 			activity.getClassPK(), ActionKeys.VIEW);
 	}
 
-	protected boolean isExpired(SocialActivitySet activitySet) {
+	protected boolean isExpired(
+		SocialActivitySet activitySet, boolean comment) {
+
 		long age = System.currentTimeMillis() - activitySet.getCreateDate();
 
 		long timeWindow =
 			Time.MINUTE *
 				PortletPropsValues.SOCIAL_ACTIVITY_SETS_BUNDLING_TIME_WINDOW;
+
+		if (comment) {
+			timeWindow =
+				Time.MINUTE *
+					PortletPropsValues.
+						SOCIAL_ACTIVITY_SETS_COMMENTS_BUNDLING_TIME_WINDOW;
+		}
 
 		if (age > timeWindow) {
 			return true;

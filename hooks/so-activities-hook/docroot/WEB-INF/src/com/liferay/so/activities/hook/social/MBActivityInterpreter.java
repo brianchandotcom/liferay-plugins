@@ -29,6 +29,8 @@ import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 
+import java.util.List;
+
 /**
  * @author Evan Thibodeau
  * @author Matthew Kong
@@ -86,14 +88,18 @@ public class MBActivityInterpreter extends SOSocialActivityInterpreter {
 
 			SocialActivitySet activitySet = null;
 
+			boolean comment = false;
+
 			if (activityType == _ACTIVITY_KEY_REPLY_MESSAGE) {
 				activitySet =
-					SocialActivitySetLocalServiceUtil.getUserActivitySet(
-						activity.getGroupId(), activity.getUserId(),
-						activity.getClassNameId(), activityType);
+					SocialActivitySetLocalServiceUtil.getClassActivitySet(
+						activity.getClassNameId(), activity.getClassPK(),
+						activity.getType());
+
+				comment = true;
 			}
 
-			if ((activitySet != null) && !isExpired(activitySet)) {
+			if ((activitySet != null) && !isExpired(activitySet, comment)) {
 				return activitySet.getActivitySetId();
 			}
 		}
@@ -110,6 +116,20 @@ public class MBActivityInterpreter extends SOSocialActivityInterpreter {
 
 		return getBody(
 			activity.getClassName(), activity.getClassPK(), serviceContext);
+	}
+
+	@Override
+	protected String getBody(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
+		throws Exception {
+
+		if (activitySet.getType() == _ACTIVITY_KEY_REPLY_MESSAGE) {
+			return getBody(
+				activitySet.getClassName(), activitySet.getClassPK(),
+				serviceContext);
+		}
+
+		return super.getBody(activitySet, serviceContext);
 	}
 
 	protected String getBody(
@@ -179,6 +199,27 @@ public class MBActivityInterpreter extends SOSocialActivityInterpreter {
 	}
 
 	@Override
+	protected Object[] getTitleArguments(
+			String groupName, SocialActivitySet activitySet, String link,
+			String title, ServiceContext serviceContext)
+		throws Exception {
+
+		if (activitySet.getType() == _ACTIVITY_KEY_REPLY_MESSAGE) {
+			List<SocialActivity> activities =
+				SocialActivityLocalServiceUtil.getActivitySetActivities(
+					activitySet.getActivitySetId(), 0, 1);
+
+			SocialActivity activity = activities.get(0);
+
+			return getTitleArguments(
+				groupName, activity, link, title, serviceContext);
+		}
+
+		return super.getTitleArguments(
+			groupName, activitySet, link, title, serviceContext);
+	}
+
+	@Override
 	protected String getTitlePattern(String groupName, SocialActivity activity)
 		throws Exception {
 
@@ -215,7 +256,7 @@ public class MBActivityInterpreter extends SOSocialActivityInterpreter {
 			return "wrote-x-new-forum-posts";
 		}
 		else if (activitySet.getType() == _ACTIVITY_KEY_REPLY_MESSAGE) {
-			return "replied-to-x-forum-posts";
+			return "replied-to-x-forum-post";
 		}
 
 		return StringPool.BLANK;
