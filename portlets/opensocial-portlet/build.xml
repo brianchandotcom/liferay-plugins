@@ -6,6 +6,10 @@
 
 	<property name="original.war.file" value="shindig-server-2.0.2.war" />
 
+	<target name="compile-prepare-set-jsps-source">
+		<property name="jsp.precompile.src.dir" value="tmp" />
+	</target>
+
 	<target name="merge">
 
 		<!-- Delete unused Shindig directories -->
