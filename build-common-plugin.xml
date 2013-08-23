@@ -887,10 +887,12 @@ ${oversize.files.jsp}</fail>
 	</target>
 
 	<target name="compile-prepare-jsps">
-		<mkdir dir="precompile-jsps" />
+		<mkdir dir="precompile-jsps" />	
+
+		<antcallback target="compile-prepare-set-jsps-source" return="jsp.precompile.src.dir"/>
 
 		<copy todir="precompile-jsps">
-			<fileset dir="docroot">
+			<fileset dir="${jsp.precompile.src.dir}">
 				<include name="**/*" />
 			</fileset>
 		</copy>
@@ -903,6 +905,10 @@ ${oversize.files.jsp}</fail>
 				<delete dir="precompile-jsps/${plugin-hook.custom-jsp-dir}" />
 			</then>
 		</if>
+	</target>
+
+	<target name="compile-prepare-set-jsps-source">
+		<property name="jsp.precompile.src.dir" value="docroot"/>
 	</target>
 
 	<target name="compile-jonas">
