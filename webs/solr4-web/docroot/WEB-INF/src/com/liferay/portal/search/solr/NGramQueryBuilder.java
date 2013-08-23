@@ -12,26 +12,17 @@
  * details.
  */
 
-package com.liferay.portal.search.solr.server;
+package com.liferay.portal.search.solr;
 
-import java.util.List;
-import java.util.TreeSet;
+import com.liferay.portal.kernel.search.SearchException;
+
+import org.apache.solr.client.solrj.SolrQuery;
 
 /**
  * @author Michael C. Han
  */
-public class LoadBalancedSolrServerSelector implements SolrServerSelector {
+public interface NGramQueryBuilder {
 
-	@Override
-	public SolrServerWrapper select(
-		List<SolrServerWrapper> solrServerWrappers) {
-
-		TreeSet<SolrServerWrapper> sortedSolrServerWrappers =
-			new TreeSet<SolrServerWrapper>(new SolrServerWrapperComparator());
-
-		sortedSolrServerWrappers.addAll(solrServerWrappers);
-
-		return sortedSolrServerWrappers.first();
-	}
+	public SolrQuery getNGramQuery(String input) throws SearchException;
 
 }
