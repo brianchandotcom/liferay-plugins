@@ -16,6 +16,18 @@
 
 <%@ include file="/init.jsp" %>
 
+<%
+List<Subscription> viewableSubscriptions = new ArrayList<Subscription>();
+
+List<Subscription> subscriptions = SubscriptionLocalServiceUtil.getUserSubscriptions(user.getUserId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS, new SubscriptionClassNameIdComparator(true));
+
+for (Subscription subscription : subscriptions) {
+	if (SubscriptionPermissionUtil.contains(permissionChecker, subscription.getClassName(), subscription.getClassPK(), null, 0)) {
+		viewableSubscriptions.add(subscription);
+	}
+}
+%>
+
 <portlet:actionURL name="unsubscribe" var="unsubscribeURL" />
 
 <aui:form action="<%= unsubscribeURL %>" method="get" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "unsubscribe();" %>'>
@@ -34,9 +46,14 @@
 			iteratorURL="<%= iteratorURL %>"
 			rowChecker="<%= new RowChecker(renderResponse) %>"
 		>
+
+			<%
+			int searchContainerEnd = (viewableSubscriptions.size() < searchContainer.getEnd()) ? viewableSubscriptions.size() : searchContainer.getEnd();
+			%>
+
 			<liferay-ui:search-container-results
-				results="<%= SubscriptionLocalServiceUtil.getUserSubscriptions(user.getUserId(), searchContainer.getStart(), searchContainer.getEnd(), new SubscriptionClassNameIdComparator(true)) %>"
-				total="<%= SubscriptionLocalServiceUtil.getUserSubscriptionsCount(user.getUserId()) %>"
+				results="<%= viewableSubscriptions.subList(searchContainer.getStart(), searchContainerEnd) %>"
+				total="<%= viewableSubscriptions.size() %>"
 			/>
 
 			<%
