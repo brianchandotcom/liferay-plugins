@@ -5,9 +5,9 @@ AUI.add(
 		var isString = Lang.isString;
 		var isValue = Lang.isValue;
 
-		var AUTO = 'auto';
-
 		var ACTIVE_EDITABLE = 'activeEditable';
+
+		var AUTO = 'auto';
 
 		var BOUNDING_BOX = 'boundingBox';
 
@@ -31,9 +31,9 @@ AUI.add(
 
 		var LABEL = 'label';
 
-		var NEW_NODE = 'newNode';
-
 		var NEW_FOLDER = 'New Folder';
+
+		var NEW_NODE = 'newNode';
 
 		var OWNER_TREE = 'ownerTree';
 
@@ -142,8 +142,8 @@ AUI.add(
 
 						var children = instance.getChildren();
 
-						var folderChildren = [];
 						var fileEntryChildren = [];
+						var folderChildren = [];
 
 						A.Array.each(
 							children,
@@ -157,14 +157,14 @@ AUI.add(
 							}
 						);
 
-						folderChildren.sort(arraySort);
 						fileEntryChildren.sort(arraySort);
+						folderChildren.sort(arraySort);
 
 						A.Array.each(
 							folderChildren,
 							function(item, index, collection) {
 								if (index != 0) {
-									instance.insertAfter(item, collection[index-1]);
+									instance.insertAfter(item, collection[index - 1]);
 								}
 							}
 						);
@@ -178,7 +178,7 @@ AUI.add(
 									}
 								}
 								else {
-									instance.insertAfter(item, collection[index-1]);
+									instance.insertAfter(item, collection[index - 1]);
 								}
 							}
 						);
@@ -200,8 +200,8 @@ AUI.add(
 
 					entryId: {
 						value: '',
-						setter: function(v) {
-							return String(v);
+						setter: function(value) {
+							return String(value);
 						}
 					},
 
@@ -323,8 +323,8 @@ AUI.add(
 
 						var children = instance.getChildren();
 
-						var folderChildren = [];
 						var fileEntryChildren = [];
+						var folderChildren = [];
 
 						var ownerTree = instance.get(OWNER_TREE);
 
@@ -340,14 +340,14 @@ AUI.add(
 							}
 						);
 
-						folderChildren.sort(arraySort);
 						fileEntryChildren.sort(arraySort);
+						folderChildren.sort(arraySort);
 
 						A.Array.each(
 							folderChildren,
 							function(item, index, collection) {
 								if (index != 0) {
-									ownerTree.insertAfter(item, collection[index-1]);
+									ownerTree.insertAfter(item, collection[index - 1]);
 								}
 							}
 						);
@@ -361,7 +361,7 @@ AUI.add(
 									}
 								}
 								else {
-									ownerTree.insertAfter(item, collection[index-1]);
+									ownerTree.insertAfter(item, collection[index - 1]);
 								}
 							}
 						);
@@ -405,21 +405,8 @@ AUI.add(
 						if (isLeaf) {
 							var closeContextMenuButton = new A.ButtonItem(
 								{
+									cssClass: 'close-file-entry',
 									disabled: true,
-									handler: function(event) {
-										var buttonItem = event.target;
-
-										if (!buttonItem.get(DISABLED)) {
-											instance.fire(
-												'closeFileEntry',
-												{
-													entryId: instance.get(ENTRY_ID)
-												}
-											);
-
-											instance._contextMenuOverlay.hide();
-										}
-									},
 									icon: 'gadgeteditor-close',
 									label: 'Close'
 								}
@@ -427,63 +414,24 @@ AUI.add(
 
 							var publishMenuButton = new A.ButtonItem(
 								{
+									cssClass: 'publish',
 									disabled: !instance.get(OWNER_TREE).get('publishGadgetPermission'),
-									handler: function(event) {
-										var buttonItem = event.target;
-
-										if (!buttonItem.get(DISABLED)) {
-											instance.fire(
-												'publish',
-												{
-													entryId: instance.get(ENTRY_ID)
-												}
-											);
-
-											instance._contextMenuOverlay.hide();
-										}
-									},
 									icon: 'gadgeteditor-publish',
 									label: 'Publish'
 								}
 							);
 
-							var showURLContextMenuButton= new A.ButtonItem(
+							var showURLContextMenuButton = new A.ButtonItem(
 								{
-									handler: function(event) {
-										var buttonItem = event.target;
-
-										if (!buttonItem.get(DISABLED)) {
-											instance.fire(
-												'showURL',
-												{
-													entryId: instance.get(ENTRY_ID)
-												}
-											);
-
-											instance._contextMenuOverlay.hide();
-										}
-									},
+									cssClass: 'show-url',
 									icon: 'gadgeteditor-url',
 									label: 'Show URL'
 								}
 							);
 
-							var unpublishMenuButton= new A.ButtonItem(
+							var unpublishMenuButton = new A.ButtonItem(
 								{
-									handler: function(event) {
-										var buttonItem = event.target;
-
-										if (!buttonItem.get(DISABLED)) {
-											instance.fire(
-												'unpublish',
-												{
-													entryId: instance.get(ENTRY_ID)
-												}
-											);
-
-											instance._contextMenuOverlay.hide();
-										}
-									},
+									cssClass: 'unpublish',
 									icon: 'gadgeteditor-publish',
 									label: 'Unpublish'
 								}
@@ -502,21 +450,7 @@ AUI.add(
 						else {
 							var newFolderContextMenuButton = new A.ButtonItem(
 								{
-									handler: function(event) {
-										var buttonItem = event.target;
-
-										if (!buttonItem.get(DISABLED)) {
-
-											instance.fire(
-												'addFolderNode',
-												{
-													parentFolderId: instance.get(ID)
-												}
-											);
-
-											instance._contextMenuOverlay.hide();
-										}
-									},
+									cssClass: 'add-folder',
 									icon: 'gadgeteditor-addfolder',
 									label: NEW_FOLDER
 								}
@@ -529,21 +463,8 @@ AUI.add(
 
 						var deleteContextMenuButton = new A.ButtonItem(
 							{
+								cssClass: 'delete-entry',
 								disabled: instance.get(IS_ROOT_NODE),
-								handler: function(event) {
-									var buttonItem = event.target;
-
-									if (!buttonItem.get(DISABLED)) {
-										instance.fire(
-											'deleteEntry',
-											{
-												entryId: instance.get(ENTRY_ID)
-											}
-										);
-
-										instance._contextMenuOverlay.hide();
-									}
-								},
 								icon: 'gadgeteditor-delete',
 								label: 'Delete'
 							}
@@ -551,21 +472,8 @@ AUI.add(
 
 						var renameContextMenuButton = new A.ButtonItem(
 							{
+								cssClass: 'rename-entry',
 								disabled: instance.get(IS_ROOT_NODE),
-								handler: function(event) {
-									var buttonItem = event.target;
-
-									if (!buttonItem.get(DISABLED)) {
-										instance.fire(
-											'renameEntry',
-											{
-												entryId: instance.get(ENTRY_ID)
-											}
-										);
-
-										instance._contextMenuOverlay.hide();
-									}
-								},
 								icon: 'gadgeteditor-rename',
 								label: 'Rename'
 							}
@@ -642,6 +550,55 @@ AUI.add(
 						treeActionOverlayManager.register(contextMenuOverlay);
 
 						instance._contextMenuOverlay = contextMenuOverlay;
+
+						instance._renderContextMenuDelegate(contextMenuOverlay);
+					},
+
+					_renderContextMenuDelegate: function(overlay) {
+						var instance = this;
+
+						var entry = {};
+
+						overlay.get(BOUNDING_BOX).delegate(
+							CLICK,
+							function(event) {
+								var buttonItem = event.target;
+
+								entry.entryId = instance.get(ENTRY_ID);
+
+								if (!buttonItem.get(DISABLED)) {
+									if (buttonItem.hasClass('add-folder')) {
+										instance.fire(
+											'addFolderNode',
+											{
+												parentFolderId: instance.get(ID)
+											}
+										);
+									}
+									else if (buttonItem.hasClass('close-file-entry')) {
+										instance.fire('closeFileEntry', entry);
+									}
+									else if (buttonItem.hasClass('delete-entry')) {
+										instance.fire('deleteEntry', entry);
+									}
+									else if (buttonItem.hasClass('publish')) {
+										instance.fire('publish', entry);
+									}
+									else if (buttonItem.hasClass('rename-entry')) {
+										instance.fire('renameEntry', entry);
+									}
+									else if (buttonItem.hasClass('show-url')) {
+										instance.fire('showURL', entry);
+									}
+									else if (buttonItem.hasClass('unpublish')) {
+										instance.fire('unpublish', entry);
+									}
+
+									instance._contextMenuOverlay.hide();
+								}
+							},
+							'.aui-buttonitem'
+						);
 					},
 
 					_renderEditable: function() {
@@ -653,9 +610,6 @@ AUI.add(
 
 						var editable = new EditableEditor(
 							{
-								eventType: '',
-								entryId: instance.get(ENTRY_ID),
-								node: instance.get('labelEl'),
 								after: {
 									startEditing: function(event) {
 										ownerTree.set(ACTIVE_EDITABLE, event.target);
@@ -664,6 +618,9 @@ AUI.add(
 										ownerTree.set(ACTIVE_EDITABLE, null);
 									}
 								},
+								entryId: instance.get(ENTRY_ID),
+								eventType: '',
+								node: instance.get('labelEl'),
 								on: {
 									startEditing: function(event) {
 										var editable = event.target;
@@ -864,6 +821,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-editable', 'aui-tree-view', 'aui-tree-node', 'aui-overlay-manager', 'aui-toolbar', 'aui-overlay-context']
+		requires: ['aui-editable', 'aui-overlay-context', 'aui-overlay-manager', 'aui-toolbar', 'aui-tree-node', 'aui-tree-view']
 	}
 );
