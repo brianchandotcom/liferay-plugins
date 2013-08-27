@@ -38,14 +38,20 @@
 
 		<div class="scheduler-event-recorder-body">
 			<table>
-				<tr class="calendar-portlet-event-recorder-status-row">
-					<td>
-						<liferay-ui:message key="status" />:
-					</td>
-					<td>
-						<label>{status}</label>
-					</td>
-				</tr>
+				<tpl if="status != Liferay.CalendarWorkflow.STATUS_DRAFT">
+					<tr class="calendar-portlet-event-recorder-status-row">
+						<td>
+							<liferay-ui:message key="attend" />?
+						</td>
+						<td>
+							<a class="calendar-event-answer calendar-event-answer-{acceptLinkEnabled}" data-status="{workflowStatus.STATUS_APPROVED}" href="javascript:void(0);"><liferay-ui:message key="yes" /></a>
+							&mdash;
+							<a class="calendar-event-answer calendar-event-answer-{maybeLinkEnabled}" data-status="{workflowStatus.STATUS_MAYBE}" href="javascript:void(0);"><liferay-ui:message key="maybe" /></a>
+							&mdash;
+							<a class="calendar-event-answer calendar-event-answer-{declineLinkEnabled}" data-status="{workflowStatus.STATUS_DENIED}" href="javascript:void(0);"><liferay-ui:message key="no" /></a>
+						</td>
+					</tr>
+				</tpl>
 				<tr>
 					<td>
 						<liferay-ui:message key="when" />:

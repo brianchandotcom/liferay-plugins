@@ -418,7 +418,7 @@ AUI.add(
 			},
 
 			getStatusLabel: function(statusId) {
-				var status = String.valueOf(statusId);
+				var status = STR_BLANK;
 
 				if (CalendarWorkflow.STATUS_APPROVED === statusId) {
 					status = Liferay.Language.get('accepted');
@@ -1576,6 +1576,14 @@ AUI.add(
 				NAME: 'scheduler-event-recorder',
 
 				prototype: {
+					initializer: function() {
+						var instance = this;
+
+						var popoverBB = instance.popover.get('boundingBox');
+
+						popoverBB.delegate('click', instance._handleEventAnswer, '.calendar-event-answer', instance);
+					},
+
 					getTemplateData: function() {
 						var instance = this;
 
@@ -1601,14 +1609,18 @@ AUI.add(
 							templateData,
 							{
 								allDay: schedulerEvent.get('allDay'),
+								acceptLinkEnabled: instance._hasWorkflowStatusPermission(schedulerEvent, CalendarWorkflow.STATUS_APPROVED),
 								availableCalendars: availableCalendars,
 								calendar: calendar,
 								calendarIds: AObject.keys(availableCalendars),
+								declineLinkEnabled: instance._hasWorkflowStatusPermission(schedulerEvent, CalendarWorkflow.STATUS_DENIED),
 								editing: editing,
 								endTime: templateData.endDate,
+								maybeLinkEnabled: instance._hasWorkflowStatusPermission(schedulerEvent, CalendarWorkflow.STATUS_MAYBE),
 								permissions: permissions,
 								startTime: templateData.startDate,
-								status: CalendarUtil.getStatusLabel(schedulerEvent.get('status'))
+								status: schedulerEvent.get('status'),
+								workflowStatus: CalendarWorkflow
 							}
 						);
 					},
@@ -1659,33 +1671,19 @@ AUI.add(
 						);
 					},
 
-					_handleEventAcceptResponse: function(event) {
+					_handleEventAnswer: function(event) {
 						var instance = this;
+
+						var currentTarget = event.currentTarget;
 
 						var schedulerEvent = instance.get('event');
 
-						if (schedulerEvent) {
-							CalendarUtil.invokeTransition(schedulerEvent, CalendarWorkflow.STATUS_APPROVED);
-						}
-					},
+						var linkEnabled = A.DataType.Boolean.parse(currentTarget.hasClass('calendar-event-answer-true'));
 
-					_handleEventDeclineResponse: function(event) {
-						var instance = this;
+						var statusData = Lang.toInt(currentTarget.getData('status'));
 
-						var schedulerEvent = instance.get('event');
-
-						if (schedulerEvent) {
-							CalendarUtil.invokeTransition(schedulerEvent, CalendarWorkflow.STATUS_DENIED);
-						}
-					},
-
-					_handleEventMaybeResponse: function(event) {
-						var instance = this;
-
-						var schedulerEvent = instance.get('event');
-
-						if (schedulerEvent) {
-							CalendarUtil.invokeTransition(schedulerEvent, CalendarWorkflow.STATUS_MAYBE);
+						if (schedulerEvent && linkEnabled) {
+							CalendarUtil.invokeTransition(schedulerEvent, statusData);
 						}
 					},
 
@@ -1771,14 +1769,6 @@ AUI.add(
 						event.domEvent.preventDefault();
 					},
 
-					_hasAcceptButton: function(permissions, calendar, status) {
-						return permissions.MANAGE_BOOKINGS && (status !== CalendarWorkflow.STATUS_APPROVED) && (status !== CalendarWorkflow.STATUS_DRAFT);
-					},
-
-					_hasDeclineButton: function(permissions, calendar, status) {
-						return permissions.MANAGE_BOOKINGS && (status !== CalendarWorkflow.STATUS_DRAFT);
-					},
-
 					_hasDeleteButton: function(permissions, calendar, status) {
 						return permissions.MANAGE_BOOKINGS && calendar;
 					},
@@ -1787,12 +1777,28 @@ AUI.add(
 						return permissions.MANAGE_BOOKINGS;
 					},
 
-					_hasMaybeButton: function(permissions, calendar, status) {
-						return permissions.MANAGE_BOOKINGS && (status !== CalendarWorkflow.STATUS_DRAFT) && (status !== CalendarWorkflow.STATUS_MAYBE);
-					},
-
 					_hasSaveButton: function(permissions, calendar, status) {
 						return permissions.MANAGE_BOOKINGS;
+					},
+
+					_hasWorkflowStatusPermission: function(schedulerEvent, newStatus) {
+						var instance = this;
+
+						var hasPermission = false;
+
+						if (schedulerEvent) {
+							var calendarId = schedulerEvent.get('calendarId');
+
+							var calendar = CalendarUtil.availableCalendars[calendarId];
+
+							var permissions = calendar.get('permissions');
+
+							var status = schedulerEvent.get('status');
+
+							hasPermission = permissions.MANAGE_BOOKINGS && (status !== newStatus) && (status !== CalendarWorkflow.STATUS_DRAFT);
+						}
+
+						return hasPermission;
 					},
 
 					_afterPopoverVisibleChange: function(event) {
@@ -2004,45 +2010,6 @@ AUI.add(
 								);
 							}
 
-							if (instance._hasAcceptButton(permissions, calendar, status)) {
-								respondGroup.push(
-									{
-										on: {
-											click: A.bind(instance._handleEventAcceptResponse, instance)
-										},
-										icon: 'icon-ok-sign',
-										id: 'acceptBtn',
-										label: Liferay.Language.get('accept')
-									}
-								);
-							}
-
-							if (instance._hasMaybeButton(permissions, calendar, status)) {
-								respondGroup.push(
-									{
-										on: {
-											click: A.bind(instance._handleEventMaybeResponse, instance)
-										},
-										icon: 'icon-question-sign',
-										id: 'maybeBtn',
-										label: Liferay.Language.get('maybe')
-									}
-								);
-							}
-
-							if (instance._hasDeclineButton(permissions, calendar, status)) {
-								respondGroup.push(
-									{
-										on: {
-											click: A.bind(instance._handleEventDeclineResponse, instance)
-										},
-										icon: ' icon-remove-sign',
-										id: 'declineBtn',
-										label: Liferay.Language.get('decline')
-									}
-								);
-							}
-
 							if (editGroup.length) {
 								children.push(editGroup);
 							}
@@ -2062,6 +2029,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-io', 'aui-scheduler', 'aui-toolbar', 'autocomplete', 'autocomplete-highlighters', 'dd-plugin', 'liferay-calendar-message-util', 'liferay-calendar-recurrence-util', 'liferay-node', 'liferay-portlet-url', 'liferay-store', 'resize-plugin']
+		requires: ['aui-datatype', 'aui-io', 'aui-scheduler', 'aui-toolbar', 'autocomplete', 'autocomplete-highlighters', 'dd-plugin', 'liferay-calendar-message-util', 'liferay-calendar-recurrence-util', 'liferay-node', 'liferay-portlet-url', 'liferay-store', 'resize-plugin']
 	}
 );
