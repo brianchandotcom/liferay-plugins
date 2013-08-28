@@ -14,6 +14,8 @@
 
 package com.liferay.cdi.portlet.bridge;
 
+import com.liferay.portal.util.PortalUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -33,10 +35,12 @@ import javax.servlet.AsyncContext;
 import javax.servlet.DispatcherType;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
@@ -49,6 +53,7 @@ public class HttpServletRequestAdapterImpl
 
 	public HttpServletRequestAdapterImpl(PortletRequest portletRequest) {
 		_portletRequest = portletRequest;
+		_httpServletRequest = PortalUtil.getHttpServletRequest(portletRequest);
 	}
 
 	@Override
@@ -79,6 +84,10 @@ public class HttpServletRequestAdapterImpl
 	@Override
 	public String getCharacterEncoding() {
 		if (!(_portletRequest instanceof ClientDataRequest)) {
+			
+			if (_httpServletRequest != null) {
+				return _httpServletRequest.getCharacterEncoding();
+			}
 			throw new UnsupportedOperationException();
 		}
 
@@ -91,6 +100,10 @@ public class HttpServletRequestAdapterImpl
 	@Override
 	public int getContentLength() {
 		if (!(_portletRequest instanceof ClientDataRequest)) {
+			
+			if (_httpServletRequest != null) {
+				return _httpServletRequest.getContentLength();
+			}
 			throw new UnsupportedOperationException();
 		}
 
@@ -103,6 +116,10 @@ public class HttpServletRequestAdapterImpl
 	@Override
 	public String getContentType() {
 		if (!(_portletRequest instanceof ClientDataRequest)) {
+			
+			if (_httpServletRequest != null) {
+				return _httpServletRequest.getContentType();
+			}
 			throw new UnsupportedOperationException();
 		}
 
@@ -124,33 +141,52 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public long getDateHeader(String name) {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getDateHeader(name);
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public DispatcherType getDispatcherType() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getDispatcherType();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getHeader(String name) {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getHeader(name);
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Enumeration<String> getHeaderNames() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getHeaderNames();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public Enumeration<String> getHeaders(String name) {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getHeaders(name);
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public ServletInputStream getInputStream() {
+	public ServletInputStream getInputStream() throws IOException {
 		if (_servletInputStream == null) {
 			if (!(_portletRequest instanceof ClientDataRequest)) {
+				
+				if (_httpServletRequest != null) {
+					return _httpServletRequest.getInputStream();
+				}
 				throw new UnsupportedOperationException();
 			}
 
@@ -166,11 +202,17 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public int getIntHeader(String name) {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getIntHeader(name);
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getLocalAddr() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getLocalAddr();
+		}
 		throw new UnsupportedOperationException();
 	}
 
@@ -199,6 +241,10 @@ public class HttpServletRequestAdapterImpl
 	@Override
 	public String getMethod() {
 		if (!(_portletRequest instanceof ClientDataRequest)) {
+			
+			if (_httpServletRequest != null) {
+				return _httpServletRequest.getMethod();
+			}
 			throw new UnsupportedOperationException();
 		}
 
@@ -229,22 +275,34 @@ public class HttpServletRequestAdapterImpl
 	}
 
 	@Override
-	public Part getPart(String name) {
+	public Part getPart(String name) throws IOException, ServletException {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getPart(name);
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public Collection<Part> getParts() {
+	public Collection<Part> getParts() throws IOException, ServletException {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getParts();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getPathInfo() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getPathInfo();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getPathTranslated() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getPathTranslated();
+		}
 		throw new UnsupportedOperationException();
 	}
 
@@ -255,17 +313,27 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public String getProtocol() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getProtocol();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getQueryString() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getQueryString();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public BufferedReader getReader() throws IOException {
 		if (!(_portletRequest instanceof ClientDataRequest)) {
+			
+			if (_httpServletRequest != null) {
+				return _httpServletRequest.getReader();
+			}
 			throw new UnsupportedOperationException();
 		}
 
@@ -277,21 +345,33 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public String getRealPath(String path) {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getRealPath(path);
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getRemoteAddr() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getRemoteAddr();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getRemoteHost() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getRemoteHost();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public int getRemotePort() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getRemotePort();
+		}
 		throw new UnsupportedOperationException();
 	}
 
@@ -302,6 +382,9 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public RequestDispatcher getRequestDispatcher(String path) {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getRequestDispatcher(path);
+		}
 		throw new UnsupportedOperationException();
 	}
 
@@ -312,11 +395,17 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public String getRequestURI() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getRequestURI();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public StringBuffer getRequestURL() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getRequestURL();
+		}
 		throw new UnsupportedOperationException();
 	}
 
@@ -337,11 +426,17 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public ServletContext getServletContext() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getServletContext();
+		}
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getServletPath() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.getServletPath();
+		}
 		throw new UnsupportedOperationException();
 	}
 
@@ -386,21 +481,33 @@ public class HttpServletRequestAdapterImpl
 
 	@Override
 	public boolean isRequestedSessionIdFromCookie() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.isRequestedSessionIdFromCookie();
+		}
 		return false;
 	}
 
 	@Override
 	public boolean isRequestedSessionIdFromUrl() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.isRequestedSessionIdFromUrl();
+		}
 		return false;
 	}
 
 	@Override
 	public boolean isRequestedSessionIdFromURL() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.isRequestedSessionIdFromURL();
+		}
 		return false;
 	}
 
 	@Override
 	public boolean isRequestedSessionIdValid() {
+		if (_httpServletRequest != null) {
+			return _httpServletRequest.isRequestedSessionIdValid();
+		}
 		throw new UnsupportedOperationException();
 	}
 
@@ -439,6 +546,10 @@ public class HttpServletRequestAdapterImpl
 		throws UnsupportedEncodingException {
 
 		if (!(_portletRequest instanceof ClientDataRequest)) {
+			
+			if (_httpServletRequest != null) {
+				_httpServletRequest.setCharacterEncoding(encoding);
+			}
 			throw new UnsupportedOperationException();
 		}
 
@@ -460,6 +571,7 @@ public class HttpServletRequestAdapterImpl
 		throw new UnsupportedOperationException();
 	}
 
+	private HttpServletRequest _httpServletRequest;
 	private PortletRequest _portletRequest;
 	private CDISession _portletSession;
 	private ServletInputStream _servletInputStream;
