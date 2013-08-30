@@ -398,6 +398,10 @@ public class ActivitiesPortlet extends MVCPortlet {
 				modifiedDate, themeDisplay.getLocale(),
 				themeDisplay.getTimeZone()));
 
+		if ((userId <= 0) || (userId != themeDisplay.getUserId())) {
+			jsonObject.put("commentControlsClass", "aui-helper-hidden");
+		}
+
 		User user = UserLocalServiceUtil.fetchUser(userId);
 
 		if (user != null) {
