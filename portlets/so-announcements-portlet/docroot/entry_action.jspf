@@ -38,14 +38,9 @@
 
 		<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.DELETE) %>">
 			<span class="action delete-entry">
-				<liferay-portlet:actionURL name="deleteEntry" var="deleteURL">
-					<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
-					<portlet:param name="redirect" value="<%= currentURL %>" />
-				</liferay-portlet:actionURL>
-
 				<liferay-ui:icon-delete
 					label="<%= true %>"
-					url="<%= deleteURL %>"
+					url="javascript:;"
 				/>
 			</span>
 		</c:if>
@@ -65,7 +60,7 @@
 		</c:if>
 
 		<span class="toggle action hide">
-			<a class="toggle-entry" data-entryId="<%= entry.getEntryId() %>" href="javascript:;">
+			<a class="toggle-entry" href="javascript:;">
 				<span><liferay-ui:message key="view-more" /></span>
 			</a>
 		</span>
