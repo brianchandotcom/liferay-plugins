@@ -55,12 +55,12 @@ String dirName = ParamUtil.getString(request, "dirName");
 
 	<c:choose>
 		<c:when test="<%= (kbArticle != null) && kbArticle.isApproved() %>">
-			<div class="portlet-msg-info">
+			<div class="alert alert-info">
 				<liferay-ui:message key="a-new-version-will-be-created-automatically-if-this-content-is-modified" />
 			</div>
 		</c:when>
 		<c:when test="<%= (kbArticle != null) && kbArticle.isPending() %>">
-			<div class="portlet-msg-info">
+			<div class="alert alert-info">
 				<liferay-ui:message key="there-is-a-publication-workflow-in-process" />
 			</div>
 		</c:when>
@@ -93,10 +93,10 @@ String dirName = ParamUtil.getString(request, "dirName");
 			</div>
 		</aui:field-wrapper>
 
-		<c:if test="<%= Validator.isNotNull(PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) %>">
+		<c:if test="<%= Validator.isNotNull(PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) || (parentResourcePrimKey == KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) %>">
 			<aui:model-context bean="<%= null %>" model="<%= KBArticle.class %>" />
 
-			<aui:select cssClass='<%= (parentResourcePrimKey != KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) ? "aui-helper-hidden" : StringPool.BLANK %>' ignoreRequestValue="<%= true %>" multiple="<%= true %>" name="sections">
+			<aui:select ignoreRequestValue="<%= true %>" multiple="<%= true %>" name="sections">
 
 				<%
 				Map<String, String> sectionsMap = new TreeMap<String, String>();
@@ -119,6 +119,14 @@ String dirName = ParamUtil.getString(request, "dirName");
 			<aui:model-context bean="<%= kbArticle %>" model="<%= KBArticle.class %>" />
 		</c:if>
 
+		<c:if test="<%= kbArticle == null %>">
+			<aui:field-wrapper cssClass='<%= (parentResourcePrimKey != KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) ? "hide" : StringPool.BLANK %>' label="permissions">
+				<liferay-ui:input-permissions
+					modelName="<%= KBArticle.class.getName() %>"
+				/>
+			</aui:field-wrapper>
+		</c:if>
+
 		<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= false %>" persistState="<%= true %>" title="categorization">
 			<aui:fieldset>
 				<aui:input classPK="<%= (kbArticle != null) ? kbArticle.getClassPK() : 0 %>" name="categories" type="assetCategories" />
@@ -126,14 +134,6 @@ String dirName = ParamUtil.getString(request, "dirName");
 				<aui:input classPK="<%= (kbArticle != null) ? kbArticle.getClassPK() : 0 %>" name="tags" type="assetTags" />
 			</aui:fieldset>
 		</liferay-ui:panel>
-
-		<c:if test="<%= kbArticle == null %>">
-			<aui:field-wrapper cssClass='<%= (parentResourcePrimKey != KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) ? "aui-helper-hidden" : StringPool.BLANK %>' label="permissions">
-				<liferay-ui:input-permissions
-					modelName="<%= KBArticle.class.getName() %>"
-				/>
-			</aui:field-wrapper>
-		</c:if>
 
 		<aui:button-row cssClass="kb-submit-buttons">
 			<aui:button type="submit" value='<%= ((kbArticle == null) || kbArticle.isApproved() || kbArticle.isDraft()) ? "save-as-draft" : "save" %>' />

@@ -1,14 +1,14 @@
 /* ---------- Configuration ---------- */
 
 .portlet-configuration {
-	.kb-block-labels .aui-field-label {
+	.kb-block-labels .field-label {
 		display: block;
 	}
 
 	.kb-field-wrapper {
 		margin: 10px 0;
 
-		.aui-field-wrapper-content {
+		.field-wrapper-content {
 			margin: 0;
 		}
 	}
@@ -22,19 +22,27 @@
 /* ---------- Portal ---------- */
 
 .knowledge-base-portlet {
-	.aui-field-inline {
+	.field-inline {
 		display: inline-block;
 	}
 
-	.aui-fieldset {
+	.fieldset {
 		padding: 0;
 
-		.lfr-search-container .aui-field-content {
+		.lfr-search-container .field-content {
 			margin: 0;
 		}
 	}
 
-	.aui-tagselector-content {
+	.table-cell .control-group {
+		margin-bottom: 0;
+
+		.field {
+			margin-bottom: 0;
+		}
+	}
+
+	.tagselector-content {
 		margin-bottom: 0;
 	}
 
@@ -55,10 +63,6 @@
 	.taglib-ratings.stars {
 		margin: 15px 0 0;
 		padding: 0;
-	}
-
-	.top-links-container {
-		margin: 0;
 	}
 
 	/* ---------- Portlet ---------- */
@@ -108,8 +112,13 @@
 		margin: 5px 0 0;
 	}
 
-	.kb-block-labels .aui-field-label {
+	.kb-block-labels .field-label {
 		display: block;
+	}
+
+	.kb-bulk-action-button-holder {
+		margin-bottom: 15px;
+		margin-top: 15px;
 	}
 
 	.kb-column-no-wrap {
@@ -183,7 +192,7 @@
 		.kb-article-comments, .kb-template-comments {
 			margin: 15px -7px 0;
 
-			.aui-field-content {
+			.field-content {
 				margin: 0;
 			}
 
@@ -246,9 +255,13 @@
 	.kb-field-wrapper {
 		margin: 10px 0;
 
-		.aui-field-wrapper-content {
+		.field-wrapper-content {
 			margin: 0;
 		}
+	}
+
+	.kb-new-parent .control-group-inline {
+		margin-bottom: 0;
 	}
 
 	.kb-panel-separator {
