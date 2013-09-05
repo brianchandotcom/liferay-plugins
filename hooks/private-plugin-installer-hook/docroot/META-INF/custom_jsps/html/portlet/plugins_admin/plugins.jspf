@@ -22,7 +22,7 @@ String portletId = portletDisplay.getId();
 	<c:when test="<%= portletId.equals(PortletKeys.ADMIN_PLUGINS) %>">
 
 		<%
-		PortletURL installPluginsURL = PortletURLFactoryUtil.create(request, PortletKeys.PLUGIN_INSTALLER, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+		PortletURL installPluginsURL = PortletURLFactoryUtil.create(request, "111", themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 
 		installPluginsURL.setWindowState(LiferayWindowState.MAXIMIZED);
 		installPluginsURL.setPortletMode(PortletMode.VIEW);
