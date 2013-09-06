@@ -256,6 +256,20 @@ AUI.add(
 						A.Get.script(googleMapsURL);
 					},
 
+					_isDirectionFilled: function() {
+						var instance = this;
+
+						var isDirectionFilled = false;
+
+						if (instance.get(STR_DIRECTION_ADDRESS)) {
+							if (instance.byId(STR_DIRECTION_ADDRESS).val()) {
+								isDirectionFilled = true;
+							}
+						}
+
+						return isDirectionFilled;
+					},
+
 					_isGoogleMapLoaded: function() {
 						return (typeof google !== 'undefined' && A.Lang.isObject(google.maps));
 					},
@@ -314,7 +328,12 @@ AUI.add(
 
 						event.preventDefault();
 
-						instance._getMap();
+						if (instance._isDirectionFilled()) {
+							instance._getDirections();
+						}
+						else {
+							instance._getMap();
+						}
 					},
 
 					_onMarkerClick: function(event, marker, text) {
@@ -407,7 +426,7 @@ AUI.add(
 
 						instance._stepDisplay = new googleMaps.InfoWindow();
 
-						if (instance.get(STR_DIRECTION_ADDRESS)) {
+						if (instance._isDirectionFilled()) {
 							instance._getDirections();
 						}
 						else {
@@ -454,6 +473,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog', 'aui-io-request', 'get', 'liferay-portlet-base']
+		requires: ['get', 'liferay-portlet-base']
 	}
 );
