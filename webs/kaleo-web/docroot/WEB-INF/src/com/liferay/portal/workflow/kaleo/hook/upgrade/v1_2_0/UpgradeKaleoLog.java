@@ -12,26 +12,18 @@
  * details.
  */
 
-package com.liferay.portal.workflow.kaleo.hook.upgrade;
+package com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0;
 
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoLog;
-import com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoNotificationRecipient;
 
 /**
- * @author Michael C. Han
+ * @author Kenneth Chang
  */
-public class UpgradeProcess_1_2_0 extends UpgradeProcess {
-
-	@Override
-	public int getThreshold() {
-		return 120;
-	}
+public class UpgradeKaleoLog extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		upgrade(UpgradeKaleoLog.class);
-		upgrade(UpgradeKaleoNotificationRecipient.class);
+		runSQL("alter_column_type KaleoLog comment TEXT null");
 	}
 
 }
