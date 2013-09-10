@@ -26,56 +26,24 @@
 			sb.append("&amp;autoplay=1");
 		}
 
-		if (showThickerBorder) {
-			sb.append("&amp;border=1");
-		}
-
-		sb.append("&amp;cc_load_policy=");
-		sb.append(closedCaptioning);
-
-		if (Validator.isNotNull(borderColor)) {
-			sb.append("&amp;color1=");
-			sb.append(borderColorHex);
-		}
-
-		if (Validator.isNotNull(playerColor)) {
-			sb.append("&amp;color2=");
-			sb.append(playerColorHex);
+		if (closedCaptioning) {
+			sb.append("&amp;cc_load_policy=1");
 		}
 
 		if (!enableKeyboardControls) {
 			sb.append("&amp;disablekb=1");
 		}
 
-		if (enableEnhancedGenieMenu) {
-			sb.append("&amp;egm=1");
+		if (annotations) {
+			sb.append("&amp;iv_load_policy=1");
 		}
-
-		if (enableFullscreen) {
-			sb.append("&amp;fs=1");
+		else {
+			sb.append("&amp;iv_load_policy=3");
 		}
-
-		if (hd) {
-			sb.append("&amp;hd=1");
-		}
-
-		sb.append("&amp;iv_load_policy=");
-		sb.append(annotations);
 
 		if (loop) {
-			sb.append("&amp;loop=1");
-		}
-
-		if (enableRelatedVideos) {
-			sb.append("&amp;rel=1");
-		}
-
-		if (!showInfo) {
-			sb.append("&amp;showinfo=0");
-		}
-
-		if (!enableSearch) {
-			sb.append("&amp;showsearch=0");
+			sb.append("&amp;loop=1&amp;playlist=");
+			sb.append(id);
 		}
 
 		if (Validator.isNotNull(startTime)) {
@@ -85,7 +53,6 @@
 		%>
 
 		<liferay-ui:flash
-			allowFullScreen="true"
 			allowScriptAccess="true"
 			height="<%= height %>"
 			movie="<%= swfURL + id + sb.toString() %>"
