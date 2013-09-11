@@ -99,7 +99,7 @@ catch (NoSuchRoleException nsre) {
 							<img alt="<%= user.getFullName() %>" src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>">
 						</span>
 
-						<span class="full-name"><%= user.getFullName() %></span>
+						<span class="full-name"><%= user.getFullName() %></span> &#x25BE;
 					</a>
 
 					<ul class="child-menu">
