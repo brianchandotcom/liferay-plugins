@@ -15,6 +15,9 @@
 package com.liferay.portal.workflow.kaleo.runtime.action;
 
 import com.liferay.portal.kernel.scripting.ScriptingUtil;
+import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.workflow.kaleo.model.KaleoAction;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.util.ScriptingContextBuilderUtil;
@@ -24,6 +27,9 @@ import java.util.Map;
 /**
  * @author Michael C. Han
  */
+@Transactional(
+	isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
+	rollbackFor = {Exception.class})
 public class ScriptActionExecutor implements ActionExecutor {
 
 	@Override

@@ -18,6 +18,9 @@ import com.liferay.portal.kernel.bi.rules.Fact;
 import com.liferay.portal.kernel.bi.rules.RulesEngineUtil;
 import com.liferay.portal.kernel.bi.rules.RulesResourceRetriever;
 import com.liferay.portal.kernel.resource.StringResourceRetriever;
+import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.workflow.kaleo.model.KaleoAction;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.util.RulesContextBuilder;
@@ -27,6 +30,9 @@ import java.util.List;
 /**
  * @author Michael C. Han
  */
+@Transactional(
+	isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
+	rollbackFor = {Exception.class})
 public class DRLActionExecutor implements ActionExecutor {
 
 	@Override

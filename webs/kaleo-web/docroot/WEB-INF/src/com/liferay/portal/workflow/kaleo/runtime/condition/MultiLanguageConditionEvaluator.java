@@ -16,6 +16,9 @@ package com.liferay.portal.workflow.kaleo.runtime.condition;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.transaction.Isolation;
+import com.liferay.portal.kernel.transaction.Propagation;
+import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.workflow.kaleo.definition.ScriptLanguage;
 import com.liferay.portal.workflow.kaleo.model.KaleoCondition;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
@@ -26,6 +29,9 @@ import java.util.Map;
 /**
  * @author Michael C. Han
  */
+@Transactional(
+	isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
+	rollbackFor = {Exception.class})
 public class MultiLanguageConditionEvaluator implements ConditionEvaluator {
 
 	@Override
