@@ -119,27 +119,17 @@
 	<bean id="com.liferay.portal.workflow.kaleo.runtime.action.ActionExecutorFactory" class="com.liferay.portal.workflow.kaleo.runtime.action.ActionExecutorFactory">
 		<property name="actionExecutors">
 			<util:map>
-				<entry key="beanshell">
-					<bean class="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
-				</entry>
-				<entry key="drl">
-					<bean class="com.liferay.portal.workflow.kaleo.runtime.action.DRLActionExecutor" />
-				</entry>
-				<entry key="groovy">
-					<bean class="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
-				</entry>
-				<entry key="javascript">
-					<bean class="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
-				</entry>
-				<entry key="python">
-					<bean class="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
-				</entry>
-				<entry key="ruby">
-					<bean class="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
-				</entry>
+				<entry key="beanshell" value-ref="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
+				<entry key="drl" value-ref="com.liferay.portal.workflow.kaleo.runtime.action.DRLActionExecutor" />
+				<entry key="groovy" value-ref="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
+				<entry key="javascript" value-ref="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
+				<entry key="python" value-ref="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
+				<entry key="ruby" value-ref="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
 			</util:map>
 		</property>
 	</bean>
+	<bean id="com.liferay.portal.workflow.kaleo.runtime.action.DRLActionExecutor" class="com.liferay.portal.workflow.kaleo.runtime.action.DRLActionExecutor" />
+	<bean id="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" class="com.liferay.portal.workflow.kaleo.runtime.action.ScriptActionExecutor" />
 	<bean id="com.liferay.portal.workflow.kaleo.runtime.assignment.CompositeTaskAssignmentSelector" class="com.liferay.portal.workflow.kaleo.runtime.assignment.CompositeTaskAssignmentSelector">
 		<property name="taskAssignmentSelectors">
 			<util:map>
