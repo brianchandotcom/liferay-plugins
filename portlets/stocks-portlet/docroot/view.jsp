@@ -20,7 +20,7 @@
 
 <c:choose>
 	<c:when test="<%= windowState.equals(WindowState.NORMAL) %>">
-		<table class="lfr-table ">
+		<table class="lfr-table">
 
 		<%
 		for (int i = 0; i < symbols.length; i++) {
@@ -71,7 +71,7 @@
 	<c:otherwise>
 
 		<%
-		String symbol = ParamUtil.getString(request, "symbol").toUpperCase();
+		String symbol = StringUtil.toUpperCase(ParamUtil.getString(request, "symbol"));
 
 		Stocks stocks = null;
 
