@@ -6,6 +6,10 @@
 		font-weight: bold;
 	}
 
+	.alert-error {
+		display: inline-block;
+	}
+
 	.admin-actions {
 		margin-bottom: 1em;
 	}
@@ -116,17 +120,14 @@
 			border-left: 1px solid #2571AD;
 			display: inline-block;
 			height: 16px;
+			line-height: 1em;
 			margin: .5em 0;
-			padding: 0 .6em 0 .5em;
+			padding: 0 .6em 0 .8em;
 			vertical-align: middle;
 
 			&:first-child {
 				border-left-width: 0;
 				padding-left: 0;
-			}
-
-			img {
-				height: 16px;
 			}
 		}
 
@@ -144,15 +145,15 @@
 			padding: .2em .5em;
 		}
 
-		.aui-toggler-header-collapsed {
+		.toggler-header-collapsed {
 			background: url(@theme_image_path@/portlet/maximize.png) no-repeat 99% 50%;
 		}
 
-		.aui-toggler-header-expanded {
+		.toggler-header-expanded {
 			background: url(@theme_image_path@/portlet/minimize.png) no-repeat 99% 50%;
 		}
 
-		.aui-toggler-content-collapsed {
+		.toggler-content-collapsed {
 			display: block;
 			height: 0;
 			overflow: hidden;
@@ -191,35 +192,44 @@
 	}
 }
 
-.aui-dialog-iframe-popup .so-announcements-portlet {
+.dialog-iframe-popup .so-announcements-portlet {
 	select {
 		margin: 0;
 	}
 
-	.display-date, .distribution-scope, .expiration-date, .priority, .type, .title, .url {
-		.aui-field-content {
-			display: inline-block;
-		}
-	}
+	.control-group {
+		display: inline-block;
+		margin-right: 1em;
+		position: relative;
 
-	.display-date, .distribution-scope, .title, .type {
-		.aui-field-content {
-			margin-right: 1em;
+		&:last-child {
+			margin-right: 0;
 		}
-	}
 
-	.title, .url {
-		.aui-field-input-text {
+		&.field-wrapper {
+			display: block;
+			margin-right: 0;
+		}
+
+		.title, .url {
 			width: 350px;
 		}
+
+		.form-validator-stack {
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+	}
+
+	.date-container .control-group {
+		float: left;
+		margin-bottom: 0;
 	}
 
 	.distribution-scope-container {
 		display: inline;
-
-		.aui-field-content:after {
-			display: none;
-		}
+		min-width: inherit;
 	}
 
 	#_1_WAR_soannouncementsportlet_ocerSearchContainerSearchContainer td.last {
@@ -233,28 +243,12 @@
 }
 
 .portlet-configuration {
-	.modified-notice {
-		color: #090;
-		font-weight: bold;
+	.accordion-group .accordion-heading .accordion-toggle {
+		display: inline-block;
 	}
 
-	#displaySettingsPanel .aui-field-label {
-		display: inline;
-		margin-right: 1em;
-	}
-
-	#announcementsDisplayedPanel {
-		.customize-announcements-displayed {
-			display: block;
-			margin-bottom: 1em;
-
-			.aui-choice-label {
-				font-weight: bold;
-			}
-		}
-		.aui-tabview-list {
-			margin-top: 1em;
-		}
+	.taglib-move-boxes .control-group {
+		min-width: 200px;
 	}
 }
 

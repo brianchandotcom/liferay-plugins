@@ -74,7 +74,7 @@
 
 				var uri = '<liferay-portlet:actionURL name="deleteEntry"></liferay-portlet:actionURL>';
 
-				uri = Liferay.Util.addParams('entryId=' + entryId, uri)
+				uri = Liferay.Util.addParams('<portlet:namespace />entryId=' + entryId, uri)
 
 				A.io.request(
 					uri,
@@ -87,7 +87,7 @@
 									var message = A.one('#<portlet:namespace />errorMessage');
 
 									if (message) {
-										message.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+										message.html('<span class="alert alert-error">' + responseData.message + '</span>');
 									}
 								}
 								else {
@@ -176,14 +176,16 @@
 			{
 				cache: false,
 				dialog: {
-					align: Liferay.Util.Window.ALIGN_CENTER,
-					modal: modal,
-					on: {
-						close: function() {
-							Liferay.Announcements.updateEntries(false, null);
-							Liferay.Announcements.updateEntries(true, null);
+					after: {
+						visibleChange: function(event) {
+							if (!event.currentTarget.get('visible')) {
+								Liferay.Announcements.updateEntries(false, null);
+								Liferay.Announcements.updateEntries(true, null);
+							}
 						}
 					},
+					align: Liferay.Util.Window.ALIGN_CENTER,
+					modal: modal,
 					width: width
 				},
 				id: '<portlet:namespace />Dialog',

@@ -78,7 +78,7 @@ if (!roles.isEmpty()) {
 			<aui:input cssClass="customize-announcements-displayed" id="customizeAnnouncementsDisplayed" name="preferences--customizeAnnouncementsDisplayed--" title="customize-announcements-displayed" type="checkbox" value="<%= customizeAnnouncementsDisplayed %>" />
 
 			<div class="<%= customizeAnnouncementsDisplayed ? "" : "hide" %>" id="<portlet:namespace />announcementsDisplayed">
-				<div class="portlet-msg-info">
+				<div class="alert alert-info">
 					<liferay-ui:message key="general-annnouncements-will-always-be-shown-select-any-other-distribution-scopes-you-would-like-to-display" />
 				</div>
 
@@ -266,12 +266,12 @@ if (!roles.isEmpty()) {
 	var form = A.one('#<portlet:namespace />fm');
 
 	var modified = function(panel) {
-		var modifiedNotice = panel.one('.lfr-panel-title .modified-notice');
+		var modifiedNotice = panel.one('.accordion-heading .modified-notice');
 
 		if (modifiedNotice == null) {
-			var displayTitle = panel.one('.lfr-panel-title');
+			var displayTitle = panel.one('.accordion-heading');
 
-			displayTitle.append('<span class="modified-notice"> (<liferay-ui:message key="modified" />) </span>');
+			displayTitle.append('<span class="accordion-toggle modified-notice"> (<liferay-ui:message key="modified" />) </span>');
 		}
 	}
 
@@ -292,7 +292,7 @@ if (!roles.isEmpty()) {
 		}
 	);
 
-	var selected = form.all('.left-selector-column-content select');
+	var selected = form.all('.left-selector');
 
 	var selectedHTML = "";
 
