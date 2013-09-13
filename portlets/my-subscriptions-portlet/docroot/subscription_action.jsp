@@ -37,10 +37,12 @@ AssetRenderer assetRenderer = MySubscriptionsUtil.getAssetRenderer(subscription.
 	}
 	%>
 
-	<liferay-ui:icon
-		image="view"
-		url="<%= viewURL %>"
-	/>
+	<c:if test="<%= viewURL != null %>">
+		<liferay-ui:icon
+			image="view"
+			url="<%= viewURL %>"
+		/>
+	</c:if>
 
 	<%
 	String displayPopupHREF = null;
@@ -49,7 +51,17 @@ AssetRenderer assetRenderer = MySubscriptionsUtil.getAssetRenderer(subscription.
 		PortletURL displayPopupURL = assetRenderer.getURLView(liferayPortletResponse, LiferayWindowState.POP_UP);
 
 		if (displayPopupURL != null) {
-			displayPopupHREF = "javascript:displayPopup('" + displayPopupURL.toString() + "', 'my-subscription');";
+			StringBundler sb = new StringBundler(6);
+
+			sb.append("javascript:");
+			sb.append(liferayPortletResponse.getNamespace());
+			sb.append("displayPopup('");
+			sb.append(displayPopupURL.toString());
+			sb.append("', '");
+			sb.append(UnicodeLanguageUtil.get(pageContext, "my-subscription"));
+			sb.append("');");
+
+			displayPopupHREF = sb.toString();
 		}
 	}
 	%>
