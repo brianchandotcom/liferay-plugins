@@ -44,9 +44,7 @@
 
 					<tr>
 						<td class="span8">
-							<span>
-								<liferay-ui:message key="<%= userNotificationDefinition.getDescription() %>" />
-							</span>
+							<liferay-ui:message key="<%= userNotificationDefinition.getDescription() %>" />
 						</td>
 
 						<%
@@ -82,7 +80,7 @@
 	</aui:row>
 </div>
 
-<aui:script use="aui-base,aui-io-plugin-deprecated">
+<aui:script use="aui-base,aui-io-request">
 	var userNotifications = A.one('#portlet_<%= PortletKeys.NOTIFICATIONS %>');
 
 	var notificationDelivery = userNotifications.one('.manage-notifications .notification-deliveries');
