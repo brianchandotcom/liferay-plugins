@@ -210,8 +210,7 @@ if (recurrence != null) {
 								recurrenceContainerNode.show();
 							}
 
-							window.<portlet:namespace />updateSummary(summaryNode);
-							window.<portlet:namespace />updateSummary('#<portlet:namespace />summaryPreview');
+							window.<portlet:namespace />updateSummaries();
 						}
 					},
 					bodyContent: recurrenceContainerNode,
@@ -224,14 +223,14 @@ if (recurrence != null) {
 							{
 								on: {
 									click: function() {
-										this.hide();
+										window.<portlet:namespace />recurrenceDialog.hide();
 									}
 								},
 								label: '<liferay-ui:message key="done" />'
 							}
 						]
 					},
-					visible: true,
+					visible: visible,
 					width: 600
 				},
 				title: '<liferay-ui:message key="repeat" />'
@@ -266,7 +265,7 @@ if (recurrence != null) {
 				untilDateDatePicker.set('disabled', false);
 			}
 
-			window.<portlet:namespace />updateSummary('#<portlet:namespace />summaryPreview');
+			window.<portlet:namespace />updateSummaries();
 		},
 		'select,input'
 	);
@@ -293,6 +292,13 @@ if (recurrence != null) {
 		}
 	);
 
+	untilDateDatePicker.after(
+		'selectionChange',
+		function(event) {
+			window.<portlet:namespace />updateSummaries();
+		}
+	);
+
 	window.<portlet:namespace />getSummary = function() {
 		var intervalNode = A.one('#<portlet:namespace />interval');
 		var weekdays = A.all('#<portlet:namespace />view<%= Frequency.WEEKLY %> input:checked');
@@ -310,7 +316,7 @@ if (recurrence != null) {
 			endValue: endValue,
 			frequency: frequencyNode.val(),
 			interval: intervalNode.val(),
-			untilDate: untilDateDatePicker.calendar.get('selectedDates.0'),
+			untilDate: untilDateDatePicker.getDate(),
 			weekdays: selectedWeekdays
 		}
 
@@ -333,7 +339,12 @@ if (recurrence != null) {
 		}
 	};
 
-	<c:if test="<%= recurring %>">
+	window.<portlet:namespace />updateSummaries = function() {
 		window.<portlet:namespace />updateSummary(summaryNode);
+		window.<portlet:namespace />updateSummary('#<portlet:namespace />summaryPreview');
+	}
+
+	<c:if test="<%= recurring %>">
+		window.<portlet:namespace />updateSummaries();
 	</c:if>
 </aui:script>
