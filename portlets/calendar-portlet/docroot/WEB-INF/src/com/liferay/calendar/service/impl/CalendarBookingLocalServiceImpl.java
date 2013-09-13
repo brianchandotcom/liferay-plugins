@@ -402,6 +402,14 @@ public class CalendarBookingLocalServiceImpl
 
 	@Override
 	public List<CalendarBooking> getCalendarBookings(
+			long calendarId, int[] statuses)
+		throws SystemException {
+
+		return calendarBookingPersistence.findByC_S(calendarId, statuses);
+	}
+
+	@Override
+	public List<CalendarBooking> getCalendarBookings(
 			long calendarId, long startTime, long endTime)
 		throws SystemException {
 

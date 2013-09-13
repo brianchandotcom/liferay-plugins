@@ -23,6 +23,7 @@ import com.liferay.calendar.recurrence.Recurrence;
 import com.liferay.calendar.service.CalendarBookingLocalServiceUtil;
 import com.liferay.calendar.service.CalendarBookingServiceUtil;
 import com.liferay.calendar.service.CalendarLocalServiceUtil;
+import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringReader;
 import com.liferay.portal.kernel.io.unsync.UnsyncStringWriter;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -93,8 +94,16 @@ public class CalendarICalDataHandler implements CalendarDataHandler {
 
 	@Override
 	public String exportCalendar(long calendarId) throws Exception {
+
+		int[] statuses = new int[] {
+			CalendarBookingWorkflowConstants.STATUS_APPROVED,
+			CalendarBookingWorkflowConstants.STATUS_MAYBE,
+			CalendarBookingWorkflowConstants.STATUS_PENDING
+		};
+
 		List<CalendarBooking> calendarBookings =
-			CalendarBookingLocalServiceUtil.getCalendarBookings(calendarId);
+			CalendarBookingLocalServiceUtil.getCalendarBookings(
+				calendarId, statuses);
 
 		net.fortuna.ical4j.model.Calendar iCalCalendar = toICalCalendar(
 			calendarBookings);
