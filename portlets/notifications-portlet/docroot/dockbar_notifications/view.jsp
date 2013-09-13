@@ -16,28 +16,30 @@
 
 <%@ include file="/init.jsp" %>
 
-<li class="dockbar-user-notifications dropdown toggle-controls" id="userNotifications">
-	<a class="dropdown-toggle user-notification-link" href="javascript:;">
-		<i class="icon-globe icon-white"></i>
+<%
+int newUserNotificationsCount = UserNotificationEventLocalServiceUtil.getDeliveredUserNotificationEventsCount(themeDisplay.getUserId(), false);
+int unreadUserNotificationsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), false);
+%>
 
-		<span class="hide user-notifications-count" id="userNotificationsCount"></span>
+<li class="dockbar-user-notifications dropdown toggle-controls" id="<portlet:namespace />userNotifications">
+	<a class="dropdown-toggle user-notification-link" href="javascript:;">
+		<span class='user-notifications-count <%= (newUserNotificationsCount > 0) ? "alert" : StringPool.BLANK %>' id="<portlet:namespace />userNotificationsCount"><%= unreadUserNotificationsCount %></span>
 	</a>
 
-	<span class="dropdown-menu"></span>
+	<ul class="dropdown-menu user-notifications-list"></ul>
 
 	<aui:script use="aui-base,aui-io-plugin-deprecated,liferay-poller">
-		var userNotifications = A.one('#userNotifications');
+		var userNotifications = A.one('#<portlet:namespace />userNotifications');
 
-		var userNotificationsCount = userNotifications.one('#userNotificationsCount');
+		var userNotificationsCount = userNotifications.one('#<portlet:namespace />userNotificationsCount');
 
 		var onPollerUpdate = function(response, chunkId) {
-			var count = Number(response.count);
+			var newUserNotificationsCount = Number(response.newUserNotificationsCount);
+			var unreadUserNotificationsCount = Number(response.unreadUserNotificationsCount);
 
-			if (userNotificationsCount) {
-				userNotificationsCount.toggleClass('hide', (count == 0));
+			userNotificationsCount.toggleClass('alert', (newUserNotificationsCount > 0));
 
-				userNotificationsCount.setHTML(count);
-			}
+			userNotificationsCount.setHTML(unreadUserNotificationsCount);
 		}
 
 		A.on(
@@ -65,7 +67,7 @@
 
 				var target = event.target;
 
-				var handle = Liferay.Data['userNotificationsHandle'];
+				var handle = Liferay.Data['<portlet:namespace />userNotificationsHandle'];
 
 				if (!target.hasClass('user-notification') && !target.ancestor('.user-notification')) {
 					currentTarget.toggleClass('open');
@@ -76,7 +78,7 @@
 						handle = currentTarget.on(
 							'clickoutside',
 							function(event) {
-								Liferay.Data['userNotificationsHandle'] = null;
+								Liferay.Data['<portlet:namespace />userNotificationsHandle'] = null;
 
 								handle.detach();
 
@@ -90,7 +92,7 @@
 						handle = null;
 					}
 
-					Liferay.Data['userNotificationsHandle'] = handle;
+					Liferay.Data['<portlet:namespace />userNotificationsHandle'] = handle;
 
 					if (menuOpen) {
 						<portlet:renderURL var="unreadURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
@@ -104,17 +106,29 @@
 						userNotificationsList.io.start();
 
 						A.io.request('<liferay-portlet:actionURL name="setDelivered" />');
+
+						userNotificationsCount.removeClass('alert');
 					}
 
 				}
 				else {
-					Liferay.Data['userNotificationsHandle'] = null;
+					Liferay.Data['<portlet:namespace />userNotificationsHandle'] = null;
 
 					handle.detach();
 
 					currentTarget.removeClass('open');
 				}
 			}
+		);
+
+		userNotificationsList.delegate(
+			'click',
+			function(event) {
+				event.preventDefault();
+
+				Liferay.Notifications.viewNotification(event);
+			},
+			'.user-notification .user-notification-link'
 		);
 	</aui:script>
 </li>
