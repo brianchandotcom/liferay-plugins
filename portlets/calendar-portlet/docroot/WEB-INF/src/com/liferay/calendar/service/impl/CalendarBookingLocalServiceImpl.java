@@ -929,7 +929,8 @@ public class CalendarBookingLocalServiceImpl
 				trashEntryLocalService.addTrashEntry(
 					userId, calendarBooking.getGroupId(),
 					CalendarBooking.class.getName(),
-					calendarBooking.getCalendarBookingId(), oldStatus, null,
+					calendarBooking.getCalendarBookingId(),
+					calendarBooking.getUuid(), null, oldStatus, null,
 					null);
 			}
 			else {
@@ -937,6 +938,7 @@ public class CalendarBookingLocalServiceImpl
 					userId, calendarBooking.getGroupId(),
 					CalendarBooking.class.getName(),
 					calendarBooking.getCalendarBookingId(),
+					calendarBooking.getUuid(), null,
 					CalendarBookingWorkflowConstants.STATUS_PENDING, null,
 					null);
 			}
