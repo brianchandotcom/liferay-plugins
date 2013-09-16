@@ -54,7 +54,7 @@ portletURL.setParameter("tabs2", tabs2);
 	<div style="clear: both;"><!-- --></div>
 </div>
 
-<div class="filter-wrapper aui-helper-hidden">
+<div class="filter-wrapper hide">
 	<%@ include file="/tasks/view_tasks_filter.jspf" %>
 </div>
 
@@ -81,6 +81,7 @@ portletURL.setParameter("tabs2", tabs2);
 			Liferay.Tasks.init(
 				{
 					currentTab: '<%= HtmlUtil.escape(tabs1) %>',
+					namespace: '<portlet:namespace />',
 					taskListURL: '<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/tasks/view_tasks.jsp" /></portlet:renderURL>'
 				}
 			);
