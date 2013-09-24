@@ -25,6 +25,7 @@
 
 <%@ page import="com.liferay.mysubscriptions.util.MySubscriptionsUtil" %><%@
 page import="com.liferay.portal.NoSuchSubscriptionException" %><%@
+page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
 page import="com.liferay.portal.kernel.dao.search.ResultRow" %><%@
 page import="com.liferay.portal.kernel.dao.search.RowChecker" %><%@
 page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
@@ -37,11 +38,13 @@ page import="com.liferay.portal.kernel.util.WebKeys" %><%@
 page import="com.liferay.portal.model.Subscription" %><%@
 page import="com.liferay.portal.security.permission.ResourceActionsUtil" %><%@
 page import="com.liferay.portal.service.SubscriptionLocalServiceUtil" %><%@
+page import="com.liferay.portal.service.permission.SubscriptionPermissionUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
 page import="com.liferay.portal.util.comparator.SubscriptionClassNameIdComparator" %><%@
 page import="com.liferay.portlet.asset.model.AssetRenderer" %>
 
-<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %><%@
+page import="java.util.List" %>
 
 <%@ page import="javax.portlet.PortletURL" %>
 
