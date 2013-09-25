@@ -2,36 +2,25 @@ AUI.add(
 	'gadget-editor-tabs',
 	function(A) {
 		var Lang = A.Lang;
+		var AArray = A.Array;
 
-		var ACTIVE_TAB = 'activeTab';
-
-		var AUI_TAB_LABEL = 'aui-tab-label';
-
-		var BOUNDING_BOX = 'boundingBox';
+		var ACE_EDITOR = 'aceEditor';
 
 		var CONTENT_BOX = 'contentBox';
 
-		var CONTENT_NODE = 'contentNode';
-
 		var DIRTY_INDICATOR_NODE = 'dirtyIndicatorNode';
-
-		var EDITOR = 'editor';
 
 		var ENTRY_ID = 'entryId';
 
-		var HEIGHT = 'height';
+		var FILE_NAME = 'fileName';
 
 		var ID = 'id';
 
 		var IS_DIRTY = 'isDirty';
 
-		var IS_RENDERED = 'isRendered';
+		var STR_EMPTY = '';
 
-		var ITEMS = 'items';
-
-		var LABEL = 'label';
-
-		var TPL_CLOSE_BUTTON = '<a class="gadget-editor-tab-close" href="javascript:;"></a>';
+		var TPL_CLOSE_BUTTON = '<a class="gadget-editor-tab-close icon-remove" href="javascript:;"></a>';
 
 		var TPL_DIV = '<div></div>';
 
@@ -59,11 +48,11 @@ AUI.add(
 								isNew: false,
 								label: label
 							}
-						).render();
+						);
 
-						instance.addTab(tab);
+						instance._addTab(tab);
 
-						instance.adjustEditorHeight();
+						instance.selectTabById(tab.get(ID));
 
 						return tab;
 					},
@@ -83,51 +72,21 @@ AUI.add(
 							{
 								active: true,
 								contentNode: contentNode,
-								editorContent: '',
+								editorContent: STR_EMPTY,
 								entryId: entryId,
 								isDirty: false,
 								isNew: true,
 								label: 'new ' + newTabCounter
 							}
-						).render();
+						);
 
-						instance.addTab(tab);
+						instance._addTab(tab);
 
 						instance._newTabCounter = newTabCounter;
 
-						instance.adjustEditorHeight();
+						instance.selectTabById(tab.get(ID));
 
 						return tab;
-					},
-
-					addTab: function(tab) {
-						var instance = this;
-
-						tab.addTarget(instance);
-
-						tab.fire('add');
-
-						TabViewEditor.superclass.addTab.apply(instance, arguments);
-					},
-
-					adjustEditorHeight: function() {
-						var instance = this;
-
-						var tab = instance.get(ACTIVE_TAB);
-
-						var codeMirrorElement = tab.get(CONTENT_NODE).one('.CodeMirror');
-
-						if (codeMirrorElement) {
-							var contentTabsHeight = instance.get(BOUNDING_BOX).get('clientHeight');
-
-							var listNodeHeight = instance.get('listNode').get('offsetHeight');
-
-							var height =  contentTabsHeight - listNodeHeight;
-
-							codeMirrorElement.setStyle(HEIGHT, height);
-
-							tab.get(EDITOR).refresh();
-						}
 					},
 
 					closeTabById: function(id) {
@@ -136,16 +95,18 @@ AUI.add(
 						var tab = instance.getTabById(id);
 
 						if (tab) {
-							var items = instance.get(ITEMS);
-
-							if (items.length == 1) {
+							if (instance.size() === 1) {
 								instance.addNewTab();
 							}
 
 							instance.removeTabById(id);
-
-							instance.adjustEditorHeight();
 						}
+					},
+
+					getSelectedTab: function() {
+						var instance = this;
+
+						return instance.get('selection');
 					},
 
 					getTabById: function(id) {
@@ -153,15 +114,15 @@ AUI.add(
 
 						var tab = null;
 
-						A.Array.some(
-							instance.get(ITEMS),
+						instance.some(
 							function(item, index, collection) {
-								if (item.get(ID) == id) {
+								if (item.get(ID) === id) {
 									tab = item;
 
 									return true;
 								}
-							}
+							},
+							instance
 						);
 
 						return tab;
@@ -172,32 +133,42 @@ AUI.add(
 
 						var tab = instance.getTabById(id);
 
-						instance.removeTab(tab);
+						var index = instance.indexOf(tab);
 
-						var tabContentNode = tab.get(CONTENT_NODE);
-						var tabViewContentNode = instance.get(CONTENT_NODE);
+						instance.remove(index);
 
-						if (tabViewContentNode.contains(tabContentNode)) {
-							tabViewContentNode.removeChild(tabContentNode);
+						var tabContentBox = tab.get(CONTENT_BOX);
+						var tabViewContentBox = instance.get(CONTENT_BOX);
+
+						if (tabViewContentBox.contains(tabContentBox)) {
+							tabViewContentBox.removeChild(tabContentBox);
 						}
 					},
 
 					selectTabById: function(id) {
 						var instance = this;
 
-						var index = instance.getTabIndex(instance.getTabById(id));
+						var index = instance.indexOf(instance.getTabById(id));
 
-						instance.selectTab(index);
+						instance.selectChild(index);
 					},
 
-					_onActiveTabChange: function(event) {
+					_addTab: function(tab) {
 						var instance = this;
 
-						TabViewEditor.superclass._onActiveTabChange.apply(this, arguments);
+						tab.addTarget(instance);
 
-						if (event.newVal) {
-							instance.adjustEditorHeight();
-						}
+						tab.fire('add');
+
+						TabViewEditor.superclass.add.apply(instance, arguments);
+					},
+
+					_validateAceEditor: function(value) {
+						return (value instanceof A.AceEditor);
+					},
+
+					_validateDirtyIndicatorNode: function(value) {
+						return (value instanceof A.Node);
 					}
 				}
 			}
@@ -208,22 +179,35 @@ AUI.add(
 		var TabEditor = A.Component.create(
 			{
 				ATTRS: {
-					dirtyIndicatorNode: {},
-					editor: {},
+					aceEditor: {
+						validator: '_validateAceEditor'
+					},
+					dirtyIndicatorNode: {
+						validator: '_validateDirtyIndicatorNode'
+					},
+					fileName: {
+						validator: Lang.isString
+					},
 					entryId: {
-						setter: function(v) {
-							return String(v);
+						setter: function(value) {
+							return String(value);
 						},
-						value: ''
+						value: STR_EMPTY
 					},
 					isDirty: {
+						validator: Lang.isBoolean,
 						value: false
 					},
 					isNew: {
+						validator: Lang.isBoolean,
 						value: true
 					},
 					isRendered: {
+						validator: Lang.isBoolean,
 						value: false
+					},
+					label: {
+						validator: Lang.isString
 					}
 				},
 
@@ -237,204 +221,116 @@ AUI.add(
 
 						TabEditor.superclass.bindUI.apply(this, arguments);
 
-						instance.after('idChange', instance._afterIdChange);
-
 						instance.on('isDirtyChange', instance._onIsDirtyChange);
+						instance.on('labelChange', instance._onLabelChange);
 					},
 
 					initializer: function(config) {
 						var instance = this;
 
-						instance._searchMarked = [];
-
 						instance._editorModes = {
-							css: ['css'],
-							gadget: ['xml'],
-							javascript: ['js'],
-							xml: ['html', 'htm', 'shtml', 'shtm', 'xhtml', 'xsml', 'xsl', 'xsd', 'kml', 'wsdl']
+							css: {
+								'css': 1
+							},
+							gadget: {
+								'xml': 1
+							},
+							html: {
+								'htm': 1,
+								'html': 1,
+								'shtm': 1,
+								'shtml': 1,
+								'xhtml': 1
+							},
+							javascript: {
+								'js': 1
+							},
+							xml: {
+								'kml': 1,
+								'wsdl': 1,
+								'xsd': 1,
+								'xsl': 1,
+								'xsml': 1
+							}
 						};
 
-						instance._createEditor(instance.get(CONTENT_NODE), config.editorContent);
+						instance._createEditor(instance.get('panelNode'), config.editorContent);
+
+						instance.updateEditorMode(config.label);
 					},
 
 					renderUI: function() {
 						var instance = this;
 
 						TabEditor.superclass.renderUI.apply(this, arguments);
-
-						instance.get('labelNode').removeClass(AUI_TAB_LABEL);
-						instance.get(CONTENT_BOX).addClass(AUI_TAB_LABEL);
-
-						instance._renderCloseButton();
-						instance._renderDirtyIndicator();
-					},
-
-					getEditorModeFromLabel: function() {
-						var instance = this;
-
-						var label = instance.get(LABEL);
-
-						var mode;
-
-						var extension = label.substr(label.lastIndexOf('.') + 1);
-
-						if (A.Array.indexOf(instance._editorModes.gadget, extension) != -1) {
-							mode = 'gadget';
-						}
-						else if (A.Array.indexOf(instance._editorModes.javascript, extension) != -1) {
-							mode = 'javascript';
-						}
-						else if (A.Array.indexOf(instance._editorModes.css, extension) != -1) {
-							mode = 'css';
-						}
-						else if (A.Array.indexOf(instance._editorModes.xml, extension) != -1) {
-							mode = 'xml';
-						}
-						else {
-							mode = 'text/plain';
-						}
-
-						return mode;
 					},
 
 					searchEditorText: function(searchText, caseInsensitive, replaceText, doReplace) {
 						var instance = this;
 
-						var searched = instance._searched;
-						var searchLastPosition = instance._searchLastPosition;
-						var searchLastQuery = instance._searchLastQuery;
-
 						if (searchText) {
-							var editor = instance.get(EDITOR);
+							var editor = instance.get(ACE_EDITOR).getEditor();
 
-							if (searchLastQuery != searchText) {
-								searchLastPosition = null;
-
-								searched = false;
-							}
-
-							if (!searched) {
-								instance.unmarkSearch();
-
-								var searchMarked = instance._searchMarked;
-
-								var cursor = editor.getSearchCursor(searchText, null, caseInsensitive)
-
-								while (cursor.findNext()) {
-									searchMarked.push(editor.markText(cursor.from(), cursor.to(), 'codemirror-searched'));
-								}
-
-								searched = true;
-							}
-
-							var cursor;
-
-							if (searchLastQuery != searchText) {
-								searchLastPosition = null;
-
-								searched = false;
-
-								cursor = editor.getSearchCursor(searchText, editor.getCursor(), caseInsensitive);
+							if (doReplace) {
+								editor.replace(replaceText);
 							}
 							else {
-								cursor = editor.getSearchCursor(searchText, searchLastPosition, caseInsensitive);
-
-								if (doReplace && cursor.findPrevious()) {
-									editor.replaceRange(replaceText, cursor.from(), cursor.to());
-								}
+								editor.find(searchText);
 							}
-
-							if (!cursor.findNext()) {
-								cursor = editor.getSearchCursor(searchText, null, caseInsensitive);
-
-								if (!cursor.findNext()) {
-									cursor = null;
-								}
-							}
-
-							if (cursor) {
-								editor.setSelection(cursor.from(), cursor.to());
-
-								instance._searchLastQuery = searchText;
-
-								searchLastPosition = cursor.to();
-							}
-
-							instance._searched = searched;
-							instance._searchLastPosition = searchLastPosition;
 						}
 					},
 
-					updateEditorMode: function() {
+					updateEditorMode: function(fileName) {
 						var instance = this;
 
-						var mode = instance.getEditorModeFromLabel();
+						var mode = 'ace/mode/text';
 
-						var editor = instance.get(EDITOR);
+						var extension = fileName.substr(fileName.lastIndexOf('.') + 1);
 
-						editor.setOption('mode', mode);
-					},
+						var editorModes = instance._editorModes;
 
-					unmarkSearch: function() {
-						var instance = this;
-
-						var searchMarked = instance._searchMarked;
-						var length = searchMarked.length;
-
-						for (var i = 0; i < length; ++i) {
-							searchMarked[i]();
+						if (editorModes.css[extension]) {
+							mode = 'ace/mode/css';
+						}
+						else if (editorModes.gadget[extension] || editorModes.html[extension]) {
+							mode = 'ace/mode/html';
+						}
+						else if (editorModes.javascript[extension]) {
+							mode = 'ace/mode/javascript';
+						}
+						else if (editorModes.xml[extension]) {
+							mode = 'ace/mode/xml';
 						}
 
-						instance._searchMarked.length = 0;
-						instance._searched = false;
+						instance.get(ACE_EDITOR).getEditor().getSession().setMode(mode);
 					},
 
-					_afterIdChange: function(event) {
+					_createEditor: function(node, content) {
 						var instance = this;
 
-						instance.get(BOUNDING_BOX).attr(ID, event.newVal);
-					},
-
-					_createEditor: function(node , content) {
-						var instance = this;
-
-						var mode = instance.getEditorModeFromLabel();
-
-						var editor = new CodeMirror(
-							node.getDOM(),
+						var aceEditor = new A.AceEditor(
 							{
-								lineNumbers: true,
-								matchBrackets: true,
-								mode: mode,
-								onChange: function(editor) {
-									instance.set(IS_DIRTY, true);
-									instance.set(IS_RENDERED, false);
+								boundingBox: node,
+								height: '600',
+								value: content,
+								width: '100%'
+							}
+						).render();
 
-									instance.fire('onEditorChange');
-								},
-								onCursorActivity: function(editor) {
-									editor.setLineClass(currentLine, null);
+						var session = aceEditor.getSession();
 
-									currentLine = editor.setLineClass(editor.getCursor().line, 'codemirror-activeline');
-								},
-								onFocus: function(editor) {
-									instance.fire('onEditorFocus');
-								},
-								value: content
+						session.on(
+							'change',
+							function(event) {
+								instance.set(IS_DIRTY, true);
+
+								instance.fire('onEditorChange');
 							}
 						);
 
-						var currentLine = editor.setLineClass(0, 'codemirror-activeline');
+						instance.set(ACE_EDITOR, aceEditor);
 
-						instance.set(EDITOR, editor);
-
-						return editor;
-					},
-
-					_hideIsDirtyIndicator: function() {
-						var instance = this;
-
-						instance.get(DIRTY_INDICATOR_NODE).hide();
+						return aceEditor;
 					},
 
 					_onCloseButtonClick: function(event) {
@@ -453,12 +349,20 @@ AUI.add(
 					_onIsDirtyChange: function(event) {
 						var instance = this;
 
-						if (event.newVal) {
-							instance._showIsDirtyIndicator();
-						}
-						else {
-							instance._hideIsDirtyIndicator();
-						}
+						instance.get(DIRTY_INDICATOR_NODE).toggleView(event.newVal);
+					},
+
+					_onLabelChange: function(event) {
+						var instance = this;
+
+						instance.get(CONTENT_BOX).setHTML(event.newVal);
+
+						instance._renderDirtyIndicator();
+						instance._renderCloseButton();
+
+						instance.set(FILE_NAME, event.newVal);
+
+						event.preventDefault();
 					},
 
 					_renderCloseButton: function() {
@@ -476,22 +380,12 @@ AUI.add(
 
 						var dirtyIndicatorNode = A.Node.create(TPL_DIRTY_INDICATOR);
 
-						dirtyIndicatorNode.hide();
+						dirtyIndicatorNode.toggleView(instance.get(IS_DIRTY));
 
 						instance.get(CONTENT_BOX).prepend(dirtyIndicatorNode);
 
 						instance.set(DIRTY_INDICATOR_NODE, dirtyIndicatorNode);
-					},
-
-					_showIsDirtyIndicator: function() {
-						var instance = this;
-
-						instance.get(DIRTY_INDICATOR_NODE).show();
-					},
-
-					_searched: false,
-					_searchLastPosition: null,
-					_searchLastQuery: null
+					}
 				}
 			}
 		);
@@ -500,6 +394,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-tabs-base']
+		requires: ['aui-ace-editor', 'aui-tabs-base', 'aui-tabview']
 	}
 );

@@ -2,6 +2,7 @@ AUI.add(
 	'gadget-editor-tree',
 	function(A) {
 		var Lang = A.Lang;
+		var AArray = A.Array;
 		var isString = Lang.isString;
 		var isValue = Lang.isValue;
 
@@ -15,7 +16,9 @@ AUI.add(
 
 		var CONTENT_BOX = 'contentBox';
 
-		var CSS_CONTEXT_MENU_OPEN = 'gadget-editor-tree-node-contextmenuicon-open';
+		var CSS_CONTEXT_MENU = 'gadget-editor-tree-node-contextmenuicon icon-sort-down icon-large';
+
+		var CSS_CONTEXT_MENU_OPEN = 'gadget-editor-tree-node-contextmenuicon-open icon-sort-down icon-large';
 
 		var DISABLED = 'disabled';
 
@@ -31,8 +34,6 @@ AUI.add(
 
 		var LABEL = 'label';
 
-		var NEW_FOLDER = 'New Folder';
-
 		var NEW_NODE = 'newNode';
 
 		var OWNER_TREE = 'ownerTree';
@@ -45,6 +46,8 @@ AUI.add(
 
 		var RENDERED = 'rendered';
 
+		var STR_EMPTY = '';
+
 		var TPL_ICON_CONTEXT_MENU = '<a href="javascript:;"></a>';
 
 		var VISIBLE = 'visible';
@@ -56,11 +59,16 @@ AUI.add(
 				NAME: 'tree-view-editor',
 
 				ATTRS: {
-					activeEditable: {},
+					activeEditable: {
+						validator: Lang.isObject
+					},
 
-					publishGadgetPermission: {},
+					publishGadgetPermission: {
+						validator: Lang.isBoolean
+					},
 
 					treeActionOverlayManager: {
+						validator: Lang.isObject,
 						valueFn: function() {
 							return new A.OverlayManager();
 						}
@@ -81,7 +89,7 @@ AUI.add(
 							}
 						);
 
-						if (instance.get(ID) == parentId) {
+						if (instance.get(ID) === parentId) {
 							instance.appendChild(node);
 						}
 						else {
@@ -145,7 +153,7 @@ AUI.add(
 						var fileEntryChildren = [];
 						var folderChildren = [];
 
-						A.Array.each(
+						AArray.each(
 							children,
 							function(item, index, collection) {
 								if (item.isLeaf()) {
@@ -160,7 +168,7 @@ AUI.add(
 						fileEntryChildren.sort(arraySort);
 						folderChildren.sort(arraySort);
 
-						A.Array.each(
+						AArray.each(
 							folderChildren,
 							function(item, index, collection) {
 								if (index != 0) {
@@ -169,10 +177,10 @@ AUI.add(
 							}
 						);
 
-						A.Array.each(
+						AArray.each(
 							fileEntryChildren,
 							function(item, index, collection) {
-								if (index == 0) {
+								if (index === 0) {
 									if (folderChildren.length > 0) {
 										instance.insertAfter(item, folderChildren[folderChildren.length - 1]);
 									}
@@ -199,7 +207,7 @@ AUI.add(
 					editable: {},
 
 					entryId: {
-						value: '',
+						value: STR_EMPTY,
 						setter: function(value) {
 							return String(value);
 						}
@@ -210,7 +218,7 @@ AUI.add(
 					},
 
 					fileEntryURL: {
-						value: ''
+						value: STR_EMPTY
 					},
 
 					gadgetId: {
@@ -276,10 +284,10 @@ AUI.add(
 
 							var ownerTree = instance.get(OWNER_TREE);
 
-							A.Array.each(
+							AArray.each(
 								siblings,
 								function(sibling) {
-									if (sibling.isLeaf() == isLeaf) {
+									if (sibling.isLeaf() === isLeaf) {
 										filteredSiblings.push(sibling);
 									}
 								}
@@ -287,7 +295,7 @@ AUI.add(
 
 							filteredSiblings.sort(arraySort);
 
-							if (filteredSiblings.length == 1) {
+							if (filteredSiblings.length === 1) {
 								if (siblings.length > 1) {
 									if (isLeaf) {
 										var lastNode = siblings[siblings.length - 1];
@@ -328,7 +336,7 @@ AUI.add(
 
 						var ownerTree = instance.get(OWNER_TREE);
 
-						A.Array.each(
+						AArray.each(
 							children,
 							function(item, index, collection) {
 								if (item.isLeaf()) {
@@ -343,7 +351,7 @@ AUI.add(
 						fileEntryChildren.sort(arraySort);
 						folderChildren.sort(arraySort);
 
-						A.Array.each(
+						AArray.each(
 							folderChildren,
 							function(item, index, collection) {
 								if (index != 0) {
@@ -352,10 +360,10 @@ AUI.add(
 							}
 						);
 
-						A.Array.each(
+						AArray.each(
 							fileEntryChildren,
 							function(item, index, collection) {
-								if (index == 0) {
+								if (index === 0) {
 									if (folderChildren.length > 0) {
 										ownerTree.insertAfter(item, folderChildren[folderChildren.length - 1]);
 									}
@@ -399,41 +407,41 @@ AUI.add(
 						event.target.get(EDITABLE).set(ENTRY_ID, event.newVal);
 					},
 
-					_renderButtonItems: function(isLeaf) {
+					_renderButtons: function(isLeaf) {
 						var instance = this;
 
 						if (isLeaf) {
-							var closeContextMenuButton = new A.ButtonItem(
+							var closeContextMenuButton = new A.Button(
 								{
 									cssClass: 'close-file-entry',
 									disabled: true,
-									icon: 'gadgeteditor-close',
-									label: 'Close'
+									icon: 'icon-remove',
+									label: Liferay.Language.get('close')
 								}
 							);
 
-							var publishMenuButton = new A.ButtonItem(
+							var publishMenuButton = new A.Button(
 								{
 									cssClass: 'publish',
 									disabled: !instance.get(OWNER_TREE).get('publishGadgetPermission'),
-									icon: 'gadgeteditor-publish',
-									label: 'Publish'
+									icon: 'icon-bullhorn',
+									label: Liferay.Language.get('publish')
 								}
 							);
 
-							var showURLContextMenuButton = new A.ButtonItem(
+							var showURLContextMenuButton = new A.Button(
 								{
 									cssClass: 'show-url',
-									icon: 'gadgeteditor-url',
-									label: 'Show URL'
+									icon: 'icon-link',
+									label: Liferay.Language.get('show-url')
 								}
 							);
 
-							var unpublishMenuButton = new A.ButtonItem(
+							var unpublishMenuButton = new A.Button(
 								{
 									cssClass: 'unpublish',
-									icon: 'gadgeteditor-publish',
-									label: 'Unpublish'
+									icon: 'icon-bullhorn',
+									label: Liferay.Language.get('unpublish')
 								}
 							);
 
@@ -448,11 +456,11 @@ AUI.add(
 							instance._unpublishMenuButton = unpublishMenuButton;
 						}
 						else {
-							var newFolderContextMenuButton = new A.ButtonItem(
+							var newFolderContextMenuButton = new A.Button(
 								{
 									cssClass: 'add-folder',
-									icon: 'gadgeteditor-addfolder',
-									label: NEW_FOLDER
+									icon: 'icon-folder-close',
+									label: Liferay.Language.get('new-folder')
 								}
 							);
 
@@ -461,21 +469,21 @@ AUI.add(
 							instance._newFolderContextMenuButton = newFolderContextMenuButton;
 						}
 
-						var deleteContextMenuButton = new A.ButtonItem(
+						var deleteContextMenuButton = new A.Button(
 							{
 								cssClass: 'delete-entry',
 								disabled: instance.get(IS_ROOT_NODE),
-								icon: 'gadgeteditor-delete',
-								label: 'Delete'
+								icon: 'icon-remove',
+								label: Liferay.Language.get('delete')
 							}
 						);
 
-						var renameContextMenuButton = new A.ButtonItem(
+						var renameContextMenuButton = new A.Button(
 							{
 								cssClass: 'rename-entry',
 								disabled: instance.get(IS_ROOT_NODE),
-								icon: 'gadgeteditor-rename',
-								label: 'Rename'
+								icon: 'icon-pencil',
+								label: Liferay.Language.get('rename')
 							}
 						);
 
@@ -491,7 +499,7 @@ AUI.add(
 
 						var isLeaf = instance.isLeaf();
 
-						instance._renderButtonItems(isLeaf);
+						instance._renderButtons(isLeaf);
 
 						if (isLeaf) {
 							instance._renderFileEntryContextMenu();
@@ -506,7 +514,7 @@ AUI.add(
 
 						var contextMenuIcon = A.Node.create(TPL_ICON_CONTEXT_MENU);
 
-						contextMenuIcon.addClass('gadget-editor-tree-node-contextmenuicon');
+						contextMenuIcon.addClass(CSS_CONTEXT_MENU);
 
 						instance.get(CONTENT_BOX).append(contextMenuIcon);
 
@@ -529,6 +537,15 @@ AUI.add(
 
 										if (!overlayContext.get(RENDERED)) {
 											contextMenu.render();
+
+											AArray.each(
+												contextMenu.get('children')[0],
+												function(item, index, collection) {
+													if (A.instanceOf(item, A.Button)) {
+														item.render();
+													}
+												}
+											);
 
 											overlayContext.render();
 										}
@@ -597,7 +614,7 @@ AUI.add(
 									instance._contextMenuOverlay.hide();
 								}
 							},
-							'.aui-buttonitem'
+							'button'
 						);
 					},
 
@@ -619,7 +636,7 @@ AUI.add(
 									}
 								},
 								entryId: instance.get(ENTRY_ID),
-								eventType: '',
+								eventType: STR_EMPTY,
 								node: instance.get('labelEl'),
 								on: {
 									startEditing: function(event) {
@@ -657,18 +674,21 @@ AUI.add(
 						instance._updatePublishButtons();
 
 						var children = [
-							instance._closeContextMenuButton,
-							instance._renameContextMenuButton,
-							instance._deleteContextMenuButton,
-							instance._publishMenuButton,
-							instance._unpublishMenuButton,
-							instance._showURLContextMenuButton
+							[
+								STR_EMPTY,
+								'vertical',
+								instance._closeContextMenuButton,
+								instance._renameContextMenuButton,
+								instance._deleteContextMenuButton,
+								instance._publishMenuButton,
+								instance._unpublishMenuButton,
+								instance._showURLContextMenuButton
+							]
 						];
 
 						var contextMenu = new A.Toolbar(
 							{
 								children: children,
-								orientation: 'vertical'
 							}
 						);
 
@@ -683,7 +703,7 @@ AUI.add(
 
 							instance._closeContextMenuButton.set(DISABLED, !fileEntryLoaded);
 
-							instance.get(CONTENT_BOX).toggleClass('aui-tree-node-loaded', fileEntryLoaded);
+							instance.get(CONTENT_BOX).toggleClass('tree-node-loaded', fileEntryLoaded);
 						}
 					},
 
@@ -691,15 +711,18 @@ AUI.add(
 						var instance = this;
 
 						var children = [
-							instance._newFolderContextMenuButton,
-							instance._renameContextMenuButton,
-							instance._deleteContextMenuButton
+							[
+								STR_EMPTY,
+								'vertical',
+								instance._newFolderContextMenuButton,
+								instance._renameContextMenuButton,
+								instance._deleteContextMenuButton
+							]
 						];
 
 						var contextMenu = new A.Toolbar(
 							{
 								children: children,
-								orientation: 'vertical'
 							}
 						);
 
@@ -717,7 +740,7 @@ AUI.add(
 
 						var extension = label.substr(label.lastIndexOf('.') + 1);
 
-						if (extension == 'xml') {
+						if (extension === 'xml') {
 							if (instance.get(GADGET_ID) > 0) {
 								var unpublishPermission = instance.get(PERMISSIONS).unpublishPermission;
 
@@ -749,10 +772,10 @@ AUI.add(
 
 				ATTRS: {
 					entryId: {
-						setter: function(v) {
-							return String(v);
+						setter: function(value) {
+							return String(value);
 						},
-						value: ''
+						value: STR_EMPTY
 					}
 				},
 
@@ -771,10 +794,6 @@ AUI.add(
 						EditableEditor.superclass._defStartEditingFn.apply(this, arguments);
 
 						var inputField = instance._comboBox._field;
-
-						inputField.set('width', AUTO);
-
-						inputField.fire('adjustSize');
 					}
 				}
 			}
@@ -821,6 +840,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-editable', 'aui-overlay-context', 'aui-overlay-manager', 'aui-toolbar', 'aui-tree-node', 'aui-tree-view']
+		requires: ['aui-editable-deprecated', 'aui-overlay-context-deprecated', 'aui-overlay-manager-deprecated', 'aui-toolbar', 'aui-tree-node', 'aui-tree-view']
 	}
 );
