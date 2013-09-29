@@ -14,7 +14,7 @@
  */
 --%>
 
-<button class="close" type="button">&times;</button>
+<aui:button cssClass="icon icon-remove" />
 
 <p>
 	This is a message embedded in a JSP file that can be displayed as a portal message.

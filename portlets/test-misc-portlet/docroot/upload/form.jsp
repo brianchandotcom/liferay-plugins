@@ -20,29 +20,13 @@
 String actionName = ParamUtil.getString(renderRequest, ActionRequest.ACTION_NAME);
 %>
 
-<form action="<portlet:actionURL name="<%= actionName %>" />" enctype="multipart/form-data" method="post">
+<portlet:actionURL name="<%= actionName %>" var="submitURL" />
 
-<table class="lfr-table">
-<tr>
-	<td>
-		<liferay-ui:message key="title" />
-	</td>
-	<td>
-		<input class="lfr-input-text" name="<portlet:namespace />title" type="text" />
-	</td>
-</tr>
-<tr>
-	<td>
-		<liferay-ui:message key="file" />
-	</td>
-	<td>
-		<input name="<portlet:namespace />fileName" size="50" type="file" />
-	</td>
-</tr>
-</table>
+<aui:form action="<%= submitURL %>" method="post" name="fm">
+	<aui:fieldset>
+		<aui:input label="title" name="title" />
+		<aui:input label="file" name="fileName" size="50" type="file" />
+	</aui:fieldset>
 
-<br />
-
-<input type="submit" value="<liferay-ui:message key="save" />" />
-
-</form>
+	<aui:button type="submit" value="save" />
+</aui:form>
