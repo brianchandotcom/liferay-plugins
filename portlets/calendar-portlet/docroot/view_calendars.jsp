@@ -98,7 +98,7 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 		<liferay-ui:message key="your-request-completed-successfully" />
 	</div>
 
-	<aui:form enctype="multipart/form-data" method="post" name="fm">
+	<aui:form enctype="multipart/form-data" method="post" name="importFm">
 		<aui:input id="file" name="file" type="file" />
 		<div class="portlet-msg-help">
 			<liferay-ui:message key="choose-the-file-that-contains-your-events.this-calendar-can-import-event-information-in-ical-format" />
@@ -116,13 +116,7 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 			var A = AUI();
 
 			if (!<portlet:namespace />importDialog) {
-				var form = A.one('#<portlet:namespace />fm');
-
 				var importCalendarContainer = A.one('#<portlet:namespace />importCalendarContainer');
-
-				var portletErrorMessage = A.one('#<portlet:namespace />portletErrorMessage');
-
-				var portletSuccessMessage = A.one('#<portlet:namespace />portletSuccessMessage');
 
 				var buttons = [
 					{
@@ -133,7 +127,7 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 									{
 										dataType: 'json',
 										form: {
-											id: form,
+											id: '<portlet:namespace />importFm',
 											upload: true
 										},
 										method: 'post',
@@ -141,10 +135,17 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 											complete: function() {
 												var responseData = this.get('responseData');
 
+												var portletErrorMessage = A.one('#<portlet:namespace />portletErrorMessage');
+
+												var portletSuccessMessage = A.one('#<portlet:namespace />portletSuccessMessage');
+
 												var error = responseData && responseData.error;
 
 												if (error) {
-													portletErrorMessage.html(error).show();
+													portletErrorMessage.show();
+													portletSuccessMessage.hide();
+
+													portletErrorMessage.html(error);
 												}
 												else {
 													portletErrorMessage.hide();
@@ -160,24 +161,33 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 					}
 				];
 
+				var buttonClose = [
+					{
+						on: {
+							click: function() {
+								<portlet:namespace />importDialog.hide();
+							}
+						},
+						cssClass: 'close',
+						label: "\u00D7",
+						render: true
+					}
+				];
+
 				<portlet:namespace />importDialog = Liferay.Util.Window.getWindow(
 					{
 						dialog: {
 							bodyContent: importCalendarContainer.html(),
 							toolbars: {
-								footer: buttons
-							}
-						},
-						on: {
-							visibleChange: function(event) {
-								if (event.newVal) {
-									importCalendarContainer.show();
-								}
-								else {
-									form.reset();
-
-									portletSuccessMessage.hide();
-									portletErrorMessage.hide();
+								footer: buttons,
+								header: buttonClose
+							},
+							modal: true,
+							on: {
+								visibleChange: function(event) {
+									A.one('#<portlet:namespace />importFm').reset();
+									A.one('#<portlet:namespace />portletErrorMessage').hide();
+									A.one('#<portlet:namespace />portletSuccessMessage').hide();
 								}
 							}
 						},
