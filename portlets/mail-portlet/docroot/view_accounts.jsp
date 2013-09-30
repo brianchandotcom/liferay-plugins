@@ -22,40 +22,43 @@ long accountId = ParamUtil.getLong(request, "accountId");
 MailManager mailManager = MailManager.getInstance(request);
 %>
 
-<c:if test="<%= mailManager != null %>">
-	<aui:layout>
-
+<c:if test="<%= Validator.isNotNull(mailManager) %>">
+	<div class="row-fluid">
 		<%
 		List<Account> mailAccounts = mailManager.getAccounts();
 		%>
 
-		<c:if test="<%= !mailAccounts.isEmpty() %>">
-			<aui:column>
+		<c:choose>
+			<c:when test="<%= !mailAccounts.isEmpty() %>">
+				<div class="span9">
+					<ul class="nav nav-pills">
 
-				<ul class="aui-tabview-list">
+						<%
+						for (Account mailAccount : mailAccounts) {
+						%>
 
-					<%
-					for (Account mailAccount : mailAccounts) {
-					%>
+							<li class="tab <%= (mailAccount.getAccountId() == accountId) ? "active" : "" %>">
+								<aui:a cssClass="folders-link" data-accountId="<%= mailAccount.getAccountId() %>" data-inboxFolderId="<%= mailAccount.getInboxFolderId() %>" href="javascript:;" label="<%= mailAccount.getAddress() %>" />
+							</li>
 
-						<li class="aui-tab <%= (mailAccount.getAccountId() == accountId) ? "aui-tab-active" : "" %>">
-							<span class="aui-tab-content">
-								<span class="aui-tab-label">
-									<aui:a cssClass="folders-link" data-accountId="<%= mailAccount.getAccountId() %>" data-inboxFolderId="<%= mailAccount.getInboxFolderId() %>" href="javascript:;" label="<%= mailAccount.getAddress() %>" />
-								</span>
-							</span>
-						</li>
+						<%
+						}
+						%>
 
-					<%
-					}
-					%>
+					</ul>
+				</div>
 
-				</ul>
-			</aui:column>
-		</c:if>
-
-		<aui:column>
-			<aui:button onClick="Liferay.Mail.addAccount();" value="add-mail-account" />
-		</aui:column>
-	</aui:layout>
+				<div class="span3 text-right">
+					<aui:button cssClass="add-account-button" onClick="Liferay.Mail.addAccount();" value="add-mail-account" />
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="span12">
+					<div class="alert alert-info">
+						<aui:a href="javascript:;" onClick="Liferay.Mail.addAccount();"><liferay-ui:message key="add-a-new-email-account" /></aui:a>
+					</div>
+				</div>
+			</c:otherwise>
+		</c:choose>
+	</div>
 </c:if>

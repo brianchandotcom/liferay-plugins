@@ -1,83 +1,33 @@
 @import "compass";
 
 .mail-portlet {
-	#controlContainer {
-		background-color: #D7F1FF;
-		border: 1px solid #88C5D9;
-		padding: 0.7em;
+	.controls-list {
+		padding: 8px 0;
 	}
 
 	#messageContentContainer {
 		background-color: #FFF;
-		border: 1px solid #C8C9CA;
+		border: solid #C8C9CA;
+		border-width: 1px 0;
 		margin: 1em 0;
 		min-height: 2em;
 		overflow: auto;
 		padding: 1em;
-
-		.pagination, .search {
-			float: right;
-		}
 	}
 
-	.folder-list {
-		min-width: 40%;
-
-		.action {
-			text-align: right;
-		}
-	}
-
-	.message-list {
+	#messagesContainer .nav {
 		width: 100%;
+	}
 
-		thead tr {
-			background-color: #D1D6DC;
-		}
+	.add-account-button {
+		white-space: nowrap;
+	}
 
-		th {
-			padding: 5px 0;
-		}
+	.unread {
+		font-weight: bold;
 
-		.check {
-			width: 5%;
-		}
-
-		.address {
-			width: 20%;
-		}
-
-		.subject {
-			width: 55%;
-		}
-
-		.date {
-			width: 15%;
-		}
-
-		.attachments {
-			width: 5%;
-		}
-
-		tr {
-			&.results-row.no-hover td {
-				padding: 1px 0;
-			}
-
-			&.unread {
-				font-weight: bold;
-			}
-
-			&.important {
-				color: #A00;
-				font-weight: normal;
-			}
-		}
-
-		td div {
-			height: 18px;
-			overflow: hidden;
-			@include word-break(break-all);
+		td {
+			background-color: #FFF;
 		}
 	}
 
@@ -95,26 +45,25 @@
 		font-style: italic;
 	}
 
-	.message-count {
-		float: right;
-	}
-
 	.message-header {
-		border: 1px solid #C8C9CA;
+		background-color: #FAFAFA;
+		color: #999;
 		margin: 1em 0;
+	}
 
-		td {
-			padding: 2px 1em;
+	.message-pager {
+		li {
+			line-height: 20px;
 		}
 
-		.message-header-label {
-			background-color: #D1D6DC;
-			padding-left: 3em;
-			text-align: right;
+		.message-count {
+			display: inline-block;
+			margin: 5px 10px;
+			vertical-align: middle;
 		}
 	}
 
-	.recipient-fields .aui-field-input {
+	.recipient-fields .field-input {
 		width: 95%;
 	}
 
@@ -124,7 +73,7 @@
 		text-decoration: underline;
 	}
 
-	.add-folder-container .aui-field-content, .search .aui-field-content {
+	.add-folder-container .field-content, .search .field-content {
 		display: inline-block;
 	}
 }

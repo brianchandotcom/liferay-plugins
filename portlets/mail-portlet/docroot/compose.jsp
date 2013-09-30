@@ -80,34 +80,37 @@ else {
 	<aui:input name="messageId" type="hidden" value="<%= messageId %>" />
 	<aui:input name="attachmentCount" type="hidden" value="0" />
 
-	<aui:layout>
-		<aui:column columnWidth="60" cssClass="recipient-fields">
-			<aui:input name="to" value="<%= to %>" />
+	<aui:fieldset>
+		<div class="row-fluid">
+			<div class="recipient-fields span7">
+				<aui:input name="to" value="<%= to %>" />
 
-			<aui:input name="cc" value="<%= cc %>" />
+				<aui:input name="cc" value="<%= cc %>" />
 
-			<aui:input name="bcc" />
+				<aui:input name="bcc" />
 
-			<aui:input name="subject" value="<%= subject %>" />
-		</aui:column>
-		<aui:column columnWidth="40">
-			<aui:field-wrapper label="attachments">
-				<div class="attachments"></div>
+				<aui:input name="subject" value="<%= subject %>" />
+			</div>
 
-				<div>
-					<a class="add-attachment" href="javascript:;"><liferay-ui:message key="add-attachment" /></a>
-				</div>
+			<div class="span5">
+				<aui:field-wrapper label="attachments">
+					<div class="attachments"></div>
+
+					<div>
+						<a class="add-attachment" href="javascript:;"><liferay-ui:message key="add-attachment" /></a>
+					</div>
+				</aui:field-wrapper>
+			</div>
+		</div>
+
+		<div class="body-editor">
+			<aui:field-wrapper label="body">
+				<liferay-ui:input-editor editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>" toolbarSet="email" width="100%" />
+
+				<aui:input name="body" type="hidden" />
 			</aui:field-wrapper>
-		</aui:column>
-	</aui:layout>
-
-	<div class="body-editor">
-		<aui:field-wrapper label="body">
-			<liferay-ui:input-editor editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>" toolbarSet="email" width="100%" />
-
-			<aui:input name="body" type="hidden" />
-		</aui:field-wrapper>
-	</div>
+		</div>
+	</aui:fieldset>
 
 	<aui:button-row>
 		<aui:button cssClass="send-message" data-messageId="<%= messageId %>" value="send" />
@@ -124,7 +127,7 @@ else {
 	}
 </aui:script>
 
-<aui:script use="aui-base,aui-io,aui-io-upload">
+<aui:script use="aui-base,aui-io-deprecated,aui-io-upload">
 	var form = A.one('#<portlet:namespace />fm');
 
 	form.one('.send-message').on(
@@ -142,7 +145,7 @@ else {
 				{
 					dataType: 'json',
 					form: {
-						id: form.getDOM(),
+						id: form.getDOMNode(),
 						upload: true
 					},
 					method: 'POST',
@@ -179,7 +182,7 @@ else {
 				{
 					dataType: 'json',
 					form: {
-						id: form.getDOM()
+						id: form.getDOMNode()
 					},
 					on: {
 						failure: function(event, id, obj) {
