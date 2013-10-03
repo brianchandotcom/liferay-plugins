@@ -70,4 +70,8 @@ public interface CalendarImporterLocalService extends BaseLocalService,
 	public void importCalEvents()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public void updatePortletIds()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }
