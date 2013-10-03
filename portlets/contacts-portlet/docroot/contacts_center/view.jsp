@@ -87,7 +87,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 			<aui:layout cssClass="toolbar">
 				<div class="filter-container">
 					<aui:layout cssClass="contact-group-filter">
-						<aui:button name="checkAll" type="checkbox" />
+						<aui:input label="" name="checkAll" type="checkbox" />
 
 						<c:if test="<%= !userPublicPage %>">
 							<aui:select cssClass="contact-group-filter-select" inlineField="true" label="" name="filterBy">
@@ -129,18 +129,16 @@ portletURL.setWindowState(WindowState.NORMAL);
 				</div>
 
 				<c:if test="<%= !showOnlySiteMembers %>">
-					<button class="add-contact aui-buttonitem-content yui3-widget aui-component aui-buttonitem aui-state-default aui-buttonitem-icon-label" id="<portlet:namespace/>add-contact" type="button" value="add-contact">
-						<span class="aui-buttonitem-icon aui-icon aui-icon-add"></span>
-
-						<span class="aui-buttonitem-label"><liferay-ui:message key="add-contact" /></span>
-					</button>
+					<aui:button cssClass="add-contact btn-primary" icon="icon-plus-sign" id='<%= renderResponse.getNamespace() + "addContact" %>' value="add-contact" />
 				</c:if>
 			</aui:layout>
 
 			<aui:layout cssClass="contacts-result-container lfr-app-column-view">
 				<aui:column columnWidth="30" cssClass="contacts-list" first="<%= true %>">
-					<div class="lfr-search-column contacts-search aui-search-bar">
+					<div class="lfr-search-column contacts-search search-bar">
 						<aui:input cssClass="search-input" id="name" label="" name="name" size="30" type="text" value="<%= HtmlUtil.escape(name) %>" />
+
+						<i class="icon-search"></i>
 					</div>
 
 					<aui:layout cssClass='<%= userPublicPage ? "contacts-result personal-contact-list" : "contacts-result" %>'>
@@ -286,7 +284,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 				<aui:column columnWidth="70" cssClass="contacts-container">
 					<div id="<portlet:namespace/>userToolbarButtons"><!-- --></div>
 
-					<div class="aui-helper-hidden" id="<portlet:namespace/>contactCenterToolbarButtons">
+					<div class="hide" id="<portlet:namespace/>contactCenterToolbarButtons">
 						<liferay-util:include page="/contacts_center/contacts_center_toolbar.jsp" servletContext="<%= application %>" />
 					</div>
 
@@ -370,7 +368,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 			</aui:layout>
 		</aui:form>
 
-		<aui:script use="aui-dialog,aui-io,aui-io-plugin,datatype-number,liferay-contacts-center,liferay-form">
+		<aui:script use="aui-io-deprecated,aui-io-plugin-deprecated,aui-loading-mask-deprecated,datatype-number,liferay-contacts-center,liferay-form,liferay-util-window">
 			var searchInput = A.one('.contacts-portlet #<portlet:namespace />name');
 
 			var contactsCenter = new Liferay.ContactsCenter(
@@ -410,6 +408,12 @@ portletURL.setWindowState(WindowState.NORMAL);
 			contactsResult.delegate(
 				'click',
 				function(event) {
+					var contactsContainer = A.one('.contacts-portlet .contacts-container');
+
+					contactsContainer.plug(A.LoadingMask);
+
+					contactsContainer.loadingmask.show();
+
 					var node = event.currentTarget;
 
 					A.io.request(
@@ -417,9 +421,13 @@ portletURL.setWindowState(WindowState.NORMAL);
 						{
 							after: {
 								failure: function(event, id, obj) {
+									contactsContainer.loadingmask.hide();
+
 									contactsCenter.showMessage(false);
 								},
 								success: function(event, id, obj) {
+									contactsContainer.loadingmask.hide();
+
 									contactsCenter.renderContent(this.get('responseData'), true);
 								}
 							}
@@ -450,10 +458,10 @@ portletURL.setWindowState(WindowState.NORMAL);
 								}
 							},
 							data: {
-								end: end,
-								filterBy: contactFilterSelect.get('value') || '<%= ContactsConstants.FILTER_BY_DEFAULT %>',
-								keywords: searchInput.get('value'),
-								start: start
+								<portlet:namespace />end: end,
+								<portlet:namespace />filterBy: contactFilterSelect.get('value') || '<%= ContactsConstants.FILTER_BY_DEFAULT %>',
+								<portlet:namespace />keywords: searchInput.get('value'),
+								<portlet:namespace />start: start
 							},
 							dataType: 'json'
 						}
@@ -486,7 +494,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 									}
 								},
 								data: {
-									userId: userId
+									<portlet:namespace />userId: userId
 								},
 								dataType: 'json'
 							}
@@ -520,8 +528,8 @@ portletURL.setWindowState(WindowState.NORMAL);
 								}
 							},
 							data: {
-								showDetailView: true,
-								userId: userId
+								<portlet:namespace />showDetailView: true,
+								<portlet:namespace />userId: userId
 							}
 						}
 					);
@@ -533,7 +541,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 				var contactsCenterHome = A.one('.contacts-portlet .contacts-center-home');
 
 				<c:if test="<%= !showOnlySiteMembers %>">
-					var addContact = A.one('#<portlet:namespace/>add-contact');
+					var addContact = A.one('#<portlet:namespace/>addContact');
 
 					if (addContact) {
 						addContact.on(

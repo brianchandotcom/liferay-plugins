@@ -133,14 +133,18 @@ if (selUser != null) {
 								var message = A.one('#<portlet:namespace />errorMessage');
 
 								if (message) {
-									message.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+									message.html('<span class="alert alert-error">' + responseData.message + '</span>');
 								}
 							}
 							else {
+								Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
+
 								var redirect = responseData.redirect;
 
 								if (redirect) {
-									location.href = redirect;
+									var topWindow = Liferay.Util.getTop();
+
+									topWindow.location.href = redirect;
 								}
 							}
 						}

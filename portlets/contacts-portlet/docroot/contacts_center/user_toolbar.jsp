@@ -43,7 +43,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 			<liferay-ui:icon
 				cssClass="action remove-connection"
-				image="../social/remove_coworker"
+				image="../aui/minus-sign"
 				label="<%= true %>"
 				message="disconnect"
 				method="get"
@@ -53,7 +53,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 		<c:when test="<%= SocialRequestLocalServiceUtil.hasRequest(themeDisplay.getUserId(), User.class.getName(), themeDisplay.getUserId(), SocialRelationConstants.TYPE_BI_CONNECTION, user2.getUserId(), SocialRequestConstants.STATUS_PENDING) %>">
 			<liferay-ui:icon
 				cssClass="disabled"
-				image="../social/coworker"
+				image="../aui/user"
 				label="<%= true %>"
 				message="connection-requested"
 			/>
@@ -67,7 +67,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 			<liferay-ui:icon
 				cssClass="action add-connection"
-				image="../social/add_coworker"
+				image="../aui/plus-sign"
 				label="<%= true %>"
 				message="connect"
 				method="get"
@@ -86,7 +86,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 			<liferay-ui:icon
 				cssClass="action unfollow"
-				image="../social/unfollow"
+				image="../aui/minus-sign"
 				label="<%= true %>"
 				message="unfollow"
 				method="get"
@@ -102,7 +102,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 			<liferay-ui:icon
 				cssClass="action follow"
-				image="../social/follow"
+				image="../aui/plus-sign"
 				label="<%= true %>"
 				message="follow"
 				method="get"
@@ -122,7 +122,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 		<liferay-ui:icon
 			cssClass="action unblock"
-			image="../social/unblock"
+			image="../aui/ok"
 			label="<%= true %>"
 			message="unblock"
 			method="get"
@@ -138,7 +138,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 		<liferay-ui:icon
 			cssClass="action block"
-			image="../social/block"
+			image="../aui/ban-circle"
 			label="<%= true %>"
 			message="block"
 			method="get"
@@ -155,7 +155,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 	<liferay-ui:icon
 		cssClass="send-message"
-		image="../mail/compose"
+		image="../aui/envelope"
 		label="<%= true %>"
 		message="message"
 		onClick="<%= messageTaglibOnClick %>"
@@ -168,7 +168,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 </portlet:resourceURL>
 
 <liferay-ui:icon
-	image="export"
+	image="../aui/save"
 	label="<%= true %>"
 	message="vcard"
 	url="<%= exportURL %>"
@@ -182,20 +182,22 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 
 		var uri = '<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /><portlet:param name="redirect" value="<%= redirectURL %>" /></liferay-portlet:renderURL>';
 
-		new A.Dialog(
+		Liferay.Util.Window.getWindow(
 			{
-				align: Liferay.Util.Window.ALIGN_CENTER,
-				cssClass: 'private-messaging-portlet',
-				destroyOnClose: true,
-				modal: true,
-				title: '<%= UnicodeLanguageUtil.get(pageContext, "new-message") %>',
-				width: 600
+				dialog: {
+					align: Liferay.Util.Window.ALIGN_CENTER,
+					cssClass: 'private-messaging-portlet',
+					destroyOnClose: true,
+					modal: true,
+					width: 600
+				},
+				title: '<%= UnicodeLanguageUtil.get(pageContext, "new-message") %>'
 			}
 		).plug(
 			A.Plugin.IO,
 			{
 				data: {
-					userIds: <%= user2.getUserId() %>
+					<portlet:namespace />userIds: <%= user2.getUserId() %>
 				},
 				uri: uri
 			}
@@ -203,7 +205,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 	}
 </aui:script>
 
-<aui:script use="aui-base,aui-dialog,aui-dialog-iframe">
+<aui:script use="aui-base,liferay-util-window,aui-dialog-iframe-deprecated">
 	<liferay-portlet:renderURL var="viewSummaryURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="mvcPath" value="/contacts_center/view_user.jsp" />
 		<portlet:param name="userId" value="<%= String.valueOf(user2.getUserId()) %>" />

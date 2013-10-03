@@ -17,19 +17,19 @@ AUI.add(
 
 		var TPL_BLOCK_IMG =
 			'<span>' +
-				'<img class="icon" alt="" src="' + themeDisplay.getPathThemeImages() + '/social/block.png">' +
+				'<i class="icon-ban-circle"></i>' +
 				'<span class="taglib-text">' + Liferay.Language.get('blocked') + '</span>' +
 			'</span>';
 
 		var TPL_CONNECTED_IMG =
 			'<span>' +
-				'<img class="icon" alt="" src="' + themeDisplay.getPathThemeImages() + '/social/coworker.png">' +
+				'<i class="icon-user"></i>' +
 				'<span class="taglib-text">' + Liferay.Language.get('connected') + '</span>' +
 			'</span>';
 
 		var TPL_CONNECTION_REQUESTED_IMG =
 			'<span>' +
-				'<img class="icon" alt="" src="' + themeDisplay.getPathThemeImages() + '/social/coworker.png">' +
+				'<i class="icon-user"></i>' +
 				'<span class="taglib-text">' + Liferay.Language.get('connection-requested') + '</span>' +
 			'</span>';
 
@@ -77,7 +77,7 @@ AUI.add(
 
 		var TPL_FOLLOWING_IMG =
 			'<span>' +
-				'<img class="icon" alt="" src="' + themeDisplay.getPathThemeImages() + '/social/following.png">' +
+				'<i class="icon-user"></i>' +
 				'<span class="taglib-text">' + Liferay.Language.get('following') + '</span>' +
 			'</span>';
 
@@ -163,7 +163,7 @@ AUI.add(
 
 						instance._contactsCheckBox = A.one('.contacts-result');
 
-						instance._checkAll = instance.byId('checkAll');
+						instance._checkAll = instance.byId('checkAllCheckbox');
 
 						instance._checkAll.on('click', instance._onCheckAll, instance);
 
@@ -325,7 +325,7 @@ AUI.add(
 						var contacts = data.contacts;
 
 						if (contacts && (contacts.length > 0)) {
-							if (!instance._detailUserView.hasClass('aui-helper-hidden') && (contacts.length == 1)) {
+							if (!instance._detailUserView.hasClass('hide') && (contacts.length == 1)) {
 								var user = contacts[0].user;
 
 								instance._updateUserToolBar(user);
@@ -361,14 +361,14 @@ AUI.add(
 									message = instance._defaultMessageSuccess;
 								}
 
-								instance._messageContainer.html('<span class="portlet-msg-success">' + message + '</span>');
+								instance._messageContainer.html('<span class="alert alert-success">' + message + '</span>');
 							}
 							else {
 								if (!message || (message == '')) {
 									message = instance._defaultMessageError;
 								}
 
-								instance._messageContainer.html('<span class="portlet-msg-error">' + message + '</span>');
+								instance._messageContainer.html('<span class="alert alert-error">' + message + '</span>');
 							}
 						}
 					},
@@ -393,7 +393,7 @@ AUI.add(
 
 						instance._popup.show();
 
-						instance._popup.set('title', title);
+						instance._popup.titleNode.html(title);
 
 						instance._popup.io.set('uri', uri);
 
@@ -427,7 +427,7 @@ AUI.add(
 						instance._buttonUnBlockUserIds.length = 0;
 						instance._buttonUnFollowUserIds.length = 0;
 
-						A.all('.contacts-portlet .aui-toolbar-content button').hide();
+						A.all('.contacts-container-content .toolbar-content button').hide();
 
 						if (instance._sendMessageButton) {
 							instance._sendMessageButton.show();
@@ -450,22 +450,24 @@ AUI.add(
 								},
 								on: {
 									request: function(event) {
-										var contactFilterContainer = A.one('.contacts-portlet .contact-group-filter');
+										var contactFilter = A.one('#' + instance._namespace + 'filterBy');
 
 										var filterBy = '0';
 
-										if (contactFilterContainer) {
-											filterBy = contactFilterContainer.one('select').get('value');
+										if (contactFilter) {
+											filterBy = contactFilter.get('value');
 										}
+
+										var eventData = {};
 
 										var data = event.request;
 
-										event.cfg.data = {
-											end: data.end || instance._maxResultCount,
-											filterBy: data.filterBy || filterBy,
-											keywords: data.keywords || '',
-											start: data.start || 0
-										}
+										eventData[instance._namespace + 'end'] = data[instance._namespace + 'end'] || instance._maxResultCount;
+										eventData[instance._namespace + 'filterBy'] = data[instance._namespace + 'filterBy'] || filterBy;
+										eventData[instance._namespace + 'keywords'] = data[instance._namespace + 'keywords'] || '';
+										eventData[instance._namespace + 'start'] = data[instance._namespace + 'start'] || 0;
+
+										event.cfg.data = eventData;
 									}
 								},
 								source: url
@@ -488,9 +490,11 @@ AUI.add(
 								listNode: contactsResult,
 								minQueryLength: 0,
 								requestTemplate: function(query) {
-									return {
-										keywords: query
-									}
+									var data = {};
+
+									data[instance._namespace + 'keywords'] = query;
+
+									return data;
 								},
 								resultTextLocator: function(response) {
 									var result = '';
@@ -523,6 +527,7 @@ AUI.add(
 						if (confirm(confirmMessageText)) {
 							var actionURL = new Liferay.PortletURL.createURL(config.baseActionURL);
 
+							actionURL.setParameter('entryId', contact.entryId);
 							actionURL.setParameter('javax.portlet.action', 'deleteEntry');
 							actionURL.setPortletId('1_WAR_contactsportlet');
 							actionURL.setWindowState('NORMAL');
@@ -537,9 +542,6 @@ AUI.add(
 										success: function(event, id, obj) {
 											location.href = contact.redirect;
 										}
-									},
-									data: {
-										entryId: contact.entryId
 									}
 								}
 							);
@@ -566,12 +568,14 @@ AUI.add(
 						var instance = this;
 
 						return function(query) {
-							return {
-								end: instance._maxResultCount,
-								filterBy: filterBy,
-								keywords: query,
-								start: 0
-							}
+							var data = {};
+
+							data[instance._namespace + 'end'] = instance._maxResultCount;
+							data[instance._namespace + 'filterBy'] = filterBy;
+							data[instance._namespace + 'keywords'] = query;
+							data[instance._namespace + 'start'] = 0;
+
+							return data;
 						};
 					},
 
@@ -581,17 +585,19 @@ AUI.add(
 						if (!instance._popup) {
 							var contactsPortlet = A.one('.contacts-portlet');
 
-							instance._popup = new A.Dialog(
+							instance._popup = Liferay.Util.Window.getWindow(
 								{
-									align: {
-										node: contactsPortlet,
-										points: ['tc', 'tc']
-									},
-									constrain2view: true,
-									cssClass: 'contact-dialog',
-									modal: true,
-									resizable: false,
-									width: 500
+									dialog: {
+										align: {
+											node: contactsPortlet,
+											points: ['tc', 'tc']
+										},
+										constrain2view: true,
+										cssClass: 'contact-dialog',
+										modal: true,
+										resizable: false,
+										width: 500
+									}
 								}
 							).plug(
 								A.Plugin.IO,
@@ -615,10 +621,14 @@ AUI.add(
 							if (contacts.size() > 0) {
 								contacts.set('checked', true);
 
+								var uri = config.getSelectedContactsURL;
+
 								var userIds = contacts.val();
 
+								uri = Liferay.Util.addParams(instance._namespace + 'userIds=' + userIds.join(), uri) || uri;
+
 								A.io.request(
-									config.getSelectedContactsURL,
+									uri,
 									{
 										after: {
 											failure: function(event, id, obj) {
@@ -627,9 +637,6 @@ AUI.add(
 											success: function(event, id, obj) {
 												instance.addContactResults(this.get('responseData'));
 											}
-										},
-										data: {
-											userIds: userIds.join()
 										},
 										dataType: 'json'
 									}
@@ -711,15 +718,19 @@ AUI.add(
 								boundingBox: instance._userToolbar,
 								children: [
 									{
-										handler: function(event) {
-											instance._editEntry(contact);
+										on: {
+											click: function(event) {
+												instance._editEntry(contact);
+											}
 										},
 										icon: 'edit',
 										label: Liferay.Language.get('edit')
 									},
 									{
-										handler: function(event) {
-											instance._deleteEntry(contact);
+										on: {
+											click: function(event) {
+												instance._deleteEntry(contact);
+											}
 										},
 										icon: 'delete',
 										label: Liferay.Language.get('delete')
@@ -741,7 +752,7 @@ AUI.add(
 
 						if ((results.length == 0) && displayMessage) {
 							buffer.push(
-								'<div class="empty">' + Liferay.Language.get('there-are-no-results') + '</div>'
+								'<div class="empty"><i class="icon-warning-sign"></i>' + Liferay.Language.get('there-are-no-results') + '</div>'
 							);
 						}
 						else {
@@ -1114,6 +1125,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog','aui-io-plugin','aui-toolbar','autocomplete-base','datasource-io','json-parse','liferay-portlet-base','liferay-portlet-url']
+		requires: ['liferay-util-window','aui-io-plugin-deprecated','aui-toolbar','autocomplete-base','datasource-io','json-parse','liferay-portlet-base','liferay-portlet-url']
 	}
 );

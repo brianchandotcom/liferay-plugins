@@ -53,18 +53,24 @@ request.setAttribute("view_user.jsp-user", user2);
 					<div class="lfr-asset-metadata">
 						<c:if test="<%= connection %>">
 							<span class="lfr-asset-icon lfr-asset-connection<%= (following || follower) ? StringPool.BLANK : " last" %>">
+								<i class="icon-user"></i>
+
 								<liferay-ui:message key="connection" />
 							</span>
 						</c:if>
 
 						<c:if test="<%= following %>">
 							<span class="lfr-asset-icon lfr-asset-following<%= follower ? StringPool.BLANK : " last" %>">
+								<i class="icon-user"></i>
+
 								<liferay-ui:message key="following" />
 							</span>
 						</c:if>
 
 						<c:if test="<%= follower %>">
 							<span class="lfr-asset-icon lfr-asset-follower last">
+								<i class="icon-user"></i>
+
 								<liferay-ui:message key="follower" />
 							</span>
 						</c:if>
@@ -92,29 +98,29 @@ request.setAttribute("view_user.jsp-user", user2);
 							%>
 
 							<liferay-ui:icon
-								cssClass='<%= showConnectedRequestedIcon ? "disabled" : "disabled aui-helper-hidden" %>'
-								image="../social/coworker"
+								cssClass='<%= showConnectedRequestedIcon ? "action disabled" : "action disabled hide" %>'
+								image="../aui/user"
 								label="<%= true %>"
 								message="connection-requested"
 							/>
 
 							<liferay-ui:icon
-								cssClass='<%= showConnectedIcon ? "connected" : "connected aui-helper-hidden" %>'
-								image="../social/coworker"
+								cssClass='<%= showConnectedIcon ? "action connected" : "action connected hide" %>'
+								image="../aui/user"
 								label="<%= true %>"
 								message="connected"
 							/>
 
 							<liferay-ui:icon
-								cssClass='<%= showFollowingIcon ? "following" : "following aui-helper-hidden" %>'
-								image="../social/following"
+								cssClass='<%= showFollowingIcon ? "action following" : "action following hide" %>'
+								image="../aui/user"
 								label="<%= true %>"
 								message="following"
 							/>
 
 							<liferay-ui:icon
-								cssClass='<%= showBlockIcon ? "block" : "block aui-helper-hidden" %>'
-								image="../social/block"
+								cssClass='<%= showBlockIcon ? "action block" : "action block hide" %>'
+								image="../aui/ban-circle"
 								label="<%= true %>"
 								message="blocked"
 							/>
@@ -127,6 +133,8 @@ request.setAttribute("view_user.jsp-user", user2);
 			</aui:layout>
 
 			<div class="lfr-detail-info field-group" data-sectionId="details" data-title="<%= LanguageUtil.get(pageContext, "details") %>">
+				<i class="icon-edit"></i>
+
 				<c:if test="<%= showIcon %>">
 					<div class="lfr-contact-thumb">
 						<a href="<%= user2.getDisplayURL(themeDisplay) %>"><img alt="<%= user2.getFullName() %>" src="<%= user2.getPortraitURL(themeDisplay) %>" /></a>
@@ -274,6 +282,8 @@ request.setAttribute("view_user.jsp-user", user2);
 								<c:choose>
 									<c:when test="<%= !assetTags.isEmpty() %>">
 										<div class="field-group" data-sectionId="categorization" data-title="<%= LanguageUtil.get(pageContext, "tags") %>">
+											<i class="icon-edit"></i>
+
 											<ul class="user-tags">
 
 												<%
@@ -350,36 +360,35 @@ request.setAttribute("view_user.jsp-user", user2);
 			var <portlet:namespace />openDialog = function(event) {
 				var node = event.currentTarget;
 
-				var uri = '<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/contacts_center/edit_user_dialogs.jsp" /></portlet:renderURL>';
+				var uri = '<portlet:renderURL windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/contacts_center/edit_user_dialogs.jsp" /></portlet:renderURL>';
 
 				if (node.getAttribute('data-sectionId')) {
-					uri = Liferay.Util.addParams('curSectionId=' + node.getAttribute('data-sectionId'), uri) || uri;
+					uri = Liferay.Util.addParams('<portlet:namespace />curSectionId=' + node.getAttribute('data-sectionId'), uri) || uri;
 				}
 
 				if (node.getAttribute('data-extension')) {
-					uri = Liferay.Util.addParams('extension=' + node.getAttribute('data-extension'), uri) || uri;
+					uri = Liferay.Util.addParams('<portlet:namespace />extension=' + node.getAttribute('data-extension'), uri) || uri;
 				}
 
-				var dialog = new A.Dialog(
+				var dialog = Liferay.Util.Window.getWindow(
 					{
-						align: {
-							node: null,
-							points: ['tc', 'tc']
+						dialog: {
+							align: {
+								node: null,
+								points: ['tc', 'tc']
+							},
+							constrain2view: true,
+							cssClass: 'profile-dialog',
+							destroyOnClose: true,
+							modal: true,
+							resizable: false,
+							width: 500
 						},
-						constrain2view: true,
-						cssClass: 'profile-dialog',
-						destroyOnClose: true,
-						modal: true,
-						resizable: false,
+						id: '<portlet:namespace />Dialog',
 						title: node.getAttribute('data-title'),
-						width: 500
-					}
-				).plug(
-					A.Plugin.IO,
-					{
 						uri: uri
 					}
-				).render();
+				)
 			};
 	</aui:script>
 </c:if>

@@ -36,8 +36,8 @@ if (entryId > 0) {
 <liferay-portlet:actionURL name="updateEntry" var="updateEntryURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
 
 <aui:form action="<%= updateEntryURL %>" method="post" name="addEntry" onSubmit="event.preventDefault();">
-	<aui:input name="redirect" type="hidden"  value="<%= redirect %>" />
-	<aui:input name="entryId" type="hidden"  value="<%= entryId %>" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="entryId" type="hidden" value="<%= entryId %>" />
 
 	<aui:model-context bean="<%= entry %>" model="<%= Entry.class %>" />
 
@@ -52,7 +52,7 @@ if (entryId > 0) {
 	</aui:button-row>
 </aui:form>
 
-<aui:script use="aui-io-request">
+<aui:script use="aui-io-request-deprecated">
 	Liferay.Util.focusFormField(document.<portlet:namespace />addEntry.<portlet:namespace />fullName);
 
 	var form = A.one('#<portlet:namespace />addEntry');
@@ -61,7 +61,7 @@ if (entryId > 0) {
 		var errorMessage = A.one('#<portlet:namespace/>errorMessage');
 
 		if (errorMessage) {
-			errorMessage.html('<span class="portlet-msg-error"><liferay-ui:message key="an-error-occurred-while-retrieving-the-users-information" unicode="<%= true %>" /></span>');
+			errorMessage.html('<span class="alert alert-error"><liferay-ui:message key="an-error-occurred-while-retrieving-the-users-information" unicode="<%= true %>" /></span>');
 		}
 	}
 
@@ -96,7 +96,7 @@ if (entryId > 0) {
 								var message = A.one('#<portlet:namespace />errorMessage');
 
 								if (message) {
-									message.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+									message.html('<span class="alert alert-error">' + responseData.message + '</span>');
 								}
 							}
 							else {
@@ -107,10 +107,10 @@ if (entryId > 0) {
 						}
 					},
 					data: {
-						end: end,
-						filterBy: contactFilterSelect.get('value') || '<%= ContactsConstants.FILTER_BY_DEFAULT %>',
-						keywords: searchInput.get('value'),
-						start: 0
+						<portlet:namespace />end: end,
+						<portlet:namespace />filterBy: contactFilterSelect.get('value') || '<%= ContactsConstants.FILTER_BY_DEFAULT %>',
+						<portlet:namespace />keywords: searchInput.get('value'),
+						<portlet:namespace />start: 0
 					},
 					dataType: 'json',
 					form: {
