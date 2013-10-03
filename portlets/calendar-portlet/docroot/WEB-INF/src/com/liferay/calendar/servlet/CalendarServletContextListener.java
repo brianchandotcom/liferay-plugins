@@ -75,6 +75,8 @@ public class CalendarServletContextListener
 
 				CalendarImporterLocalServiceUtil.importCalEvents();
 
+				CalendarImporterLocalServiceUtil.updatePortletIds();
+
 				if (_log.isInfoEnabled()) {
 					StringBundler sb = new StringBundler(6);
 

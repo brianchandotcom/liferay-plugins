@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.InfrastructureUtil;
 import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.persistence.GroupPersistence;
+import com.liferay.portal.service.persistence.LayoutPersistence;
 import com.liferay.portal.service.persistence.ResourceActionPersistence;
 import com.liferay.portal.service.persistence.ResourceBlockPersistence;
 import com.liferay.portal.service.persistence.ResourcePermissionPersistence;
@@ -447,6 +448,62 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	 */
 	public void setGroupPersistence(GroupPersistence groupPersistence) {
 		this.groupPersistence = groupPersistence;
+	}
+
+	/**
+	 * Returns the layout local service.
+	 *
+	 * @return the layout local service
+	 */
+	public com.liferay.portal.service.LayoutLocalService getLayoutLocalService() {
+		return layoutLocalService;
+	}
+
+	/**
+	 * Sets the layout local service.
+	 *
+	 * @param layoutLocalService the layout local service
+	 */
+	public void setLayoutLocalService(
+		com.liferay.portal.service.LayoutLocalService layoutLocalService) {
+		this.layoutLocalService = layoutLocalService;
+	}
+
+	/**
+	 * Returns the layout remote service.
+	 *
+	 * @return the layout remote service
+	 */
+	public com.liferay.portal.service.LayoutService getLayoutService() {
+		return layoutService;
+	}
+
+	/**
+	 * Sets the layout remote service.
+	 *
+	 * @param layoutService the layout remote service
+	 */
+	public void setLayoutService(
+		com.liferay.portal.service.LayoutService layoutService) {
+		this.layoutService = layoutService;
+	}
+
+	/**
+	 * Returns the layout persistence.
+	 *
+	 * @return the layout persistence
+	 */
+	public LayoutPersistence getLayoutPersistence() {
+		return layoutPersistence;
+	}
+
+	/**
+	 * Sets the layout persistence.
+	 *
+	 * @param layoutPersistence the layout persistence
+	 */
+	public void setLayoutPersistence(LayoutPersistence layoutPersistence) {
+		this.layoutPersistence = layoutPersistence;
 	}
 
 	/**
@@ -1226,6 +1283,25 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the social activity remote service.
+	 *
+	 * @return the social activity remote service
+	 */
+	public com.liferay.portlet.social.service.SocialActivityService getSocialActivityService() {
+		return socialActivityService;
+	}
+
+	/**
+	 * Sets the social activity remote service.
+	 *
+	 * @param socialActivityService the social activity remote service
+	 */
+	public void setSocialActivityService(
+		com.liferay.portlet.social.service.SocialActivityService socialActivityService) {
+		this.socialActivityService = socialActivityService;
+	}
+
+	/**
 	 * Returns the social activity persistence.
 	 *
 	 * @return the social activity persistence
@@ -1353,6 +1429,12 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	protected com.liferay.portal.service.GroupService groupService;
 	@BeanReference(type = GroupPersistence.class)
 	protected GroupPersistence groupPersistence;
+	@BeanReference(type = com.liferay.portal.service.LayoutLocalService.class)
+	protected com.liferay.portal.service.LayoutLocalService layoutLocalService;
+	@BeanReference(type = com.liferay.portal.service.LayoutService.class)
+	protected com.liferay.portal.service.LayoutService layoutService;
+	@BeanReference(type = LayoutPersistence.class)
+	protected LayoutPersistence layoutPersistence;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)
 	protected com.liferay.portal.service.ResourceLocalService resourceLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceActionLocalService.class)
@@ -1435,6 +1517,8 @@ public abstract class CalendarImporterLocalServiceBaseImpl
 	protected RatingsStatsPersistence ratingsStatsPersistence;
 	@BeanReference(type = com.liferay.portlet.social.service.SocialActivityLocalService.class)
 	protected com.liferay.portlet.social.service.SocialActivityLocalService socialActivityLocalService;
+	@BeanReference(type = com.liferay.portlet.social.service.SocialActivityService.class)
+	protected com.liferay.portlet.social.service.SocialActivityService socialActivityService;
 	@BeanReference(type = SocialActivityPersistence.class)
 	protected SocialActivityPersistence socialActivityPersistence;
 	private String _beanIdentifier;

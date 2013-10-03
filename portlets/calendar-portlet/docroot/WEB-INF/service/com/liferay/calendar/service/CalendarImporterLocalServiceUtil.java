@@ -76,6 +76,12 @@ public class CalendarImporterLocalServiceUtil {
 		getService().importCalEvents();
 	}
 
+	public static void updatePortletIds()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().updatePortletIds();
+	}
+
 	public static void clearService() {
 		_service = null;
 	}
