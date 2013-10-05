@@ -123,6 +123,10 @@
 			}
 		}
 
+		.scheduler-event {
+			z-index: 300;
+		}
+
 		.scheduler-base-views {
 			position: absolute;
 		}
