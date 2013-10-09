@@ -11,10 +11,31 @@
 			// read our portlet ID (injected in view.jsp)
 			instance._portletId = A.one('#chat-video-portlet-id').val();
 
+			// video buddies list
+			instance._buddies = [];
+
 			// increased polling rate
 			instance._increasedPollingRate = false;
 			instance._increasedPollingRateDelayMs = 500;
 			instance._increasedPollingCountMs = 0;
+
+			// initialize master manager
+			var ringingElemDom = A.one('#webrtc-ringtone').getDOM();
+			var outRingingElemDom = A.one('#webrtc-out-ringtone').getDOM();
+			var tryDisableAudio = function(domElem) {
+				/* We do this here because when modifying the playback state
+				 * of an HTMLMediaElement, it can throw some exceptions when
+				 * not ready for some reason. Since it's not loaded anyway,
+				 * we don't care about the raised exception since it's not
+				 * playing and we want to disable it anyway.
+				 */
+				try {
+					domElem.pause();
+					domElem.currentTime = 0;
+				} catch(e) {
+					// probably not ready yet: not playing anyway
+				}
+			};
 
 			// add poller listener for video chat
 			Liferay.Poller.addListener(instance._portletId, instance._onPollerUpdate, instance);
@@ -25,11 +46,41 @@
 					Liferay.Poller.cancelOverriddenDelay();
 				}
 			);
+
+			// send reset message manually (testing)
+			instance._send({
+				'msgType': 'reset'
+			});
+			instance._send({
+				'msgType': 'setAvailability',
+				'isAvailable': true
+			});
 		},
 
 		_onPollerUpdate: function(response, chunk) {
 			console.log('poller');
 			console.log(response);
+		},
+
+		_send: function(payload) {
+			var instance = this;
+
+			/* The provided payload is not specific to this chat portlet.
+			 * We need to craft it a little more. To do so, we add
+			 * the true 'webrtc' member so that the server knows it's a
+			 * WebRTC message. We also prepend the 'webrtc' prefix to
+			 * each member to avoid name collisions.
+			 *
+			 * Example: 'dstUserId' -> webrtcDstUserId'
+			 */
+			for (var paramName in payload) {
+				var newParamName = 'webrtc' + paramName.charAt(0).toUpperCase() + paramName.slice(1);
+				payload[newParamName] = payload[paramName];
+				delete payload[paramName];
+			}
+
+			// send using poller
+			Liferay.Poller.submitRequest(instance._portletId, payload);
 		}
 	};
 

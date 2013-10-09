@@ -79,6 +79,7 @@ public class ChatVideoPollerProcessor extends BasePollerProcessor {
         } else if (webRtcMsgType.equals("updatePresence")) {
             this.webRtcManager.updatePresence(srcUserId);
         } else {
+            // safely ignore unknown messages
             // TODO: error
         }
     }
@@ -89,8 +90,10 @@ public class ChatVideoPollerProcessor extends BasePollerProcessor {
 
         // initialize response
         JSONObject webrtcObj = JSONFactoryUtil.createJSONObject();
-        JSONArray mailsObj = JSONFactoryUtil.createJSONArray();
+        JSONArray mailsArray = JSONFactoryUtil.createJSONArray();
+        JSONArray clientsArray = JSONFactoryUtil.createJSONArray();
 
+        // get client mails
         if (client != null) {
             List<WebRtcClient.Mailbox.Mail> clientMails = client.getOugoingMailbox().popAll();
             for (Mailbox.Mail mail : clientMails) {
@@ -100,12 +103,20 @@ public class ChatVideoPollerProcessor extends BasePollerProcessor {
                 mailObj.put("type", type);
                 mailObj.put("msg", jsonMessage);
                 mailObj.put("fromUserId", mail.getFromUserId());
-                mailsObj.put(mailObj);
+                mailsArray.put(mailObj);
             }
         }
 
-        // mails
-        webrtcObj.put("mails", mailsObj);
+        // copy list of connected clients (except me) to outgoing array
+        for (Long uid : this.webRtcManager.getAvailableClientsIds()) {
+            if (uid != req.getUserId()) {
+                clientsArray.put(uid);
+            }
+        }
+
+        // set parameters
+        webrtcObj.put("mails", mailsArray);
+        webrtcObj.put("clients", clientsArray);
         resp.setParameter("webrtc", webrtcObj);
     }
 

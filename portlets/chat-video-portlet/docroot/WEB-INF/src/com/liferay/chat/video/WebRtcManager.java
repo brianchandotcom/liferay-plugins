@@ -53,6 +53,19 @@ public class WebRtcManager {
         }
     }
 
+    public List<Long> getAvailableClientsIds() {
+        ArrayList<Long> uids = new ArrayList<Long>();
+        synchronized (this.clients) {
+            for (Long uid : this.clients.keySet()) {
+                if (this.clientIsAvailable(uid)) {
+                    uids.add(uid);
+                }
+            }
+        }
+
+        return uids;
+    }
+
     public WebRtcClient getClient(long userId) {
         synchronized (this.clients) {
             return this.getClientUnsafe(userId);
