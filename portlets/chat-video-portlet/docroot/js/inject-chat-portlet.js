@@ -18,6 +18,13 @@
 
 			// add poller listener for video chat
 			Liferay.Poller.addListener(instance._portletId, instance._onPollerUpdate, instance);
+			Liferay.bind(
+				'sessionExpired',
+				function(event) {
+					Liferay.Poller.removeListener(instance._portletId);
+					Liferay.Poller.cancelOverriddenDelay();
+				}
+			);
 		},
 
 		_onPollerUpdate: function(response, chunk) {

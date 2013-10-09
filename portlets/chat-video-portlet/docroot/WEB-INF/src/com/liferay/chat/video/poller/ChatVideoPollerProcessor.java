@@ -118,8 +118,6 @@ public class ChatVideoPollerProcessor extends BasePollerProcessor {
 
 	@Override
 	protected void doSend(PollerRequest pollerRequest) throws Exception {
-        if (this.getBoolean(pollerRequest, "webrtc")) {
-            this.processWebRtcMessage(pollerRequest);
-        }
+        this.processWebRtcMessage(pollerRequest);
 	}
 }
