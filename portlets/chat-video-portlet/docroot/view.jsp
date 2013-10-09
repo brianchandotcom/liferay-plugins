@@ -27,4 +27,12 @@
 		<script defer="defer" src="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/js/webrtc.js", portlet.getTimestamp()) %>" type="text/javascript"></script>
 		<script defer="defer" src="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/js/inject-chat-portlet.js", portlet.getTimestamp()) %>" type="text/javascript"></script>
 	</liferay-util:html-bottom>
+
+	<div class="portlet-chat-video" id="chat-video">
+		<audio preload loop id="webrtc-ringtone" src="<%= PortalUtil.getStaticResourceURL(request, request.getContextPath() + "/audio/webrtc-ringtone.ogg", portlet.getTimestamp()) %>"></audio>
+		<audio preload loop id="webrtc-out-ringtone" src="<%= PortalUtil.getStaticResourceURL(request, request.getContextPath() + "/audio/webrtc-out-ringtone.ogg", portlet.getTimestamp()) %>"></audio>
+		<div id="webrtc-video-overlay" class="aui-helper-hidden"></div>
+		<div id="webrtc-mute-ctrl" class="unmuted aui-helper-hidden"></div>
+		<input id="chat-video-portlet-id" type="hidden" value="<%= portletDisplay.getId() %>" />
+	</div>
 </c:if>

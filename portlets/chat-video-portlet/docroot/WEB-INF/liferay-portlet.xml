@@ -4,6 +4,7 @@
 <liferay-portlet-app>
 	<portlet>
 		<portlet-name>1</portlet-name>
+		<poller-processor-class>com.liferay.chat.video.poller.ChatVideoPollerProcessor</poller-processor-class>
 		<use-default-template>false</use-default-template>
 		<css-class-wrapper>chat-video-portlet</css-class-wrapper>
 		<system>true</system>

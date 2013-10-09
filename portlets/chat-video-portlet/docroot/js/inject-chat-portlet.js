@@ -1,4 +1,31 @@
 ;(function(A) {
+	Liferay.namespace('Chat');
+
+	Liferay.Chat.Video = {
+		init: function(chatManager) {
+			var instance = this;
+
+			// save chat manager reference
+			instance._chatManager = chatManager;
+
+			// read our portlet ID (injected in view.jsp)
+			instance._portletId = A.one('#chat-video-portlet-id').val();
+
+			// increased polling rate
+			instance._increasedPollingRate = false;
+			instance._increasedPollingRateDelayMs = 500;
+			instance._increasedPollingCountMs = 0;
+
+			// add poller listener for video chat
+			Liferay.Poller.addListener(instance._portletId, instance._onPollerUpdate, instance);
+		},
+
+		_onPollerUpdate: function(response, chunk) {
+			console.log('poller');
+			console.log(response);
+		}
+	};
+
 	Liferay.on(
 		'chatPortletReady',
 		function(event) {
@@ -6,38 +33,10 @@
 
 			A.on(
 				function(options) {
-					console.log('Manager#init');
+					Liferay.Chat.Video.init(this);
 				},
 				Liferay.Chat.Manager,
 				'init'
-			);
-			A.on(
-				function(options) {
-					console.log('Manager#send');
-				},
-				Liferay.Chat.Conversation,
-				'send'
-			);
-			A.on(
-				function(panelName, panel) {
-					console.log('Manager#_addPanel');
-				},
-				Liferay.Chat.Manager,
-				'_addPanel'
-			);
-			A.on(
-				function(reponse, chunkId) {
-					console.log('Manager#_onPollerUpdate');
-				},
-				Liferay.Chat.Manager,
-				'_onPollerUpdate'
-			);
-			A.on(
-				function(buddies) {
-					console.log('Manager#_updateBuddies');
-				},
-				Liferay.Chat.Manager,
-				'_updateBuddies'
 			);
 			A.on(
 				function(event) {
