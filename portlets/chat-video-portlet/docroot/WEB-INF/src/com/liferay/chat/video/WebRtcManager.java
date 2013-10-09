@@ -87,7 +87,6 @@ public class WebRtcManager {
     }
 
     public void updatePresence(long userId) {
-        System.out.println("updatePresence: " + userId);
         synchronized (this.clients) {
             WebRtcClient client = this.getClientUnsafe(userId);
             if (client == null) {
@@ -124,8 +123,6 @@ public class WebRtcManager {
     }
 
     private void checkConnectionsStates() {
-        System.out.println("### checking connections states... " + this.clients.size());
-
         synchronized(this.clients) {
             // verify each client
             for (WebRtcClient client : this.clients.values()) {
@@ -142,7 +139,6 @@ public class WebRtcManager {
                             client.removeBilateralConnection(otherClient);
                             WebRtcManager.notifyClientLostConnection(client, otherClient, "timeout");
                             WebRtcManager.notifyClientLostConnection(otherClient, client, "timeout");
-                            System.out.println(String.format("### TIMEOUT (%d -> %d)", client.getUserId(), otherClient.getUserId()));
                         }
                     }
                 }
@@ -151,7 +147,6 @@ public class WebRtcManager {
     }
 
     private void checkPresences() {
-        System.out.println("### checking presences... " + this.clients.size());
         long currentTimeMs = System.currentTimeMillis();
 
         synchronized(this.clients) {
@@ -159,7 +154,6 @@ public class WebRtcManager {
             for (long userId : presUserIds) {
                 long tsMs = this.getClientUnsafe(userId).getTs();
                 long diff = currentTimeMs - tsMs;
-                System.out.println("userId=" + userId + ", diff=" + diff);
                 if (diff > WebRtcManager.PRESENCE_TIMEOUT_MS) {
                     // expired: reset this client and remove it
                     this.resetUserUnsafe(userId);
