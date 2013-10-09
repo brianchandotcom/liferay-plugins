@@ -1,0 +1,208 @@
+
+/* WebRTC extension below */
+video.local {
+	-webkit-transform: scale(-1, 1);
+	transform: scale(-1, 1);
+}
+div.webrtc-remote-video-container {
+	height: 165px;
+	border-radius: 3px;
+	background: black;
+	video.local {
+		display: none;
+	}
+}
+div.webrtc-remote-video {
+	position: relative;
+	cursor: pointer;
+	height: 100%;
+	width: 100%;
+	video.remote {
+		width: 100%;
+		height: 100%;
+	}
+	video.local {
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+		height: 160px;
+		width: auto;
+	}
+}
+span.webrtc-inchat-msg {
+	color: #C70E42;
+}
+p.webrtc-inchat-msg-top b.name {
+	background: #C70E42;
+	color: #fff; 
+}
+div.webrtc-ctrl {
+	background: #20272b;
+	padding: 10px;
+	position: relative;
+	height: 24px;
+	div.webrtc-msg {
+		position: absolute;
+		height: 24px;
+		padding: 5px 0px 5px 35px;
+		width: 90px;
+		top: 5px;
+		left: 0;
+		div.working {
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			width: 24px;
+			height: 24px;
+			background-image: url(../images/webrtc/working.gif);
+			background-repeat: no-repeat;
+		}
+		div.msg {
+			color: #c5ccd0;
+			height: 100%;
+			overflow: hidden;
+			line-height: 110%;
+		}
+	}
+}
+div.webrtc-ctrl div.webrtc-buttons {
+	a {
+		width: 24px;
+		height: 24px;
+		margin-left: 5px;
+		&.accept {
+			background-image: url(../images/webrtc/btns-24/btn-accept.png);
+			&:hover {
+				background-image: url(../images/webrtc/btns-24/btn-accept-hover.png);
+			}
+		}
+		&.hangup {
+			background-image: url(../images/webrtc/btns-24/btn-hangup.png);
+			&:hover {
+				background-image: url(../images/webrtc/btns-24/btn-hangup-hover.png);
+			}
+		}
+		&.call {
+			background-image: url(../images/webrtc/btns-24/btn-call.png);
+			&:hover {
+				background-image: url(../images/webrtc/btns-24/btn-call-hover.png);
+			}
+		}
+		&.mike {
+			&.unmuted {
+				background-image: url(../images/webrtc/btns-24/btn-mic-on.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-24/btn-mic-on-hover.png);
+				}
+			}
+			&.muted {
+				background-image: url(../images/webrtc/btns-24/btn-mic-off.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-24/btn-mic-off-hover.png);
+				}
+			}
+		}
+		&.fullscreen {
+			&.off {
+				background-image: url(../images/webrtc/btns-24/btn-fullscreen.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-24/btn-fullscreen-hover.png);
+				}
+			}
+			&.on {
+				background-image: url(../images/webrtc/btns-24/btn-fullscreen-exit.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-24/btn-fullscreen-exit-hover.png);
+				}
+			}
+		}
+	}
+}
+#webrtc-video-overlay div.webrtc-buttons {
+	position: absolute;
+	left: 50%;
+	bottom: 10px;
+	margin-left: -68px;
+	padding: 10px 0px 10px 10px;
+	background: rgba(white, 0.5);
+	border-radius: 3px;
+	a {
+		width: 32px;
+		height: 32px;
+		margin-right: 10px;
+		&.accept {
+			background-image: url(../images/webrtc/btns-32/btn-accept.png);
+			&:hover {
+				background-image: url(../images/webrtc/btns-32/btn-accept-hover.png);
+			}
+		}
+		&.hangup {
+			background-image: url(../images/webrtc/btns-32/btn-hangup.png);
+			&:hover {
+				background-image: url(../images/webrtc/btns-32/btn-hangup-hover.png);
+			}
+		}
+		&.call {
+			background-image: url(../images/webrtc/btns-32/btn-call.png);
+			&:hover {
+				background-image: url(../images/webrtc/btns-32/btn-call-hover.png);
+			}
+		}
+		&.mike {
+			&.unmuted {
+				background-image: url(../images/webrtc/btns-32/btn-mic-on.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-32/btn-mic-on-hover.png);
+				}
+			}
+			&.muted {
+				background-image: url(../images/webrtc/btns-32/btn-mic-off.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-32/btn-mic-off-hover.png);
+				}
+			}
+		}
+		&.fullscreen {
+			&.off {
+				background-image: url(../images/webrtc/btns-32/btn-fullscreen.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-32/btn-fullscreen-hover.png);
+				}
+			}
+			&.on {
+				background-image: url(../images/webrtc/btns-32/btn-fullscreen-exit.png);
+				&:hover {
+					background-image: url(../images/webrtc/btns-32/btn-fullscreen-exit-hover.png);
+				}
+			}
+		}
+	}
+}
+div.webrtc-buttons a {
+	display: block;
+	float: right;
+	background-repeat: no-repeat;
+}
+.buddy-list .panel-content img.webrtc-enabled-icon {
+	margin-left: 8px;
+	display: inline;
+	float: none;
+	height: auto;
+	width: auto;
+	padding: 0;
+	background: none;
+	position: relative;
+	top: -2px;
+}
+#webrtc-video-overlay {
+	background: black;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2000;
+	video.local {
+		display: block;
+	}
+}
