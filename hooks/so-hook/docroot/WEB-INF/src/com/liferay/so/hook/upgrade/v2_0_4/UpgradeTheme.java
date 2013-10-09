@@ -17,23 +17,16 @@
 
 package com.liferay.so.hook.upgrade.v2_0_4;
 
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.model.LayoutSet;
-import com.liferay.portal.service.GroupLocalServiceUtil;
-import com.liferay.portal.service.LayoutSetLocalServiceUtil;
-
-import java.util.List;
 
 /**
  * @author Jonathan Lee
  */
-public class UpgradeGroup extends UpgradeProcess {
+public class UpgradeTheme extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
+		// This is a Social Office EE upgrade.
 	}
 
 }
