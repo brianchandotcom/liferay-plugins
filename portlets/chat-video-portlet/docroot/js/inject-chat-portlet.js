@@ -152,7 +152,7 @@
 			 * WebRTC message. We also prepend the 'webrtc' prefix to
 			 * each member to avoid name collisions.
 			 *
-			 * Example: 'dstUserId' -> webrtcDstUserId'
+			 * Example: 'dstUserId' -> 'webrtcDstUserId'
 			 */
 			for (var paramName in payload) {
 				var newParamName = 'webrtc' + paramName.charAt(0).toUpperCase() + paramName.slice(1);
