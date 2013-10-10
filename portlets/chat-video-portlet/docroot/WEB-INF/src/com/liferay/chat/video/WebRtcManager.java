@@ -171,7 +171,6 @@ public class WebRtcManager {
             for (long userId : presUserIds) {
                 long tsMs = this.getClientUnsafe(userId).getTs();
                 long diff = currentTimeMs - tsMs;
-                System.out.println("user " + userId + " diff " + diff);
                 if (diff > WebRtcManager.PRESENCE_TIMEOUT_MS) {
                     // expired: reset this client and remove it
                     this.resetUserUnsafe(userId);
