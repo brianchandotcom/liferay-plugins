@@ -130,6 +130,14 @@
 			for (var i in response.webrtc.clients) {
 				instance._buddies[response.webrtc.clients[i]] = true;
 			}
+			for (var i in instance._chatManager._chatSessions) {
+				var session = instance._chatManager._chatSessions[i];
+				if (session._panelId in instance._buddies) {
+					session._setWebRtcAvailable(instance.isUserWebRtcAvailable(session._panelId));
+				} else {
+					session._setWebRtcAvailable(false);
+				}
+			}
 
 			// process video messages
 			instance._webRtcManager.processWebRtcMsg(response.webrtc);
@@ -196,6 +204,10 @@
 
 		isUserWebRtcAvailable: function(userId) {
 			var instance = this;
+
+			if (userId == null || userId == undefined) {
+				return false;
+			}
 
 			return (instance._buddies[userId] != undefined);
 		},
