@@ -54,7 +54,7 @@ div.webrtc-ctrl {
 			left: 5px;
 			width: 24px;
 			height: 24px;
-			background-image: url(../images/webrtc/working.gif);
+			background-image: url(../images/working.gif);
 			background-repeat: no-repeat;
 		}
 		div.msg {
@@ -71,48 +71,48 @@ div.webrtc-ctrl div.webrtc-buttons {
 		height: 24px;
 		margin-left: 5px;
 		&.accept {
-			background-image: url(../images/webrtc/btns-24/btn-accept.png);
+			background-image: url(../images/btns-24/btn-accept.png);
 			&:hover {
-				background-image: url(../images/webrtc/btns-24/btn-accept-hover.png);
+				background-image: url(../images/btns-24/btn-accept-hover.png);
 			}
 		}
 		&.hangup {
-			background-image: url(../images/webrtc/btns-24/btn-hangup.png);
+			background-image: url(../images/btns-24/btn-hangup.png);
 			&:hover {
-				background-image: url(../images/webrtc/btns-24/btn-hangup-hover.png);
+				background-image: url(../images/btns-24/btn-hangup-hover.png);
 			}
 		}
 		&.call {
-			background-image: url(../images/webrtc/btns-24/btn-call.png);
+			background-image: url(../images/btns-24/btn-call.png);
 			&:hover {
-				background-image: url(../images/webrtc/btns-24/btn-call-hover.png);
+				background-image: url(../images/btns-24/btn-call-hover.png);
 			}
 		}
 		&.mike {
 			&.unmuted {
-				background-image: url(../images/webrtc/btns-24/btn-mic-on.png);
+				background-image: url(../images/btns-24/btn-mic-on.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-24/btn-mic-on-hover.png);
+					background-image: url(../images/btns-24/btn-mic-on-hover.png);
 				}
 			}
 			&.muted {
-				background-image: url(../images/webrtc/btns-24/btn-mic-off.png);
+				background-image: url(../images/btns-24/btn-mic-off.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-24/btn-mic-off-hover.png);
+					background-image: url(../images/btns-24/btn-mic-off-hover.png);
 				}
 			}
 		}
 		&.fullscreen {
 			&.off {
-				background-image: url(../images/webrtc/btns-24/btn-fullscreen.png);
+				background-image: url(../images/btns-24/btn-fullscreen.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-24/btn-fullscreen-hover.png);
+					background-image: url(../images/btns-24/btn-fullscreen-hover.png);
 				}
 			}
 			&.on {
-				background-image: url(../images/webrtc/btns-24/btn-fullscreen-exit.png);
+				background-image: url(../images/btns-24/btn-fullscreen-exit.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-24/btn-fullscreen-exit-hover.png);
+					background-image: url(../images/btns-24/btn-fullscreen-exit-hover.png);
 				}
 			}
 		}
@@ -131,48 +131,48 @@ div.webrtc-ctrl div.webrtc-buttons {
 		height: 32px;
 		margin-right: 10px;
 		&.accept {
-			background-image: url(../images/webrtc/btns-32/btn-accept.png);
+			background-image: url(../images/btns-32/btn-accept.png);
 			&:hover {
-				background-image: url(../images/webrtc/btns-32/btn-accept-hover.png);
+				background-image: url(../images/btns-32/btn-accept-hover.png);
 			}
 		}
 		&.hangup {
-			background-image: url(../images/webrtc/btns-32/btn-hangup.png);
+			background-image: url(../images/btns-32/btn-hangup.png);
 			&:hover {
-				background-image: url(../images/webrtc/btns-32/btn-hangup-hover.png);
+				background-image: url(../images/btns-32/btn-hangup-hover.png);
 			}
 		}
 		&.call {
-			background-image: url(../images/webrtc/btns-32/btn-call.png);
+			background-image: url(../images/btns-32/btn-call.png);
 			&:hover {
-				background-image: url(../images/webrtc/btns-32/btn-call-hover.png);
+				background-image: url(../images/btns-32/btn-call-hover.png);
 			}
 		}
 		&.mike {
 			&.unmuted {
-				background-image: url(../images/webrtc/btns-32/btn-mic-on.png);
+				background-image: url(../images/btns-32/btn-mic-on.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-32/btn-mic-on-hover.png);
+					background-image: url(../images/btns-32/btn-mic-on-hover.png);
 				}
 			}
 			&.muted {
-				background-image: url(../images/webrtc/btns-32/btn-mic-off.png);
+				background-image: url(../images/btns-32/btn-mic-off.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-32/btn-mic-off-hover.png);
+					background-image: url(../images/btns-32/btn-mic-off-hover.png);
 				}
 			}
 		}
 		&.fullscreen {
 			&.off {
-				background-image: url(../images/webrtc/btns-32/btn-fullscreen.png);
+				background-image: url(../images/btns-32/btn-fullscreen.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-32/btn-fullscreen-hover.png);
+					background-image: url(../images/btns-32/btn-fullscreen-hover.png);
 				}
 			}
 			&.on {
-				background-image: url(../images/webrtc/btns-32/btn-fullscreen-exit.png);
+				background-image: url(../images/btns-32/btn-fullscreen-exit.png);
 				&:hover {
-					background-image: url(../images/webrtc/btns-32/btn-fullscreen-exit-hover.png);
+					background-image: url(../images/btns-32/btn-fullscreen-exit-hover.png);
 				}
 			}
 		}
@@ -206,3 +206,25 @@ div.webrtc-buttons a {
 		display: block;
 	}
 }
+
+.panel-self-view {
+	border: 1px solid #000;
+	height: 48px;
+	position: absolute;
+	top: 4px;
+	left: 6px;
+	display: block;
+	width: 48px;
+	img, video {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+	img {
+		background: #333;
+	}
+	video {
+		background: black;
+	}
+}
+

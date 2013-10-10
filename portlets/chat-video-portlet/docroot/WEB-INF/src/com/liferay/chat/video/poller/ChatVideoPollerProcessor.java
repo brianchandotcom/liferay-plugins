@@ -60,6 +60,9 @@ public class ChatVideoPollerProcessor extends BasePollerProcessor {
         String webRtcMsgType = this.getWebRtcMessageType(req);
         long dstUserId = this.getWebRtcDstUserId(req);
 
+        System.out.println("got msg from " + req.getUserId());
+        System.out.println("msg " + webRtcMsgType);
+
         // process message
         if (webRtcMsgType.equals("setAvailability")) {
             boolean isAvailable = getBoolean(req, "webrtcIsAvailable");

@@ -25,7 +25,7 @@ import com.liferay.chat.video.WebRtcManager;
  * WebRTC connection state scheduler
  *
  * This class is instantiated by Liferay and checks at a regular
- * interval all the client presences of all the WebRTC managers.
+ * interval all the connection states of all the WebRTC managers.
  *
  * @author Philippe Proulx <philippe.proulx@savoirfairelinux.com>
  */

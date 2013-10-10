@@ -22,6 +22,10 @@
 	Portlet portlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId(), portletDisplay.getId());
 	%>
 
+	<liferay-util:html-top>
+		<link href="<%= PortalUtil.getStaticResourceURL(request, request.getContextPath() + "/css/main.css", portlet.getTimestamp()) %>" rel="stylesheet" type="text/css" />
+	</liferay-util:html-top>
+	
 	<liferay-util:html-bottom>
 		<script defer="defer" src="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/js/webrtc-adapter.js", portlet.getTimestamp()) %>" type="text/javascript"></script>
 		<script defer="defer" src="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/js/webrtc.js", portlet.getTimestamp()) %>" type="text/javascript"></script>
@@ -31,8 +35,8 @@
 	<div class="portlet-chat-video" id="chat-video">
 		<audio preload loop id="webrtc-ringtone" src="<%= PortalUtil.getStaticResourceURL(request, request.getContextPath() + "/audio/webrtc-ringtone.ogg", portlet.getTimestamp()) %>"></audio>
 		<audio preload loop id="webrtc-out-ringtone" src="<%= PortalUtil.getStaticResourceURL(request, request.getContextPath() + "/audio/webrtc-out-ringtone.ogg", portlet.getTimestamp()) %>"></audio>
-		<div id="webrtc-video-overlay" class="aui-helper-hidden"></div>
-		<div id="webrtc-mute-ctrl" class="unmuted aui-helper-hidden"></div>
+		<div id="webrtc-video-overlay" class="hide"></div>
+		<div id="webrtc-mute-ctrl" class="unmuted hide"></div>
 		<input id="chat-video-portlet-id" type="hidden" value="<%= portletDisplay.getId() %>" />
 	</div>
 </c:if>
