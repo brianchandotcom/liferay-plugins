@@ -183,16 +183,17 @@ div.webrtc-buttons a {
 	float: right;
 	background-repeat: no-repeat;
 }
-.buddy-list .panel-content img.webrtc-enabled-icon {
+.buddy-list .panel-content div.webrtc-enabled-icon {
 	margin-left: 8px;
-	display: inline;
+	display: inline-block;
 	float: none;
-	height: auto;
-	width: auto;
+	height: 10px;
+	width: 19px;
 	padding: 0;
 	background: none;
 	position: relative;
 	top: -2px;
+	background: url(../images/icon-video.gif) no-repeat;
 }
 #webrtc-video-overlay {
 	background: black;

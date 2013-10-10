@@ -25,7 +25,7 @@
 	<liferay-util:html-top>
 		<link href="<%= PortalUtil.getStaticResourceURL(request, request.getContextPath() + "/css/main.css", portlet.getTimestamp()) %>" rel="stylesheet" type="text/css" />
 	</liferay-util:html-top>
-	
+
 	<liferay-util:html-bottom>
 		<script defer="defer" src="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/js/webrtc-adapter.js", portlet.getTimestamp()) %>" type="text/javascript"></script>
 		<script defer="defer" src="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/js/webrtc.js", portlet.getTimestamp()) %>" type="text/javascript"></script>
@@ -38,5 +38,7 @@
 		<div id="webrtc-video-overlay" class="hide"></div>
 		<div id="webrtc-mute-ctrl" class="unmuted hide"></div>
 		<input id="chat-video-portlet-id" type="hidden" value="<%= portletDisplay.getId() %>" />
+		<input id="chat-video-portlet-poller-notifications-timeout" type="hidden" value="<%= PropsUtil.get(PropsKeys.POLLER_NOTIFICATIONS_TIMEOUT) %>" />
+		<input id="chat-video-portlet-poller-request-timeout" type="hidden" value="<%= PropsUtil.get(PropsKeys.POLLER_REQUEST_TIMEOUT) %>" />
 	</div>
 </c:if>

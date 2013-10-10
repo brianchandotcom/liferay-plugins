@@ -31,12 +31,16 @@
 			// read our portlet ID (injected in view.jsp)
 			instance._portletId = A.one('#chat-video-portlet-id').val();
 
+			// read some portal poller properties
+			var pollerNotificationsTimeout = parseInt(A.one('#chat-video-portlet-poller-notifications-timeout').val());
+			var pollerRequestTimeout = parseInt(A.one('#chat-video-portlet-poller-request-timeout').val());
+
 			// video buddies list
 			instance._buddies = {};
 
 			// increased polling rate
 			instance._increasedPollingRate = false;
-			instance._increasedPollingRateDelayMs = 500;
+			instance._increasedPollingRateDelayMs = pollerNotificationsTimeout + pollerRequestTimeout + 100;
 			instance._increasedPollingCountMs = 0;
 			instance._increasedPollingMaxCountMs = 30000;
 
@@ -233,15 +237,22 @@
 			if (panel instanceof Liferay.Chat.Conversation) {
 				instance._chatManager._chatSessions[userId].onDelete();
 			}
+		},
+
+		_onAfterUpdateBuddies: function(buddies) {
+			var instance = this;
+
+			// verify if buddies support video and add icon if so
+			var listItems = instance._chatManager._onlineBuddies.all('li.user');
+			listItems.each(function(liNode) {
+				var uid = liNode.getAttribute('userId');
+				if (uid && instance.isUserWebRtcAvailable(uid)) {
+					var iconNode = A.Node.create('<div class="webrtc-enabled-icon"></div>');
+					iconNode.appendTo(liNode);
+				}
+			});
 		}
 	};
-
-	Liferay.on(
-		'updateBuddies',
-		function(buddies) {
-			console.log('update buddies fired!');
-		}
-	);
 
 	Liferay.on(
 		'chatPortletReady',
@@ -260,18 +271,16 @@
 				Liferay.Chat.Manager,
 				'_onPanelClose'
 			);
-			A.on(
+			A.after(
 				function(buddies) {
-					console.log('_updateBuddies');
+					Liferay.Chat.VideoManager._onAfterUpdateBuddies(buddies);
 				},
 				Liferay.Chat.Manager,
 				'_updateBuddies'
 			);
 
 			var Chat = Liferay.Chat;
-
 			Chat.ConversationPanel = Chat.Conversation;
-
 			Chat.Conversation = function() {
 				var instance = this;
 
