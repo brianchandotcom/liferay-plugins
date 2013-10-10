@@ -244,3 +244,12 @@ div.webrtc-buttons a {
 	}
 }
 
+.chat-bar div ul li .panel-trigger .unread-webrtc {
+	height: 16px;
+	position: absolute;
+	right: -4px;
+	top: -6px;
+	width: 16px;
+	z-index: 30;
+	background: url(../images/unread-messages.png);
+}

@@ -289,7 +289,7 @@
 				// unread video messages
 				instance._unreadMessagesWebRtcContainer = instance._panel.one('.unread-webrtc');
 				if (!instance._unreadMessagesWebRtcContainer) {
-					instance._unreadMessagesWebRtcContainer = A.Node.create('<div class="unread-webrtc" />');
+					instance._unreadMessagesWebRtcContainer = A.Node.create('<div class="unread-webrtc hide" />');
 					instance._popupTrigger.append(instance._unreadMessagesWebRtcContainer);
 				}
 
@@ -433,6 +433,7 @@
 								if (!instance.get('selected')) {
 									if (instance._unreadMessagesWebRtcContainer) {
 										instance._unreadMessagesWebRtcContainer.show();
+										instance.setWaiting(true);
 									}
 								}
 							},
