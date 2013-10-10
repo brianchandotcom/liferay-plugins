@@ -1,7 +1,7 @@
 /**
  * webrtc.js - WebRTC management for any chat portlet
  *
- * Copyright (c) 2013 Savoir-faire Linux
+ * Copyright (c) 2013 Savoir-faire Linux Inc.
  *     Philippe Proulx <philippe.proulx@savoirfairelinux.com>.
  * All rights reserved.
  *

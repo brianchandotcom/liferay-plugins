@@ -1,7 +1,7 @@
 /**
  * inject-chat-portlet.js - Injects chat-video-portlet code into chat-portlet
  *
- * Copyright (c) 2013 Savoir-faire Linux
+ * Copyright (c) 2013 Savoir-faire Linux Inc.
  *     Philippe Proulx <philippe.proulx@savoirfairelinux.com>.
  * All rights reserved.
  *
