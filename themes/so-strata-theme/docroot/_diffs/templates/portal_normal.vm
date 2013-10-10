@@ -2,7 +2,7 @@
 
 #parse ($init)
 
-<html class="#language("lang.dir")" dir="#language("lang.dir")" lang="$w3c_language_id">
+<html class="$root_css_class" dir="#language("lang.dir")" lang="$w3c_language_id">
 
 <head>
 	<title>$the_title - $company_name</title>
@@ -12,7 +12,7 @@
 	<meta content="user-scalable=yes, initial-scale=1.0, width=device-width" name="viewport" />
 </head>
 
-<body class="so-strata-theme $css_class">
+<body class="so-strata-theme dockbar-split $css_class">
 
 $theme.include($body_top_include)
 
@@ -93,6 +93,14 @@ $theme.include($body_top_include)
 			#end
 
 			#if ($is_signed_in)
+				<a class="config-icon" href="javascript:;" id="toggleDockbar">
+					<img alt="#language("configuration") #language("icon")" height="16" src="$images_folder/custom/cog.png" width="16" />
+
+					<span class="aui-helper-hidden">
+						#language("toggle") #language("javax.portlet.title.145")
+					</span>
+				</a>
+
 				<div id="page-search">
 					$theme.search()
 				</div>
@@ -104,13 +112,11 @@ $theme.include($body_top_include)
 
 			#if ($is_user_dashboard)
 				<h2 class="page-title">
-					#if ($the_title == "Dashboard")
 						<a class="avatar" href="$current_user_profile_url" style="background-image: url($user.getPortraitURL($themeDisplay))">
 							<img alt="$user.getFullName()" src="$user.getPortraitURL($themeDisplay)">
 						</a>
 
-						<span>$current_user.getFullName()'s</span>
-					#end
+						<span class="aui-helper-hidden">$current_user.getFullName()'s</span>
 
 					<span>$the_title</span>
 				</h2>

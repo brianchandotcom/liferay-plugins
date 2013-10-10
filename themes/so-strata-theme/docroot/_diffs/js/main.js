@@ -4,6 +4,18 @@ AUI().ready(
 	'event',
 	function(A) {
 		var messageBoard = A.one('.portlet-message-boards');
+		var toggleDockbar = A.one('#toggleDockbar');
+
+		toggleDockbar.on(
+			'click',
+			function(event) {
+				event.preventDefault();
+
+				var body = A.one('body');
+
+				body.toggleClass('show-dockbar');
+			}
+		);
 
 		if (messageBoard) {
 			messageBoard.delegate(
