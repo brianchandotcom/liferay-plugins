@@ -688,7 +688,15 @@ AUI().use('aui-base', function(A) {
 		instance._localVideoDomElem = conf.localVideoDomElem;
 
 		// ICE servers
-		instance._iceServers = conf.iceServers;
+		instance._iceServers = [];
+		for (var i in conf.iceServers) {
+			var ice = conf.iceServers[i];
+			var compatIce = Liferay.Chat.WebRtcManager.getWebRtcCompat().createIceServer(ice);
+			if (compatIce != null) {
+				instance._iceServers.push(compatIce);
+				console.log(compatIce);
+			}
+		}
 
 		// signal manager that I now exist
 		Liferay.Chat.WebRtcManager.registerConversation(instance);

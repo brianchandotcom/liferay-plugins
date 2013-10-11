@@ -15,16 +15,16 @@
  * met:
  *
  *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *	 notice, this list of conditions and the following disclaimer.
  *
  *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
+ *	 notice, this list of conditions and the following disclaimer in
+ *	 the documentation and/or other materials provided with the
+ *	 distribution.
  *
  *   * Neither the name of Google nor the names of its contributors may
- *     be used to endorse or promote products derived from this software
- *     without specific prior written permission.
+ *	 be used to endorse or promote products derived from this software
+ *	 without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -73,170 +73,224 @@ var webRtcSupported = false;
 
 // mozilla chrome compat layer -- very similar to adapter.js
 function setupRTC() {
-    var RTC = null;
-    if (navigator.mozGetUserMedia && mozRTCPeerConnection) {
-        console.log('This appears to be Firefox');
-        var version = parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]);
-        if (version >= 22) {
-            RTC = {
-                peerconnection: mozRTCPeerConnection,
-                browser: 'firefox',
-                getUserMedia: navigator.mozGetUserMedia.bind(navigator),
-                attachMediaStream: function(element, stream) {
-                    element.mozSrcObject = stream;
-                    element.play();
-                },
-                pc_constraints: {}
-            };
-            if (!MediaStream.prototype.getVideoTracks)
-                MediaStream.prototype.getVideoTracks = function() { return []; };
-            if (!MediaStream.prototype.getAudioTracks)
-                MediaStream.prototype.getAudioTracks = function() { return []; };
-            RTCSessionDescription = mozRTCSessionDescription;
-            RTCIceCandidate = mozRTCIceCandidate;
-        }
-    } else if (navigator.webkitGetUserMedia && webkitRTCPeerConnection) {
-        console.log('This appears to be Chrome');
-        RTC = {
-            peerconnection: webkitRTCPeerConnection,
-            browser: 'chrome',
-            getUserMedia: navigator.webkitGetUserMedia.bind(navigator),
-            attachMediaStream: function(element, stream) {
-                element.src = webkitURL.createObjectURL(stream);
-            },
-//            pc_constraints: {} // FIVE-182
-            pc_constraints: {'optional': [{'DtlsSrtpKeyAgreement': 'true'}]} // enable dtls support in canary
-        };
-        if (navigator.userAgent.indexOf('Android') != -1) {
-            RTC.pc_constraints = {}; // disable DTLS on Android
-        }
-        if (!webkitMediaStream.prototype.getVideoTracks) {
-            webkitMediaStream.prototype.getVideoTracks = function()
-            { return this.videoTracks; };
-        }
-        if (!webkitMediaStream.prototype.getAudioTracks) {
-            webkitMediaStream.prototype.getAudioTracks = function()
-            { return this.audioTracks; };
-        }
-		// New syntax of getXXXStreams method in M26.
-		if (!webkitRTCPeerConnection.prototype.getLocalStreams) {
-			webkitRTCPeerConnection.prototype.getLocalStreams = function() {
-				return this.localStreams;
-			};
-			webkitRTCPeerConnection.prototype.getRemoteStreams = function() {
-				return this.remoteStreams;
-			};
-		}
-    }
-    if (RTC == null) {
-        try { console.log('Browser does not appear to be WebRTC-capable'); } catch (e) { }
-    }
+	var RTC = null;
+	if (navigator.mozGetUserMedia && mozRTCPeerConnection) {
+		console.log('This appears to be Firefox');
+		var version = parseInt(navigator.userAgent.match(/Firefox\/([0-9]+)\./)[1]);
+		if (version >= 22) {
+			RTC = {
+				peerconnection: mozRTCPeerConnection,
+				browser: 'firefox',
+				getUserMedia: navigator.mozGetUserMedia.bind(navigator),
+				attachMediaStream: function(element, stream) {
+					element.mozSrcObject = stream;
+					element.play();
+				},
+				createIceServer: function(ice) {
+					var iceServer = null;
+					var url_parts = ice.url.split(':');
+					if (url_parts[0].indexOf('stun') === 0) {
+						// Create iceServer with stun url.
+						iceServer = {
+							'url': ice.url
+						};
+					} else if (url_parts[0].indexOf('turn') === 0 &&
+							(ice.url.indexOf('transport=udp') !== -1 ||
+							ice.url.indexOf('?transport') === -1)) {
+						// Create iceServer with turn url.
+						// Ignore the transport parameter from TURN url.
+						var turn_url_parts = ice.url.split("?");
+						iceServer = {
+							'url': turn_url_parts[0],
+							'credential': ice.password,
+							'username': ice.username
+						};
+					}
 
-    return RTC;
+					return iceServer;
+				},
+				pc_constraints: {}
+			};
+			if (!MediaStream.prototype.getVideoTracks)
+				MediaStream.prototype.getVideoTracks = function() { return []; };
+			if (!MediaStream.prototype.getAudioTracks)
+				MediaStream.prototype.getAudioTracks = function() { return []; };
+			RTCSessionDescription = mozRTCSessionDescription;
+			RTCIceCandidate = mozRTCIceCandidate;
+		}
+	} else if (navigator.webkitGetUserMedia && webkitRTCPeerConnection) {
+		console.log('This appears to be Chrome');
+		var version = parseInt(navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./)[2]);
+		RTC = {
+			peerconnection: webkitRTCPeerConnection,
+			browser: 'chrome',
+			getUserMedia: navigator.webkitGetUserMedia.bind(navigator),
+			attachMediaStream: function(element, stream) {
+				element.src = webkitURL.createObjectURL(stream);
+			},
+			createIceServer: function(ice) {
+				var iceServer = null;
+				var url_parts = ice.url.split(':');
+				if (url_parts[0].indexOf('stun') === 0) {
+					// Create iceServer with stun url.
+					iceServer = {
+						'url': ice.url
+					};
+				} else if (url_parts[0].indexOf('turn') === 0) {
+					if (version < 28) {
+						// For pre-M28 chrome versions use old TURN format.
+						var url_turn_parts = ice.url.split("turn:");
+						iceServer = {
+							'url': 'turn:' + ice.username + '@' + url_turn_parts[1],
+							'credential': ice.password
+						};
+					} else {
+						// For Chrome M28 & above use new TURN format.
+						iceServer = {
+							'url': ice.url,
+							'credential': ice.password,
+							'username': ice.username
+						};
+					}
+				}
+
+				return iceServer;
+			},
+			// pc_constraints: {} // FIVE-182
+			pc_constraints: {'optional': [{'DtlsSrtpKeyAgreement': 'true'}]} // enable dtls support in canary
+		};
+		if (navigator.userAgent.indexOf('Android') != -1) {
+			RTC.pc_constraints = {}; // disable DTLS on Android
+		}
+		if (!webkitMediaStream.prototype.getVideoTracks) {
+			webkitMediaStream.prototype.getVideoTracks = function()
+			{ return this.videoTracks; };
+		}
+		if (!webkitMediaStream.prototype.getAudioTracks) {
+			webkitMediaStream.prototype.getAudioTracks = function()
+			{ return this.audioTracks; };
+		}
+	// New syntax of getXXXStreams method in M26.
+	if (!webkitRTCPeerConnection.prototype.getLocalStreams) {
+		webkitRTCPeerConnection.prototype.getLocalStreams = function() {
+			return this.localStreams;
+		};
+		webkitRTCPeerConnection.prototype.getRemoteStreams = function() {
+			return this.remoteStreams;
+		};
+	}
+	}
+	if (RTC == null) {
+		try { console.log('Browser does not appear to be WebRTC-capable'); } catch (e) { }
+	}
+
+	return RTC;
 }
 
 // Set Opus as the default audio codec if it's present.
 function preferOpus(sdp) {
-  var sdpLines = sdp.split('\r\n');
+	var sdpLines = sdp.split('\r\n');
 
-  // Search for m line.
-  for (var i = 0; i < sdpLines.length; i++) {
-      if (sdpLines[i].search('m=audio') !== -1) {
-        var mLineIndex = i;
-        break;
-      }
-  }
-  if (mLineIndex === null)
-    return sdp;
+	// Search for m line.
+	for (var i = 0; i < sdpLines.length; i++) {
+		if (sdpLines[i].search('m=audio') !== -1) {
+			var mLineIndex = i;
+			break;
+		}
+	}
+	if (mLineIndex === null)
+		return sdp;
 
-  // If Opus is available, set it as the default in m line.
-  for (var i = 0; i < sdpLines.length; i++) {
-    if (sdpLines[i].search('opus/48000') !== -1) {
-      var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
-      if (opusPayload)
-        sdpLines[mLineIndex] = setDefaultCodec(sdpLines[mLineIndex],
-                                               opusPayload);
-      break;
-    }
-  }
+	// If Opus is available, set it as the default in m line.
+	for (var i = 0; i < sdpLines.length; i++) {
+		if (sdpLines[i].search('opus/48000') !== -1) {
+			var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
+			if (opusPayload)
+				sdpLines[mLineIndex] = setDefaultCodec(sdpLines[mLineIndex], opusPayload);
+			break;
+		}
+	}
 
-  // Remove CN in m line and sdp.
-  sdpLines = removeCN(sdpLines, mLineIndex);
+	// Remove CN in m line and sdp.
+	sdpLines = removeCN(sdpLines, mLineIndex);
 
-  sdp = sdpLines.join('\r\n');
-  return sdp;
+	sdp = sdpLines.join('\r\n');
+
+	return sdp;
 }
 
 // Set Opus in stereo if stereo is enabled.
 function addStereo(sdp) {
-  var sdpLines = sdp.split('\r\n');
+	var sdpLines = sdp.split('\r\n');
 
-  // Find opus payload.
-  for (var i = 0; i < sdpLines.length; i++) {
-    if (sdpLines[i].search('opus/48000') !== -1) {
-      var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
-      break;
-    }
-  }
+	// Find opus payload.
+	for (var i = 0; i < sdpLines.length; i++) {
+		if (sdpLines[i].search('opus/48000') !== -1) {
+			var opusPayload = extractSdp(sdpLines[i], /:(\d+) opus\/48000/i);
+			break;
+		}
+	}
 
-  // Find the payload in fmtp line.
-  for (var i = 0; i < sdpLines.length; i++) {
-    if (sdpLines[i].search('a=fmtp') !== -1) {
-      var payload = extractSdp(sdpLines[i], /a=fmtp:(\d+)/ );
-      if (payload === opusPayload) {
-        var fmtpLineIndex = i;
-        break;
-      }
-    }
-  }
-  // No fmtp line found.
-  if (fmtpLineIndex === null)
-    return sdp;
+	// Find the payload in fmtp line.
+	for (var i = 0; i < sdpLines.length; i++) {
+		if (sdpLines[i].search('a=fmtp') !== -1) {
+			var payload = extractSdp(sdpLines[i], /a=fmtp:(\d+)/ );
+			if (payload === opusPayload) {
+				var fmtpLineIndex = i;
+				break;
+			}
+		}
+	}
 
-  // Append stereo=1 to fmtp line.
-  sdpLines[fmtpLineIndex] = sdpLines[fmtpLineIndex].concat(' stereo=1');
+	// No fmtp line found.
+	if (fmtpLineIndex === null)
+	return sdp;
 
-  sdp = sdpLines.join('\r\n');
-  return sdp;
+	// Append stereo=1 to fmtp line.
+	sdpLines[fmtpLineIndex] = sdpLines[fmtpLineIndex].concat(' stereo=1');
+
+	sdp = sdpLines.join('\r\n');
+	return sdp;
 }
 
 function extractSdp(sdpLine, pattern) {
-  var result = sdpLine.match(pattern);
-  return (result && result.length == 2)? result[1]: null;
+	var result = sdpLine.match(pattern);
+	return (result && result.length == 2)? result[1]: null;
 }
 
 // Set the selected codec to the first in m line.
 function setDefaultCodec(mLine, payload) {
-  var elements = mLine.split(' ');
-  var newLine = new Array();
-  var index = 0;
-  for (var i = 0; i < elements.length; i++) {
-    if (index === 3) // Format of media starts from the fourth.
-      newLine[index++] = payload; // Put target payload to the first.
-    if (elements[i] !== payload)
-      newLine[index++] = elements[i];
-  }
-  return newLine.join(' ');
+	var elements = mLine.split(' ');
+	var newLine = new Array();
+	var index = 0;
+	for (var i = 0; i < elements.length; i++) {
+		if (index === 3) // Format of media starts from the fourth.
+			newLine[index++] = payload; // Put target payload to the first.
+		if (elements[i] !== payload)
+			newLine[index++] = elements[i];
+	}
+
+	return newLine.join(' ');
 }
 
 // Strip CN from sdp before CN constraints is ready.
 function removeCN(sdpLines, mLineIndex) {
-  var mLineElements = sdpLines[mLineIndex].split(' ');
-  // Scan from end for the convenience of removing an item.
-  for (var i = sdpLines.length-1; i >= 0; i--) {
-    var payload = extractSdp(sdpLines[i], /a=rtpmap:(\d+) CN\/\d+/i);
-    if (payload) {
-      var cnPos = mLineElements.indexOf(payload);
-      if (cnPos !== -1) {
-        // Remove CN payload from m line.
-        mLineElements.splice(cnPos, 1);
-      }
-      // Remove CN line in sdp
-      sdpLines.splice(i, 1);
-    }
-  }
+	var mLineElements = sdpLines[mLineIndex].split(' ');
+	// Scan from end for the convenience of removing an item.
+	for (var i = sdpLines.length-1; i >= 0; i--) {
+		var payload = extractSdp(sdpLines[i], /a=rtpmap:(\d+) CN\/\d+/i);
+		if (payload) {
+			var cnPos = mLineElements.indexOf(payload);
+			if (cnPos !== -1) {
+				// Remove CN payload from m line.
+				mLineElements.splice(cnPos, 1);
+			}
+			// Remove CN line in sdp
+			sdpLines.splice(i, 1);
+		}
+	}
 
-  sdpLines[mLineIndex] = mLineElements.join(' ');
-  return sdpLines;
+	sdpLines[mLineIndex] = mLineElements.join(' ');
+
+	return sdpLines;
 }
-
