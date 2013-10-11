@@ -231,13 +231,13 @@
 
 			instance._increasedPollingCountMs = 0;
 			instance._setIncreasedPollingRate(true);
-			Liferay.Poller.setOverriddenDelay(instance._increasedPollingRateDelayMs);
+			Liferay.Poller.setCustomDelay(instance._increasedPollingRateDelayMs);
 		},
 		_stopIncreasedPollingRate: function() {
 			var instance = this;
 
 			instance._setIncreasedPollingRate(false);
-			Liferay.Poller.cancelOverriddenDelay();
+			Liferay.Poller.cancelCustomDelay();
 		},
 
 		_onPanelClose: function(event) {
