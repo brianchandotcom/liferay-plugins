@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2013 Savoir-faire Linux Inc.
  *     Philippe Proulx <philippe.proulx@savoirfairelinux.com>.
@@ -16,18 +15,23 @@
  * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
---%>
+package com.liferay.chat.video.scheduler;
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+import com.liferay.portal.kernel.messaging.BaseMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.chat.video.WebRtcManager;
 
-<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
-<%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
-
-<%@ page import="com.liferay.portal.kernel.servlet.BrowserSnifferUtil" %><%@
-page import="com.liferay.portal.model.Portlet" %><%@
-page import="com.liferay.portal.service.PortletLocalServiceUtil" %><%@
-page import="com.liferay.portal.util.PortalUtil" %><%@
-page import="com.liferay.portal.kernel.util.PropsKeys" %><%@
-page import="com.liferay.portal.kernel.util.PropsUtil" %>
-
-<liferay-theme:defineObjects />
+/**
+ * WebRTC presence scheduler
+ *
+ * This class is instantiated by Liferay and checks at a regular
+ * interval all the client presences of all the WebRTC managers.
+ *
+ * @author Philippe Proulx <philippe.proulx@savoirfairelinux.com>
+ */
+public class WebRtcPresenceScheduler extends BaseMessageListener {
+    @Override
+    protected void doReceive(Message message) throws Exception {
+        WebRtcManager.checkAllManagersPresences();
+    }
+}
