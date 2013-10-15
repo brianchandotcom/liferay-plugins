@@ -172,7 +172,7 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-base', 'aui-dialog', 'aui-io']
+		requires: ['aui-base', 'aui-io-deprecated', 'liferay-util-window']
 	}
 );
 

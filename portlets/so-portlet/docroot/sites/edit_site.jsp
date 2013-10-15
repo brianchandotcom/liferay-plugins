@@ -32,11 +32,11 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 <aui:form action="<%= addSiteURL %>" method="post" name="dialogFm">
 	<aui:model-context model="<%= Group.class %>" />
 
-	<div class="portlet-msg-success aui-helper-hidden">
+	<div class="hide portlet-msg-success">
 		<liferay-ui:message key="your-request-processed-successfully" />
 	</div>
 
-	<div class="portlet-msg-error aui-helper-hidden">
+	<div class="hide portlet-msg-error">
 		<liferay-ui:message key="your-request-failed-to-complete" />
 	</div>
 
@@ -53,7 +53,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 		LayoutSetPrototype defaultLayoutSetPrototype = null;
 		%>
 
-		<div class="section site-settings aui-helper-hidden" data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {2, 2}) %>' data-title='<%= LanguageUtil.get(pageContext, "add-site-settings") %>'>
+		<div class="hide section site-settings" data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {2, 2}) %>' data-title='<%= LanguageUtil.get(pageContext, "add-site-settings") %>'>
 			<div class="site-options">
 
 				<%
@@ -171,7 +171,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 	</aui:button-row>
 </aui:form>
 
-<aui:script use="aui-base,aui-io-request,aui-loading-mask">
+<aui:script use="aui-base,aui-io-request-deprecated,aui-loading-mask-deprecated">
 	var form = A.one(document.<portlet:namespace />dialogFm);
 
 	var sectionContainer = A.one('.so-portlet-sites-dialog .section-container');
@@ -260,7 +260,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 		window,
 		'<portlet:namespace />previous',
 		function() {
-			var section = A.one('.so-portlet-sites-dialog .section:not(.aui-helper-hidden)').previous();
+			var section = A.one('.so-portlet-sites-dialog .section:not(.hide)').previous();
 
 			<portlet:namespace />showSection(section);
 		}
@@ -276,14 +276,14 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 			sectionContainer.all('.section').hide();
 
-			if (!section.previous()) {
+			if (!section.previous('.section')) {
 				Liferay.SO.Sites.disableButton(previousButton);
 			}
 			else {
 				Liferay.SO.Sites.enableButton(previousButton);
 			}
 
-			if (!section.next()) {
+			if (!section.next('.section')) {
 				Liferay.SO.Sites.disableButton(nextButton);
 			}
 			else {
@@ -301,7 +301,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 		window,
 		'<portlet:namespace />next',
 		function() {
-			var section = A.one('.so-portlet-sites-dialog .section:not(.aui-helper-hidden)').next();
+			var section = A.one('.so-portlet-sites-dialog .section:not(.hide)').next();
 
 			<portlet:namespace />showSection(section);
 		}
@@ -310,7 +310,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 	Liferay.Util.focusFormField(document.<portlet:namespace />dialogFm.<portlet:namespace />name);
 </aui:script>
 
-<aui:script use="aui-base,aui-io">
+<aui:script use="aui-base,aui-io-deprecated">
 	var form = A.one(document.<portlet:namespace />dialogFm);
 
 	form.on(
@@ -365,7 +365,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 						}
 					},
 					data: {
-						layoutSetPrototypeId: templateId
+						<portlet:namespace />layoutSetPrototypeId: templateId
 					},
 					dataType: 'JSON'
 				}
