@@ -14,6 +14,7 @@
 
 package com.liferay.portal.workflow.kaleo;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -50,6 +51,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -224,10 +226,21 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 					}
 				}
 				else {
-					long[] userIds = UserLocalServiceUtil.getRoleUserIds(
-						kaleoTaskAssignment.getAssigneeClassPK());
+					LinkedHashMap<String, Object> params =
+						new LinkedHashMap<String, Object>();
 
-					pooledActors.addAll(userIds);
+					params.put("inherit", Boolean.TRUE);
+					params.put("usersRoles", role.getRoleId());
+
+					List<User> users = UserLocalServiceUtil.search(
+						role.getCompanyId(), null,
+						WorkflowConstants.STATUS_APPROVED, params,
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+						(OrderByComparator)null);
+
+					for (User user : users) {
+						pooledActors.add(user.getUserId());
+					}
 				}
 			}
 
