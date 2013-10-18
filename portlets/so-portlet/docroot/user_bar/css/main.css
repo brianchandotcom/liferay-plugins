@@ -36,6 +36,7 @@ body.show-dockbar, html > body.lfr-dockbar-pinned, body.controls-visible {
 }
 
 .aui .so-portlet-user-bar {
+	background: #252D31 url(../images/user_bar_default_bg.png) 0 0 repeat-x;
 	@include background-image(linear-gradient(bottom, #252D31 0, #32363A 100%));
 
 	font: 14px/2em 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -314,8 +315,6 @@ body.show-dockbar, html > body.lfr-dockbar-pinned, body.controls-visible {
 	border-top-color: transparent;
 	right: 0;
 }
-html.aui .dockbar-split .dockbar .navbar-inner .nav > li {
-}
 
 html.aui {
 	.dockbar,
@@ -341,11 +340,11 @@ html.aui {
 
 		.navbar-inner .nav > li {
 			background-color: transparent;
+		}
 
-			> a {
-				color: #FFF;
-				text-shadow: none;
-			}
+		.navbar-inner .nav.nav-account-controls > li > a {
+			color: #FFF;
+			text-shadow: none;
 		}
 	}
 
