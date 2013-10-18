@@ -88,7 +88,7 @@ public class ScriptingExecutorHotDeployMessageListener
 				ScriptingUtil.exec(
 					null, new HashMap<String, Object>(), language,
 					StringUtil.read(inputStream),
-					servletContextNames.toArray(
+					(String[])servletContextNames.toArray(
 						new String[servletContextNames.size()]));
 			}
 			catch (Exception e) {
