@@ -1477,7 +1477,7 @@ AUI.add(
 										'<p class="calendar-portlet-confirmation-text">',
 										Lang.sub(
 											Liferay.Language.get('you-are-about-to-make-changes-that-will-only-effect-your-calendar-x'),
-											[calendar.get('name')]
+											[Liferay.Util.escapeHTML(calendar.get('name'))]
 										),
 										'</p>'
 									].join(STR_BLANK);
@@ -1489,12 +1489,12 @@ AUI.add(
 										function() {
 											CalendarUtil.updateEvent(schedulerEvent);
 
-											this.close();
+											this.hide();
 										},
 										function() {
 											instance.load();
 
-											this.close();
+											this.hide();
 										}
 									);
 								}

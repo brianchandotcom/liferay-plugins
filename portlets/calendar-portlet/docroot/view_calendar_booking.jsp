@@ -76,7 +76,7 @@ AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.getEntry(CalendarBookin
 				}
 				%>
 
-				<%= StringUtil.merge(calendarResourcesNames, ", ") %>
+				<%= HtmlUtil.escape(StringUtil.merge(calendarResourcesNames, ", ")) %>
 			</dd>
 		</c:if>
 		<c:if test="<%= Validator.isNotNull(calendarBooking.getLocation()) %>">
