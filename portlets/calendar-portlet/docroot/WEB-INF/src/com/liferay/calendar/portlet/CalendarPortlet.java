@@ -188,7 +188,9 @@ public class CalendarPortlet extends MVCPortlet {
 			getCalendarResource(renderRequest);
 		}
 		catch (Exception e) {
-			if (e instanceof NoSuchResourceException) {
+			if (e instanceof NoSuchResourceException ||
+				e instanceof PrincipalException) {
+
 				SessionErrors.add(renderRequest, e.getClass());
 			}
 			else {
@@ -518,6 +520,23 @@ public class CalendarPortlet extends MVCPortlet {
 		MBMessageServiceUtil.deleteDiscussionMessage(
 			groupId, className, classPK, permissionClassName, permissionClassPK,
 			permissionOwnerId, messageId);
+	}
+
+	@Override
+	protected void doDispatch(
+			RenderRequest renderRequest, RenderResponse renderResponse)
+		throws IOException, PortletException {
+
+		if (SessionErrors.contains(
+				renderRequest, NoSuchResourceException.class.getName()) ||
+			SessionErrors.contains(
+				renderRequest, PrincipalException.class.getName())) {
+
+			include("/error.jsp", renderRequest, renderResponse);
+		}
+		else {
+			super.doDispatch(renderRequest, renderResponse);
+		}
 	}
 
 	protected void getCalendar(PortletRequest portletRequest) throws Exception {
