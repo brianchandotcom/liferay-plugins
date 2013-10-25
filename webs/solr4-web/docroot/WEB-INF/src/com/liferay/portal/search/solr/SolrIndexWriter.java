@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -178,9 +179,23 @@ public class SolrIndexWriter extends BaseIndexWriter {
 			SearchContext searchContext, Collection<Document> documents)
 		throws SearchException {
 
-		for (Document document : documents) {
-			deleteDocument(searchContext, document.getUID());
+		if (documents.isEmpty()) {
+			return;
 		}
+
+		// LPS-41388
+
+		Iterator<Document> itr = documents.iterator();
+
+		Document firstDocument = itr.next();
+
+		String uid = firstDocument.getUID();
+
+		int pos = uid.indexOf(StringPool.UNDERLINE);
+
+		String portletId = uid.substring(0, pos);
+
+		deletePortletDocuments(searchContext, portletId);
 
 		addDocuments(searchContext, documents);
 	}
