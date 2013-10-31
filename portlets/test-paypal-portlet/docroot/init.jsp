@@ -27,22 +27,10 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
-page import="com.liferay.portal.kernel.util.Validator" %><%@
-page import="com.liferay.portal.util.PortalUtil" %><%@
-page import="com.liferay.testpaypal.util.PayPalUtil" %>
+page import="com.liferay.portal.util.PortalUtil" %>
 
-<%@ page import="com.paypal.api.payments.Amount" %><%@
-page import="com.paypal.api.payments.Details" %><%@
-page import="com.paypal.api.payments.Item" %><%@
-page import="com.paypal.api.payments.ItemList" %><%@
-page import="com.paypal.api.payments.Payee" %><%@
-page import="com.paypal.api.payments.Payer" %><%@
-page import="com.paypal.api.payments.PayerInfo" %><%@
-page import="com.paypal.api.payments.Payment" %><%@
-page import="com.paypal.api.payments.ShippingAddress" %><%@
-page import="com.paypal.api.payments.Transaction" %>
-
-<%@ page import="java.util.List" %>
+<%@ page import="com.paypal.api.payments.Item" %><%@
+page import="com.paypal.api.payments.Payment" %>
 
 <%@ page import="javax.portlet.PortletURL" %>
 

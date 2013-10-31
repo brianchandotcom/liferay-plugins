@@ -14,7 +14,6 @@
 
 package com.liferay.testpaypal.util;
 
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.util.portlet.PortletProps;
 
 /**

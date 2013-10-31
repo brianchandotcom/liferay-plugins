@@ -14,11 +14,7 @@
 
 package com.liferay.testpaypal.util;
 
-import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-
-import com.liferay.testpaypal.util.PortletPropsValues;
 
 import com.paypal.api.payments.Address;
 import com.paypal.api.payments.Amount;
@@ -30,22 +26,17 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payer;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.PaymentExecution;
-import com.paypal.api.payments.PaymentHistory;
 import com.paypal.api.payments.RedirectUrls;
 import com.paypal.api.payments.Transaction;
 import com.paypal.core.rest.APIContext;
 import com.paypal.core.rest.OAuthTokenCredential;
 import com.paypal.core.rest.PayPalRESTException;
-import com.paypal.core.rest.QueryParameters;
 
 import java.io.UnsupportedEncodingException;
 
 import java.net.URLDecoder;
 
-import java.text.DateFormat;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
