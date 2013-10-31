@@ -16,27 +16,14 @@
 
 <%@ include file="/init.jsp" %>
 
-<%
-String tabs1 = ParamUtil.getString(request, "tabs1", "Purchase");
-String tabs2 = ParamUtil.getString(request, "tabs2", "Account Payment");
+<h2>Cancel Account Payment</h2>
 
-PortletURL portletURL = renderResponse.createRenderURL();
+<p>
+	Your Account Payment transaction has been canceled.
+</p>
 
-portletURL.setParameter("mvcPath", "/view.jsp");
-portletURL.setParameter("tabs1", tabs1);
-portletURL.setParameter("tabs2", tabs2);
-%>
+<liferay-portlet:renderURL var="backURL">
+	<portlet:param name="mvcPath" value="/view.jsp" />
+</liferay-portlet:renderURL>
 
-<liferay-ui:tabs
-	names="Purchase"
-	param="tabs1"
-	url="<%= portletURL.toString() %>"
-/>
-
-<liferay-ui:tabs
-	names="Account Payment"
-	param="tabs2"
-	url="<%= portletURL.toString() %>"
-/>
-
-<liferay-util:include page="/purchase/purchase_with_account_payment.jsp" servletContext="<%= application %>" />
+<aui:button href="<%= backURL %>" value="Back" />

@@ -1,0 +1,34 @@
+/* ---------------- Global ---------------- */
+
+table {
+	margin: 0 20px 20px 0;
+}
+
+th {
+	background-color: #F0EFEF;
+}
+
+th, td {
+	padding: 2px 5px;
+}
+
+.shopping-cart {
+	display: block;
+	width: 100%;
+
+	table {
+		width: 100%;
+
+		.price {
+			text-align: right;
+		}
+
+		.quantity {
+			text-align: center;
+		}
+
+		.total {
+			font-weight: bold;
+		}
+	}
+}
