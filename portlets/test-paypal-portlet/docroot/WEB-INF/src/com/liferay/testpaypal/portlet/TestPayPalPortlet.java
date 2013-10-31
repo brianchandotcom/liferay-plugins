@@ -84,9 +84,13 @@ public class TestPayPalPortlet extends MVCPortlet {
 
 		List<Item> items = new ArrayList<Item>();
 
-		items.add(getItem("Boba Milk Tea", "4", "3.00", "USD"));
-		items.add(getItem("Caramel Macchiato", "1", "4.25", "USD"));
-		items.add(getItem("Pumpkin Spice Latte", "2", "4.50", "USD"));
+		Item item1 = getItem("Boba Milk Tea", "4", "3.00", "USD");
+		Item item2 = getItem("Caramel Macchiato", "1", "4.25", "USD");
+		Item item3 = getItem("Pumpkin Spice Latte", "2", "4.50", "USD");
+
+		items.add(item1);
+		items.add(item2);
+		items.add(item3);
 
 		try {
 			Payment payment = PayPalUtil.getAccountPayment(
@@ -99,6 +103,47 @@ public class TestPayPalPortlet extends MVCPortlet {
 			String redirectURL = PayPalUtil.getApprovalURL(payment);
 
 			actionResponse.sendRedirect(redirectURL);
+		}
+		catch (Exception e) {
+		}
+	}
+
+	public void purchaseWithRest(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws PortalException, SystemException {
+
+		List<Item> items = new ArrayList<Item>();
+
+		Item item1 = getItem("Boba Milk Tea", "3", "3.00", "USD");
+		Item item2 = getItem("Caramel Macchiato", "5", "4.25", "USD");
+		Item item3 = getItem("Pumpkin Spice Latte", "1", "4.50", "USD");
+
+		items.add(item1);
+		items.add(item2);
+		items.add(item3);
+
+		String total = "34.75";
+		String currencyCode = "USD";
+
+		String ccNumber = "4417119669820331";
+		String ccType = "visa";
+		int ccExpireMonth = 11;
+		int ccExpireYear = 2018;
+		String ccCvv2 = "874";
+		String ccFirstName = "Joe";
+		String ccLastName = "Shopper";
+
+		String street = "1400 Montefino Ave";
+		String city = "Diamond Bar";
+		String countryCode = "US";
+		String postalCode = "91765";
+		String state = "CA";
+
+		try {
+			PayPalUtil.executeRestPayment(
+				items, total, currencyCode, ccNumber, ccType, ccExpireMonth,
+				ccExpireYear, ccCvv2, ccFirstName, ccLastName, street, city,
+				countryCode, postalCode, state);
 		}
 		catch (Exception e) {
 		}

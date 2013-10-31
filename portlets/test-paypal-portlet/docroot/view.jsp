@@ -34,9 +34,16 @@ portletURL.setParameter("tabs2", tabs2);
 />
 
 <liferay-ui:tabs
-	names="Account Payment"
+	names="Account Payment, REST"
 	param="tabs2"
 	url="<%= portletURL.toString() %>"
 />
 
-<liferay-util:include page="/purchase/purchase_with_account_payment.jsp" servletContext="<%= application %>" />
+<c:choose>
+	<c:when test='<%= tabs2.equals("Account Payment") %>'>
+		<liferay-util:include page="/purchase/purchase_with_account_payment.jsp" servletContext="<%= application %>" />
+	</c:when>
+	<c:when test='<%= tabs2.equals("REST") %>'>
+		<liferay-util:include page="/purchase/purchase_with_rest.jsp" servletContext="<%= application %>" />
+	</c:when>
+</c:choose>

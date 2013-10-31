@@ -32,3 +32,24 @@ th, td {
 		}
 	}
 }
+
+/* ---------------- Pages ---------------- */
+
+/* ---------------- Rest ---------------- */
+
+.test-paypal.purchase-with-rest {
+	.payer-info, .cc-info {
+		display: inline-block;
+		vertical-align: top;
+		width: 400px;
+
+		th {
+			text-align: right;
+		}
+	}
+
+	.payment-info {
+		display: block;
+		width: 100%;
+	}
+}

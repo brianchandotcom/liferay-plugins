@@ -72,6 +72,63 @@ public class PayPalUtil {
 		payment.execute(apiContext, paymentExecute);
 	}
 
+	public static void executeRestPayment(
+			List<Item> items, String amountTotal, String currencyCode,
+			String ccNumber, String ccType, int ccExpireMonth, int ccExpireYear,
+			String ccCvv2, String ccFirstName, String ccLastName, String street,
+			String city, String countryCode, String postalCode, String state)
+		throws Exception {
+
+		Payment payment = new Payment();
+
+		payment.setIntent("sale");
+
+		Payer payer = new Payer();
+
+		List<FundingInstrument> fundingInstruments =
+			new ArrayList<FundingInstrument>();
+
+		FundingInstrument fundingInstrument = new FundingInstrument();
+
+		CreditCard creditCard = new CreditCard();
+
+		creditCard.setNumber(ccNumber);
+		creditCard.setType(ccType);
+		creditCard.setExpireMonth(ccExpireMonth);
+		creditCard.setExpireYear(ccExpireYear);
+		creditCard.setCvv2(ccCvv2);
+		creditCard.setFirstName(ccFirstName);
+		creditCard.setLastName(ccLastName);
+
+		Address address = new Address();
+
+		address.setLine1(street);
+		address.setCity(city);
+		address.setCountryCode(countryCode);
+		address.setPostalCode(postalCode);
+		address.setState(state);
+
+		creditCard.setBillingAddress(address);
+
+		fundingInstrument.setCreditCard(creditCard);
+
+		fundingInstruments.add(fundingInstrument);
+
+		payer.setFundingInstruments(fundingInstruments);
+		payer.setPaymentMethod("credit_card");
+
+		payment.setPayer(payer);
+
+		List<Transaction> transactions = getTransactions(
+			"Liferay Purchase Through REST", items, amountTotal, currencyCode);
+
+		payment.setTransactions(transactions);
+
+		APIContext apiContext = getAPIContext();
+
+		payment.create(apiContext);
+	}
+
 	public static Payment getAccountPayment(
 			List<Item> items, String amountTotal, String currencyCode,
 			String returnURL, String cancelURL)
