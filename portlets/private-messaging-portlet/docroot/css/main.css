@@ -1,21 +1,26 @@
 @import "compass";
 
 .private-messaging-portlet {
-	.column-content {
-		.check-all {
-			margin: 0 20px 0 5px;
-		}
+	.column-content .check-all {
+		margin: 0 20px 0 5px;
+	}
+
+	.navbar, .lfr-search-container {
+		margin: 0;
+	}
+
+	.navbar-inner {
+		border-bottom-width: 0;
+		padding: 0 10px;
 	}
 
 	img.avatar {
-		width: 50px;
+		width: 60px;
 	}
-
 
 	.controls {
 		.check-all {
-			margin-left: -10px;
-			margin-top: 13px;
+			margin: 15px 10px 0 0;
 		}
 
 		.back-button {
@@ -53,8 +58,9 @@
 
 	.message-link {
 		display: block;
-		margin: -10px -10px -10px -60px;
-		padding: 10px 10px 10px 60px;
+		margin: -10px;
+		padding: 10px;
+		padding-left: 80px;
 		position: relative;
 		z-index: 1;
 
@@ -69,6 +75,24 @@
 
 	.private-messaging-container .results-header, .taglib-user-display.display-style-2 .user-details, .taglib-user-display.display-style-2 .user-name {
 		display: none;
+	}
+
+	.table {
+		border-top: 0;
+		margin-bottom: 0;
+
+		thead {
+			display: none;
+		}
+
+		.first {
+			vertical-align: middle;
+			width: 12px;
+		}
+	}
+
+	.table-striped .table-data .first, .table-striped .table-data .last {
+		background: none;
 	}
 
 	/* Messages */
@@ -87,20 +111,20 @@
 
 	/* Results */
 
-	.messages .results-grid {
-		border-width: 0;
-
-		table.taglib-search-iterator, .results-row td, .results-row.alt td {
-			border: 1px solid #CFCFCF;
-		}
-
-		.results-row td, .results-row.alt td {
+	.messages .table-data tr {
+		&:hover td, &:nth-child(odd) td, td {
 			background: #FFF;
 			padding: 10px;
 		}
 
-		.results-row.unread td {
+		&.unread td {
 			background: #F0F5F7;
+		}
+	}
+
+	.taglib-search-iterator-page-iterator-bottom {
+		.lfr-pagination-buttons, .lfr-pagination-config, .search-results {
+			line-height: 30px;
 		}
 	}
 
@@ -127,9 +151,13 @@
 			padding: 0 10px 10px;
 		}
 
-		.results-row td {
-			border-bottom: 1px solid #CFCFCF;
+		tr td {
 			background-color: transparent;
+			border-bottom: 1px solid #CFCFCF;
+
+			&.last, &.only {
+				border-bottom-width: 0;
+			}
 		}
 
 		.name {
@@ -146,10 +174,6 @@
 	.messages .taglib-user-display, .thread .taglib-user-display {
 		float: left;
 		padding: 0;
-	}
-
-	.messages .last-thread, .thread .message {
-		margin-left: 60px;
 	}
 
 	.line-through {
