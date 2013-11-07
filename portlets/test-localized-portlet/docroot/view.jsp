@@ -32,7 +32,8 @@ Test only in
 
 <br /><br />
 
-<table class="lfr-table">
+<table class="table table-bordered table-hover table-striped">
+<thead>
 <tr>
 	<th>
 		Description
@@ -49,6 +50,8 @@ Test only in
 	<th></th>
 	<th></th>
 </tr>
+</thead>
+<tbody>
 
 <%
 String[] expectedResourceBundleValues = null;
@@ -242,7 +245,9 @@ for (int i = 0; i < tests.length; i++) {
 			<%= resourceBundleActualValue %>
 		</td>
 		<td>
-			<liferay-util:buffer var="taglibActualValue"><liferay-ui:message key="<%= key %>" /></liferay-util:buffer>
+			<liferay-util:buffer var="taglibActualValue">
+				<liferay-ui:message key="<%= key %>" />
+			</liferay-util:buffer>
 
 			<%= taglibActualValue %>
 		</td>
@@ -292,4 +297,5 @@ for (int i = 0; i < tests.length; i++) {
 }
 %>
 
+</tbody>
 </table>
