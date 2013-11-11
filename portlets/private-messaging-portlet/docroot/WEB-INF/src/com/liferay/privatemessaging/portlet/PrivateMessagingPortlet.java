@@ -99,15 +99,22 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 	}
 
 	public void getMessageAttachment(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
+
+		HttpServletRequest request = PortalUtil.getHttpServletRequest(
+			resourceRequest);
+		HttpServletResponse response = PortalUtil.getHttpServletResponse(
+			resourceResponse);
 
 		try {
 			ThemeDisplay themeDisplay =
-				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+				(ThemeDisplay)resourceRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
 
-			long messageId = ParamUtil.getLong(actionRequest, "messageId");
-			String fileName = ParamUtil.getString(actionRequest, "attachment");
+			long messageId = ParamUtil.getLong(resourceRequest, "messageId");
+			String fileName = ParamUtil.getString(
+				resourceRequest, "attachment");
 
 			MBMessage message = MBMessageLocalServiceUtil.getMessage(messageId);
 
@@ -116,11 +123,6 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 
 				throw new PrincipalException();
 			}
-
-			HttpServletRequest request = PortalUtil.getHttpServletRequest(
-				actionRequest);
-			HttpServletResponse response = PortalUtil.getHttpServletResponse(
-				actionResponse);
 
 			FileEntry fileEntry = PortletFileRepositoryUtil.getPortletFileEntry(
 				message.getGroupId(), message.getAttachmentsFolderId(),
@@ -131,7 +133,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				fileEntry.getSize(), fileEntry.getMimeType());
 		}
 		catch (Exception e) {
-			PortalUtil.sendError(e, actionRequest, actionResponse);
+			PortalUtil.sendError(e, request, response);
 		}
 	}
 
@@ -168,13 +170,13 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 	}
 
 	public void sendMessage(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
 		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(actionRequest);
+			PortalUtil.getUploadPortletRequest(resourceRequest);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
 		long userId = ParamUtil.getLong(uploadPortletRequest, "userId");
@@ -209,7 +211,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				}
 				catch (Exception e) {
 					_log.error(
-						translate(actionRequest, "unable to attach file ") +
+						translate(resourceRequest, "unable to attach file ") +
 							fileName, e);
 				}
 			}
@@ -221,17 +223,8 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			jsonObject.put("success", Boolean.TRUE);
 		}
 		catch (Exception e) {
-			String message = "unable-to-send-message";
+			jsonObject.put("message", getMessage(resourceRequest, e));
 
-			if (e instanceof FileExtensionException ||
-				e instanceof FileNameException ||
-				e instanceof FileSizeException ||
-				e instanceof IOException) {
-
-				message = "unable-to-process-attachment";
-			}
-
-			jsonObject.put("message", translate(actionRequest, message));
 			jsonObject.put("success", Boolean.FALSE);
 		}
 		finally {
@@ -244,7 +237,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			}
 		}
 
-		writeJSON(actionRequest, actionResponse, jsonObject);
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
 	}
 
 	@Override
@@ -256,8 +249,14 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			String resourceID = GetterUtil.getString(
 				resourceRequest.getResourceID());
 
-			if (resourceID.equals("getUsers")) {
+			if (resourceID.equals("getMessageAttachment")) {
+				getMessageAttachment(resourceRequest, resourceResponse);
+			}
+			else if (resourceID.equals("getUsers")) {
 				getUsers(resourceRequest, resourceResponse);
+			}
+			else if (resourceID.equals("sendMessage")) {
+				sendMessage(resourceRequest, resourceResponse);
 			}
 			else {
 				super.serveResource(resourceRequest, resourceResponse);
@@ -270,9 +269,6 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 
 	protected String getMessage(PortletRequest portletRequest, Exception key)
 		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
 
 		String message = null;
 
