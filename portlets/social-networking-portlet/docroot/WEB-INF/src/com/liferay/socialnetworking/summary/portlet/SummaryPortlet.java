@@ -115,7 +115,7 @@ public class SummaryPortlet extends MVCPortlet {
 				group.getGroupId(), new long[] {themeDisplay.getUserId()});
 		}
 		else {
-			Role role = RoleLocalServiceUtil.getRole(
+			Role siteAdminRole = RoleLocalServiceUtil.getRole(
 				themeDisplay.getCompanyId(), RoleConstants.SITE_ADMINISTRATOR);
 
 			LinkedHashMap<String, Object> userParams =
@@ -124,12 +124,27 @@ public class SummaryPortlet extends MVCPortlet {
 			userParams.put(
 				"userGroupRole",
 				new Long[] {new Long(group.getGroupId()),
-				new Long(role.getRoleId())});
+				new Long(siteAdminRole.getRoleId())});
 
 			List<User> users = UserLocalServiceUtil.search(
 				themeDisplay.getCompanyId(), null,
 				WorkflowConstants.STATUS_APPROVED, userParams,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, (OrderByComparator)null);
+
+			if (users.isEmpty()) {
+				Role adminRole = RoleLocalServiceUtil.getRole(
+					themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
+
+				userParams.clear();
+
+				userParams.put("usersRoles", adminRole.getRoleId());
+
+				users = UserLocalServiceUtil.search(
+					themeDisplay.getCompanyId(), null,
+					WorkflowConstants.STATUS_APPROVED, userParams,
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+					(OrderByComparator)null);
+			}
 
 			for (User user : users) {
 				SocialRequestLocalServiceUtil.addRequest(
@@ -168,6 +183,21 @@ public class SummaryPortlet extends MVCPortlet {
 			themeDisplay.getCompanyId(), null,
 			WorkflowConstants.STATUS_APPROVED, userParams, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, (OrderByComparator)null);
+
+		if (users.isEmpty()) {
+			Role adminRole = RoleLocalServiceUtil.getRole(
+				themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
+
+			userParams.clear();
+
+			userParams.put("usersRoles", adminRole.getRoleId());
+
+			users = UserLocalServiceUtil.search(
+				themeDisplay.getCompanyId(), null,
+				WorkflowConstants.STATUS_APPROVED, userParams,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				(OrderByComparator)null);
+		}
 
 		for (User user : users) {
 			SocialRequestLocalServiceUtil.addRequest(
