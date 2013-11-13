@@ -131,13 +131,13 @@ public class SummaryPortlet extends MVCPortlet {
 				WorkflowConstants.STATUS_APPROVED, userParams,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, (OrderByComparator)null);
 
-			if (users.size() == 0) {
-				Role portalAdminRole = RoleLocalServiceUtil.getRole(
+			if (users.isEmpty()) {
+				Role adminRole = RoleLocalServiceUtil.getRole(
 					themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
 
 				userParams.clear();
 
-				userParams.put("usersRoles", portalAdminRole.getRoleId());
+				userParams.put("usersRoles", adminRole.getRoleId());
 
 				users = UserLocalServiceUtil.search(
 					themeDisplay.getCompanyId(), null,
@@ -184,13 +184,13 @@ public class SummaryPortlet extends MVCPortlet {
 			WorkflowConstants.STATUS_APPROVED, userParams, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, (OrderByComparator)null);
 
-		if (users.size() == 0) {
-			Role portalAdminRole = RoleLocalServiceUtil.getRole(
+		if (users.isEmpty()) {
+			Role adminRole = RoleLocalServiceUtil.getRole(
 				themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
 
 			userParams.clear();
 
-			userParams.put("usersRoles", portalAdminRole.getRoleId());
+			userParams.put("usersRoles", adminRole.getRoleId());
 
 			users = UserLocalServiceUtil.search(
 				themeDisplay.getCompanyId(), null,
