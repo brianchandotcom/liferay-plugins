@@ -19,7 +19,6 @@
 
 	.user-notifications-list {
 		list-style: none;
-		margin: 0;
 
 		.message {
 			text-align: center;
@@ -124,15 +123,13 @@
 			.count {
 				float: right;
 			}
+
+			&:hover {
+				text-decoration: none;
+			}
 		}
 
-		a:hover {
-			background-color: #0A85E4;
-			color: #FFF;
-			text-decoration: none;
-		}
-
-		a.selected {
+		a:hover, a.selected {
 			background-color: #0A85E4;
 			color: #FFF;
 		}
@@ -150,10 +147,10 @@
 
 	.user-notifications-list {
 		.user-notification {
-			color:#000;
+			color: #000;
 
 			&:hover {
-				color:#FFF;
+				color: #FFF;
 			}
 
 			&.unread {
@@ -169,10 +166,8 @@
 			}
 		}
 
-		.message {
-			&.top {
-				border-bottom: 1px solid #D5D5D5;
-			}
+		.message.top {
+			border-bottom: 1px solid #D5D5D5;
 		}
 	}
 
@@ -202,34 +197,22 @@
 
 /* ---------- Extras ---------- */
 
-.dockbar-user-notifications {
-	.user-notifications-count {
-		@include border-radius(4px);
-	}
+.dockbar-user-notifications .user-notifications-count, .notifications-portlet .nav a:hover, .notifications-portlet .nav a.selected, .notifications-portlet .user-notifications-list-container {
+	@include border-radius(4px);
 }
 
-.notifications-portlet {
-	.nav {
-		a:hover {
-			@include border-radius(4px);
+.aui {
+	li.user-notification {
+		line-height: 20px;
+	}
+
+	.dockbar .nav li.dropdown.dockbar-user-notifications .dropdown-menu {
+		left: auto;
+		padding: 10px;
+		right: 0;
+
+		&.pull-right:after {
+			right: 20px;
 		}
-
-		a.selected {
-			@include border-radius(4px);
-		}
 	}
-
-	.user-notifications-list-container {
-		@include border-radius(4px);
-	}
-}
-
-.aui li.user-notification {
-	line-height: 20px;
-}
-
-.aui .dockbar .nav li.dropdown.dockbar-user-notifications .dropdown-menu {
-	left: auto;
-	padding: 10px;
-	right: 0;
 }
