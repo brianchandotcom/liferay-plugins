@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.util.PortletKeys;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -89,6 +90,10 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 					return;
 				}
 
+				if (type.equals(PortletKeys.ANNOUNCEMENTS)) {
+					type = "1_WAR_soannouncementsportlet";
+				}
+
 				payloadJSONObject.remove("portletId");
 
 				long entryId = payloadJSONObject.getLong("entryId");
@@ -97,6 +102,16 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 					payloadJSONObject.put("classPK", entryId);
 
 					payloadJSONObject.remove("entryId");
+				}
+				else {
+					long memberRequestId = payloadJSONObject.getLong(
+						"memberRequestId");
+
+					if (memberRequestId > 0) {
+						payloadJSONObject.put("classPK", memberRequestId);
+
+						payloadJSONObject.remove("memberRequestId");
+					}
 				}
 
 				updateNotification(
