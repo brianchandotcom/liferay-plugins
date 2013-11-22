@@ -1,4 +1,5 @@
 @import "compass";
+@import "mixins";
 
 .calendar-booking-invitations {
 	min-height: 110px;
@@ -552,4 +553,10 @@
 
 .simple-color-picker-item:hover, .simple-color-picker-item-selected {
 	@include transition(border-color 0s);
+}
+
+@include respond-to(phone, tablet) {
+	.scheduler-view-table-header-day div {
+		overflow: hidden
+	}
 }
