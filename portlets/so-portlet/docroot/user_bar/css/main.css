@@ -183,8 +183,14 @@ html.aui {
 		}
 
 		.info-items, .info-link-container {
-			position: relative;
-			top: 44px;
+			left: auto;
+			position: absolute;
+			right: 16px;
+			top: 43px;
+		}
+
+		.info-items {
+			width: 660px;
 		}
 	}
 
@@ -240,12 +246,16 @@ html.aui {
 	}
 }
 
-.portlet-dockbar .nav-account-controls .go-to {
-	.so-portlet-sites .search .search-input {
+.portlet-dockbar .nav-account-controls .go-to .so-portlet-sites {
+	.alert, .alert-success, .portlet-msg-alert, .portlet-msg-error, .portlet-msg-help, .portlet-msg-info, .portlet-msg-progress, .portlet-msg-success {
+		display: block;
+		margin-bottom: -1px;
+	}
+
+	.search .search-input {
 		border: 1px solid #1C2125;
 	}
 }
-
 
 @media (max-width:860px) {
 	.so-portlet-user-bar {
