@@ -14,6 +14,7 @@
 
 package com.liferay.notifications.hook.upgrade.v1_0_0;
 
+import com.liferay.notifications.util.PortletKeys;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -71,7 +72,7 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 				"select userNotificationEventId, payload from " +
 					"UserNotificationEvent where type_ = ?");
 
-			ps.setString(1, "6_WAR_soportlet");
+			ps.setString(1, PortletKeys.SO_NOTIFICATION);
 
 			rs = ps.executeQuery();
 
@@ -89,6 +90,10 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 					return;
 				}
 
+				if (type.equals(PortletKeys.ANNOUNCEMENTS)) {
+					type = PortletKeys.SO_ANNOUNCEMENTS;
+				}
+
 				payloadJSONObject.remove("portletId");
 
 				long entryId = payloadJSONObject.getLong("entryId");
@@ -97,6 +102,16 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 					payloadJSONObject.put("classPK", entryId);
 
 					payloadJSONObject.remove("entryId");
+				}
+				else {
+					long memberRequestId = payloadJSONObject.getLong(
+						"memberRequestId");
+
+					if (memberRequestId > 0) {
+						payloadJSONObject.put("classPK", memberRequestId);
+
+						payloadJSONObject.remove("memberRequestId");
+					}
 				}
 
 				updateNotification(
