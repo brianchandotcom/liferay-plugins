@@ -4,6 +4,9 @@
 <project name="build-common-osgi-plugin" xmlns:antelope="antlib:ise.antelope.tasks">
 	<import file="build-common-plugin.xml" />
 
+	<var name="import.compat.shared" value="false" />
+	<var name="plugin.packaging" value="jar" />
+
 	<antelope:stringutil string="${plugin.file}" property="plugin.file">
 		<antelope:replace regex="\.war" replacement="\.jar" />
 	</antelope:stringutil>
@@ -31,6 +34,9 @@
 	<var name="plugin-lib.classpath.path" unset="true" />
 
 	<taskdef classpathref="portal.classpath" resource="aQute/bnd/ant/taskdef.properties" />
+
+	<bndexpand propertyfile="bnd.bnd" />
+	<bndexpand propertyfile="${sdk.dir}/common.bnd" />
 
 	<macrodef name="manifest-helper">
 		<attribute name="analyze" default="false" />
@@ -124,7 +130,7 @@
 				<baseline-jar-macro
 					bndRootFile="${sdk.dir}/common.bnd"
 					file="bnd.bnd"
-					outputPath="."
+					outputPath="${plugin.file}"
 					rootProjectDir="${project.dir}"
 					sourcePath="."
 				/>
