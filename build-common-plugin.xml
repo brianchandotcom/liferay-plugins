@@ -683,6 +683,12 @@ Please find a solution that does not require portal-impl.jar.
 					<param name="javac.destdir" value="docroot/WEB-INF/classes" />
 					<param name="javac.srcdir" value="docroot/WEB-INF/src" />
 				</antcall>
+
+				<antcall target="fsc">
+					<param name="scalac.classpathref" value="plugin.classpath" />
+					<param name="scalac.destdir" value="docroot/WEB-INF/classes" />
+					<param name="scalac.srcdir" value="docroot/WEB-INF/src" />
+				</antcall>
 			</then>
 		</if>
 
@@ -820,6 +826,11 @@ Please find a solution that does not require portal-impl.jar.
 					<param name="javac.classpathref" value="test.classpath" />
 					<param name="javac.destdir" value="test-classes/${test.type}" />
 					<param name="javac.srcdir" value="test/${test.type}" />
+				</antcall>
+				<antcall target="fsc">
+					<param name="scalac.classpathref" value="test.classpath" />
+					<param name="scalac.destdir" value="test-classes/${test.type}" />
+					<param name="scalac.srcdir" value="test/${test.type}" />
 				</antcall>
 			</then>
 		</if>
