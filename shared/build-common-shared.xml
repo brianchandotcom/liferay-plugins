@@ -34,6 +34,12 @@
 			<param name="javac.destdir" value="classes" />
 			<param name="javac.srcdir" value="src" />
 		</antcall>
+
+		<antcall target="fsc">
+			<param name="scalac.classpathref" value="plugin.classpath" />
+			<param name="scalac.destdir" value="classes" />
+			<param name="scalac.srcdir" value="src" />
+		</antcall>
 	</target>
 
 	<target name="deploy" depends="jar">
