@@ -481,10 +481,10 @@ if (comment) {
 
 			var url = form.one('input[name="<portlet:namespace />redirect"]');
 
-			var updateContainer = A.one('.microblogs-portlet .portlet-body');
+			var updateContainer = A.one('#p_p_id<portlet:namespace /> .portlet-body');
 
 			<c:if test="<%= comment %>">
-				updateContainer = A.one('.microblogs-portlet #<portlet:namespace />commentsContainer<%= microblogsEntryId %>');
+				updateContainer = A.one('#<portlet:namespace />commentsContainer<%= microblogsEntryId %>');
 			</c:if>
 
 			Liferay.Microblogs.updateMicroblogs(form, url.get("value"), updateContainer);
