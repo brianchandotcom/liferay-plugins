@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="build-servers" xmlns:antelope="antlib:ise.antelope.tasks">
+	<import file="build-common.xml" />
+
+	<property location="${sdk.dir}/../../servers" name="cli.servers.dir" />
+
+	<propertycopy from="app.server.${app.server.type}.zip.url" name="app.server.zip.url" />
+
+	<basename file="${app.server.zip.url}" property="app.server.zip.name" suffix=".zip" />
+
+	<property location="${cli.servers.dir}/${app.server.zip.name}" name="cli.app.server.parent.dir" />
+
+	<propertycopy from="cli.app.server.parent.dir" name="app.server.parent.dir" override="true" />
+
+	<loadproperties prefix="cli." srcFile="${sdk.dir}/build.properties" />
+
+	<propertycopy from="cli.app.server.${app.server.type}.deploy.dir" name="app.server.deploy.dir" override="true" />
+	<propertycopy from="cli.app.server.${app.server.type}.dir" name="app.server.dir" override="true" />
+	<propertycopy from="cli.app.server.${app.server.type}.lib.global.dir" name="app.server.lib.global.dir" override="true" />
+	<propertycopy from="cli.app.server.${app.server.type}.portal.dir" name="app.server.portal.dir" override="true" />
+	<propertycopy from="cli.auto.deploy.dir" name="auto.deploy.dir" override="true" />
+
+	<macrodef name="update-cli-properties">
+		<sequential>
+			<propertyfile file="${sdk.dir}/cli.properties">
+				<entry key="app.server.deploy.dir" value="${app.server.deploy.dir}" />
+				<entry key="app.server.dir" value="${app.server.dir}" />
+				<entry key="app.server.lib.global.dir" value="${app.server.lib.global.dir}" />
+				<entry key="app.server.portal.dir" value="${app.server.portal.dir}" />
+				<entry key="app.server.type" value="${app.server.type}" />
+				<entry key="auto.deploy.dir" value="${auto.deploy.dir}" />
+			</propertyfile>
+		</sequential>
+	</macrodef>
+
+	<target name="install-server">
+		<property location="${sdk.dir}/../../bundles" name="cli.bundles.dir" />
+
+		<if>
+			<not>
+				<available file="${cli.bundles.dir}/${app.server.zip.name}.zip" />
+			</not>
+			<then>
+				<mkdir dir="${cli.bundles.dir}" />
+
+				<get
+					dest="${cli.bundles.dir}"
+					password="${cli.password}"
+					src="${app.server.zip.url}"
+					username="${cli.username}"
+					verbose="true"
+				/>
+			</then>
+		</if>
+
+		<antelope:stringutil property="app.server.zip.version" string="${app.server.zip.name}">
+			<replace regex="liferay-portal-${app.server.type}-" replacement="" />
+		</antelope:stringutil>
+
+		<antelope:stringutil string="${app.server.zip.version}" property="app.server.zip.version.endindex">
+			<lastindexof string="-" />
+		</antelope:stringutil>
+
+		<antelope:stringutil string="${app.server.zip.version}" property="app.server.zip.version.without.timestamp">
+			<substring endindex="${app.server.zip.version.endindex}" />
+		</antelope:stringutil>
+
+		<unzip
+			dest="${cli.servers.dir}/${app.server.zip.name}"
+			src="${cli.bundles.dir}/${app.server.zip.name}.zip"
+		>
+			<mapper>
+				<globmapper
+					from="liferay-portal-${app.server.zip.version.without.timestamp}/*"
+					to="*"
+				/>
+			</mapper>
+		</unzip>
+
+		<update-cli-properties />
+	</target>
+
+	<target name="select-app-server-type">
+		<update-cli-properties />
+	</target>
+
+	<target name="run-server">
+		<switch value="${app.server.type}">
+			<case value="geronimo">
+				<java fork="true" jar="${app.server.dir}/bin/server.jar">
+					<jvmarg value="-Dfile.encoding=UTF8" />
+					<jvmarg value="-Duser.timezone=GMT" />
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
+				</java>
+			</case>
+			<case value="glassfish">
+				<java fork="true" jar="${app.server.dir}/modules/admin-cli.jar">
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
+					<arg line="start-domain --verbose" />
+				</java>
+			</case>
+			<case value="jboss">
+				<java fork="true" jar="${app.server.dir}/jboss-modules.jar">
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
+					<arg line="-mp ${app.server.dir}/modules/ -jaxpmodule javax.xml.jaxp-provider org.jboss.as.standalone -Djboss.home.dir=${app.server.dir}" />
+				</java>
+			</case>
+			<case value="jetty">
+				<java dir="${app.server.dir}" fork="true" jar="${app.server.dir}/start.jar">
+					<jvmarg value="-Dapp.server.jetty.version=8.1.10" />
+					<jvmarg value="-Dapp.server.jetty.version.date=20130312" />
+					<jvmarg value="-Dfile.encoding=UTF8" />
+					<jvmarg value="-Djava.net.preferIPv4Stack=true" />
+					<jvmarg value="-Duser.timezone=GMT" />
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
+				</java>
+			</case>
+			<case value="jonas">
+				<path id="jonas.classpath">
+					<fileset dir="${app.server.dir}/lib">
+						<include name="**/*.jar" />
+					</fileset>
+				</path>
+
+				<java classname="org.ow2.jonas.commands.admin.ClientAdmin" classpathref="jonas.classpath" fork="true">
+					<jvmarg value="-Dfile.encoding=UTF8" />
+					<jvmarg value="-Djava.net.preferIPv4Stack=true" />
+					<jvmarg value="-Djonas.felix.configuration.file=${app.server.dir}/conf/felix-config.properties" />
+					<jvmarg value="-Duser.timezone=GMT" />
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
+					<jvmarg value="-Djava.awt.headless=true" />
+					<jvmarg value="-Djonas.root=${app.server.dir}" />
+					<jvmarg value="-Djonas.base=${app.server.dir}" />
+					<jvmarg value="-Dipojo.log.level=ERROR" />
+					<jvmarg value="-Djava.security.policy=${app.server.dir}/conf/java.policy" />
+					<jvmarg value="-Djava.security.auth.login.config=${app.server.dir}/conf/jaas.config" />
+					<jvmarg value="-Djava.endorsed.dirs=${app.server.dir}/lib/endorsed" />
+					<arg line="-start" />
+				</java>
+			</case>
+			<case value="resin">
+				<java fork="true" jar="${app.server.dir}/lib/resin.jar">
+					<arg value="console" />
+				</java>
+			</case>
+			<case value="tomcat">
+				<path id="tomcat.classpath">
+					<fileset dir="${app.server.dir}/bin">
+						<include name="**/*.jar" />
+					</fileset>
+				</path>
+
+				<java classname="org.apache.catalina.startup.Bootstrap" classpathref="tomcat.classpath" fork="true">
+					<jvmarg value="-Dcatalina.home=${app.server.dir}" />
+					<jvmarg value="-Dfile.encoding=UTF8" />
+					<jvmarg value="-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" />
+					<jvmarg value="-Duser.timezone=GMT" />
+					<jvmarg value="-Xmx1024m" />
+					<jvmarg value="-XX:MaxPermSize=256m" />
+				</java>
+			</case>
+		</switch>
+	</target>
+</project>
