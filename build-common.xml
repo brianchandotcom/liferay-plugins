@@ -196,6 +196,51 @@ ECJ was automatically installed. Please rerun your task.
 		<delete file="ServiceBuilder.temp" />
 	</target>
 
+	<target name="fsc">
+		<mkdir dir="${plugin.classes.dir}" />
+
+		<fsc
+			addparams="${scala.compiler.parameters}"
+			classpathref="plugin.classpath"
+			deprecation="true"
+			destdir="${plugin.classes.dir}"
+			srcdir="${plugin.source.dir}"
+		>
+			<include name="**/*.java" />
+			<include name="**/*.scala" />
+		</fsc>
+	</target>
+
+	<target name="fsc-reset">
+		<mkdir dir="${plugin.classes.dir}" />
+
+		<fsc
+			classpathref="plugin.classpath"
+			deprecation="true"
+			destdir="${plugin.classes.dir}"
+			reset="true"
+			srcdir="${plugin.source.dir}"
+		>
+			<include name="**/*.java" />
+			<include name="**/*.scala" />
+		</fsc>
+	</target>
+
+	<target name="fsc-shutdown">
+		<mkdir dir="${plugin.classes.dir}" />
+
+		<fsc
+			classpathref="plugin.classpath"
+			deprecation="true"
+			destdir="${plugin.classes.dir}"
+			shutdown="true"
+			srcdir="${plugin.source.dir}"
+		>
+			<include name="**/*.java" />
+			<include name="**/*.scala" />
+		</fsc>
+	</target>
+
 	<target name="print-current-time">
 		<tstamp>
 			<format property="current.time" pattern="MMMM d, yyyy 'at' hh:mm aa" />
