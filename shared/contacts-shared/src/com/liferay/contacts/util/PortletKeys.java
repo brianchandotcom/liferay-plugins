@@ -12,26 +12,20 @@
  * details.
  */
 
-package com.liferay.so.util;
+package com.liferay.contacts.util;
 
 /**
  * @author Ryan Park
  */
 public class PortletKeys extends com.liferay.portal.util.PortletKeys {
 
-	public static final String SO_ACTIVITIES = "1_WAR_soportlet";
+	public static final String CONTACTS_CENTER = "1_WAR_contactsportlet";
 
-	public static final String SO_ANNOUNCEMENTS =
-		com.liferay.so.announcements.util.PortletKeys.SO_ANNOUNCEMENTS;
+	public static final String MEMBERS = "4_WAR_contactsportlet";
 
-	public static final String SO_DOCKBAR_NOTIFICATION = "7_WAR_soportlet";
+	public static final String PRIVATE_MESSAGING =
+		com.liferay.privatemessaging.util.PortletKeys.PRIVATE_MESSAGING;
 
-	public static final String SO_EXPERTISE = "4_WAR_soportlet";
-
-	public static final String SO_INVITE_MEMBERS = "2_WAR_soportlet";
-
-	public static final String SO_NOTIFICATION = "6_WAR_soportlet";
-
-	public static final String SO_SITES = "5_WAR_soportlet";
+	public static final String PROFILE = "2_WAR_contactsportlet";
 
 }
