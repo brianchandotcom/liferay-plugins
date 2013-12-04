@@ -28,8 +28,6 @@
 	<portlet>
 		<portlet-name>5</portlet-name>
 		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
-		<header-portlet-css>/sites/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/sites/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>so-portlet-sites</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 		<system>true</system>

@@ -52,7 +52,11 @@ PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setWindowState(WindowState.NORMAL);
 
 pageContext.setAttribute("portletURL", portletURL);
+
+Portlet portlet = PortletLocalServiceUtil.getPortletById(company.getCompanyId(), portletDisplay.getId());
 %>
+
+<link href="<%= PortalUtil.getStaticResourceURL(request, portlet.getStaticResourcePath() + "/sites/css/main.css", portlet.getTimestamp()) %>" rel="stylesheet" type="text/css" />
 
 <div id="<portlet:namespace />messages"><!-- --></div>
 
@@ -82,6 +86,8 @@ pageContext.setAttribute("portletURL", portletURL);
 </div>
 
 </form>
+
+<script src="<%= PortalUtil.getStaticResourceURL(request, portlet.getStaticResourcePath() + "/sites/js/main.js", portlet.getTimestamp()) %>" type="text/javascript"></script>
 
 <aui:script use="aui-base,aui-io-deprecated,aui-toolbar,liferay-so-user-menu">
 	Liferay.SO.Sites.init(
