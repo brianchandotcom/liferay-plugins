@@ -75,14 +75,22 @@ if (microblogsEntries != null) {
 
 			<div class="entry-bubble">
 				<div class="user-name">
-					<span><a href="<%= userDisplayURL %>"><%= userFullName %></a></span>
+
+					<%
+					String userName = "<span><a href=\"" + userDisplayURL +"\">" + userFullName + "</a></span>";
+					%>
 
 					<c:choose>
 						<c:when test="<%= microblogsEntry.getType() == MicroblogsEntryConstants.TYPE_REPOST %>">
-							<span class="small"><liferay-ui:message key="reposted-from" /></span> <span><%= PortalUtil.getUserName(microblogsEntry.getReceiverUserId(), StringPool.BLANK) %></span>
+
+							<%
+							String receiverUserName = "<span>" + PortalUtil.getUserName(microblogsEntry.getReceiverUserId(), StringPool.BLANK) + "</span>";
+							%>
+
+							<span class="small"><liferay-ui:message arguments="<%= new Object[] {userName, receiverUserName} %>" key="x-reposted-from-x" /></span>
 						</c:when>
 						<c:otherwise>
-							<span class="small"><liferay-ui:message key="says" /></span>
+							<span class="small"><liferay-ui:message arguments="<%= userName %>" key="x-says" /></span>
 						</c:otherwise>
 					</c:choose>
 				</div>
