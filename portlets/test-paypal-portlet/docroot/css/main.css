@@ -1,0 +1,55 @@
+/* ---------------- Global ---------------- */
+
+table {
+	margin: 0 20px 20px 0;
+}
+
+th {
+	background-color: #F0EFEF;
+}
+
+th, td {
+	padding: 2px 5px;
+}
+
+.shopping-cart {
+	display: block;
+	width: 100%;
+
+	table {
+		width: 100%;
+
+		.price {
+			text-align: right;
+		}
+
+		.quantity {
+			text-align: center;
+		}
+
+		.total {
+			font-weight: bold;
+		}
+	}
+}
+
+/* ---------------- Pages ---------------- */
+
+/* -------- Rest -------- */
+
+.test-paypal.purchase-with-rest {
+	.payer-info, .cc-info {
+		display: inline-block;
+		vertical-align: top;
+		width: 400px;
+
+		th {
+			text-align: right;
+		}
+	}
+
+	.payment-info {
+		display: block;
+		width: 100%;
+	}
+}
