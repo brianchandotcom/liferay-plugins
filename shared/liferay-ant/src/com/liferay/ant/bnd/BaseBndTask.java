@@ -107,6 +107,26 @@ public abstract class BaseBndTask extends BndTask {
 		}
 
 		_bndRootFile = _bndRootFile.getAbsoluteFile();
+
+		File rootDir = _bndRootFile.getParentFile();
+
+		if (!rootDir.canWrite()) {
+			return;
+		}
+
+		File bndDir = new File(rootDir, getBndDirName());
+
+		if (!bndDir.exists() && !bndDir.mkdir()) {
+			return;
+		}
+
+		File buildFile = new File(bndDir, "build.bnd");
+
+		if (buildFile.exists() || !bndDir.canWrite()) {
+			return;
+		}
+
+		buildFile.createNewFile();
 	}
 
 	protected abstract void doExecute() throws Exception;
