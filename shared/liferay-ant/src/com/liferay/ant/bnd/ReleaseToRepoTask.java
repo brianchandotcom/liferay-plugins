@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.util.ant.bnd;
+package com.liferay.ant.bnd;
 
 import java.io.File;
 
