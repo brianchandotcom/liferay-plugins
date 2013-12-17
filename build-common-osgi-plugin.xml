@@ -35,6 +35,9 @@
 
 	<taskdef classpathref="portal.classpath" resource="aQute/bnd/ant/taskdef.properties" />
 
+	<bndexpand propertyfile="bnd.bnd" />
+	<bndexpand propertyfile="${sdk.dir}/common.bnd" />
+
 	<macrodef name="manifest-helper">
 		<attribute name="analyze" default="false" />
 
