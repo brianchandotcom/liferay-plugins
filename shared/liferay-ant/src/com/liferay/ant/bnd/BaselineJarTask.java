@@ -26,10 +26,6 @@ import aQute.bnd.service.diff.Delta;
 import aQute.bnd.service.diff.Diff;
 import aQute.bnd.version.Version;
 
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -86,6 +82,13 @@ public class BaselineJarTask extends BaseBndTask {
 		projectBuilder.setPedantic(isPedantic());
 		projectBuilder.setProperties(_file);
 		projectBuilder.setSourcepath(new File[] {_sourcePath});
+
+		if (baselineProperty != null) {
+			projectBuilder.setProperty("-baseline", baselineProperty);
+		}
+		else {
+			projectBuilder.setProperty("-baseline", "*");
+		}
 
 		Jar baselineJar = projectBuilder.getBaselineJar();
 
@@ -216,10 +219,10 @@ public class BaselineJarTask extends BaseBndTask {
 
 		_reportLevel = project.getProperty("baseline.jar.report.level");
 
-		_reportLevelIsDiff = Validator.equals(_reportLevel, "diff");
-		_reportLevelIsOff = Validator.equals(_reportLevel, "off");
-		_reportLevelIsPersist = Validator.equals(_reportLevel, "persist");
-		_reportLevelIsStandard = Validator.equals(_reportLevel, "standard");
+		_reportLevelIsDiff = "diff".equals(_reportLevel);
+		_reportLevelIsOff = "off".equals(_reportLevel);
+		_reportLevelIsPersist = "persist".equals(_reportLevel);
+		_reportLevelIsStandard = "standard".equals(_reportLevel);
 
 		if (_reportLevelIsPersist) {
 			_reportLevelIsDiff = true;
@@ -240,9 +243,8 @@ public class BaselineJarTask extends BaseBndTask {
 			}
 		}
 
-		_reportOnlyDirtyPackages = GetterUtil.getBoolean(
-			project.getProperty("baseline.jar.report.only.dirty.packages"),
-			false);
+		_reportOnlyDirtyPackages = Boolean.parseBoolean(
+			project.getProperty("baseline.jar.report.only.dirty.packages"));
 
 		if ((_sourcePath == null) || !_sourcePath.exists() ||
 			!_sourcePath.isDirectory()) {
@@ -283,7 +285,7 @@ public class BaselineJarTask extends BaseBndTask {
 	protected void doDiff(Diff diff, StringBuffer sb) {
 		String output = String.format(
 			"%s%-3s %-10s %s", sb, getShortDelta(diff.getDelta()),
-			StringUtil.toLowerCase(String.valueOf(diff.getType())),
+			String.valueOf(diff.getType()).toLowerCase(),
 			diff.getName());
 
 		project.log(output, Project.MSG_WARN);

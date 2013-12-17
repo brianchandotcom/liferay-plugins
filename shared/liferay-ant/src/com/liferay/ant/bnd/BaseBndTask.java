@@ -15,16 +15,16 @@
 package com.liferay.ant.bnd;
 
 import aQute.bnd.ant.BndTask;
+import aQute.bnd.build.Project;
 import aQute.bnd.build.Workspace;
 import aQute.bnd.service.IndexProvider;
+import aQute.bnd.service.RepositoryPlugin;
 
 import java.io.File;
 
 import java.util.Properties;
-import java.util.Set;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 /**
  * @author Raymond Augé
@@ -49,28 +49,31 @@ public abstract class BaseBndTask extends BndTask {
 	}
 
 	@SuppressWarnings("unchecked")
-	public aQute.bnd.build.Project getBndProject() throws Exception {
+	public Project getBndProject() throws Exception {
 		File bndRootFile = getBndRootFile();
 
 		Workspace workspace = Workspace.getWorkspace(
 			bndRootFile.getParentFile(), getBndDirName());
 
-		aQute.bnd.build.Project bndProject = new aQute.bnd.build.Project(
-			workspace, bndRootFile.getParentFile());
-
-		bndProject.setFileMustExist(true);
-		bndProject.setProperties(bndRootFile);
+		workspace.setProperties(bndRootFile);
 
 		Properties properties = new Properties();
 
 		properties.putAll(project.getProperties());
-		properties.putAll(bndProject.getProperties());
+		properties.putAll(workspace.getProperties());
 
-		bndProject.setProperties(properties);
+		if (properties.containsKey("-baseline")) {
+			baselineProperty = (String)properties.remove("-baseline");
+		}
 
-		Set<Object> plugins = bndProject.getPlugins();
+		workspace.setProperties(properties);
 
-		for (Object plugin : plugins) {
+		Project bndProject = new Project(
+			workspace, bndRootFile.getParentFile());
+
+		bndProject.setFileMustExist(true);
+
+		for (RepositoryPlugin plugin : workspace.getRepositories()) {
 			if (plugin instanceof IndexProvider) {
 				IndexProvider indexProvider = (IndexProvider)plugin;
 
@@ -97,7 +100,7 @@ public abstract class BaseBndTask extends BndTask {
 				project.log(
 					"bndRootFile is either missing or is a directory " +
 						_bndRootFile.getAbsolutePath(),
-					Project.MSG_ERR);
+					org.apache.tools.ant.Project.MSG_ERR);
 			}
 
 			throw new Exception("bndRootFile is invalid");
@@ -122,7 +125,8 @@ public abstract class BaseBndTask extends BndTask {
 		return _bndDirName;
 	}
 
-	protected Project project;
+	protected String baselineProperty = null;
+	protected org.apache.tools.ant.Project project;
 
 	private static final String _BND_DIR = ".bnd";
 
