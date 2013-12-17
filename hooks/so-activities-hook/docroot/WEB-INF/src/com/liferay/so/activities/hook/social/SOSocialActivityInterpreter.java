@@ -159,15 +159,7 @@ public abstract class SOSocialActivityInterpreter
 				QueryUtil.ALL_POS);
 
 		for (SocialActivity activity : activities) {
-			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
-
-			PermissionChecker permissionChecker =
-				themeDisplay.getPermissionChecker();
-
-			if (!hasPermissions(
-					permissionChecker, activity, ActionKeys.VIEW,
-					serviceContext)) {
-
+			if (!hasPermissions(activity, serviceContext)) {
 				continue;
 			}
 
@@ -435,6 +427,42 @@ public abstract class SOSocialActivityInterpreter
 		return permissionChecker.hasPermission(
 			activity.getGroupId(), activity.getClassName(),
 			activity.getClassPK(), ActionKeys.VIEW);
+	}
+
+	protected boolean hasPermissions(
+			SocialActivity activity, ServiceContext serviceContext)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
+		PermissionChecker permissionChecker =
+			themeDisplay.getPermissionChecker();
+
+		return hasPermissions(
+			permissionChecker, activity, ActionKeys.VIEW, serviceContext);
+	}
+
+	protected boolean hasPermissions(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
+		PermissionChecker permissionChecker =
+			themeDisplay.getPermissionChecker();
+
+		List<SocialActivity> activities =
+			SocialActivityLocalServiceUtil.getActivitySetActivities(
+				activitySet.getActivitySetId(), 0, 1);
+
+		if (!activities.isEmpty()) {
+			SocialActivity activity = activities.get(0);
+
+			return hasPermissions(
+				permissionChecker, activity, ActionKeys.VIEW, serviceContext);
+		}
+
+		return false;
 	}
 
 	protected boolean isExpired(
