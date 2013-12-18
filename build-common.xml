@@ -1444,6 +1444,21 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="release-macro">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-module-properties
+				module.dir="@{module.dir}"
+			/>
+
+			<lfr-bnd-release
+				bndRootFile="${sdk.dir}/common.bnd"
+				file="${plugin.file}"
+			/>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="set-build-xml-var">
 		<attribute name="build.xml.var.name" />
 		<attribute name="module.dir" />
