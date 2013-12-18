@@ -1344,7 +1344,15 @@ Please find a solution that does not require portal-impl.jar.
 			<var name="plugin.sources.file.default" value="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}-sources.${plugin.packaging}" />
 			<var name="plugin.src.file.default" value="${sdk.dir}/dist/${plugin.name}-src-${plugin.full.version}.zip" />
 
-			<var name="plugin.full.version" value="${plugin.full.version.default}" />
+			<if>
+				<available file="@{module.dir}/bnd.bnd" />
+				<then>
+					<var name="plugin.full.version" value="${Bundle-Version}" />
+				</then>
+				<else>
+					<var name="plugin.full.version" value="${plugin.full.version.default}" />
+				</else>
+			</if>
 
 			<var name="plugin.file" value="${plugin.file.default}" />
 			<var name="plugin.javadoc.file" value="${plugin.javadoc.file.default}" />
