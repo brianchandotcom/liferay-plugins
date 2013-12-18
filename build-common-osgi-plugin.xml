@@ -8,6 +8,9 @@
 		<antelope:replace regex="\.war" replacement="\.jar" />
 	</antelope:stringutil>
 
+	<bndexpand propertyfile="bnd.bnd" />
+	<bndexpand propertyfile="${sdk.dir}/common.bnd" />
+
 	<property name="plugin-lib.classpath.path" refid="plugin-lib.classpath" />
 
 	<path id="plugin-lib.classpath">

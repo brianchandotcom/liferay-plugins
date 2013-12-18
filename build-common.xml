@@ -1063,10 +1063,6 @@ Please find a solution that does not require portal-impl.jar.
 								</then>
 							</if>
 
-							<loadfile property="jar-macro.bnd.bnd.content" srcFile="@{module.dir}/bnd.bnd" />
-
-							<var name="jar-macro.bnd.bnd.content" unset="true" />
-
 							<baseline-jar-macro
 								bndRootFile="${sdk.dir}/common.bnd"
 								file="@{module.dir}/bnd.bnd"
