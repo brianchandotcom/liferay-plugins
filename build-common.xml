@@ -1701,6 +1701,21 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="test-osgi-macro">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-module-properties
+				module.dir="@{module.dir}"
+			/>
+
+			<lfr-bnd-test
+				bndRootFile="${sdk.dir}/common.bnd"
+				runfiles="bnd.bnd"
+			/>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="war-macro">
 		<attribute name="module.dir" />
 
