@@ -1,0 +1,9 @@
+Bundle-Version: 1.0.0
+Include-Resource: classes
+Private-Package: com.liferay.registry.test
+Test-Cases: ${classes;CONCRETE;EXTENDS;junit.framework.TestCase},${classes;ANNOTATION;org.junit.Test}
+
+-runbundles: \
+	lib/liferay-registry.jar;version=file,\
+	lib/liferay-registry-impl.jar;version=file,\
+	org.apache.felix.scr
