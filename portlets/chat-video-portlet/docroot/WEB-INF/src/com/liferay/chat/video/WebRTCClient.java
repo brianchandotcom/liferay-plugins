@@ -14,6 +14,8 @@
 
 package com.liferay.chat.video;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -86,6 +88,50 @@ public class WebRTCClient {
 	protected void removeUnilateralWebRTCConnection(WebRTCClient webRTCClient) {
 		_webRTCConnections.remove(webRTCClient);
 	}
+
+    public static class Mailbox {
+
+        private List<Mailbox.Mail> _mails = new ArrayList<Mailbox.Mail>();
+
+        public void pushMail(Mailbox.Mail mail) {
+            _mails.add(mail);
+        }
+
+        public List<Mailbox.Mail> popAllMails() {
+            List<Mailbox.Mail> allMails = new ArrayList<Mailbox.Mail>(_mails);
+            _mails.clear();
+
+            return allMails;
+        }
+
+        public static abstract class Mail {
+
+            private long _fromUserId;
+            private String _jsonMessage;
+
+            public Mail(Mailbox.Mail mail) {
+                _fromUserId = mail._fromUserId;
+                _jsonMessage = mail._jsonMessage;
+            }
+
+            public Mail(long fromUserId, String jsonMessage) {
+                _fromUserId = fromUserId;
+                _jsonMessage = jsonMessage;
+            }
+
+            public long getFromUserId() {
+                return _fromUserId;
+            }
+
+            public String getJsonMessage() {
+                return _jsonMessage;
+            }
+
+            public abstract String getMsgType();
+
+        }
+
+    }
 
 	private boolean _available;
 	private long _presenceTime;
