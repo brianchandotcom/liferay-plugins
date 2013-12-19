@@ -14,11 +14,13 @@
 
 package com.liferay.resourcesimporter.messaging;
 
+import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.HotDeployMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
@@ -179,7 +181,7 @@ public class ResourcesImporterHotDeployMessageListener
 					importer = getResourceImporter();
 
 					Group group = GroupLocalServiceUtil.getCompanyGroup(
-						companyId);
+						company.getCompanyId());
 
 					importer.setGroupId(group.getGroupId());
 					importer.setResourcesDir(_TEMPLATES_DIR);
@@ -214,11 +216,19 @@ public class ResourcesImporterHotDeployMessageListener
 
 				importer.setTargetValue(targetValue);
 
-				importer.afterPropertiesSet();
+				PluginPackage pluginPackage =
+					DeployManagerUtil.getInstalledPluginPackage(
+						servletContextName);
+
+				importer.setVersion(pluginPackage.getVersion());
 
 				boolean developerModeEnabled = GetterUtil.getBoolean(
 					pluginPackageProperties.getProperty(
 						"resources-importer-developer-mode-enabled"));
+
+				importer.setDeveloperModeEnabled(developerModeEnabled);
+
+				importer.afterPropertiesSet();
 
 				if (!developerModeEnabled && importer.isExisting() &&
 					!importer.isCompanyGroup()) {
