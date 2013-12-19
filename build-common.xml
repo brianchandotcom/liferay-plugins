@@ -1244,12 +1244,12 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<set-module-properties
+			<call-macrodef-or-target
+				macrodef.name="compile"
 				module.dir="@{module.dir}"
 			/>
 
-			<call-macrodef-or-target
-				macrodef.name="compile"
+			<set-module-properties
 				module.dir="@{module.dir}"
 			/>
 
