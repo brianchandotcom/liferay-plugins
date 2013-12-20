@@ -59,10 +59,6 @@ public class MarketplaceLicenseUtil {
 			currentThread.setContextClassLoader(
 				PortalClassLoaderUtil.getClassLoader());
 
-			MethodKey _registerOrderMethodKey = new MethodKey(
-				"com.liferay.portal.license.util.LicenseUtil","registerOrder",
-				String.class, String.class, int.class);
-
 			PortalClassInvoker.invoke(
 				false, _registerOrderMethodKey, orderUuid, productEntryName, 0);
 		}
@@ -78,10 +74,12 @@ public class MarketplaceLicenseUtil {
 
 		jsonObject.put("cmd", "UNLOCK");
 		jsonObject.put("hostName", LicenseManagerUtil.getHostName());
-		jsonObject.put("ipAddresses", StringUtil.merge(
-			LicenseManagerUtil.getIpAddresses()));
-		jsonObject.put("macAddresses", StringUtil.merge(
-			LicenseManagerUtil.getMacAddresses()));
+		jsonObject.put(
+			"ipAddresses",
+			StringUtil.merge(LicenseManagerUtil.getIpAddresses()));
+		jsonObject.put(
+			"macAddresses",
+			StringUtil.merge(LicenseManagerUtil.getMacAddresses()));
 		jsonObject.put("orderUuid", orderUuid);
 		jsonObject.put("productEntryName", productEntryName);
 		jsonObject.put("serverId", Arrays.toString(getServerIdBytes()));
@@ -94,10 +92,6 @@ public class MarketplaceLicenseUtil {
 			currentThread.setContextClassLoader(
 				PortalClassLoaderUtil.getClassLoader());
 
-			MethodKey _unlockOrderMethodKey = new MethodKey(
-				"com.liferay.portal.license.util.LicenseUtil","sendRequest",
-				String.class);
-
 			PortalClassInvoker.invoke(
 				false, _unlockOrderMethodKey, jsonObject.toString());
 		}
@@ -105,5 +99,12 @@ public class MarketplaceLicenseUtil {
 			currentThread.setContextClassLoader(contextClassLoader);
 		}
 	}
+
+	private static MethodKey _registerOrderMethodKey = new MethodKey(
+		"com.liferay.portal.license.util.LicenseUtil","registerOrder",
+		String.class, String.class, int.class);
+	private static MethodKey _unlockOrderMethodKey = new MethodKey(
+		"com.liferay.portal.license.util.LicenseUtil","sendRequest",
+		String.class);
 
 }
