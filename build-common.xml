@@ -546,16 +546,17 @@ Error-Prone was automatically installed. Please rerun your task.
 							/>
 
 							<if>
-								<available file="${sdk.dir}/shared/${import.shared.current.value}/src" />
+								<and>
+									<available file="${sdk.dir}/shared/${import.shared.current.value}/src" />
+									<not>
+										<equals arg1="${plugin.name}" arg2="${import.shared.current.value}" />
+									</not>
+								</and>
 								<then>
-									<call-macrodef-or-target
-										macrodef.name="jar-macro"
-										module.dir="${sdk.dir}/shared/${import.shared.current.value}"
-									/>
 
-									<set-module-properties
-										module.dir="@{module.dir}"
-									/>
+									<!-- This MUST be done within a "forgetful" recursive scope. Therefor we need to use an <ant/> call. -->
+
+									<ant dir="${sdk.dir}/shared/${import.shared.current.value}" target="jar" inheritAll="false" />
 
 									<for param="import.shared.full.path">
 										<path>
