@@ -528,40 +528,61 @@ Error-Prone was automatically installed. Please rerun your task.
 
 					<for list="${import.shared.list}" param="import.shared.current">
 						<sequential>
-							<if>
-								<available file="${sdk.dir}/shared/@{import.shared.current}/src" />
-								<then>
-									<call-macrodef-or-target
-										macrodef.name="jar-macro"
-										module.dir="${sdk.dir}/shared/@{import.shared.current}"
-									/>
+							<propertyregex
+								casesensitive="false"
+								defaultValue="@{import.shared.current}"
+								input="@{import.shared.current}"
+								property="import.shared.current.value"
+								regexp="(.*)-(\d+\.\d+\.\d+([\.-]\w+)?)"
+								select="\1"
+							/>
+							<propertyregex
+								casesensitive="false"
+								defaultValue="${lp.version}.*"
+								input="@{import.shared.current}"
+								property="import.shared.current.version"
+								regexp="(.*)-(\d+\.\d+\.\d+([\.-]\w+)?)"
+								select="\2"
+							/>
 
-									<set-module-properties
-										module.dir="@{module.dir}"
-									/>
+							<if>
+								<and>
+									<available file="${sdk.dir}/shared/${import.shared.current.value}/src" />
+									<not>
+										<equals arg1="${plugin.name}" arg2="${import.shared.current.value}" />
+									</not>
+								</and>
+								<then>
+
+									<!-- This MUST be done within a "forgetful" recursive scope. Therefor we need to use an <ant/> call. -->
+
+									<ant dir="${sdk.dir}/shared/${import.shared.current.value}" target="jar" inheritAll="false" />
 
 									<for param="import.shared.full.path">
 										<path>
-											<fileset dir="${sdk.dir}/dist" includes="@{import.shared.current}-${lp.version}.*.jar" />
+											<fileset dir="${sdk.dir}/dist" includes="${import.shared.current.value}-${import.shared.current.version}.jar" />
 										</path>
 										<sequential>
 											<copy
 												file="@{import.shared.full.path}"
-												tofile="${plugin.lib.dir}/@{import.shared.current}.jar"
+												tofile="${plugin.lib.dir}/${import.shared.current.value}.jar"
 											/>
 										</sequential>
 									</for>
 
 									<if>
-										<available file="${sdk.dir}/shared/@{import.shared.current}/lib" />
+										<available file="${sdk.dir}/shared/${import.shared.current.value}/lib" />
 										<then>
 											<copy todir="${plugin.lib.dir}">
-												<fileset dir="${sdk.dir}/shared/@{import.shared.current}/lib" includes="*.jar" />
+												<fileset dir="${sdk.dir}/shared/${import.shared.current.value}/lib" includes="*.jar" />
 											</copy>
 										</then>
 									</if>
 								</then>
 							</if>
+
+							<var name="import.shared.current.value" unset="true" />
+							<var name="import.shared.current.version" unset="true" />
 						</sequential>
 					</for>
 				</then>
@@ -1003,7 +1024,7 @@ Please find a solution that does not require portal-impl.jar.
 					<if>
 						<not>
 							<uptodate targetfile="${plugin.file}">
-								<srcfiles dir="${osgi.plugin.classes.dir}" includes="**/*.*" />
+								<srcfiles dir="${plugin.classes.dir}" includes="**/*.*" />
 							</uptodate>
 						</not>
 						<then>
@@ -1043,23 +1064,10 @@ Please find a solution that does not require portal-impl.jar.
 								</then>
 							</if>
 
-							<loadfile property="jar-macro.bnd.bnd.content" srcFile="@{module.dir}/bnd.bnd" />
-
-							<if>
-								<not>
-									<contains string="${jar-macro.bnd.bnd.content}" substring="-output=" />
-								</not>
-								<then>
-									<echo append="true" file="@{module.dir}/bnd.bnd">${line.separator}${line.separator}-output=${plugin.name}.jar</echo>
-								</then>
-							</if>
-
-							<var name="jar-macro.bnd.bnd.content" unset="true" />
-
 							<baseline-jar-macro
 								bndRootFile="${sdk.dir}/common.bnd"
 								file="@{module.dir}/bnd.bnd"
-								outputPath="@{module.dir}"
+								outputPath="${plugin.file}"
 								rootProjectDir="${sdk.dir}"
 								sourcePath="@{module.dir}"
 							/>
@@ -1337,7 +1345,15 @@ Please find a solution that does not require portal-impl.jar.
 			<var name="plugin.sources.file.default" value="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}-sources.${plugin.packaging}" />
 			<var name="plugin.src.file.default" value="${sdk.dir}/dist/${plugin.name}-src-${plugin.full.version}.zip" />
 
-			<var name="plugin.full.version" value="${plugin.full.version.default}" />
+			<if>
+				<available file="@{module.dir}/bnd.bnd" />
+				<then>
+					<var name="plugin.full.version" value="${Bundle-Version}" />
+				</then>
+				<else>
+					<var name="plugin.full.version" value="${plugin.full.version.default}" />
+				</else>
+			</if>
 
 			<var name="plugin.file" value="${plugin.file.default}" />
 			<var name="plugin.javadoc.file" value="${plugin.javadoc.file.default}" />
