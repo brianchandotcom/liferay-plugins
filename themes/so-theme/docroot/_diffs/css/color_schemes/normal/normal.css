@@ -21,11 +21,28 @@ html.aui {
 		padding: 0;
 	}
 
-	.dockbar {
-		margin-top: -44px;
+	.navbar .nav-navigation {
+		display: none;
+	}
 
+	.dockbar-split .dockbar {
 		@include transition-duration(0.2s);
-		@include transition-property(margin-top);
+		@include transition-property(margin-left);
+
+		.navbar-inner .nav-add-controls {
+			background: $controlBgColor;
+			border-right: 1px solid $defaultBorderColor;
+			bottom: 0;
+			margin-left: -63px;
+			top: 0;
+
+			@include transition-duration(0.2s);
+			@include transition-property(margin-left);
+
+			.dockbar-item {
+				float: none;
+			}
+		}
 
 		.info-items, .info-link-container {
 			a {
@@ -81,19 +98,21 @@ html.aui {
 			top: 92px;
 		}
 	}
+}
 
-	.show-dockbar .dockbar {
-		margin-top: 0;
+.aui .dockbar-split.show-dockbar {
+	#wrapper, .so-portlet-user-bar {
+		border-left: 63px solid $controlBgColor;
 
-		&.navbar-static-top .collapse, .navbar-inner .container {
-			.nav-account-controls {
-				top: -44px;
-			}
-		}
+		@include transition-duration(0.2s);
+		@include transition-property(border-left);
+	}
 
-		.info-items, .info-link-container {
-			display: block;
-		}
+	.dockbar .navbar-inner .nav-add-controls {
+		background: $controlBgColor;
+		bottom: 0;
+		margin-left: 0;
+		top: 0;
 	}
 }
 
@@ -140,9 +159,9 @@ a {
 }
 
 .aui-panel-hd, .lfr-panel.lfr-extended .lfr-panel-titlebar {
-	@include normal-gradient;
-
 	@include default-border;
+
+	@include normal-gradient;
 }
 
 .invite-members, .social-relations a, .aui-buttonitem-content, .aui-tabview-list .aui-tab-label {
@@ -168,11 +187,14 @@ a {
 
 	.aui-dialog-hd {
 		border: 1px solid $defaultBorderColor;
-		border-width: 0 0 1px;
-		padding: 0 0 0 0.5em;
 
 		@include border-radius(4px 4px 0 0);
+
+		border-width: 0 0 1px;
+
 		@include box-shadow(none);
+
+		padding: 0 0 0 0.5em;
 
 		.aui-toolbar {
 			margin: -1px;
@@ -450,9 +472,10 @@ a {
 /* ---------- Banner ---------- */
 
 #banner {
+	border-width: 1px 0;
+
 	@include header;
 
-	border-width: 1px 0;
 	padding: 0.86em 1.5em;
 
 	h1, h2 {
@@ -558,10 +581,10 @@ a {
 
 	.search-controls {
 		background: #FFF;
+		display: none;
 
 		@include border-radius(4px);
 
-		display: none;
 		left: 0;
 
 		@include menu-style;
@@ -627,14 +650,15 @@ div#navigation {
 		font-size: 1.125em;
 		font-weight: 200;
 		padding: 0.65em 1.05em;
-		text-shadow: 0 1px 0 #FFF;
 
 		@include subtle-gradient;
 
-		&:hover, &:focus {
-			text-decoration: none;
+		text-shadow: 0 1px 0 #FFF;
 
+		&:hover, &:focus {
 			@include button-hover;
+
+			text-decoration: none;
 		}
 
 		&:active {
@@ -676,12 +700,13 @@ div#navigation {
 
 #main-content {
 	background: #FFF;
+
+	@include box-shadow(-4px 0 15px -7px rgba(0,0,0, 0.6));
+
 	float: left;
 	min-height: 500px;
 	position: relative;
 	width: 100%;
-
-	@include box-shadow(-4px 0 15px -7px rgba(0,0,0, 0.6));
 }
 
 .aui-dialog-iframe-popup, .portal-popup {
@@ -891,8 +916,8 @@ div#navigation {
 		}
 
 		a {
-			@include button-default;
 			@include border-radius(4px);
+			@include button-default;
 
 			display: inline-block;
 			line-height: 1em;
@@ -1177,10 +1202,9 @@ div#navigation {
 	}
 
 	.thumbnail {
-		border-width: 0;
-
 		@include border-radius(0);
 
+		border-width: 0;
 		height: 50px;
 		padding: 0;
 		width: 50px;
@@ -2058,10 +2082,10 @@ div#navigation {
 			}
 
 			.aui-field-input {
+				@include border-radius(4px 0 0 4px);
+
 				margin-right: -1px;
 				width: 9em;
-
-				@include border-radius(4px 0 0 4px);
 			}
 
 			.aui-button-submit input {
@@ -2089,8 +2113,8 @@ div#navigation {
 }
 
 .portlet-message-boards .edit-controls a, .portlet-message-boards .thread-controls a, .portlet-wiki .page-actions a, .portlet-wiki .toc a.toc-trigger {
-	@include button-default;
 	@include border-radius(4px);
+	@include button-default;
 
 	display: inline-block;
 
@@ -2249,14 +2273,11 @@ div#navigation {
 /* ---------- Responsive ---------- */
 
 html.aui {
-	@media (max-width:1060px) {
-		.so-portlet-user-bar .dashboard-nav li a {
-			font-weight: 300;
-			padding: 0.58em 0.5em;
-		}
-	}
-
 	@media (max-width:979px) {
+		.navbar .nav-navigation {
+			display: block;
+		}
+
 		.so-portlet-user-bar {
 			padding-right: 0;
 
@@ -2265,37 +2286,32 @@ html.aui {
 			}
 		}
 
-		.portlet-dockbar {
-			.btn-navbar {
-				background: transparent;
-				border: 0;
-				color: #FFF;
-				margin: 5px;
-				padding: 6px 7px;
+		.dockbar-split {
+			&.show-dockbar {
+				#wrapper, .so-portlet-user-bar {
+					border-left-width: 0;
 
-				i {
-					font-size: 21px;
+					@include transition-duration(0.2s);
+					@include transition-property(border-left);
 				}
+			}
 
-				.user-avatar-image {
-					width: 21px;
-				}
+			.dockbar .navbar-inner .nav-add-controls > li {
+				margin: 0;
 			}
 		}
 
-		.dockbar .navbar-inner {
-			padding-left: 47px;
-			padding-right: 0;
-
-			.container {
-				z-index: 301;
+		.portlet-dockbar .dockbar .navbar-inner {
+			.nav-add-controls > li {
+				margin: 0;
 			}
 
 			.container {
-				.container .nav-collapse .nav, .nav {
+				z-index: 301;
+
+				.nav-collapse .nav, .nav {
 					float: none;
 					margin-bottom: 0;
-					margin-left: -47px;
 					position: relative;
 
 					> li {
@@ -2326,7 +2342,6 @@ html.aui {
 					}
 
 					.dockbar-user-notifications {
-
 						.dropdown-menu {
 							padding: 0;
 							width: 100%;
@@ -2346,28 +2361,54 @@ html.aui {
 					}
 				}
 
-				.nav-account-controls {
-					li.dropdown.open > .dropdown-toggle {
-						background-color: transparent;
+				.nav-account-controls .user-avatar-link .nav-item-label {
+					padding-left: 0;
+
+					img {
+						display: none;
 					}
+				}
+			}
 
-					.user-avatar-link .nav-item-label {
-						padding-left: 0;
+			.nav-collapse.open > ul, .nav-collapse .open > .dropdown-menu, .site-administration-menu {
+				&.nav {
+					background-color: #DDD;
+					margin: 0;
+				}
 
-						img {
-							display: none;
+				> li {
+					background: transparent;
+					border-top: 1px solid #CCC;
+
+					a {
+						background: transparent;
+						margin-bottom: 0;
+						text-align: left;
+
+						.nav-item-label {
+							background: transparent;
+							display: inline;
+							font-weight: bold;
+							padding: 0;
+							position: inherit;
 						}
 					}
 				}
 			}
-		}
 
-		.nav-collapse .open > .dropdown-menu, .site-administration-menu {
-			background-color: #DDD;
-			margin: 0;
+			.nav-collapse .open  > .dropdown-menu {
+				margin: 0;
 
-			> li {
-				border-top: 1px solid #CCC;
+				li {
+					> a:hover {
+						background: rgba(0, 0, 0, 0.2);
+					}
+
+					li > a {
+						padding: 9px 15px 9px 40px;
+					}
+
+				}
 			}
 		}
 
@@ -2429,6 +2470,10 @@ html.aui {
 	@media (max-width: 767px) {
 		body {
 			padding: 0;
+		}
+
+		.so-portlet-user-bar {
+			margin: 0;
 		}
 
 		.dockbar.navbar-static-top {

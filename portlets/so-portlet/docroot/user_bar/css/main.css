@@ -29,9 +29,9 @@ body.show-dockbar, html > body.lfr-dockbar-pinned, body.controls-visible {
 	}
 
 	#dockbar {
-		@include opacity(1);
-
 		margin-top: 0;
+
+		@include opacity(1);
 	}
 }
 
@@ -181,10 +181,9 @@ html.aui {
 						}
 
 						img {
-							border-width: 0;
-
 							@include border-radius(12px);
 
+							border-width: 0;
 							clip: rect(0px, 23px, 23px, 0px);
 							left: -6px;
 							position: absolute;
@@ -384,6 +383,12 @@ html.aui {
 /* ---------- Responsive ---------- */
 
 html.aui {
+	@media (max-width:767px) {
+		.so-portlet-user-bar {
+			margin: 0 -20px;
+		}
+	}
+
 	@media (max-width:860px) {
 		.so-portlet-user-bar {
 			a {
@@ -410,13 +415,22 @@ html.aui {
 		.so-portlet-user-bar {
 			padding-right: 0;
 
+			nav {
+				display: none;
+			}
+
 			.dashboard-nav li a {
 				font-weight: 400;
 				padding: 0.58em 0.7em;
 			}
 		}
 
-		.portlet-dockbar {
+		.dockbar-split .portlet-dockbar, .portlet-dockbar {	
+			.dockbar {
+				position: relative;
+				top: -45px;
+			}
+
 			.btn-navbar {
 				padding: 7px 10px;
 
@@ -426,6 +440,37 @@ html.aui {
 
 				.user-avatar-image {
 					width: 20px;
+				}
+			}
+
+			.navbar-inner {
+				background-color: transparent;
+				background-image: none;
+
+				.btn-navbar, .btn-navbar.open {
+					background: transparent;
+					border: 0;
+					color: #FFF;
+					float: right;
+					margin: 4px;
+					padding: 6px 7px;
+
+					&:hover {
+						background-color: #E6E6E6;
+					}
+
+					i {
+						font-size: 23px;
+						margin: 0 1px;
+					}
+
+					.user-avatar-image {
+						@include border-radius(12px);
+
+						box-shadow: none;
+						top: 0;
+						width: 23px;
+					}
 				}
 			}
 		}
