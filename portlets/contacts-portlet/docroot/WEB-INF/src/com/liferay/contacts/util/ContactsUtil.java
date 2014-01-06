@@ -17,6 +17,11 @@
 
 package com.liferay.contacts.util;
 
+import com.liferay.contacts.model.Entry;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -39,6 +44,9 @@ import com.liferay.portal.service.ListTypeServiceUtil;
 import com.liferay.portal.service.PhoneLocalServiceUtil;
 import com.liferay.portal.service.RegionServiceUtil;
 import com.liferay.portal.service.WebsiteLocalServiceUtil;
+import com.liferay.portlet.social.model.SocialRequestConstants;
+import com.liferay.portlet.social.service.SocialRelationLocalServiceUtil;
+import com.liferay.portlet.social.service.SocialRequestLocalServiceUtil;
 
 import java.lang.reflect.Field;
 
@@ -49,6 +57,18 @@ import java.util.List;
  * @author Jonathan Lee
  */
 public class ContactsUtil {
+
+	public static JSONObject getEntryJSONObject(Entry entry) {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put("emailAddress", entry.getEmailAddress());
+		jsonObject.put("entryId", String.valueOf(entry.getEntryId()));
+		jsonObject.put("comments", entry.getComments());
+		jsonObject.put("fullName", entry.getFullName());
+		jsonObject.put("portalUser", false);
+
+		return jsonObject;
+	}
 
 	public static long getGroupId(String filterBy) {
 		String groupIdString = filterBy.substring(
@@ -80,6 +100,57 @@ public class ContactsUtil {
 			ContactsConstants.FILTER_BY_TYPE.length());
 
 		return GetterUtil.getLong(socialRelationTypeString);
+	}
+
+	public static JSONObject getUserJSONObject(long userId, User user)
+		throws PortalException, SystemException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		boolean block = SocialRelationLocalServiceUtil.hasRelation(
+			userId, user.getUserId(), SocialRelationConstants.TYPE_UNI_ENEMY);
+
+		jsonObject.put("block", block);
+
+		jsonObject.put("emailAddress", user.getEmailAddress());
+		jsonObject.put("firstName", user.getFirstName());
+		jsonObject.put("fullName", user.getFullName());
+		jsonObject.put("jobTitle", user.getJobTitle());
+		jsonObject.put("lastName", user.getLastName());
+		jsonObject.put("portalUser", true);
+		jsonObject.put("userId", String.valueOf(user.getUserId()));
+
+		if (!SocialRelationLocalServiceUtil.hasRelation(
+				user.getUserId(), userId,
+				SocialRelationConstants.TYPE_UNI_ENEMY) &&
+			!SocialRelationLocalServiceUtil.hasRelation(
+				userId, user.getUserId(),
+				SocialRelationConstants.TYPE_UNI_ENEMY)) {
+
+			boolean connectionRequested =
+				SocialRequestLocalServiceUtil.hasRequest(
+					userId, User.class.getName(), userId,
+					SocialRelationConstants.TYPE_BI_CONNECTION,
+					user.getUserId(), SocialRequestConstants.STATUS_PENDING);
+
+			jsonObject.put("connectionRequested", connectionRequested);
+
+			boolean connected =
+				!connectionRequested &&
+				SocialRelationLocalServiceUtil.hasRelation(
+					userId, user.getUserId(),
+					SocialRelationConstants.TYPE_BI_CONNECTION);
+
+			jsonObject.put("connected", connected);
+
+			boolean following = SocialRelationLocalServiceUtil.hasRelation(
+				userId, user.getUserId(),
+				SocialRelationConstants.TYPE_UNI_FOLLOWER);
+
+			jsonObject.put("following", following);
+		}
+
+		return jsonObject;
 	}
 
 	public static String getVCard(User user) throws Exception {
