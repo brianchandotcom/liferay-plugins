@@ -19,6 +19,8 @@ package com.liferay.so.hook.listeners;
 
 import com.liferay.portal.ModelListenerException;
 import com.liferay.portal.NoSuchGroupException;
+import com.liferay.portal.kernel.cache.Lifecycle;
+import com.liferay.portal.kernel.cache.ThreadLocalCacheManager;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.Group;
@@ -29,6 +31,7 @@ import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.impl.TableMapper;
 import com.liferay.so.service.SocialOfficeServiceUtil;
 import com.liferay.so.util.LayoutSetPrototypeUtil;
 import com.liferay.so.util.RoleConstants;
@@ -113,7 +116,12 @@ public class UserListener extends BaseModelListener<User> {
 		try {
 			User user = UserLocalServiceUtil.getUser((Long)classPK);
 
-			FinderCacheUtil.clearCache(_MAPPING_TABLE_USERS_ROLES_NAME);
+			FinderCacheUtil.clearCache(
+				_MAPPING_TABLE_USERS_ROLES_NAME_LEFT_TO_RIGHT);
+			FinderCacheUtil.clearCache(
+				_MAPPING_TABLE_USERS_ROLES_NAME_RIGHT_TO_LEFT);
+
+			ThreadLocalCacheManager.clearAll(Lifecycle.REQUEST);
 
 			if (UserLocalServiceUtil.hasRoleUser(
 					user.getCompanyId(), RoleConstants.SOCIAL_OFFICE_USER,
@@ -206,6 +214,10 @@ public class UserListener extends BaseModelListener<User> {
 	 * {@link
 	 * com.liferay.portal.model.impl.RoleModelImpl#MAPPING_TABLE_USERS_ROLES_NAME}
 	 */
-	private static final String _MAPPING_TABLE_USERS_ROLES_NAME = "Users_Roles";
+	private static final String _MAPPING_TABLE_USERS_ROLES_NAME_LEFT_TO_RIGHT =
+		TableMapper.class.getName() + "-" + "Users_Roles" + "-LeftToRight";
+
+	private static final String _MAPPING_TABLE_USERS_ROLES_NAME_RIGHT_TO_LEFT =
+		TableMapper.class.getName() + "-" + "Users_Roles" + "-RightToLeft";
 
 }
