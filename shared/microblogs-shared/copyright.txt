@@ -14,29 +14,3 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
-
-package com.liferay.so.hook.upgrade;
-
-import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-import com.liferay.so.hook.upgrade.v3_0_0.UpgradeDocumentLibrary;
-import com.liferay.so.hook.upgrade.v3_0_0.UpgradeGroup;
-import com.liferay.so.hook.upgrade.v3_0_0.UpgradeLayout;
-
-/**
- * @author Matthew Kong
- */
-public class UpgradeProcess_3_0_0 extends UpgradeProcess {
-
-	@Override
-	public int getThreshold() {
-		return 300;
-	}
-
-	@Override
-	protected void doUpgrade() throws Exception {
-		upgrade(UpgradeDocumentLibrary.class);
-		upgrade(UpgradeGroup.class);
-		upgrade(UpgradeLayout.class);
-	}
-
-}
