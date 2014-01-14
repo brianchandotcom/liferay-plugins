@@ -12,19 +12,36 @@
  * details.
  */
 
-package com.liferay.sync.engine.service.persistence;
+package com.liferay.sync.engine.service;
 
-import com.liferay.sync.engine.model.Account;
+import com.liferay.sync.engine.service.persistence.FilePersistence;
 
 import java.sql.SQLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Shinn Lok
  */
-public class AccountDao extends BaseSyncDaoImpl<Account, Long> {
+public class FileService {
 
-	public AccountDao() throws SQLException {
-		super(Account.class);
+	public static FilePersistence getPersistence() {
+		if (_filePersistence != null) {
+			return _filePersistence;
+		}
+
+		try {
+			_filePersistence = new FilePersistence();
+		}
+		catch (SQLException sqle) {
+			_logger.debug(sqle.getMessage(), sqle);
+		}
+
+		return _filePersistence;
 	}
+
+	private static FilePersistence _filePersistence = getPersistence();
+	private static Logger _logger = LoggerFactory.getLogger(FileService.class);
 
 }

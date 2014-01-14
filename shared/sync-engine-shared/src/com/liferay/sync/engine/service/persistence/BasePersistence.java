@@ -12,15 +12,17 @@
  * details.
  */
 
-package com.liferay.sync.engine.util;
+package com.liferay.sync.engine.service.persistence;
+
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
 
 /**
  * @author Shinn Lok
  */
-public class SyncConstants {
+public interface BasePersistence<TT, TID> extends Dao<TT, TID> {
 
-	public static final String SYNC_CONFIG_FOLDER = ".liferay-sync";
-
-	public static final String SYNC_DB_NAME = "liferay-sync";
+	public int createTable() throws SQLException;
 
 }

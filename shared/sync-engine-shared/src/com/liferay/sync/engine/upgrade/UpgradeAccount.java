@@ -14,8 +14,8 @@
 
 package com.liferay.sync.engine.upgrade;
 
-import com.liferay.sync.engine.service.AccountManager;
-import com.liferay.sync.engine.service.persistence.AccountDao;
+import com.liferay.sync.engine.service.AccountService;
+import com.liferay.sync.engine.service.persistence.AccountPersistence;
 
 /**
  * @author Shinn Lok
@@ -23,10 +23,10 @@ import com.liferay.sync.engine.service.persistence.AccountDao;
 public class UpgradeAccount extends UpgradeProcess {
 
 	public void upgrade() throws Exception {
-		AccountDao accountDao = AccountManager.getDao();
+		AccountPersistence accountPersistence = AccountService.getPersistence();
 
-		if (!accountDao.isTableExists()) {
-			accountDao.createTable();
+		if (!accountPersistence.isTableExists()) {
+			accountPersistence.createTable();
 		}
 	}
 

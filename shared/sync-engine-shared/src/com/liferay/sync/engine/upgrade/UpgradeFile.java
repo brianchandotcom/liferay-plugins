@@ -14,8 +14,8 @@
 
 package com.liferay.sync.engine.upgrade;
 
-import com.liferay.sync.engine.service.FileManager;
-import com.liferay.sync.engine.service.persistence.FileDao;
+import com.liferay.sync.engine.service.FileService;
+import com.liferay.sync.engine.service.persistence.FilePersistence;
 
 /**
  * @author Shinn Lok
@@ -23,10 +23,10 @@ import com.liferay.sync.engine.service.persistence.FileDao;
 public class UpgradeFile extends UpgradeProcess {
 
 	public void upgrade() throws Exception {
-		FileDao fileDao = FileManager.getDao();
+		FilePersistence filePersistence = FileService.getPersistence();
 
-		if (!fileDao.isTableExists()) {
-			fileDao.createTable();
+		if (!filePersistence.isTableExists()) {
+			filePersistence.createTable();
 		}
 	}
 

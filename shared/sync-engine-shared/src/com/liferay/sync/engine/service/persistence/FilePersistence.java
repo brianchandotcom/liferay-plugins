@@ -14,15 +14,17 @@
 
 package com.liferay.sync.engine.service.persistence;
 
-import com.j256.ormlite.dao.Dao;
+import com.liferay.sync.engine.model.File;
 
 import java.sql.SQLException;
 
 /**
  * @author Shinn Lok
  */
-public interface BaseSyncDao<TT, TID> extends Dao<TT, TID> {
+public class FilePersistence extends BasePersistenceImpl<File, Long> {
 
-	public int createTable() throws SQLException;
+	public FilePersistence() throws SQLException {
+		super(File.class);
+	}
 
 }

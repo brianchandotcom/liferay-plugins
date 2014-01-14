@@ -19,7 +19,7 @@ import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-import com.liferay.sync.engine.util.SyncConstants;
+import com.liferay.sync.engine.util.Constants;
 
 import java.io.File;
 
@@ -30,10 +30,10 @@ import org.apache.commons.io.FileUtils;
 /**
  * @author Shinn Lok
  */
-public class BaseSyncDaoImpl<TT, TID> extends BaseDaoImpl<TT, TID>
-	implements BaseSyncDao<TT, TID> {
+public class BasePersistenceImpl<TT, TID> extends BaseDaoImpl<TT, TID>
+	implements BasePersistence<TT, TID> {
 
-	public BaseSyncDaoImpl(Class<TT> dataClass) throws SQLException {
+	public BasePersistenceImpl(Class<TT> dataClass) throws SQLException {
 		super(_getConnectionSource(), dataClass);
 	}
 
@@ -52,9 +52,9 @@ public class BaseSyncDaoImpl<TT, TID> extends BaseDaoImpl<TT, TID>
 		sb.append("jdbc:h2:");
 		sb.append(FileUtils.getUserDirectoryPath());
 		sb.append(File.separator);
-		sb.append(SyncConstants.SYNC_CONFIG_FOLDER);
+		sb.append(Constants.SYNC_CONFIG_FOLDER);
 		sb.append(File.separator);
-		sb.append(SyncConstants.SYNC_DB_NAME);
+		sb.append(Constants.SYNC_DB_NAME);
 		sb.append(";AUTO_SERVER=TRUE");
 
 		_connectionSource = new JdbcPooledConnectionSource(sb.toString());

@@ -17,12 +17,12 @@ package com.liferay.sync.engine.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import com.liferay.sync.engine.service.persistence.BaseSyncDaoImpl;
+import com.liferay.sync.engine.service.persistence.BasePersistenceImpl;
 
 /**
  * @author Shinn Lok
  */
-@DatabaseTable(tableName = "File", daoClass = BaseSyncDaoImpl.class)
+@DatabaseTable(tableName = "File", daoClass = BasePersistenceImpl.class)
 public class File {
 
 	public long getFileId() {

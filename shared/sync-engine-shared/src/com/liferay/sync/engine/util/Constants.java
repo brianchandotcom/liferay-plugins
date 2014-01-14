@@ -12,19 +12,15 @@
  * details.
  */
 
-package com.liferay.sync.engine.service.persistence;
-
-import com.liferay.sync.engine.model.File;
-
-import java.sql.SQLException;
+package com.liferay.sync.engine.util;
 
 /**
  * @author Shinn Lok
  */
-public class FileDao extends BaseSyncDaoImpl<File, Long> {
+public class Constants {
 
-	public FileDao() throws SQLException {
-		super(File.class);
-	}
+	public static final String SYNC_CONFIG_FOLDER = ".liferay-sync";
+
+	public static final String SYNC_DB_NAME = "liferay-sync";
 
 }

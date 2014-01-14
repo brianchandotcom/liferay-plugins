@@ -15,7 +15,7 @@
 package com.liferay.sync.engine.service;
 
 import com.liferay.sync.engine.model.Account;
-import com.liferay.sync.engine.service.persistence.AccountDao;
+import com.liferay.sync.engine.service.persistence.AccountPersistence;
 import com.liferay.sync.engine.util.Encryptor;
 
 import java.sql.SQLException;
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Shinn Lok
  */
-public class AccountManager {
+public class AccountService {
 
 	public static Account addAccount(String login, String password, String url)
 		throws Exception {
@@ -37,32 +37,32 @@ public class AccountManager {
 		account.setPassword(Encryptor.encrypt(password));
 		account.setUrl(url);
 
-		_accountDao.create(account);
+		_accountPersistence.create(account);
 
 		return account;
 	}
 
 	public static Account getAccount(long accountId) throws Exception {
-		return _accountDao.queryForId(accountId);
+		return _accountPersistence.queryForId(accountId);
 	}
 
-	public static AccountDao getDao() {
-		if (_accountDao != null) {
-			return _accountDao;
+	public static AccountPersistence getPersistence() {
+		if (_accountPersistence != null) {
+			return _accountPersistence;
 		}
 
 		try {
-			_accountDao = new AccountDao();
+			_accountPersistence = new AccountPersistence();
 		}
 		catch (SQLException sqle) {
 			_logger.debug(sqle.getMessage(), sqle);
 		}
 
-		return _accountDao;
+		return _accountPersistence;
 	}
 
-	private static AccountDao _accountDao = getDao();
+	private static AccountPersistence _accountPersistence = getPersistence();
 	private static Logger _logger = LoggerFactory.getLogger(
-		AccountManager.class);
+		AccountService.class);
 
 }

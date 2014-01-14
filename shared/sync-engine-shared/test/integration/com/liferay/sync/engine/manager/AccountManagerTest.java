@@ -15,8 +15,8 @@
 package com.liferay.sync.engine.manager;
 
 import com.liferay.sync.engine.model.Account;
-import com.liferay.sync.engine.service.AccountManager;
-import com.liferay.sync.engine.service.persistence.AccountDao;
+import com.liferay.sync.engine.service.AccountService;
+import com.liferay.sync.engine.service.persistence.AccountPersistence;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -36,10 +36,10 @@ public class AccountManagerTest extends BaseManagerTestCase {
 
 	@After
 	public void tearDown() {
-		AccountDao accountDao = AccountManager.getDao();
+		AccountPersistence accountPersistence = AccountService.getPersistence();
 
 		try {
-			accountDao.delete(_account);
+			accountPersistence.delete(_account);
 		}
 		catch (Exception e) {
 			_logger.error(e.getMessage(), e);
@@ -48,10 +48,10 @@ public class AccountManagerTest extends BaseManagerTestCase {
 
 	@Test
 	public void testAddAccount() throws Exception {
-		_account = AccountManager.addAccount(
+		_account = AccountService.addAccount(
 			"test@liferay.com", "test", "http://localhost:8080/api/jsonws/");
 
-		_account = AccountManager.getAccount(_account.getAccountId());
+		_account = AccountService.getAccount(_account.getAccountId());
 
 		Assert.assertNotNull(_account);
 	}
