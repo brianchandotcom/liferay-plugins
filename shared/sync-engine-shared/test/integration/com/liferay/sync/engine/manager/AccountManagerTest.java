@@ -14,8 +14,9 @@
 
 package com.liferay.sync.engine.manager;
 
-import com.liferay.sync.engine.dao.AccountDao;
 import com.liferay.sync.engine.model.Account;
+import com.liferay.sync.engine.service.AccountManager;
+import com.liferay.sync.engine.service.persistence.AccountDao;
 
 import org.junit.After;
 import org.junit.Assert;

@@ -17,7 +17,7 @@ package com.liferay.sync.engine.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import com.liferay.sync.engine.dao.BaseSyncDaoImpl;
+import com.liferay.sync.engine.service.persistence.BaseSyncDaoImpl;
 
 /**
  * @author Shinn Lok

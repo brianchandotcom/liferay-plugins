@@ -12,19 +12,19 @@
  * details.
  */
 
-package com.liferay.sync.engine.dao;
+package com.liferay.sync.engine.service.persistence;
 
-import com.liferay.sync.engine.model.Account;
+import com.liferay.sync.engine.model.File;
 
 import java.sql.SQLException;
 
 /**
  * @author Shinn Lok
  */
-public class AccountDao extends BaseSyncDaoImpl<Account, Long> {
+public class FileDao extends BaseSyncDaoImpl<File, Long> {
 
-	public AccountDao() throws SQLException {
-		super(Account.class);
+	public FileDao() throws SQLException {
+		super(File.class);
 	}
 
 }

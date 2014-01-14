@@ -14,8 +14,8 @@
 
 package com.liferay.sync.engine.upgrade;
 
-import com.liferay.sync.engine.dao.FileDao;
-import com.liferay.sync.engine.manager.FileManager;
+import com.liferay.sync.engine.service.FileManager;
+import com.liferay.sync.engine.service.persistence.FileDao;
 
 /**
  * @author Shinn Lok

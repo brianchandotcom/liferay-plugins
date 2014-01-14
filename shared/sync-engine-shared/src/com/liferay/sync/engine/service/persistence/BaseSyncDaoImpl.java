@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.sync.engine.dao;
+package com.liferay.sync.engine.service.persistence;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;

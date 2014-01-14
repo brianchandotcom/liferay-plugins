@@ -12,10 +12,10 @@
  * details.
  */
 
-package com.liferay.sync.engine.manager;
+package com.liferay.sync.engine.service;
 
-import com.liferay.sync.engine.dao.AccountDao;
 import com.liferay.sync.engine.model.Account;
+import com.liferay.sync.engine.service.persistence.AccountDao;
 import com.liferay.sync.engine.util.Encryptor;
 
 import java.sql.SQLException;

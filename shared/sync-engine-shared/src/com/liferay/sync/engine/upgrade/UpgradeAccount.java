@@ -14,8 +14,8 @@
 
 package com.liferay.sync.engine.upgrade;
 
-import com.liferay.sync.engine.dao.AccountDao;
-import com.liferay.sync.engine.manager.AccountManager;
+import com.liferay.sync.engine.service.AccountManager;
+import com.liferay.sync.engine.service.persistence.AccountDao;
 
 /**
  * @author Shinn Lok
