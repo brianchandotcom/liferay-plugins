@@ -26,13 +26,17 @@ import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutTemplate;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.persistence.LayoutActionableDynamicQuery;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.so.service.SocialOfficeServiceUtil;
+import com.liferay.so.util.LayoutSetPrototypeUtil;
 import com.liferay.so.util.PortletKeys;
+import com.liferay.so.util.SocialOfficeConstants;
 
 /**
  * @author Matthew Kong
@@ -41,10 +45,14 @@ public class UpgradeLayout extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		updateSOAnnouncements();
+		for (long companyId : PortalUtil.getCompanyIds()) {
+			updateSOAnnouncements(companyId);
+		}
 	}
 
-	protected void updateSOAnnouncements() throws Exception {
+	protected void updateSOAnnouncements(final long companyId)
+		throws Exception {
+
 		ActionableDynamicQuery actionableDynamicQuery =
 			new LayoutActionableDynamicQuery() {
 
@@ -98,7 +106,13 @@ public class UpgradeLayout extends UpgradeProcess {
 					layout.setTypeSettingsProperties(typeSettingsProperties);
 				}
 				else {
-					if (layout.getLayoutId() != 1) {
+					if (layout.getPriority() != 0) {
+						return;
+					}
+
+					if (layout.getGroupId() ==
+							_userPublicLayoutSetPrototypeGroupId) {
+
 						return;
 					}
 
@@ -127,7 +141,30 @@ public class UpgradeLayout extends UpgradeProcess {
 
 				LayoutLocalServiceUtil.updateLayout(layout);
 			}
+
+			protected long getLayoutSetPrototypeGroupId(
+					long companyId, String layoutSetPrototypeKey)
+				throws Exception {
+
+				LayoutSetPrototype layoutSetPrototype =
+					LayoutSetPrototypeUtil.fetchLayoutSetPrototype(
+						companyId, layoutSetPrototypeKey);
+
+				if (layoutSetPrototype != null) {
+					return layoutSetPrototype.getGroupId();
+				}
+
+				return 0;
+			}
+
+			private long _userPublicLayoutSetPrototypeGroupId =
+				getLayoutSetPrototypeGroupId(
+					companyId,
+					SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PUBLIC);
+
 		};
+
+		actionableDynamicQuery.setCompanyId(companyId);
 
 		actionableDynamicQuery.performActions();
 	}
