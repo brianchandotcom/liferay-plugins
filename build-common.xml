@@ -62,6 +62,13 @@
 
 	<taskdef classpathref="portal.classpath" resource="aQute/bnd/ant/taskdef.properties" />
 
+	<path id="merged-lib.classpath">
+		<path refid="lib.classpath" />
+		<path refid="portal.classpath" />
+	</path>
+
+	<taskdef classpathref="merged-lib.classpath" resource="com/liferay/ant/taskdef.properties" />
+
 	<path id="test.classpath">
 		<path refid="plugin.classpath" />
 		<fileset dir="${app.server.lib.portal.dir}" excludes="ant.jar" includes="*.jar" />
@@ -126,37 +133,6 @@ Error-Prone was automatically installed. Please rerun your task.
 			</if>
 		</else>
 	</if>
-
-	<macrodef name="baseline-jar-macro">
-		<attribute name="bndRootFile" />
-		<attribute name="file" />
-		<attribute name="outputPath" />
-		<attribute name="rootProjectDir" />
-		<attribute name="sourcePath" />
-
-		<sequential>
-			<taskdef
-				classname="com.liferay.util.ant.bnd.BaselineJarTask"
-				classpathref="plugin.classpath"
-				name="baseline-jar"
-			/>
-
-			<manifest-helper />
-
-			<bndexpand propertyfile="@{bndRootFile}" />
-
-			<baseline-jar
-				bndRootFile="@{bndRootFile}"
-				file="@{file}"
-				outputPath="@{outputPath}"
-				sourcePath="@{sourcePath}"
-			>
-				<classpath>
-					<pathelement location="@{sourcePath}/classes" />
-				</classpath>
-			</baseline-jar>
-		</sequential>
-	</macrodef>
 
 	<macrodef name="build-css">
 		<attribute name="module.dir" />
@@ -1330,13 +1306,16 @@ Please find a solution that does not require portal-impl.jar.
 
 							<var name="jar-macro.bnd.bnd.content" unset="true" />
 
-							<baseline-jar-macro
+							<lfr-bnd-jar
 								bndRootFile="${sdk.dir}/common.bnd"
 								file="@{module.dir}/bnd.bnd"
 								outputPath="${plugin.file}"
-								rootProjectDir="${sdk.dir}"
 								sourcePath="@{module.dir}"
-							/>
+							>
+								<classpath>
+									<pathelement location="${plugin.classes.dir}" />
+								</classpath>
+							</lfr-bnd-jar>
 						</then>
 					</if>
 				</then>
