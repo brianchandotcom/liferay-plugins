@@ -61,6 +61,7 @@
 	</path>
 
 	<taskdef classpathref="portal.classpath" resource="aQute/bnd/ant/taskdef.properties" />
+	<taskdef classpathref="portal.classpath" classname="com.liferay.util.ant.ManifestHelperTask" name="lfr-manifest-helper" />
 
 	<path id="merged-lib.classpath">
 		<path refid="lib.classpath" />
@@ -1377,24 +1378,6 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
-	<macrodef name="manifest-helper">
-		<attribute name="analyze" default="false" />
-
-		<sequential>
-			<taskdef
-				classname="com.liferay.util.ant.ManifestHelperTask"
-				classpathref="plugin.classpath"
-				name="liferay-manifest-helper"
-			/>
-
-			<liferay-manifest-helper
-				analyze="@{analyze}"
-				classpathref="plugin.classpath"
-				projectDirPropertyName="sdk.dir"
-			/>
-		</sequential>
-	</macrodef>
-
 	<macrodef name="merge">
 		<attribute name="module.dir" />
 
@@ -1672,6 +1655,12 @@ Please find a solution that does not require portal-impl.jar.
 					</if>
 				</else>
 			</if>
+
+			<lfr-manifest-helper
+				analyze="false"
+				classpathref="plugin.classpath"
+				projectDirPropertyName="sdk.dir"
+			/>
 
 			<if>
 				<contains string="${set-module-properties.build.xml.content}" substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;" />
