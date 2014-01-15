@@ -17,21 +17,67 @@ package com.liferay.sync.engine.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import com.liferay.sync.engine.service.persistence.BasePersistenceImpl;
+
 /**
  * @author Shinn Lok
  */
-@DatabaseTable(tableName = "Account")
+@DatabaseTable(tableName = "Account", daoClass = BasePersistenceImpl.class)
 public class Account {
 
 	public long getAccountId() {
-		return this.accountId;
+		return accountId;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getRootPath() {
+		return rootPath;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 
 	public void setAccountId(long accountId) {
 		this.accountId = accountId;
 	}
 
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setRootPath(String rootPath) {
+		this.rootPath = rootPath;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	@DatabaseField(generatedId = true, useGetSet = true)
-	protected long accountId;
+	private long accountId;
+
+	@DatabaseField(useGetSet = true, width = 16777216)
+	private String login;
+
+	@DatabaseField(useGetSet = true, width = 16777216)
+	private String password;
+
+	@DatabaseField(useGetSet = true, width = 16777216)
+	private String rootPath;
+
+	@DatabaseField(useGetSet = true, width = 16777216)
+	private String url;
 
 }

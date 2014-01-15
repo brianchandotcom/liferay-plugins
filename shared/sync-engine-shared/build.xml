@@ -1,5 +1,16 @@
 <?xml version="1.0"?>
 
 <project name="sync-engine-shared" basedir="." default="compile">
+	<property name="plugin.version" value="1" />
+
 	<import file="../build-common-shared.xml" />
+
+	<target name="update-portal-service">
+		<copy overwrite="yes" todir="src/com/liferay/portal/kernel">
+			<fileset
+				dir="${portal.dir}/portal-service/src/com/liferay/portal/kernel"
+				includes="io/BigEndianCodec.java,security/SecureRandom.java,security/SecureRandomUtil.java,util/StringPool.java"
+			/>
+		</copy>
+	</target>
 </project>
