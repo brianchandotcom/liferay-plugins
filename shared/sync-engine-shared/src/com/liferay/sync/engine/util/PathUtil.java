@@ -36,18 +36,6 @@ public class PathUtil {
 		return name;
 	}
 
-	public static String getWebDAVPath(String repositoryPath, String path) {
-		path = fixPath(path);
-
-		if (path.startsWith(repositoryPath)) {
-			return path.substring(repositoryPath.length());
-		}
-
-		_logger.error("Unable to get WebDAV path {}", path);
-
-		return null;
-	}
-
 	private static Logger _logger = LoggerFactory.getLogger(PathUtil.class);
 
 }
