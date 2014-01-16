@@ -33,8 +33,8 @@ public class SyncAccount {
 		return password;
 	}
 
-	public String getRootPath() {
-		return rootPath;
+	public String getRootFilePath() {
+		return rootFilePath;
 	}
 
 	public long getSyncAccountId() {
@@ -53,8 +53,8 @@ public class SyncAccount {
 		this.password = password;
 	}
 
-	public void setRootPath(String rootPath) {
-		this.rootPath = rootPath;
+	public void setRootFilePath(String rootFilePath) {
+		this.rootFilePath = rootFilePath;
 	}
 
 	public void setSyncAccountId(long syncAccountId) {
@@ -72,7 +72,7 @@ public class SyncAccount {
 	protected String password;
 
 	@DatabaseField(useGetSet = true, width = 16777216)
-	protected String rootPath;
+	protected String rootFilePath;
 
 	@DatabaseField(generatedId = true, useGetSet = true)
 	protected long syncAccountId;
