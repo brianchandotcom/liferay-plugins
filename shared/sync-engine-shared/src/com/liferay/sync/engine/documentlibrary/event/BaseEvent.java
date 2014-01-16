@@ -27,10 +27,10 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseEvent implements Runnable {
 
 	public BaseEvent(
-		long syncAccountId, String path, Map<String, Object> parameters) {
+		long syncAccountId, String service, Map<String, Object> parameters) {
 
 		_syncAccountId = syncAccountId;
-		_path = path;
+		_service = service;
 		_parameters = parameters;
 	}
 
@@ -38,7 +38,7 @@ public abstract class BaseEvent implements Runnable {
 	public void run() {
 		try {
 			String response = JSONUtil.executeRequest(
-				_syncAccountId, _path, _parameters);
+				_syncAccountId, _service, _parameters);
 
 			processResponse(response);
 		}
@@ -57,7 +57,7 @@ public abstract class BaseEvent implements Runnable {
 	private static Logger _logger = LoggerFactory.getLogger(BaseEvent.class);
 
 	private Map<String, Object> _parameters;
-	private String _path;
+	private String _service;
 	private long _syncAccountId;
 
 }
