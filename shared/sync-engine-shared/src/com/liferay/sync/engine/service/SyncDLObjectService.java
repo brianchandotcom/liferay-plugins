@@ -45,6 +45,7 @@ public class SyncDLObjectService {
 
 	private static Logger _logger = LoggerFactory.getLogger(
 		SyncDLObjectService.class);
+
 	private static SyncDLObjectPersistence _syncDLObjectPersistence =
 		getSyncDLObjectPersistence();
 

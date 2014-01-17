@@ -77,6 +77,7 @@ public class SyncGroupService {
 
 	private static Logger _logger = LoggerFactory.getLogger(
 		SyncGroupService.class);
+
 	private static SyncGroupPersistence _syncGroupPersistence =
 		getSyncGroupPersistence();
 

@@ -77,6 +77,7 @@ public class SyncAccountService {
 
 	private static Logger _logger = LoggerFactory.getLogger(
 		SyncAccountService.class);
+
 	private static SyncAccountPersistence _syncAccountPersistence =
 		getSyncAccountPersistence();
 
