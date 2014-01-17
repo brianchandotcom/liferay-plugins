@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseEvent implements Runnable {
 
 	public BaseEvent(
-		long syncAccountId, String urlPath, 
+		long syncAccountId, String urlPath,
 		Map<String, Object> parameters) {
 
 		_syncAccountId = syncAccountId;
@@ -58,7 +58,7 @@ public abstract class BaseEvent implements Runnable {
 	private static Logger _logger = LoggerFactory.getLogger(BaseEvent.class);
 
 	private Map<String, Object> _parameters;
-	private String _urlPath;
 	private long _syncAccountId;
+	private String _urlPath;
 
 }
