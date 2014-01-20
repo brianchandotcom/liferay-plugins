@@ -522,6 +522,12 @@
 		</for>
 	</target>
 
+	<target name="jar" depends="compile">
+		<jar-macro
+			module.dir="."
+		/>
+	</target>
+
 	<target name="jar-javadoc" depends="javadoc">
 		<jar-javadoc
 			module.dir="."

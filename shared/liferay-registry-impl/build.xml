@@ -3,7 +3,7 @@
 
 <project name="liferay-registry-impl" basedir="." default="deploy">
 	<property name="import.compat.shared" value="false" />
-	<property name="import.shared" value="liferay-registry-1.0.0" />
+	<property name="import.shared" value="liferay-registry" />
 
 	<import file="../../build-common-osgi-plugin.xml" />
 

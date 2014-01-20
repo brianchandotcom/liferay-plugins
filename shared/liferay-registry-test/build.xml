@@ -3,10 +3,10 @@
 
 <project name="liferay-registry-test" basedir="." default="deploy">
 	<property name="import.compat.shared" value="false" />
-	<property name="import.shared" value="liferay-registry-1.0.0,liferay-registry-impl-1.0.0" />
+	<property name="import.shared" value="liferay-registry,liferay-registry-impl" />
 
 	<import file="../../build-common-osgi-plugin.xml" />
 
-	<target name="deploy" depends="jar">
+	<target name="deploy">
 	</target>
 </project>

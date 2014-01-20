@@ -1619,7 +1619,24 @@ Please find a solution that does not require portal-impl.jar.
 			<var name="plugin.sources.file.default" value="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}-sources.${plugin.packaging}" />
 			<var name="plugin.src.file.default" value="${sdk.dir}/dist/${plugin.name}-src-${plugin.full.version}.zip" />
 
-			<var name="plugin.full.version" value="${plugin.full.version.default}" />
+			<if>
+				<available file="@{module.dir}/bnd.bnd" />
+				<then>
+					<read-single-property-from-properties
+						property.name="Bundle-Version"
+						module.dir="@{module.dir}"
+						file="bnd.bnd"
+						default.value="${plugin.full.version.default}"
+					/>
+
+					<if>
+						<isset property="Bundle-Version" />
+						<then>
+							<var name="plugin.full.version" value="${Bundle-Version}" />
+						</then>
+					</if>
+				</then>
+			</if>
 
 			<var name="plugin.file" value="${plugin.file.default}" />
 			<var name="plugin.javadoc.file" value="${plugin.javadoc.file.default}" />
@@ -1913,6 +1930,31 @@ Please find a solution that does not require portal-impl.jar.
 			</if>
 		</sequential>
 	</macrodef>
+
+	<scriptdef name="read-single-property-from-properties" classpathref="portal.classpath" language="groovy">
+		<attribute name="property.name" />
+		<attribute name="module.dir" />
+		<attribute name="file" />
+		<attribute name="default.value" />
+		<![CDATA[
+			//println attributes
+
+			java.util.Properties properties = new java.util.Properties();
+
+			properties.load(
+				new java.io.FileInputStream(new File(attributes['module.dir'], attributes['file'])))
+
+			String propertyValue = properties.get(attributes['property.name']);
+
+			if (propertyValue != null) {
+				project.setProperty(attributes['property.name'], propertyValue);
+			}
+
+			if ((propertyValue == null) && (attributes['default.value'] != null)) {
+				project.setProperty(attributes['property.name'], attributes['default.value']);
+			}
+		]]>
+	</scriptdef>
 
 	<target name="create">
 		<if>
