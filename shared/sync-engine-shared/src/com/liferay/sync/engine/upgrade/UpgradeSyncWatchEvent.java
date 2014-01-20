@@ -12,22 +12,24 @@
  * details.
  */
 
-package com.liferay.sync.engine.filesystem;
+package com.liferay.sync.engine.upgrade;
 
-import java.nio.file.Path;
-import java.nio.file.WatchEvent;
+import com.liferay.sync.engine.service.SyncWatchEventService;
+import com.liferay.sync.engine.service.persistence.SyncWatchEventPersistence;
 
 /**
  * @author Michael Young
  */
-public interface WatchEventListener {
+public class UpgradeSyncWatchEvent extends UpgradeProcess {
 
-	public void entryCreate(Path filePath, WatchEvent<Path> watchEvent);
+	@Override
+	public void upgrade() throws Exception {
+		SyncWatchEventPersistence syncWatchEventPersistence =
+			SyncWatchEventService.getSyncWatchEventPersistence();
 
-	public void entryDelete(Path filePath, WatchEvent<Path> watchEvent);
-
-	public void entryModify(Path filePath, WatchEvent<Path> watchEvent);
-
-	public void overflow(Path filePath, WatchEvent<Path> watchEvent);
+		if (!syncWatchEventPersistence.isTableExists()) {
+			syncWatchEventPersistence.createTable();
+		}
+	}
 
 }

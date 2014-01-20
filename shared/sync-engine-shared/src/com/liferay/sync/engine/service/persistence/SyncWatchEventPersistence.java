@@ -12,22 +12,20 @@
  * details.
  */
 
-package com.liferay.sync.engine.filesystem;
+package com.liferay.sync.engine.service.persistence;
 
-import java.nio.file.Path;
-import java.nio.file.WatchEvent;
+import com.liferay.sync.engine.model.SyncWatchEvent;
+
+import java.sql.SQLException;
 
 /**
  * @author Michael Young
  */
-public interface WatchEventListener {
+public class SyncWatchEventPersistence
+	extends BasePersistenceImpl<SyncWatchEvent, Long> {
 
-	public void entryCreate(Path filePath, WatchEvent<Path> watchEvent);
-
-	public void entryDelete(Path filePath, WatchEvent<Path> watchEvent);
-
-	public void entryModify(Path filePath, WatchEvent<Path> watchEvent);
-
-	public void overflow(Path filePath, WatchEvent<Path> watchEvent);
+	public SyncWatchEventPersistence() throws SQLException {
+		super(SyncWatchEvent.class);
+	}
 
 }
