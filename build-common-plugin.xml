@@ -5,7 +5,7 @@
 	<import file="build-common.xml" />
 
 	<set-module-properties
-		module.dir="."
+		module.dir="${basedir}"
 	/>
 
 	<macrodef name="classpath-to-jar">
