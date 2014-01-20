@@ -48,7 +48,7 @@
 
 	<path id="plugin.classpath">
 		<path refid="plugin-lib.classpath" />
-		<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
+		<fileset dir="${app.server.lib.global.dir}" includes="*.jar" excludes="liferay-registry*.jar"/>
 		<fileset dir="${app.server.lib.portal.dir}" includes="annotations.jar,commons-logging.jar,log4j.jar,util-bridges.jar,util-java.jar,util-taglib.jar" />
 		<fileset dir="${sdk.dir}/lib" includes="activation.jar,javax.servlet-api.jar,jsp-api.jar,mail.jar" />
 	</path>
@@ -1304,7 +1304,6 @@ Please find a solution that does not require portal-impl.jar.
 							</if>
 
 							<loadfile property="jar-macro.bnd.bnd.content" srcFile="@{module.dir}/bnd.bnd" />
-
 							<var name="jar-macro.bnd.bnd.content" unset="true" />
 
 							<lfr-bnd-jar
@@ -1317,6 +1316,10 @@ Please find a solution that does not require portal-impl.jar.
 									<pathelement location="${plugin.classes.dir}" />
 								</classpath>
 							</lfr-bnd-jar>
+
+							<var name="original.lib.name" unset="true" />
+							<var name="original.lib.version" unset="true" />
+							<var name="original.lib.url" unset="true" />
 						</then>
 					</if>
 				</then>
