@@ -1307,7 +1307,7 @@ Please find a solution that does not require portal-impl.jar.
 
 							<var name="jar-macro.bnd.bnd.content" unset="true" />
 
-							<baseline-jar-macro
+							<lfr-bnd-jar
 								bndRootFile="${sdk.dir}/common.bnd"
 								file="@{module.dir}/bnd.bnd"
 								outputPath="${plugin.file}"
