@@ -4,8 +4,14 @@
 <project name="build-common-osgi-plugin">
 	<import file="build-common-plugin.xml" />
 
-	<target name="jar">
-		<jar-macro
+	<target name="release" depends="war">
+		<release-macro
+			module.dir="."
+		/>
+	</target>
+
+	<target name="test" depends="compile" if="Test-Cases">
+		<test-osgi-macro
 			module.dir="."
 		/>
 	</target>

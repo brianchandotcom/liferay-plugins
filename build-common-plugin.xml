@@ -5,7 +5,7 @@
 	<import file="build-common.xml" />
 
 	<set-module-properties
-		module.dir="."
+		module.dir="${basedir}"
 	/>
 
 	<macrodef name="classpath-to-jar">
@@ -520,6 +520,12 @@
 				</java>
 			</sequential>
 		</for>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar-macro
+			module.dir="."
+		/>
 	</target>
 
 	<target name="jar-javadoc" depends="javadoc">
