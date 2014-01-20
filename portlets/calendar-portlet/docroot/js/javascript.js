@@ -1849,6 +1849,8 @@ AUI.add(
 							],
 							'header'
 						);
+
+						instance.popover.headerNode.toggleClass('hide', !templateData.permissions.VIEW_BOOKING_DETAILS);
 					},
 
 					_afterPopoverVisibleChange: function(event) {
@@ -2065,26 +2067,34 @@ AUI.add(
 					_syncInvitees: function() {
 						var instance = this;
 
-						var portletNamespace = instance.get('portletNamespace');
 						var schedulerEvent = instance.get('event');
 
 						if (schedulerEvent) {
-							var parentCalendarBookingId = schedulerEvent.get('parentCalendarBookingId');
+							var calendar = CalendarUtil.availableCalendars[schedulerEvent.get('calendarId')];
 
-							CalendarUtil.getCalendarBookingInvitees(
-								parentCalendarBookingId,
-								function(data) {
-									var results = AArray.partition(
-										data,
-										function(item) {
-											return item.classNameId === CalendarUtil.USER_CLASS_NAME_ID;
+							if (calendar) {
+								var permissions = calendar.get('permissions');
+
+								if (permissions.VIEW_BOOKING_DETAILS) {
+									var parentCalendarBookingId = schedulerEvent.get('parentCalendarBookingId');
+									var portletNamespace = instance.get('portletNamespace');
+
+									CalendarUtil.getCalendarBookingInvitees(
+										parentCalendarBookingId,
+										function(data) {
+											var results = AArray.partition(
+													data,
+													function(item) {
+														return item.classNameId === CalendarUtil.USER_CLASS_NAME_ID;
+													}
+											);
+
+											instance._syncInviteesContent('#' + portletNamespace + 'eventRecorderUsers', results.matches);
+											instance._syncInviteesContent('#' + portletNamespace + 'eventRecorderResources', results.rejects);
 										}
 									);
-
-									instance._syncInviteesContent('#' + portletNamespace + 'eventRecorderUsers', results.matches);
-									instance._syncInviteesContent('#' + portletNamespace + 'eventRecorderResources', results.rejects);
 								}
-							);
+							}
 						}
 					},
 

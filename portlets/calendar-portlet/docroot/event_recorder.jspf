@@ -38,7 +38,7 @@
 
 		<div class="scheduler-event-recorder-body">
 			<table>
-				<tpl if="status != Liferay.CalendarWorkflow.STATUS_DRAFT">
+				<tpl if="values.permissions.MANAGE_BOOKINGS && (status != Liferay.CalendarWorkflow.STATUS_DRAFT)">
 					<tr class="calendar-portlet-event-recorder-status-row">
 						<td>
 							<liferay-ui:message key="attend" />?
@@ -65,12 +65,12 @@
 					</td>
 				</tr>
 
-				<tpl if="values.permissions.MANAGE_BOOKINGS">
-					<tr class="calendar-portlet-event-recorder-calendar-row">
-						<td>
-							<liferay-ui:message key="calendar" />:
-						</td>
-						<td>
+				<tr class="calendar-portlet-event-recorder-calendar-row">
+					<td>
+						<liferay-ui:message key="calendar" />:
+					</td>
+					<td>
+						<tpl if="values.permissions.MANAGE_BOOKINGS">
 							<select id="<portlet:namespace />eventRecorderCalendar" name="calendarId">
 								<tpl for="calendarIds">
 									<tpl for="parent.availableCalendars[values]">
@@ -82,26 +82,32 @@
 									</tpl>
 								</tpl>
 							</select>
+						</tpl>
+
+						<tpl if="!values.permissions.MANAGE_BOOKINGS">
+							<label>{[Liferay.Util.escapeHTML(Liferay.CalendarUtil.getCalendarName(values.calendar.get('name'), values.calendar.get('calendarResourceName')))]}</label>
+						</tpl>
+					</td>
+				</tr>
+
+				<tpl if="values.editing && values.permissions.VIEW_BOOKING_DETAILS">
+					<tr id="<portlet:namespace />eventRecorderUsers">
+						<td>
+							<liferay-ui:message key="users" />:
+						</td>
+						<td>
+							<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
+						</td>
+					</tr>
+					<tr id="<portlet:namespace />eventRecorderResources">
+						<td>
+							<liferay-ui:message key="resources" />:
+						</td>
+						<td>
+							<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
 						</td>
 					</tr>
 				</tpl>
-
-				<tr <tpl if="!values.editing">class="hide"</tpl> id="<portlet:namespace />eventRecorderUsers">
-					<td>
-						<liferay-ui:message key="users" />:
-					</td>
-					<td>
-						<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
-					</td>
-				</tr>
-				<tr <tpl if="!values.editing">class="hide"</tpl> id="<portlet:namespace />eventRecorderResources">
-					<td>
-						<liferay-ui:message key="resources" />:
-					</td>
-					<td>
-						<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
-					</td>
-				</tr>
 			</table>
 		</div>
 	</div>
