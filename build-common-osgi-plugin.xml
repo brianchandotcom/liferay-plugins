@@ -4,12 +4,6 @@
 <project name="build-common-osgi-plugin">
 	<import file="build-common-plugin.xml" />
 
-	<target name="jar">
-		<jar-macro
-			module.dir="."
-		/>
-	</target>
-
 	<target name="release" depends="war">
 		<release-macro
 			module.dir="."
