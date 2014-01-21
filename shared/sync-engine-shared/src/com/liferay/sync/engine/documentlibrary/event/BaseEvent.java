@@ -14,7 +14,7 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
-import com.liferay.sync.engine.util.JSONUtil;
+import com.liferay.sync.engine.util.HttpUtil;
 
 import java.util.Map;
 
@@ -37,8 +37,7 @@ public abstract class BaseEvent implements Runnable {
 	@Override
 	public void run() {
 		try {
-			String response = JSONUtil.execute(
-				_syncAccountId, _urlPath, _parameters);
+			String response = processRequest();
 
 			processResponse(response);
 		}
@@ -49,6 +48,10 @@ public abstract class BaseEvent implements Runnable {
 
 	protected long getSyncAccountId() {
 		return _syncAccountId;
+	}
+
+	protected String processRequest() throws Exception {
+		return HttpUtil.executePost(_syncAccountId, _urlPath, _parameters);
 	}
 
 	protected abstract void processResponse(String httpResponse)

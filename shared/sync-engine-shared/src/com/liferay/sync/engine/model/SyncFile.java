@@ -28,12 +28,20 @@ import com.liferay.sync.engine.service.persistence.BasePersistenceImpl;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SyncFile {
 
+	public static final String TYPE_FILE = "file";
+
+	public static final String TYPE_FOLDER = "folder";
+
 	public String getChecksum() {
 		return checksum;
 	}
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getFilePath() {
+		return filePath;
 	}
 
 	public String getName() {
@@ -52,6 +60,10 @@ public class SyncFile {
 		return size;
 	}
 
+	public long getSyncAccountId() {
+		return syncAccountId;
+	}
+
 	public long getSyncFileId() {
 		return syncFileId;
 	}
@@ -64,6 +76,10 @@ public class SyncFile {
 		return typePK;
 	}
 
+	public String getTypeUuid() {
+		return typeUuid;
+	}
+
 	public String getVersion() {
 		return version;
 	}
@@ -74,6 +90,10 @@ public class SyncFile {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	public void setName(String name) {
@@ -92,6 +112,10 @@ public class SyncFile {
 		this.size = size;
 	}
 
+	public void setSyncAccountId(long syncAccountId) {
+		this.syncAccountId = syncAccountId;
+	}
+
 	public void setSyncFileId(long syncFileId) {
 		this.syncFileId = syncFileId;
 	}
@@ -104,6 +128,10 @@ public class SyncFile {
 		this.typePK = typePK;
 	}
 
+	public void setTypeUuid(String typeUuid) {
+		this.typeUuid = typeUuid;
+	}
+
 	public void setVersion(String version) {
 		this.version = version;
 	}
@@ -113,6 +141,9 @@ public class SyncFile {
 
 	@DatabaseField(useGetSet = true, width = 16777216)
 	protected String description;
+
+	@DatabaseField(useGetSet = true, width = 16777216)
+	protected String filePath;
 
 	@DatabaseField(useGetSet = true, width = 255)
 	protected String name;
@@ -126,6 +157,9 @@ public class SyncFile {
 	@DatabaseField(useGetSet = true)
 	protected long size;
 
+	@DatabaseField(useGetSet = true)
+	protected long syncAccountId;
+
 	@DatabaseField(generatedId = true, useGetSet = true)
 	protected long syncFileId;
 
@@ -134,6 +168,9 @@ public class SyncFile {
 
 	@DatabaseField(useGetSet = true)
 	protected long typePK;
+
+	@DatabaseField(useGetSet = true, width = 75)
+	protected String typeUuid;
 
 	@DatabaseField(useGetSet = true, width = 255)
 	protected String version;
