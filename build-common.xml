@@ -1618,6 +1618,25 @@ Please find a solution that does not require portal-impl.jar.
 
 			<var name="plugin.full.version" value="${plugin.full.version.default}" />
 
+			<if>
+				<available file="@{module.dir}/bnd.bnd" />
+				<then>
+					<read-single-property-from-properties
+						property.name="Bundle-Version"
+						module.dir="@{module.dir}"
+						file="bnd.bnd"
+						default.value="${plugin.full.version.default}"
+					/>
+
+					<if>
+						<isset property="Bundle-Version" />
+						<then>
+							<var name="plugin.full.version" value="${Bundle-Version}" />
+						</then>
+					</if>
+				</then>
+			</if>
+
 			<var name="plugin.file" value="${plugin.file.default}" />
 			<var name="plugin.javadoc.file" value="${plugin.javadoc.file.default}" />
 			<var name="plugin.pom.file" value="${plugin.pom.file.default}" />
