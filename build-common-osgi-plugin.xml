@@ -9,4 +9,16 @@
 			module.dir="."
 		/>
 	</target>
+
+	<target name="release" depends="war">
+		<release-macro
+			module.dir="."
+		/>
+	</target>
+
+	<target name="test" depends="compile">
+		<test-osgi-macro
+			module.dir="."
+		/>
+	</target>
 </project>
