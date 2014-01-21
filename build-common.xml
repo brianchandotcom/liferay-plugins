@@ -1724,10 +1724,21 @@ Please find a solution that does not require portal-impl.jar.
 				module.dir="@{module.dir}"
 			/>
 
-			<lfr-bnd-test
-				bndRootFile="${sdk.dir}/common.bnd"
-				runfiles="bnd.bnd"
+			<read-single-property-from-properties
+				property.name="Test-Cases"
+				module.dir="@{module.dir}"
+				file="bnd.bnd"
 			/>
+
+			<if>
+				<isset property="Test-Cases" />
+				<then>
+					<lfr-bnd-test
+						bndRootFile="${sdk.dir}/common.bnd"
+						runfiles="bnd.bnd"
+					/>
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -1910,6 +1921,32 @@ Please find a solution that does not require portal-impl.jar.
 			</if>
 		</sequential>
 	</macrodef>
+
+	<scriptdef name="read-single-property-from-properties" classpathref="portal.classpath" language="groovy">
+		<attribute name="property.name" />
+		<attribute name="module.dir" />
+		<attribute name="file" />
+		<attribute name="default.value" />
+		<![CDATA[
+			//println attributes
+
+			java.util.Properties properties = new java.util.Properties();
+
+			properties.load(
+				new java.io.FileInputStream(
+					new File(attributes['module.dir'], attributes['file'])))
+
+			String propertyValue = properties.get(attributes['property.name']);
+
+			if (propertyValue != null) {
+				project.setProperty(attributes['property.name'], propertyValue);
+			}
+			else if (attributes['default.value'] != null) {
+				project.setProperty(
+					attributes['property.name'], attributes['default.value']);
+			}
+		]]>
+	</scriptdef>
 
 	<target name="create">
 		<if>
