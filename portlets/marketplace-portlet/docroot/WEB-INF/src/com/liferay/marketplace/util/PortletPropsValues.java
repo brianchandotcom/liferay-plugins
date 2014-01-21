@@ -26,7 +26,9 @@ public class PortletPropsValues {
 		GetterUtil.getBoolean(
 			PortletProps.get(PortletPropsKeys.MARKETPLACE_STORE_ENABLED), true);
 
-	public static final String MARKETPLACE_URL_LOGOUT = PortletProps.get(
-		PortletPropsKeys.MARKETPLACE_URL_LOGOUT);
+	public static final String MARKETPLACE_URL =
+		GetterUtil.getString(
+			PortletProps.get(PortletPropsKeys.MARKETPLACE_URL),
+			"https://mp.liferay.com");
 
 }
