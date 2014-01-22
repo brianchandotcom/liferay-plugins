@@ -527,11 +527,15 @@ public class CalendarImporterLocalServiceImpl
 
 		serviceContext.setUserId(userId);
 
-		CalendarResource calendarResource =
-			CalendarResourceUtil.getGroupCalendarResource(
-				groupId, serviceContext);
+		Group group = groupLocalService.getGroup(groupId);
 
-		return calendarResource;
+		if (group.isUser()) {
+			return CalendarResourceUtil.getUserCalendarResource(
+				group.getCreatorUserId(), serviceContext);
+		}
+
+		return CalendarResourceUtil.getGroupCalendarResource(
+			groupId, serviceContext);
 	}
 
 	protected String getRecurrence(TZSRecurrence tzsRecurrence) {
