@@ -48,15 +48,22 @@ for (long calendarId : calendarIds) {
 	}
 }
 
+List<Calendar> defaultCalendars = Collections.emptyList();
+
+if ((groupCalendars != null) && (groupCalendars.size() > 0)) {
+	defaultCalendars = groupCalendars;
+}
+else if (userCalendars != null) {
+	defaultCalendars = userCalendars;
+}
+
 Calendar defaultCalendar = null;
 
-if ((userCalendars != null) && (userCalendars.size() > 0)) {
-	for (Calendar userCalendar : userCalendars) {
-		if (userCalendar.isDefaultCalendar()) {
-			defaultCalendar = userCalendar;
+for (Calendar calendar : defaultCalendars) {
+	if (calendar.isDefaultCalendar()) {
+		defaultCalendar = calendar;
 
-			break;
-		}
+		break;
 	}
 }
 
