@@ -91,7 +91,7 @@ catch (NoSuchRoleException nsre) {
 
 <aui:script>
 	function <portlet:namespace />openWindow() {
-		<liferay-portlet:renderURL portletName="5_WAR_soportlet" var="viewSitesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+		<liferay-portlet:renderURL portletName="<%= PortletKeys.SO_SITES %>" var="viewSitesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 			<portlet:param name="mvcPath" value="/sites/view_sites.jsp" />
 		</liferay-portlet:renderURL>
 
@@ -116,6 +116,34 @@ catch (NoSuchRoleException nsre) {
 </aui:script>
 
 <aui:script use="aui-base">
+	if (!('placeholder' in document.createElement('input'))) {
+		var searchInput = A.one('#<%= PortalUtil.getPortletNamespace(PortletKeys.SO_SITES) %>name')
+
+		if (searchInput) {
+			var placeholder = searchInput.getAttribute('placeholder');
+
+			searchInput.val(placeholder);
+
+			searchInput.on(
+				'click',
+				function(event) {
+					if (searchInput.val() == placeholder) {
+						searchInput.val('');
+					}
+				}
+			);
+
+			searchInput.on(
+				'blur',
+				function(event) {
+					if (!searchInput.val()) {
+						searchInput.val(placeholder);
+					}
+				}
+			);
+		}
+	}
+
 	var mySites = A.one('.portlet-dockbar .my-sites');
 
 	if (mySites) {
