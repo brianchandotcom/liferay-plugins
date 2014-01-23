@@ -825,8 +825,12 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 			InputStream inputStream = _extRepository.getContentStream(
 				extRepositoryFileVersion);
 
-			_extRepository.checkOutExtRepositoryFileEntry(
-				extRepositoryFileEntryKey);
+			try {
+				_extRepository.checkOutExtRepositoryFileEntry(
+					extRepositoryFileEntryKey);
+			}
+			catch (UnsupportedOperationException uoe) {
+			}
 
 			_extRepository.updateExtRepositoryFileEntry(
 				extRepositoryFileEntryKey,
@@ -834,8 +838,12 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 			String changeLog = "Reverted to " + version;
 
-			_extRepository.checkInExtRepositoryFileEntry(
-				extRepositoryFileEntryKey, true, changeLog);
+			try {
+				_extRepository.checkInExtRepositoryFileEntry(
+					extRepositoryFileEntryKey, true, changeLog);
+			}
+			catch (UnsupportedOperationException uoe) {
+			}
 		}
 		else {
 			throw new NoSuchFileVersionException(
@@ -865,11 +873,6 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	@SuppressWarnings("unused")
-	public Hits search(SearchContext searchContext) throws SearchException {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
 
@@ -976,20 +979,40 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 		String extRepositoryFileEntryKey = getExtRepositoryObjectKey(
 			fileEntryId);
 
-		ExtRepositoryFileEntry extRepositoryFileEntry =
-			_extRepository.updateExtRepositoryFileEntry(
-				extRepositoryFileEntryKey, mimeType, is);
+		ExtRepositoryFileEntry extRepositoryFileEntry = null;
 
-		_extRepository.checkInExtRepositoryFileEntry(
-			extRepositoryFileEntryKey, majorVersion, changeLog);
+		if (is == null) {
+			extRepositoryFileEntry = _extRepository.getExtRepositoryObject(
+					ExtRepositoryObjectType.FILE, extRepositoryFileEntryKey);
+		}
+		else {
+			try {
+				_extRepository.checkOutExtRepositoryFileEntry(
+					extRepositoryFileEntryKey);
+			}
+			catch (UnsupportedOperationException uoe) {
+			}
 
-		ExtRepositoryFolder extRepositoryFolder =
-			_extRepository.getExtRepositoryParentFolder(extRepositoryFileEntry);
+			extRepositoryFileEntry =
+				_extRepository.updateExtRepositoryFileEntry(
+					extRepositoryFileEntryKey, mimeType, is);
+
+			try {
+				_extRepository.checkInExtRepositoryFileEntry(
+					extRepositoryFileEntryKey, majorVersion, changeLog);
+			}
+			catch (UnsupportedOperationException uoe) {
+			}
+		}
 
 		if (!title.equals(extRepositoryFileEntry.getTitle())) {
-			_extRepository.moveExtRepositoryObject(
+			ExtRepositoryFolder folder =
+				_extRepository.getExtRepositoryParentFolder(
+					extRepositoryFileEntry);
+
+			extRepositoryFileEntry = _extRepository.moveExtRepositoryObject(
 				ExtRepositoryObjectType.FILE, extRepositoryFileEntryKey,
-				extRepositoryFolder.getExtRepositoryModelKey(), title);
+				folder.getExtRepositoryModelKey(), title);
 		}
 
 		return _toExtRepositoryObjectAdapter(
