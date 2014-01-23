@@ -33,8 +33,17 @@ public class UpgradeSocial extends UpgradeProcess {
 	}
 
 	protected void updateSOSocialActivities() throws Exception {
-		if (!hasTable("SO_SocialActivity")) {
-			return;
+		if (isSupportsStringCaseSensitiveQuery()) {
+			if (!hasTable("so_socialactivity") &&
+				!hasTable("SO_SocialActivity")) {
+
+				return;
+			}
+		}
+		else {
+			if (!hasTable("SO_SocialActivity")) {
+				return;
+			}
 		}
 
 		Connection con = null;
