@@ -14,13 +14,15 @@
 
 package com.liferay.sync.engine.service;
 
-import com.liferay.sync.engine.model.SyncSite;
-import com.liferay.sync.engine.service.persistence.SyncSitePersistence;
-
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.liferay.sync.engine.model.SyncSite;
+import com.liferay.sync.engine.service.persistence.SyncSitePersistence;
 
 /**
  * @author Shinn Lok
@@ -42,6 +44,17 @@ public class SyncSiteService {
 		return syncSite;
 	}
 
+	public static void deleteSyncSite(long syncSiteId) {
+		try {
+			_syncSitePersistence.deleteById(syncSiteId);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+		}
+	}
+
 	public static SyncSite fetchSyncSite(long groupId, long syncAccountId) {
 		try {
 			return _syncSitePersistence.fetchSyncSite(groupId, syncAccountId);
@@ -52,6 +65,19 @@ public class SyncSiteService {
 			}
 
 			return null;
+		}
+	}
+
+	public static List<SyncSite> fetchSyncSites(long syncAccountId) {
+		try {
+			return _syncSitePersistence.fetchSyncSite(syncAccountId);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+
+			return Collections.emptyList();
 		}
 	}
 

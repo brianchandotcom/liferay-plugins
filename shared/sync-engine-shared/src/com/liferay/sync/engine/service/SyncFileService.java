@@ -19,6 +19,9 @@ import com.liferay.sync.engine.service.persistence.SyncFilePersistence;
 
 import java.sql.SQLException;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,6 +87,19 @@ public class SyncFileService {
 			}
 
 			return null;
+		}
+	}
+
+	public static List<SyncFile> fetchSyncFiles(long syncAccountId) {
+		try {
+			return _syncFilePersistence.fetchSyncFiles(syncAccountId);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+
+			return Collections.emptyList();
 		}
 	}
 
