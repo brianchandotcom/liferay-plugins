@@ -33,7 +33,6 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -86,19 +85,19 @@ public class ResourceImporter extends FileSystemImporter {
 
 	@Override
 	protected void addDDLDisplayTemplates(
-			String ddmStructureKey, String displayTemplateDir)
+			String ddmStructureKey, String dirName, String fileName)
 		throws Exception {
 
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
 			groupId, PortalUtil.getClassNameId(DDLRecordSet.class),
 			ddmStructureKey);
 
-		StringBundler sb = new StringBundler(6);
+		StringBundler sb = new StringBundler(4);
 
 		sb.append(resourcesDir);
-		sb.append(displayTemplateDir);
-		sb.append("/");
-		sb.append(ddmStructure.getName(Locale.getDefault()));
+		sb.append(dirName);
+		sb.append(StringPool.SLASH);
+		sb.append(fileName);
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
 			sb.toString());
@@ -127,19 +126,19 @@ public class ResourceImporter extends FileSystemImporter {
 
 	@Override
 	protected void addDDLFormTemplates(
-			String ddmStructureKey, String formTemplateDir)
+			String ddmStructureKey, String dirName, String fileName)
 		throws Exception {
 
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
 			groupId, PortalUtil.getClassNameId(DDLRecordSet.class),
 			ddmStructureKey);
 
-		StringBundler sb = new StringBundler(6);
+		StringBundler sb = new StringBundler(4);
 
 		sb.append(resourcesDir);
-		sb.append(formTemplateDir);
-		sb.append("/");
-		sb.append(ddmStructure.getName(Locale.getDefault()));
+		sb.append(dirName);
+		sb.append(StringPool.SLASH);
+		sb.append(fileName);
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
 			sb.toString());
@@ -189,12 +188,11 @@ public class ResourceImporter extends FileSystemImporter {
 	}
 
 	@Override
-	protected void addDDMStructures(
-			String parentStructureId, String structuresDirName)
+	protected void addDDMStructures(String parentStructureId, String dirName)
 		throws Exception {
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(structuresDirName));
+			resourcesDir.concat(dirName));
 
 		if (resourcePaths == null) {
 			return;
@@ -217,12 +215,11 @@ public class ResourceImporter extends FileSystemImporter {
 	}
 
 	@Override
-	protected void addDDMTemplates(
-			String ddmStructureKey, String templatesDirName)
+	protected void addDDMTemplates(String ddmStructureKey, String dirName)
 		throws Exception {
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(templatesDirName));
+			resourcesDir.concat(dirName));
 
 		if (resourcePaths == null) {
 			return;
@@ -245,11 +242,9 @@ public class ResourceImporter extends FileSystemImporter {
 	}
 
 	@Override
-	protected void addDLFileEntries(String fileEntriesDirName)
-		throws Exception {
-
+	protected void addDLFileEntries(String dirName) throws Exception {
 		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(fileEntriesDirName));
+			resourcesDir.concat(dirName));
 
 		if (resourcePaths == null) {
 			return;
@@ -314,12 +309,11 @@ public class ResourceImporter extends FileSystemImporter {
 
 	@Override
 	protected void addJournalArticles(
-			String ddmStructureKey, String ddmTemplateKey,
-			String articlesDirName)
+			String ddmStructureKey, String ddmTemplateKey, String dirName)
 		throws Exception {
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(articlesDirName));
+			resourcesDir.concat(dirName));
 
 		if (resourcePaths == null) {
 			return;
