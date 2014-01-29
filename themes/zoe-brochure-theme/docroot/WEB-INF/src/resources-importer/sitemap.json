@@ -1,22 +1,42 @@
 {
-	"layoutTemplateId": "1_3_1_columns",
+	"layoutTemplateId": "1_column",
 	"privatePages": [
 		{
 			"columns": [
 				[
-					"Home Carousel.xml"
-				],
-				[
-					"Panel1.xml"
-				],
-				[
-					"Panel2.xml"
-				],
-				[
-					"Panel3.xml"
-				],
-				[
-					"Banner 1.xml"
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Home Carousel.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Panel Home Page.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Banner 1.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					}
 				]
 			],
 			"friendlyURL": "/home",

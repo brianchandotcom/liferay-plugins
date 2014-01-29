@@ -523,11 +523,12 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ------- Panels -------- */
 
-	.panel {
+	.row-fluid .zoe-panel {
+		margin-bottom: 20px;
+	}
+
+	.zoe-panel {
 		background-color: #FAFAFA;
-
-		@include box-shadow(0 1px 1px #E7E7E7);
-
 		display: table-cell;
 		padding: 60px 40px;
 		text-align: center;
@@ -535,8 +536,10 @@ $default-box-shadow-v-offset: 1px;
 
 		@include word-break(break-word);
 
-		.panel-image {
+		.zoe-panel-image {
+			display: inline-block;
 			margin-bottom: 24px;
+			overflow: hidden;
 
 			i {
 				font-size: 90px;
