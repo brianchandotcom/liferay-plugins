@@ -10,13 +10,6 @@ $textColor: #004461;
 $textShadowColor1: #FFF;
 $textShadowColor2: #333;
 
-/* ---------- Dockbar color variables ---------- */
-
-$dockbarGradientEnd: #0F3F5F;
-$dockbarGradientStart: #3689AC;
-$dockbarOpenGradientEnd: #035679;
-$dockbarOpenGradientStart: #4F98B6;
-
 /* ---------- Set compass defaults ---------- */
 
 $default-box-shadow-blur-offset: 6px;
@@ -49,42 +42,57 @@ $default-box-shadow-v-offset: 1px;
 	/* ---------- Dockbar ---------- */
 
 	.dockbar-split .dockbar {
+		.info-button {
+			top: 9px;
+		}
+
+		.nav {
+			> li {
+				> .dropdown-menu {
+					background-color: #333;
+					border: 0;
+
+					@include border-radius(0);
+					@include box-shadow(none);
+
+					margin: 0;
+
+					&:after, &:before {
+						border: 0;
+					}
+
+					> li > a {
+						color: #FFF;
+					}
+				}
+			}
+
+			> li.user-avatar > .dropdown-menu {
+				left: auto;
+				right: 0;
+			}
+
+			li.dropdown {
+				&.active, &.active.open, &.open {
+					> .dropdown-toggle {
+						background-color: #333;
+					}
+				}
+			}
+		}
+
 		.navbar-inner {
-			.nav {
-				background-color: $dockbarGradientStart;
-
-				> li {
-					background-color: transparent;
-				}
-
-				li.dropdown {
-					&.active, &.open, &.open.active {
-						> .dropdown-toggle {
-							background-color: $dockbarOpenGradientStart;
-						}
-					}
-				}
+			.container .nav-collapse > .nav > li.open > a {
+				color: #FFF;
 			}
 
-			.nav-account-controls > li > a {
-				font-size: 1.2em;
+			.site-administration-menu li a {
+				color: #FFF;
 			}
+		}
 
-			.nav-add-controls {
-				background: transparent;
-
-				> li > a {
-					background: #046C98;
-
-					&:hover {
-						background: $dockbarGradientEnd;
-					}
-
-					&.toggle-controls-link {
-						background: #92F545;
-					}
-				}
-			}
+		.page-customization-bar .page-customization-bar-text {
+			height: 44px;
 		}
 	}
 
@@ -761,34 +769,14 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Extras ---------- */
 
-	a, a:link, a:visited, p, #navigation ul, .columns-max .portlet-topper-toolbar, .ie8 .pod.button span.description, .innovation-title, .pod {
-		@include single-text-shadow($textShadowColor1, 1px, 1px, 1px);
-	}
-
-	.dockbar-split .dockbar {
-		.navbar-inner {
-			@include box-shadow(none);
-
-			.nav {
-				li.dropdown.open > .dropdown-toggle {
-					@include background-image(linear-gradient($dockbarOpenGradientStart, $dockbarOpenGradientEnd));
-					@include box-shadow(none);
-				}
-			}
-
-			.nav-account-controls {
-				@include background-image(linear-gradient($dockbarGradientStart 0%, $dockbarGradientStart 10%, $dockbarGradientEnd 100%));
-			}
-
-			.dropdown-menu li a {
-				@include text-shadow(none);
-			}
-		}
-	}
-
 	.columns-max .portlet-boundary {
 		@include border-radius(5px);
 		@include single-box-shadow;
+	}
+
+	.dockbar-split .dockbar .nav > li > .dropdown-menu {
+		@include border-radius(0);
+		@include box-shadow(none);
 	}
 
 	.pod {
