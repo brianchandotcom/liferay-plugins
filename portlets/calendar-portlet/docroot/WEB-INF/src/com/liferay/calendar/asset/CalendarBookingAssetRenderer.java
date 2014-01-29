@@ -36,6 +36,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.WindowState;
 
 /**
  * @author Fabio Pezzutto
@@ -107,6 +108,30 @@ public class CalendarBookingAssetRenderer
 			String.valueOf(_calendarBooking.getCalendarBookingId()));
 
 		return portletURL;
+	}
+
+	@Override
+	public String getURLViewInContext(
+		LiferayPortletRequest liferayPortletRequest,
+		LiferayPortletResponse liferayPortletResponse,
+		String noSuchEntryRedirect) {
+
+		try {
+			PortletURL portletURL = liferayPortletResponse.createRenderURL(
+				PortletKeys.CALENDAR);
+
+			portletURL.setParameter("mvcPath", "/view_calendar_booking.jsp");
+			portletURL.setParameter(
+				"calendarBookingId",
+				String.valueOf(_calendarBooking.getCalendarBookingId()));
+			portletURL.setWindowState(WindowState.MAXIMIZED);
+
+			return portletURL.toString();
+		}
+		catch (Exception e) {
+		}
+
+		return null;
 	}
 
 	@Override
