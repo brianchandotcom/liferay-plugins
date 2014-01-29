@@ -31,19 +31,32 @@ import org.slf4j.LoggerFactory;
 public class SyncWatchEventService {
 
 	public static SyncWatchEvent addSyncWatchEvent(
-			String filePath, String kind, long syncAccountId)
+			String filePath, String fileType, String kindName,
+			long syncAccountId)
 		throws Exception {
 
 		SyncWatchEvent syncWatchEvent = new SyncWatchEvent();
 
 		syncWatchEvent.setFilePath(filePath);
-		syncWatchEvent.setKind(kind);
+		syncWatchEvent.setFileType(fileType);
+		syncWatchEvent.setKindName(kindName);
 		syncWatchEvent.setSyncAccountId(syncAccountId);
 		syncWatchEvent.setTimestamp(System.currentTimeMillis());
 
 		_syncWatchEventPersistence.create(syncWatchEvent);
 
 		return syncWatchEvent;
+	}
+
+	public static void deleteSyncWatchEvent(long syncWatchEventId) {
+		try {
+			_syncWatchEventPersistence.deleteById(syncWatchEventId);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+		}
 	}
 
 	public static SyncWatchEvent fetchSyncWatchEvent(long syncWatchEventId) {

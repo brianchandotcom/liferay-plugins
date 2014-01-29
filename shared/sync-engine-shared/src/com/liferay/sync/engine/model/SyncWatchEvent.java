@@ -44,8 +44,12 @@ public class SyncWatchEvent {
 		return filePath;
 	}
 
-	public String getKind() {
-		return kind;
+	public String getFileType() {
+		return fileType;
+	}
+
+	public String getKindName() {
+		return kindName;
 	}
 
 	public long getSyncAccountId() {
@@ -64,8 +68,12 @@ public class SyncWatchEvent {
 		this.filePath = filePath;
 	}
 
-	public void setKind(String kind) {
-		this.kind = kind;
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public void setKindName(String kindName) {
+		this.kindName = kindName;
 	}
 
 	public void setSyncAccountId(long syncAccountId) {
@@ -84,7 +92,10 @@ public class SyncWatchEvent {
 	protected String filePath;
 
 	@DatabaseField(useGetSet = true)
-	protected String kind;
+	protected String fileType;
+
+	@DatabaseField(useGetSet = true)
+	protected String kindName;
 
 	@DatabaseField(useGetSet = true)
 	protected long syncAccountId;
