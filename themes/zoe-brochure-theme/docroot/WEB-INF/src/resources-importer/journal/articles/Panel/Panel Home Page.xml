@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<root>
+	<dynamic-element name="title">
+		<dynamic-content><![CDATA[Panel Home Page]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="number_of_columns" type="select">
+		<dynamic-content><![CDATA[3]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="panel_icon_background" type="select">
+		<dynamic-content><![CDATA[ ]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="panel_icon_background_color" type="text">
+		<dynamic-content><![CDATA[]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="panel_icon_padding" type="text">
+		<dynamic-content><![CDATA[]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="panel_icon_color" type="text">
+		<dynamic-content><![CDATA[]]></dynamic-content>
+	</dynamic-element>
+
+	<dynamic-element name="panel_heading" type="text">
+		<dynamic-element name="panel_icon" type="text">
+			<dynamic-content><![CDATA[icon-headphones]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_image" type="ddm-documentlibrary">
+			<dynamic-content><![CDATA[]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_content" type="textarea">
+			<dynamic-content><![CDATA[Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_text" type="text">
+			<dynamic-content><![CDATA[Download]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_link" type="text">
+			<dynamic-content><![CDATA[1]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_style" type="select">
+			<dynamic-content><![CDATA[btn]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_size" type="select">
+			<dynamic-content><![CDATA[btn-large]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Marketing Message #1]]></dynamic-content>
+	</dynamic-element>
+
+	<dynamic-element name="panel_heading" type="text">
+		<dynamic-element name="panel_icon" type="text">
+			<dynamic-content><![CDATA[icon-signal]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_image" type="ddm-documentlibrary">
+			<dynamic-content><![CDATA[]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_content" type="textarea">
+			<dynamic-content><![CDATA[Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_text" type="text">
+			<dynamic-content><![CDATA[Download]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_link" type="text">
+			<dynamic-content><![CDATA[2]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_style" type="select">
+			<dynamic-content><![CDATA[btn]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_size" type="select">
+			<dynamic-content><![CDATA[btn-large]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Marketing Message #2]]></dynamic-content>
+	</dynamic-element>
+
+	<dynamic-element name="panel_heading" type="text">
+		<dynamic-element name="panel_icon" type="text">
+			<dynamic-content><![CDATA[icon-briefcase]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_image" type="ddm-documentlibrary">
+			<dynamic-content><![CDATA[]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_content" type="textarea">
+			<dynamic-content><![CDATA[Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_text" type="text">
+			<dynamic-content><![CDATA[Download]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_link" type="text">
+			<dynamic-content><![CDATA[3]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_style" type="select">
+			<dynamic-content><![CDATA[btn]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-element name="panel_button_size" type="select">
+			<dynamic-content><![CDATA[btn-large]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content><![CDATA[Marketing Message #3]]></dynamic-content>
+	</dynamic-element>
+</root>

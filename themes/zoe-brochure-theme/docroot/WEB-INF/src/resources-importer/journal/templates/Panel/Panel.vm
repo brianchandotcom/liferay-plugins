@@ -1,19 +1,69 @@
-<div class="panel">
-	<div class="panel-image">
-		#if (!$Panel_Icon.getData().isEmpty())
-			<i class="$Panel_Icon.getData()"></i>
-		#end
+#set ($content_id = $reserved-article-id.getData())
 
-		#if (!$Panel_Image.getData().isEmpty())
-			<img src="$Panel_Image.getData()" />
+#set ($integer = 0)
+
+#set ($num_cols = $integer.parseInt($number_of_columns.data))
+
+#if ($num_cols == 5)
+	#set ($span = "span2dot4")
+#elseif ($num_cols == 4)
+	#set ($span = "span3")
+#elseif ($num_cols == 3)
+	#set ($span = "span4")
+#elseif ($num_cols == 2)
+	#set ($span = "span6")
+#else
+	#set ($span = "")
+#end
+
+#if (!$panel_icon_background_color.data.isEmpty())
+	#set($background_color = "background: ${panel_icon_background_color.data};")
+#end
+
+#if (!$panel_icon_padding.data.isEmpty())
+	#set($icon_padding = "padding: ${panel_icon_padding.data};")
+#end
+
+#if (!$panel_icon_color.data.isEmpty())
+	#set($icon_color = "color: ${panel_icon_color.data};")
+#end
+
+#if ($num_cols == 1)
+	<div class="row-fluid" id="zoePanel${content_id}">
+#end
+
+#foreach ($cur_panel_heading in $panel_heading.getSiblings())
+	#set ($mod = ${velocityCount}%${num_cols})
+
+	#if ($mod == 1 && $num_cols != 1)
+		<div class="row-fluid" id="zoePanel${content_id}">
+	#end
+
+	<div class="$span zoe-panel">
+		<div class="zoe-panel-image $panel_icon_background.data" style="$background_color $icon_padding">
+			#if (!$cur_panel_heading.panel_icon.data.isEmpty())
+				<i class="$cur_panel_heading.panel_icon.data" style="$icon_color"></i>
+			#end
+
+			#if (!$cur_panel_heading.panel_image.data.isEmpty())
+				<img alt="" src="$cur_panel_heading.panel_image.data" />
+			#end
+		</div>
+
+		<h3>$cur_panel_heading.data</h3>
+
+		<p>$cur_panel_heading.panel_content.data</p>
+
+		#if (!$cur_panel_heading.panel_button_text.data.isEmpty())
+			<a class="$cur_panel_heading.panel_button_style.data $cur_panel_heading.panel_button_size.data" href="$cur_panel_heading.panel_button_link.data">$cur_panel_heading.panel_button_text.data</a>
 		#end
 	</div>
 
-	<h3>$Panel_Heading.getData()</h3>
-
-	<p>$Panel_Content.getData()</p>
-
-	#if (!$Panel_Button_Text.getData().isEmpty())
-		<a class="$Panel_Button_Style.getData() $Panel_Button_Size.getData()" href="$Panel_Button_Link.getData()">$Panel_Button_Text.getData()</a>
+	#if ($mod == 0 && $num_cols != 1)
+		</div>
 	#end
-</div>
+#end
+
+#if ($num_cols == 1)
+	</div>
+#end
