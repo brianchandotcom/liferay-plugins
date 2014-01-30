@@ -17,6 +17,10 @@ package com.liferay.sync.engine.service;
 import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.persistence.SyncFilePersistence;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import java.sql.SQLException;
 
 import java.util.Collections;
@@ -31,21 +35,26 @@ import org.slf4j.LoggerFactory;
 public class SyncFileService {
 
 	public static SyncFile addSyncFile(
-			String filePath, String name, long parentFolderId,
-			long repositoryId, long syncAccountId, String type, long typePK)
+			String filePathName, String name, long parentFolderId,
+			long repositoryId, long syncAccountId, String type)
 		throws Exception {
 
 		SyncFile syncFile = new SyncFile();
 
-		syncFile.setFilePath(filePath);
+		syncFile.setFilePathName(filePathName);
 		syncFile.setName(name);
 		syncFile.setRepositoryId(repositoryId);
 		syncFile.setParentFolderId(parentFolderId);
 		syncFile.setSyncAccountId(syncAccountId);
 		syncFile.setType(type);
-		syncFile.setTypePK(typePK);
 
 		_syncFilePersistence.create(syncFile);
+
+		if (type.equals(SyncFile.TYPE_FOLDER)) {
+			Path filePath = Paths.get(filePathName);
+
+			Files.createDirectories(filePath);
+		}
 
 		return syncFile;
 	}
@@ -77,9 +86,12 @@ public class SyncFileService {
 		}
 	}
 
-	public static SyncFile fetchSyncFile(String filePath, long syncAccountId) {
+	public static SyncFile fetchSyncFile(
+		String filePathName, long syncAccountId) {
+
 		try {
-			return _syncFilePersistence.fetchSyncFile(filePath, syncAccountId);
+			return _syncFilePersistence.fetchSyncFile(
+				filePathName, syncAccountId);
 		}
 		catch (SQLException sqle) {
 			if (_logger.isDebugEnabled()) {
@@ -93,6 +105,21 @@ public class SyncFileService {
 	public static List<SyncFile> findSyncFiles(long syncAccountId) {
 		try {
 			return _syncFilePersistence.findSyncFiles(syncAccountId);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+
+			return Collections.emptyList();
+		}
+	}
+
+	public static List<SyncFile> findSyncFiles(
+		String checksum, long syncAccountId) {
+
+		try {
+			return _syncFilePersistence.findSyncFiles(checksum, syncAccountId);
 		}
 		catch (SQLException sqle) {
 			if (_logger.isDebugEnabled()) {

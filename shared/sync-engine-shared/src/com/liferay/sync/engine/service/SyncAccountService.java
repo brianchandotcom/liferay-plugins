@@ -15,6 +15,7 @@
 package com.liferay.sync.engine.service;
 
 import com.liferay.sync.engine.model.SyncAccount;
+import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.persistence.SyncAccountPersistence;
 import com.liferay.sync.engine.util.Encryptor;
 
@@ -29,17 +30,21 @@ import org.slf4j.LoggerFactory;
 public class SyncAccountService {
 
 	public static SyncAccount addSyncAccount(
-			String filePath, String login, String password, String url)
+			String filePathName, String login, String password, String url)
 		throws Exception {
 
 		SyncAccount syncAccount = new SyncAccount();
 
-		syncAccount.setFilePath(filePath);
+		syncAccount.setFilePathName(filePathName);
 		syncAccount.setLogin(login);
 		syncAccount.setPassword(Encryptor.encrypt(password));
 		syncAccount.setUrl(url);
 
 		_syncAccountPersistence.create(syncAccount);
+
+		SyncFileService.addSyncFile(
+			filePathName, filePathName, 0, 0, syncAccount.getSyncAccountId(),
+			SyncFile.TYPE_FOLDER);
 
 		return syncAccount;
 	}

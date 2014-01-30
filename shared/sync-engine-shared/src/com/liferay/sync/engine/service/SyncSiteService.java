@@ -14,6 +14,7 @@
 
 package com.liferay.sync.engine.service;
 
+import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.model.SyncSite;
 import com.liferay.sync.engine.service.persistence.SyncSitePersistence;
 
@@ -31,16 +32,20 @@ import org.slf4j.LoggerFactory;
 public class SyncSiteService {
 
 	public static SyncSite addSyncSite(
-			String filePath, long groupId, long syncAccountId)
+			String filePathName, long groupId, long syncAccountId)
 		throws Exception {
 
 		SyncSite syncSite = new SyncSite();
 
-		syncSite.setFilePath(filePath);
+		syncSite.setFilePathName(filePathName);
 		syncSite.setGroupId(groupId);
 		syncSite.setSyncAccountId(syncAccountId);
 
 		_syncSitePersistence.create(syncSite);
+
+		SyncFileService.addSyncFile(
+			filePathName, filePathName, 0, groupId, syncAccountId,
+			SyncFile.TYPE_FOLDER);
 
 		return syncSite;
 	}

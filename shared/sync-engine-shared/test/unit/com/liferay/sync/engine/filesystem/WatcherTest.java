@@ -12,12 +12,16 @@
  * details.
  */
 
-package com.liferay.sync.engine.documentlibrary.event;
+package com.liferay.sync.engine.filesystem;
 
 import com.liferay.sync.engine.BaseTestCase;
 import com.liferay.sync.engine.model.SyncFile;
+import com.liferay.sync.engine.model.SyncSite;
+import com.liferay.sync.engine.model.SyncWatchEvent;
 import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.service.SyncFileService;
+import com.liferay.sync.engine.service.SyncSiteService;
+import com.liferay.sync.engine.service.SyncWatchEventService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,8 +29,9 @@ import java.nio.file.Paths;
 
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,53 +39,71 @@ import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
- * @author Shinn Lok
+ * @author Michael Young
  */
 @RunWith(PowerMockRunner.class)
-public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
+public class WatcherTest extends BaseTestCase {
 
 	@Before
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 
-		_testFolderSyncFile = SyncFileService.addSyncFile(
-			syncAccount.getFilePathName(), "test", 0, 0,
-			syncAccount.getSyncAccountId(), SyncFile.TYPE_FOLDER);
+		_syncSite = SyncSiteService.addSyncSite(
+			filePathName + "/test-site", 10184, syncAccount.getSyncAccountId());
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		super.tearDown();
+
 		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
-		SyncFileService.deleteSyncFile(_testFolderSyncFile.getSyncFileId());
+
+		SyncSiteService.deleteSyncSite(_syncSite.getSyncSiteId());
 
 		for (SyncFile syncFile : _syncFiles) {
 			SyncFileService.deleteSyncFile(syncFile.getSyncFileId());
+		}
+
+		for (SyncWatchEvent syncWatchEvent : SyncWatchEventService.findAll()) {
+			SyncWatchEventService.deleteSyncWatchEvent(
+				syncWatchEvent.getSyncWatchEventId());
 		}
 	}
 
 	@Test
 	public void testRun() throws Exception {
-		setMockPostResponse("dependencies/get_all_sync_dl_objects.json");
+		setMockPostResponse("dependencies/watcher_test_add_file.json");
 
-		GetAllSyncDLObjectsEvent getAllSyncDLObjectsEvent =
-			new GetAllSyncDLObjectsEvent(syncAccount.getSyncAccountId(), null);
+		SyncWatchEventProcessor syncWatchEventProcessor =
+			new SyncWatchEventProcessor();
 
-		getAllSyncDLObjectsEvent.run();
+		syncWatchEventProcessor.process();
+
+		WatchEventListener watchEventListener = new SyncSiteWatchEventListener(
+			syncAccount.getSyncAccountId());
+
+		Path filePath = Paths.get(syncAccount.getFilePathName());
+
+		Watcher watcher = new Watcher(filePath, true, watchEventListener);
+
+		Thread thread = new Thread(watcher);
+
+		thread.start();
+
+		Path addFilePath = Paths.get(_syncSite.getFilePathName() + "/test.txt");
+
+		Files.createFile(addFilePath);
+
+		thread.sleep(15000);
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
 
 		Assert.assertEquals(3, _syncFiles.size());
-
-		Path filePath = Paths.get(
-			_testFolderSyncFile.getFilePathName() +
-			_testFolderSyncFile.getName() + "/Document_1.txt");
-
-		Assert.assertTrue(Files.exists(filePath));
 	}
 
 	private List<SyncFile> _syncFiles;
-	private SyncFile _testFolderSyncFile;
+	private SyncSite _syncSite;
 
 }
