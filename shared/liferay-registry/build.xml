@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="liferay-registry" basedir="." default="deploy">
+	<property name="import.compat.shared" value="false" />
+
+	<import file="../../build-common-osgi-plugin.xml" />
+
+	<target name="deploy" depends="jar">
+	</target>
+</project>

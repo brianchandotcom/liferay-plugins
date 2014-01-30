@@ -48,7 +48,7 @@
 
 	<path id="plugin.classpath">
 		<path refid="plugin-lib.classpath" />
-		<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
+		<fileset dir="${app.server.lib.global.dir}" includes="*.jar" excludes="liferay-registry.jar" />
 		<fileset dir="${app.server.lib.portal.dir}" includes="annotations.jar,commons-logging.jar,log4j.jar,util-bridges.jar,util-java.jar,util-taglib.jar" />
 		<fileset dir="${sdk.dir}/lib" includes="activation.jar,javax.servlet-api.jar,jsp-api.jar,mail.jar" />
 	</path>
@@ -61,6 +61,14 @@
 	</path>
 
 	<taskdef classpathref="portal.classpath" resource="aQute/bnd/ant/taskdef.properties" />
+	<taskdef classpathref="portal.classpath" classname="com.liferay.util.ant.ManifestHelperTask" name="lfr-manifest-helper" />
+
+	<path id="merged-lib.classpath">
+		<path refid="lib.classpath" />
+		<path refid="portal.classpath" />
+	</path>
+
+	<taskdef classpathref="merged-lib.classpath" resource="com/liferay/ant/taskdef.properties" />
 
 	<path id="test.classpath">
 		<path refid="plugin.classpath" />
@@ -126,37 +134,6 @@ Error-Prone was automatically installed. Please rerun your task.
 			</if>
 		</else>
 	</if>
-
-	<macrodef name="baseline-jar-macro">
-		<attribute name="bndRootFile" />
-		<attribute name="file" />
-		<attribute name="outputPath" />
-		<attribute name="rootProjectDir" />
-		<attribute name="sourcePath" />
-
-		<sequential>
-			<taskdef
-				classname="com.liferay.util.ant.bnd.BaselineJarTask"
-				classpathref="plugin.classpath"
-				name="baseline-jar"
-			/>
-
-			<manifest-helper />
-
-			<bndexpand propertyfile="@{bndRootFile}" />
-
-			<baseline-jar
-				bndRootFile="@{bndRootFile}"
-				file="@{file}"
-				outputPath="@{outputPath}"
-				sourcePath="@{sourcePath}"
-			>
-				<classpath>
-					<pathelement location="@{sourcePath}/classes" />
-				</classpath>
-			</baseline-jar>
-		</sequential>
-	</macrodef>
 
 	<macrodef name="build-css">
 		<attribute name="module.dir" />
@@ -1330,13 +1307,16 @@ Please find a solution that does not require portal-impl.jar.
 
 							<var name="jar-macro.bnd.bnd.content" unset="true" />
 
-							<baseline-jar-macro
+							<lfr-bnd-jar
 								bndRootFile="${sdk.dir}/common.bnd"
 								file="@{module.dir}/bnd.bnd"
 								outputPath="${plugin.file}"
-								rootProjectDir="${sdk.dir}"
 								sourcePath="@{module.dir}"
-							/>
+							>
+								<classpath>
+									<pathelement location="${plugin.classes.dir}" />
+								</classpath>
+							</lfr-bnd-jar>
 						</then>
 					</if>
 				</then>
@@ -1395,24 +1375,6 @@ Please find a solution that does not require portal-impl.jar.
 					<var name="module.dirs" unset="true" />
 				</then>
 			</if>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="manifest-helper">
-		<attribute name="analyze" default="false" />
-
-		<sequential>
-			<taskdef
-				classname="com.liferay.util.ant.ManifestHelperTask"
-				classpathref="plugin.classpath"
-				name="liferay-manifest-helper"
-			/>
-
-			<liferay-manifest-helper
-				analyze="@{analyze}"
-				classpathref="plugin.classpath"
-				projectDirPropertyName="sdk.dir"
-			/>
 		</sequential>
 	</macrodef>
 
@@ -1479,6 +1441,21 @@ Please find a solution that does not require portal-impl.jar.
 			/>
 
 			<var name="merge-unzip.original.war.file" unset="true" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="release-macro">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-module-properties
+				module.dir="@{module.dir}"
+			/>
+
+			<lfr-bnd-release
+				bndRootFile="${sdk.dir}/common.bnd"
+				file="${plugin.file}"
+			/>
 		</sequential>
 	</macrodef>
 
@@ -1641,6 +1618,25 @@ Please find a solution that does not require portal-impl.jar.
 
 			<var name="plugin.full.version" value="${plugin.full.version.default}" />
 
+			<if>
+				<available file="@{module.dir}/bnd.bnd" />
+				<then>
+					<read-single-property-from-properties
+						property.name="Bundle-Version"
+						module.dir="@{module.dir}"
+						file="bnd.bnd"
+						default.value="${plugin.full.version.default}"
+					/>
+
+					<if>
+						<isset property="Bundle-Version" />
+						<then>
+							<var name="plugin.full.version" value="${Bundle-Version}" />
+						</then>
+					</if>
+				</then>
+			</if>
+
 			<var name="plugin.file" value="${plugin.file.default}" />
 			<var name="plugin.javadoc.file" value="${plugin.javadoc.file.default}" />
 			<var name="plugin.pom.file" value="${plugin.pom.file.default}" />
@@ -1694,6 +1690,12 @@ Please find a solution that does not require portal-impl.jar.
 				</else>
 			</if>
 
+			<lfr-manifest-helper
+				analyze="false"
+				classpathref="plugin.classpath"
+				projectDirPropertyName="sdk.dir"
+			/>
+
 			<if>
 				<contains string="${set-module-properties.build.xml.content}" substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;" />
 				<then>
@@ -1730,6 +1732,32 @@ Please find a solution that does not require portal-impl.jar.
 
 			<var name="set-module-properties.build.xml.content" unset="true" />
 			<var name="set-module-properties.plugin.version" unset="true" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="test-osgi-macro">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-module-properties
+				module.dir="@{module.dir}"
+			/>
+
+			<read-single-property-from-properties
+				property.name="Test-Cases"
+				module.dir="@{module.dir}"
+				file="bnd.bnd"
+			/>
+
+			<if>
+				<isset property="Test-Cases" />
+				<then>
+					<lfr-bnd-test
+						bndRootFile="${sdk.dir}/common.bnd"
+						runfiles="bnd.bnd"
+					/>
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -1912,6 +1940,32 @@ Please find a solution that does not require portal-impl.jar.
 			</if>
 		</sequential>
 	</macrodef>
+
+	<scriptdef name="read-single-property-from-properties" classpathref="portal.classpath" language="groovy">
+		<attribute name="property.name" />
+		<attribute name="module.dir" />
+		<attribute name="file" />
+		<attribute name="default.value" />
+		<![CDATA[
+			//println attributes
+
+			java.util.Properties properties = new java.util.Properties();
+
+			properties.load(
+				new java.io.FileInputStream(
+					new File(attributes['module.dir'], attributes['file'])))
+
+			String propertyValue = properties.get(attributes['property.name']);
+
+			if (propertyValue != null) {
+				project.setProperty(attributes['property.name'], propertyValue);
+			}
+			else if (attributes['default.value'] != null) {
+				project.setProperty(
+					attributes['property.name'], attributes['default.value']);
+			}
+		]]>
+	</scriptdef>
 
 	<target name="create">
 		<if>
