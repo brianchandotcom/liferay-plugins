@@ -551,6 +551,37 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	.zoe-panel-post .row-fluid, .zoe-panel-post.row-fluid {
+		@include box-sizing(border-box);
+
+		padding: 0 120px;
+
+		.zoe-panel {
+			background: transparent;
+			display: block;
+			padding: 0;
+
+			h3 {
+				font-size: 36px;
+				font-weight: 400;
+				margin-bottom: 33px;
+				margin-top: 63px;
+			}
+
+			p {
+				font-size: 20px;
+				font-weight: 300;
+				letter-spacing: 0.6px;
+				line-height: 40px;
+				text-align: left;
+			}
+
+			.btn {
+				margin-top: 33px;
+			}
+		}
+	}
+
 	/* ---------- Internet explorer ---------- */
 
 	.ie6 {
