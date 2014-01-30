@@ -33,12 +33,12 @@ $default-box-shadow-v-offset: 1px;
 	}
 
 	body {
-		background: $bgColor url(../images/custom/body_bg.png) repeat-x 0 0;
-		font: 12px "Helvetica Neue", Helvetica, Arial, san-serif;
+		background-color :#EAEAEA;
+		font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	}
 
 	p {
-		color: #666;
+		color: #676767;
 	}
 
 	/* ---------- Dockbar ---------- */
@@ -98,9 +98,9 @@ $default-box-shadow-v-offset: 1px;
 
 	#wrapper {
 		margin: 0 auto;
-		padding: 0;
+		max-width: 1200px;
+		padding: 20px 6em 0;
 		position: relative;
-		width: 1200px;
 	}
 
 	.signed-in {
@@ -223,129 +223,6 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
-	/* ---------- Content ---------- */
-
-	#content {
-		clear: both;
-		min-height: 600px;
-	}
-
-	.dialog #main-content {
-		width: auto;
-	}
-
-	#main-content {
-		margin: 0 auto;
-		width: 960px;
-
-		p img {
-			padding: 10px;
-
-			&.left {
-				padding-left: 0;
-			}
-
-			&.right {
-				padding-right: 0;
-			}
-		}
-	}
-
-	.columns-1-3-1 {
-		.span4 {
-			#layout-column_column-1 .journal-content-article, #layout-column_column-2 .journal-content-article, #layout-column_column-3 .journal-content-article {
-				width: 302px;
-			}
-		}
-
-		#column-1 {
-			padding: 0 0 30px 0;
-		}
-	}
-
-	.featured-text {
-		height: 240px;
-		margin-top: 0;
-		padding: 0;
-
-		.featured-content {
-			height: 205px;
-			overflow-y: auto;
-			padding: 0 10px 10px 0;
-		}
-
-		p {
-			color: #FFF;
-		}
-	}
-
-	.columns-2-1-2 {
-		#column-1 {
-			.featured-text h3 {
-				color: #FFF;
-				font-size: 21px;
-				font-style: italic;
-				font-weight: normal;
-				letter-spacing: 1px;
-				text-transform: uppercase;
-			}
-
-			.lfr-icon-actions {
-				margin-top: 23px;
-			}
-		}
-
-		#column-2 {
-			.featured-text h3 {
-				color: #FFF;
-				font-size: 21px;
-				font-style: italic;
-				font-weight: normal;
-				letter-spacing: 1px;
-				text-transform: uppercase;
-			}
-		}
-	}
-
-	.page-content {
-		.column {
-			&.span4 {
-				&.column-first {
-					padding: 0 10px 0 0;
-				}
-
-				&.column-last {
-					padding: 0 0 0 10px;
-				}
-
-				&.center {
-					padding: 0 5px;
-				}
-			}
-
-			&.span6 {
-				&.column-first, &.column-last {
-					padding: 0 20px 0 0;
-				}
-			}
-
-			&.span12 {
-				padding: 0;
-			}
-		}
-
-		.divider {
-			background: url(../images/custom/home_content_divs.png) 0 0 repeat-x;
-			height: 8px;
-			margin: 0 0 15px;
-			width: 100%;
-		}
-
-		.portlet-column {
-			padding: 0 5px;
-		}
-	}
-
 	/* ---------- Footer ---------- */
 
 	#footer {
@@ -364,49 +241,6 @@ $default-box-shadow-v-offset: 1px;
 		.powered-by {
 			text-indent: -9999px;
 		}
-	}
-
-	/* ---------- Portlet max ---------- */
-
-	.columns-max {
-		.portlet span {
-			color: #000;
-		}
-
-		.portlet-borderless-container .portlet-borderless-bar {
-			display: none;
-		}
-
-		.portlet-boundary {
-			background: $bgColor;
-			padding: 10px;
-		}
-
-		.portlet-title {
-			border-bottom: 2px solid #C8C9CA;
-			color: $textColor;
-			font-weight: normal;
-			padding-top: 5px;
-			text-decoration: none;
-			text-transform: uppercase;
-		}
-
-		.portlet-topper-toolbar {
-			a, a:visited {
-				color: $textColor;
-				text-decoration: none;
-			}
-		}
-	}
-
-	/* ---------- Custom classes ---------- */
-
-	.left {
-		float: left;
-	}
-
-	.right {
-		float: right;
 	}
 
 	/* ---------- Web content ---------- */
@@ -521,47 +355,6 @@ $default-box-shadow-v-offset: 1px;
 		i {
 			color: #333;
 			font-size: 50px;
-		}
-	}
-
-	/* ---------- Columns ---------- */
-
-	.column-text {
-		margin-top: 33px;
-		padding: 15px 2px 0 2px;
-		width: 302px;
-	}
-
-	.innovation-title {
-		color: $textColor;
-		font-size: 26px;
-		font-style: italic;
-		font-weight: lighter;
-		margin: 0 0 12px 0;
-		padding-top: 25px;
-		text-transform: uppercase;
-	}
-
-	.columns-2-custom #column-1 {
-		height: 200px;
-	}
-
-	#column-2 #layout-column_column-2 {
-		padding: 0 5px 0 0;
-	}
-
-	#column-3 #layout-column_column-3 {
-		padding: 0 5px;
-	}
-
-	#column-4 {
-		#layout-column_column-4 {
-			padding: 0 0 0 10px;
-
-			.divider {
-				margin-left: -15px;
-				margin-right: 0;
-			}
 		}
 	}
 
