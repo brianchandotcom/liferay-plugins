@@ -1676,6 +1676,16 @@ AUI.add(
 								label: Liferay.Language.get('yes'),
 								on: {
 									click: function(event) {
+										var node = args[2];
+
+										if (A.instanceOf(node, A.TreeNodeEditor)) {
+											var parentNode = node.get(PARENT_NODE);
+
+											if (parentNode) {
+												parentNode.select();
+											}
+										}
+
 										if (callback) {
 											callback.apply(instance, AArray(args, 2, true));
 										}
