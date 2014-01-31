@@ -31,7 +31,41 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 		super(SyncFile.class);
 	}
 
-	public SyncFile fetchSyncFile(
+	public SyncFile fetchByFK_S(String fileKey, long syncAccountId)
+		throws SQLException {
+
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+
+		fieldValues.put("fileKey", fileKey);
+		fieldValues.put("syncAccountId", syncAccountId);
+
+		List<SyncFile> syncFiles = queryForFieldValues(fieldValues);
+
+		if ((syncFiles == null) || syncFiles.isEmpty()) {
+			return null;
+		}
+
+		return syncFiles.get(0);
+	}
+
+	public SyncFile fetchByFPN_S(String filePathName, long syncAccountId)
+		throws SQLException {
+
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+
+		fieldValues.put("filePathName", filePathName);
+		fieldValues.put("syncAccountId", syncAccountId);
+
+		List<SyncFile> syncFiles = queryForFieldValues(fieldValues);
+
+		if ((syncFiles == null) || syncFiles.isEmpty()) {
+			return null;
+		}
+
+		return syncFiles.get(0);
+	}
+
+	public SyncFile fetchByP_R_S(
 			long parentFolderId, long repositoryId, long syncAccountId)
 		throws SQLException {
 
@@ -50,24 +84,7 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 		return syncFiles.get(0);
 	}
 
-	public SyncFile fetchSyncFile(String filePathName, long syncAccountId)
-		throws SQLException {
-
-		Map<String, Object> fieldValues = new HashMap<String, Object>();
-
-		fieldValues.put("filePathName", filePathName);
-		fieldValues.put("syncAccountId", syncAccountId);
-
-		List<SyncFile> syncFiles = queryForFieldValues(fieldValues);
-
-		if ((syncFiles == null) || syncFiles.isEmpty()) {
-			return null;
-		}
-
-		return syncFiles.get(0);
-	}
-
-	public List<SyncFile> findSyncFiles(String checksum, long syncAccountId)
+	public List<SyncFile> findByC_S(String checksum, long syncAccountId)
 		throws SQLException {
 
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
@@ -78,7 +95,7 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 		return queryForFieldValues(fieldValues);
 	}
 
-	public List<SyncFile> findSyncFiles(long syncAccountId)
+	public List<SyncFile> findBySyncAccountId(long syncAccountId)
 		throws SQLException {
 
 		return queryForEq("syncAccountId", syncAccountId);

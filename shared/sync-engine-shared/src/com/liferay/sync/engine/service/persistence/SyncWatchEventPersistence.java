@@ -33,7 +33,7 @@ public class SyncWatchEventPersistence
 		super(SyncWatchEvent.class);
 	}
 
-	public SyncWatchEvent fetchSyncWatchEvent(
+	public SyncWatchEvent fetchByF_K_T(
 			String filePathName, String kindName, long timestamp)
 		throws SQLException {
 
@@ -49,7 +49,11 @@ public class SyncWatchEventPersistence
 
 		where.and();
 
-		where.le("timestamp", timestamp);
+		where.ge("timestamp", timestamp - 1000);
+
+		where.or();
+
+		where.le("timestamp", timestamp + 1000);
 
 		List<SyncWatchEvent> syncWatchEvents = query(queryBuilder.prepare());
 
