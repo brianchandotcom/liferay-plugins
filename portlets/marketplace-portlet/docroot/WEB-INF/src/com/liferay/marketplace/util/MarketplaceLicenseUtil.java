@@ -58,8 +58,12 @@ public class MarketplaceLicenseUtil {
 			currentThread.setContextClassLoader(
 				PortalClassLoaderUtil.getClassLoader());
 
+			MethodKey methodKey = new MethodKey(
+				"com.liferay.portal.license.util.LicenseUtil", "sendRequest",
+				String.class);
+
 			response = (String)PortalClassInvoker.invoke(
-				false, _sendRequestMethodKey, jsonObject.toString());
+				false, methodKey, jsonObject.toString());
 		}
 		finally {
 			currentThread.setContextClassLoader(classLoader);
@@ -92,8 +96,12 @@ public class MarketplaceLicenseUtil {
 			currentThread.setContextClassLoader(
 				PortalClassLoaderUtil.getClassLoader());
 
+			MethodKey methodKey = new MethodKey(
+				"com.liferay.portal.license.util.LicenseUtil", "registerOrder",
+				String.class, String.class, int.class);
+
 			PortalClassInvoker.invoke(
-				false, _registerOrderMethodKey, orderUuid, productEntryName, 0);
+				false, methodKey, orderUuid, productEntryName, 0);
 		}
 		finally {
 			currentThread.setContextClassLoader(classLoader);
@@ -102,12 +110,5 @@ public class MarketplaceLicenseUtil {
 
 	private static final String _LICENSE_SERVER_ID_FILE_NAME =
 		PropsUtil.get(PropsKeys.LIFERAY_HOME) + "/data/license/server/serverId";
-
-	private static MethodKey _registerOrderMethodKey = new MethodKey(
-		"com.liferay.portal.license.util.LicenseUtil", "registerOrder",
-		String.class, String.class, int.class);
-	private static MethodKey _sendRequestMethodKey = new MethodKey(
-		"com.liferay.portal.license.util.LicenseUtil", "sendRequest",
-		String.class);
 
 }
