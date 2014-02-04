@@ -51,10 +51,6 @@ $default-box-shadow-v-offset: 1px;
 				> .dropdown-menu {
 					background-color: #333;
 					border: 0;
-
-					@include border-radius(0);
-					@include box-shadow(none);
-
 					margin: 0;
 
 					&:after, &:before {
