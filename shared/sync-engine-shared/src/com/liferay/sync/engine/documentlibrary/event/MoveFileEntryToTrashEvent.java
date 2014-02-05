@@ -29,7 +29,6 @@ public class MoveFileEntryToTrashEvent extends BaseEvent {
 
 	@Override
 	protected void processResponse(String response) throws Exception {
-		System.out.println(response);
 	}
 
 	private static final String _URL_PATH =

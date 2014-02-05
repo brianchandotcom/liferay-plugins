@@ -29,10 +29,9 @@ public class MoveFolderToTrashEvent extends BaseEvent {
 
 	@Override
 	protected void processResponse(String response) throws Exception {
-		System.out.println(response);
 	}
 
 	private static final String _URL_PATH =
-			"/sync-web.syncdlobject/move-folder-event";
+		"/sync-web.syncdlobject/move-folder-to-trash";
 
 }

@@ -14,6 +14,12 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.liferay.sync.engine.model.SyncFile;
+import com.liferay.sync.engine.service.SyncFileService;
+
 import java.util.Map;
 
 /**
@@ -27,7 +33,30 @@ public class AddFolderEvent extends BaseEvent {
 
 	@Override
 	protected void processResponse(String response) throws Exception {
-		System.out.println(response);
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		SyncFile remoteSyncFile = objectMapper.readValue(
+			response, new TypeReference<SyncFile>() {});
+
+		SyncFile localSyncFile = (SyncFile)getParameterValue("syncFile");
+
+		localSyncFile.setCompanyId(remoteSyncFile.getCompanyId());
+		localSyncFile.setCreateTime(remoteSyncFile.getCreateTime());
+		localSyncFile.setExtension(remoteSyncFile.getExtension());
+		localSyncFile.setExtraSettings(remoteSyncFile.getExtraSettings());
+		localSyncFile.setLockExpirationDate(
+			remoteSyncFile.getLockExpirationDate());
+		localSyncFile.setLockUserId(remoteSyncFile.getLockUserId());
+		localSyncFile.setLockUserName(remoteSyncFile.getLockUserName());
+		localSyncFile.setModifiedTime(remoteSyncFile.getModifiedTime());
+		localSyncFile.setParentFolderId(remoteSyncFile.getParentFolderId());
+		localSyncFile.setSize(remoteSyncFile.getSize());
+		localSyncFile.setSyncAccountId(getSyncAccountId());
+		localSyncFile.setTypePK(remoteSyncFile.getTypePK());
+		localSyncFile.setTypeUuid(remoteSyncFile.getTypeUuid());
+		localSyncFile.setVersion(remoteSyncFile.getVersion());
+
+		SyncFileService.update(localSyncFile);
 	}
 
 	private static final String _URL_PATH = "/sync-web.syncdlobject/add-folder";
