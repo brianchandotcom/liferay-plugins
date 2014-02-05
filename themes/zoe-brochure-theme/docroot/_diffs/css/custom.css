@@ -417,6 +417,24 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	/* ------- Divider -------- */
+
+	.zoe-divider {
+		margin: 40px 0;
+		text-align: center;
+
+		hr {
+			display: inline-block;
+			margin: 0 2%;
+			width: 30%;
+		}
+
+		i {
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}
+
 	/* ------- Panels -------- */
 
 	.zoe-panel {
