@@ -40,15 +40,17 @@
 	#end
 
 	<div class="$span zoe-panel">
-		<div class="zoe-panel-image $panel_icon_background.data" style="$background_color $icon_padding">
-			#if (!$cur_panel_heading.panel_icon.data.isEmpty())
-				<i class="$cur_panel_heading.panel_icon.data" style="$icon_color"></i>
-			#end
+		#if (!$cur_panel_heading.panel_icon.data.isEmpty() || !$cur_panel_heading.panel_image.data.isEmpty())
+			<div class="zoe-panel-image $panel_icon_background.data" style="$background_color $icon_padding">
+				#if (!$cur_panel_heading.panel_icon.data.isEmpty())
+					<i class="$cur_panel_heading.panel_icon.data" style="$icon_color"></i>
+				#end
 
-			#if (!$cur_panel_heading.panel_image.data.isEmpty())
-				<img alt="" src="$cur_panel_heading.panel_image.data" />
-			#end
-		</div>
+				#if (!$cur_panel_heading.panel_image.data.isEmpty())
+					<img alt="" src="$cur_panel_heading.panel_image.data" />
+				#end
+			</div>
+		#end
 
 		<h3>$cur_panel_heading.data</h3>
 
