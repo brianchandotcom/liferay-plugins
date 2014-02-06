@@ -200,9 +200,7 @@ public class SyncFileService {
 
 	public static void deleteSyncFile(long syncFileId) {
 		try {
-			SyncFilePersistence syncFilePersistence = getSyncFilePersistence();
-
-			SyncFile syncFile = syncFilePersistence.queryForId(syncFileId);
+			SyncFile syncFile = _syncFilePersistence.queryForId(syncFileId);
 
 			String type = syncFile.getType();
 
