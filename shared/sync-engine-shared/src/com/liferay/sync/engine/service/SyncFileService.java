@@ -29,6 +29,7 @@ import com.liferay.sync.engine.util.FileUtil;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import java.sql.SQLException;
 
@@ -142,13 +143,24 @@ public class SyncFileService {
 		return syncFile;
 	}
 
+	public static void delete(long syncFileId) {
+		try {
+			_syncFilePersistence.deleteById(syncFileId);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+		}
+	}
+
 	public static SyncFile deleteFileSyncFile(
 			long syncAccountId, SyncFile syncFile)
 		throws Exception {
 
 		// Local sync file
 
-		deleteSyncFile(syncFile.getSyncFileId());
+		delete(syncFile.getSyncFileId());
 
 		// Remote sync file
 
@@ -164,13 +176,43 @@ public class SyncFileService {
 		return syncFile;
 	}
 
+	public static void deleteFolderSyncFile(long syncFileId) {
+		try {
+
+			// Child sync files
+
+			List<SyncFile> childSyncFiles = _syncFilePersistence.queryForEq(
+				"parentFolderId", syncFileId);
+
+			for (SyncFile childSyncFile : childSyncFiles) {
+				String type = childSyncFile.getType();
+
+				if (type.equals(SyncFile.TYPE_FILE)) {
+					delete(childSyncFile.getSyncFileId());
+				}
+				else {
+					deleteFolderSyncFile(childSyncFile.getSyncFileId());
+				}
+			}
+
+			// Sync file
+
+			delete(syncFileId);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+		}
+	}
+
 	public static SyncFile deleteFolderSyncFile(
 			long syncAccountId, SyncFile syncFile)
 		throws Exception {
 
 		// Local sync file
 
-		deleteSyncFile(syncFile.getSyncFileId());
+		deleteFolderSyncFile(syncFile.getSyncFileId());
 
 		// Remote sync file
 
@@ -186,14 +228,52 @@ public class SyncFileService {
 		return syncFile;
 	}
 
-	public static void deleteSyncFile(long syncFileId) {
+	public static SyncFile doUpdateFolderSyncFile(
+		Path filePath, long parentFolderId, SyncFile syncFile) {
+
+		String filePathName = FilePathNameUtil.getFilePathName(filePath);
+
 		try {
-			_syncFilePersistence.deleteById(syncFileId);
+
+			// Child sync files
+
+			List<SyncFile> childSyncFiles = _syncFilePersistence.queryForEq(
+				"parentFolderId", syncFile.getTypePK());
+
+			for (SyncFile childSyncFile : childSyncFiles) {
+				String childFilePathName = childSyncFile.getFilePathName();
+
+				childFilePathName = childFilePathName.replace(
+					syncFile.getFilePathName(), filePathName);
+
+				String type = childSyncFile.getType();
+
+				if (type.equals(SyncFile.TYPE_FILE)) {
+					childSyncFile.setFilePathName(childFilePathName);
+
+					update(childSyncFile);
+				}
+				else {
+					doUpdateFolderSyncFile(
+						Paths.get(childFilePathName),
+						childSyncFile.getParentFolderId(), childSyncFile);
+				}
+			}
+
+			// Sync file
+
+			syncFile.setFilePathName(filePathName);
+			syncFile.setName(String.valueOf(filePath.getFileName()));
+			syncFile.setParentFolderId(parentFolderId);
+
+			return update(syncFile);
 		}
 		catch (SQLException sqle) {
 			if (_logger.isDebugEnabled()) {
 				_logger.debug(sqle.getMessage(), sqle);
 			}
+
+			return null;
 		}
 	}
 
@@ -325,10 +405,7 @@ public class SyncFileService {
 
 		// Local sync file
 
-		syncFile.setFilePathName(FilePathNameUtil.getFilePathName(filePath));
-		syncFile.setParentFolderId(parentFolderId);
-
-		update(syncFile);
+		doUpdateFolderSyncFile(filePath, parentFolderId, syncFile);
 
 		// Remote sync file
 
@@ -375,7 +452,6 @@ public class SyncFileService {
 
 		syncFile.setChangeLog(changeLog);
 		syncFile.setChecksum(checksum);
-		syncFile.setDescription(name);
 		syncFile.setFilePathName(FilePathNameUtil.getFilePathName(filePath));
 		syncFile.setName(name);
 
@@ -410,21 +486,15 @@ public class SyncFileService {
 
 		// Local sync file
 
-		String name = String.valueOf(filePath.getFileName());
-
-		syncFile.setDescription(name);
-		syncFile.setFilePathName(FilePathNameUtil.getFilePathName(filePath));
-		syncFile.setName(name);
-
-		update(syncFile);
+		doUpdateFolderSyncFile(
+			filePath, syncFile.getParentFolderId(), syncFile);
 
 		// Remote sync file
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put("description", name);
 		parameters.put("folderId", syncFile.getTypePK());
-		parameters.put("name", name);
+		parameters.put("name", filePath.getFileName());
 		parameters.put("syncFile", syncFile);
 
 		UpdateFolderEvent updateFolderEvent = new UpdateFolderEvent(

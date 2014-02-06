@@ -89,7 +89,7 @@ public class WatcherTest extends BaseTestCase {
 		SyncSiteService.deleteSyncSite(_syncSite.getSyncSiteId());
 
 		for (SyncFile syncFile : _syncFiles) {
-			SyncFileService.deleteSyncFile(syncFile.getSyncFileId());
+			SyncFileService.delete(syncFile.getSyncFileId());
 		}
 
 		for (SyncWatchEvent syncWatchEvent : SyncWatchEventService.findAll()) {
