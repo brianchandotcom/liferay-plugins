@@ -31,6 +31,10 @@ import org.osgi.framework.Bundle;
 public class BundleTemplateLoader implements TemplateLoader {
 
 	public BundleTemplateLoader(Bundle bundle) {
+		if (bundle == null) {
+			throw new IllegalArgumentException("Bundle cannot be null");
+		}
+
 		_bundle = bundle;
 	}
 
@@ -73,7 +77,6 @@ public class BundleTemplateLoader implements TemplateLoader {
 	public static class BundleTemplateSource {
 
 		public BundleTemplateSource(URL url) throws IOException {
-
 			_url = url;
 			_inputStream = url.openStream();
 		}
@@ -86,9 +89,9 @@ public class BundleTemplateLoader implements TemplateLoader {
 			return _url;
 		}
 
-		private final InputStream _inputStream;
+		final private InputStream _inputStream;
 
-		private URL _url;
+		final private URL _url;
 	}
 
 	private Bundle _bundle;
