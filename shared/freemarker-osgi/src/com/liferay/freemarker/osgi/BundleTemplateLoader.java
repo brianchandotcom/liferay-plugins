@@ -50,7 +50,7 @@ public class BundleTemplateLoader implements TemplateLoader {
 
 	@Override
 	public Object findTemplateSource(String name) throws IOException {
-		URL resource = _bundle.getResource(name);
+		URL resource = _bundle.getEntry(name);
 
 		if (resource == null) {
 			return null;
