@@ -73,7 +73,7 @@ public abstract class BaseTestCase {
 
 		FileUtils.deleteDirectory(filePath.toFile());
 
-		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
+		SyncAccountService.delete(syncAccount.getSyncAccountId());
 	}
 
 	protected void setMockPostResponse(String fileName) throws Exception {

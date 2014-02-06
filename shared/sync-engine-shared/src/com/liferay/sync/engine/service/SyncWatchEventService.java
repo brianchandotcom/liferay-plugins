@@ -48,7 +48,7 @@ public class SyncWatchEventService {
 		return syncWatchEvent;
 	}
 
-	public static void deleteSyncWatchEvent(long syncWatchEventId) {
+	public static void delete(long syncWatchEventId) {
 		try {
 			_syncWatchEventPersistence.deleteById(syncWatchEventId);
 		}
