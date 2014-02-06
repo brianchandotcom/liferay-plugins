@@ -60,7 +60,7 @@ public class SyncWatchEventProcessor implements Runnable {
 			if (_processedSyncWatchEventIds.contains(
 					syncWatchEvent.getSyncWatchEventId())) {
 
-				SyncWatchEventService.deleteSyncWatchEvent(
+				SyncWatchEventService.delete(
 					syncWatchEvent.getSyncWatchEventId());
 
 				continue;
@@ -106,8 +106,7 @@ public class SyncWatchEventProcessor implements Runnable {
 				_logger.error(e.getMessage(), e);
 			}
 
-			SyncWatchEventService.deleteSyncWatchEvent(
-				syncWatchEvent.getSyncWatchEventId());
+			SyncWatchEventService.delete(syncWatchEvent.getSyncWatchEventId());
 		}
 
 		_processedSyncWatchEventIds.clear();

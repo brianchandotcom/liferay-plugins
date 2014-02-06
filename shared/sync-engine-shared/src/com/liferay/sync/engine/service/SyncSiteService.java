@@ -63,7 +63,7 @@ public class SyncSiteService {
 		return syncSite;
 	}
 
-	public static void deleteSyncSite(long syncSiteId) {
+	public static void delete(long syncSiteId) {
 		try {
 			_syncSitePersistence.deleteById(syncSiteId);
 		}

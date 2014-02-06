@@ -31,7 +31,7 @@ public class SyncAccountServiceTest extends BaseTestCase {
 	public void tearDown() throws Exception {
 		super.tearDown();
 
-		SyncAccountService.deleteSyncAccount(_syncAccount.getSyncAccountId());
+		SyncAccountService.delete(_syncAccount.getSyncAccountId());
 	}
 
 	@Test

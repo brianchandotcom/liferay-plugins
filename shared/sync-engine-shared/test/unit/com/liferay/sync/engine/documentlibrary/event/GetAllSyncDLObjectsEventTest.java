@@ -57,11 +57,11 @@ public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 	public void tearDown() throws Exception {
 		super.tearDown();
 
-		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
-		SyncFileService.deleteSyncFile(_testFolderSyncFile.getSyncFileId());
+		SyncAccountService.delete(syncAccount.getSyncAccountId());
+		SyncFileService.delete(_testFolderSyncFile.getSyncFileId());
 
 		for (SyncFile syncFile : _syncFiles) {
-			SyncFileService.deleteSyncFile(syncFile.getSyncFileId());
+			SyncFileService.delete(syncFile.getSyncFileId());
 		}
 	}
 

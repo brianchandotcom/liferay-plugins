@@ -62,7 +62,7 @@ public class SyncAccountService {
 		return syncAccount;
 	}
 
-	public static void deleteSyncAccount(long syncAccountId) {
+	public static void delete(long syncAccountId) {
 		try {
 			_syncAccountPersistence.deleteById(syncAccountId);
 		}

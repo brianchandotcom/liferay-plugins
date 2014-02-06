@@ -84,17 +84,16 @@ public class WatcherTest extends BaseTestCase {
 
 		super.tearDown();
 
-		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
+		SyncAccountService.delete(syncAccount.getSyncAccountId());
 
-		SyncSiteService.deleteSyncSite(_syncSite.getSyncSiteId());
+		SyncSiteService.delete(_syncSite.getSyncSiteId());
 
 		for (SyncFile syncFile : _syncFiles) {
-			SyncFileService.deleteSyncFile(syncFile.getSyncFileId());
+			SyncFileService.delete(syncFile.getSyncFileId());
 		}
 
 		for (SyncWatchEvent syncWatchEvent : SyncWatchEventService.findAll()) {
-			SyncWatchEventService.deleteSyncWatchEvent(
-				syncWatchEvent.getSyncWatchEventId());
+			SyncWatchEventService.delete(syncWatchEvent.getSyncWatchEventId());
 		}
 	}
 

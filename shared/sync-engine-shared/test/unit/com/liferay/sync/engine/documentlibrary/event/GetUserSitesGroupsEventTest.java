@@ -39,10 +39,10 @@ public class GetUserSitesGroupsEventTest extends BaseTestCase {
 	public void tearDown() throws Exception {
 		super.tearDown();
 
-		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
+		SyncAccountService.delete(syncAccount.getSyncAccountId());
 
 		for (SyncSite syncSite : _syncSites) {
-			SyncSiteService.deleteSyncSite(syncSite.getSyncSiteId());
+			SyncSiteService.delete(syncSite.getSyncSiteId());
 		}
 	}
 
