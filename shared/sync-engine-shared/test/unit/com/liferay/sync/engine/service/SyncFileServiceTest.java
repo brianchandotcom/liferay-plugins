@@ -78,7 +78,7 @@ public class SyncFileServiceTest extends BaseTestCase {
 
 		Assert.assertEquals(8, _syncFiles.size());
 
-		SyncFileService.deleteFolderSyncFile(folderSyncFileA.getSyncFileId());
+		SyncFileService.deleteSyncFile(folderSyncFileA.getSyncFileId());
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
@@ -104,7 +104,7 @@ public class SyncFileServiceTest extends BaseTestCase {
 			"/home/liferay/liferay-sync-test/a/a.txt",
 			folderSyncFileA.getTypePK(), syncAccount.getSyncAccountId());
 
-		SyncFileService.doUpdateFolderSyncFile(
+		SyncFileService.updateSyncFile(
 			Paths.get("/home/liferay/liferay-sync-test/b/a"),
 			folderSyncFileB.getTypePK(), folderSyncFileA);
 
