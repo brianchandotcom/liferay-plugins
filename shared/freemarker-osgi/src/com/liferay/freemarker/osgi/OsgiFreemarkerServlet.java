@@ -20,8 +20,13 @@ import freemarker.ext.servlet.FreemarkerServlet;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
+
 import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.BundleReference;
 
 /**
  * @author Carlos Sierra Andrés
@@ -29,12 +34,30 @@ import org.osgi.framework.FrameworkUtil;
 public class OsgiFreemarkerServlet extends FreemarkerServlet {
 
 	@Override
+	public void init(ServletConfig config) throws ServletException {
+		ServletContext servletContext = config.getServletContext();
+
+		if (servletContext instanceof BundleReference) {
+			BundleReference bundleReference = (BundleReference)servletContext;
+
+			_bundle = bundleReference.getBundle();
+		}
+		else {
+			throw new UnavailableException(
+				"Can't find Osgi Bundle in ServletContext("+
+					servletContext.getContextPath()+")");
+		}
+
+		super.init(config);
+	}
+
+	@Override
 	protected TemplateLoader createTemplateLoader(String templatePath)
 		throws IOException {
 
-		Bundle bundle = FrameworkUtil.getBundle(getClass());
-
-		return new BundleTemplateLoader(bundle);
+		return new BundleTemplateLoader(_bundle);
 	}
+
+	private Bundle _bundle;
 
 }
