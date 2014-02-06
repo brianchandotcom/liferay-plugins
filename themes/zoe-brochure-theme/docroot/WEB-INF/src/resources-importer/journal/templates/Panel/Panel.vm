@@ -1,5 +1,6 @@
 #set ($content_id = $reserved-article-id.getData())
-
+#set ($icon_size = "")
+#set ($icon_width = "")
 #set ($integer = 0)
 
 #set ($num_cols = $integer.parseInt($number_of_columns.data))
@@ -28,6 +29,11 @@
 	#set($icon_color = "color: ${panel_icon_color.data};")
 #end
 
+#if (!$panel_icon_size.data.isEmpty())
+	#set ($icon_size = "font-size: ${panel_icon_size.data};")
+	#set ($icon_width = "width: ${panel_icon_size.data};")
+#end
+
 #if ($num_cols == 1)
 	<div class="row-fluid" id="zoePanel${content_id}">
 #end
@@ -41,9 +47,9 @@
 
 	<div class="$span zoe-panel">
 		#if (!$cur_panel_heading.panel_icon.data.isEmpty() || !$cur_panel_heading.panel_image.data.isEmpty())
-			<div class="zoe-panel-image $panel_icon_background.data" style="$background_color $icon_padding">
+			<div class="zoe-panel-image $panel_icon_background.data" style="$background_color $icon_padding $icon_width">
 				#if (!$cur_panel_heading.panel_icon.data.isEmpty())
-					<i class="$cur_panel_heading.panel_icon.data" style="$icon_color"></i>
+					<i class="$cur_panel_heading.panel_icon.data" style="$icon_color $icon_size"></i>
 				#end
 
 				#if (!$cur_panel_heading.panel_image.data.isEmpty())
