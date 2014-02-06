@@ -129,6 +129,19 @@
 			</entry>
 		</meta-data>
 	</dynamic-element>
+	<dynamic-element dataType="string" indexType="keyword" name="panel_icon_size" readOnly="false" repeatable="false" required="false" showLabel="true" type="text" width="small">
+		<meta-data locale="en_US">
+			<entry name="label">
+				<![CDATA[Panel Icon Size (e.g. 12px, 1em, 100%)]]>
+			</entry>
+			<entry name="predefinedValue">
+				<![CDATA[]]>
+			</entry>
+			<entry name="tip">
+				<![CDATA[]]>
+			</entry>
+		</meta-data>
+	</dynamic-element>
 	<dynamic-element dataType="string" indexType="keyword" name="panel_heading" readOnly="false" repeatable="true" required="false" showLabel="true" type="text" width="large">
 		<dynamic-element dataType="string" indexType="keyword" name="panel_icon" readOnly="false" repeatable="false" required="false" showLabel="true" type="text" width="large">
 			<meta-data locale="en_US">

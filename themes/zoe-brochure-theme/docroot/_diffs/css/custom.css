@@ -540,10 +540,6 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ------- Panels -------- */
 
-	.row-fluid .zoe-panel {
-		margin-bottom: 20px;
-	}
-
 	.zoe-panel {
 		background-color: #FAFAFA;
 		display: table-cell;
@@ -582,7 +578,7 @@ $default-box-shadow-v-offset: 1px;
 				font-size: 36px;
 				font-weight: 400;
 				margin-bottom: 33px;
-				margin-top: 63px;
+				margin-top: 0px;
 			}
 
 			p {
@@ -840,4 +836,13 @@ $default-box-shadow-v-offset: 1px;
 			}
 		}
 	}
+
+	@media (max-width: 767px) {
+		.row-fluid .zoe-panel {
+			margin-bottom: 20px;
+
+			&:last-of-type {
+				margin-bottom: 0;
+			}
+		}
 }
