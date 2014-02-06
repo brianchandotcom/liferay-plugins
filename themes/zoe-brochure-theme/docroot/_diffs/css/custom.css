@@ -139,7 +139,7 @@ $default-box-shadow-v-offset: 1px;
 		position: relative;
 	}
 
-	.signed-in {
+	.dockbar-split {
 		#wrapper {
 			margin-top: 45px;
 		}
@@ -147,14 +147,25 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Sign-In ---------- */
 
-	#sign-in {
-		color: #FFF;
-		font-size: 12px;
-		position: absolute;
-		right: 125px;
-		text-shadow: none;
-		top: 5px;
+	.portlet-login {
+		margin-top: 40px;
+
+		.control-label {
+			font-size: 16px;
+			max-width: 206px;
+		}
+
+		.navigation {
+			background: transparent;
+			border-top: 0;
+			padding: 0;
+		}
 	}
+
+	.signed-out .portlet-borderless-bar {
+		display: none;
+	}
+
 
 	/* ---------- Heading ---------- */
 
