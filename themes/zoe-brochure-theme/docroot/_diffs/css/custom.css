@@ -3,7 +3,7 @@
 
 @import url(custom_common.css);
 
-$mainContentPadding: 20px;
+$mainContentSpacing: 20px;
 
 /* ---------- Common color variables ---------- */
 
@@ -52,11 +52,11 @@ $default-box-shadow-v-offset: 1px;
 			> li {
 				> .dropdown-menu {
 					background-color: #333;
-					border: 0;
+					border-width: 0;
 					margin: 0;
 
 					&:after, &:before {
-						border: 0;
+						border-width: 0;
 					}
 
 					> li > a {
@@ -133,13 +133,13 @@ $default-box-shadow-v-offset: 1px;
 	#content {
 		background-color: #FFF;
 		clear: left;
-		padding-left: $mainContentPadding;
-		padding-right: $mainContentPadding;
+		padding-left: $mainContentSpacing;
+		padding-right: $mainContentSpacing;
 	}
 
 	#heading {
 		float: left;
-		margin-left: $mainContentPadding;
+		margin-left: $mainContentSpacing;
 
 		h1.site-title {
 			margin: 0;
@@ -170,15 +170,15 @@ $default-box-shadow-v-offset: 1px;
 
 				> .dropdown-menu {
 					background-color: #333;
-					border: 0;
+					border-width: 0;
 					margin: 0;
 
 					&:after {
-						border: 0;
+						border-width: 0;
 					}
 
 					&:before {
-						border: 0;
+						border-width: 0;
 					}
 
 					> li > a {
@@ -205,7 +205,7 @@ $default-box-shadow-v-offset: 1px;
 
 				&.hover > a {
 					background-color: #333;
-					border-top: 5px solid green;
+					border-top: 5px solid #2ECC40;
 					color: #FFF;
 				}
 
@@ -218,7 +218,7 @@ $default-box-shadow-v-offset: 1px;
 
 		.navbar-inner {
 			background-color: transparent;
-			border: 0;
+			border-width: 0;
 			padding: 0;
 		}
 	}
