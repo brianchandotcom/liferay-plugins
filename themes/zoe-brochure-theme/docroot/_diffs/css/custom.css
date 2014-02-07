@@ -3,6 +3,8 @@
 
 @import url(custom_common.css);
 
+$mainContentPadding: 20px;
+
 /* ---------- Common color variables ---------- */
 
 $bgColor: #DADADA;
@@ -95,9 +97,8 @@ $default-box-shadow-v-offset: 1px;
 	/* ---------- Wrapper ---------- */
 
 	#wrapper {
-		background: #FFF url(../images/custom/header_bg.png) no-repeat 0 0;
 		margin: 0 auto;
-		padding: 20px 0 0;
+		padding: 0;
 		position: relative;
 		width: 1200px;
 	}
@@ -121,100 +122,112 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Heading ---------- */
 
-	#banner #heading {
-		h1 {
+	#banner {
+		background-color: #FFF;
+		float: left;
+		margin-top: -65px;
+		padding-top: 44px;
+		width: 100%;
+	}
+
+	#content {
+		background-color: #FFF;
+		clear: left;
+		padding-left: $mainContentPadding;
+		padding-right: $mainContentPadding;
+	}
+
+	#heading {
+		float: left;
+		margin-left: $mainContentPadding;
+
+		h1.site-title {
 			margin: 0;
-			position: absolute;
 		}
 
 		.logo {
-			float: left;
-			margin: 4px 7px 7px 130px;
-		}
-
-		.site-name {
-			background: #3D7899;
-			color: #FFF;
-			display: inline-block;
-			font-weight: bold;
-			margin: 10px;
-			padding: 5px 10px;
+			margin-right: 5px;
+			vertical-align: text-top;
 		}
 	}
 
 	/* ---------- Navigation ---------- */
 
 	#navigation {
-		background: url(../images/custom/nav_bg.png) no-repeat 0 0;
-		height: 58px;
-		margin: 0 auto;
-		width: 966px;
+		float: right;
+		margin-bottom: 0;
 
-		a {
-			background: url(../images/custom/nav_div.png) no-repeat 0 5px;
-			color: $textColor;
-			float: left;
-			font-weight: lighter;
-			padding: 2px 0 0;
-			text-decoration: none;
-			text-transform: uppercase;
-
-			&:active, &:focus, &:hover {
-				color: #666;
-			}
-
-			span {
-				display: block;
-				float: left;
-				height: 33px;
-				padding: 17px 15px 0;
-			}
-		}
-
-		li {
-			float: left;
-		}
-
-		ul {
-			float: right;
-			list-style: none;
+		&.navbar .nav {
 			margin: 0;
-			padding: 0 14px 0 0;
 
-			&:after {
-				clear: both;
-				content: "";
-				display: block;
-			}
+			> li {
+				background-color: #FFF;
 
-			li.selected a span {
-				background: url(../images/custom/nav_active.png) repeat-x 0 0;
+				&:last-of-type > .dropdown-menu {
+					left: auto;
+					right: 0;
+				}
+
+				> .dropdown-menu {
+					background-color: #333;
+					border: 0;
+					margin: 0;
+
+					&:after {
+						border: 0;
+					}
+
+					&:before {
+						border: 0;
+					}
+
+					> li > a {
+						color: #FFF;
+						font-size: 13px;
+						padding: 6px 15px;
+
+						&:focus, &:hover {
+							background-color: #252525;
+						}
+					}
+				}
+
+				> a {
+					border-top: 5px solid #EEE;
+					padding: 20px 25px;
+				}
+
+				&.active.hover > a {
+					background-color: #FFF;
+					border-top: 5px solid #EEE;
+					color: #333;
+				}
+
+				&.hover > a {
+					background-color: #333;
+					border-top: 5px solid green;
+					color: #FFF;
+				}
+
+				> a:focus, > a:hover {
+					background-color: #333;
+					color: #FFF;
+				}
 			}
 		}
-	}
 
-	.modify-pages .delete-tab {
-		background: #0C466A repeat-x 0 -1px;
-		border: 2px solid #FFF;
-		color: #FFF;
-		font-size: 16px;
-		padding: 4px;
-		right: -10px;
-		top: 0;
-		z-index: 300;
-
-		&:hover {
-			color: #F33;
+		.navbar-inner {
+			background-color: transparent;
+			border: 0;
+			padding: 0;
 		}
 	}
 
 	/* ---------- Content ---------- */
 
 	#content {
-		background: url(../images/custom/content_bg.png) repeat-x 0 285px;
-		margin: 10px 0 0;
+		clear: both;
 		min-height: 600px;
-		padding: 0 0 20px 0;
 	}
 
 	.dialog #main-content {
@@ -589,20 +602,8 @@ $default-box-shadow-v-offset: 1px;
 	/* ---------- Internet explorer ---------- */
 
 	.ie6 {
-		#banner #heading .logo.default-logo {
-			background-image: url(../images/custom/ie6/logo.gif);
-		}
-
 		#footer p {
 			background-image: url(../images/custom/ie6/footer_logo.gif);
-		}
-
-		#navigation {
-			background-image: url(../images/custom/ie6/nav_bg.gif);
-
-			ul li.selected a span {
-				background-image: url(../images/custom/ie6/nav_active.gif);
-			}
 		}
 
 		.pod {
@@ -765,6 +766,42 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Extras ---------- */
 
+	#navigation {
+		&.navbar .nav {
+			> .active {
+				> a, a:hover, a:focus {
+					@include box-shadow(none);
+					@include text-shadow(none);
+				}
+			}
+
+			> li {
+				> .dropdown-menu {
+					@include border-radius(0);
+					@include box-shadow(none);
+
+					> li > a {
+						&:focus, &:hover {
+							@include background-image(none);
+						}
+					}
+				}
+
+				&.hover > a {
+					@include text-shadow(none);
+				}
+
+				> a:focus, > a:hover {
+					@include text-shadow(none);
+				}
+			}
+		}
+
+		.navbar-inner {
+			@include box-shadow(none);
+		}
+	}
+
 	.columns-max .portlet-boundary {
 		@include border-radius(5px);
 		@include single-box-shadow;
@@ -781,16 +818,6 @@ $default-box-shadow-v-offset: 1px;
 
 	.tab-active span span a, .columns-2-1-2 #column-1 .featured-text h3, .columns-2-1-2 #column-2 .featured-text h3, .featured-text p, .portlet-topper-toolbar a, .portlet-topper-toolbar a:visited {
 		@include single-text-shadow($textShadowColor2, 1px, 1px, 1px);
-	}
-
-	#banner #heading .site-name {
-		@include border-radius(4px);
-		@include box-shadow(inset 0 0 5px rgba(0, 0, 0, 0.8), 1px 1px 1px #3D7899);
-		@include text-shadow(1px 1px rgba(0, 0, 0, 0.5));
-	}
-
-	#wrapper {
-		@include single-box-shadow;
 	}
 
 	.modify-pages .delete-tab {
