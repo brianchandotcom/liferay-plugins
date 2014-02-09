@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<beans
+	default-destroy-method="destroy"
+	default-init-method="afterPropertiesSet"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+>
+	<bean class="com.liferay.portal.spring.context.PortletBeanFactoryPostProcessor" />
+
+	<!-- Elastic Search engine adapter -->
+
+	<bean id="com.liferay.portal.search.elasticsearch.ElasticSearchIndexSearcher" class="com.liferay.portal.search.elasticsearch.ElasticSearchIndexSearcher" />
+
+	<bean id="com.liferay.portal.search.elasticsearch.ElasticSearchIndexWriter" class="com.liferay.portal.search.elasticsearch.ElasticSearchIndexWriter" />
+
+	<bean id="com.liferay.portal.search.elasticsearch.ElasticSearchEngineImpl" class="com.liferay.portal.kernel.search.BaseSearchEngine">
+		<property name="clusteredWrite" value="false" />
+		<property name="indexSearcher" ref="com.liferay.portal.search.elasticsearch.ElasticSearchIndexSearcher" />
+		<property name="indexWriter" ref="com.liferay.portal.search.elasticsearch.ElasticSearchIndexWriter" />
+		<property name="luceneBased" value="true" />
+		<property name="vendor" value="ElasticSearch" />
+	</bean>
+
+	<!-- Configurator -->
+
+	<bean id="searchEngineConfigurator.solr" class="com.liferay.portal.kernel.search.PluginSearchEngineConfigurator">
+		<property name="searchEngines">
+			<util:map>
+				<entry key="SYSTEM_ENGINE" value-ref="com.liferay.portal.search.elasticsearch.ElasticSearchEngineImpl" />
+			</util:map>
+		</property>
+	</bean>
+</beans>
