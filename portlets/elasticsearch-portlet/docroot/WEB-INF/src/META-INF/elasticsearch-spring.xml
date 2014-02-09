@@ -24,6 +24,16 @@
 		<property name="vendor" value="ElasticSearch" />
 	</bean>
 
+	<bean id="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnection" class="com.liferay.portal.search.elasticsearch.connection.EmbeddedElasticSearchConnection">
+		<property name="clusterName">
+			<util:constant static-field="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnection.DEFAULT_CLUSTER_NAME" />
+		</property>
+	</bean>
+
+	<bean id="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnectionManager" class="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnectionManager">
+		<property name="elasticSearchConnection" ref="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnection" />
+	</bean>
+
 	<!-- Configurator -->
 
 	<bean id="searchEngineConfigurator.solr" class="com.liferay.portal.kernel.search.PluginSearchEngineConfigurator">
