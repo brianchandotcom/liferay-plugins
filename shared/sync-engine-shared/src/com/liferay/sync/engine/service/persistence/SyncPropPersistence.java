@@ -12,24 +12,19 @@
  * details.
  */
 
-package com.liferay.sync.engine.upgrade;
+package com.liferay.sync.engine.service.persistence;
 
-import com.liferay.sync.engine.service.SyncWatchEventService;
-import com.liferay.sync.engine.service.persistence.SyncWatchEventPersistence;
+import com.liferay.sync.engine.model.SyncProp;
+
+import java.sql.SQLException;
 
 /**
- * @author Michael Young
+ * @author Shinn Lok
  */
-public class UpgradeSyncWatchEvent extends UpgradeProcess {
+public class SyncPropPersistence extends BasePersistenceImpl<SyncProp, Long> {
 
-	@Override
-	public void upgrade() throws Exception {
-		SyncWatchEventPersistence syncWatchEventPersistence =
-			SyncWatchEventService.getSyncWatchEventPersistence();
-
-		if (!syncWatchEventPersistence.isTableExists()) {
-			syncWatchEventPersistence.createTable();
-		}
+	public SyncPropPersistence() throws SQLException {
+		super(SyncProp.class);
 	}
 
 }

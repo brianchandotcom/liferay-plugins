@@ -12,24 +12,39 @@
  * details.
  */
 
-package com.liferay.sync.engine.upgrade;
+package com.liferay.sync.engine.model;
 
-import com.liferay.sync.engine.service.SyncSiteService;
-import com.liferay.sync.engine.service.persistence.SyncSitePersistence;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+import com.liferay.sync.engine.service.persistence.BasePersistenceImpl;
 
 /**
  * @author Shinn Lok
  */
-public class UpgradeSyncSite extends UpgradeProcess {
+@DatabaseTable(daoClass = BasePersistenceImpl.class, tableName = "SyncProp")
+public class SyncProp {
 
-	@Override
-	public void upgrade() throws Exception {
-		SyncSitePersistence syncSitePersistence =
-			SyncSiteService.getSyncSitePersistence();
-
-		if (!syncSitePersistence.isTableExists()) {
-			syncSitePersistence.createTable();
-		}
+	public String getKey() {
+		return key;
 	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	@DatabaseField(useGetSet = true)
+	protected String key;
+
+	@DatabaseField(useGetSet = true)
+	protected String value;
 
 }

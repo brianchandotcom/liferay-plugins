@@ -12,25 +12,19 @@
  * details.
  */
 
-package com.liferay.sync.engine.upgrade;
+package com.liferay.sync.engine.util;
 
 /**
  * @author Shinn Lok
  */
-public class UpgradeProcessSuite {
+public class ReleaseInfo {
 
-	public void upgrade() throws Exception {
-		upgrade(UpgradeSyncAccount.class);
-		upgrade(UpgradeSyncFile.class);
-		upgrade(UpgradeSyncSite.class);
-		upgrade(UpgradeSyncWatchEvent.class);
+	public static final int getBuildNumber() {
+		return _BUILD_NUMBER;
 	}
 
-	protected void upgrade(Class<?> upgradeProcessClass) throws Exception {
-		UpgradeProcess upgradeProcess =
-			(UpgradeProcess)upgradeProcessClass.newInstance();
+	private static final String _BUILD = "2000";
 
-		upgradeProcess.upgrade();
-	}
+	private static final int _BUILD_NUMBER = Integer.parseInt(_BUILD);
 
 }

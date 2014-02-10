@@ -12,24 +12,13 @@
  * details.
  */
 
-package com.liferay.sync.engine.upgrade;
-
-import com.liferay.sync.engine.service.SyncFileService;
-import com.liferay.sync.engine.service.persistence.SyncFilePersistence;
+package com.liferay.sync.engine.listener;
 
 /**
  * @author Shinn Lok
  */
-public class UpgradeSyncFile extends UpgradeProcess {
+public interface SyncEngineListener {
 
-	@Override
-	public void upgrade() throws Exception {
-		SyncFilePersistence syncFilePersistence =
-			SyncFileService.getSyncFilePersistence();
-
-		if (!syncFilePersistence.isTableExists()) {
-			syncFilePersistence.createTable();
-		}
-	}
+	public void syncEngineStateChanged(int syncEngineState);
 
 }
