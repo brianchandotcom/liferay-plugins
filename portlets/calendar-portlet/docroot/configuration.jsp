@@ -18,21 +18,17 @@
 
 <%
 String tabs2 = ParamUtil.getString(request, "tabs2", "user-settings");
-
-String redirect = ParamUtil.getString(request, "redirect");
 %>
 
-<liferay-portlet:renderURL portletConfiguration="true" var="portletURL">
+<liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
+<liferay-portlet:renderURL portletConfiguration="true" var="configurationRenderURL">
 	<portlet:param name="tabs2" value="<%= tabs2 %>" />
-	<portlet:param name="redirect" value="<%= redirect %>" />
 </liferay-portlet:renderURL>
 
-<liferay-portlet:actionURL portletConfiguration="true" var="actionURL" />
-
-<aui:form action="<%= actionURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveConfiguration();" %>'>
+<aui:form action="<%= configurationActionURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveConfiguration();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
-	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />
 
 	<%
 	String tabs2Names = "user-settings";
@@ -45,7 +41,7 @@ String redirect = ParamUtil.getString(request, "redirect");
 	<liferay-ui:tabs
 		names="<%= tabs2Names %>"
 		param="tabs2"
-		url="<%= portletURL %>"
+		url="<%= configurationRenderURL %>"
 	/>
 
 	<c:choose>

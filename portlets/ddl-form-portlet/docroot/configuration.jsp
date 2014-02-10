@@ -19,8 +19,6 @@
 <%
 int cur = ParamUtil.getInteger(request, SearchContainer.DEFAULT_CUR_PARAM);
 
-String redirect = ParamUtil.getString(renderRequest, "redirect");
-
 String keywords = ParamUtil.getString(request, "keywords");
 
 DDLRecordSet selRecordSet = null;
@@ -38,11 +36,11 @@ catch (NoSuchRecordSetException nsrse) {
 }
 %>
 
-<liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
-<liferay-portlet:renderURL portletConfiguration="true" varImpl="portletURL" />
+<liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
+<liferay-portlet:renderURL portletConfiguration="true" varImpl="configurationRenderURL" />
 
-<aui:form action="<%= configurationURL %>" method="post" name="fm1">
-	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+<aui:form action="<%= configurationActionURL %>" method="post" name="fm1">
+	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL.toString() %>" />
 
 	<div class="alert alert-info">
 		<span class="displaying-help-message-holder <%= (selRecordSet == null) ? StringPool.BLANK : "hide" %>">
@@ -88,7 +86,7 @@ catch (NoSuchRecordSetException nsrse) {
 	<aui:fieldset label="lists">
 		<liferay-ui:search-container
 			emptyResultsMessage="no-entries-were-found"
-			iteratorURL="<%= portletURL %>"
+			iteratorURL="<%= configurationRenderURL %>"
 			total="<%= DDLRecordSetLocalServiceUtil.searchCount(company.getCompanyId(), scopeGroupId, keywords, DDLRecordSetConstants.SCOPE_DYNAMIC_DATA_LISTS) %>"
 		>
 			<div class="form-search input-append">
@@ -162,9 +160,9 @@ catch (NoSuchRecordSetException nsrse) {
 	</aui:fieldset>
 </aui:form>
 
-<aui:form action="<%= configurationURL %>" method="post" name="fm">
+<aui:form action="<%= configurationActionURL %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
-	<aui:input name="redirect" type="hidden" value='<%= portletURL.toString() + StringPool.AMPERSAND + renderResponse.getNamespace() + "cur" + cur %>' />
+	<aui:input name="redirect" type="hidden" value='<%= configurationRenderURL.toString() + StringPool.AMPERSAND + renderResponse.getNamespace() + "cur" + cur %>' />
 	<aui:input name="preferences--recordSetId--" type="hidden" value="<%= recordSetId %>" />
 	<aui:input name="preferences--formDDMTemplateId--" type="hidden" value="<%= formDDMTemplateId %>" />
 	<aui:input name="preferences--multipleSubmissions--" type="hidden" value="<%= multipleSubmissions %>" />

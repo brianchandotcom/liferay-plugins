@@ -17,8 +17,6 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String redirect = ParamUtil.getString(renderRequest, "redirect");
-
 String titleXml = LocalizationUtil.getLocalizationXmlFromPreferences(portletPreferences, renderRequest, "title");
 String descriptionXml = LocalizationUtil.getLocalizationXmlFromPreferences(portletPreferences, renderRequest, "description");
 boolean requireCaptcha = GetterUtil.getBoolean(portletPreferences.getValue("requireCaptcha", StringPool.BLANK));
@@ -43,11 +41,12 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 }
 %>
 
-<liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
+<liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
+<liferay-portlet:renderURL portletConfiguration="true" var="configurationRenderURL" />
 
-<aui:form action="<%= configurationURL %>" method="post" name="fm">
+<aui:form action="<%= configurationActionURL %>" method="post" name="fm">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
-	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />
 
 	<liferay-ui:error exception="<%= DuplicateColumnNameException.class %>" message="please-enter-unique-field-names" />
 
