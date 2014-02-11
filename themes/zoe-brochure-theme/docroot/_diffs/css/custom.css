@@ -614,11 +614,10 @@ $default-box-shadow-v-offset: 1px;
 	.banner {
 		background-color: #FAFAFA;
 
-		@include box-shadow(0 1px 1px #E7E7E7);
 		@include box-sizing(border-box);
 
 		float: left;
-		padding: 30px;
+		padding: 20px;
 		width: 100%;
 
 		.banner-button {
@@ -629,6 +628,34 @@ $default-box-shadow-v-offset: 1px;
 			display: table-cell;
 			text-align: center;
 			vertical-align: middle;
+		}
+
+		.banner-message-secondary {
+			font: italic 20px 'Georgia', 'Times New Roman', serif;
+		}
+	}
+
+	.banner-header .banner, .banner-header.banner {
+		@include box-sizing(content-box);
+
+		margin-left: -$mainContentSpacing;
+		margin-right: -$mainContentSpacing;
+		padding: 50px $mainContentSpacing;
+
+		.banner-message {
+			@include box-sizing(border-box);
+
+			padding-left: 65px;
+
+			h2 {
+				font-size: 40px;
+				font-weight: 500;
+			}
+
+			p {
+				font-size: 24px;
+				font-weight: 300;
+			}
 		}
 	}
 
@@ -675,6 +702,10 @@ $default-box-shadow-v-offset: 1px;
 		.navbar-inner {
 			@include box-shadow(none);
 		}
+	}
+
+	.banner {
+		@include box-shadow(0 1px 1px #E7E7E7);
 	}
 
 	.columns-max .portlet-boundary {
