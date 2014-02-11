@@ -41,6 +41,27 @@ $default-box-shadow-v-offset: 1px;
 		color: #676767;
 	}
 
+	/* -------- Admin -------- */
+
+	.lfr-ddm-container {
+		textarea.wlarge, textarea.input-xxlarge {
+			@include box-sizing(border-box);
+
+			height: 200px;
+			width: 100%;
+		}
+
+		textarea.wmedium, textarea.input-xlarge {
+			height: 100px;
+			width: 75%;
+		}
+
+		textarea.wsmall, textarea.input-large {
+			height: 100px;
+			width: 50%;
+		}
+	}
+
 	/* ---------- Dockbar ---------- */
 
 	.dockbar-split .dockbar {
@@ -225,21 +246,55 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Footer ---------- */
 
-	#footer {
-		background: url(../images/custom/footer_bg.png) repeat-x 0 0;
-		margin: -2px auto 0;
-		padding: 30px 0;
-		width: 1200px;
+	.row-fluid .span2dot4 {
+		margin-left: 1%;
+		width: 19%;
+	}
 
-		p {
-			background: url(../images/custom/footer_logo.png) no-repeat 0 0;
-			height: 64px;
-			margin: 0 auto;
-			width: 64px;
+	.zoe-footer {
+		background-color: #0C486C;
+		border-top: 10px solid #39A0DD;
+		color: #FFF;
+		margin-left: -$mainContentSpacing;
+		margin-right: -$mainContentSpacing;
+		padding: 20px $mainContentSpacing;
+
+		&.row-fluid .span12 {
+			margin: 0;
 		}
 
-		.powered-by {
-			text-indent: -9999px;
+		a {
+			color: #FFF;
+		}
+
+		h4 {
+			font-weight: 300;
+		}
+
+		.footer-column {
+			padding: 0 30px;
+		}
+	}
+
+	.zoe-footer-secondary {
+		background-color: #0D2939;
+		color: #FFF;
+		margin-left: -$mainContentSpacing;
+		margin-right: -$mainContentSpacing;
+		padding: 20px $mainContentSpacing;
+
+		a {
+			color: #FFF;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	&.ie6, &.ie7, &.ie8 {
+		.zoe-footer-secondary {
+			margin-bottom: -20px
 		}
 	}
 
@@ -329,6 +384,10 @@ $default-box-shadow-v-offset: 1px;
 
 	.portlet-boundary {
 		margin-bottom: 20px;
+
+		&:last-child, &:last-of-type {
+			margin-bottom: 0;
+		}
 	}
 
 	.media-row {
@@ -658,6 +717,11 @@ $default-box-shadow-v-offset: 1px;
 	}
 
 	@include respond-to(phone) {
+		.row-fluid .span2dot4 {
+			margin-left: 0;
+			width: 100%;
+		}
+
 		.row-fluid .zoe-panel {
 			margin-bottom: 20px;
 
