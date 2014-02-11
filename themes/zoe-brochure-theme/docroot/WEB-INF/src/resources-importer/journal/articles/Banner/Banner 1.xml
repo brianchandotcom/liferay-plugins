@@ -2,10 +2,16 @@
 
 <root available-locales="en_US" default-locale="en_US">
 	<dynamic-element name="title" type="text">
-		<dynamic-content><![CDATA[Banner1]]></dynamic-content>
+		<dynamic-content><![CDATA[Banner 1]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="banner_message" type="textarea">
 		<dynamic-content><![CDATA[Use this element to promote a message or advertisement with a call to action.]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="banner_secondary_message" type="textarea">
+		<dynamic-content><![CDATA[]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element name="banner_message_alignment" type="select">
+		<dynamic-content><![CDATA[]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="banner_button_text" type="text">
 		<dynamic-element name="banner_button_link" type="text">
@@ -17,6 +23,6 @@
 		<dynamic-element name="banner_button_size" type="select">
 			<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Call to Action]]></dynamic-content>
+		<dynamic-content><![CDATA[Call To Action]]></dynamic-content>
 	</dynamic-element>
 </root>
