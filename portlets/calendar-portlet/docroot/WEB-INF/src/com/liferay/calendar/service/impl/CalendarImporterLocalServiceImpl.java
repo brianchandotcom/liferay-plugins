@@ -591,26 +591,54 @@ public class CalendarImporterLocalServiceImpl
 		return RecurrenceSerializer.serialize(recurrence);
 	}
 
-	protected void importAssetLink(AssetLink assetLink, long entryId1)
+	protected void importAssetLink(
+			AssetLink assetLink, long oldEntryId, long newEntryId)
 		throws PortalException, SystemException {
 
-		long entryId2 = assetLink.getEntryId2();
+		long entryId1;
+		long entryId2;
 
-		AssetEntry assetEntry2 = assetEntryPersistence.findByPrimaryKey(
-			entryId2);
+		AssetEntry linkedAssetEntry;
 
-		if (assetEntry2.getClassNameId() ==
+		if (assetLink.getEntryId1() == oldEntryId) {
+			entryId1 = newEntryId;
+			entryId2 = assetLink.getEntryId2();
+
+			linkedAssetEntry = assetEntryPersistence.findByPrimaryKey(entryId2);
+		}
+		else {
+			entryId1 = assetLink.getEntryId1();
+			entryId2 = newEntryId;
+
+			linkedAssetEntry = assetEntryPersistence.findByPrimaryKey(entryId1);
+		}
+
+		if (linkedAssetEntry.getClassNameId() ==
 				classNameLocalService.getClassNameId(CalEvent.class)) {
 
 			CalEvent calEvent = calEventPersistence.findByPrimaryKey(
-				assetEntry2.getClassPK());
+				linkedAssetEntry.getClassPK());
 
 			importCalEvent(calEvent);
 
-			assetEntry2 = assetEntryPersistence.findByG_CU(
-				calEvent.getGroupId(), calEvent.getUuid());
+			CalendarResource calendarResource = getCalendarResource(
+				calEvent.getCompanyId(), calEvent.getGroupId());
 
-			entryId2 = assetEntry2.getEntryId();
+			linkedAssetEntry = assetEntryPersistence.findByG_CU(
+				calendarResource.getGroupId(), calEvent.getUuid());
+
+			if (assetLink.getEntryId1() == oldEntryId) {
+				entryId2 = linkedAssetEntry.getEntryId();
+			}
+			else {
+				entryId1 = linkedAssetEntry.getEntryId();
+			}
+
+			if (assetLinkPersistence.countByE_E_T(
+					entryId1, entryId2, assetLink.getType()) > 0) {
+
+				return;
+			}
 		}
 
 		long linkId = counterLocalService.increment();
@@ -669,11 +697,11 @@ public class CalendarImporterLocalServiceImpl
 
 		// Asset links
 
-		List<AssetLink> assetLinks = assetLinkLocalService.getDirectLinks(
+		List<AssetLink> assetLinks = assetLinkLocalService.getLinks(
 			assetEntry.getEntryId());
 
 		for (AssetLink assetLink : assetLinks) {
-			importAssetLink(assetLink, entryId);
+			importAssetLink(assetLink, assetEntry.getEntryId(), entryId);
 		}
 
 		// Asset tags
@@ -923,12 +951,12 @@ public class CalendarImporterLocalServiceImpl
 	protected boolean isImported(CalEvent calEvent)
 		throws PortalException, SystemException {
 
-		Group group = groupLocalService.getCompanyGroup(
-			calEvent.getCompanyId());
+		CalendarResource calendarResource = getCalendarResource(
+			calEvent.getCompanyId(), calEvent.getGroupId());
 
 		CalendarBooking calendarBooking =
 			calendarBookingPersistence.fetchByUUID_G(
-				calEvent.getUuid(), group.getGroupId());
+				calEvent.getUuid(), calendarResource.getGroupId());
 
 		if (calendarBooking != null) {
 			return true;
