@@ -7,6 +7,6 @@
 
 	<context-param>
 		<param-name>portalContextConfigLocation</param-name>
-		<param-value>/WEB-INF/classes/META-INF/elasticsearch-spring.xml</param-value>
+		<param-value>/WEB-INF/classes/META-INF/elasticsearch-spring.xml,/WEB-INF/classes/META-INF/messaging-spring.xml</param-value>
 	</context-param>
 </web-app>
