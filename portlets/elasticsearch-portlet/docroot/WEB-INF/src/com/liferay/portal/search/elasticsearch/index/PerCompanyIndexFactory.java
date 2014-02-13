@@ -12,19 +12,24 @@
  * details.
  */
 
-package com.liferay.portal.search.elasticsearch.messaging;
+package com.liferay.portal.search.elasticsearch.index;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.messaging.HotDeployMessageListener;
-import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.Company;
-import com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnection;
-import com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnectionManager;
 import com.liferay.portal.search.elasticsearch.io.StringOutputStream;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.action.ListenableActionFuture;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
@@ -38,21 +43,9 @@ import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
 /**
  * @author Michael C. Han
  */
-public class ElasticSearchHotDeployMessageListener
-	extends HotDeployMessageListener {
+public class PerCompanyIndexFactory implements IndexFactory {
 
-	@Override
-	protected void onDeploy(Message message) throws Exception {
-		ElasticSearchConnectionManager elasticSearchConnectionManager =
-			ElasticSearchConnectionManager.getInstance();
-
-		ElasticSearchConnection elasticSearchConnection =
-			elasticSearchConnectionManager.getElasticSearchConnection();
-
-		elasticSearchConnection.initialize();
-
-		AdminClient adminClient = elasticSearchConnection.getClient().admin();
-
+	public void createIndices(AdminClient adminClient) throws Exception {
 		List<Company> companies = CompanyLocalServiceUtil.getCompanies();
 
 		IndicesAdminClient indicesAdminClient = adminClient.indices();
@@ -77,6 +70,16 @@ public class ElasticSearchHotDeployMessageListener
 				indicesAdminClient.prepareCreate(
 					String.valueOf(company.getCompanyId()));
 
+			for (Map.Entry<String, String> typeMappingEntry :
+					_typeMappings.entrySet()) {
+
+				String typeMapping = retrieveTypeMapping(
+					typeMappingEntry.getValue());
+
+				createIndexRequestBuilder.addMapping(
+					typeMappingEntry.getKey(), typeMapping);
+			}
+
 			ListenableActionFuture<CreateIndexResponse> createIndexFuture =
 				createIndexRequestBuilder.execute();
 
@@ -94,18 +97,43 @@ public class ElasticSearchHotDeployMessageListener
 		}
 	}
 
-	@Override
-	protected void onUndeploy(Message message) throws Exception {
-		ElasticSearchConnectionManager elasticSearchConnectionManager =
-			ElasticSearchConnectionManager.getInstance();
+	public void setTypeMappings(Map<String, String> typeMappings) {
+		_typeMappings = typeMappings;
+	}
 
-		ElasticSearchConnection elasticSearchConnection =
-			elasticSearchConnectionManager.getElasticSearchConnection();
+	protected String retrieveTypeMapping(String typeMappingPath)
+		throws IOException {
 
-		elasticSearchConnection.close();
+		ClassLoader contextClassLoader =
+			Thread.currentThread().getContextClassLoader();
+
+		StringBundler stringBundler = new StringBundler();
+
+		InputStream inputStream = null;
+
+		try {
+			inputStream = contextClassLoader.getResourceAsStream(
+				typeMappingPath);
+
+			BufferedReader bufferedReader = new BufferedReader(
+				new InputStreamReader(inputStream));
+
+			String line = null;
+
+			while ((line = bufferedReader.readLine()) != null) {
+				stringBundler.append(line);
+			}
+		}
+		finally {
+			StreamUtil.cleanUp(inputStream);
+		}
+
+		return stringBundler.toString();
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
-		ElasticSearchHotDeployMessageListener.class);
+		PerCompanyIndexFactory.class);
+
+	private Map<String, String> _typeMappings = new HashMap<String, String>();
 
 }

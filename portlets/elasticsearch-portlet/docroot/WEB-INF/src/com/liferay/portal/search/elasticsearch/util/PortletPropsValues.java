@@ -12,23 +12,20 @@
  * details.
  */
 
-package com.liferay.portal.search.elasticsearch.connection;
+package com.liferay.portal.search.elasticsearch.util;
 
-import org.elasticsearch.client.Client;
+import com.liferay.util.portlet.PortletProps;
 
 /**
  * @author Michael C. Han
  */
-public interface ElasticSearchConnection {
+public class PortletPropsValues {
 
-	public static final String DEFAULT_CLUSTER_NAME = "LiferayElasticSearch";
+	public static final String ELASTICSEARCH_EMBEDDED_CONFIG_LOCATION =
+		PortletProps.get(
+			PortletPropsKeys.ELASTICSEARCH_EMBEDDED_CONFIG_LOCATION);
 
-	public static final String LIFERAY_DOCUMENT_TYPE = "LiferayDocumentType";
-
-	public void close();
-
-	public Client getClient();
-
-	public void initialize();
+	public static final String ELASTICSEARCH_REMOTE_CONFIG_LOCATION =
+		PortletProps.get(PortletPropsKeys.ELASTICSEARCH_REMOTE_CONFIG_LOCATION);
 
 }

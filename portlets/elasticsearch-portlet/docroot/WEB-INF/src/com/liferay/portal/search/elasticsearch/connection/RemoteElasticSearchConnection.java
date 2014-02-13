@@ -18,15 +18,16 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.search.elasticsearch.util.PortletPropsValues;
 
 import java.net.InetAddress;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 
 /**
@@ -34,23 +35,24 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
  */
 public class RemoteElasticSearchConnection extends BaseElasticSearchConnection {
 
-	@Override
-	public void initialize() {
+	public void setTransportAddresses(Set<String> transportAddresses) {
+		_transportAddresses = transportAddresses;
+	}
 
+	@Override
+	protected Client createClient(ImmutableSettings.Builder settingsBuilder) {
 		if (_transportAddresses.isEmpty()) {
 			throw new IllegalStateException(
 				"Must configure at least one transport address");
 		}
 
-		ImmutableSettings.Builder settingsBuilder =
-			ImmutableSettings.settingsBuilder();
+		settingsBuilder.loadFromClasspath(
+			PortletPropsValues.ELASTICSEARCH_REMOTE_CONFIG_LOCATION);
+
+		TransportClient transportClient = new TransportClient(settingsBuilder);
 
 		settingsBuilder.put("client.transport.sniff", true);
 		settingsBuilder.put("cluster.name", getClusterName());
-
-		Settings settings = settingsBuilder.build();
-
-		TransportClient transportClient = new TransportClient(settings);
 
 		for (String transportAddress : _transportAddresses) {
 			String[] transportAddressComponents = StringUtil.split(
@@ -72,11 +74,7 @@ public class RemoteElasticSearchConnection extends BaseElasticSearchConnection {
 			}
 		}
 
-		setClient(transportClient);
-	}
-
-	public void setTransportAddresses(Set<String> transportAddresses) {
-		_transportAddresses = transportAddresses;
+		return transportClient;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

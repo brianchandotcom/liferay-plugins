@@ -16,9 +16,12 @@ package com.liferay.portal.search.elasticsearch.connection;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.search.elasticsearch.util.PortletPropsValues;
 
 import org.apache.commons.lang.time.StopWatch;
 
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeBuilder;
 
@@ -37,8 +40,14 @@ public class EmbeddedElasticSearchConnection
 		}
 	}
 
-	public void initialize() {
+	@Override
+	protected Client createClient(ImmutableSettings.Builder settingsBuilder) {
 		NodeBuilder nodeBuilder = NodeBuilder.nodeBuilder();
+
+		settingsBuilder.loadFromClasspath(
+			PortletPropsValues.ELASTICSEARCH_EMBEDDED_CONFIG_LOCATION);
+
+		nodeBuilder.settings(settingsBuilder);
 
 		nodeBuilder.clusterName(getClusterName());
 		nodeBuilder.client(false);
@@ -58,7 +67,7 @@ public class EmbeddedElasticSearchConnection
 
 		_node.start();
 
-		setClient(_node.client());
+		Client client = _node.client();
 
 		if (_log.isDebugEnabled()) {
 			stopWatch.stop();
@@ -67,6 +76,8 @@ public class EmbeddedElasticSearchConnection
 				"Completed startup: " + getClusterName() + " in " +
 					stopWatch.getTime());
 		}
+
+		return client;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

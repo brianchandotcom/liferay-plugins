@@ -25,10 +25,6 @@ public class ElasticSearchConnectionManager {
 		return _instance;
 	}
 
-	public ElasticSearchConnection getElasticSearchConnection() {
-		return _elasticSearchConnection;
-	}
-
 	public Client getClient() {
 		if (_elasticSearchConnection == null) {
 			throw new IllegalStateException(
@@ -36,6 +32,10 @@ public class ElasticSearchConnectionManager {
 		}
 
 		return _elasticSearchConnection.getClient();
+	}
+
+	public ElasticSearchConnection getElasticSearchConnection() {
+		return _elasticSearchConnection;
 	}
 
 	public void setElasticSearchConnection(

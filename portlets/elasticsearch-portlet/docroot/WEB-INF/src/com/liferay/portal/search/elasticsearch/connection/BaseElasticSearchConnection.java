@@ -14,9 +14,14 @@
 
 package com.liferay.portal.search.elasticsearch.connection;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.search.elasticsearch.index.IndexFactory;
 
+import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.ImmutableSettings;
 
 /**
  * @author Michael C. Han
@@ -44,15 +49,53 @@ public abstract class BaseElasticSearchConnection
 		return _clusterName;
 	}
 
+	@Override
+	public void initialize() {
+		ImmutableSettings.Builder settingsBuilder =
+			ImmutableSettings.settingsBuilder();
+
+		_client = createClient(settingsBuilder);
+
+		initializeIndices();
+	}
+
 	public void setClusterName(String clusterName) {
 		_clusterName = clusterName;
+	}
+
+	public void setIndexFactory(IndexFactory indexFactory) {
+		_indexFactory = indexFactory;
+	}
+
+	protected abstract Client createClient(
+		ImmutableSettings.Builder settingsBuilder);
+
+	protected IndexFactory getIndexFactory() {
+		return _indexFactory;
+	}
+
+	protected void initializeIndices() {
+		try {
+			AdminClient adminClient = getClient().admin();
+
+			_indexFactory.createIndices(adminClient);
+		}
+		catch (Exception e) {
+			if (_log.isErrorEnabled()) {
+				_log.error("Unable to initialize indices", e);
+			}
+		}
 	}
 
 	protected void setClient(Client client) {
 		_client = client;
 	}
 
+	private static Log _log = LogFactoryUtil.getLog(
+		BaseElasticSearchConnection.class);
+
 	private Client _client;
 	private String _clusterName;
+	private IndexFactory _indexFactory;
 
 }

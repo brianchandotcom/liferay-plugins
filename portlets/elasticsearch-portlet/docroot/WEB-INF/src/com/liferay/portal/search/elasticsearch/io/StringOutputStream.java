@@ -12,23 +12,28 @@
  * details.
  */
 
-package com.liferay.portal.search.elasticsearch.connection;
+package com.liferay.portal.search.elasticsearch.io;
 
-import org.elasticsearch.client.Client;
+import com.liferay.portal.kernel.util.StringBundler;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author Michael C. Han
  */
-public interface ElasticSearchConnection {
+public class StringOutputStream extends OutputStream {
 
-	public static final String DEFAULT_CLUSTER_NAME = "LiferayElasticSearch";
+	@Override
+	public String toString() {
+		return stringBundler.toString();
+	}
 
-	public static final String LIFERAY_DOCUMENT_TYPE = "LiferayDocumentType";
+	@Override
+	public void write(int b) throws IOException {
+		stringBundler.append(b);
+	}
 
-	public void close();
-
-	public Client getClient();
-
-	public void initialize();
+	private StringBundler stringBundler = new StringBundler();
 
 }

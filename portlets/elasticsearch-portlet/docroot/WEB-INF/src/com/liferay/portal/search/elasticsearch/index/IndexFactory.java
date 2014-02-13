@@ -12,23 +12,16 @@
  * details.
  */
 
-package com.liferay.portal.search.elasticsearch.connection;
+package com.liferay.portal.search.elasticsearch.index;
 
-import org.elasticsearch.client.Client;
+import org.elasticsearch.client.AdminClient;
 
 /**
  * @author Michael C. Han
  */
-public interface ElasticSearchConnection {
+public interface IndexFactory {
 
-	public static final String DEFAULT_CLUSTER_NAME = "LiferayElasticSearch";
-
-	public static final String LIFERAY_DOCUMENT_TYPE = "LiferayDocumentType";
-
-	public void close();
-
-	public Client getClient();
-
-	public void initialize();
+	public void createIndices(AdminClient adminClient)
+		throws Exception;
 
 }

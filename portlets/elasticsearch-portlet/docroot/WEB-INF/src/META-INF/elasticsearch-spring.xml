@@ -24,10 +24,21 @@
 		<property name="vendor" value="ElasticSearch" />
 	</bean>
 
+	<!-- Elastic Search Connection -->
+
+	<bean id="com.liferay.portal.search.elasticsearch.index.IndexFactory" class="com.liferay.portal.search.elasticsearch.index.PerCompanyIndexFactory">
+		<property name="typeMappings">
+			<util:map>
+				<entry key="LiferayDocumentType" value="META-INF/mappings.json" />
+			</util:map>
+		</property>
+	</bean>
+
 	<bean id="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnection" class="com.liferay.portal.search.elasticsearch.connection.EmbeddedElasticSearchConnection">
 		<property name="clusterName">
 			<util:constant static-field="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnection.DEFAULT_CLUSTER_NAME" />
 		</property>
+		<property name="indexFactory" ref="com.liferay.portal.search.elasticsearch.index.IndexFactory" />
 	</bean>
 
 	<bean id="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnectionManager" class="com.liferay.portal.search.elasticsearch.connection.ElasticSearchConnectionManager">
