@@ -41,7 +41,7 @@
 
 				<tr>
 					<td>
-						<%= layoutTemplate.getName() %>
+						<%= LanguageUtil.get(pageContext, StringUtil.replace(layoutTemplate.getLayoutTemplateId(), CharPool.UNDERLINE, CharPool.DASH), layoutTemplate.getName()) %>
 					</td>
 					<td>
 						<liferay-ui:message key="layout-template" />
