@@ -923,12 +923,9 @@ public class CalendarImporterLocalServiceImpl
 	protected boolean isImported(CalEvent calEvent)
 		throws PortalException, SystemException {
 
-		Group group = groupLocalService.getCompanyGroup(
-			calEvent.getCompanyId());
-
 		CalendarBooking calendarBooking =
 			calendarBookingPersistence.fetchByUUID_G(
-				calEvent.getUuid(), group.getGroupId());
+				calEvent.getUuid(), calEvent.getGroupId());
 
 		if (calendarBooking != null) {
 			return true;
