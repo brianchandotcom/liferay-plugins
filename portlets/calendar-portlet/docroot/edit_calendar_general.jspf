@@ -15,19 +15,19 @@
 --%>
 
 <liferay-ui:header
-	backURL="<%= redirect %>"
-	title='<%= (calendar == null) ? LanguageUtil.format(pageContext, "new-calendar-for-x", calendarResource.getName(locale), false) : calendar.getName(locale) %>'
+	backURL="<%= backURL %>"
+	title='<%= (calendar == null) ? LanguageUtil.format(pageContext, "new-calendar-for-x", calendarResource.getName(locale)) : calendar.getName(locale) %>'
 />
 
 <liferay-portlet:actionURL name="updateCalendar" var="updateCalendarURL" />
 
 <aui:form action="<%= updateCalendarURL %>" method="post" name="fm">
 	<aui:input name="mvcPath" type="hidden" value="/edit_calendar.jsp" />
-	<portlet:param name="tabs2" value="<%= tabs2 %>" />
+	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="backURL" type="hidden" value="<%= backURL %>" />
 	<aui:input name="calendarId" type="hidden" value="<%= (calendar != null) ? String.valueOf(calendar.getCalendarId()) : StringPool.BLANK %>" />
 	<aui:input name="calendarResourceId" type="hidden" value="<%= (calendarResource != null) ? String.valueOf(calendarResource.getCalendarResourceId()) : StringPool.BLANK %>" />
-	<aui:input name="saveAndContinue" type="hidden" value="<%= (calendar != null) ? false : true %>" />
 
 	<liferay-ui:error exception="<%= CalendarNameException.class %>" message="please-enter-a-valid-name" />
 

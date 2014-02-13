@@ -39,7 +39,7 @@ String notificationTemplateBody = BeanPropertiesUtil.getString(calendarNotificat
 %>
 
 <liferay-ui:header
-	backURL="<%= redirect %>"
+	backURL="<%= backURL %>"
 	title="<%= calendar.getName(locale) %>"
 />
 
