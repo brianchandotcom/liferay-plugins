@@ -8,7 +8,7 @@
 	<info module="elasticsearch-portlet" organisation="com.liferay" />
 
 	<dependencies defaultconf="default">
-		<dependency name="elasticsearch" org="org.elasticsearch" rev="0.90.11" />
+		<dependency name="elasticsearch" org="org.elasticsearch" rev="1.0.0" />
 		<dependency name="lucene-analyzers-common" org="org.apache.lucene" rev="4.6.1" />
 		<dependency name="lucene-codecs" org="org.apache.lucene" rev="4.6.1" />
 		<dependency name="lucene-core" org="org.apache.lucene" rev="4.6.1" />
