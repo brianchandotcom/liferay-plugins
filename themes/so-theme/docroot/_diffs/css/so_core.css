@@ -526,6 +526,30 @@ html.aui {
 
 /* ---------- Portlet base styling ---------- */
 
+.portlet {
+	border-bottom: 1px solid $defaultBorderColor;
+	margin-bottom: -1px;
+
+	.portlet-content, .portlet-topper {
+		padding: 1em;
+	}
+
+	.portlet-topper {
+		padding-bottom: 0;
+	}
+
+	.portlet-title {
+		font-size: 1.5em;
+		font-weight: 200;
+		line-height: 1.25em;
+		margin: 0;
+
+		.icon, img {
+			display: none;
+		}
+	}
+}
+
 .portlet-borderless-container {
 	min-height: 0;
 }
@@ -967,6 +991,11 @@ html.aui {
 
 .portlet-column-only .contacts-portlet .contacts-profile {
 	border-bottom-width: 1px;
+	overflow: hidden;
+
+	.social-relations {
+		border-bottom: 1px solid $defaultBorderColor;
+	}
 }
 
 /* ---------- Portlet: Document library ---------- */
@@ -1507,12 +1536,8 @@ html.aui {
 /* ---------- Portlet: Microblogs ---------- */
 
 .microblogs-portlet {
-	.aui-tabview-list {
-		margin: 1em;
-	}
-
-	.yui3-aclist-hidden {
-		z-index: 4;
+	.alert, .nav-tabs, .microblogs-entry-form {
+		margin: 10px;
 	}
 
 	.autocomplete {
@@ -1545,9 +1570,6 @@ html.aui {
 }
 
 .user-group .microblogs-status-container {
-	position: relative;
-	top: -6px;
-
 	.microblogs-entry, .portlet-msg-info {
 		background-color: #FFF;
 		border: 1px solid $defaultBorderColor;
@@ -1572,6 +1594,7 @@ html.aui {
 }
 
 .profile-page .microblogs-status-container {
+	margin-top: 10px;
 	top: 0;
 }
 
@@ -1641,8 +1664,12 @@ html.aui {
 /* ---------- Portlet: Tasks ---------- */
 
 .tasks-portlet {
+	.nav-tabs {
+		margin: 10px;
+	}
+
 	.control-wrapper, .filter-wrapper, .list-wrapper, .tasks-options {
-		margin: 1em;
+		margin: 15px;
 	}
 
 	.filter-wrapper {
