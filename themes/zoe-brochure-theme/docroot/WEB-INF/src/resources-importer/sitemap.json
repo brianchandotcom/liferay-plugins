@@ -120,6 +120,70 @@
 			"title": "About"
 		},
 		{
+			"columns": [
+				[
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Pricing Heading Banner.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Pricing Table.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Full Page Divider.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Pricing Page Panel.xml",
+							"groupId": "${groupId}",
+							"portletSetupCss": {
+								"advancedData": {
+									"customCSSClassName": "zoe-panel-post"
+								}
+							},
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Footer.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					}
+				]
+			],
 			"friendlyURL": "/pricing",
 			"name": "Pricing",
 			"title": "Pricing"
