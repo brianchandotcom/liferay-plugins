@@ -578,7 +578,7 @@ $default-box-shadow-v-offset: 1px;
 				font-size: 36px;
 				font-weight: 400;
 				margin-bottom: 33px;
-				margin-top: 0px;
+				margin-top: 0;
 			}
 
 			p {
@@ -828,7 +828,7 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Media queries ---------- */
 
-	@media (max-width: 979px) {
+	@include respond-to(tablet) {
 		.banner {
 			.banner-button, .banner-message {
 				display: block;
@@ -837,7 +837,7 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
-	@media (max-width: 767px) {
+	@include respond-to(phone) {
 		.row-fluid .zoe-panel {
 			margin-bottom: 20px;
 
@@ -845,4 +845,5 @@ $default-box-shadow-v-offset: 1px;
 				margin-bottom: 0;
 			}
 		}
+	}
 }
