@@ -445,6 +445,47 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	/* ---------- Pricing tables ---------- */
+
+	.zoe-pricing-table {
+		margin-bottom: 20px;
+		text-align: center;
+
+		h3 {
+			background-color: #FAFAFA;
+			color: #676767;
+			font-weight: 300;
+			margin: 0;
+			padding: 10px 0;
+		}
+
+		ul li {
+			border-top: 1px solid #E0E0E0;
+			color: #676767;
+			font-size: 16px;
+			font-weight: 300;
+			margin: 0 27px;
+			padding: 16px 0;
+
+			&.last {
+				border-bottom: 1px solid #E0E0E0;
+			}
+		}
+
+		.btn {
+			margin-top: 26px;
+		}
+
+		.rate {
+			margin: 26px 0;
+
+			.price {
+				font-size: 68px;
+				font-weight: 300;
+			}
+		}
+	}
+
 	/* ---------- Theme modules ---------- */
 
 	.banner {
@@ -730,6 +771,12 @@ $default-box-shadow-v-offset: 1px;
 		p {
 			font-size: 18px;
 		}
+	}
+
+	/* -------- Pricing --------- */
+
+	#zoePricingTablePRICING-TABLE {
+		margin-top: 55px;
 	}
 
 	/* ---------- Hidden accessible ---------- */
