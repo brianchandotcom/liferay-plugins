@@ -353,6 +353,25 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ------- Panels -------- */
 
+	.row-fluid .zoe-panel {
+		margin-bottom: 20px;
+	}
+
+	.zoe-clickable-panel.zoe-panel {
+		color: #333;
+		padding: 35px 20px 20px;
+
+		&:focus, &:hover {
+			background-color: #63C4F0;
+			color: #FAFAFA;
+			text-decoration: none;
+
+			p {
+				color: #FAFAFA;
+			}
+		}
+	}
+
 	.zoe-panel {
 		background-color: #FAFAFA;
 		display: table-cell;
@@ -365,7 +384,10 @@ $default-box-shadow-v-offset: 1px;
 		.zoe-panel-image {
 			display: inline-block;
 			margin-bottom: 24px;
-			overflow: hidden;
+
+			&.img-circle {
+				overflow: hidden;
+			}
 
 			i {
 				font-size: 90px;
