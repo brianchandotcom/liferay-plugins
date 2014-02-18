@@ -387,6 +387,32 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	/* -------- Media -------- */
+
+	.media-portlet-bordered {
+		.media-row {
+			@include box-sizing(border-box);
+
+			padding: 0 20px 10px 105px;
+		}
+
+		.portlet-content {
+			padding: 0;
+		}
+
+		.portlet-title {
+			font-size: 30px;
+			margin: 0 0 0 105px;
+			text-align: left;
+		}
+	}
+
+	/* ------- Panels -------- */
+
+	.row-fluid .zoe-panel {
+		margin-bottom: 20px;
+	}
+
 	.zoe-panel {
 		background-color: #FAFAFA;
 		display: table-cell;
@@ -876,6 +902,16 @@ $default-box-shadow-v-offset: 1px;
 	}
 
 	@include respond-to(phone) {
+		.media-portlet-bordered {
+			.media-row {
+				padding-left: 10px;
+			}
+
+			.portlet-title {
+				margin-left: 10px;
+			}
+		}
+
 		.row-fluid .span2-4 {
 			margin-left: 0;
 			width: 100%;
@@ -887,6 +923,10 @@ $default-box-shadow-v-offset: 1px;
 			&:last-of-type {
 				margin-bottom: 0;
 			}
+		}
+
+		.zoe-panel-post .row-fluid, .zoe-panel-post.row-fluid {
+			padding: 0 20px;
 		}
 	}
 }
