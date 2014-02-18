@@ -462,7 +462,12 @@ $default-box-shadow-v-offset: 1px;
 				font-weight: 300;
 				letter-spacing: 0.6px;
 				line-height: 40px;
+				margin-bottom: 1.25em;
 				text-align: left;
+
+				&:last-of-type {
+					margin-bottom: 0;
+				}
 			}
 
 			.btn {
@@ -803,6 +808,16 @@ $default-box-shadow-v-offset: 1px;
 
 	#zoePricingTablePRICING-TABLE {
 		margin-top: 55px;
+	}
+
+	/* ---------- Support page ---------- */
+
+	.zoe-panel-PANEL-SUPPORT-INTRO {
+		margin-top: 70px;
+
+		.zoe-panel {
+			margin-bottom: 0;
+		}
 	}
 
 	/* ---------- Hidden accessible ---------- */
