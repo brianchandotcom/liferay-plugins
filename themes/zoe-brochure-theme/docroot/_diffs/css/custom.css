@@ -497,6 +497,33 @@ $default-box-shadow-v-offset: 1px;
 		margin-bottom: 20px;
 	}
 
+	.media-row {
+		.media {
+			&:first-child {
+				margin-top: 15px;
+			}
+
+			> .media-image.pull-left {
+				margin-right: 25px;
+				text-align: center;
+			}
+
+			> .media-image.pull-right {
+				margin-left: 25px;
+				text-align: center;
+			}
+		}
+	}
+
+	.media-image {
+		width: 50px;
+
+		i {
+			color: #333;
+			font-size: 50px;
+		}
+	}
+
 	/* ---------- Columns ---------- */
 
 	.column-text {
