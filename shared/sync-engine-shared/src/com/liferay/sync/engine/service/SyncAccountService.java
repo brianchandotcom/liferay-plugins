@@ -14,6 +14,7 @@
 
 package com.liferay.sync.engine.service;
 
+import com.liferay.sync.engine.model.ModelListener;
 import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.persistence.SyncAccountPersistence;
@@ -119,6 +120,12 @@ public class SyncAccountService {
 		}
 
 		return _syncAccountPersistence;
+	}
+
+	public static void registerListener(
+		ModelListener<SyncAccount> modelListener) {
+
+		_syncAccountPersistence.registerListener(modelListener);
 	}
 
 	public static SyncAccount update(SyncAccount syncAccount) {
