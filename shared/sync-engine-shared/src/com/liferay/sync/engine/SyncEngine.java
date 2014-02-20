@@ -15,13 +15,16 @@
 package com.liferay.sync.engine;
 
 import com.liferay.sync.engine.documentlibrary.event.GetAllSyncDLObjectsEvent;
+import com.liferay.sync.engine.documentlibrary.event.GetSyncDLObjectUpdateEvent;
 import com.liferay.sync.engine.filesystem.SyncSiteWatchEventListener;
 import com.liferay.sync.engine.filesystem.SyncWatchEventProcessor;
 import com.liferay.sync.engine.filesystem.WatchEventListener;
 import com.liferay.sync.engine.filesystem.Watcher;
 import com.liferay.sync.engine.model.SyncAccount;
+import com.liferay.sync.engine.model.SyncFileListener;
 import com.liferay.sync.engine.model.SyncSite;
 import com.liferay.sync.engine.service.SyncAccountService;
+import com.liferay.sync.engine.service.SyncFileService;
 import com.liferay.sync.engine.service.SyncSiteService;
 import com.liferay.sync.engine.upgrade.util.UpgradeUtil;
 import com.liferay.sync.engine.util.LoggerUtil;
@@ -31,6 +34,7 @@ import com.liferay.sync.engine.util.SyncEngineUtil;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +70,8 @@ public class SyncEngine {
 
 		UpgradeUtil.upgrade();
 
+		SyncFileService.registerModelListener(new SyncFileListener());
+
 		SyncWatchEventProcessor syncWatchEventProcessor =
 			new SyncWatchEventProcessor();
 
@@ -73,20 +79,49 @@ public class SyncEngine {
 			syncWatchEventProcessor, 0, 3, TimeUnit.SECONDS);
 
 		for (SyncAccount syncAccount : SyncAccountService.findAll()) {
+			final List<Runnable> getSyncDLObjectUpdateEvents =
+				new ArrayList<Runnable>();
+
 			List<SyncSite> syncSites = SyncSiteService.findSyncSites(
 				syncAccount.getSyncAccountId());
 
 			for (SyncSite syncSite : syncSites) {
-				Map<String, Object> map = new HashMap<String, Object>();
+				Map<String, Object> parameters = new HashMap<String, Object>();
 
-				map.put("folderId", 0);
-				map.put("repositoryId", syncSite.getGroupId());
+				parameters.put("folderId", 0);
+				parameters.put("repositoryId", syncSite.getGroupId());
 
-				_eventScheduledExecutorService.scheduleAtFixedRate(
+				GetAllSyncDLObjectsEvent getAllSyncDLObjectsEvent =
 					new GetAllSyncDLObjectsEvent(
-						syncAccount.getSyncAccountId(), map),
-					0, syncAccount.getInterval(), TimeUnit.SECONDS);
+						syncAccount.getSyncAccountId(), parameters);
+
+				getAllSyncDLObjectsEvent.run();
+
+				parameters = new HashMap<String, Object>();
+
+				parameters.put("companyId", syncSite.getCompanyId());
+				parameters.put("repositoryId", syncSite.getGroupId());
+				parameters.put("syncSite", syncSite);
+
+				getSyncDLObjectUpdateEvents.add(
+					new GetSyncDLObjectUpdateEvent(
+						syncAccount.getSyncAccountId(), parameters));
 			}
+
+			_eventScheduledExecutorService.scheduleAtFixedRate(
+				new Runnable() {
+
+					@Override
+					public void run() {
+						for (Runnable getSyncDLObjectUpdateEvent :
+								getSyncDLObjectUpdateEvents) {
+
+							getSyncDLObjectUpdateEvent.run();
+						}
+					}
+
+				},
+				0, syncAccount.getInterval(), TimeUnit.SECONDS);
 
 			Path filePath = Paths.get(syncAccount.getFilePathName());
 
