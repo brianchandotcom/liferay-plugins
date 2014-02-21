@@ -14,6 +14,7 @@
 
 package com.liferay.sync.util;
 
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.util.portlet.PortletProps;
 
 /**
@@ -23,5 +24,19 @@ public class PortletPropsValues {
 
 	public static final String SYNC_AUTH_VERIFIER_PIPELINE = PortletProps.get(
 		PortletPropsKeys.SYNC_AUTH_VERIFIER_PIPELINE);
+
+	public static final int SYNC_FILE_DIFF_CACHE_DELETE_INTERVAL =
+		GetterUtil.getInteger(
+			PortletProps.get(
+				PortletPropsKeys.SYNC_FILE_DIFF_CACHE_DELETE_INTERVAL));
+
+	public static final boolean SYNC_FILE_DIFF_CACHE_ENABLED =
+		GetterUtil.getBoolean(
+			PortletProps.get(PortletPropsKeys.SYNC_FILE_DIFF_CACHE_ENABLED));
+
+	public static final long SYNC_FILE_DIFF_CACHE_EXPIRATION_TIME =
+		GetterUtil.getLong(
+			PortletProps.get(
+				PortletPropsKeys.SYNC_FILE_DIFF_CACHE_EXPIRATION_TIME));
 
 }

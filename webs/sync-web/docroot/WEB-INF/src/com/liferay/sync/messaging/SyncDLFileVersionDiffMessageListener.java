@@ -12,36 +12,23 @@
  * details.
  */
 
-package com.liferay.sync.service.messaging;
+package com.liferay.sync.messaging;
 
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
-
-import com.liferay.sync.service.ClpSerializer;
 import com.liferay.sync.service.SyncDLFileVersionDiffLocalServiceUtil;
-import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
-import com.liferay.sync.service.SyncDLObjectServiceUtil;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Dennis Ju
  */
-public class ClpMessageListener extends BaseMessageListener {
-	public static String getServletContextName() {
-		return ClpSerializer.getServletContextName();
-	}
+public class SyncDLFileVersionDiffMessageListener extends BaseMessageListener {
+
+	public static final String DESTINATION_NAME =
+		"liferay/sync_dl_file_version_diff_processor";
 
 	@Override
 	protected void doReceive(Message message) throws Exception {
-		String command = message.getString("command");
-		String servletContextName = message.getString("servletContextName");
-
-		if (command.equals("undeploy") &&
-				servletContextName.equals(getServletContextName())) {
-			SyncDLFileVersionDiffLocalServiceUtil.clearService();
-
-			SyncDLObjectLocalServiceUtil.clearService();
-
-			SyncDLObjectServiceUtil.clearService();
-		}
+		SyncDLFileVersionDiffLocalServiceUtil.deleteExpired();
 	}
+
 }

@@ -14,7 +14,7 @@
 
 package com.liferay.sync.service.base;
 
-import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
+import com.liferay.sync.service.SyncDLFileVersionDiffLocalServiceUtil;
 
 import java.util.Arrays;
 
@@ -22,26 +22,26 @@ import java.util.Arrays;
  * @author Brian Wing Shun Chan
  * @generated
  */
-public class SyncDLObjectLocalServiceClpInvoker {
-	public SyncDLObjectLocalServiceClpInvoker() {
-		_methodName0 = "addSyncDLObject";
+public class SyncDLFileVersionDiffLocalServiceClpInvoker {
+	public SyncDLFileVersionDiffLocalServiceClpInvoker() {
+		_methodName0 = "addSyncDLFileVersionDiff";
 
 		_methodParameterTypes0 = new String[] {
-				"com.liferay.sync.model.SyncDLObject"
+				"com.liferay.sync.model.SyncDLFileVersionDiff"
 			};
 
-		_methodName1 = "createSyncDLObject";
+		_methodName1 = "createSyncDLFileVersionDiff";
 
 		_methodParameterTypes1 = new String[] { "long" };
 
-		_methodName2 = "deleteSyncDLObject";
+		_methodName2 = "deleteSyncDLFileVersionDiff";
 
 		_methodParameterTypes2 = new String[] { "long" };
 
-		_methodName3 = "deleteSyncDLObject";
+		_methodName3 = "deleteSyncDLFileVersionDiff";
 
 		_methodParameterTypes3 = new String[] {
-				"com.liferay.sync.model.SyncDLObject"
+				"com.liferay.sync.model.SyncDLFileVersionDiff"
 			};
 
 		_methodName4 = "dynamicQuery";
@@ -80,11 +80,11 @@ public class SyncDLObjectLocalServiceClpInvoker {
 				"com.liferay.portal.kernel.dao.orm.Projection"
 			};
 
-		_methodName10 = "fetchSyncDLObject";
+		_methodName10 = "fetchSyncDLFileVersionDiff";
 
 		_methodParameterTypes10 = new String[] { "long" };
 
-		_methodName11 = "getSyncDLObject";
+		_methodName11 = "getSyncDLFileVersionDiff";
 
 		_methodParameterTypes11 = new String[] { "long" };
 
@@ -92,90 +92,89 @@ public class SyncDLObjectLocalServiceClpInvoker {
 
 		_methodParameterTypes12 = new String[] { "java.io.Serializable" };
 
-		_methodName13 = "getSyncDLObjects";
+		_methodName13 = "getSyncDLFileVersionDiffs";
 
 		_methodParameterTypes13 = new String[] { "int", "int" };
 
-		_methodName14 = "getSyncDLObjectsCount";
+		_methodName14 = "getSyncDLFileVersionDiffsCount";
 
 		_methodParameterTypes14 = new String[] {  };
 
-		_methodName15 = "updateSyncDLObject";
+		_methodName15 = "updateSyncDLFileVersionDiff";
 
 		_methodParameterTypes15 = new String[] {
-				"com.liferay.sync.model.SyncDLObject"
+				"com.liferay.sync.model.SyncDLFileVersionDiff"
 			};
 
-		_methodName62 = "getBeanIdentifier";
+		_methodName50 = "getBeanIdentifier";
 
-		_methodParameterTypes62 = new String[] {  };
+		_methodParameterTypes50 = new String[] {  };
 
-		_methodName63 = "setBeanIdentifier";
+		_methodName51 = "setBeanIdentifier";
 
-		_methodParameterTypes63 = new String[] { "java.lang.String" };
+		_methodParameterTypes51 = new String[] { "java.lang.String" };
 
-		_methodName68 = "addSyncDLObject";
+		_methodName56 = "addSyncDLFileVersionDiff";
 
-		_methodParameterTypes68 = new String[] {
-				"long", "long", "long", "long", "java.lang.String",
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String", "java.lang.String", "java.lang.String",
-				"long", "java.lang.String", "java.lang.String", "java.util.Date",
-				"long", "java.lang.String", "java.lang.String", "long",
-				"java.lang.String"
+		_methodParameterTypes56 = new String[] {
+				"long", "long", "long", "java.io.File"
 			};
 
-		_methodName69 = "fetchSyncDLObject";
+		_methodName57 = "deleteExpired";
 
-		_methodParameterTypes69 = new String[] { "long" };
+		_methodParameterTypes57 = new String[] {  };
 
-		_methodName70 = "getLatestModifiedTime";
+		_methodName58 = "fetchSyncDLFileVersionDiff";
 
-		_methodParameterTypes70 = new String[] {  };
+		_methodParameterTypes58 = new String[] { "long", "long", "long" };
+
+		_methodName59 = "refreshExpirationDate";
+
+		_methodParameterTypes59 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
 		if (_methodName0.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes0, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.addSyncDLObject((com.liferay.sync.model.SyncDLObject)arguments[0]);
+			return SyncDLFileVersionDiffLocalServiceUtil.addSyncDLFileVersionDiff((com.liferay.sync.model.SyncDLFileVersionDiff)arguments[0]);
 		}
 
 		if (_methodName1.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes1, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.createSyncDLObject(((Long)arguments[0]).longValue());
+			return SyncDLFileVersionDiffLocalServiceUtil.createSyncDLFileVersionDiff(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName2.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes2, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.deleteSyncDLObject(((Long)arguments[0]).longValue());
+			return SyncDLFileVersionDiffLocalServiceUtil.deleteSyncDLFileVersionDiff(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName3.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes3, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.deleteSyncDLObject((com.liferay.sync.model.SyncDLObject)arguments[0]);
+			return SyncDLFileVersionDiffLocalServiceUtil.deleteSyncDLFileVersionDiff((com.liferay.sync.model.SyncDLFileVersionDiff)arguments[0]);
 		}
 
 		if (_methodName4.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes4, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.dynamicQuery();
+			return SyncDLFileVersionDiffLocalServiceUtil.dynamicQuery();
 		}
 
 		if (_methodName5.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes5, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
+			return SyncDLFileVersionDiffLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
 		}
 
 		if (_methodName6.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes6, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
+			return SyncDLFileVersionDiffLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
 		if (_methodName7.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes7, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
+			return SyncDLFileVersionDiffLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
 				(com.liferay.portal.kernel.util.OrderByComparator)arguments[3]);
@@ -183,86 +182,84 @@ public class SyncDLObjectLocalServiceClpInvoker {
 
 		if (_methodName8.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes8, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
+			return SyncDLFileVersionDiffLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
 		}
 
 		if (_methodName9.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes9, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
+			return SyncDLFileVersionDiffLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
 				(com.liferay.portal.kernel.dao.orm.Projection)arguments[1]);
 		}
 
 		if (_methodName10.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes10, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.fetchSyncDLObject(((Long)arguments[0]).longValue());
+			return SyncDLFileVersionDiffLocalServiceUtil.fetchSyncDLFileVersionDiff(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName11.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes11, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getSyncDLObject(((Long)arguments[0]).longValue());
+			return SyncDLFileVersionDiffLocalServiceUtil.getSyncDLFileVersionDiff(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName12.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes12, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getPersistedModel((java.io.Serializable)arguments[0]);
+			return SyncDLFileVersionDiffLocalServiceUtil.getPersistedModel((java.io.Serializable)arguments[0]);
 		}
 
 		if (_methodName13.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes13, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getSyncDLObjects(((Integer)arguments[0]).intValue(),
+			return SyncDLFileVersionDiffLocalServiceUtil.getSyncDLFileVersionDiffs(((Integer)arguments[0]).intValue(),
 				((Integer)arguments[1]).intValue());
 		}
 
 		if (_methodName14.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes14, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getSyncDLObjectsCount();
+			return SyncDLFileVersionDiffLocalServiceUtil.getSyncDLFileVersionDiffsCount();
 		}
 
 		if (_methodName15.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes15, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.updateSyncDLObject((com.liferay.sync.model.SyncDLObject)arguments[0]);
+			return SyncDLFileVersionDiffLocalServiceUtil.updateSyncDLFileVersionDiff((com.liferay.sync.model.SyncDLFileVersionDiff)arguments[0]);
 		}
 
-		if (_methodName62.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getBeanIdentifier();
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			return SyncDLFileVersionDiffLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName63.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
-			SyncDLObjectLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+			SyncDLFileVersionDiffLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName68.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.addSyncDLObject(((Long)arguments[0]).longValue(),
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+			return SyncDLFileVersionDiffLocalServiceUtil.addSyncDLFileVersionDiff(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
-				((Long)arguments[2]).longValue(),
-				((Long)arguments[3]).longValue(),
-				(java.lang.String)arguments[4], (java.lang.String)arguments[5],
-				(java.lang.String)arguments[6], (java.lang.String)arguments[7],
-				(java.lang.String)arguments[8], (java.lang.String)arguments[9],
-				(java.lang.String)arguments[10],
-				((Long)arguments[11]).longValue(),
-				(java.lang.String)arguments[12],
-				(java.lang.String)arguments[13], (java.util.Date)arguments[14],
-				((Long)arguments[15]).longValue(),
-				(java.lang.String)arguments[16],
-				(java.lang.String)arguments[17],
-				((Long)arguments[18]).longValue(),
-				(java.lang.String)arguments[19]);
+				((Long)arguments[2]).longValue(), (java.io.File)arguments[3]);
 		}
 
-		if (_methodName69.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.fetchSyncDLObject(((Long)arguments[0]).longValue());
+		if (_methodName57.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
+			SyncDLFileVersionDiffLocalServiceUtil.deleteExpired();
+
+			return null;
 		}
 
-		if (_methodName70.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getLatestModifiedTime();
+		if (_methodName58.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
+			return SyncDLFileVersionDiffLocalServiceUtil.fetchSyncDLFileVersionDiff(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue());
+		}
+
+		if (_methodName59.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
+			SyncDLFileVersionDiffLocalServiceUtil.refreshExpirationDate(((Long)arguments[0]).longValue());
+
+			return null;
 		}
 
 		throw new UnsupportedOperationException();
@@ -300,14 +297,16 @@ public class SyncDLObjectLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName62;
-	private String[] _methodParameterTypes62;
-	private String _methodName63;
-	private String[] _methodParameterTypes63;
-	private String _methodName68;
-	private String[] _methodParameterTypes68;
-	private String _methodName69;
-	private String[] _methodParameterTypes69;
-	private String _methodName70;
-	private String[] _methodParameterTypes70;
+	private String _methodName50;
+	private String[] _methodParameterTypes50;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
+	private String _methodName56;
+	private String[] _methodParameterTypes56;
+	private String _methodName57;
+	private String[] _methodParameterTypes57;
+	private String _methodName58;
+	private String[] _methodParameterTypes58;
+	private String _methodName59;
+	private String[] _methodParameterTypes59;
 }

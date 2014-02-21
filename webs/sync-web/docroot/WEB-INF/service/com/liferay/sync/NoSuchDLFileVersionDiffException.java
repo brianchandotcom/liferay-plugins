@@ -12,23 +12,29 @@
  * details.
  */
 
-package com.liferay.sync.util;
+package com.liferay.sync;
+
+import com.liferay.portal.NoSuchModelException;
 
 /**
- * @author Dennis Ju
+ * @author Brian Wing Shun Chan
  */
-public class PortletPropsKeys {
+public class NoSuchDLFileVersionDiffException extends NoSuchModelException {
 
-	public static final String SYNC_AUTH_VERIFIER_PIPELINE =
-		"sync.auth.verifier.pipeline";
+	public NoSuchDLFileVersionDiffException() {
+		super();
+	}
 
-	public static final String SYNC_FILE_DIFF_CACHE_DELETE_INTERVAL =
-		"sync.file.diff.cache.delete.interval";
+	public NoSuchDLFileVersionDiffException(String msg) {
+		super(msg);
+	}
 
-	public static final String SYNC_FILE_DIFF_CACHE_ENABLED =
-		"sync.file.diff.cache.enabled";
+	public NoSuchDLFileVersionDiffException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
-	public static final String SYNC_FILE_DIFF_CACHE_EXPIRATION_TIME =
-		"sync.file.diff.cache.expiration.time";
+	public NoSuchDLFileVersionDiffException(Throwable cause) {
+		super(cause);
+	}
 
 }
