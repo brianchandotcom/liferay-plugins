@@ -364,8 +364,8 @@ html.aui {
 
 		.info-items {
 			left: auto;
-			position: relative;
-			right: 0;
+			position: absolute;
+			right: 332px;
 			top: 44px;
 
 			.page-customization-bar .page-customization-bar-text {
@@ -382,8 +382,8 @@ html.aui {
 
 		.info-link-container {
 			left: auto;
-			position: relative;
-			right: 0;
+			position: absolute;
+			right: 332px;
 			top: 56px;
 		}
 	}
@@ -457,21 +457,20 @@ html.aui {
 	@include normal-gradient;
 }
 
-.invite-members, .social-relations a {
-	@include button-default;
-}
+.aui {
+	.invite-members, .social-relations a {
+		@include border-radius(4px);
+		@include button-default;
 
-.invite-members, .social-relations a {
-	@include border-radius(4px);
+		&:hover, &:focus {
+			@include button-hover;
 
-	&:hover, &:focus {
-		@include button-hover;
+			text-decoration: none;
+		}
 
-		text-decoration: none;
-	}
-
-	&:active {
-		@include button-active;
+		&:active {
+			@include button-active;
+		}
 	}
 }
 
@@ -488,21 +487,20 @@ html.aui {
 	}
 }
 
-.portlet-column {
+.portlet-column .portlet-column-content {
 	border: solid $defaultBorderColor;
 	border-width: 0 1px 0 0;
 	margin: 0 0 0 -1px;
-
-	&, .portlet-column-content {
-		padding: 0;
-	}
+	padding: 0;
 }
 
 .portlet-column-only, .ltr .portlet-column-last, .rtl .portlet-column-first {
-	border-right-width: 0;
+	.portlet-column-content {
+		border-right-width: 0;
+	}
 }
 
-.portlet-column-last .portlet-column {
+.portlet-column-last .portlet-column .portlet-column-content {
 	border-left-width: 0;
 }
 
@@ -849,6 +847,18 @@ html.aui {
 	}
 }
 
+/* ---------- Portlet: Calendar ---------- */
+
+.calendar-portlet {
+	.nav-tabs {
+		margin: 10px;
+	}
+
+	.calendar-portlet-column-parent {
+		padding-bottom: 10px;
+	}
+}
+
 /* ---------- Portlet: contacts ---------- */
 
 .contacts-portlet {
@@ -897,8 +907,6 @@ html.aui {
 	}
 
 	.contacts-action-content {
-		padding: 3px;
-
 		span, .taglib-text {
 			padding: 0;
 		}
@@ -1516,8 +1524,16 @@ html.aui {
 /* ---------- Portlet: microblogs ---------- */
 
 .microblogs-portlet {
-	.alert, .nav-tabs, .microblogs-entry-form {
-		margin: 10px;
+	.portlet-body {
+		padding: 10px;
+	}
+
+	.nav-tabs, .microblogs-entry-form {
+		margin-bottom: 10px;
+	}
+
+	.alert {
+		margin-bottom: 0;
 	}
 
 	.autocomplete {
@@ -1533,6 +1549,10 @@ html.aui {
 		border-color: #8A0808;
 		color: #FFF;
 		opacity: 1;
+	}
+
+	.microblogs-entry {
+		margin: 0 5px;
 	}
 
 	.thumbnail {
@@ -1571,11 +1591,6 @@ html.aui {
 
 .private-page .microblogs-status-container {
 	padding-bottom: 0;
-}
-
-.profile-page .microblogs-status-container {
-	margin-top: 10px;
-	top: 0;
 }
 
 /* ---------- Portlet: private messaging ---------- */
@@ -1743,8 +1758,14 @@ html.aui {
 	}
 
 	@media (max-width: 979px) {
-		.navbar .nav-navigation {
-			display: block;
+		.navbar {
+			.info-items, .info-link-container {
+				display: none;
+			}
+
+			.nav-navigation {
+				display: block;
+			}
 		}
 
 		.so-portlet-user-bar {
