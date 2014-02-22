@@ -32,6 +32,8 @@
 
 			var CSS_SIMPLE_MENU_SEPARATOR = getClassName('simple-menu', 'separator');
 
+			var DEFAULT_ALIGN_POINTS = [A.WidgetPositionAlign.TL, A.WidgetPositionAlign.BL];
+
 			var TPL_SIMPLE_MENU_ITEM = '<li class="{cssClass}" data-id="{id}">{caption}</li>';
 
 			var getItemHandler = A.cached(
@@ -57,6 +59,10 @@
 				{
 
 					ATTRS: {
+						alignNode: {
+							value: null
+						},
+
 						hiddenItems: {
 							validator: isArray,
 							value: []
@@ -72,7 +78,7 @@
 						}
 					},
 
-					AUGMENTS: [A.WidgetStdMod, A.WidgetPosition, A.WidgetStack, A.WidgetPositionAlign, A.WidgetPositionConstrain],
+					AUGMENTS: [A.WidgetModality, A.WidgetPosition, A.WidgetPositionAlign, A.WidgetPositionConstrain, A.WidgetStack, A.WidgetStdMod],
 
 					NAME: 'simple-menu',
 
@@ -92,14 +98,25 @@
 						bindUI: function() {
 							var instance = this;
 
+							A.Event.defineOutside('touchend');
+
 							var contentBox = instance.get('contentBox');
 
 							contentBox.delegate('click', instance._onClickItems, STR_DOT + CSS_SIMPLE_MENU_ITEM, instance);
 
-							A.getDoc().on('click', instance._onClickDocument, instance);
+							contentBox.on('touchendoutside', instance._closeMenu, instance);
+
+							A.getDoc().on('click', instance._closeMenu, instance);
+
+							A.getWin().on(
+								'resize',
+								A.debounce(instance._positionMenu, 200, instance)
+							);
+
+							instance.after('visibleChange', instance._positionMenu, instance);
 						},
 
-						_onClickDocument: function() {
+						_closeMenu: function() {
 							var instance = this;
 
 							instance.hide();
@@ -119,6 +136,37 @@
 							if (handler) {
 								handler.apply(instance, arguments);
 							}
+						},
+
+						_positionMenu: function() {
+							var instance = this;
+
+							var Util = Liferay.Util;
+
+							var align = {
+								points: DEFAULT_ALIGN_POINTS,
+								node: instance.get('alignNode')
+							};
+
+							var centered = false;
+							var modal = false;
+							var width = 222;
+
+							if (Util.isPhone() || Util.isTablet()) {
+								align = null;
+								centered = true;
+								modal = true;
+								width = '90%';
+							}
+
+							instance.setAttrs(
+								{
+									align: align,
+									centered: centered,
+									modal: modal,
+									width: width
+								}
+							);
 						},
 
 						_renderItems: function(items) {
@@ -202,7 +250,7 @@
 		},
 		'',
 		{
-			requires: ['aui-base', 'aui-template-deprecated', 'widget-position', 'widget-position-align', 'widget-position-constrain', 'widget-stack', 'widget-stdmod']
+			requires: ['aui-base', 'aui-template-deprecated', 'event-outside', 'event-touch', 'widget-modality', 'widget-position', 'widget-position-align', 'widget-position-constrain', 'widget-stack', 'widget-stdmod']
 		}
 	);
 
@@ -235,6 +283,8 @@
 
 			var CSS_CALENDAR_LIST_ITEM_LABEL = getClassName(STR_CALENDAR_LIST, STR_ITEM, 'label');
 
+			var CSS_ICON_CARET_DOWN = 'icon-caret-down';
+
 			var TPL_CALENDAR_LIST_EMPTY_MESSAGE = '<div class="' + CSS_CALENDAR_LIST_EMPTY_MESSAGE + '">{message}</div>';
 
 			var TPL_CALENDAR_LIST_ITEM = new A.Template(
@@ -242,7 +292,7 @@
 					'<div class="', CSS_CALENDAR_LIST_ITEM, '">',
 						'<div class="', CSS_CALENDAR_LIST_ITEM_COLOR, '" {[ parent.calendars[$i].get("visible") ? ', '\'style="background-color:\'', STR_PLUS, 'parent.calendars[$i].get("color")', STR_PLUS, '";border-color:"', STR_PLUS, 'parent.calendars[$i].get("color")', STR_PLUS, '";\\""', ' : \'', STR_BLANK, '\' ]}></div>',
 							'<span class="', CSS_CALENDAR_LIST_ITEM_LABEL, '">{[ Liferay.Util.escapeHTML(parent.calendars[$i].getDisplayName()) ]}</span>',
-						'<div href="javascript:;" class="', CSS_CALENDAR_LIST_ITEM_ARROW, '"></div>',
+						'<div href="javascript:;" class="', CSS_CALENDAR_LIST_ITEM_ARROW, '"><i class="', CSS_ICON_CARET_DOWN, '"></i></div>',
 					'</div>',
 				'</tpl>'
 			);
@@ -262,7 +312,8 @@
 						simpleMenu: {
 							setter: '_setSimpleMenu',
 							validator: isObject,
-							value: null
+							value: null,
+							zIndex: Liferay.zIndex.MENU
 						},
 
 						strings: {
@@ -427,7 +478,7 @@
 
 							var target = event.target;
 
-							if (target.hasClass(CSS_CALENDAR_LIST_ITEM_ARROW)) {
+							if (target.hasClass(CSS_ICON_CARET_DOWN)) {
 								event.stopPropagation();
 
 								var activeNode = instance.activeNode;
@@ -448,7 +499,7 @@
 
 								simpleMenu.setAttrs(
 									{
-										'align.node': target,
+										alignNode: target,
 										visible: ((simpleMenu.get('align.node') !== target) || !simpleMenu.get('visible'))
 									}
 								);
@@ -573,7 +624,7 @@
 									plugins: [ A.Plugin.OverlayAutohide ],
 									visible: false,
 									width: 290,
-									zIndex: 500
+									zIndex: Liferay.zIndex.MENU
 								},
 								val || {}
 							);
@@ -1054,7 +1105,7 @@
 							{
 								on: {
 
-									click: function(event, buttonItem)  {
+									click: function(event, buttonItem) {
 										confirmationPanel.onlyThisInstanceFn.apply(confirmationPanel, arguments);
 									}
 								},
@@ -1062,7 +1113,7 @@
 							},
 							{
 								on: {
-									click: function(event, buttonItem)  {
+									click: function(event, buttonItem) {
 										confirmationPanel.allFollowingFn.apply(confirmationPanel, arguments);
 									}
 								},
@@ -1070,7 +1121,7 @@
 							},
 							{
 								on: {
-									click: function(event, buttonItem)  {
+									click: function(event, buttonItem) {
 										confirmationPanel.allEventsInFn.apply(confirmationPanel, arguments);
 									}
 								},
@@ -1078,7 +1129,7 @@
 							},
 							{
 								on: {
-									click: function(event, buttonItem)  {
+									click: function(event, buttonItem) {
 										confirmationPanel.cancelFn.apply(confirmationPanel, arguments);
 									}
 								},
