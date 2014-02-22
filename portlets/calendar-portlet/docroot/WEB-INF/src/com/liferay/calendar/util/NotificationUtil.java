@@ -29,27 +29,23 @@ import com.liferay.calendar.notification.NotificationType;
 import com.liferay.calendar.service.permission.CalendarPermission;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.configuration.Filter;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
-import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.util.ContentUtil;
 import com.liferay.util.portlet.PortletProps;
 
-import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Eduardo Lundgren
@@ -62,10 +58,15 @@ public class NotificationUtil {
 
 		CalendarResource calendarResource = calendar.getCalendarResource();
 
-		User user = UserLocalServiceUtil.getDefaultUser(
-			calendarResource.getCompanyId());
+		User user = UserLocalServiceUtil.getUser(calendarResource.getUserId());
 
-		if (calendarResource.isUser()) {
+		if (calendarResource.isGroup()) {
+			Group group = GroupLocalServiceUtil.getGroup(
+				calendarResource.getClassPK());
+
+			user = UserLocalServiceUtil.getUser(group.getCreatorUserId());
+		}
+		else if (calendarResource.isUser()) {
 			user = UserLocalServiceUtil.getUser(calendarResource.getClassPK());
 		}
 
@@ -130,8 +131,7 @@ public class NotificationUtil {
 
 	public static void notifyCalendarBookingRecipients(
 			CalendarBooking calendarBooking, NotificationType notificationType,
-			NotificationTemplateType notificationTemplateType,
-			ServiceContext serviceContext)
+			NotificationTemplateType notificationTemplateType)
 		throws Exception {
 
 		NotificationSender notificationSender =
@@ -149,7 +149,7 @@ public class NotificationUtil {
 			NotificationTemplateContext notificationTemplateContext =
 				NotificationTemplateContextFactory.getInstance(
 					notificationType, notificationTemplateType, calendarBooking,
-					user, serviceContext);
+					user);
 
 			notificationSender.sendNotification(
 				notificationRecipient, notificationTemplateContext);
@@ -202,39 +202,11 @@ public class NotificationUtil {
 			NotificationTemplateContext notificationTemplateContext =
 				NotificationTemplateContextFactory.getInstance(
 					notificationType, NotificationTemplateType.REMINDER,
-					calendarBooking, user, null);
+					calendarBooking, user);
 
 			notificationSender.sendNotification(
 				notificationRecipient, notificationTemplateContext);
 		}
-	}
-
-	public static String processNotificationTemplate(
-			String notificationTemplate,
-			Map<String, Serializable> notificationContext)
-		throws Exception {
-
-		return StringUtil.replace(
-			notificationTemplate,
-			new String[] {
-				"[$EVENT_END_DATE$]", "[$EVENT_LOCATION$]",
-				"[$EVENT_START_DATE$]", "[$EVENT_TITLE$]", "[$EVENT_URL$]",
-				"[$FROM_ADDRESS$]", "[$FROM_NAME$]", "[$PORTAL_URL$]",
-				"[$PORTLET_NAME$]", "[$TO_ADDRESS$]", "[$TO_NAME$]"
-			},
-			new String[] {
-				GetterUtil.getString(notificationContext.get("endTime")),
-				GetterUtil.getString(notificationContext.get("location")),
-				GetterUtil.getString(notificationContext.get("startTime")),
-				GetterUtil.getString(notificationContext.get("title")),
-				GetterUtil.getString(notificationContext.get("url")),
-				GetterUtil.getString(notificationContext.get("fromAddress")),
-				GetterUtil.getString(notificationContext.get("fromName")),
-				GetterUtil.getString(notificationContext.get("portalUrl")),
-				GetterUtil.getString(notificationContext.get("portletName")),
-				GetterUtil.getString(notificationContext.get("toAddress")),
-				GetterUtil.getString(notificationContext.get("toName"))
-			});
 	}
 
 	private static List<NotificationRecipient> _getNotificationRecipients(
