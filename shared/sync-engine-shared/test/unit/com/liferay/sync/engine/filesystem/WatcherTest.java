@@ -120,9 +120,30 @@ public class WatcherTest extends BaseTestCase {
 	public void testRunAddIgnoredFile() throws Exception {
 		setPostResponse("dependencies/watcher_test_add_file.json");
 
-		Path filePath = Paths.get(_syncSite.getFilePathName() + "/.DS_Store");
+		if (OSDetector.isWindows()) {
+			Path hiddenFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/hidden_file.txt");
 
-		Files.createFile(filePath);
+			Files.createFile(hiddenFilePath);
+
+			Files.setAttribute(hiddenFilePath, "dos:hidden", true);
+
+			Path shortcutFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/test.txt - Shortcut.lnk");
+
+			Files.createFile(shortcutFilePath);
+		}
+		else {
+			Path ignoredFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/.DS_Store");
+
+			Files.createFile(ignoredFilePath);
+
+			Path symbolicLinkFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/symbolic_link");
+
+			Files.createSymbolicLink(symbolicLinkFilePath, ignoredFilePath);
+		}
 
 		sleep();
 
