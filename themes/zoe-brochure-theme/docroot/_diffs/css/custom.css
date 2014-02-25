@@ -246,7 +246,7 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Footer ---------- */
 
-	.row-fluid .span2dot4 {
+	.row-fluid .span2-4 {
 		margin-left: 1%;
 		width: 19%;
 	}
@@ -567,12 +567,14 @@ $default-box-shadow-v-offset: 1px;
 				&:hover {
 					a.carousel-menu-next {
 						right: 0;
-						transition: all 0.5s ease;
+
+						@include transition(all 0.5s ease);
 					}
 
 					a.carousel-menu-prev {
 						left: 0;
-						transition: all 0.5s ease;
+
+						@include transition(all 0.5s ease);
 					}
 				}
 			}
@@ -594,12 +596,12 @@ $default-box-shadow-v-offset: 1px;
 			}
 
 			a.carousel-menu-pause:after {
-				content: "\f04c";
+				content: '\f04c';
 				font-family: 'fontawesome-alloy';
 			}
 
 			a.carousel-menu-play:after {
-				content: "\f04b";
+				content: '\f04b';
 				font-family: 'fontawesome-alloy';
 			}
 
@@ -612,7 +614,9 @@ $default-box-shadow-v-offset: 1px;
 				position: absolute;
 				text-decoration: none;
 				top: 50%;
-				transition: all 0.25s ease;
+
+				@include transition(all 0.25s ease);
+
 				width: auto;
 				z-index: 5;
 
@@ -628,7 +632,7 @@ $default-box-shadow-v-offset: 1px;
 				right: -100px;
 
 				&:after {
-					content: "\f054";
+					content: '\f054';
 				}
 			}
 
@@ -636,7 +640,7 @@ $default-box-shadow-v-offset: 1px;
 				left: -100px;
 
 				&:after {
-					content: "\f053";
+					content: '\f053';
 				}
 			}
 		}
@@ -718,7 +722,7 @@ $default-box-shadow-v-offset: 1px;
 	}
 
 	@include respond-to(phone) {
-		.row-fluid .span2dot4 {
+		.row-fluid .span2-4 {
 			margin-left: 0;
 			width: 100%;
 		}

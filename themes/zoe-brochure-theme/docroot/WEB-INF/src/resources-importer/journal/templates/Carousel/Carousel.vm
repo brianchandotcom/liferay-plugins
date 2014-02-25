@@ -64,7 +64,6 @@
 					intervalTime: $duration.data,
 					itemSelector: '.carousel-item'
 				}
-
 			).render();
 		}
 	);

@@ -8,7 +8,7 @@
 #set ($num_cols = $integer.parseInt($number_of_columns.data))
 
 #if ($num_cols == 5)
-	#set ($span = "span2dot4")
+	#set ($span = "span2-4")
 #elseif ($num_cols == 4)
 	#set ($span = "span3")
 #elseif ($num_cols == 3)
