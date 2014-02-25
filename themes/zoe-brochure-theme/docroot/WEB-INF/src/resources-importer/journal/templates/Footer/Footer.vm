@@ -1,7 +1,7 @@
 #if ($footer_column_title.getSiblings().size() == 6)
 	#set ($span = "span2")
 #elseif ($footer_column_title.getSiblings().size() == 5)
-	#set ($span = "span2dot4")
+	#set ($span = "span2-4")
 #elseif ($footer_column_title.getSiblings().size() == 4)
 	#set ($span = "span3")
 #elseif ($footer_column_title.getSiblings().size() == 3)
