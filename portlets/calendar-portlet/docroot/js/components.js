@@ -1141,7 +1141,9 @@
 							{
 								dialog:	{
 									bodyContent: content.join(''),
-									height: 200,
+									height: 250,
+									hideOn: [],
+									resizable: false,
 									toolbars: {
 										footer: buttons
 									},
@@ -1204,9 +1206,13 @@
 							{
 								dialog : {
 									bodyContent: message,
+									height: 250,
+									hideOn: [],
+									resizable: false,
 									toolbars: {
 										footer: buttons
-									}
+									},
+									width: 700
 								},
 								title: Liferay.Language.get('are-you-sure')
 							}
