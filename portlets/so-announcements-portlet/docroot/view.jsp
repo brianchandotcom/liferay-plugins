@@ -19,13 +19,22 @@
 
 <%@ include file="/init.jsp" %>
 
+<%
+boolean showManageEntries = GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.MANAGE_ANNOUNCEMENTS);
+
+if (group.isUser() && !showManageEntries) {
+	showManageEntries = SOAnnouncementsUtil.hasGroups(themeDisplay) || SOAnnouncementsUtil.hasOrganizations(themeDisplay) || SOAnnouncementsUtil.hasRoles(themeDisplay) || SOAnnouncementsUtil.hasUserGroups(themeDisplay);
+
+}
+%>
+
 <liferay-ui:success key="announcementAdded" message="the-announcement-was-successfully-added" />
 <liferay-ui:success key="announcementDeleted" message="the-announcement-was-successfully-deleted" />
 <liferay-ui:success key="announcementUpdated" message="the-announcement-was-successfully-updated" />
 
 <div id="<portlet:namespace />errorMessage"></div>
 
-<c:if test="<%= (permissionChecker.isGroupAdmin(layout.getGroupId()) || permissionChecker.isGroupOwner(layout.getGroupId())) && (!group.isUser() || PortalPermissionUtil.contains(permissionChecker, ActionKeys.ADD_GENERAL_ANNOUNCEMENTS)) %>">
+<c:if test="<%= showManageEntries %>">
 	<div class="admin-actions">
 		<aui:button onClick='<%= renderResponse.getNamespace() + "addEntry()" %>' value="add-entry" />
 
