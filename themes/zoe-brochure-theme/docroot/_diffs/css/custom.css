@@ -369,12 +369,12 @@ $default-box-shadow-v-offset: 1px;
 			}
 
 			> .media-image.pull-left {
-				margin-right: 25px;
+				margin-right: 6%;
 				text-align: center;
 			}
 
 			> .media-image.pull-right {
-				margin-left: 25px;
+				margin-left: 6%;
 				text-align: center;
 			}
 		}
@@ -965,8 +965,10 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
-	.zoe-panel-PANEL-ABOUT-US .zoe-panel {
-		@include box-shadow(none);
+	.zoe-panel-PANEL-ABOUT-US, .zoe-panel-post { 
+		.zoe-panel {
+			@include box-shadow(none);
+		}
 	}
 
 	/* ---------- Media queries ---------- */
@@ -996,16 +998,18 @@ $default-box-shadow-v-offset: 1px;
 			}
 		}
 
-		.media-MEDIA-ABOUT-US .media > .pull-left {
-			float: none;
-			margin-right: 0;
-			text-align: center;
-		}
+		.media-MEDIA-ABOUT-US .media > .media-image {
+			&.pull-left {
+				float: none;
+				margin: 0 auto;
+				text-align: center;
+			}
 
-		.media-MEDIA-ABOUT-US .media > .pull-right {
-			float: none;
-			margin-left: 0;
-			text-align: center;
+			&.pull-right {
+				float: none;
+				margin: 0 auto;
+				text-align: center;
+			}
 		}
 
 		.media-MEDIA-ABOUT-US .media-heading {
@@ -1015,35 +1019,6 @@ $default-box-shadow-v-offset: 1px;
 	}
 
 	@include respond-to(phone) {
-		.media-portlet-bordered {
-			.media-row {
-				padding-left: 10px;
-			}
-
-			.portlet-title {
-				margin-left: 10px;
-			}
-		}
-
-		.row-fluid .span2-4 {
-			margin-left: 0;
-			width: 100%;
-		}
-
-		.row-fluid .zoe-panel {
-			margin-bottom: 20px;
-
-			&:last-of-type {
-				margin-bottom: 0;
-			}
-		}
-
-		.zoe-panel-post .row-fluid, .zoe-panel-post.row-fluid {
-			padding: 0 20px;
-		}
-	}
-
-	@media (max-width: 767px) {
 		.journal-content-article {
 			.row-fluid {
 				&:last-child, &:last-of-type, &.last-child {
@@ -1060,9 +1035,36 @@ $default-box-shadow-v-offset: 1px;
 			}
 		}
 
+		.media-MEDIA-ABOUT-US {
+			padding: 0;
+		}
+
+		.media-portlet-bordered {
+			.media-row {
+				padding-left: 10px;
+			}
+
+			.portlet-title {
+				margin-left: 10px;
+			}
+		}
+
 		.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
 			margin-left: 0;
 			margin-right: 0;
+		}
+
+		.row-fluid .span2-4 {
+			margin-left: 0;
+			width: 100%;
+		}
+
+		.row-fluid .zoe-panel {
+			margin-bottom: 20px;
+
+			&:last-of-type {
+				margin-bottom: 0;
+			}
 		}
 
 		.zoe-carousel {
@@ -1084,6 +1086,10 @@ $default-box-shadow-v-offset: 1px;
 					width: 100%;
 				}
 			}
+		}
+
+		.zoe-panel-post .row-fluid, .zoe-panel-post.row-fluid {
+			padding: 0 20px;
 		}
 	}
 
