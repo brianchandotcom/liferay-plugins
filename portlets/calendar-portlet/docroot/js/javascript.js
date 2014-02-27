@@ -351,6 +351,38 @@ AUI.add(
 				);
 			},
 
+			getCalendarBookingWithNewStartTimeAndDuration: function(calendarBookingId, offset, duration, success) {
+				var instance = this;
+
+				var schedulerEvent = null;
+
+				instance.invokeService(
+					{
+						'/calendar-portlet.calendarbooking/get-calendar-booking-with-new-start-time-and-duration': {
+							calendarBookingId: calendarBookingId,
+							offset: offset,
+							duration: duration
+						}
+					},
+					{
+						success: function(data) {
+							if (data) {
+								if (data.exception) {
+									return;
+								}
+								else {
+									schedulerEvent = instance.toSchedulerEvent(data);
+								}
+							}
+
+							if (success) {
+								success.call(this, schedulerEvent);
+							}
+						}
+					}
+				);
+			},
+
 			getCalendarName: function(name, calendarResourceName) {
 				var instance = this;
 

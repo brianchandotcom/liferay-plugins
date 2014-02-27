@@ -49,6 +49,23 @@ import java.util.Set;
  */
 public class CalendarUtil {
 
+	public static CalendarBooking getCalendarBookingWithNewDuration(
+		CalendarBooking calendarBooking, long duration) {
+
+		calendarBooking.setEndTime(calendarBooking.getStartTime() + duration);
+
+		return calendarBooking;
+	}
+
+	public static CalendarBooking getCalendarBookingWithNewStartTime(
+		CalendarBooking calendarBooking, long offset) {
+
+		calendarBooking.setStartTime(calendarBooking.getStartTime() + offset);
+		calendarBooking.setEndTime(calendarBooking.getEndTime() + offset);
+
+		return calendarBooking;
+	}
+
 	public static JSONObject getCalendarRenderingRules(
 			ThemeDisplay themeDisplay, long[] calendarIds, int[] statuses,
 			long startTime, long endTime, String ruleName)
