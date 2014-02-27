@@ -40,6 +40,17 @@
 					{
 						"portletId": "56",
 						"portletPreferences": {
+							"articleId": "Media Home Page.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
 							"articleId": "Footer.xml",
 							"groupId": "${groupId}",
 							"portletSetupShowBorders": "false",
