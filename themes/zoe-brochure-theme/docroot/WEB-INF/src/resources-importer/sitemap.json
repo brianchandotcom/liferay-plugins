@@ -57,17 +57,65 @@
 		{
 			"columns": [
 				[
-					"Who We Are.xml"
-				],
-				[
-					"Download Pod.xml"
-				],
-				[
-					"Innovating For Over 30 Years.xml"
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Banner About Us.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Media About Us.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Full Page Divider.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Panel About Us.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "true",
+							"portletSetupTitle_en_US":
+								"Meet the Team",
+							"portletSetupUseCustomTitle": "true"
+						}
+					},
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Footer.xml",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "false",
+							"portletSetupTitle_en_US":
+								"Web Content Display",
+							"portletSetupUseCustomTitle": "false"
+						}
+					}
 				]
 			],
 			"friendlyURL": "/about",
-			"layoutTemplateId": "2_1_2_columns",
+			"layoutTemplateId": "1_column",
 			"name": "About",
 			"title": "About"
 		},

@@ -20,7 +20,7 @@
 #end
 
 #if ($num_cols == 1)
-	<div class="row-fluid" id="zoePanel${content_id}">
+	<div class="row-fluid zoe-panel-${content_id}">
 #end
 
 #foreach ($cur_panel_heading in $panel_heading.getSiblings())
