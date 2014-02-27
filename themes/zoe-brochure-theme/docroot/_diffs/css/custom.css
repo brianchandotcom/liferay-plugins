@@ -77,6 +77,10 @@ $default-box-shadow-v-offset: 1px;
 		display: none;
 	}
 
+	#hrefFm {
+		margin: 0;
+	}
+
 	/* ---------- Dockbar ---------- */
 
 	.dockbar-split .dockbar {
@@ -270,6 +274,32 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	/* ---------- Hudcrumbs ---------- */
+
+	nav.lfr-hudcrumbs {
+		left: auto !important;
+		margin: 0 auto;
+		max-width: 1200px;
+		padding: 0 6em;
+		width: auto !important;
+
+		.breadcrumb {
+			background-color: #081F2C;
+			margin: 0;
+			padding-left: $mainContentSpacing;
+			padding-right: $mainContentSpacing;
+
+			a {
+				color: #FFF;
+
+				&:focus, &:hover {
+					color:#FFF;
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
 	/* ---------- Footer ---------- */
 
 	.row-fluid .span2-4 {
@@ -420,8 +450,18 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ------- Panels -------- */
 
-	.row-fluid .zoe-panel {
-		margin-bottom: 20px;
+	.journal-content-article {
+		.row-fluid {
+			&:last-child, &:last-of-type, &.last-child {
+				.zoe-panel {
+					margin-bottom: 0;
+				}
+			}
+
+			.zoe-panel {
+				margin-bottom: 20px;
+			}
+		}
 	}
 
 	.zoe-panel {
@@ -831,6 +871,28 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	/* ---------- Home Page ---------- */
+
+	.media-MEDIA-HOME-PAGE {
+		@include box-sizing(border-box);
+
+		padding: 0 25px;
+
+		&:first-child {
+			padding-top: 15px;
+		}
+
+		&:last-child, &:last-of-type, &.last-child {
+			padding-bottom: 15px;
+		}
+	}
+
+	.zoe-panel-PANEL-HOME-PAGE {
+		.panel-link {
+			margin-top: 30px;
+		}
+	}
+
 	/* ---------- Hidden accessible ---------- */
 
 	#breadcrumbs, #heading .page-title, #navigation h1, #skip-to-content {
@@ -876,7 +938,15 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
-	.banner {
+	nav.lfr-hudcrumbs .breadcrumb {
+		@include border-radius(0);
+
+		> li {
+			@include text-shadow(none);
+		}
+	}
+
+	.banner, .zoe-panel {
 		@include box-shadow(0 1px 1px #E7E7E7);
 	}
 
@@ -901,7 +971,24 @@ $default-box-shadow-v-offset: 1px;
 
 	/* ---------- Media queries ---------- */
 
-	@include respond-to(tablet) {
+	@include respond-to(phone, tablet) {
+		#heading {
+			margin-bottom: 20px;
+		}
+
+		#wrapper {
+			padding: 20px 0 0;
+		}
+
+		body {
+			padding-left: 0;
+			padding-right: 0;
+		}
+
+		nav.lfr-hudcrumbs {
+			padding: 0;
+		}
+
 		.banner {
 			.banner-button, .banner-message {
 				display: block;
@@ -953,6 +1040,70 @@ $default-box-shadow-v-offset: 1px;
 
 		.zoe-panel-post .row-fluid, .zoe-panel-post.row-fluid {
 			padding: 0 20px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.journal-content-article {
+			.row-fluid {
+				&:last-child, &:last-of-type, &.last-child {
+					.zoe-panel {
+						margin-bottom: 20px;
+					}
+				}
+
+				.zoe-panel {
+					&:last-child, &:last-of-type, &.last-child {
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
+
+		.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		.zoe-carousel {
+			.carousel-image img {
+				height: 350px;
+				max-width: none;
+			}
+
+			.carousel-panel-center, .carousel-panel-left, .carousel-panel-right {
+				left: 5%;
+				top: 20%;
+				width: 90%;
+
+				h2 {
+					@include box-sizing(border-box);
+
+					font-size: 20px;
+					line-height: normal;
+					width: 100%;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 480px) {
+		#heading .site-title {
+			font-size: 26px;
+
+			.site-name {
+				vertical-align: sub;
+			}
+		}
+
+		.zoe-carousel {
+			.carousel-image img {
+				height: 250px;
+			}
+
+			.carousel-panel-center, .carousel-panel-left, .carousel-panel-right {
+				top: 10%;
+			}
 		}
 	}
 }

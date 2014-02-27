@@ -10,8 +10,10 @@
 
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-element name="panel_icon" type="text">
+			<dynamic-content><![CDATA[]]></dynamic-content>
 			<dynamic-element name="icon_image" type="ddm-documentlibrary">
-				<dynamic-content><![CDATA[]]></dynamic-content>
+				<dynamic-content><![CDATA[[$FILE=Infinity-Loop.png$]]]></dynamic-content>
+
 			</dynamic-element>
 			<dynamic-element name="icon_shape" type="select">
 				<dynamic-content><![CDATA[]]></dynamic-content>
@@ -28,7 +30,6 @@
 			<dynamic-element name="icon_size" type="text">
 				<dynamic-content><![CDATA[75px]]></dynamic-content>
 			</dynamic-element>
-			<dynamic-content><![CDATA[icon-headphones]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="panel_content" type="textarea">
 			<dynamic-content><![CDATA[Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
@@ -50,8 +51,9 @@
 
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-element name="panel_icon" type="text">
+			<dynamic-content><![CDATA[]]></dynamic-content>
 			<dynamic-element name="icon_image" type="ddm-documentlibrary">
-				<dynamic-content><![CDATA[]]></dynamic-content>
+				<dynamic-content><![CDATA[[$FILE=Map.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="icon_shape" type="select">
 				<dynamic-content><![CDATA[]]></dynamic-content>
@@ -68,7 +70,6 @@
 			<dynamic-element name="icon_size" type="text">
 				<dynamic-content><![CDATA[75px]]></dynamic-content>
 			</dynamic-element>
-			<dynamic-content><![CDATA[icon-signal]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="panel_content" type="textarea">
 			<dynamic-content><![CDATA[Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
@@ -90,8 +91,9 @@
 
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-element name="panel_icon" type="text">
+			<dynamic-content><![CDATA[]]></dynamic-content>
 			<dynamic-element name="icon_image" type="ddm-documentlibrary">
-				<dynamic-content><![CDATA[]]></dynamic-content>
+				<dynamic-content><![CDATA[[$FILE=Clipboard.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="icon_shape" type="select">
 				<dynamic-content><![CDATA[]]></dynamic-content>
@@ -108,7 +110,6 @@
 			<dynamic-element name="icon_size" type="text">
 				<dynamic-content><![CDATA[75px]]></dynamic-content>
 			</dynamic-element>
-			<dynamic-content><![CDATA[icon-briefcase]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="panel_content" type="textarea">
 			<dynamic-content><![CDATA[Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
