@@ -55,7 +55,7 @@
 	#end
 
 	#if ($mod == 1 && $num_cols != 1)
-		<div class="row-fluid" id="zoePanel${content_id}">
+		<div class="row-fluid zoe-panel-${content_id}">
 	#end
 
 	<div class="$span zoe-panel">
