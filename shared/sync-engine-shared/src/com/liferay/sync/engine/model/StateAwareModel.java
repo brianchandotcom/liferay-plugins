@@ -15,36 +15,21 @@
 package com.liferay.sync.engine.model;
 
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
-import com.liferay.sync.engine.service.persistence.BasePersistenceImpl;
 
 /**
- * @author Shinn Lok
+ * @author Michael Young
  */
-@DatabaseTable(daoClass = BasePersistenceImpl.class, tableName = "SyncProp")
-public class SyncProp extends BaseModel {
+public class StateAwareModel extends BaseModel {
 
-	public String getKey() {
-		return key;
+	public int getState() {
+		return state;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public void setState(int state) {
+		this.state = state;
 	}
 
 	@DatabaseField(useGetSet = true)
-	protected String key;
-
-	@DatabaseField(useGetSet = true)
-	protected String value;
+	protected int state;
 
 }

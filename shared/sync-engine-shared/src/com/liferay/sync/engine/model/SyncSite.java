@@ -26,7 +26,11 @@ import com.liferay.sync.engine.service.persistence.BasePersistenceImpl;
  */
 @DatabaseTable(daoClass = BasePersistenceImpl.class, tableName = "SyncSite")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SyncSite {
+public class SyncSite extends StateAwareModel {
+
+	public static final int STATE_CONNECTED = 1;
+
+	public static final int STATE_DISCONNECTED = 0;
 
 	public long getCompanyId() {
 		return companyId;

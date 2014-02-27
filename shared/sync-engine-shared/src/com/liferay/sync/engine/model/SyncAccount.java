@@ -23,7 +23,15 @@ import com.liferay.sync.engine.service.persistence.BasePersistenceImpl;
  * @author Shinn Lok
  */
 @DatabaseTable(daoClass = BasePersistenceImpl.class, tableName = "SyncAccount")
-public class SyncAccount {
+public class SyncAccount extends StateAwareModel {
+
+	public static final int STATE_CONNECTED = 1;
+
+	public static final int STATE_DISCONNECTED = 0;
+
+	public static final int UI_EVENT_AUTHENTICATION_EXCEPTION = 1;
+
+	public static final int UI_EVENT_CONNECTION_EXCEPTION = 2;
 
 	public String getFilePathName() {
 		return filePathName;
