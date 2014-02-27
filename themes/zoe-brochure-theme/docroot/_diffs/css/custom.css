@@ -62,6 +62,21 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	.portlet-title {
+		font-weight: 500;
+		margin-bottom: 54px;
+		margin-top: 0;
+		text-align: center;
+
+		span img {
+			display: none;
+		}
+	}
+
+	.portlet-topper-toolbar .lfr-icon-menu-arrow.caret {
+		display: none;
+	}
+
 	/* ---------- Dockbar ---------- */
 
 	.dockbar-split .dockbar {
@@ -646,6 +661,77 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	/* ---------- About us ---------- */
+
+	.media-MEDIA-ABOUT-US {
+		@include box-sizing(border-box);
+
+		padding: 0 70px;
+
+		.media {
+			margin-top: 100px;
+
+			&:first-child {
+				margin-top: 70px;
+			}
+
+			> .pull-left {
+				margin-right: 50px;
+			}
+
+			> .pull-right {
+				margin-left: 50px;
+			}
+
+			.media-image {
+				&.pull-left, &.pull-right {
+					width: auto;
+				}
+			}
+		}
+
+		.media-body p {
+			font-size: 16px;
+			font-weight: 300;
+			line-height: 40px;
+		}
+
+		.media-heading {
+			font-size: 36px;
+			font-weight: 400;
+			line-height: normal;
+			margin-bottom: 18px;
+		}
+	}
+
+	.zoe-panel-PANEL-ABOUT-US .zoe-panel {
+		background-color: transparent;
+		padding: 0;
+
+		.zoe-panel-image {
+			background: #000;
+			height: 140px;
+			margin: 0 auto;
+			overflow: hidden;
+			width: 140px;
+
+			img {
+				height: 140px;
+				max-width: none;
+				width: 140px;
+			}
+		}
+
+		h3 {
+			font-size: 24px;
+			margin: 18px 0 13px;
+		}
+
+		p {
+			font-size: 18px;
+		}
+	}
+
 	/* ---------- Hidden accessible ---------- */
 
 	#breadcrumbs, #heading .page-title, #navigation h1, #skip-to-content {
@@ -710,6 +796,10 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
+	.zoe-panel-PANEL-ABOUT-US .zoe-panel {
+		@include box-shadow(none);
+	}
+
 	/* ---------- Media queries ---------- */
 
 	@include respond-to(tablet) {
@@ -718,6 +808,23 @@ $default-box-shadow-v-offset: 1px;
 				display: block;
 				width: 100%;
 			}
+		}
+
+		.media-MEDIA-ABOUT-US .media > .pull-left {
+			float: none;
+			margin-right: 0;
+			text-align: center;
+		}
+
+		.media-MEDIA-ABOUT-US .media > .pull-right {
+			float: none;
+			margin-left: 0;
+			text-align: center;
+		}
+
+		.media-MEDIA-ABOUT-US .media-heading {
+			margin: 36px 0 18px;
+			text-align: center;
 		}
 	}
 
