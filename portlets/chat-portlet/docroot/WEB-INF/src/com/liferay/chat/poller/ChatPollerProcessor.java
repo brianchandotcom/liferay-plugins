@@ -93,11 +93,17 @@ public class ChatPollerProcessor extends BasePollerProcessor {
 			Status buddyStatus = StatusLocalServiceUtil.getUserStatus(userId);
 
 			awake = buddyStatus.getAwake();
+
 			String statusMessage = buddyStatus.getMessage();
 
 			JSONObject curUserJSONObject = JSONFactoryUtil.createJSONObject();
 
 			curUserJSONObject.put("userId", userId);
+
+			User user = UserLocalServiceUtil.getUser(userId);
+			
+			curUserJSONObject.put("groupId",  user.getGroupId());
+
 			curUserJSONObject.put("screenName", screenName);
 			curUserJSONObject.put("fullName", fullName);
 			curUserJSONObject.put("portraitId", portraitId);
