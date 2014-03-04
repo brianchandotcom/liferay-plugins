@@ -35,19 +35,7 @@ AUI().use(
 													read.setHTML(Liferay.Language.get('read'));
 												}
 
-												if (instance._openWindow(uri)) {
-													Liferay.Util.openWindow(
-														{
-															id: 'notificationsWindow',
-															uri: uri
-														}
-													);
-												}
-												else {
-													var topWindow = Liferay.Util.getTop();
-
-													topWindow.location.href = uri;
-												}
+												instance._redirect(uri);
 											}
 										}
 									}
@@ -55,6 +43,13 @@ AUI().use(
 								dataType: 'json'
 							}
 						);
+					}
+					else {
+						var userNotification = currentTarget.ancestor('.user-notification');
+
+						if (userNotification) {
+							instance._redirect(uri);
+						}
 					}
 				}
 			},
@@ -65,6 +60,24 @@ AUI().use(
 				}
 
 				return false;
+			},
+
+			_redirect: function(uri) {
+				var instance = this;
+
+				if (instance._openWindow(uri)) {
+					Liferay.Util.openWindow(
+						{
+							id: 'notificationsWindow',
+							uri: uri
+						}
+					);
+				}
+				else {
+					var topWindow = Liferay.Util.getTop();
+
+					topWindow.location.href = uri;
+				}
 			}
 		};
 	}
