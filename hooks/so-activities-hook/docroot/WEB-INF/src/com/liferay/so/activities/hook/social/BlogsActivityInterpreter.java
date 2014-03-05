@@ -29,6 +29,8 @@ import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.so.activities.util.SocialActivityKeyConstants;
 
+import java.util.Date;
+
 /**
  * @author Evan Thibodeau
  * @author Matthew Kong
@@ -100,10 +102,6 @@ public class BlogsActivityInterpreter extends SOSocialActivityInterpreter {
 				SocialActivityKeyConstants.BLOGS_UPDATE_ENTRY) ||
 			(activitySet.getType() ==
 				SocialActivityConstants.TYPE_ADD_COMMENT)) {
-
-			if (!hasPermissions(activitySet, serviceContext)) {
-				return null;
-			}
 
 			return getBody(
 				activitySet.getClassName(), activitySet.getClassPK(),
@@ -199,6 +197,39 @@ public class BlogsActivityInterpreter extends SOSocialActivityInterpreter {
 		}
 
 		return StringPool.BLANK;
+	}
+
+	@Override
+	protected boolean isAfterDisplayDate(SocialActivity activity)
+		throws Exception {
+
+		BlogsEntry blogsEntry = BlogsEntryLocalServiceUtil.fetchBlogsEntry(
+			activity.getClassPK());
+
+		if (blogsEntry == null) {
+			return false;
+		}
+
+		SocialActivitySet activitySet =
+			SocialActivitySetLocalServiceUtil.getSocialActivitySet(
+				activity.getActivitySetId());
+
+		Date displayDate = blogsEntry.getDisplayDate();
+
+		long displayTime = displayDate.getTime();
+
+		if (displayTime < System.currentTimeMillis()) {
+			return true;
+		}
+
+		if (displayTime > activitySet.getModifiedDate()) {
+			activitySet.setModifiedDate(displayTime);
+
+			SocialActivitySetLocalServiceUtil.updateSocialActivitySet(
+				activitySet);
+		}
+
+		return false;
 	}
 
 	private static final String[] _CLASS_NAMES = {BlogsEntry.class.getName()};

@@ -93,10 +93,6 @@ public class BookmarksActivityInterpreter extends SOSocialActivityInterpreter {
 		if (activitySet.getType() ==
 				SocialActivityKeyConstants.BOOKMARKS_UPDATE_ENTRY) {
 
-			if (!hasPermissions(activitySet, serviceContext)) {
-				return null;
-			}
-
 			return getBody(
 				activitySet.getClassName(), activitySet.getClassPK(),
 				serviceContext);
@@ -166,7 +162,8 @@ public class BookmarksActivityInterpreter extends SOSocialActivityInterpreter {
 
 		String body = StringUtil.shorten(
 			HtmlUtil.escape(
-				assetRenderer.getSummary(serviceContext.getLocale())), 200);
+				assetRenderer.getSummary(serviceContext.getLocale())),
+			200);
 
 		return new SocialActivityFeedEntry(title, body);
 	}
