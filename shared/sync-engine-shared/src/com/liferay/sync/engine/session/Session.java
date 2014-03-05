@@ -12,11 +12,7 @@
  * details.
  */
 
-package com.liferay.sync.engine.util;
-
-import com.liferay.sync.engine.documentlibrary.handler.BaseHandler;
-import com.liferay.sync.engine.model.SyncAccount;
-import com.liferay.sync.engine.service.SyncAccountService;
+package com.liferay.sync.engine.session;
 
 import java.net.URL;
 
@@ -31,10 +27,11 @@ import java.util.Set;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -46,49 +43,81 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.BasicHttpContext;
 
 /**
  * @author Shinn Lok
+ * @author Dennis Ju
  */
-public class HttpUtil {
+public class Session {
 
-	public static String executeGet(long syncAccountId, String urlPath)
-		throws Exception {
+	public Session(URL url, String login, String password) {
+		_url = url;
 
-		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
-			syncAccountId);
-
-		URL url = new URL(syncAccount.getUrl());
-
-		HttpHost httpHost = new HttpHost(
+		_httpHost = new HttpHost(
 			url.getHost(), url.getPort(), url.getProtocol());
 
-		HttpGet httpGet = new HttpGet(urlPath);
+		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
-		HttpClient httpClient = _getHttpClient(syncAccount, url);
+		CredentialsProvider credentialsProvider =
+			new BasicCredentialsProvider();
 
-		return httpClient.execute(
-			httpHost, httpGet, new BaseHandler(),
-			_getBasicHttpContext(httpHost));
+		credentialsProvider.setCredentials(
+			new AuthScope(url.getHost(), url.getPort()),
+			new UsernamePasswordCredentials(login, password));
+
+		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+
+		httpClientBuilder.setMaxConnPerRoute(2);
+
+		_httpClient = httpClientBuilder.build();
 	}
 
-	public static String executePost(
-			long syncAccountId, String urlPath, Map<String, Object> parameters)
+	public HttpResponse executeGet(String urlPath) throws Exception {
+		HttpGet httpGet = new HttpGet(_url.toString() + urlPath);
+
+		return _httpClient.execute(_httpHost, httpGet, _getBasicHttpContext());
+	}
+
+	public <T> T executeGet(
+			String urlPath, ResponseHandler<? extends T> responseHandler)
 		throws Exception {
 
-		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
-			syncAccountId);
+		HttpGet httpGet = new HttpGet(_url.toString() + urlPath);
 
-		URL url = new URL(syncAccount.getUrl());
+		return _httpClient.execute(
+			_httpHost, httpGet, responseHandler, _getBasicHttpContext());
+	}
 
-		HttpClient httpClient = _getHttpClient(syncAccount, url);
+	public HttpResponse executePost(
+			String urlPath, Map<String, Object> parameters)
+		throws Exception {
 
-		HttpHost httpHost = new HttpHost(
-			url.getHost(), url.getPort(), url.getProtocol());
+		HttpPost httpPost = new HttpPost(_url.toString() + urlPath);
 
-		HttpPost httpPost = new HttpPost(syncAccount.getUrl() + urlPath);
+		_buildHttpPostBody(httpPost, parameters);
+
+		return _httpClient.execute(_httpHost, httpPost, _getBasicHttpContext());
+	}
+
+	public <T> T executePost(
+			String urlPath, Map<String, Object> parameters,
+			ResponseHandler<? extends T> responseHandler)
+		throws Exception {
+
+		HttpPost httpPost = new HttpPost(_url.toString() + urlPath);
+
+		_buildHttpPostBody(httpPost, parameters);
+
+		return _httpClient.execute(
+			_httpHost, httpPost, responseHandler, _getBasicHttpContext());
+	}
+
+	private void _buildHttpPostBody(
+			HttpPost httpPost, Map<String, Object> parameters)
+		throws Exception {
 
 		Path filePath = (Path)parameters.remove("filePath");
 
@@ -104,32 +133,28 @@ public class HttpUtil {
 		}
 
 		httpPost.setEntity(multipartEntityBuilder.build());
-
-		return httpClient.execute(
-			httpHost, httpPost, new BaseHandler(),
-			_getBasicHttpContext(httpHost));
 	}
 
-	private static BasicAuthCache _getBasicAuthCache(HttpHost httpHost) {
+	private BasicAuthCache _getBasicAuthCache() {
 		BasicAuthCache basicAuthCache = new BasicAuthCache();
 
 		BasicScheme basicScheme = new BasicScheme();
 
-		basicAuthCache.put(httpHost, basicScheme);
+		basicAuthCache.put(_httpHost, basicScheme);
 
 		return basicAuthCache;
 	}
 
-	private static BasicHttpContext _getBasicHttpContext(HttpHost httpHost) {
+	private BasicHttpContext _getBasicHttpContext() {
 		BasicHttpContext basicHttpContext = new BasicHttpContext();
 
 		basicHttpContext.setAttribute(
-			HttpClientContext.AUTH_CACHE, _getBasicAuthCache(httpHost));
+			HttpClientContext.AUTH_CACHE, _getBasicAuthCache());
 
 		return basicHttpContext;
 	}
 
-	private static ContentBody _getFileBody(
+	private ContentBody _getFileBody(
 			Path filePath, String mimeType, String fileName)
 		throws Exception {
 
@@ -137,26 +162,7 @@ public class HttpUtil {
 			filePath.toFile(), ContentType.create(mimeType), fileName);
 	}
 
-	private static HttpClient _getHttpClient(SyncAccount syncAccount, URL url)
-		throws Exception {
-
-		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-
-		CredentialsProvider credentialsProvider =
-			new BasicCredentialsProvider();
-
-		credentialsProvider.setCredentials(
-			new AuthScope(url.getHost(), url.getPort()),
-			new UsernamePasswordCredentials(
-				syncAccount.getLogin(),
-				Encryptor.decrypt(syncAccount.getPassword())));
-
-		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-
-		return httpClientBuilder.build();
-	}
-
-	private static MultipartEntityBuilder _getMultipartEntityBuilder(
+	private MultipartEntityBuilder _getMultipartEntityBuilder(
 		Map<String, Object> parameters) {
 
 		MultipartEntityBuilder multipartEntityBuilder =
@@ -174,13 +180,16 @@ public class HttpUtil {
 		return multipartEntityBuilder;
 	}
 
-	private static StringBody _getStringBody(Object value) {
+	private StringBody _getStringBody(Object value) {
 		return new StringBody(
 			String.valueOf(value),
 			ContentType.create(MediaType.TEXT_PLAIN, Charset.defaultCharset()));
 	}
 
-	private static Set<String> _ignoredParameterKeys = new HashSet<String>(
+	private final CloseableHttpClient _httpClient;
+	private HttpHost _httpHost;
+	private Set<String> _ignoredParameterKeys = new HashSet<String>(
 		Arrays.asList("filePath", "syncFile"));
+	private URL _url;
 
 }

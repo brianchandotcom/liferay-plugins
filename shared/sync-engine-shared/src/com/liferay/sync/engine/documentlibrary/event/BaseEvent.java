@@ -14,9 +14,11 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
+import com.liferay.sync.engine.documentlibrary.handler.BaseHandler;
 import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.service.SyncAccountService;
-import com.liferay.sync.engine.util.HttpUtil;
+import com.liferay.sync.engine.session.Session;
+import com.liferay.sync.engine.session.SessionManager;
 
 import java.util.Map;
 
@@ -96,7 +98,9 @@ public abstract class BaseEvent implements Runnable {
 	}
 
 	protected String processRequest() throws Exception {
-		return HttpUtil.executePost(_syncAccountId, _urlPath, _parameters);
+		Session session = SessionManager.getSession(_syncAccountId);
+
+		return session.executePost(_urlPath, _parameters, new BaseHandler());
 	}
 
 	protected abstract void processResponse(String response)

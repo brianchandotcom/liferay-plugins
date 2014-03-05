@@ -16,9 +16,10 @@ package com.liferay.sync.engine;
 
 import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.service.SyncAccountService;
+import com.liferay.sync.engine.session.Session;
+import com.liferay.sync.engine.session.SessionManager;
 import com.liferay.sync.engine.upgrade.util.UpgradeUtil;
 import com.liferay.sync.engine.util.FilePathNameUtil;
-import com.liferay.sync.engine.util.HttpUtil;
 import com.liferay.sync.engine.util.LoggerUtil;
 import com.liferay.sync.engine.util.PropsKeys;
 import com.liferay.sync.engine.util.PropsUtil;
@@ -32,6 +33,7 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.client.ResponseHandler;
 
 import org.junit.After;
 import org.junit.Before;
@@ -49,7 +51,7 @@ import org.slf4j.LoggerFactory;
  * @author Shinn Lok
  */
 @PowerMockIgnore("javax.crypto.*")
-@PrepareForTest(HttpUtil.class)
+@PrepareForTest(SessionManager.class)
 public abstract class BaseTestCase {
 
 	@Before
@@ -73,7 +75,9 @@ public abstract class BaseTestCase {
 
 		SyncAccountService.update(syncAccount);
 
-		PowerMockito.mockStatic(HttpUtil.class);
+		PowerMockito.mockStatic(SessionManager.class);
+
+		_session = Mockito.mock(Session.class);
 	}
 
 	@After
@@ -106,21 +110,35 @@ public abstract class BaseTestCase {
 	}
 
 	protected void setGetResponse(String fileName) throws Exception {
+		Mockito.when(
+			SessionManager.getSession(Mockito.anyLong())
+		).thenReturn(
+			_session
+		);
+
 		String response = readResponse(fileName);
 
 		Mockito.when(
-			HttpUtil.executeGet(Mockito.anyLong(), Mockito.anyString())
+			_session.executeGet(
+				Mockito.anyString(), Mockito.any(ResponseHandler.class))
 		).thenReturn(
 			response
 		);
 	}
 
 	protected void setPostResponse(String fileName) throws Exception {
+		Mockito.when(
+			SessionManager.getSession(Mockito.anyLong())
+		).thenReturn(
+			_session
+		);
+
 		String response = readResponse(fileName);
 
 		Mockito.when(
-			HttpUtil.executePost(
-				Mockito.anyLong(), Mockito.anyString(), Mockito.anyMap())
+			_session.executePost(
+				Mockito.anyString(), Mockito.anyMap(),
+				Mockito.any(ResponseHandler.class))
 		).thenReturn(
 			response
 		);
@@ -130,5 +148,7 @@ public abstract class BaseTestCase {
 	protected SyncAccount syncAccount;
 
 	private static Logger _logger = LoggerFactory.getLogger(BaseTestCase.class);
+
+	private Session _session;
 
 }
