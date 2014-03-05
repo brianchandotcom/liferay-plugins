@@ -8,9 +8,9 @@
 					<div class="portrait-icons">
 						<div class="btn-group">
 							<button class="btn edit-logo">
-								<span class="aui-buttonitem-label">$languageUtil.get($locale, "edit-profile-picture")</span>
-							</button>
-							<button class="btn delete-logo" disabled="false" icon="icon-remove" value="delete">
+								<i class="icon-picture"></i>
+
+								$languageUtil.get($locale, "change")
 							</button>
 						</div>
 
@@ -63,13 +63,33 @@
 					{
 						boundingBox: '#${themeNamespace}taglibLogoSelector',
 						contentBox: '#${themeNamespace}taglibLogoSelectorContent',
-						defaultLogoURL: '$current_user_profile_portrait_url',
+						defaultLogoURL: '$default_user_profile_portrait_url',
 						editLogoURL: '$current_user_edit_profile_portrait_url',
 						logoDisplaySelector: '#${themeNamespace}avatar',
 						portletNamespace: '${my_account_portletNamespace}',
 						randomNamespace: '${themeNamespace}'
 					}
 				).render();
+
+				window['${my_account_portletNamespace}changeLogo'] = function(logoURL) {
+					var avatarDialog = A.all('.avatar img');
+
+					if (avatarDialog) {
+						avatarDialog.attr('src', logoURL);
+					}
+
+					var avatarDockbar = A.one('.nav-account-controls .user-avatar-image');
+
+					if (avatarDockbar) {
+						avatarDockbar.attr('src', logoURL);
+					}
+
+					var avatarSidebar = A.one('.avatar');
+
+					if (avatarSidebar) {
+						avatarSidebar.attr('src', logoURL);
+					}
+				}
 			}
 		);
 	</script>
