@@ -36,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -131,6 +132,15 @@ public class SyncEngine {
 		}
 	}
 
+	public static void stop() {
+		try {
+			doStop();
+		}
+		catch (Exception e) {
+			_logger.error(e.getMessage(), e);
+		}
+	}
+
 	protected static void doStart() throws Exception {
 		SyncEngineUtil.fireSyncEngineStateChanged(
 			SyncEngineUtil.SYNC_ENGINE_STATE_STARTING);
@@ -152,14 +162,40 @@ public class SyncEngine {
 		_syncWatchEventProcessorExecutorService.scheduleAtFixedRate(
 			syncWatchEventProcessor, 0, 3, TimeUnit.SECONDS);
 
-		for (long syncAccountId :
+		List<SyncAccount> syncAccounts = SyncAccountService.findAll();
+
+		if (syncAccounts.isEmpty()) {
+			SyncEngineUtil.fireSyncEngineStateChanged(
+				SyncEngineUtil.SYNC_ENGINE_NOT_CONFIGURED);
+		}
+
+		for (long activeSyncAccountId :
 				SyncAccountService.getActiveSyncAccountIds()) {
 
-			scheduleSyncAccountTasks(syncAccountId);
+			scheduleSyncAccountTasks(activeSyncAccountId);
 		}
 
 		SyncEngineUtil.fireSyncEngineStateChanged(
 			SyncEngineUtil.SYNC_ENGINE_STATE_STARTED);
+	}
+
+	protected static void doStop() throws Exception {
+		SyncEngineUtil.fireSyncEngineStateChanged(
+			SyncEngineUtil.SYNC_ENGINE_STATE_STOPPING);
+
+		for (long syncAccountId : _syncAccountTasks.keySet()) {
+			cancelSyncAccountTasks(syncAccountId);
+		}
+
+		_syncWatchEventProcessorExecutorService.shutdown();
+
+		SyncAccountService.unregisterModelListener(
+			new SyncAccountModelListener());
+		SyncFileService.unregisterModelListener(new SyncFileModelListener());
+		SyncSiteService.unregisterModelListener(new SyncSiteModelListener());
+
+		SyncEngineUtil.fireSyncEngineStateChanged(
+			SyncEngineUtil.SYNC_ENGINE_STATE_STOPPED);
 	}
 
 	private static Logger _logger = LoggerFactory.getLogger(SyncEngine.class);
