@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.mentions.hook.service.impl;
+package com.liferay.mentions.portlet.service.impl;
 
 import com.liferay.mentions.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
