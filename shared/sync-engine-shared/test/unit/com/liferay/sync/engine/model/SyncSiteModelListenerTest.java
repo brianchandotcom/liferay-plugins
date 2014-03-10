@@ -16,6 +16,7 @@ package com.liferay.sync.engine.model;
 
 import com.liferay.sync.engine.BaseTestCase;
 import com.liferay.sync.engine.service.SyncSiteService;
+import com.liferay.sync.engine.util.SyncSiteTestUtil;
 
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class SyncSiteModelListenerTest extends BaseTestCase {
 
 		SyncSiteService.registerModelListener(_syncSiteModelListener);
 
-		_syncSite = SyncSiteService.addSyncSite(
+		_syncSite = SyncSiteTestUtil.addSyncSite(
 			10158, filePathName + "/test-site", 10185,
 			syncAccount.getSyncAccountId());
 
@@ -50,9 +51,6 @@ public class SyncSiteModelListenerTest extends BaseTestCase {
 	@After
 	@Override
 	public void tearDown() throws Exception {
-		SyncSiteService.setActiveSyncSiteIds(
-			syncAccount.getSyncAccountId(), null);
-
 		SyncSiteService.unregisterModelListener(_syncSiteModelListener);
 
 		SyncSiteService.deleteSyncSite(_syncSite.getSyncSiteId());

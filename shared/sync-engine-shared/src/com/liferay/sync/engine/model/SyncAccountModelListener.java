@@ -64,12 +64,10 @@ public class SyncAccountModelListener implements ModelListener<SyncAccount> {
 		Set<Long> activeSyncAccountIds =
 			SyncAccountService.getActiveSyncAccountIds();
 
-		activeSyncAccountIds.remove(syncAccount.getSyncAccountId());
-
-		SyncAccountService.setActiveSyncAccountIds(activeSyncAccountIds);
+		activeSyncAccountIds.add(syncAccount.getSyncAccountId());
 
 		try {
-			SyncEngine.cancelSyncAccountTasks(syncAccount.getSyncAccountId());
+			SyncEngine.scheduleSyncAccountTasks(syncAccount.getSyncAccountId());
 		}
 		catch (Exception e) {
 			_logger.error(e.getMessage(), e);
@@ -81,8 +79,6 @@ public class SyncAccountModelListener implements ModelListener<SyncAccount> {
 			SyncAccountService.getActiveSyncAccountIds();
 
 		activeSyncAccountIds.remove(syncAccount.getSyncAccountId());
-
-		SyncAccountService.setActiveSyncAccountIds(activeSyncAccountIds);
 
 		try {
 			SyncEngine.cancelSyncAccountTasks(syncAccount.getSyncAccountId());

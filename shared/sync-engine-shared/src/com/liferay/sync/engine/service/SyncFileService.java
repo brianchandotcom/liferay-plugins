@@ -237,6 +237,10 @@ public class SyncFileService {
 
 		// Remote sync file
 
+		if (syncFile.getState() == SyncFile.STATE_DELETED) {
+			return syncFile;
+		}
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("fileEntryId", syncFile.getTypePK());
@@ -261,6 +265,10 @@ public class SyncFileService {
 
 		// Remote sync file
 
+		if (syncFile.getState() == SyncFile.STATE_DELETED) {
+			return syncFile;
+		}
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("folderId", syncFile.getTypePK());
@@ -280,9 +288,7 @@ public class SyncFileService {
 
 			_syncFilePersistence.delete(syncFile);
 
-			String type = syncFile.getType();
-
-			if (type.equals(SyncFile.TYPE_FILE)) {
+			if (!syncFile.isFolder()) {
 				return;
 			}
 
@@ -292,14 +298,12 @@ public class SyncFileService {
 				"parentFolderId", syncFile.getSyncFileId());
 
 			for (SyncFile childSyncFile : childSyncFiles) {
-				type = childSyncFile.getType();
-
-				if (type.equals(SyncFile.TYPE_FILE)) {
-					_syncFilePersistence.deleteById(
-						childSyncFile.getSyncFileId());
+				if (childSyncFile.isFolder()) {
+					deleteSyncFile(childSyncFile);
 				}
 				else {
-					deleteSyncFile(childSyncFile);
+					_syncFilePersistence.deleteById(
+						childSyncFile.getSyncFileId());
 				}
 			}
 		}
@@ -561,9 +565,7 @@ public class SyncFileService {
 
 			// Sync file
 
-			String type = syncFile.getType();
-
-			if (type.equals(SyncFile.TYPE_FILE)) {
+			if (!syncFile.isFolder()) {
 				return update(syncFile);
 			}
 
@@ -587,17 +589,15 @@ public class SyncFileService {
 				childFilePathName = childFilePathName.replace(
 					oldFilePathName, newFilePathName);
 
-				type = childSyncFile.getType();
-
-				if (type.equals(SyncFile.TYPE_FILE)) {
-					childSyncFile.setFilePathName(childFilePathName);
-
-					update(childSyncFile);
-				}
-				else {
+				if (childSyncFile.isFolder()) {
 					updateSyncFile(
 						Paths.get(childFilePathName),
 						childSyncFile.getParentFolderId(), childSyncFile);
+				}
+				else {
+					childSyncFile.setFilePathName(childFilePathName);
+
+					update(childSyncFile);
 				}
 			}
 

@@ -153,7 +153,7 @@ public class Session {
 			HttpPost httpPost, Map<String, Object> parameters)
 		throws Exception {
 
-		Path filePath = (Path)parameters.remove("filePath");
+		Path filePath = (Path)parameters.get("filePath");
 
 		MultipartEntityBuilder multipartEntityBuilder =
 			_getMultipartEntityBuilder(parameters);
@@ -245,7 +245,7 @@ public class Session {
 	private HttpClient _httpClient;
 	private HttpHost _httpHost;
 	private Set<String> _ignoredParameterKeys = new HashSet<String>(
-		Arrays.asList("filePath", "syncFile"));
+		Arrays.asList("filePath", "syncFile", "syncSite"));
 	private URL _url;
 
 }
