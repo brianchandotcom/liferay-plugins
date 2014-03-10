@@ -125,16 +125,15 @@ public class Session {
 			HttpPost httpPost, Map<String, Object> parameters)
 		throws Exception {
 
-		Path filePath = (Path)parameters.remove("filePath");
-
 		MultipartEntityBuilder multipartEntityBuilder =
 			_getMultipartEntityBuilder(parameters);
 
-		if (filePath != null) {
+		if (parameters.get("filePath") != null) {
 			multipartEntityBuilder.addPart(
 				"file",
 				_getFileBody(
-					filePath, (String)parameters.get("mimeType"),
+					(Path)parameters.get("filePath"),
+					(String)parameters.get("mimeType"),
 					(String)parameters.get("title")));
 		}
 
@@ -215,7 +214,7 @@ public class Session {
 	private HttpClient _httpClient;
 	private HttpHost _httpHost;
 	private Set<String> _ignoredParameterKeys = new HashSet<String>(
-		Arrays.asList("filePath", "syncFile"));
+		Arrays.asList("filePath", "syncFile", "syncSite"));
 	private URL _url;
 
 }
