@@ -16,16 +16,39 @@
 
 <%@ include file="/html/taglib/ui/discussion/page.portal.jsp" %>
 
-<aui:script use="liferay-autocomplete-input">
-	new Liferay.AutoCompleteInput(
-		{
-			'acConfig.resultTextLocator': 'text',
-			'acConfig.resultFilters': function(query, results) {
-				return results;
-			},
-			inputNode: '#<portlet:namespace /><%= randomNamespace + "postReplyBody" + "0" %>',
-			source: '<%= themeDisplay.getPathMain() %>/portal/auto_complete_user?query={query}',
-			tplResults: '<div class="taglib-user-display display-style-3"><span><span class="user-profile-image" style="background-image: url(\'{portrait}\'); background-size: 32px 32px; height: 32px; width: 32px;"></span><span class="user-name">{fullName}</span><span class="user-details">{screenName}</span></span></div>'
-		}
-	);
-</aui:script>
+<c:if test="<%= _isMentionsEnabled(themeDisplay.getSiteGroupId()) %>">
+	<liferay-portlet:resourceURL portletName="1_WAR_mentionsportlet" var="autoCompleteUserURL" />
+
+	<aui:script use="liferay-autocomplete-input">
+		new Liferay.AutoCompleteInput(
+			{
+				'acConfig.resultTextLocator': 'result',
+				'acConfig.resultFilters': function(query, results) {
+					return results;
+				},
+				'acConfig.requestTemplate': function(query) {
+					return 'query=' + query;
+				},
+				inputNode: '#<portlet:namespace /><%= randomNamespace + "postReplyBody" + "0" %>',
+				source: '<%= autoCompleteUserURL.toString() + "&" + PortalUtil.getPortletNamespace("1_WAR_mentionsportlet") %>',
+				tplResults: '<div class="taglib-user-display display-style-3"><span><span class="user-profile-image" style="background-image: url(\'{portrait}\'); background-size: 32px 32px; height: 32px; width: 32px;"></span><span class="user-name">{fullName}</span><span class="user-details">{screenName}</span></span></div>'
+			}
+		);
+	</aui:script>
+</c:if>
+
+<%!
+private boolean _isMentionsEnabled(long siteGroupId) throws PortalException, SystemException {
+	Group group = GroupLocalServiceUtil.getGroup(siteGroupId);
+
+	PortletPreferences preferences = PrefsPropsUtil.getPreferences(group.getCompanyId(), true);
+
+	boolean companyMentionsEnabled = GetterUtil.getBoolean(preferences.getValue("mentionsEnabled", null), true);
+
+	if (!companyMentionsEnabled) {
+		return false;
+	}
+
+	return GetterUtil.getBoolean(group.getLiveParentTypeSettingsProperty("mentionsEnabled"), true);
+}
+%>

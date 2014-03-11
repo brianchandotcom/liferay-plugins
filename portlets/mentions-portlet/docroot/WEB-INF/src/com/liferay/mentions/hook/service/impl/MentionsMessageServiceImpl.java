@@ -14,14 +14,19 @@
 
 package com.liferay.mentions.hook.service.impl;
 
+import com.liferay.mentions.util.PortletKeys;
 import com.liferay.mentions.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.notifications.UserNotificationDefinition;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -35,6 +40,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.portlet.PortletPreferences;
 
 /**
  * @author Sergio González
@@ -59,6 +66,12 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 			userId, userName, groupId, className, classPK, threadId,
 			parentMessageId, subject, body, serviceContext);
 
+		long siteGroupId = PortalUtil.getSiteGroupId(message.getGroupId());
+
+		if (!_isMentionsEnabled(siteGroupId)) {
+			return message;
+		}
+
 		notifyUsers(message, serviceContext);
 
 		return message;
@@ -73,6 +86,12 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 		MBMessage message = super.updateDiscussionMessage(
 			userId, messageId, className, classPK, subject, body,
 			serviceContext);
+
+		long siteGroupId = PortalUtil.getSiteGroupId(message.getGroupId());
+
+		if (!_isMentionsEnabled(siteGroupId)) {
+			return message;
+		}
 
 		notifyUsers(message, serviceContext);
 
@@ -108,6 +127,8 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 			return;
 		}
 
+		String contentURL = (String)serviceContext.getAttribute("contentURL");
+
 		String messageUserEmailAddress = PortalUtil.getUserEmailAddress(
 			message.getUserId());
 		String messageUserName = PortalUtil.getUserName(
@@ -126,17 +147,33 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 		SubscriptionSender subscriptionSender = new SubscriptionSender();
 
 		subscriptionSender.setBody(body);
+		subscriptionSender.setClassName(message.getModelClassName());
+		subscriptionSender.setClassPK(message.getMessageId());
 		subscriptionSender.setCompanyId(message.getCompanyId());
 		subscriptionSender.setContextAttribute(
 			"[$COMMENTS_BODY$]", message.getBody(true), false);
 		subscriptionSender.setContextAttributes(
 			"[$COMMENTS_USER_ADDRESS$]", messageUserEmailAddress,
 			"[$COMMENTS_USER_NAME$]", messageUserName, "[$CONTENT_URL$]",
-			serviceContext.getAttribute("contentURL"));
+			contentURL);
+		subscriptionSender.setEntryTitle(message.getBody());
+		subscriptionSender.setEntryURL(contentURL);
 		subscriptionSender.setFrom(fromAddress, fromName);
 		subscriptionSender.setHtmlFormat(true);
 		subscriptionSender.setMailId(
 			"mb_discussion", message.getCategoryId(), message.getMessageId());
+
+		int notificationType =
+			UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY;
+
+		if (serviceContext.isCommandUpdate()) {
+			notificationType =
+				UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY;
+		}
+
+		subscriptionSender.setNotificationType(notificationType);
+
+		subscriptionSender.setPortletId(PortletKeys.MENTIONS);
 		subscriptionSender.setScopeGroupId(message.getGroupId());
 		subscriptionSender.setServiceContext(serviceContext);
 		subscriptionSender.setSubject(subject);
@@ -155,6 +192,27 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 			subscriptionSender.addRuntimeSubscribers(
 				user.getEmailAddress(), user.getFullName());
 		}
+
+		subscriptionSender.flushNotificationsAsync();
+	}
+
+	private boolean _isMentionsEnabled(long siteGroupId)
+		throws PortalException, SystemException {
+
+		Group group = GroupLocalServiceUtil.getGroup(siteGroupId);
+
+		PortletPreferences preferences = PrefsPropsUtil.getPreferences(
+			group.getCompanyId(), true);
+
+		boolean companyMentionsEnabled = GetterUtil.getBoolean(
+			preferences.getValue("mentionsEnabled", null), true);
+
+		if (!companyMentionsEnabled) {
+			return false;
+		}
+
+		return GetterUtil.getBoolean(
+			group.getLiveParentTypeSettingsProperty("mentionsEnabled"), true);
 	}
 
 	private static Pattern _pattern = Pattern.compile(
