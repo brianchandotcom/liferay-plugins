@@ -156,19 +156,19 @@ String viewCalendarBookingURL = ParamUtil.getString(request, "viewCalendarBookin
 			todayDate: new Date(<%= todayYear %>, <%= todayMonth %>, <%= todayDay %>),
 			views: [
 				<c:if test="<%= !hideDayView %>">
-					window.<portlet:namespace />dayView,
+					window.<portlet:namespace />dayView
 				</c:if>
 
 				<c:if test="<%= !hideWeekView %>">
-					window.<portlet:namespace />weekView,
+					,window.<portlet:namespace />weekView
 				</c:if>
 
 				<c:if test="<%= !hideMonthView %>">
-					window.<portlet:namespace />monthView,
+					,window.<portlet:namespace />monthView
 				</c:if>
 
 				<c:if test="<%= !hideAgendaView %>">
-					window.<portlet:namespace />agendaView
+					,window.<portlet:namespace />agendaView
 				</c:if>
 			]
 		}
