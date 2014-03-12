@@ -160,10 +160,10 @@ public class BookmarksActivityInterpreter extends SOSocialActivityInterpreter {
 		AssetRenderer assetRenderer = getAssetRenderer(
 			activity.getClassName(), activity.getClassPK());
 
-		String body = StringUtil.shorten(
-			HtmlUtil.escape(
-				assetRenderer.getSummary(serviceContext.getLocale())),
-			200);
+		String summary = assetRenderer.getSummary(
+			serviceContext.getLocale(), null, null);
+
+		String body = StringUtil.shorten(HtmlUtil.escape(summary), 200);
 
 		return new SocialActivityFeedEntry(title, body);
 	}

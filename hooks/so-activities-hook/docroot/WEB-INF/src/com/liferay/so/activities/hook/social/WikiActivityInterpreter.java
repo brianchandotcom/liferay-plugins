@@ -244,11 +244,10 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 
 		AssetRenderer assetRenderer = getAssetRenderer(className, classPK);
 
-		sb.append(
-			StringUtil.shorten(
-				HtmlUtil.escape(
-					assetRenderer.getSummary(
-						serviceContext.getLocale()), 200)));
+		String summary = assetRenderer.getSummary(
+			serviceContext.getLocale(), null, null);
+
+		sb.append(StringUtil.shorten(HtmlUtil.escape(summary), 200));
 
 		sb.append("</div></div>");
 
