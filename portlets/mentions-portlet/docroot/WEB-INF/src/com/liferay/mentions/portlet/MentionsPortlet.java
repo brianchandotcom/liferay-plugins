@@ -12,17 +12,19 @@
  * details.
  */
 
-package com.liferay.mentions.hook.action;
+package com.liferay.mentions.portlet;
 
+import com.liferay.mentions.util.MentionsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -33,8 +35,15 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
+import com.liferay.util.bridges.mvc.MVCPortlet;
+
+import java.io.IOException;
 
 import java.util.List;
+
+import javax.portlet.PortletException;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,14 +52,28 @@ import javax.servlet.http.HttpServletResponse;
  * @author Iván Zaera
  * @author Sergio González
  */
-public class AutoCompleteUserAction extends BaseStrutsAction {
+public class MentionsPortlet extends MVCPortlet {
 
 	@Override
-	public String execute(
-			HttpServletRequest request, HttpServletResponse response)
-		throws Exception {
+	public void serveResource(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws IOException, PortletException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		try {
+			if (!MentionsUtil.isMentionsEnabled(
+					themeDisplay.getSiteGroupId())) {
+
+				return;
+			}
+
+			HttpServletRequest request = PortalUtil.getHttpServletRequest(
+				resourceRequest);
+			HttpServletResponse response = PortalUtil.getHttpServletResponse(
+				resourceResponse);
+
 			JSONArray jsonArray = getJSONArray(request);
 
 			response.setContentType(ContentTypes.APPLICATION_JSON);
@@ -58,12 +81,10 @@ public class AutoCompleteUserAction extends BaseStrutsAction {
 			ServletResponseUtil.write(response, jsonArray.toString());
 		}
 		catch (Exception e) {
-			PortalUtil.sendError(
-				HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e, request,
-				response);
+			_log.error(e, e);
 		}
 
-		return null;
+		return;
 	}
 
 	protected JSONArray getJSONArray(HttpServletRequest request)
@@ -94,12 +115,14 @@ public class AutoCompleteUserAction extends BaseStrutsAction {
 
 			jsonObject.put("fullName", user.getFullName());
 			jsonObject.put("portraitURL", user.getPortraitURL(themeDisplay));
-			jsonObject.put("screenName", StringPool.AT + user.getScreenName());
+			jsonObject.put("screenName", user.getScreenName());
 
 			jsonArray.put(jsonObject);
 		}
 
 		return jsonArray;
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(MentionsPortlet.class);
 
 }

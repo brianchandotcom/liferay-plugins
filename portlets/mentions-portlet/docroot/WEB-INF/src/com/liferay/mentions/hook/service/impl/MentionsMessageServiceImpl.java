@@ -14,6 +14,9 @@
 
 package com.liferay.mentions.hook.service.impl;
 
+import com.liferay.mentions.util.MentionsConstants;
+import com.liferay.mentions.util.MentionsUtil;
+import com.liferay.mentions.util.PortletKeys;
 import com.liferay.mentions.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -59,6 +62,12 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 			userId, userName, groupId, className, classPK, threadId,
 			parentMessageId, subject, body, serviceContext);
 
+		long siteGroupId = PortalUtil.getSiteGroupId(message.getGroupId());
+
+		if (!MentionsUtil.isMentionsEnabled(siteGroupId)) {
+			return message;
+		}
+
 		notifyUsers(message, serviceContext);
 
 		return message;
@@ -73,6 +82,12 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 		MBMessage message = super.updateDiscussionMessage(
 			userId, messageId, className, classPK, subject, body,
 			serviceContext);
+
+		long siteGroupId = PortalUtil.getSiteGroupId(message.getGroupId());
+
+		if (!MentionsUtil.isMentionsEnabled(siteGroupId)) {
+			return message;
+		}
 
 		notifyUsers(message, serviceContext);
 
@@ -108,6 +123,8 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 			return;
 		}
 
+		String contentURL = (String)serviceContext.getAttribute("contentURL");
+
 		String messageUserEmailAddress = PortalUtil.getUserEmailAddress(
 			message.getUserId());
 		String messageUserName = PortalUtil.getUserName(
@@ -126,17 +143,23 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 		SubscriptionSender subscriptionSender = new SubscriptionSender();
 
 		subscriptionSender.setBody(body);
+		subscriptionSender.setClassName(message.getModelClassName());
+		subscriptionSender.setClassPK(message.getMessageId());
 		subscriptionSender.setCompanyId(message.getCompanyId());
 		subscriptionSender.setContextAttribute(
 			"[$COMMENTS_BODY$]", message.getBody(true), false);
 		subscriptionSender.setContextAttributes(
 			"[$COMMENTS_USER_ADDRESS$]", messageUserEmailAddress,
 			"[$COMMENTS_USER_NAME$]", messageUserName, "[$CONTENT_URL$]",
-			serviceContext.getAttribute("contentURL"));
+			contentURL);
+		subscriptionSender.setEntryTitle(message.getBody());
+		subscriptionSender.setEntryURL(contentURL);
 		subscriptionSender.setFrom(fromAddress, fromName);
 		subscriptionSender.setHtmlFormat(true);
 		subscriptionSender.setMailId(
 			"mb_discussion", message.getCategoryId(), message.getMessageId());
+		subscriptionSender.setNotificationType(MentionsConstants.MENTION);
+		subscriptionSender.setPortletId(PortletKeys.MENTIONS);
 		subscriptionSender.setScopeGroupId(message.getGroupId());
 		subscriptionSender.setServiceContext(serviceContext);
 		subscriptionSender.setSubject(subject);
@@ -155,6 +178,8 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 			subscriptionSender.addRuntimeSubscribers(
 				user.getEmailAddress(), user.getFullName());
 		}
+
+		subscriptionSender.flushNotificationsAsync();
 	}
 
 	private static Pattern _pattern = Pattern.compile(
