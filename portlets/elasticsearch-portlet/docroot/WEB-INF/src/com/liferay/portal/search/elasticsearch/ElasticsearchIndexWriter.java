@@ -21,27 +21,20 @@ import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchException;
-import com.liferay.portal.search.elasticsearch.connection.ElasticsearchConnection;
 import com.liferay.portal.search.elasticsearch.connection.ElasticsearchConnectionManager;
-import com.liferay.portal.search.elasticsearch.document.ElasticsearchDocumentFactory;
-import com.liferay.portal.search.elasticsearch.io.StringOutputStream;
-
-import java.io.IOException;
+import com.liferay.portal.search.elasticsearch.util.DocumentTypes;
+import com.liferay.portal.search.elasticsearch.util.LogUtil;
 
 import java.util.Collection;
 import java.util.concurrent.Future;
 
-import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.deletebyquery.DeleteByQueryRequestBuilder;
 import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
-import org.elasticsearch.action.update.UpdateRequestBuilder;
-import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.io.stream.OutputStreamStreamOutput;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -55,7 +48,8 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 	public void addDocument(SearchContext searchContext, Document document)
 		throws SearchException {
 
-		updateDocument(searchContext, document);
+		_elasticsearchUpdateDocumentCommand.updateDocument(
+			DocumentTypes.LIFERAY_DOCUMENT_TYPE, searchContext, document);
 	}
 
 	@Override
@@ -63,7 +57,8 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 			SearchContext searchContext, Collection<Document> documents)
 		throws SearchException {
 
-		updateDocuments(searchContext, documents);
+		_elasticsearchUpdateDocumentCommand.updateDocuments(
+			DocumentTypes.LIFERAY_DOCUMENT_TYPE, searchContext, documents);
 	}
 
 	@Override
@@ -75,13 +70,13 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 
 			DeleteRequestBuilder deleteRequestBuilder = client.prepareDelete(
 				String.valueOf(searchContext.getCompanyId()),
-				ElasticsearchConnection.LIFERAY_DOCUMENT_TYPE, uid);
+				DocumentTypes.LIFERAY_DOCUMENT_TYPE, uid);
 
 			Future<DeleteResponse> future = deleteRequestBuilder.execute();
 
 			DeleteResponse deleteResponse = future.get();
 
-			logActionResponse(deleteResponse);
+			LogUtil.logActionResponse(_log, deleteResponse);
 		}
 		catch (Exception e) {
 			throw new SearchException("Unable to delete document " + uid, e);
@@ -102,7 +97,7 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 				DeleteRequestBuilder deleteRequestBuilder =
 					client.prepareDelete(
 						String.valueOf(searchContext.getCompanyId()),
-						ElasticsearchConnection.LIFERAY_DOCUMENT_TYPE, uid);
+						DocumentTypes.LIFERAY_DOCUMENT_TYPE, uid);
 
 				bulkRequestBuilder.add(deleteRequestBuilder);
 			}
@@ -111,7 +106,7 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 
 			BulkResponse bulkResponse = future.get();
 
-			logActionResponse(bulkResponse);
+			LogUtil.logActionResponse(_log, bulkResponse);
 		}
 		catch (Exception e) {
 			throw new SearchException("Unable to delete documents " + uids, e);
@@ -142,7 +137,7 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 
 			DeleteByQueryResponse deleteByQueryResponse = future.get();
 
-			logActionResponse(deleteByQueryResponse);
+			LogUtil.logActionResponse(_log, deleteByQueryResponse);
 		}
 		catch (Exception e) {
 			throw new SearchException(
@@ -150,32 +145,19 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 		}
 	}
 
-	public void setElasticsearchDocumentFactory(
-		ElasticsearchDocumentFactory elasticsearchDocumentFactory) {
+	public void setElasticsearchUpdateDocumentCommand(
+		ElasticsearchUpdateDocumentCommand elasticsearchUpdateDocumentCommand) {
 
-		_elasticsearchDocumentFactory = elasticsearchDocumentFactory;
+		_elasticsearchUpdateDocumentCommand =
+			elasticsearchUpdateDocumentCommand;
 	}
 
 	@Override
 	public void updateDocument(SearchContext searchContext, Document document)
 		throws SearchException {
 
-		try {
-			Client client = getClient();
-
-			UpdateRequestBuilder updateRequestBuilder =
-				buildUpdateRequestBuilder(searchContext, client, document);
-
-			Future<UpdateResponse> future = updateRequestBuilder.execute();
-
-			UpdateResponse updateResponse = future.get();
-
-			logActionResponse(updateResponse);
-		}
-		catch (Exception e) {
-			throw new SearchException(
-				"Unable to update document " + document, e);
-		}
+		_elasticsearchUpdateDocumentCommand.updateDocument(
+			DocumentTypes.LIFERAY_DOCUMENT_TYPE, searchContext, document);
 	}
 
 	@Override
@@ -183,45 +165,8 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 			SearchContext searchContext, Collection<Document> documents)
 		throws SearchException {
 
-		try {
-			Client client = getClient();
-
-			BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
-
-			for (Document document : documents) {
-				UpdateRequestBuilder updateRequestBuilder =
-					buildUpdateRequestBuilder(searchContext, client, document);
-
-				bulkRequestBuilder.add(updateRequestBuilder);
-			}
-
-			Future<BulkResponse> future = bulkRequestBuilder.execute();
-
-			BulkResponse bulkResponse = future.get();
-
-			logActionResponse(bulkResponse);
-		}
-		catch (Exception e) {
-			throw new SearchException(
-				"Unable to update documents " + documents, e);
-		}
-	}
-
-	protected UpdateRequestBuilder buildUpdateRequestBuilder(
-			SearchContext searchContext, Client client, Document document)
-		throws IOException {
-
-		UpdateRequestBuilder updateRequestBuilder = client.prepareUpdate(
-			String.valueOf(searchContext.getCompanyId()),
-			ElasticsearchConnection.LIFERAY_DOCUMENT_TYPE, document.getUID());
-
-		String elasticSearchDocument =
-			_elasticsearchDocumentFactory.getElasticsearchDocument(document);
-
-		updateRequestBuilder.setDoc(elasticSearchDocument);
-		updateRequestBuilder.setDocAsUpsert(true);
-
-		return updateRequestBuilder;
+		_elasticsearchUpdateDocumentCommand.updateDocuments(
+			DocumentTypes.LIFERAY_DOCUMENT_TYPE, searchContext, documents);
 	}
 
 	protected Client getClient() {
@@ -231,36 +176,10 @@ public class ElasticsearchIndexWriter extends BaseIndexWriter {
 		return elasticsearchConnectionManager.getClient();
 	}
 
-	protected void logActionResponse(ActionResponse actionResponse)
-		throws IOException {
-
-		if (!_log.isInfoEnabled()) {
-			return;
-		}
-
-		StringOutputStream stringOutputStream = new StringOutputStream();
-
-		actionResponse.writeTo(
-			new OutputStreamStreamOutput(stringOutputStream));
-
-		_log.info(stringOutputStream);
-	}
-
-	protected void logActionResponse(BulkResponse bulkResponse)
-		throws IOException {
-
-		if (bulkResponse.hasFailures()) {
-			if (_log.isErrorEnabled()) {
-				_log.error(bulkResponse.buildFailureMessage());
-			}
-		}
-
-		logActionResponse((ActionResponse)bulkResponse);
-	}
-
 	private static Log _log = LogFactoryUtil.getLog(
 		ElasticsearchIndexWriter.class);
 
-	private ElasticsearchDocumentFactory _elasticsearchDocumentFactory;
+	private ElasticsearchUpdateDocumentCommand
+		_elasticsearchUpdateDocumentCommand;
 
 }

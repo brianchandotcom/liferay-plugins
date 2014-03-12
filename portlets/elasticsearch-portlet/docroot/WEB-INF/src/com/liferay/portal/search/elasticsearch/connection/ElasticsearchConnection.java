@@ -23,8 +23,6 @@ public interface ElasticsearchConnection {
 
 	public static final String CLUSTER_NAME = "LiferayElasticSearch";
 
-	public static final String LIFERAY_DOCUMENT_TYPE = "LiferayDocumentType";
-
 	public void close();
 
 	public Client getClient();
