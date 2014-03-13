@@ -147,6 +147,24 @@ else {
 			);
 		}
 		else {
+			var getSiteActionHtml = function(actionClassNames, actionLinkClassName, actionTitle, actionUrl) {
+				var siteActionTemplate =
+					'<span class="{actionClassNames}" title="{actionTitle}">' +
+						'<a class="{actionLinkClassName}" href="{actionUrl}">' +
+						'</a>' +
+					'</span>';
+
+				return A.Lang.sub(
+					siteActionTemplate,
+					{
+						actionClassNames: actionClassNames,
+						actionLinkClassName: actionLinkClassName,
+						actionTitle: actionTitle,
+						actionUrl: actionUrl,
+					}
+				);
+			};
+
 			var siteTemplate =
 				'<li class="{classNames}">' +
 					'{favoriteHtml}' +
@@ -178,6 +196,31 @@ else {
 							classNames.push('alt');
 						}
 
+						var deleteHtml = '<span class="action-not-allowed"></span>';
+
+						if (result.deleteURL) {
+							if (result.deleteURL == '<%= StringPool.FALSE %>') {
+								deleteHtml = getSiteActionHtml('delete', 'disabled', Liferay.Language.get("you-cannot-delete-the-current-site"), '#')
+							}
+							else {
+								deleteHtml = getSiteActionHtml('action delete', 'delete-site', Liferay.Language.get("delete-site"), result.deleteURL);
+							}
+						}
+
+						var favoriteHtml;
+
+						if (result.favoriteURL == '<%= StringPool.BLANK %>') {
+							favoriteHtml = getSiteActionHtml('favorite', 'disabled', Liferay.Language.get("you-must-be-a-member-of-the-site-to-add-to-favorites"), '#');
+						}
+						else {
+							if (result.favoriteURL) {
+								favoriteHtml = getSiteActionHtml('action favorite', '', Liferay.Language.get("add-to-favorites"), result.favoriteURL);
+							}
+							else {
+								favoriteHtml = getSiteActionHtml('action unfavorite', '', Liferay.Language.get("remove-from-favorites"), result.unfavoriteURL);
+							}
+						}
+
 						var name = result.name;
 
 						if (result.publicLayoutsURL) {
@@ -195,16 +238,15 @@ else {
 							siteTemplate,
 							{
 								classNames: classNames.join(' '),
-								deleteHtml: (result.deleteURL ? '<span class="action delete"><a class="delete-site" href="' + result.deleteURL + '"><liferay-ui:message key="delete" /></a></span>' : '<span class="action-not-allowed"></span>'),
-								joinHtml: (result.joinUrl ? '<span class="action join"><a class="join-site" href="' + result.joinUrl + '"><liferay-ui:message key="join" /></a></span>' : ''),
-								leaveHtml: (result.leaveUrl ? '<span class="action leave"><a class="leave-site" href="' + result.leaveUrl + '"><liferay-ui:message key="leave" /></a></span>' : ''),
-								requestHtml: (result.requestUrl ? '<span class="action request"><a class="request-site" href="' + result.requestUrl + '"><liferay-ui:message key="request-membership" /></a></span>' : ''),
-								requestedHtml: (result.membershipRequested ? '<span class="action requested"><a><liferay-ui:message key="membership-requested" /></a></span>' : ''),
+								deleteHtml: deleteHtml,
+								favoriteHtml: favoriteHtml,
+								joinHtml: (result.joinUrl ? getSiteActionHtml('action join', 'join-site', Liferay.Language.get("join-site"), result.joinUrl) : ''),
+								leaveHtml: (result.leaveUrl ? getSiteActionHtml('action leave', 'leave-site', Liferay.Language.get("leave-site"), result.leaveUrl) : ''),
+								requestHtml: (result.requestUrl ? getSiteActionHtml('action request', 'request-site', Liferay.Language.get("request-membership"), result.requestUrl) : ''),
+								requestedHtml: (result.membershipRequested ? getSiteActionHtml('action requested', '', Liferay.Language.get("membership-requested"), '#') : ''),
 								siteDescription: result.description,
-								siteName: name,
-								favoriteHtml: (result.favoriteURL ? '<span class="action favorite"><a class="favorite-site" href="' + result.favoriteURL + '"><liferay-ui:message key="favorite" /></a></span>' : '<span class="action unfavorite"><a class="unfavorite-site" href="' + result.unfavoriteURL + '"><liferay-ui:message key="unfavorite" /></a></span>')
+								siteName: name
 							}
-
 						);
 					}
 				).join('')

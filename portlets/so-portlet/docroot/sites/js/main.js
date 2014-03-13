@@ -323,6 +323,24 @@ AUI().use(
 
 				var buffer = [];
 
+				var getSiteActionHtml = function(actionClassNames, actionLinkClassName, actionTitle, actionUrl) {
+					var siteActionTemplate =
+						'<span class="{actionClassNames}" title="{actionTitle}">' +
+							'<a class="{actionLinkClassName}" href="{actionUrl}">' +
+							'</a>' +
+						'</span>';
+
+					return 	A.Lang.sub(
+						siteActionTemplate,
+						{
+							actionClassNames: actionClassNames,
+							actionLinkClassName: actionLinkClassName,
+							actionTitle: actionTitle,
+							actionUrl: actionUrl,
+						}
+					);
+				};
+
 				if (results.length == 0) {
 					buffer.push(
 						'<li class="empty">' + Liferay.Language.get('there-are-no-results') + '</li>'
@@ -349,6 +367,20 @@ AUI().use(
 									classNames.push('member');
 								}
 
+								var favoriteHtml;
+
+								if (result.favoriteURL == '') {
+									favoriteHtml = getSiteActionHtml('favorite', 'disabled', Liferay.Language.get("you-must-be-a-member-of-the-site-to-add-to-favorites"), '#');
+								}
+								else {
+									if (result.favoriteURL) {
+										favoriteHtml = getSiteActionHtml('action favorite', '', Liferay.Language.get("add-to-favorites"), result.favoriteURL);
+									}
+									else {
+										favoriteHtml = getSiteActionHtml('action unfavorite', '', Liferay.Language.get("remove-from-favorites"), result.unfavoriteURL);
+									}
+								}
+
 								var name = result.name;
 
 								if (result.publicLayoutsURL) {
@@ -366,7 +398,7 @@ AUI().use(
 									siteTemplate,
 									{
 										classNames: classNames.join(' '),
-										favoriteHtml: (result.favoriteURL ? '<span class="action favorite"><a href="' + result.favoriteURL + '">' + Liferay.Language.get('favorite') + '</a></span>' : '<span class="action unfavorite"><a href="' + result.unfavoriteURL + '">' + Liferay.Language.get('unfavorite') + '</a></span>'),
+										favoriteHtml: favoriteHtml,
 										siteName: name
 									}
 								);
