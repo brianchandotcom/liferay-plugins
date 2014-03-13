@@ -19,6 +19,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * WebRTC client (not thread safe)
+ *
  * @author Philippe Proulx
  */
 public class WebRTCClient {
