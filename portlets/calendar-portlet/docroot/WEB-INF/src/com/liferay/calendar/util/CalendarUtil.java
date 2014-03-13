@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * @author Eduardo Lundgren
@@ -208,6 +209,71 @@ public class CalendarUtil {
 		return StringUtil.split(StringUtil.merge(keywordsList));
 	}
 
+	public static JSONObject toCalendarBookingJSONObject(
+			ThemeDisplay themeDisplay, CalendarBooking calendarBooking,
+			TimeZone timeZone)
+		throws SystemException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put("allDay", calendarBooking.isAllDay());
+		jsonObject.put(
+			"calendarBookingId", calendarBooking.getCalendarBookingId());
+		jsonObject.put("calendarId", calendarBooking.getCalendarId());
+		jsonObject.put(
+			"description", calendarBooking.getDescriptionCurrentValue());
+		jsonObject.put("endTime", calendarBooking.getEndTime());
+		jsonObject.put("firstReminder", calendarBooking.getFirstReminder());
+		jsonObject.put(
+			"firstReminderType", calendarBooking.getFirstReminderType());
+		jsonObject.put("location", calendarBooking.getLocation());
+		jsonObject.put(
+			"parentCalendarBookingId",
+			calendarBooking.getParentCalendarBookingId());
+		jsonObject.put("recurrence", calendarBooking.getRecurrence());
+		jsonObject.put("secondReminder", calendarBooking.getSecondReminder());
+		jsonObject.put(
+			"secondReminderType", calendarBooking.getSecondReminder());
+		jsonObject.put("startTime", calendarBooking.getStartTime());
+		jsonObject.put("status", calendarBooking.getStatus());
+		jsonObject.put("title", calendarBooking.getTitleCurrentValue());
+
+		java.util.Calendar startTimeJCalendar = JCalendarUtil.getJCalendar(
+			calendarBooking.getStartTime(), timeZone);
+
+		jsonObject.put(
+			"startTimeYear", startTimeJCalendar.get(java.util.Calendar.YEAR));
+		jsonObject.put(
+			"startTimeMonth", startTimeJCalendar.get(java.util.Calendar.MONTH));
+		jsonObject.put(
+			"startTimeDay",
+			startTimeJCalendar.get(java.util.Calendar.DAY_OF_MONTH));
+		jsonObject.put(
+			"startTimeHour",
+			startTimeJCalendar.get(java.util.Calendar.HOUR_OF_DAY));
+		jsonObject.put(
+			"startTimeMinute",
+			startTimeJCalendar.get(java.util.Calendar.MINUTE));
+
+		java.util.Calendar endTimeJCalendar = JCalendarUtil.getJCalendar(
+			calendarBooking.getEndTime(), timeZone);
+
+		jsonObject.put(
+			"endTimeYear", endTimeJCalendar.get(java.util.Calendar.YEAR));
+		jsonObject.put(
+			"endTimeMonth", endTimeJCalendar.get(java.util.Calendar.MONTH));
+		jsonObject.put(
+			"endTimeDay",
+			endTimeJCalendar.get(java.util.Calendar.DAY_OF_MONTH));
+		jsonObject.put(
+			"endTimeHour",
+			endTimeJCalendar.get(java.util.Calendar.HOUR_OF_DAY));
+		jsonObject.put(
+			"endTimeMinute", endTimeJCalendar.get(java.util.Calendar.MINUTE));
+
+		return jsonObject;
+	}
+
 	public static JSONArray toCalendarBookingsJSONArray(
 			ThemeDisplay themeDisplay, List<CalendarBooking> calendarBookings)
 		throws PortalException, SystemException {
@@ -221,6 +287,23 @@ public class CalendarUtil {
 		for (CalendarBooking calendarBooking : calendarBookings) {
 			JSONObject jsonObject = toCalendarJSONObject(
 				themeDisplay, calendarBooking.getCalendar());
+
+			jsonArray.put(jsonObject);
+		}
+
+		return jsonArray;
+	}
+
+	public static JSONArray toCalendarBookingsJSONArray(
+			ThemeDisplay themeDisplay, List<CalendarBooking> calendarBookings,
+			TimeZone timeZone)
+		throws PortalException, SystemException {
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (CalendarBooking calendarBooking : calendarBookings) {
+			JSONObject jsonObject = toCalendarBookingJSONObject(
+				themeDisplay, calendarBooking, timeZone);
 
 			jsonArray.put(jsonObject);
 		}
