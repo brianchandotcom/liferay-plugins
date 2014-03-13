@@ -22,10 +22,8 @@ import com.liferay.portal.kernel.messaging.Message;
 import java.util.List;
 
 /**
- * WebRTC connection state scheduler
- *
- * This class is instantiated by Liferay and checks at a regular
- * interval all the connection states of all the WebRTC managers.
+ * Listens for the connection states of the WebRTC managers at a regular
+ * interval.
  *
  * @author Philippe Proulx
  */

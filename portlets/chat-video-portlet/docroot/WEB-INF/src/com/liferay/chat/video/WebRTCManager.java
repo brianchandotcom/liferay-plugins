@@ -24,10 +24,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * WebRTC connection state scheduler
- *
- * This class is instantiated by Liferay and checks at a regular
- * interval all the connection states of all the WebRTC managers.
+ * Manages WebRTC clients (thread-safe) by connecting clients together, checking
+ * and updating that connection, and managing mail for the clients. The
+ * processed mail is automatically added to the user's mailbox.
  *
  * @author Philippe Proulx
  */
@@ -140,9 +139,8 @@ public class WebRTCManager {
 	}
 
 	/**
-	 * Verifies presences of all registered clients.
-	 *
-	 * This method should be called by an external timer/scheduler.
+	 * Checks the presence of all registered WebRTC clients. This method should
+	 * be called by a message listener.
 	 */
 	public void checkWebRTCClients() {
 		long time = System.currentTimeMillis();
@@ -161,9 +159,8 @@ public class WebRTCManager {
 	}
 
 	/**
-	 * Verifies the connections states for timeout handling.
-	 *
-	 * This method should be called by an external timer/scheduler.
+	 * Checks the WebRTC client connection states for timeout handling. This
+	 * method should be called by a message listener.
 	 */
 	public void checkWebRTCConnectionsStates() {
 		for (WebRTCClient webRTCClient : _webRTCClients.values()) {
