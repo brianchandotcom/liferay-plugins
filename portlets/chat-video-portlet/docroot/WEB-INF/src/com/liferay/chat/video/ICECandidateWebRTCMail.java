@@ -17,6 +17,9 @@ package com.liferay.chat.video;
 import com.liferay.portal.kernel.json.JSONObject;
 
 /**
+ * Represents an ICE candidate WebRTC mail, used to provide a destination
+ * WebRTC client a single ICE candidate from a source WebRTC client.
+ *
  * @author Philippe Proulx
  */
 public class ICECandidateWebRTCMail extends WebRTCMail {

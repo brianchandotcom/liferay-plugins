@@ -24,9 +24,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Manages WebRTC clients (thread-safe) by connecting clients together, checking
- * and updating that connection, and managing mail for the clients. The
- * processed mail is automatically added to the user's mailbox.
+ * Manages WebRTC clients by connecting clients together, checking and
+ * updating connections states, and managing mails for the clients.
  *
  * @author Philippe Proulx
  */

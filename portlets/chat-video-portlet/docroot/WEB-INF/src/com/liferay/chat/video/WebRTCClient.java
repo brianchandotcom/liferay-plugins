@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Represents the WebRTC client (not thread-safe).
+ * Represents the WebRTC client.
  *
  * @author Philippe Proulx
  */
