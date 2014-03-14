@@ -48,7 +48,7 @@ public class SettingsFactoryImpl implements SettingsFactory {
 
 	@Override
 	public Settings getPortletInstanceSettings(Layout layout, String portletId)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		long ownerId = PortletKeys.PREFS_OWNER_ID_DEFAULT;
 		int ownerType = PortletKeys.PREFS_OWNER_TYPE_LAYOUT;
@@ -63,33 +63,12 @@ public class SettingsFactoryImpl implements SettingsFactory {
 				layout.getCompanyId(), ownerId, ownerType, layout.getPlid(),
 				portletId);
 
-		PortletInstanceSettings portletInstanceSettings =
-			new PortletInstanceSettings(portletInstancePortletPreferences);
+		Settings defaultGroupSettings = getGroupSettings(
+			layout.getCompanyId(), portletId,
+			PortletKeys.PREFS_OWNER_TYPE_LAYOUT_DEFAULTS_GROUP);
 
-		PortletPreferences companyPortletPreferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				layout.getCompanyId(), layout.getCompanyId(),
-				PortletKeys.PREFS_OWNER_TYPE_LAYOUT_DEFAULTS_COMPANY, 0,
-				portletId);
-
-		portletInstanceSettings.setCompanyPortletPreferences(
-			companyPortletPreferences);
-
-		PortletPreferences groupPortletPreferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				layout.getCompanyId(), layout.getGroupId(),
-				PortletKeys.PREFS_OWNER_TYPE_LAYOUT_DEFAULTS_GROUP, 0,
-				portletId);
-
-		portletInstanceSettings.setGroupPortletPreferences(
-			groupPortletPreferences);
-
-		portletInstanceSettings.setPortalPreferences(
-			getPortalPreferences(layout.getCompanyId()));
-		portletInstanceSettings.setPortalProperties(
-			getPortalProperties(portletId));
-
-		return portletInstanceSettings;
+		return new PortletPreferencesSettings(
+			portletInstancePortletPreferences, defaultGroupSettings);
 	}
 
 	@Override
@@ -97,51 +76,48 @@ public class SettingsFactoryImpl implements SettingsFactory {
 			long companyId, String serviceName)
 		throws SystemException {
 
-		PortletPreferences companyPortletPreferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0,
-				serviceName);
-
-		ServiceCompanySettings serviceCompanySettings =
-			new ServiceCompanySettings(companyPortletPreferences);
-
-		serviceCompanySettings.setPortalPreferences(
-			getPortalPreferences(companyId));
-		serviceCompanySettings.setPortalProperties(
-			getPortalProperties(serviceName));
-
-		return serviceCompanySettings;
+		return getCompanySettings(
+			companyId, serviceName, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
 	}
 
 	@Override
 	public Settings getServiceGroupSettings(long groupId, String serviceName)
 		throws PortalException, SystemException {
 
+		return getGroupSettings(
+			groupId, serviceName, PortletKeys.PREFS_OWNER_TYPE_GROUP);
+	}
+
+	protected Settings getCompanySettings(
+			long companyId, String key, int ownerType)
+		throws SystemException {
+
+		PortletPreferences companyPortletPreferences =
+			PortletPreferencesLocalServiceUtil.getPreferences(
+				companyId, companyId, ownerType, 0, key);
+
+		Settings portalSettings = new PortletPreferencesSettings(
+			getPortalPreferences(companyId), getPortalPropertiesSettings(key));
+
+		return new PortletPreferencesSettings(
+			companyPortletPreferences, portalSettings);
+	}
+
+	protected Settings getGroupSettings(long groupId, String key, int ownerType)
+		throws PortalException, SystemException {
+
 		Group group = GroupLocalServiceUtil.getGroup(groupId);
 
 		PortletPreferences groupPortletPreferences =
 			PortletPreferencesLocalServiceUtil.getPreferences(
-				group.getCompanyId(), groupId,
-				PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, serviceName);
+				group.getCompanyId(), groupId, ownerType, 0, key);
 
-		ServiceGroupSettings serviceGroupSettings = new ServiceGroupSettings(
-			groupPortletPreferences);
+		Settings defaultCompanySettings = getCompanySettings(
+			group.getCompanyId(), key,
+			PortletKeys.PREFS_OWNER_TYPE_GROUP_DEFAULTS_COMPANY);
 
-		PortletPreferences companyPortletPreferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				group.getCompanyId(), group.getCompanyId(),
-				PortletKeys.PREFS_OWNER_TYPE_GROUP_DEFAULTS_COMPANY, 0,
-				serviceName);
-
-		serviceGroupSettings.setCompanyPortletPreferences(
-			companyPortletPreferences);
-
-		serviceGroupSettings.setPortalPreferences(
-			getPortalPreferences(group.getCompanyId()));
-		serviceGroupSettings.setPortalProperties(
-			getPortalProperties(serviceName));
-
-		return serviceGroupSettings;
+		return new PortletPreferencesSettings(
+			groupPortletPreferences, defaultCompanySettings);
 	}
 
 	protected PortletPreferences getPortalPreferences(long companyId)
@@ -163,6 +139,12 @@ public class SettingsFactoryImpl implements SettingsFactory {
 		_propertiesMap.put(key, portalProperties);
 
 		return portalProperties;
+	}
+
+	protected PropertiesSettings getPortalPropertiesSettings(
+		String serviceName) {
+
+		return new PropertiesSettings(getPortalProperties(serviceName));
 	}
 
 	private Map<String, Properties> _propertiesMap =
