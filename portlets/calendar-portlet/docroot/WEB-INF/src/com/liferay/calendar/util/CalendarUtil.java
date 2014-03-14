@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * @author Eduardo Lundgren
@@ -208,6 +209,50 @@ public class CalendarUtil {
 		return StringUtil.split(StringUtil.merge(keywordsList));
 	}
 
+	public static JSONObject toCalendarBookingJSONObject(
+			ThemeDisplay themeDisplay, CalendarBooking calendarBooking,
+			TimeZone timeZone)
+		throws SystemException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put("allDay", calendarBooking.isAllDay());
+		jsonObject.put(
+			"calendarBookingId", calendarBooking.getCalendarBookingId());
+		jsonObject.put("calendarId", calendarBooking.getCalendarId());
+		jsonObject.put(
+			"description",
+			calendarBooking.getDescription(themeDisplay.getLocale()));
+
+		java.util.Calendar endTimeJCalendar = JCalendarUtil.getJCalendar(
+			calendarBooking.getEndTime(), timeZone);
+
+		_addTimeProperties(jsonObject, "endTime", endTimeJCalendar);
+
+		jsonObject.put("firstReminder", calendarBooking.getFirstReminder());
+		jsonObject.put(
+			"firstReminderType", calendarBooking.getFirstReminderType());
+		jsonObject.put("location", calendarBooking.getLocation());
+		jsonObject.put(
+			"parentCalendarBookingId",
+			calendarBooking.getParentCalendarBookingId());
+		jsonObject.put("recurrence", calendarBooking.getRecurrence());
+		jsonObject.put("secondReminder", calendarBooking.getSecondReminder());
+		jsonObject.put(
+			"secondReminderType", calendarBooking.getSecondReminder());
+
+		java.util.Calendar startTimeJCalendar = JCalendarUtil.getJCalendar(
+			calendarBooking.getStartTime(), timeZone);
+
+		_addTimeProperties(jsonObject, "startTime", startTimeJCalendar);
+
+		jsonObject.put("status", calendarBooking.getStatus());
+		jsonObject.put(
+			"title", calendarBooking.getTitle(themeDisplay.getLocale()));
+
+		return jsonObject;
+	}
+
 	public static JSONArray toCalendarBookingsJSONArray(
 			ThemeDisplay themeDisplay, List<CalendarBooking> calendarBookings)
 		throws PortalException, SystemException {
@@ -221,6 +266,23 @@ public class CalendarUtil {
 		for (CalendarBooking calendarBooking : calendarBookings) {
 			JSONObject jsonObject = toCalendarJSONObject(
 				themeDisplay, calendarBooking.getCalendar());
+
+			jsonArray.put(jsonObject);
+		}
+
+		return jsonArray;
+	}
+
+	public static JSONArray toCalendarBookingsJSONArray(
+			ThemeDisplay themeDisplay, List<CalendarBooking> calendarBookings,
+			TimeZone timeZone)
+		throws PortalException, SystemException {
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (CalendarBooking calendarBooking : calendarBookings) {
+			JSONObject jsonObject = toCalendarBookingJSONObject(
+				themeDisplay, calendarBooking, timeZone);
 
 			jsonArray.put(jsonObject);
 		}
@@ -297,6 +359,21 @@ public class CalendarUtil {
 		}
 
 		return jsonArray;
+	}
+
+	private static void _addTimeProperties(
+		JSONObject jsonObject, String prefix, java.util.Calendar jCalendar) {
+
+		jsonObject.put(prefix, jCalendar.getTimeInMillis());
+		jsonObject.put(
+			prefix + "Day", jCalendar.get(java.util.Calendar.DAY_OF_MONTH));
+		jsonObject.put(
+			prefix + "Hour", jCalendar.get(java.util.Calendar.HOUR_OF_DAY));
+		jsonObject.put(
+			prefix + "Minute", jCalendar.get(java.util.Calendar.MINUTE));
+		jsonObject.put(
+			prefix + "Month", jCalendar.get(java.util.Calendar.MONTH));
+		jsonObject.put(prefix + "Year", jCalendar.get(java.util.Calendar.YEAR));
 	}
 
 	private static JSONObject _getPermissionsJSONObject(

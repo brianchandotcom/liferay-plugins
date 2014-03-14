@@ -33,6 +33,8 @@ AUI.add(
 
 		var STR_SPACE = ' ';
 
+		var TPL_CALENDAR_BOOKINGS_URL = '{calendarBookingsURL}&{portletNamespace}calendarIds={calendarIds}&{portletNamespace}startTime={startTime}&{portletNamespace}endTime={endTime}&{portletNamespace}statuses={statuses}';
+
 		var TPL_INVITEES_URL = '{inviteesURL}&{portletNamespace}parentCalendarBookingId={calendarBookingId}';
 
 		var TPL_RENDERING_RULES_URL = '{renderingRulesURL}&{portletNamespace}calendarIds={calendarIds}&{portletNamespace}startTime={startTime}&{portletNamespace}endTime={endTime}&{portletNamespace}ruleName={ruleName}';
@@ -92,18 +94,22 @@ AUI.add(
 		Liferay.Time = Time;
 
 		var CalendarUtil = {
+			CALENDAR_BOOKINGS_URL: null,
 			INVITEES_URL: null,
 			INVOKER_URL: themeDisplay.getPathContext() + '/api/jsonws/invoke',
 			NOTIFICATION_DEFAULT_TYPE: 'email',
 			PORTLET_NAMESPACE: STR_BLANK,
 			RENDERING_RULES_URL: null,
-			USER_TIMEZONE_OFFSET: 0,
+			USER_TIME_ZONE: 'UTC',
 
 			availableCalendars: {},
 			visibleCalendars: {},
 
 			addEvent: function(schedulerEvent, success) {
 				var instance = this;
+
+				var endDate = schedulerEvent.get('endDate');
+				var startDate = schedulerEvent.get('startDate');
 
 				instance.invokeService(
 					{
@@ -112,7 +118,11 @@ AUI.add(
 							calendarId: schedulerEvent.get('calendarId'),
 							childCalendarIds: STR_BLANK,
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
-							endTime: CalendarUtil.toUTC(schedulerEvent.get('endDate')).getTime(),
+							endTimeDay: endDate.getDate(),
+							endTimeHour: endDate.getHours(),
+							endTimeMinute: endDate.getMinutes(),
+							endTimeMonth: endDate.getMonth(),
+							endTimeYear: endDate.getFullYear(),
 							firstReminder: schedulerEvent.get('firstReminder'),
 							firstReminderType: schedulerEvent.get('firstReminderType'),
 							location: schedulerEvent.get('location'),
@@ -120,8 +130,13 @@ AUI.add(
 							recurrence: schedulerEvent.get('recurrence'),
 							secondReminder: schedulerEvent.get('secondReminder'),
 							secondReminderType: schedulerEvent.get('secondReminderType'),
-							startTime: CalendarUtil.toUTC(schedulerEvent.get('startDate')).getTime(),
-							titleMap: instance.getLocalizationMap(Liferay.Util.unescapeHTML(schedulerEvent.get('content')))
+							startTimeDay: startDate.getDate(),
+							startTimeHour: startDate.getHours(),
+							startTimeMinute: startDate.getMinutes(),
+							startTimeMonth: startDate.getMonth(),
+							startTimeYear: startDate.getFullYear(),
+							titleMap: instance.getLocalizationMap(Liferay.Util.unescapeHTML(schedulerEvent.get('content'))),
+							timeZoneId: instance.USER_TIME_ZONE
 						}
 					},
 					{
@@ -236,14 +251,17 @@ AUI.add(
 			createSchedulerEvent: function(calendarBooking) {
 				var instance = this;
 
+				var endDate = new Date(calendarBooking.endTimeYear, calendarBooking.endTimeMonth, calendarBooking.endTimeDay, calendarBooking.endTimeHour, calendarBooking.endTimeMinute);
+				var startDate = new Date(calendarBooking.startTimeYear, calendarBooking.startTimeMonth, calendarBooking.startTimeDay, calendarBooking.startTimeHour, calendarBooking.startTimeMinute);
+
 				var schedulerEvent = new Liferay.SchedulerEvent(
 					{
 						allDay: calendarBooking.allDay,
 						calendarBookingId: calendarBooking.calendarBookingId,
 						calendarId: calendarBooking.calendarId,
-						content: calendarBooking.titleCurrentValue,
-						description: calendarBooking.descriptionCurrentValue,
-						endDate: calendarBooking.endTime,
+						content: calendarBooking.title,
+						description: calendarBooking.description,
+						endDate: endDate.getTime(),
 						firstReminder: calendarBooking.firstReminder,
 						firstReminderType: calendarBooking.firstReminderType,
 						location: calendarBooking.location,
@@ -251,12 +269,10 @@ AUI.add(
 						recurrence: calendarBooking.recurrence,
 						secondReminder: calendarBooking.secondReminder,
 						secondReminderType: calendarBooking.secondReminderType,
-						startDate: calendarBooking.startTime,
+						startDate: startDate.getTime(),
 						status: calendarBooking.status
 					}
 				);
-
-				CalendarUtil.adjustSchedulerEventDisplayTime(schedulerEvent);
 
 				return schedulerEvent;
 			},
@@ -417,27 +433,30 @@ AUI.add(
 
 				var calendarIds = AObject.keys(instance.availableCalendars);
 
-				instance.invokeService(
+				var calendarBookingsURL = Lang.sub(
+					TPL_CALENDAR_BOOKINGS_URL,
 					{
-						'/calendar-portlet.calendarbooking/search': {
-							calendarIds: calendarIds.join(','),
-							calendarResourceIds: STR_BLANK,
-							companyId: COMPANY_ID,
-							end: -1,
-							endTime: endDate.getTime(),
-							groupIds: [],
-							keywords: null,
-							orderByComparator: null,
-							parentCalendarBookingId: -1,
-							recurring: true,
-							start: -1,
-							startTime: startDate.getTime(),
-							statuses: status.join(',')
+						calendarBookingsURL: instance.CALENDAR_BOOKINGS_URL,
+						calendarIds: calendarIds.join(','),
+						endTime: endDate.getTime(),
+						portletNamespace: instance.PORTLET_NAMESPACE,
+						startTime: startDate.getTime(),
+						statuses: status.join(',')
+					}
+				);
+
+				A.io.request(
+					calendarBookingsURL,
+					{
+						dataType: 'json',
+						on: {
+							failure: function() {
+								failure(this.get('responseData'));
+							},
+							success: function() {
+								success(this.get('responseData'));
+							}
 						}
-					},
-					{
-						failure: failure,
-						success: success
 					}
 				);
 			},
@@ -619,14 +638,6 @@ AUI.add(
 			toLocalTime: function(utc) {
 				var instance = this;
 
-				var date = instance.toLocalTimeWithoutUserTimeZone(utc);
-
-				return DateMath.add(date, DateMath.MINUTES, instance.USER_TIMEZONE_OFFSET / DateMath.ONE_MINUTE_MS);
-			},
-
-			toLocalTimeWithoutUserTimeZone: function(utc) {
-				var instance = this;
-
 				if (!isDate(utc)) {
 					utc = new Date(utc);
 				}
@@ -635,14 +646,6 @@ AUI.add(
 			},
 
 			toUTC: function(date) {
-				var instance = this;
-
-				var utc = instance.toUTCWithoutUserTimeZone(date);
-
-				return DateMath.subtract(utc, DateMath.MINUTES, instance.USER_TIMEZONE_OFFSET / DateMath.ONE_MINUTE_MS);
-			},
-
-			toUTCWithoutUserTimeZone: function(date) {
 				var instance = this;
 
 				if (!isDate(date)) {
@@ -705,6 +708,9 @@ AUI.add(
 			updateEventInstance: function(schedulerEvent, allFollowing, success) {
 				var instance = this;
 
+				var startDate = schedulerEvent.get('startDate');
+				var endDate = schedulerEvent.get('endDate');
+
 				instance.invokeService(
 					{
 						'/calendar-portlet.calendarbooking/update-calendar-booking-instance': {
@@ -713,17 +719,25 @@ AUI.add(
 							calendarBookingId: schedulerEvent.get('calendarBookingId'),
 							calendarId: schedulerEvent.get('calendarId'),
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
-							endTime: CalendarUtil.toUTC(schedulerEvent.get('endDate')).getTime(),
+							endTimeDay: endDate.getDate(),
+							endTimeHour: endDate.getHours(),
+							endTimeMinute: endDate.getMinutes(),
+							endTimeMonth: endDate.getMonth(),
+							endTimeYear: endDate.getFullYear(),
 							firstReminder: schedulerEvent.get('firstReminder'),
 							firstReminderType: schedulerEvent.get('firstReminderType'),
 							location: schedulerEvent.get('location'),
 							recurrence: schedulerEvent.get('recurrence'),
 							secondReminder: schedulerEvent.get('secondReminder'),
 							secondReminderType: schedulerEvent.get('secondReminderType'),
-							startTime: CalendarUtil.toUTC(schedulerEvent.get('startDate')).getTime(),
+							startTimeDay: startDate.getDate(),
+							startTimeHour: startDate.getHours(),
+							startTimeMinute: startDate.getMinutes(),
+							startTimeMonth: startDate.getMonth(),
+							startTimeYear: startDate.getFullYear(),
 							status: schedulerEvent.get('status'),
-							titleMap: instance.getLocalizationMap(Liferay.Util.unescapeHTML(schedulerEvent.get('content'))),
-							userId: USER_ID
+							timeZoneId: instance.USER_TIME_ZONE,
+							titleMap: instance.getLocalizationMap(Liferay.Util.unescapeHTML(schedulerEvent.get('content')))
 						}
 					},
 					{
