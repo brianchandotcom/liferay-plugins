@@ -461,6 +461,13 @@ public class CalendarBookingLocalServiceUtil {
 		return getService().getChildCalendarIds(calendarBookingId, calendarId);
 	}
 
+	public static java.util.TimeZone getTimeZone(
+		com.liferay.calendar.model.CalendarBooking calendarBooking)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getTimeZone(calendarBooking);
+	}
+
 	public static com.liferay.calendar.model.CalendarBooking moveCalendarBookingToTrash(
 		long userId, com.liferay.calendar.model.CalendarBooking calendarBooking)
 		throws com.liferay.portal.kernel.exception.PortalException,

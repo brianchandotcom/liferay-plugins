@@ -372,6 +372,13 @@ public class CalendarLocalServiceUtil {
 			defaultCalendar);
 	}
 
+	public static java.util.TimeZone getTimeZone(
+		com.liferay.calendar.model.Calendar calendar)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getTimeZone(calendar);
+	}
+
 	public static void importCalendar(long calendarId, java.lang.String data,
 		java.lang.String type) throws java.lang.Exception {
 		getService().importCalendar(calendarId, data, type);
