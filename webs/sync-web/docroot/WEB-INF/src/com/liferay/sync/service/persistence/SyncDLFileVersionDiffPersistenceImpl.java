@@ -612,39 +612,39 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 
 	private static final String _FINDER_COLUMN_EXPIRATIONDATE_EXPIRATIONDATE_1 = "syncDLFileVersionDiff.expirationDate < NULL";
 	private static final String _FINDER_COLUMN_EXPIRATIONDATE_EXPIRATIONDATE_2 = "syncDLFileVersionDiff.expirationDate < ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_F_S_D = new FinderPath(SyncDLFileVersionDiffModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_FETCH_BY_F_S_T = new FinderPath(SyncDLFileVersionDiffModelImpl.ENTITY_CACHE_ENABLED,
 			SyncDLFileVersionDiffModelImpl.FINDER_CACHE_ENABLED,
 			SyncDLFileVersionDiffImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByF_S_D",
+			"fetchByF_S_T",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			SyncDLFileVersionDiffModelImpl.FILEENTRYID_COLUMN_BITMASK |
 			SyncDLFileVersionDiffModelImpl.SOURCEFILEVERSIONID_COLUMN_BITMASK |
-			SyncDLFileVersionDiffModelImpl.DESTINATIONFILEVERSIONID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_F_S_D = new FinderPath(SyncDLFileVersionDiffModelImpl.ENTITY_CACHE_ENABLED,
+			SyncDLFileVersionDiffModelImpl.TARGETFILEVERSIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_F_S_T = new FinderPath(SyncDLFileVersionDiffModelImpl.ENTITY_CACHE_ENABLED,
 			SyncDLFileVersionDiffModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByF_S_D",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByF_S_T",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			});
 
 	/**
-	 * Returns the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and destinationFileVersionId = &#63; or throws a {@link com.liferay.sync.NoSuchDLFileVersionDiffException} if it could not be found.
+	 * Returns the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and targetFileVersionId = &#63; or throws a {@link com.liferay.sync.NoSuchDLFileVersionDiffException} if it could not be found.
 	 *
 	 * @param fileEntryId the file entry ID
 	 * @param sourceFileVersionId the source file version ID
-	 * @param destinationFileVersionId the destination file version ID
+	 * @param targetFileVersionId the target file version ID
 	 * @return the matching sync d l file version diff
 	 * @throws com.liferay.sync.NoSuchDLFileVersionDiffException if a matching sync d l file version diff could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public SyncDLFileVersionDiff findByF_S_D(long fileEntryId,
-		long sourceFileVersionId, long destinationFileVersionId)
+	public SyncDLFileVersionDiff findByF_S_T(long fileEntryId,
+		long sourceFileVersionId, long targetFileVersionId)
 		throws NoSuchDLFileVersionDiffException, SystemException {
-		SyncDLFileVersionDiff syncDLFileVersionDiff = fetchByF_S_D(fileEntryId,
-				sourceFileVersionId, destinationFileVersionId);
+		SyncDLFileVersionDiff syncDLFileVersionDiff = fetchByF_S_T(fileEntryId,
+				sourceFileVersionId, targetFileVersionId);
 
 		if (syncDLFileVersionDiff == null) {
 			StringBundler msg = new StringBundler(8);
@@ -657,8 +657,8 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 			msg.append(", sourceFileVersionId=");
 			msg.append(sourceFileVersionId);
 
-			msg.append(", destinationFileVersionId=");
-			msg.append(destinationFileVersionId);
+			msg.append(", targetFileVersionId=");
+			msg.append(targetFileVersionId);
 
 			msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -673,44 +673,44 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 	}
 
 	/**
-	 * Returns the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and destinationFileVersionId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and targetFileVersionId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
 	 *
 	 * @param fileEntryId the file entry ID
 	 * @param sourceFileVersionId the source file version ID
-	 * @param destinationFileVersionId the destination file version ID
+	 * @param targetFileVersionId the target file version ID
 	 * @return the matching sync d l file version diff, or <code>null</code> if a matching sync d l file version diff could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public SyncDLFileVersionDiff fetchByF_S_D(long fileEntryId,
-		long sourceFileVersionId, long destinationFileVersionId)
+	public SyncDLFileVersionDiff fetchByF_S_T(long fileEntryId,
+		long sourceFileVersionId, long targetFileVersionId)
 		throws SystemException {
-		return fetchByF_S_D(fileEntryId, sourceFileVersionId,
-			destinationFileVersionId, true);
+		return fetchByF_S_T(fileEntryId, sourceFileVersionId,
+			targetFileVersionId, true);
 	}
 
 	/**
-	 * Returns the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and destinationFileVersionId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and targetFileVersionId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
 	 *
 	 * @param fileEntryId the file entry ID
 	 * @param sourceFileVersionId the source file version ID
-	 * @param destinationFileVersionId the destination file version ID
+	 * @param targetFileVersionId the target file version ID
 	 * @param retrieveFromCache whether to use the finder cache
 	 * @return the matching sync d l file version diff, or <code>null</code> if a matching sync d l file version diff could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public SyncDLFileVersionDiff fetchByF_S_D(long fileEntryId,
-		long sourceFileVersionId, long destinationFileVersionId,
+	public SyncDLFileVersionDiff fetchByF_S_T(long fileEntryId,
+		long sourceFileVersionId, long targetFileVersionId,
 		boolean retrieveFromCache) throws SystemException {
 		Object[] finderArgs = new Object[] {
-				fileEntryId, sourceFileVersionId, destinationFileVersionId
+				fileEntryId, sourceFileVersionId, targetFileVersionId
 			};
 
 		Object result = null;
 
 		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_F_S_D,
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_F_S_T,
 					finderArgs, this);
 		}
 
@@ -719,7 +719,7 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 
 			if ((fileEntryId != syncDLFileVersionDiff.getFileEntryId()) ||
 					(sourceFileVersionId != syncDLFileVersionDiff.getSourceFileVersionId()) ||
-					(destinationFileVersionId != syncDLFileVersionDiff.getDestinationFileVersionId())) {
+					(targetFileVersionId != syncDLFileVersionDiff.getTargetFileVersionId())) {
 				result = null;
 			}
 		}
@@ -729,11 +729,11 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 
 			query.append(_SQL_SELECT_SYNCDLFILEVERSIONDIFF_WHERE);
 
-			query.append(_FINDER_COLUMN_F_S_D_FILEENTRYID_2);
+			query.append(_FINDER_COLUMN_F_S_T_FILEENTRYID_2);
 
-			query.append(_FINDER_COLUMN_F_S_D_SOURCEFILEVERSIONID_2);
+			query.append(_FINDER_COLUMN_F_S_T_SOURCEFILEVERSIONID_2);
 
-			query.append(_FINDER_COLUMN_F_S_D_DESTINATIONFILEVERSIONID_2);
+			query.append(_FINDER_COLUMN_F_S_T_TARGETFILEVERSIONID_2);
 
 			String sql = query.toString();
 
@@ -750,12 +750,12 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 
 				qPos.add(sourceFileVersionId);
 
-				qPos.add(destinationFileVersionId);
+				qPos.add(targetFileVersionId);
 
 				List<SyncDLFileVersionDiff> list = q.list();
 
 				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_D,
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_T,
 						finderArgs, list);
 				}
 				else {
@@ -767,14 +767,14 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 
 					if ((syncDLFileVersionDiff.getFileEntryId() != fileEntryId) ||
 							(syncDLFileVersionDiff.getSourceFileVersionId() != sourceFileVersionId) ||
-							(syncDLFileVersionDiff.getDestinationFileVersionId() != destinationFileVersionId)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_D,
+							(syncDLFileVersionDiff.getTargetFileVersionId() != targetFileVersionId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_T,
 							finderArgs, syncDLFileVersionDiff);
 					}
 				}
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_F_S_D,
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_F_S_T,
 					finderArgs);
 
 				throw processException(e);
@@ -793,40 +793,40 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 	}
 
 	/**
-	 * Removes the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and destinationFileVersionId = &#63; from the database.
+	 * Removes the sync d l file version diff where fileEntryId = &#63; and sourceFileVersionId = &#63; and targetFileVersionId = &#63; from the database.
 	 *
 	 * @param fileEntryId the file entry ID
 	 * @param sourceFileVersionId the source file version ID
-	 * @param destinationFileVersionId the destination file version ID
+	 * @param targetFileVersionId the target file version ID
 	 * @return the sync d l file version diff that was removed
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public SyncDLFileVersionDiff removeByF_S_D(long fileEntryId,
-		long sourceFileVersionId, long destinationFileVersionId)
+	public SyncDLFileVersionDiff removeByF_S_T(long fileEntryId,
+		long sourceFileVersionId, long targetFileVersionId)
 		throws NoSuchDLFileVersionDiffException, SystemException {
-		SyncDLFileVersionDiff syncDLFileVersionDiff = findByF_S_D(fileEntryId,
-				sourceFileVersionId, destinationFileVersionId);
+		SyncDLFileVersionDiff syncDLFileVersionDiff = findByF_S_T(fileEntryId,
+				sourceFileVersionId, targetFileVersionId);
 
 		return remove(syncDLFileVersionDiff);
 	}
 
 	/**
-	 * Returns the number of sync d l file version diffs where fileEntryId = &#63; and sourceFileVersionId = &#63; and destinationFileVersionId = &#63;.
+	 * Returns the number of sync d l file version diffs where fileEntryId = &#63; and sourceFileVersionId = &#63; and targetFileVersionId = &#63;.
 	 *
 	 * @param fileEntryId the file entry ID
 	 * @param sourceFileVersionId the source file version ID
-	 * @param destinationFileVersionId the destination file version ID
+	 * @param targetFileVersionId the target file version ID
 	 * @return the number of matching sync d l file version diffs
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByF_S_D(long fileEntryId, long sourceFileVersionId,
-		long destinationFileVersionId) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_F_S_D;
+	public int countByF_S_T(long fileEntryId, long sourceFileVersionId,
+		long targetFileVersionId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_F_S_T;
 
 		Object[] finderArgs = new Object[] {
-				fileEntryId, sourceFileVersionId, destinationFileVersionId
+				fileEntryId, sourceFileVersionId, targetFileVersionId
 			};
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
@@ -837,11 +837,11 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 
 			query.append(_SQL_COUNT_SYNCDLFILEVERSIONDIFF_WHERE);
 
-			query.append(_FINDER_COLUMN_F_S_D_FILEENTRYID_2);
+			query.append(_FINDER_COLUMN_F_S_T_FILEENTRYID_2);
 
-			query.append(_FINDER_COLUMN_F_S_D_SOURCEFILEVERSIONID_2);
+			query.append(_FINDER_COLUMN_F_S_T_SOURCEFILEVERSIONID_2);
 
-			query.append(_FINDER_COLUMN_F_S_D_DESTINATIONFILEVERSIONID_2);
+			query.append(_FINDER_COLUMN_F_S_T_TARGETFILEVERSIONID_2);
 
 			String sql = query.toString();
 
@@ -858,7 +858,7 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 
 				qPos.add(sourceFileVersionId);
 
-				qPos.add(destinationFileVersionId);
+				qPos.add(targetFileVersionId);
 
 				count = (Long)q.uniqueResult();
 
@@ -877,9 +877,9 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_F_S_D_FILEENTRYID_2 = "syncDLFileVersionDiff.fileEntryId = ? AND ";
-	private static final String _FINDER_COLUMN_F_S_D_SOURCEFILEVERSIONID_2 = "syncDLFileVersionDiff.sourceFileVersionId = ? AND ";
-	private static final String _FINDER_COLUMN_F_S_D_DESTINATIONFILEVERSIONID_2 = "syncDLFileVersionDiff.destinationFileVersionId = ?";
+	private static final String _FINDER_COLUMN_F_S_T_FILEENTRYID_2 = "syncDLFileVersionDiff.fileEntryId = ? AND ";
+	private static final String _FINDER_COLUMN_F_S_T_SOURCEFILEVERSIONID_2 = "syncDLFileVersionDiff.sourceFileVersionId = ? AND ";
+	private static final String _FINDER_COLUMN_F_S_T_TARGETFILEVERSIONID_2 = "syncDLFileVersionDiff.targetFileVersionId = ?";
 
 	public SyncDLFileVersionDiffPersistenceImpl() {
 		setModelClass(SyncDLFileVersionDiff.class);
@@ -896,11 +896,11 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 			SyncDLFileVersionDiffImpl.class,
 			syncDLFileVersionDiff.getPrimaryKey(), syncDLFileVersionDiff);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_D,
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_T,
 			new Object[] {
 				syncDLFileVersionDiff.getFileEntryId(),
 				syncDLFileVersionDiff.getSourceFileVersionId(),
-				syncDLFileVersionDiff.getDestinationFileVersionId()
+				syncDLFileVersionDiff.getTargetFileVersionId()
 			}, syncDLFileVersionDiff);
 
 		syncDLFileVersionDiff.resetOriginalValues();
@@ -985,28 +985,28 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 			Object[] args = new Object[] {
 					syncDLFileVersionDiff.getFileEntryId(),
 					syncDLFileVersionDiff.getSourceFileVersionId(),
-					syncDLFileVersionDiff.getDestinationFileVersionId()
+					syncDLFileVersionDiff.getTargetFileVersionId()
 				};
 
-			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_F_S_D, args,
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_F_S_T, args,
 				Long.valueOf(1));
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_D, args,
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_T, args,
 				syncDLFileVersionDiff);
 		}
 		else {
 			SyncDLFileVersionDiffModelImpl syncDLFileVersionDiffModelImpl = (SyncDLFileVersionDiffModelImpl)syncDLFileVersionDiff;
 
 			if ((syncDLFileVersionDiffModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_F_S_D.getColumnBitmask()) != 0) {
+					FINDER_PATH_FETCH_BY_F_S_T.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						syncDLFileVersionDiff.getFileEntryId(),
 						syncDLFileVersionDiff.getSourceFileVersionId(),
-						syncDLFileVersionDiff.getDestinationFileVersionId()
+						syncDLFileVersionDiff.getTargetFileVersionId()
 					};
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_F_S_D, args,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_F_S_T, args,
 					Long.valueOf(1));
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_D, args,
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_F_S_T, args,
 					syncDLFileVersionDiff);
 			}
 		}
@@ -1019,22 +1019,22 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 		Object[] args = new Object[] {
 				syncDLFileVersionDiff.getFileEntryId(),
 				syncDLFileVersionDiff.getSourceFileVersionId(),
-				syncDLFileVersionDiff.getDestinationFileVersionId()
+				syncDLFileVersionDiff.getTargetFileVersionId()
 			};
 
-		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_F_S_D, args);
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_F_S_D, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_F_S_T, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_F_S_T, args);
 
 		if ((syncDLFileVersionDiffModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_F_S_D.getColumnBitmask()) != 0) {
+				FINDER_PATH_FETCH_BY_F_S_T.getColumnBitmask()) != 0) {
 			args = new Object[] {
 					syncDLFileVersionDiffModelImpl.getOriginalFileEntryId(),
 					syncDLFileVersionDiffModelImpl.getOriginalSourceFileVersionId(),
-					syncDLFileVersionDiffModelImpl.getOriginalDestinationFileVersionId()
+					syncDLFileVersionDiffModelImpl.getOriginalTargetFileVersionId()
 				};
 
-			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_F_S_D, args);
-			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_F_S_D, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_F_S_T, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_F_S_T, args);
 		}
 	}
 
@@ -1203,7 +1203,7 @@ public class SyncDLFileVersionDiffPersistenceImpl extends BasePersistenceImpl<Sy
 		syncDLFileVersionDiffImpl.setSyncDLFileVersionDiffId(syncDLFileVersionDiff.getSyncDLFileVersionDiffId());
 		syncDLFileVersionDiffImpl.setFileEntryId(syncDLFileVersionDiff.getFileEntryId());
 		syncDLFileVersionDiffImpl.setSourceFileVersionId(syncDLFileVersionDiff.getSourceFileVersionId());
-		syncDLFileVersionDiffImpl.setDestinationFileVersionId(syncDLFileVersionDiff.getDestinationFileVersionId());
+		syncDLFileVersionDiffImpl.setTargetFileVersionId(syncDLFileVersionDiff.getTargetFileVersionId());
 		syncDLFileVersionDiffImpl.setDataFileEntryId(syncDLFileVersionDiff.getDataFileEntryId());
 		syncDLFileVersionDiffImpl.setSize(syncDLFileVersionDiff.getSize());
 		syncDLFileVersionDiffImpl.setExpirationDate(syncDLFileVersionDiff.getExpirationDate());
