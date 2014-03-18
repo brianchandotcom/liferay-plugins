@@ -84,8 +84,9 @@ public class SyncDLFileVersionDiffModelImpl extends BaseModelImpl<SyncDLFileVers
 			true);
 	public static long DESTINATIONFILEVERSIONID_COLUMN_BITMASK = 1L;
 	public static long EXPIRATIONDATE_COLUMN_BITMASK = 2L;
-	public static long SOURCEFILEVERSIONID_COLUMN_BITMASK = 4L;
-	public static long SYNCDLFILEVERSIONDIFFID_COLUMN_BITMASK = 8L;
+	public static long FILEENTRYID_COLUMN_BITMASK = 4L;
+	public static long SOURCEFILEVERSIONID_COLUMN_BITMASK = 8L;
+	public static long SYNCDLFILEVERSIONDIFFID_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.sync.model.SyncDLFileVersionDiff"));
 
@@ -194,19 +195,7 @@ public class SyncDLFileVersionDiffModelImpl extends BaseModelImpl<SyncDLFileVers
 
 	@Override
 	public void setSyncDLFileVersionDiffId(long syncDLFileVersionDiffId) {
-		_columnBitmask |= SYNCDLFILEVERSIONDIFFID_COLUMN_BITMASK;
-
-		if (!_setOriginalSyncDLFileVersionDiffId) {
-			_setOriginalSyncDLFileVersionDiffId = true;
-
-			_originalSyncDLFileVersionDiffId = _syncDLFileVersionDiffId;
-		}
-
 		_syncDLFileVersionDiffId = syncDLFileVersionDiffId;
-	}
-
-	public long getOriginalSyncDLFileVersionDiffId() {
-		return _originalSyncDLFileVersionDiffId;
 	}
 
 	@Override
@@ -216,7 +205,19 @@ public class SyncDLFileVersionDiffModelImpl extends BaseModelImpl<SyncDLFileVers
 
 	@Override
 	public void setFileEntryId(long fileEntryId) {
+		_columnBitmask |= FILEENTRYID_COLUMN_BITMASK;
+
+		if (!_setOriginalFileEntryId) {
+			_setOriginalFileEntryId = true;
+
+			_originalFileEntryId = _fileEntryId;
+		}
+
 		_fileEntryId = fileEntryId;
+	}
+
+	public long getOriginalFileEntryId() {
+		return _originalFileEntryId;
 	}
 
 	@Override
@@ -403,9 +404,9 @@ public class SyncDLFileVersionDiffModelImpl extends BaseModelImpl<SyncDLFileVers
 	public void resetOriginalValues() {
 		SyncDLFileVersionDiffModelImpl syncDLFileVersionDiffModelImpl = this;
 
-		syncDLFileVersionDiffModelImpl._originalSyncDLFileVersionDiffId = syncDLFileVersionDiffModelImpl._syncDLFileVersionDiffId;
+		syncDLFileVersionDiffModelImpl._originalFileEntryId = syncDLFileVersionDiffModelImpl._fileEntryId;
 
-		syncDLFileVersionDiffModelImpl._setOriginalSyncDLFileVersionDiffId = false;
+		syncDLFileVersionDiffModelImpl._setOriginalFileEntryId = false;
 
 		syncDLFileVersionDiffModelImpl._originalSourceFileVersionId = syncDLFileVersionDiffModelImpl._sourceFileVersionId;
 
@@ -518,9 +519,9 @@ public class SyncDLFileVersionDiffModelImpl extends BaseModelImpl<SyncDLFileVers
 			SyncDLFileVersionDiff.class
 		};
 	private long _syncDLFileVersionDiffId;
-	private long _originalSyncDLFileVersionDiffId;
-	private boolean _setOriginalSyncDLFileVersionDiffId;
 	private long _fileEntryId;
+	private long _originalFileEntryId;
+	private boolean _setOriginalFileEntryId;
 	private long _sourceFileVersionId;
 	private long _originalSourceFileVersionId;
 	private boolean _setOriginalSourceFileVersionId;
