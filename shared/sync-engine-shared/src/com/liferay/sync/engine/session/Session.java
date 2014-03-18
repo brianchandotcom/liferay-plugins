@@ -27,8 +27,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ws.rs.core.MediaType;
-
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -57,6 +55,8 @@ import org.apache.http.protocol.BasicHttpContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.http.MediaType;
 
 /**
  * @author Shinn Lok
@@ -153,12 +153,20 @@ public class Session {
 			HttpPost httpPost, Map<String, Object> parameters)
 		throws Exception {
 
+		Path deltaFilePath = (Path)parameters.get("deltaFilePath");
 		Path filePath = (Path)parameters.get("filePath");
 
 		MultipartEntityBuilder multipartEntityBuilder =
 			_getMultipartEntityBuilder(parameters);
 
-		if (filePath != null) {
+		if (deltaFilePath != null) {
+			multipartEntityBuilder.addPart(
+				"deltaFile",
+				_getFileBody(
+					deltaFilePath, (String)parameters.get("mimeType"),
+					(String)parameters.get("title")));
+		}
+		else if (filePath != null) {
 			multipartEntityBuilder.addPart(
 				"file",
 				_getFileBody(
@@ -235,7 +243,8 @@ public class Session {
 	private StringBody _getStringBody(Object value) {
 		return new StringBody(
 			String.valueOf(value),
-			ContentType.create(MediaType.TEXT_PLAIN, Charset.defaultCharset()));
+			ContentType.create(
+				MediaType.TEXT_PLAIN_VALUE, Charset.defaultCharset()));
 	}
 
 	private static Logger _logger = LoggerFactory.getLogger(Session.class);

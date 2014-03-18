@@ -24,6 +24,7 @@ import com.liferay.sync.engine.service.SyncFileService;
 import com.liferay.sync.engine.service.SyncSiteService;
 import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.FileUtil;
+import com.liferay.sync.engine.util.IODeltaUtil;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -64,17 +65,23 @@ public class BaseSyncDLObjectUpdateEvent extends BaseEvent {
 		syncFile.setSyncAccountId(getSyncAccountId());
 		syncFile.setUiEvent(SyncFile.UI_EVENT_ADDED_REMOTE);
 
-		SyncFileService.update(syncFile);
-
 		if (syncFile.isFolder()) {
 			Files.createDirectories(filePath);
+
+			syncFile.setFileKey(FileUtil.getFileKey(filePath));
+
+			SyncFileService.update(syncFile);
 		}
 		else {
-			downloadFile(syncFile);
+			SyncFileService.update(syncFile);
+
+			downloadFile(syncFile, null, false);
 		}
 	}
 
-	protected void deleteFile(SyncFile targetSyncFile) throws Exception {
+	protected void deleteFile(SyncFile targetSyncFile, boolean trashed)
+		throws Exception {
+
 		SyncFile sourceSyncFile = SyncFileService.fetchSyncFile(
 			targetSyncFile.getRepositoryId(), getSyncAccountId(),
 			targetSyncFile.getTypePK());
@@ -83,18 +90,37 @@ public class BaseSyncDLObjectUpdateEvent extends BaseEvent {
 			return;
 		}
 
-		sourceSyncFile.setUiEvent(SyncFile.UI_EVENT_TRASHED_REMOTE);
+		if (trashed) {
+			sourceSyncFile.setUiEvent(SyncFile.UI_EVENT_TRASHED_REMOTE);
+		}
+		else {
+			sourceSyncFile.setUiEvent(SyncFile.UI_EVENT_DELETED_REMOTE);
+		}
 
 		Files.deleteIfExists(Paths.get(sourceSyncFile.getFilePathName()));
 
 		SyncFileService.deleteSyncFile(sourceSyncFile);
 	}
 
-	protected void downloadFile(SyncFile syncFile) {
+	protected void downloadFile(
+		SyncFile syncFile, String sourceSyncFileVersion, boolean patch) {
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put("patch", false);
 		parameters.put("syncFile", syncFile);
+
+		if (patch) {
+			String targetSyncFileVersion = syncFile.getVersion();
+
+			if (!sourceSyncFileVersion.equals(targetSyncFileVersion)) {
+				parameters.put("destinationVersion", targetSyncFileVersion);
+				parameters.put("patch", true);
+				parameters.put("sourceVersion", sourceSyncFileVersion);
+			}
+		}
+		else {
+			parameters.put("patch", false);
+		}
 
 		DownloadFileEvent downloadFileEvent = new DownloadFileEvent(
 			getSyncAccountId(), parameters);
@@ -151,20 +177,13 @@ public class BaseSyncDLObjectUpdateEvent extends BaseEvent {
 				addFile(syncFile, filePathName);
 			}
 			else if (event.equals(SyncFile.EVENT_DELETE)) {
-				syncFile = SyncFileService.fetchSyncFile(
-					syncFile.getRepositoryId(), getSyncAccountId(),
-					syncFile.getTypePK());
-
-				syncFile.setState(SyncFile.STATE_DELETED);
-				syncFile.setUiEvent(SyncFile.UI_EVENT_DELETED_REMOTE);
-
-				SyncFileService.update(syncFile);
+				deleteFile(syncFile, false);
 			}
 			else if (event.equals(SyncFile.EVENT_MOVE)) {
 				moveFile(syncFile, filePathName);
 			}
 			else if (event.equals(SyncFile.EVENT_TRASH)) {
-				deleteFile(syncFile);
+				deleteFile(syncFile, true);
 			}
 			else if (event.equals(SyncFile.EVENT_UPDATE)) {
 				updateFile(syncFile);
@@ -183,6 +202,8 @@ public class BaseSyncDLObjectUpdateEvent extends BaseEvent {
 		SyncFile sourceSyncFile = SyncFileService.fetchSyncFile(
 			targetSyncFile.getRepositoryId(), getSyncAccountId(),
 			targetSyncFile.getTypePK());
+
+		String sourceSyncFileVersion = sourceSyncFile.getVersion();
 
 		Path sourceFilePath = Paths.get(sourceSyncFile.getFilePathName());
 
@@ -222,7 +243,9 @@ public class BaseSyncDLObjectUpdateEvent extends BaseEvent {
 				return;
 			}
 
-			downloadFile(sourceSyncFile);
+			downloadFile(
+				sourceSyncFile, sourceSyncFileVersion,
+				!IODeltaUtil.isIgnoredFilePatchingExtension(targetSyncFile));
 		}
 	}
 

@@ -23,6 +23,7 @@ import com.liferay.sync.engine.documentlibrary.event.MoveFileEntryEvent;
 import com.liferay.sync.engine.documentlibrary.event.MoveFileEntryToTrashEvent;
 import com.liferay.sync.engine.documentlibrary.event.MoveFolderEvent;
 import com.liferay.sync.engine.documentlibrary.event.MoveFolderToTrashEvent;
+import com.liferay.sync.engine.documentlibrary.event.PatchFileEntryEvent;
 import com.liferay.sync.engine.documentlibrary.event.UpdateFileEntryEvent;
 import com.liferay.sync.engine.documentlibrary.event.UpdateFolderEvent;
 import com.liferay.sync.engine.model.ModelListener;
@@ -30,6 +31,8 @@ import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.persistence.SyncFilePersistence;
 import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.FileUtil;
+import com.liferay.sync.engine.util.IODeltaUtil;
+import com.liferay.sync.engine.util.PropsValues;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -237,10 +240,6 @@ public class SyncFileService {
 
 		// Remote sync file
 
-		if (syncFile.getState() == SyncFile.STATE_DELETED) {
-			return syncFile;
-		}
-
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("fileEntryId", syncFile.getTypePK());
@@ -264,10 +263,6 @@ public class SyncFileService {
 		deleteSyncFile(syncFile);
 
 		// Remote sync file
-
-		if (syncFile.getState() == SyncFile.STATE_DELETED) {
-			return syncFile;
-		}
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
@@ -498,13 +493,29 @@ public class SyncFileService {
 
 		// Local sync file
 
+		Path deltaFilePath = null;
+
 		String changeLog = String.valueOf(
 			Double.valueOf(syncFile.getVersion()) + .1);
-		String checksum = FileUtil.getChecksum(filePath);
 		String name = String.valueOf(filePath.getFileName());
+		String sourceChecksum = syncFile.getChecksum();
+		String sourceFileName = syncFile.getName();
+		String sourceVersion = syncFile.getVersion();
+		String targetChecksum = FileUtil.getChecksum(filePath);
+
+		if (!sourceChecksum.equals(targetChecksum) &&
+			!IODeltaUtil.isIgnoredFilePatchingExtension(syncFile)) {
+
+			deltaFilePath = Files.createTempFile(
+				String.valueOf(filePath.getFileName()), "tmp");
+
+			IODeltaUtil.delta(
+				filePath, IODeltaUtil.getChecksumsFilePath(syncFile),
+				deltaFilePath);
+		}
 
 		syncFile.setChangeLog(changeLog);
-		syncFile.setChecksum(checksum);
+		syncFile.setChecksum(targetChecksum);
 		syncFile.setFilePathName(FilePathNameUtil.getFilePathName(filePath));
 		syncFile.setName(name);
 		syncFile.setUiEvent(SyncFile.UI_EVENT_UPDATED_LOCAL);
@@ -516,15 +527,34 @@ public class SyncFileService {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("changeLog", changeLog);
-		parameters.put("checksum", checksum);
+		parameters.put("checksum", targetChecksum);
 		parameters.put("description", syncFile.getDescription());
 		parameters.put("fileEntryId", syncFile.getTypePK());
-		parameters.put("filePath", filePath);
 		parameters.put("majorVersion", false);
 		parameters.put("mimeType", syncFile.getMimeType());
 		parameters.put("sourceFileName", name);
 		parameters.put("syncFile", syncFile);
 		parameters.put("title", name);
+
+		if (!sourceChecksum.equals(targetChecksum)) {
+			if ((deltaFilePath != null) &&
+				(Files.size(filePath) / Files.size(deltaFilePath)) >=
+					PropsValues.SYNC_FILE_PATCHING_SIZE_RATIO_THRESHOLD) {
+
+				parameters.put("deltaFilePath", deltaFilePath);
+				parameters.put("sourceFileName", sourceFileName);
+				parameters.put("sourceVersion", sourceVersion);
+
+				PatchFileEntryEvent patchFileEntryEvent =
+					new PatchFileEntryEvent(syncAccountId, parameters);
+
+				patchFileEntryEvent.run();
+
+				return syncFile;
+			}
+
+			parameters.put("filePath", filePath);
+		}
 
 		UpdateFileEntryEvent updateFileEntryEvent = new UpdateFileEntryEvent(
 			syncAccountId, parameters);
@@ -569,10 +599,11 @@ public class SyncFileService {
 				return update(syncFile);
 			}
 
-			String oldFilePathName = syncFile.getFilePathName();
-			String newFilePathName = FilePathNameUtil.getFilePathName(filePath);
+			String sourceFilePathName = syncFile.getFilePathName();
+			String targetFilePathName = FilePathNameUtil.getFilePathName(
+				filePath);
 
-			syncFile.setFilePathName(newFilePathName);
+			syncFile.setFilePathName(targetFilePathName);
 			syncFile.setName(String.valueOf(filePath.getFileName()));
 			syncFile.setParentFolderId(parentFolderId);
 
@@ -587,7 +618,7 @@ public class SyncFileService {
 				String childFilePathName = childSyncFile.getFilePathName();
 
 				childFilePathName = childFilePathName.replace(
-					oldFilePathName, newFilePathName);
+					sourceFilePathName, targetFilePathName);
 
 				if (childSyncFile.isFolder()) {
 					updateSyncFile(
