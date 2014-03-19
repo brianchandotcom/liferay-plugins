@@ -41,7 +41,9 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.MembershipRequestConstants;
+import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -50,9 +52,11 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeServiceUtil;
 import com.liferay.portal.service.MembershipRequestLocalServiceUtil;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -350,8 +354,9 @@ public class SitesPortlet extends MVCPortlet {
 					groupJSONObject.put("membershipRequested", true);
 				}
 			}
-			else if (GroupLocalServiceUtil.hasUserGroup(
-						themeDisplay.getUserId(), group.getGroupId())) {
+			else if (member &&
+					 !isOrganizationOrUserGroupMember(
+						themeDisplay.getUserId(), group)) {
 
 				siteAssignmentsPortletURL.setParameter(
 					"removeUserIds", String.valueOf(themeDisplay.getUserId()));
@@ -615,6 +620,39 @@ public class SitesPortlet extends MVCPortlet {
 		}
 
 		return StringUtil.split(GetterUtil.getString(value), 0L);
+	}
+
+	protected boolean isOrganizationOrUserGroupMember(long userId, Group group)
+		throws Exception {
+
+		if (group.isOrganization()) {
+			return true;
+		}
+
+		List<Organization> organizations =
+			OrganizationLocalServiceUtil.getGroupOrganizations(
+				group.getGroupId());
+
+		for (Organization organization : organizations) {
+			if (OrganizationLocalServiceUtil.hasUserOrganization(
+					userId, organization.getOrganizationId())) {
+
+				return true;
+			}
+		}
+
+		List<UserGroup> userGroups =
+			UserGroupLocalServiceUtil.getGroupUserGroups(group.getGroupId());
+
+		for (UserGroup userGroup : userGroups) {
+			if (UserGroupLocalServiceUtil.hasUserUserGroup(
+					userId, userGroup.getUserGroupId())) {
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected void setCustomJspServletContextName(Group group)
