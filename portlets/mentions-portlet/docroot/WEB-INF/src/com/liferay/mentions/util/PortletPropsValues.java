@@ -14,6 +14,7 @@
 
 package com.liferay.mentions.util;
 
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.util.portlet.PortletProps;
 
 /**
@@ -26,5 +27,13 @@ public class PortletPropsValues {
 
 	public static final String MB_DISCUSSION_EMAIL_SUBJECT = PortletProps.get(
 		PortletPropsKeys.MB_DISCUSSION_EMAIL_SUBJECT);
+
+	public static final int MENTIONS_USERS_LIST_MAX_USERS =
+		GetterUtil.getInteger(
+			PortletProps.get(PortletPropsKeys.MENTIONS_USERS_LIST_MAX_USERS));
+
+	public static final String[] MENTIONS_USERS_LIST_SITE_EXCLUDES =
+		PortletProps.getArray(
+			PortletPropsKeys.MENTIONS_USERS_LIST_SITE_EXCLUDES);
 
 }

@@ -1,0 +1,7 @@
+@import url(main.portal.css);
+
+.portlet-users-admin {
+	.mentions-settings, .mentions-users, .social-relations {
+		margin-left: 20px;
+	}
+}

@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -93,7 +92,7 @@ public class MentionsPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String query = ParamUtil.getString(request, "query") + StringPool.STAR;
+		String query = ParamUtil.getString(request, "query");
 
 		List<User> users = MentionsUserFinderUtil.getUsers(query, themeDisplay);
 
