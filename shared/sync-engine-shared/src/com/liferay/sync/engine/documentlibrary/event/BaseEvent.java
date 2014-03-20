@@ -14,7 +14,6 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
-import com.liferay.sync.engine.documentlibrary.handler.BaseHandler;
 import com.liferay.sync.engine.documentlibrary.handler.Handler;
 import com.liferay.sync.engine.session.Session;
 import com.liferay.sync.engine.session.SessionManager;
@@ -24,7 +23,7 @@ import java.util.Map;
 /**
  * @author Shinn Lok
  */
-public class BaseEvent implements Event {
+public abstract class BaseEvent implements Event {
 
 	public BaseEvent(
 		long syncAccountId, String urlPath, Map<String, Object> parameters) {
@@ -34,22 +33,19 @@ public class BaseEvent implements Event {
 		_parameters = parameters;
 	}
 
-	public <T> T executeGet(String urlPath, Handler<? extends T> handler)
-		throws Exception {
-
+	public <T> T executeGet(String urlPath) throws Exception {
 		Session session = SessionManager.getSession(_syncAccountId);
 
-		return session.executeGet(urlPath, handler);
+		return session.executeGet(urlPath, (Handler<? extends T>)_handler);
 	}
 
-	public <T> T executePost(
-			String urlPath, Map<String, Object> parameters,
-			Handler<? extends T> handler)
+	public <T> T executePost(String urlPath, Map<String, Object> parameters)
 		throws Exception {
 
 		Session session = SessionManager.getSession(_syncAccountId);
 
-		return session.executePost(urlPath, parameters, handler);
+		return session.executePost(
+			urlPath, parameters, (Handler<? extends T>)_handler);
 	}
 
 	@Override
@@ -69,24 +65,23 @@ public class BaseEvent implements Event {
 
 	@Override
 	public void run() {
+		_handler = getHandler();
+
 		try {
 			processRequest();
 		}
 		catch (Exception e) {
-			Handler<?> handler = getHandler();
-
-			handler.handleException(e);
+			_handler.handleException(e);
 		}
 	}
 
-	protected Handler<?> getHandler() {
-		return new BaseHandler(this);
-	}
+	protected abstract Handler<?> getHandler();
 
 	protected void processRequest() throws Exception {
-		executePost(_urlPath, _parameters, getHandler());
+		executePost(_urlPath, _parameters);
 	}
 
+	private Handler<?> _handler;
 	private Map<String, Object> _parameters;
 	private long _syncAccountId;
 	private String _urlPath;
