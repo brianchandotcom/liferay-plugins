@@ -12,27 +12,15 @@
  * details.
  */
 
-package com.liferay.sync.engine.documentlibrary.event;
+package com.liferay.sync.engine.documentlibrary.handler;
 
-import java.util.Map;
+import org.apache.http.client.ResponseHandler;
 
 /**
  * @author Shinn Lok
  */
-public class RestoreFolderFromTrashEvent extends BaseEvent {
+public interface Handler<T> extends ResponseHandler<T> {
 
-	public RestoreFolderFromTrashEvent(
-		long syncAccountId, Map<String, Object> parameters) {
-
-		super(syncAccountId, _URL_PATH, parameters);
-	}
-
-	@Override
-	protected void processResponse(String response) throws Exception {
-		System.out.println(response);
-	}
-
-	private static final String _URL_PATH =
-		"/sync-web.syncdlobject/restore-folder-from-trash";
+	public void handleException(Exception e);
 
 }

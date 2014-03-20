@@ -12,37 +12,45 @@
  * details.
  */
 
-package com.liferay.sync.engine.documentlibrary.event;
+package com.liferay.sync.engine.documentlibrary.handler;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.liferay.sync.engine.documentlibrary.event.Event;
 import com.liferay.sync.engine.model.SyncFile;
-
-import java.util.Map;
+import com.liferay.sync.engine.service.SyncFileService;
 
 /**
  * @author Shinn Lok
  */
-public class GetFolderSyncDLObjectEvent extends BaseEvent {
+public class UpdateFileEntryHandler extends BaseJSONHandler {
 
-	public GetFolderSyncDLObjectEvent(
-		long syncAccountId, Map<String, Object> parameters) {
-
-		super(syncAccountId, _URL_PATH, parameters);
+	public UpdateFileEntryHandler(Event event) {
+		super(event);
 	}
 
 	@Override
 	protected void processResponse(String response) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		SyncFile syncFile = objectMapper.readValue(
+		SyncFile remoteSyncFile = objectMapper.readValue(
 			response, new TypeReference<SyncFile>() {});
 
-		System.out.println(syncFile);
-	}
+		SyncFile localSyncFile = (SyncFile)getParameterValue("syncFile");
 
-	private static final String _URL_PATH =
-		"/sync-web.syncdlobject/get-folder-sync-dl-object";
+		localSyncFile.setModifiedTime(remoteSyncFile.getModifiedTime());
+		localSyncFile.setParentFolderId(remoteSyncFile.getParentFolderId());
+		localSyncFile.setSize(remoteSyncFile.getSize());
+		localSyncFile.setState(SyncFile.STATE_SYNCED);
+
+		if (getParameterValue("filePath") != null) {
+			localSyncFile.setUiEvent(SyncFile.UI_EVENT_UPLOADED);
+		}
+
+		localSyncFile.setVersion(remoteSyncFile.getVersion());
+
+		SyncFileService.update(localSyncFile);
+	}
 
 }

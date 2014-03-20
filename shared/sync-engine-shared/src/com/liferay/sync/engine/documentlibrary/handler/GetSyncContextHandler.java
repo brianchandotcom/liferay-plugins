@@ -12,27 +12,33 @@
  * details.
  */
 
-package com.liferay.sync.engine.documentlibrary.event;
+package com.liferay.sync.engine.documentlibrary.handler;
 
-import java.util.Map;
+import com.liferay.sync.engine.documentlibrary.event.Event;
+import com.liferay.sync.engine.model.SyncAccount;
+import com.liferay.sync.engine.service.SyncAccountService;
 
 /**
  * @author Shinn Lok
  */
-public class GetLatestModifiedTimeEvent extends BaseEvent {
+public class GetSyncContextHandler extends BaseJSONHandler {
 
-	public GetLatestModifiedTimeEvent(
-		long syncAccountId, Map<String, Object> parameters) {
+	public GetSyncContextHandler(Event event) {
+		super(event);
+	}
 
-		super(syncAccountId, _URL_PATH, parameters);
+	@Override
+	public void handleException(Exception e) {
 	}
 
 	@Override
 	protected void processResponse(String response) throws Exception {
-		System.out.println(response);
-	}
+		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
+			getSyncAccountId());
 
-	private static final String _URL_PATH =
-		"/sync-web.syncdlobject/get-latest-modified-time";
+		syncAccount.setState(SyncAccount.STATE_CONNECTED);
+
+		SyncAccountService.update(syncAccount);
+	}
 
 }

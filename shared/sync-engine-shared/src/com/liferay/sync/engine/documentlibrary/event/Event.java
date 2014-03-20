@@ -19,17 +19,12 @@ import java.util.Map;
 /**
  * @author Shinn Lok
  */
-public class GetGroupEvent extends BaseEvent {
+public interface Event extends Runnable {
 
-	public GetGroupEvent(long syncAccountId, Map<String, Object> parameters) {
-		super(syncAccountId, _URL_PATH, parameters);
-	}
+	public Map<String, Object> getParameters();
 
-	@Override
-	protected void processResponse(String response) throws Exception {
-		System.out.println(response);
-	}
+	public Object getParameterValue(String key);
 
-	private static final String _URL_PATH = "/sync-web.syncdlobject/get-group";
+	public long getSyncAccountId();
 
 }

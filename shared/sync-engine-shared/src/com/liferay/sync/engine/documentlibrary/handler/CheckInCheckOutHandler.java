@@ -12,40 +12,40 @@
  * details.
  */
 
-package com.liferay.sync.engine.documentlibrary.event;
+package com.liferay.sync.engine.documentlibrary.handler;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.liferay.sync.engine.documentlibrary.event.Event;
 import com.liferay.sync.engine.model.SyncFile;
-
-import java.util.List;
-import java.util.Map;
+import com.liferay.sync.engine.service.SyncFileService;
 
 /**
  * @author Shinn Lok
  */
-public class GetFolderSyncDLObjectsEvent extends BaseEvent {
+public class CheckInCheckOutHandler extends BaseJSONHandler {
 
-	public GetFolderSyncDLObjectsEvent(
-		long syncAccountId, Map<String, Object> parameters) {
-
-		super(syncAccountId, _URL_PATH, parameters);
+	public CheckInCheckOutHandler(Event event) {
+		super(event);
 	}
 
 	@Override
 	protected void processResponse(String response) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		List<SyncFile> syncFiles = objectMapper.readValue(
-			response, new TypeReference<List<SyncFile>>() {});
+		SyncFile remoteSyncFile = objectMapper.readValue(
+			response, new TypeReference<SyncFile>() {});
 
-		for (SyncFile syncFile : syncFiles) {
-			System.out.println(syncFile);
-		}
+		SyncFile localSyncFile = (SyncFile)getParameterValue("syncFile");
+
+		localSyncFile.setLockExpirationDate(
+			remoteSyncFile.getLockExpirationDate());
+		localSyncFile.setLockUserId(remoteSyncFile.getLockUserId());
+		localSyncFile.setLockUserName(remoteSyncFile.getLockUserName());
+		localSyncFile.setState(SyncFile.STATE_SYNCED);
+
+		SyncFileService.update(localSyncFile);
 	}
-
-	private static final String _URL_PATH =
-		"/sync-web.syncdlobject/get-folder-sync-dl-objects";
 
 }
