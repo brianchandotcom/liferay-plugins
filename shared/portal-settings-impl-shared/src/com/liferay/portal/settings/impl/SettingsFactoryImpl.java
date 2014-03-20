@@ -47,77 +47,94 @@ public class SettingsFactoryImpl implements SettingsFactory {
 	}
 
 	@Override
-	public Settings getPortletInstanceSettings(Layout layout, String portletId)
-		throws PortalException, SystemException {
-
-		long ownerId = PortletKeys.PREFS_OWNER_ID_DEFAULT;
-		int ownerType = PortletKeys.PREFS_OWNER_TYPE_LAYOUT;
-
-		if (PortletConstants.hasUserId(portletId)) {
-			ownerId = PortletConstants.getUserId(portletId);
-			ownerType = PortletKeys.PREFS_OWNER_TYPE_USER;
-		}
-
-		PortletPreferences portletInstancePortletPreferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				layout.getCompanyId(), ownerId, ownerType, layout.getPlid(),
-				portletId);
-
-		Settings defaultGroupSettings = getGroupSettings(
-			layout.getCompanyId(), portletId,
-			PortletKeys.PREFS_OWNER_TYPE_LAYOUT_DEFAULTS_GROUP);
-
-		return new PortletPreferencesSettings(
-			portletInstancePortletPreferences, defaultGroupSettings);
-	}
-
-	@Override
-	public Settings getServiceCompanySettings(
+	public Settings getCompanyServiceSettings(
 			long companyId, String serviceName)
 		throws SystemException {
 
-		return getCompanySettings(
-			companyId, serviceName, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+		return getCompanySettings(companyId, serviceName);
 	}
 
 	@Override
-	public Settings getServiceGroupSettings(long groupId, String serviceName)
+	public Settings getGroupServiceCompanyDefaultSettings(
+			long companyId, String serviceName)
 		throws PortalException, SystemException {
 
-		return getGroupSettings(
-			groupId, serviceName, PortletKeys.PREFS_OWNER_TYPE_GROUP);
+		return new PortletPreferencesSettings(
+			getCompanyPortletPreferences(companyId, serviceName));
 	}
 
-	protected Settings getCompanySettings(
-			long companyId, String key, int ownerType)
-		throws SystemException {
+	@Override
+	public Settings getGroupServiceSettings(long groupId, String serviceName)
+		throws PortalException, SystemException {
 
-		PortletPreferences companyPortletPreferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				companyId, companyId, ownerType, 0, key);
+		return getGroupSettings(groupId, serviceName);
+	}
 
-		Settings portalSettings = new PortletPreferencesSettings(
-			getPortalPreferences(companyId), getPortalPropertiesSettings(key));
+	@Override
+	public Settings getPortletInstanceCompanyDefaultSettings(
+			long companyId, String portletId)
+		throws PortalException, SystemException {
 
 		return new PortletPreferencesSettings(
-			companyPortletPreferences, portalSettings);
+			getCompanyPortletPreferences(companyId, portletId));
 	}
 
-	protected Settings getGroupSettings(long groupId, String key, int ownerType)
+	@Override
+	public Settings getPortletInstanceGroupDefaultSettings(
+			long groupId, String portletId)
 		throws PortalException, SystemException {
 
 		Group group = GroupLocalServiceUtil.getGroup(groupId);
 
-		PortletPreferences groupPortletPreferences =
-			PortletPreferencesLocalServiceUtil.getPreferences(
-				group.getCompanyId(), groupId, ownerType, 0, key);
-
-		Settings defaultCompanySettings = getCompanySettings(
-			group.getCompanyId(), key,
-			PortletKeys.PREFS_OWNER_TYPE_GROUP_DEFAULTS_COMPANY);
+		long companyId = group.getCompanyId();
 
 		return new PortletPreferencesSettings(
-			groupPortletPreferences, defaultCompanySettings);
+			getGroupPortletPreferences(companyId, groupId, portletId));
+	}
+
+	@Override
+	public Settings getPortletInstanceSettings(Layout layout, String portletId)
+		throws PortalException, SystemException {
+
+		return new PortletPreferencesSettings(
+			getPortletInstancePortletPreferences(layout, portletId),
+			getGroupSettings(layout.getCompanyId(), portletId));
+	}
+
+	protected PortletPreferences getCompanyPortletPreferences(
+			long companyId, String key)
+		throws SystemException {
+
+		return PortletPreferencesLocalServiceUtil.getPreferences(
+			companyId, companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY, 0, key);
+	}
+
+	protected Settings getCompanySettings(long companyId, String key)
+		throws SystemException {
+
+		return new PortletPreferencesSettings(
+			getCompanyPortletPreferences(companyId, key),
+			getPortalPreferencesSettings(companyId, key));
+	}
+
+	protected PortletPreferences getGroupPortletPreferences(
+			long companyId, long groupId, String key)
+		throws SystemException {
+
+		return PortletPreferencesLocalServiceUtil.getPreferences(
+			companyId, groupId, PortletKeys.PREFS_OWNER_TYPE_GROUP, 0, key);
+	}
+
+	protected Settings getGroupSettings(long groupId, String key)
+		throws PortalException, SystemException {
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		long companyId = group.getCompanyId();
+
+		return new PortletPreferencesSettings(
+			getGroupPortletPreferences(companyId, groupId, key),
+			getCompanySettings(companyId, key));
 	}
 
 	protected PortletPreferences getPortalPreferences(long companyId)
@@ -125,6 +142,14 @@ public class SettingsFactoryImpl implements SettingsFactory {
 
 		return PortalPreferencesLocalServiceUtil.getPreferences(
 			companyId, PortletKeys.PREFS_OWNER_TYPE_COMPANY);
+	}
+
+	protected PortletPreferencesSettings getPortalPreferencesSettings(
+			long companyId, String key)
+		throws SystemException {
+
+		return new PortletPreferencesSettings(
+			getPortalPreferences(companyId), getPortalPropertiesSettings(key));
 	}
 
 	protected Properties getPortalProperties(String key) {
@@ -145,6 +170,23 @@ public class SettingsFactoryImpl implements SettingsFactory {
 		String serviceName) {
 
 		return new PropertiesSettings(getPortalProperties(serviceName));
+	}
+
+	protected PortletPreferences getPortletInstancePortletPreferences(
+			Layout layout, String portletId)
+		throws SystemException {
+
+		long ownerId = PortletKeys.PREFS_OWNER_ID_DEFAULT;
+		int ownerType = PortletKeys.PREFS_OWNER_TYPE_LAYOUT;
+
+		if (PortletConstants.hasUserId(portletId)) {
+			ownerId = PortletConstants.getUserId(portletId);
+			ownerType = PortletKeys.PREFS_OWNER_TYPE_USER;
+		}
+
+		return PortletPreferencesLocalServiceUtil.getPreferences(
+			layout.getCompanyId(), ownerId, ownerType, layout.getPlid(),
+			portletId);
 	}
 
 	private Map<String, Properties> _propertiesMap =

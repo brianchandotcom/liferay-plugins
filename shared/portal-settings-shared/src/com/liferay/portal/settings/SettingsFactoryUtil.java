@@ -29,28 +29,52 @@ public class SettingsFactoryUtil {
 		getSettingsFactory().clearCache();
 	}
 
+	public static Settings getCompanyServiceSettings(
+			long companyId, String serviceName)
+		throws PortalException, SystemException {
+
+		return getSettingsFactory().getCompanyServiceSettings(
+			companyId, serviceName);
+	}
+
+	public static Settings getGroupServiceCompanyDefaultSettings(
+			long companyId, String serviceName)
+		throws PortalException, SystemException {
+
+		return getSettingsFactory().getGroupServiceCompanyDefaultSettings(
+			companyId, serviceName);
+	}
+
+	public static Settings getGroupServiceSettings(
+			long groupId, String serviceName)
+		throws PortalException, SystemException {
+
+		return getSettingsFactory().getGroupServiceSettings(
+			groupId, serviceName);
+	}
+
+	public static Settings getPortletInstanceCompanyDefaultSettings(
+			long companyId, String portletId)
+		throws PortalException, SystemException {
+
+		return getSettingsFactory().getPortletInstanceCompanyDefaultSettings(
+			companyId, portletId);
+	}
+
+	public static Settings getPortletInstanceGroupDefaultSettings(
+			long groupId, String portletId)
+		throws PortalException, SystemException {
+
+		return getSettingsFactory().getPortletInstanceGroupDefaultSettings(
+			groupId, portletId);
+	}
+
 	public static Settings getPortletInstanceSettings(
 			Layout layout, String portletId)
 		throws PortalException, SystemException {
 
 		return getSettingsFactory().getPortletInstanceSettings(
 			layout, portletId);
-	}
-
-	public static Settings getServiceCompanySettings(
-			long companyId, String serviceName)
-		throws PortalException, SystemException {
-
-		return getSettingsFactory().getServiceCompanySettings(
-			companyId, serviceName);
-	}
-
-	public static Settings getServiceGroupSettings(
-			long groupId, String serviceName)
-		throws PortalException, SystemException {
-
-		return getSettingsFactory().getServiceGroupSettings(
-			groupId, serviceName);
 	}
 
 	public static SettingsFactory getSettingsFactory() {
