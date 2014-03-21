@@ -16,20 +16,20 @@ package com.liferay.portal.settings;
 
 import java.io.IOException;
 
-import java.util.Map;
+import java.util.List;
 
 import javax.portlet.ValidatorException;
 
 /**
  * @author Iván Zaera
  */
-public class FallbackKeySettings implements Settings {
+public class FallbackPathSettings implements Settings {
 
-	public FallbackKeySettings(
-		Settings settings, Map<String, String> fallbackKeys) {
+	public FallbackPathSettings(
+		Settings settings, FallbackPaths fallbackPaths) {
 
 		_settings = settings;
-		_fallbackKeys = fallbackKeys;
+		_fallbackPaths = fallbackPaths;
 	}
 
 	@Override
@@ -38,14 +38,20 @@ public class FallbackKeySettings implements Settings {
 			throw new IllegalArgumentException("Key is null");
 		}
 
-		while (key != null) {
-			String value = _settings.getValue(key, null);
+		String value = _settings.getValue(key, null);
+
+		if (value != null) {
+			return value;
+		}
+
+		List<String> pathKeys = _fallbackPaths.getPathKeys(key);
+
+		for (String pathKey : pathKeys) {
+			value = _settings.getValue(pathKey, null);
 
 			if (value != null) {
 				return value;
 			}
-
-			key = getFallbackKey(key);
 		}
 
 		return defaultValue;
@@ -57,14 +63,20 @@ public class FallbackKeySettings implements Settings {
 			throw new IllegalArgumentException("Key is null");
 		}
 
-		while (key != null) {
-			String[] values = _settings.getValues(key, null);
+		String[] values = _settings.getValues(key, null);
+
+		if (values != null) {
+			return values;
+		}
+
+		List<String> pathKeys = _fallbackPaths.getPathKeys(key);
+
+		for (String pathKey : pathKeys) {
+			values = _settings.getValues(pathKey, null);
 
 			if (values != null) {
 				return values;
 			}
-
-			key = getFallbackKey(key);
 		}
 
 		return defaultValue;
@@ -85,11 +97,7 @@ public class FallbackKeySettings implements Settings {
 		_settings.store();
 	}
 
-	protected String getFallbackKey(String key) {
-		return _fallbackKeys.get(key);
-	}
-
-	private Map<String, String> _fallbackKeys;
+	private FallbackPaths _fallbackPaths;
 	private Settings _settings;
 
 }
