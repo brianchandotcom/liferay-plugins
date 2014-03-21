@@ -30,10 +30,12 @@ import com.liferay.knowledgebase.util.ActionKeys;
 import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.knowledgebase.util.WebKeys;
 import com.liferay.portal.NoSuchSubscriptionException;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -70,6 +72,8 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Peter Shin
  * @author Brian Wing Shun Chan
@@ -82,6 +86,8 @@ public class ArticlePortlet extends MVCPortlet {
 
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
+
+		checkExceededSizeLimit(uploadPortletRequest);
 
 		String portletId = PortalUtil.getPortletId(actionRequest);
 
@@ -445,6 +451,21 @@ public class ArticlePortlet extends MVCPortlet {
 		}
 
 		super.addSuccessMessage(actionRequest, actionResponse);
+	}
+
+	protected void checkExceededSizeLimit(HttpServletRequest request)
+		throws PortalException {
+
+		UploadException uploadException = (UploadException)request.getAttribute(
+			WebKeys.UPLOAD_EXCEPTION);
+
+		if (uploadException != null) {
+			if (uploadException.isExceededSizeLimit()) {
+				throw new FileSizeException(uploadException.getCause());
+			}
+
+			throw new PortalException(uploadException.getCause());
+		}
 	}
 
 	@Override
