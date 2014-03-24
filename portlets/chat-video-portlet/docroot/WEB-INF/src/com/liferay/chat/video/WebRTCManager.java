@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Manages WebRTC clients by connecting clients together, checking and
- * updating connections states, and managing mails for the clients.
+ * Manages WebRTC clients by connecting clients together, checking and updating
+ * client connection states, and managing client mail.
  *
  * @author Philippe Proulx
  */

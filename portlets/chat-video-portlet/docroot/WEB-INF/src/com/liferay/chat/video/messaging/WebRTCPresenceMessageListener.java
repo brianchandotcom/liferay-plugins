@@ -22,8 +22,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import java.util.List;
 
 /**
- * Verifies the clients presences of all WebRTC managers at a regular
- * interval.
+ * Verifies the client presences of all WebRTC managers at a regular interval.
  *
  * @author Philippe Proulx
  */

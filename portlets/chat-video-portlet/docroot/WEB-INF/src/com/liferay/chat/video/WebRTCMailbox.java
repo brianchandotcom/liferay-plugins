@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a WebRTC mailbox which may contain WebRTC mails.
+ * Represents a WebRTC mailbox, which may contain WebRTC mail.
  *
  * @author Philippe Proulx
  */

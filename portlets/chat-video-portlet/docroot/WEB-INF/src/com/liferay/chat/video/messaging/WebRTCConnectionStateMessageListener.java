@@ -22,8 +22,7 @@ import com.liferay.portal.kernel.messaging.Message;
 import java.util.List;
 
 /**
- * Verifies the connections states of all WebRTC managers at a regular
- * interval.
+ * Verifies the connection states of all WebRTC managers at a regular interval.
  *
  * @author Philippe Proulx
  */
