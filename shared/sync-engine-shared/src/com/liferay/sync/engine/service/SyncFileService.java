@@ -57,6 +57,10 @@ public class SyncFileService {
 			Path filePath, long folderId, long repositoryId, long syncAccountId)
 		throws Exception {
 
+		if (Files.notExists(filePath)) {
+			return null;
+		}
+
 		// Local sync file
 
 		String checksum = FileUtil.getChecksum(filePath);
@@ -507,7 +511,7 @@ public class SyncFileService {
 			!IODeltaUtil.isIgnoredFilePatchingExtension(syncFile)) {
 
 			deltaFilePath = Files.createTempFile(
-				String.valueOf(filePath.getFileName()), "tmp");
+				String.valueOf(filePath.getFileName()), ".tmp");
 
 			deltaFilePath = IODeltaUtil.delta(
 				filePath, IODeltaUtil.getChecksumsFilePath(syncFile),
