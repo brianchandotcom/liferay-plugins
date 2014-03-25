@@ -62,11 +62,10 @@ public class KBArticleServiceClp implements KBArticleService {
 
 		_methodParameterTypes7 = new String[] { "long", "long[][]" };
 
-		_methodName8 = "getAttachmentFile";
+		_methodName8 = "getAttachment";
 
 		_methodParameterTypes8 = new String[] {
-				"java.lang.String", "long", "java.lang.String",
-				"com.liferay.portal.service.ServiceContext"
+				"long", "long", "java.lang.String", "long", "java.lang.String"
 			};
 
 		_methodName9 = "getGroupKBArticles";
@@ -471,9 +470,9 @@ public class KBArticleServiceClp implements KBArticleService {
 	}
 
 	@Override
-	public java.io.File getAttachmentFile(java.lang.String portletId,
-		long resourcePrimKey, java.lang.String fileName,
-		com.liferay.portal.service.ServiceContext serviceContext)
+	public java.io.File getAttachment(long companyId, long groupId,
+		java.lang.String portletId, long resourcePrimKey,
+		java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -482,13 +481,15 @@ public class KBArticleServiceClp implements KBArticleService {
 			returnObj = _invokableService.invokeMethod(_methodName8,
 					_methodParameterTypes8,
 					new Object[] {
-						ClpSerializer.translateInput(portletId),
+						companyId,
+						
+					groupId,
+						
+					ClpSerializer.translateInput(portletId),
 						
 					resourcePrimKey,
 						
-					ClpSerializer.translateInput(fileName),
-						
-					ClpSerializer.translateInput(serviceContext)
+					ClpSerializer.translateInput(fileName)
 					});
 		}
 		catch (Throwable t) {

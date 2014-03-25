@@ -454,11 +454,10 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService,
 	}
 
 	@Override
-	public java.io.File getAttachmentFile(java.lang.String fileName,
-		com.liferay.portal.service.ServiceContext serviceContext)
+	public java.io.File getAttachment(long companyId, java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _kbArticleLocalService.getAttachmentFile(fileName, serviceContext);
+		return _kbArticleLocalService.getAttachment(companyId, fileName);
 	}
 
 	@Override

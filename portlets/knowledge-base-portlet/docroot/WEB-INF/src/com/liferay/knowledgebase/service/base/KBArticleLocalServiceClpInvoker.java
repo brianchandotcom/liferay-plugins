@@ -199,11 +199,9 @@ public class KBArticleLocalServiceClpInvoker {
 
 		_methodParameterTypes126 = new String[] { "long", "int" };
 
-		_methodName127 = "getAttachmentFile";
+		_methodName127 = "getAttachment";
 
-		_methodParameterTypes127 = new String[] {
-				"java.lang.String", "com.liferay.portal.service.ServiceContext"
-			};
+		_methodParameterTypes127 = new String[] { "long", "java.lang.String" };
 
 		_methodName128 = "getCompanyKBArticles";
 
@@ -590,8 +588,8 @@ public class KBArticleLocalServiceClpInvoker {
 
 		if (_methodName127.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes127, parameterTypes)) {
-			return KBArticleLocalServiceUtil.getAttachmentFile((java.lang.String)arguments[0],
-				(com.liferay.portal.service.ServiceContext)arguments[1]);
+			return KBArticleLocalServiceUtil.getAttachment(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
 		}
 
 		if (_methodName128.equals(name) &&

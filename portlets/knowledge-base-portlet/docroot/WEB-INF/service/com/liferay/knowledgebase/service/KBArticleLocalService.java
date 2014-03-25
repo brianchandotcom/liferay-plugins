@@ -366,8 +366,7 @@ public interface KBArticleLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.io.File getAttachmentFile(java.lang.String fileName,
-		com.liferay.portal.service.ServiceContext serviceContext)
+	public java.io.File getAttachment(long companyId, java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

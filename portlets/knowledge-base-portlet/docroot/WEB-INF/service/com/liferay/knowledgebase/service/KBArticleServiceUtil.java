@@ -110,14 +110,14 @@ public class KBArticleServiceUtil {
 		getService().deleteKBArticles(groupId, resourcePrimKeys);
 	}
 
-	public static java.io.File getAttachmentFile(java.lang.String portletId,
-		long resourcePrimKey, java.lang.String fileName,
-		com.liferay.portal.service.ServiceContext serviceContext)
+	public static java.io.File getAttachment(long companyId, long groupId,
+		java.lang.String portletId, long resourcePrimKey,
+		java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .getAttachmentFile(portletId, resourcePrimKey, fileName,
-			serviceContext);
+				   .getAttachment(companyId, groupId, portletId,
+			resourcePrimKey, fileName);
 	}
 
 	public static java.util.List<com.liferay.knowledgebase.model.KBArticle> getGroupKBArticles(

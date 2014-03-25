@@ -189,11 +189,9 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 
 		_methodParameterTypes33 = new String[] { "long", "int" };
 
-		_methodName34 = "getAttachmentFile";
+		_methodName34 = "getAttachment";
 
-		_methodParameterTypes34 = new String[] {
-				"java.lang.String", "com.liferay.portal.service.ServiceContext"
-			};
+		_methodParameterTypes34 = new String[] { "long", "java.lang.String" };
 
 		_methodName35 = "getCompanyKBArticles";
 
@@ -1434,8 +1432,7 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 	}
 
 	@Override
-	public java.io.File getAttachmentFile(java.lang.String fileName,
-		com.liferay.portal.service.ServiceContext serviceContext)
+	public java.io.File getAttachment(long companyId, java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -1444,9 +1441,9 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 			returnObj = _invokableLocalService.invokeMethod(_methodName34,
 					_methodParameterTypes34,
 					new Object[] {
-						ClpSerializer.translateInput(fileName),
+						companyId,
 						
-					ClpSerializer.translateInput(serviceContext)
+					ClpSerializer.translateInput(fileName)
 					});
 		}
 		catch (Throwable t) {

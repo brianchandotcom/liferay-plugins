@@ -427,11 +427,11 @@ public class KBArticleLocalServiceUtil {
 		return getService().fetchLatestKBArticle(resourcePrimKey, status);
 	}
 
-	public static java.io.File getAttachmentFile(java.lang.String fileName,
-		com.liferay.portal.service.ServiceContext serviceContext)
+	public static java.io.File getAttachment(long companyId,
+		java.lang.String fileName)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getAttachmentFile(fileName, serviceContext);
+		return getService().getAttachment(companyId, fileName);
 	}
 
 	public static java.util.List<com.liferay.knowledgebase.model.KBArticle> getCompanyKBArticles(
