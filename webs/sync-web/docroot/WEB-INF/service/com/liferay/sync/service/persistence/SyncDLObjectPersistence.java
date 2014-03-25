@@ -38,61 +38,6 @@ public interface SyncDLObjectPersistence extends BasePersistence<SyncDLObject> {
 	 */
 
 	/**
-	* Returns the sync d l object where typePK = &#63; or throws a {@link com.liferay.sync.NoSuchDLObjectException} if it could not be found.
-	*
-	* @param typePK the type p k
-	* @return the matching sync d l object
-	* @throws com.liferay.sync.NoSuchDLObjectException if a matching sync d l object could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.sync.model.SyncDLObject findByTypePK(long typePK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.sync.NoSuchDLObjectException;
-
-	/**
-	* Returns the sync d l object where typePK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
-	*
-	* @param typePK the type p k
-	* @return the matching sync d l object, or <code>null</code> if a matching sync d l object could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.sync.model.SyncDLObject fetchByTypePK(long typePK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the sync d l object where typePK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
-	*
-	* @param typePK the type p k
-	* @param retrieveFromCache whether to use the finder cache
-	* @return the matching sync d l object, or <code>null</code> if a matching sync d l object could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.sync.model.SyncDLObject fetchByTypePK(long typePK,
-		boolean retrieveFromCache)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the sync d l object where typePK = &#63; from the database.
-	*
-	* @param typePK the type p k
-	* @return the sync d l object that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.sync.model.SyncDLObject removeByTypePK(long typePK)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.sync.NoSuchDLObjectException;
-
-	/**
-	* Returns the number of sync d l objects where typePK = &#63;.
-	*
-	* @param typePK the type p k
-	* @return the number of matching sync d l objects
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByTypePK(long typePK)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the sync d l objects where companyId = &#63; and modifiedTime &gt; &#63; and repositoryId = &#63;.
 	*
 	* @param companyId the company ID
@@ -251,6 +196,69 @@ public interface SyncDLObjectPersistence extends BasePersistence<SyncDLObject> {
 	* @throws SystemException if a system exception occurred
 	*/
 	public int countByC_M_R(long companyId, long modifiedTime, long repositoryId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the sync d l object where type = &#63; and typePK = &#63; or throws a {@link com.liferay.sync.NoSuchDLObjectException} if it could not be found.
+	*
+	* @param type the type
+	* @param typePK the type p k
+	* @return the matching sync d l object
+	* @throws com.liferay.sync.NoSuchDLObjectException if a matching sync d l object could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.sync.model.SyncDLObject findByT_T(
+		java.lang.String type, long typePK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.sync.NoSuchDLObjectException;
+
+	/**
+	* Returns the sync d l object where type = &#63; and typePK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param type the type
+	* @param typePK the type p k
+	* @return the matching sync d l object, or <code>null</code> if a matching sync d l object could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.sync.model.SyncDLObject fetchByT_T(
+		java.lang.String type, long typePK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the sync d l object where type = &#63; and typePK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param type the type
+	* @param typePK the type p k
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching sync d l object, or <code>null</code> if a matching sync d l object could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.sync.model.SyncDLObject fetchByT_T(
+		java.lang.String type, long typePK, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Removes the sync d l object where type = &#63; and typePK = &#63; from the database.
+	*
+	* @param type the type
+	* @param typePK the type p k
+	* @return the sync d l object that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.sync.model.SyncDLObject removeByT_T(
+		java.lang.String type, long typePK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.sync.NoSuchDLObjectException;
+
+	/**
+	* Returns the number of sync d l objects where type = &#63; and typePK = &#63;.
+	*
+	* @param type the type
+	* @param typePK the type p k
+	* @return the number of matching sync d l objects
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByT_T(java.lang.String type, long typePK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

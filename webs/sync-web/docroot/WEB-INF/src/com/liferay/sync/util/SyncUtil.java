@@ -27,9 +27,10 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Lock;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
-import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
 import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil;
+import com.liferay.sync.model.SyncConstants;
 import com.liferay.sync.model.SyncDLObject;
 import com.liferay.sync.model.impl.SyncDLObjectImpl;
 
@@ -43,6 +44,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+
+import java.util.Date;
 
 /**
  * @author Dennis Ju
@@ -220,44 +223,56 @@ public class SyncUtil {
 	public static SyncDLObject toSyncDLObject(FileEntry fileEntry, String event)
 		throws PortalException, SystemException {
 
-		SyncDLObject syncDLObject = new SyncDLObjectImpl();
-
-		syncDLObject.setCompanyId(fileEntry.getCompanyId());
-		syncDLObject.setCreateDate(fileEntry.getCreateDate());
-		syncDLObject.setModifiedDate(fileEntry.getModifiedDate());
-		syncDLObject.setRepositoryId(fileEntry.getRepositoryId());
-		syncDLObject.setParentFolderId(fileEntry.getFolderId());
-		syncDLObject.setName(fileEntry.getTitle());
-		syncDLObject.setExtension(fileEntry.getExtension());
-		syncDLObject.setMimeType(fileEntry.getMimeType());
-		syncDLObject.setDescription(fileEntry.getDescription());
-
-		DLFileVersion dlFileVersion =
-			DLFileVersionLocalServiceUtil.getLatestFileVersion(
-				fileEntry.getFileEntryId(), false);
-
-		syncDLObject.setChangeLog(dlFileVersion.getChangeLog());
-		syncDLObject.setExtraSettings(dlFileVersion.getExtraSettings());
-
-		syncDLObject.setVersion(fileEntry.getVersion());
-		syncDLObject.setSize(fileEntry.getSize());
-		syncDLObject.setChecksum(getChecksum(dlFileVersion));
-		syncDLObject.setEvent(event);
-
 		Lock lock = fileEntry.getLock();
 
+		DLFileVersion dlFileVersion = null;
+
+		Date lockExpirationDate;
+		long lockUserId;
+		String lockUserName;
+		String type;
+
 		if (lock != null) {
-			syncDLObject.setLockExpirationDate(lock.getExpirationDate());
-			syncDLObject.setLockUserId(lock.getUserId());
-			syncDLObject.setLockUserName(lock.getUserName());
+			dlFileVersion = DLFileVersionLocalServiceUtil.getFileVersion(
+				fileEntry.getFileEntryId(),
+				DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION);
+
+			lockExpirationDate = lock.getExpirationDate();
+			lockUserId = lock.getUserId();
+			lockUserName = lock.getUserName();
+			type = SyncConstants.TYPE_PRIVATE_WORKNG_COPY;
 		}
 		else {
-			syncDLObject.setLockExpirationDate(null);
-			syncDLObject.setLockUserId(0);
-			syncDLObject.setLockUserName(StringPool.BLANK);
+			dlFileVersion = DLFileVersionLocalServiceUtil.getFileVersion(
+				fileEntry.getFileEntryId(), fileEntry.getVersion());
+
+			lockExpirationDate = null;
+			lockUserId = 0;
+			lockUserName = StringPool.BLANK;
+			type = SyncConstants.TYPE_FILE;
 		}
 
-		syncDLObject.setType(DLSyncConstants.TYPE_FILE);
+		SyncDLObject syncDLObject = new SyncDLObjectImpl();
+
+		syncDLObject.setCompanyId(dlFileVersion.getCompanyId());
+		syncDLObject.setCreateDate(dlFileVersion.getCreateDate());
+		syncDLObject.setModifiedDate(dlFileVersion.getModifiedDate());
+		syncDLObject.setRepositoryId(dlFileVersion.getRepositoryId());
+		syncDLObject.setParentFolderId(dlFileVersion.getFolderId());
+		syncDLObject.setName(dlFileVersion.getTitle());
+		syncDLObject.setExtension(dlFileVersion.getExtension());
+		syncDLObject.setMimeType(dlFileVersion.getMimeType());
+		syncDLObject.setDescription(dlFileVersion.getDescription());
+		syncDLObject.setChangeLog(dlFileVersion.getChangeLog());
+		syncDLObject.setExtraSettings(dlFileVersion.getExtraSettings());
+		syncDLObject.setVersion(dlFileVersion.getVersion());
+		syncDLObject.setSize(dlFileVersion.getSize());
+		syncDLObject.setChecksum(getChecksum(dlFileVersion));
+		syncDLObject.setEvent(event);
+		syncDLObject.setLockExpirationDate(lockExpirationDate);
+		syncDLObject.setLockUserId(lockUserId);
+		syncDLObject.setLockUserName(lockUserName);
+		syncDLObject.setType(type);
 		syncDLObject.setTypePK(fileEntry.getFileEntryId());
 		syncDLObject.setTypeUuid(fileEntry.getUuid());
 
@@ -279,13 +294,13 @@ public class SyncUtil {
 		syncDLObject.setChangeLog(StringPool.BLANK);
 		syncDLObject.setExtraSettings(StringPool.BLANK);
 		syncDLObject.setVersion(StringPool.BLANK);
-		syncDLObject.setSize(-1);
+		syncDLObject.setSize(0);
 		syncDLObject.setChecksum(StringPool.BLANK);
 		syncDLObject.setEvent(event);
 		syncDLObject.setLockExpirationDate(null);
 		syncDLObject.setLockUserId(0);
 		syncDLObject.setLockUserName(StringPool.BLANK);
-		syncDLObject.setType(DLSyncConstants.TYPE_FOLDER);
+		syncDLObject.setType(SyncConstants.TYPE_FOLDER);
 		syncDLObject.setTypePK(folder.getFolderId());
 		syncDLObject.setTypeUuid(folder.getUuid());
 
