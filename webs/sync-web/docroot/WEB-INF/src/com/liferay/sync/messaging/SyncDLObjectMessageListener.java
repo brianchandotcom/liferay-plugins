@@ -19,17 +19,13 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.model.Lock;
 import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
 import com.liferay.portlet.documentlibrary.NoSuchFolderException;
-import com.liferay.portlet.documentlibrary.model.DLFileVersion;
-import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
 import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
-import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil;
+import com.liferay.sync.model.SyncConstants;
+import com.liferay.sync.model.SyncDLObject;
 import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
 import com.liferay.sync.util.SyncUtil;
-
-import java.util.Date;
 
 /**
  * @author Dennis Ju
@@ -40,14 +36,19 @@ public class SyncDLObjectMessageListener extends BaseMessageListener {
 			long modifiedTime, String event, String type, long typePK)
 		throws Exception {
 
-		if (event.equals(DLSyncConstants.EVENT_DELETE)) {
+		if (event.equals(SyncConstants.EVENT_DELETE)) {
 			SyncDLObjectLocalServiceUtil.addSyncDLObject(
 				0, modifiedTime, 0, 0, StringPool.BLANK, StringPool.BLANK,
 				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
 				StringPool.BLANK, StringPool.BLANK, 0, StringPool.BLANK, event,
 				null, 0, StringPool.BLANK, type, typePK, StringPool.BLANK);
+
+			return;
 		}
-		else if (type.equals(DLSyncConstants.TYPE_FILE)) {
+
+		SyncDLObject syncDLObject = null;
+
+		if (type.equals(SyncConstants.TYPE_FILE)) {
 			FileEntry fileEntry = null;
 
 			try {
@@ -57,32 +58,7 @@ public class SyncDLObjectMessageListener extends BaseMessageListener {
 				return;
 			}
 
-			Date lockExpirationDate = null;
-			long lockUserId = 0;
-			String lockUserName = StringPool.BLANK;
-
-			Lock lock = fileEntry.getLock();
-
-			if (lock != null) {
-				lockExpirationDate = lock.getExpirationDate();
-				lockUserId = lock.getUserId();
-				lockUserName = lock.getUserName();
-			}
-
-			DLFileVersion dlFileVersion =
-				DLFileVersionLocalServiceUtil.getLatestFileVersion(
-					fileEntry.getFileEntryId(), false);
-
-			SyncDLObjectLocalServiceUtil.addSyncDLObject(
-				dlFileVersion.getCompanyId(), modifiedTime,
-				dlFileVersion.getRepositoryId(), fileEntry.getFolderId(),
-				dlFileVersion.getTitle(), dlFileVersion.getExtension(),
-				dlFileVersion.getMimeType(), dlFileVersion.getDescription(),
-				dlFileVersion.getChangeLog(), dlFileVersion.getExtraSettings(),
-				dlFileVersion.getVersion(), dlFileVersion.getSize(),
-				SyncUtil.getChecksum(dlFileVersion), event, lockExpirationDate,
-				lockUserId, lockUserName, type, fileEntry.getFileEntryId(),
-				fileEntry.getUuid());
+			syncDLObject = SyncUtil.toSyncDLObject(fileEntry, event);
 		}
 		else {
 			Folder folder = null;
@@ -98,13 +74,20 @@ public class SyncDLObjectMessageListener extends BaseMessageListener {
 				return;
 			}
 
-			SyncDLObjectLocalServiceUtil.addSyncDLObject(
-				folder.getCompanyId(), modifiedTime, folder.getRepositoryId(),
-				folder.getParentFolderId(), folder.getName(), StringPool.BLANK,
-				StringPool.BLANK, folder.getDescription(), StringPool.BLANK,
-				StringPool.BLANK, "-1", 0, StringPool.BLANK, event, null, 0,
-				StringPool.BLANK, type, folder.getFolderId(), folder.getUuid());
+			syncDLObject = SyncUtil.toSyncDLObject(folder, event);
 		}
+
+		SyncDLObjectLocalServiceUtil.addSyncDLObject(
+			syncDLObject.getCompanyId(), modifiedTime,
+			syncDLObject.getRepositoryId(), syncDLObject.getParentFolderId(),
+			syncDLObject.getName(), syncDLObject.getExtension(),
+			syncDLObject.getMimeType(), syncDLObject.getDescription(),
+			syncDLObject.getChangeLog(), syncDLObject.getExtraSettings(),
+			syncDLObject.getVersion(), syncDLObject.getSize(),
+			syncDLObject.getChecksum(), syncDLObject.getEvent(),
+			syncDLObject.getLockExpirationDate(), syncDLObject.getLockUserId(),
+			syncDLObject.getLockUserName(), syncDLObject.getType(),
+			syncDLObject.getTypePK(), syncDLObject.getTypeUuid());
 	}
 
 	@Override
