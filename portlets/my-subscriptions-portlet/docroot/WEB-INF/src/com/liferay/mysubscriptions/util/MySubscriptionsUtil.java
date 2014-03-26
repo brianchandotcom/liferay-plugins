@@ -19,15 +19,20 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.PortletPreferences;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.Portal;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
@@ -163,6 +168,28 @@ public class MySubscriptionsUtil {
 		}
 		else if (className.equals(MBCategory.class.getName())) {
 			title = "Message Board at ";
+		}
+		else if (className.equals(PortletPreferences.class.getName())) {
+			PortletPreferences portletPreferences =
+				PortletPreferencesLocalServiceUtil.getPortletPreferences(
+					classPK);
+
+			Layout layout = LayoutLocalServiceUtil.getLayout(
+				portletPreferences.getPlid());
+
+			javax.portlet.PortletPreferences preferences =
+				PortletPreferencesFactoryUtil.getPortletSetup(
+					layout, portletPreferences.getPortletId(), null);
+
+			String portletName = preferences.getValue(
+				"portletSetupTitle_" + LocaleUtil.toLanguageId(locale),
+				StringPool.BLANK);
+
+			if (Validator.isNull(portletName)) {
+				portletName = "Asset Publisher";
+			}
+
+			return portletName;
 		}
 		else if (className.equals(WikiNode.class.getName())) {
 			WikiNode wikiNode = WikiNodeLocalServiceUtil.getWikiNode(classPK);
