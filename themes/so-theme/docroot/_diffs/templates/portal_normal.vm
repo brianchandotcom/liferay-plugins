@@ -14,6 +14,8 @@
 
 <body class="dockbar-split so-strata-theme $css_class">
 
+#quick_access("#main-content")
+
 $theme.include($body_top_include)
 
 #if ($is_signed_in)
@@ -21,8 +23,6 @@ $theme.include($body_top_include)
 #end
 
 <div id="wrapper">
-	<a class="hidden-accessible" href="#main-content" id="skip-to-content">#language("skip-to-content")</a>
-
 	<header id="banner" role="banner">
 		<div id="heading">
 			#if (!$is_user_dashboard)
