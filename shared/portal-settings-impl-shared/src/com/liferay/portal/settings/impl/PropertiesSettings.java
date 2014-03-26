@@ -15,9 +15,11 @@
 package com.liferay.portal.settings.impl;
 
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.settings.Settings;
+import com.liferay.util.ContentUtil;
 
 import java.util.Properties;
 
@@ -33,7 +35,7 @@ public class PropertiesSettings implements Settings {
 
 	@Override
 	public String getValue(String key, String defaultValue) {
-		String value = _properties.getProperty(key);
+		String value = getProperty(key);
 
 		if (Validator.isNotNull(value)) {
 			return value;
@@ -44,13 +46,18 @@ public class PropertiesSettings implements Settings {
 
 	@Override
 	public String[] getValues(String key, String[] defaultValue) {
-		String[] values = StringUtil.split(_properties.getProperty(key));
+		String[] values = StringUtil.split(getProperty(key));
 
 		if (ArrayUtil.isNotEmpty(values)) {
 			return values;
 		}
 
 		return defaultValue;
+	}
+
+	@Override
+	public void reset(String key) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -66,6 +73,38 @@ public class PropertiesSettings implements Settings {
 	@Override
 	public void store() {
 		throw new UnsupportedOperationException();
+	}
+
+	protected String getProperty(String key) {
+		String value = _properties.getProperty(key);
+
+		if (isLocationVariable("resource", value)) {
+			return ContentUtil.get(getLocation("resource", value));
+		}
+
+		return value;
+	}
+
+	private String getLocation(String protocol, String value) {
+		return value.substring(protocol.length() + 3, value.length() - 1);
+	}
+
+	private boolean isLocationVariable(String protocol, String value) {
+		if (value == null) {
+			return false;
+		}
+
+		String prefix =
+			StringPool.DOLLAR + StringPool.OPEN_CURLY_BRACE + protocol +
+			StringPool.COLON;
+
+		if (value.startsWith(prefix) &&
+			value.endsWith(StringPool.CLOSE_CURLY_BRACE)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private Properties _properties;
