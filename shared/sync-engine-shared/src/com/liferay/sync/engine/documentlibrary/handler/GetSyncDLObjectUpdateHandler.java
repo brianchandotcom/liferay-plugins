@@ -43,9 +43,9 @@ import java.util.Map;
 /**
  * @author Shinn Lok
  */
-public class SyncDLObjectUpdateHandler extends BaseJSONHandler {
+public class GetSyncDLObjectUpdateHandler extends BaseJSONHandler {
 
-	public SyncDLObjectUpdateHandler(Event event) {
+	public GetSyncDLObjectUpdateHandler(Event event) {
 		super(event);
 	}
 
@@ -220,7 +220,7 @@ public class SyncDLObjectUpdateHandler extends BaseJSONHandler {
 		SyncSite syncSite = SyncSiteService.fetchSyncSite(
 			(Long)getParameterValue("repositoryId"), getSyncAccountId());
 
-		syncSite.setLastRemoteSyncTime(syncDLObjectUpdate.getLastAccessTime());
+		syncSite.setRemoteSyncTime(syncDLObjectUpdate.getLastAccessTime());
 
 		SyncSiteService.update(syncSite);
 	}
