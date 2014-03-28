@@ -14,7 +14,26 @@
 
 package com.liferay.sync.hook.upgrade.v1_0_0;
 
+import com.liferay.portal.kernel.dao.orm.QueryDefinition;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
+import com.liferay.sync.model.SyncConstants;
+import com.liferay.sync.model.SyncDLObject;
+import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
+import com.liferay.sync.util.SyncUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Dennis Ju
@@ -27,6 +46,106 @@ public class UpgradeSyncDLObject extends UpgradeProcess {
 			runSQL("drop index IX_69ADEDD1 on SyncDLObject");
 		}
 		catch (Exception e) {
+		}
+
+		updateSyncDLObjects();
+	}
+
+	protected void populateAllSyncDLObjects(
+			long groupId, long folderId, List<SyncDLObject> syncDLObjects)
+		throws PortalException, SystemException {
+
+		List<Object> foldersAndFileEntriesAndFileShortcuts =
+			DLFolderLocalServiceUtil.getFoldersAndFileEntriesAndFileShortcuts(
+				groupId, folderId, null, false,
+				new QueryDefinition(WorkflowConstants.STATUS_APPROVED));
+
+		for (Object foldersAndFileEntriesAndFileShortcut :
+				foldersAndFileEntriesAndFileShortcuts) {
+
+			if (foldersAndFileEntriesAndFileShortcut instanceof DLFileEntry) {
+				DLFileEntry dlFileEntry =
+					(DLFileEntry)foldersAndFileEntriesAndFileShortcut;
+
+				String event = StringPool.BLANK;
+
+				if (dlFileEntry.isInTrash()) {
+					event = SyncConstants.EVENT_TRASH;
+				}
+				else {
+					event = SyncConstants.EVENT_ADD;
+				}
+
+				SyncDLObject fileEntrySyncDLObject = SyncUtil.toSyncDLObject(
+					dlFileEntry, event);
+
+				syncDLObjects.add(fileEntrySyncDLObject);
+
+				if (fileEntrySyncDLObject.getType().equals(
+						SyncConstants.TYPE_PRIVATE_WORKNG_COPY)) {
+
+					SyncDLObject approvedSyncDLObject = SyncUtil.toSyncDLObject(
+						dlFileEntry, event, true);
+
+					syncDLObjects.add(approvedSyncDLObject);
+				}
+			}
+			else if (foldersAndFileEntriesAndFileShortcut instanceof DLFolder) {
+				DLFolder dlFolder =
+					(DLFolder)foldersAndFileEntriesAndFileShortcut;
+
+				if (!SyncUtil.isSupportedFolder(dlFolder)) {
+					continue;
+				}
+
+				String event = StringPool.BLANK;
+
+				if (dlFolder.isInTrash()) {
+					event = SyncConstants.EVENT_TRASH;
+				}
+				else {
+					event = SyncConstants.EVENT_ADD;
+				}
+
+				syncDLObjects.add(SyncUtil.toSyncDLObject(dlFolder, event));
+
+				populateAllSyncDLObjects(
+					groupId, dlFolder.getFolderId(), syncDLObjects);
+			}
+		}
+	}
+
+	protected void updateSyncDLObjects() throws Exception {
+		List<Group> groups =
+			GroupLocalServiceUtil.getGroups(
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		for (Group group : groups) {
+			if (group.isStaged()) {
+				continue;
+			}
+
+			List<SyncDLObject> syncDLObjects = new ArrayList<SyncDLObject>();
+
+			populateAllSyncDLObjects(
+				group.getGroupId(), DLFolderConstants.DEFAULT_PARENT_FOLDER_ID,
+				syncDLObjects);
+
+			for (SyncDLObject syncDLObject : syncDLObjects) {
+				SyncDLObjectLocalServiceUtil.addSyncDLObject(
+					syncDLObject.getCompanyId(), syncDLObject.getModifiedTime(),
+					syncDLObject.getRepositoryId(),
+					syncDLObject.getParentFolderId(), syncDLObject.getName(),
+					syncDLObject.getExtension(), syncDLObject.getMimeType(),
+					syncDLObject.getDescription(), syncDLObject.getChangeLog(),
+					syncDLObject.getExtraSettings(), syncDLObject.getVersion(),
+					syncDLObject.getSize(), syncDLObject.getChecksum(),
+					syncDLObject.getEvent(),
+					syncDLObject.getLockExpirationDate(),
+					syncDLObject.getLockUserId(),
+					syncDLObject.getLockUserName(), syncDLObject.getType(),
+					syncDLObject.getTypePK(), syncDLObject.getTypeUuid());
+			}
 		}
 	}
 
