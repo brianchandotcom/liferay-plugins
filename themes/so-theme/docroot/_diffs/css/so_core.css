@@ -8,6 +8,7 @@
 
 	@include header;
 
+	overflow: hidden;
 	padding: 0.86em 1.5em;
 
 	h1, h2 {
@@ -20,6 +21,7 @@
 
 	.site-title {
 		display: inline-block;
+		float: left;
 
 		&, a {
 			color: $red;
@@ -892,6 +894,60 @@ html.aui {
 		.lfr-contact-name a {
 			color: $red;
 		}
+
+		.user-information-column-2 .field-group {
+			width: auto;
+		}
+
+		.user-sites {
+			list-style: none;
+			margin-left: 0;
+
+			li {
+				line-height: 24px;
+			}
+
+			.social-office-disabled:before {
+				color: #DDD;
+
+				@include font-awesome("\f0ac");
+
+				font-size: 18px;
+			}
+
+			.social-office-enabled {
+				background: url(@portal_ctx@/html/icons/social_office.png) no-repeat 0 50%;
+				padding-left: 15px;
+			}
+
+			a {
+				margin-left: 8px;
+			}
+		}
+
+		.user-tags {
+			list-style: none;
+			margin: 5px 0;
+
+			li {
+				display: inline-block;
+				margin: 0 5px 5px 0;
+			}
+
+			a {
+				background-color: #EEE;
+
+				@include border-radius(4px);
+
+				display: inline-block;
+				padding: 4px 6px;
+
+				&:hover {
+					background-color: #DDD;
+					text-decoration: none;
+				}
+			}
+		}
 	}
 
 	.toolbar, .contacts-search, .lfr-button-column {
@@ -1066,15 +1122,7 @@ html.aui {
 		margin-bottom: 10px;
 
 		.accordion-toggle:before {
-			-webkit-font-smoothing: antialiased;
-			content: "\f0da";
-			font-family: 'fontawesome-alloy';
-			font-style: normal;
-			font-variant: normal;
-			font-weight: normal;
-			line-height: 1;
-			speak: none;
-			text-transform: none;
+			@include font-awesome("\f0da");
 		}
 
 		.toggler-header-expanded .accordion-toggle:before {
