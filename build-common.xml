@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="build-common" xmlns:antelope="antlib:ise.antelope.tasks">
+<project name="build-common" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<dirname file="${ant.file.build-common}" property="sdk.dir" />
 
 	<property environment="env" />
@@ -65,6 +65,7 @@
 		<path refid="plugin-test-type.classpath" />
 		<fileset dir="${app.server.lib.portal.dir}" excludes="ant.jar" includes="*.jar" />
 		<fileset dir="${sdk.dir}/lib" includes="junit.jar,mockito-all.jar,powermock-*.jar,spring-test.jar" />
+		<ivy:resources file="ivy.xml" transitive="true" conf="test"/>
 	</path>
 
 	<taskdef classpathref="lib.classpath" resource="aQute/bnd/ant/taskdef.properties" />
