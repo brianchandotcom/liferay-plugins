@@ -60,12 +60,14 @@
 										overwriteMode="always"
 										pattern="@{ivy.xml.dir}/lib/[artifact].[ext]"
 										type="bundle,jar,orbit"
+										conf="default"
 									/>
 
 									<ivy:retrieve
 										overwriteMode="always"
 										pattern="@{ivy.xml.dir}/lib/[artifact]-[type]s.[ext]"
 										type="source"
+										conf="default"
 									/>
 								</then>
 								<else>
@@ -73,13 +75,16 @@
 										overwriteMode="always"
 										pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact].[ext]"
 										type="bundle,jar,orbit"
+										conf="default"
 									/>
 
 									<ivy:retrieve
 										overwriteMode="always"
 										pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact]-[type]s.[ext]"
 										type="source"
+										conf="default"
 									/>
+
 								</else>
 							</if>
 
