@@ -282,9 +282,9 @@ AUI.add(
 
 				instance.invokeService(
 						{
-							'/calendar-portlet/calendar/delete-calendar': {
+							'/calendar-portlet.calendar/delete-calendar': {
 								calendarId: calendarId
-							},
+							}
 						},
 						{
 							success: function() {
