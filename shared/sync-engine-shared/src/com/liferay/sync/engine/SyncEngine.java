@@ -56,6 +56,10 @@ public class SyncEngine {
 	public static void cancelSyncAccountTasks(long syncAccountId)
 		throws Exception {
 
+		if (!_running) {
+			return;
+		}
+
 		Object[] syncAccountTasks = _syncAccountTasks.get(syncAccountId);
 
 		if (syncAccountTasks == null) {
@@ -74,6 +78,10 @@ public class SyncEngine {
 
 	public static void scheduleSyncAccountTasks(long syncAccountId)
 		throws Exception {
+
+		if (!_running) {
+			return;
+		}
 
 		SyncSiteService.synchronizeSyncSites(syncAccountId);
 
@@ -136,8 +144,14 @@ public class SyncEngine {
 	}
 
 	public static void start() {
+		if (_running) {
+			return;
+		}
+
 		try {
 			doStart();
+
+			_running = true;
 		}
 		catch (Exception e) {
 			_logger.error(e.getMessage(), e);
@@ -145,8 +159,14 @@ public class SyncEngine {
 	}
 
 	public static void stop() {
+		if (!_running) {
+			return;
+		}
+
 		try {
 			doStop();
+
+			_running = false;
 		}
 		catch (Exception e) {
 			_logger.error(e.getMessage(), e);
@@ -170,6 +190,9 @@ public class SyncEngine {
 
 		SyncWatchEventProcessor syncWatchEventProcessor =
 			new SyncWatchEventProcessor();
+
+		_syncWatchEventProcessorExecutorService =
+			Executors.newSingleThreadScheduledExecutor();
 
 		_syncWatchEventProcessorExecutorService.scheduleAtFixedRate(
 			syncWatchEventProcessor, 0, 3, TimeUnit.SECONDS);
@@ -214,11 +237,11 @@ public class SyncEngine {
 
 	private static ScheduledExecutorService _eventScheduledExecutorService =
 		Executors.newScheduledThreadPool(5);
+	private static boolean _running;
 	private static Map<Long, Object[]> _syncAccountTasks =
 		new HashMap<Long, Object[]>();
 	private static ScheduledExecutorService
-		_syncWatchEventProcessorExecutorService =
-			Executors.newSingleThreadScheduledExecutor();
+		_syncWatchEventProcessorExecutorService;
 	private static ExecutorService _watcherExecutorService =
 		Executors.newCachedThreadPool();
 
