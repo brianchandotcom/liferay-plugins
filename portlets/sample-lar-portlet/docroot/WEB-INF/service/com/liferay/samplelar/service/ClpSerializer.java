@@ -230,6 +230,11 @@ public class ClpSerializer {
 
 		String className = clazz.getName();
 
+		if (className.equals("com.liferay.samplelar.BookingNumberException")) {
+			return new com.liferay.samplelar.BookingNumberException(throwable.getMessage(),
+				throwable.getCause());
+		}
+
 		if (className.equals("com.liferay.samplelar.NoSuchBookingException")) {
 			return new com.liferay.samplelar.NoSuchBookingException(throwable.getMessage(),
 				throwable.getCause());
