@@ -37,7 +37,7 @@ MicroblogsEntry microblogsEntry = MicroblogsEntryLocalServiceUtil.fetchMicroblog
 	</c:when>
 	<c:otherwise>
 		<div class="so-portlet-activities">
-			<div class="activity-item microblogs-entry">
+			<div class="activity-item clearfix microblogs-entry">
 
 				<%
 				User receiverUser = UserLocalServiceUtil.getUserById(microblogsEntry.getUserId());
@@ -49,20 +49,18 @@ MicroblogsEntry microblogsEntry = MicroblogsEntryLocalServiceUtil.fetchMicroblog
 					</span>
 				</div>
 
-				<div class="activity-data">
-					<div class="activity-header">
-						<div class="activity-time">
-							<%= Time.getRelativeTimeDescription(microblogsEntry.getModifiedDate(), themeDisplay.getLocale(), themeDisplay.getTimeZone()) %>
-						</div>
-
-						<div class="activity-user-name">
-							<%= HtmlUtil.escape(receiverUser.getFullName()) %>
-						</div>
+				<div class="activity-header">
+					<div class="activity-time">
+						<%= Time.getRelativeTimeDescription(microblogsEntry.getModifiedDate(), themeDisplay.getLocale(), themeDisplay.getTimeZone()) %>
 					</div>
 
-					<div class="activity-action">
-						<%= HtmlUtil.escape(microblogsEntry.getContent()) %>
+					<div class="activity-user-name">
+						<%= HtmlUtil.escape(receiverUser.getFullName()) %>
 					</div>
+				</div>
+
+				<div class="activity-action">
+					<%= HtmlUtil.escape(microblogsEntry.getContent()) %>
 				</div>
 			</div>
 		</div>

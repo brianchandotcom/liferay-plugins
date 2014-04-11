@@ -17,6 +17,7 @@
 	.entry {
 		margin-bottom: 1.2em;
 		padding-bottom: 0.5em;
+		position: relative;
 
 		&.last {
 			padding-bottom: 0;
@@ -25,12 +26,16 @@
 
 	.user-portrait {
 		float: left;
-		height: 45px;
+		left: 0;
+		margin-bottom: .4em;
+		max-height: 45px;
+		position: absolute;
+		top: 0;
 		width: 45px;
 
 		.avatar {
 			display: block;
-			height: 45px;
+			max-height: 45px;
 			overflow: hidden;
 
 			img {
@@ -39,7 +44,7 @@
 		}
 	}
 
-	.entry-data {
+	.entry-block, .entry-header {
 		margin-left: 55px;
 		overflow: hidden;
 	}
@@ -53,14 +58,23 @@
 	}
 
 	.entry-time {
+		color: #999;
 		float: right;
 		font-size: .9em;
 		margin-left: 1em;
 	}
 
+	.entry-action {
+		float: left;
+	}
+
 	.entry-scope {
 		color: #555;
 		display: block;
+	}
+
+	.entry-block {
+		clear: both;
 	}
 
 	.entry-body {
@@ -265,4 +279,24 @@
 
 .so-announcements-portlet .announcement-collapsed .entry-footer-toolbar {
 	@include box-shadow(0 -1px 15px -5px rgba(0, 0, 0, .8));
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 767px) {
+	.so-announcements-portlet {
+		.user-portrait {
+			position: relative;
+		}
+
+		.entry-time {
+			margin: .2em 0 0;
+			width: 100%;
+		}
+
+		.entry-block {
+			float: left;
+			margin-left: 0;
+		}
+	}
 }
