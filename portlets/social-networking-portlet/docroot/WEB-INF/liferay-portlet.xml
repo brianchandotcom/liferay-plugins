@@ -61,7 +61,7 @@
 		<portlet-name>8</portlet-name>
 		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
 		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
-		<friendly-url-mapping>activities</friendly-url-mapping>
+		<friendly-url-mapping>members_activities</friendly-url-mapping>
 		<friendly-url-routes>com/liferay/socialnetworking/members/social/activities-friendly-url-routes.xml</friendly-url-routes>
 		<css-class-wrapper>social-networking-portlet-group-users-activities</css-class-wrapper>
 	</portlet>
