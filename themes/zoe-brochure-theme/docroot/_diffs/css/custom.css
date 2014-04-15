@@ -23,6 +23,8 @@ $default-box-shadow-v-offset: 1px;
 /* ---------- Global ---------- */
 
 .aui {
+	background-color: #EAEAEA;
+
 	a {
 		color: $textColor;
 		text-decoration: none;
@@ -130,7 +132,7 @@ $default-box-shadow-v-offset: 1px;
 		}
 
 		.page-customization-bar .page-customization-bar-text {
-			height: 44px;
+			padding: 12px 0 11px;
 		}
 	}
 
@@ -277,6 +279,7 @@ $default-box-shadow-v-offset: 1px;
 	/* ---------- Hudcrumbs ---------- */
 
 	nav.lfr-hudcrumbs {
+		display: none;
 		left: auto !important;
 		margin: 0 auto;
 		max-width: 1200px;
@@ -816,7 +819,7 @@ $default-box-shadow-v-offset: 1px;
 		.media-body p {
 			font-size: 16px;
 			font-weight: 300;
-			line-height: 40px;
+			line-height: 32px;
 		}
 
 		.media-heading {
@@ -979,7 +982,7 @@ $default-box-shadow-v-offset: 1px;
 		}
 
 		#wrapper {
-			padding: 20px 0 0;
+			padding: 45px 0 0;
 		}
 
 		body {
@@ -1016,9 +1019,78 @@ $default-box-shadow-v-offset: 1px;
 			margin: 36px 0 18px;
 			text-align: center;
 		}
+
+		.portlet-boundary.portlet-dockbar {
+			margin-bottom: 0;
+		}
+
+		/* ---------- Dockbar Tablet and Below ---------- */
+
+		#navigation {
+			top: 0;
+
+			&.navbar .nav {
+				> li {
+					background-color: #F6F6F6;
+				}
+
+				> li.active {
+					display: none;
+				}
+
+				> li > a {
+					border-top-width: 0;
+				}
+
+				> li.active.hover > a, li.hover > a {
+					border-top-width: 0;
+				}
+			}
+
+			&.open .navbar-inner .nav-collapse li a {
+				color: #333;
+				font-size: 12px;
+				font-weight: bold;
+
+				&:focus, &:hover {
+					color: #FFF;
+				}
+			}
+		}
+
+		.dockbar .navbar-inner .container .nav-collapse > .nav > li.dropdown .dropdown-menu {
+			margin: 0;
+		}
+
+		.dockbar-split {
+			#wrapper {
+				margin-top: 0;
+			}
+
+			.dockbar {
+				.nav > li > .dropdown-menu > li > a {
+					color: #333;
+				}
+
+				.navbar-inner .site-administration-menu li a {
+					color: #333;
+				}
+			}
+		}
+
+		.navbar-fixed-top, .navbar-static-top {
+			.navbar-inner {
+				@include box-shadow(none);
+			}
+		}
 	}
 
 	@include respond-to(phone) {
+		#navigation {
+			left: 0;
+			right: 0;
+		}
+
 		.journal-content-article {
 			.row-fluid {
 				&:last-child, &:last-of-type, &.last-child {
