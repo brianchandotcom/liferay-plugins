@@ -16,6 +16,7 @@ package com.liferay.httpservice.internal.servlet;
 
 import com.liferay.httpservice.mock.MockFilter;
 import com.liferay.httpservice.servlet.ResourceServlet;
+import com.liferay.portal.kernel.test.CaptureHandler;
 import com.liferay.portal.kernel.test.JDKLoggerTestUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -120,7 +121,7 @@ public class BundleServletContextTest extends PowerMockito {
 	public void testGetFilterChain() throws Exception {
 		mockBundleWiring();
 
-		List<LogRecord> logRecords = JDKLoggerTestUtil.configureJDKLogger(
+		CaptureHandler captureHandler = JDKLoggerTestUtil.configureJDKLogger(
 			MockLoggingFilter.class.getName(), Level.INFO);
 
 		String cssFilterName = "CSS Filter";
@@ -141,6 +142,8 @@ public class BundleServletContextTest extends PowerMockito {
 
 		filterChain.doFilter(
 			new MockHttpServletRequest(), new MockHttpServletResponse());
+
+		List<LogRecord> logRecords = captureHandler.getLogRecords();
 
 		Assert.assertEquals(1, logRecords.size());
 
