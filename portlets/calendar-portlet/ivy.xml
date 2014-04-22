@@ -20,5 +20,6 @@
 
 	<dependencies>
 		<dependency org="com.liferay.plugins.test" name="arquillian-liferay-plugin-test-support" rev="1.0-SNAPSHOT" force="true" conf="test->*" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-tomcat-remote-7" rev="1.0.0.CR6" force="true" conf="test->*" />
 	</dependencies>
 </ivy-module>
