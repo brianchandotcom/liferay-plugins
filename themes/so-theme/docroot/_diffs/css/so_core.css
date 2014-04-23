@@ -1,4 +1,5 @@
 @import "compass";
+@import "mixins";
 @import "so";
 
 /* ---------- Banner ---------- */
@@ -1828,7 +1829,7 @@ html.aui {
 		}
 	}
 
-	@media (max-width: 979px) {
+	@include respond-to(phone, tablet) {
 		.navbar {
 			.info-items, .info-link-container {
 				display: none;
@@ -1862,7 +1863,7 @@ html.aui {
 		}
 	}
 
-	@media (max-width: 767px) {
+	@include respond-to(phone) {
 		body #banner {
 			padding: .5em 1em;
 			text-align: center;
@@ -2031,6 +2032,35 @@ html.aui {
 
 		.so-portlet-activities .activity-item {
 			padding: 1em 0;
+		}
+
+		.profile-page .so-portlet-activities .portlet-title {
+			text-align: left;
+		}
+
+		/* ---------- Portlet: contacts ---------- */
+
+		.contacts-portlet .contacts-profile {
+			.profile-actions {
+				margin: 10px 0;
+			}
+
+			.user-information-title {
+				text-align: left;
+				width: auto;
+			}
+
+			.section {
+				h3 {
+					float: none;
+					text-align: left;
+					width: auto;
+				}
+
+				.property-list {
+					margin-left: 10px;
+				}
+			}
 		}
 
 		/* ---------- Portlet: document library ---------- */
