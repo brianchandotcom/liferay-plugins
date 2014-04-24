@@ -3,4 +3,85 @@
 
 <project name="rtl-hook" basedir="." default="deploy">
 	<import file="../build-common-hook.xml" />
+
+	<macrodef name="clean">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-module-properties
+				module.dir="@{module.dir}"
+			/>
+
+			<delete dir="@{module.dir}/classes" />
+			<delete dir="@{module.dir}/docroot/WEB-INF/classes" />
+
+			<if>
+				<available file="@{module.dir}/docroot/WEB-INF/.gitignore" />
+				<then>
+					<if>
+						<resourcecontains
+							resource="@{module.dir}/docroot/WEB-INF/.gitignore"
+							substring="/lib"
+						/>
+						<then>
+							<delete dir="@{module.dir}/docroot/WEB-INF/lib" />
+						</then>
+					</if>
+				</then>
+			</if>
+
+			<delete dir="@{module.dir}/javadoc" />
+			<delete dir="@{module.dir}/test-classes" />
+			<delete dir="@{module.dir}/test-results" />
+			<delete dir="@{module.dir}/tmp" />
+
+			<delete file="${plugin.file}" />
+			<delete file="${plugin.javadoc.file}" />
+			<delete file="${plugin.pom.file}" />
+			<delete file="${plugin.sources.file}" />
+			<delete file="${plugin.src.file}" />
+
+			<call-macrodef-or-target
+				macrodef.name="clean-portal-dependencies"
+				module.dir="@{module.dir}"
+			/>
+		</sequential>
+	</macrodef>
+
+	<target name="build-rtl-css" depends="clean-rtl-css,compile">
+		<java
+			classname="com.liferay.rtl.tools.RtlCssBuilder"
+			classpathref="plugin.classpath"
+			fork="true"
+			newenvironment="true"
+		>
+			<jvmarg value="-Dliferay.lib.portal.dir=${app.server.lib.portal.dir}" />
+			<arg value="sass.dir=/" />
+			<arg value="sass.docroot.dir=${basedir}/docroot" />
+		</java>
+	</target>
+
+	<target name="clean-rtl-css">
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${basedir}/docroot" includes="**/.sass-cache/*_rtl.*" />
+		</delete>
+	</target>
+
+	<target name="compile" depends="build-common-plugin.compile, rtl-jar" />
+
+	<target name="rtl-jar">
+		<zip
+			basedir="docroot/WEB-INF/classes"
+			destfile="docroot/WEB-INF/lib/${plugin.name}.jar"
+		/>
+	</target>
+
+	<target name="update-from-portal">
+		<copy overwrite="true" preservelastmodified="true" todir="docroot/META-INF/custom_jsps">
+			<fileset dir="${app.server.portal.dir}">
+				<include name="**/*.css" />
+				<exclude name="**/_diffs/**" />
+			</fileset>
+		</copy>
+	</target>
 </project>
