@@ -15,11 +15,17 @@
 package com.liferay.sync.engine.documentlibrary.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.liferay.sync.engine.model.SyncSite;
+
+import java.util.List;
 
 /**
  * @author Dennis Ju
  */
-@JsonIgnoreProperties("userSitesGroups")
+@JsonIgnoreProperties(
+	{"portalEELicenseDigest", "socialOfficeEELicenseDigest"})
 public class SyncContext {
 
 	public String getPluginVersion() {
@@ -28,6 +34,10 @@ public class SyncContext {
 
 	public int getPortalBuildNumber() {
 		return _portalBuildNumber;
+	}
+
+	public List<SyncSite> getSyncSites() {
+		return _syncSites;
 	}
 
 	public long getUserId() {
@@ -50,6 +60,10 @@ public class SyncContext {
 		_socialOfficeInstalled = socialOfficeInstalled;
 	}
 
+	public void setSyncSites(List<SyncSite> syncSites) {
+		_syncSites = syncSites;
+	}
+
 	public void setUserId(long userId) {
 		_userId = userId;
 	}
@@ -57,6 +71,10 @@ public class SyncContext {
 	private String _pluginVersion;
 	private int _portalBuildNumber;
 	private boolean _socialOfficeInstalled;
+
+	@JsonProperty("userSitesGroups")
+	private List<SyncSite> _syncSites;
+
 	private long _userId;
 
 }
