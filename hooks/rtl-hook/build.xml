@@ -47,6 +47,13 @@
 			/>
 		</sequential>
 	</macrodef>
+
+	<target name="update-from-portal">
+		<copy overwrite="true" preservelastmodified="true" todir="docroot/META-INF/custom_jsps">
+			<fileset dir="${app.server.portal.dir}">
+				<include name="**/*.css" />
+				<exclude name="**/_diffs/**" />
+			</fileset>
+		</copy>
+	</target>
 </project>
-
-
