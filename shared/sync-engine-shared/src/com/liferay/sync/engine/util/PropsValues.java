@@ -19,6 +19,12 @@ package com.liferay.sync.engine.util;
  */
 public class PropsValues {
 
+	public static String[] SYNC_CHAR_BLACKLIST = PropsUtil.getArray(
+		PropsKeys.SYNC_CHAR_BLACKLIST);
+
+	public static String[] SYNC_CHAR_LAST_BLACKLIST = PropsUtil.getArray(
+		PropsKeys.SYNC_CHAR_LAST_BLACKLIST);
+
 	public static String SYNC_CONFIGURATION_DIRECTORY = PropsUtil.get(
 		PropsKeys.SYNC_CONFIGURATION_DIRECTORY);
 
@@ -40,6 +46,9 @@ public class PropsValues {
 
 	public static String SYNC_LOGGER_CONFIGURATION_FILE = PropsUtil.get(
 		PropsKeys.SYNC_LOGGER_CONFIGURATION_FILE);
+
+	public static String[] SYNC_NAME_BLACKLIST = PropsUtil.getArray(
+		PropsKeys.SYNC_NAME_BLACKLIST);
 
 	public static String SYNC_PRODUCT_NAME = PropsUtil.get(
 		PropsKeys.SYNC_PRODUCT_NAME);

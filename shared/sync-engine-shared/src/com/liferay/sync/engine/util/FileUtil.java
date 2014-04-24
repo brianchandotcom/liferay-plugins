@@ -27,6 +27,8 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +97,45 @@ public class FileUtil {
 		}
 
 		return false;
+	}
+
+	public static boolean isValidName(String name) {
+		if (StringUtils.isBlank(name)) {
+			return false;
+		}
+
+		for (String blacklistChar : PropsValues.SYNC_CHAR_BLACKLIST) {
+			if (name.contains(blacklistChar)) {
+				return false;
+			}
+		}
+
+		for (String blacklistLastChar : PropsValues.SYNC_CHAR_LAST_BLACKLIST) {
+			if (blacklistLastChar.startsWith("\\u")) {
+				blacklistLastChar = StringEscapeUtils.unescapeJava(
+					blacklistLastChar);
+			}
+
+			if (name.endsWith(blacklistLastChar)) {
+				return false;
+			}
+		}
+
+		String nameWithoutExtension = name;
+
+		if (name.contains(".")) {
+			int index = name.lastIndexOf(".");
+
+			nameWithoutExtension = name.substring(0, index);
+		}
+
+		for (String blacklistName : PropsValues.SYNC_NAME_BLACKLIST) {
+			if (nameWithoutExtension.equalsIgnoreCase(blacklistName)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private static Logger _logger = LoggerFactory.getLogger(FileUtil.class);
