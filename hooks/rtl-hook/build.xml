@@ -30,33 +30,10 @@
 				</then>
 			</if>
 
-			<if>
-				<and>
-					<available file="@{module.dir}/docroot/WEB-INF/.svn" />
-					<not>
-						<available file="@{module.dir}/docroot/WEB-INF/lib/.svn" />
-					</not>
-					<length length="0" when="equal">
-						<fileset dir="@{module.dir}/docroot/WEB-INF/lib" erroronmissingdir="false" />
-					</length>
-				</and>
-				<then>
-					<delete dir="@{module.dir}/docroot/WEB-INF/lib" />
-				</then>
-			</if>
-
 			<delete dir="@{module.dir}/javadoc" />
 			<delete dir="@{module.dir}/test-classes" />
 			<delete dir="@{module.dir}/test-results" />
 			<delete dir="@{module.dir}/tmp" />
-
-			<delete failonerror="false" includeemptydirs="true">
-				<fileset dir="@{module.dir}/docroot" includes="**/*.processed" />
-				<fileset dir="@{module.dir}/docroot" includes="**/.sass-cache/**" />
-				<fileset dir="@{module.dir}/docroot" includes="**/.sprite.png" />
-				<fileset dir="@{module.dir}/docroot" includes="**/.sprite.properties" />
-				<fileset dir="@{module.dir}/docroot" includes="**/Thumbs.db" />
-			</delete>
 
 			<delete file="${plugin.file}" />
 			<delete file="${plugin.javadoc.file}" />
@@ -68,23 +45,6 @@
 				macrodef.name="clean-portal-dependencies"
 				module.dir="@{module.dir}"
 			/>
-
-			<if>
-				<matches pattern=".*-theme" string="@{module.dir}" />
-				<then>
-					<if>
-						<available file="@{module.dir}/docroot/_diffs" />
-						<then>
-							<delete includeemptydirs="true" quiet="true" failonerror="false">
-								<fileset
-									dir="@{module.dir}/docroot"
-									excludes=".gitignore,_diffs.*,_diffs/**,WEB-INF/**"
-								/>
-							</delete>
-						</then>
-					</if>
-				</then>
-			</if>
 		</sequential>
 	</macrodef>
 </project>
