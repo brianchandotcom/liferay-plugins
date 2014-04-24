@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="build-common" xmlns:antelope="antlib:ise.antelope.tasks">
+<project name="build-common" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<dirname file="${ant.file.build-common}" property="sdk.dir" />
 
 	<property environment="env" />
@@ -851,6 +851,7 @@ Please find a solution that does not require portal-impl.jar.
 
 					<path id="plugin-test-type.classpath">
 						<pathelement location="@{module.dir}/test-classes/@{test.type}" />
+						<ivy:resources file="@{module.dir}/ivy.xml" transitive="true" conf="test"/>
 					</path>
 
 					<compile-java
@@ -1930,12 +1931,13 @@ Please find a solution that does not require portal-impl.jar.
 
 					<path id="plugin-test-type.classpath">
 						<pathelement location="@{module.dir}/test-classes/@{test.type}" />
+						<ivy:resources file="@{module.dir}/ivy.xml" transitive="true" conf="test"/>
 					</path>
 
 					<if>
 						<available file="@{module.dir}/test/@{test.type}" type="dir" />
 						<then>
-							<junit dir="${sdk.dir}" fork="on" forkmode="@{junit.forkmode}" outputtoformatters="false" printsummary="on" showoutput="true">
+							<junit dir="@{module.dir}" fork="on" forkmode="@{junit.forkmode}" outputtoformatters="false" printsummary="on" showoutput="true">
 								<sysproperty key="app.server.tomcat.dir" value="${app.server.tomcat.dir}" />
 								<sysproperty key="net.sourceforge.cobertura.datafile" file="@{module.dir}/test-coverage/cobertura.ser" />
 								<jvmarg line="${junit.debug.jpda}" />
