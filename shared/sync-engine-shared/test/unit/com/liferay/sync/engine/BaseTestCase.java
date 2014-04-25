@@ -76,8 +76,8 @@ public abstract class BaseTestCase {
 			System.getProperty("user.home") + "/liferay-sync-test");
 
 		syncAccount = SyncAccountService.addSyncAccount(
-			filePathName, 10, "test@liferay.com", "test", "test", false,
-			"http://localhost:8080/api/jsonws");
+			filePathName, 10, "test@liferay.com", "test", "test", null, false,
+			"http://localhost:8080");
 
 		syncAccount.setActive(true);
 		syncAccount.setState(SyncAccount.STATE_CONNECTED);
