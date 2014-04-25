@@ -1153,6 +1153,10 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 					PortletKeys.KNOWLEDGE_BASE_ARTICLE,
 					kbArticle.getAttachmentsFolderId(), inputStream,
 					shortFileName, mimeType, true);
+
+				DLStoreUtil.deleteFile(
+					serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
+					dirName + StringPool.SLASH + shortFileName);
 			}
 			finally {
 				StreamUtil.cleanUp(inputStream);
