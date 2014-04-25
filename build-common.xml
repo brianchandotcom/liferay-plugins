@@ -331,6 +331,7 @@ Error-Prone was automatically installed. Please rerun your task.
 	</macrodef>
 
 	<macrodef name="clean">
+		<attribute name="clean.sass.cache" default="true"/>
 		<attribute name="module.dir" />
 
 		<sequential>
@@ -376,9 +377,17 @@ Error-Prone was automatically installed. Please rerun your task.
 			<delete dir="@{module.dir}/test-results" />
 			<delete dir="@{module.dir}/tmp" />
 
+			<if>
+				<istrue value="@{clean.sass.cache}" />
+				<then>
+					<delete failonerror="false" includeemptydirs="true">
+						<fileset dir="@{module.dir}/docroot" includes="**/.sass-cache/**" />
+					</delete>
+				</then>
+			</if>
+
 			<delete failonerror="false" includeemptydirs="true">
 				<fileset dir="@{module.dir}/docroot" includes="**/*.processed" />
-				<fileset dir="@{module.dir}/docroot" includes="**/.sass-cache/**" />
 				<fileset dir="@{module.dir}/docroot" includes="**/.sprite.png" />
 				<fileset dir="@{module.dir}/docroot" includes="**/.sprite.properties" />
 				<fileset dir="@{module.dir}/docroot" includes="**/Thumbs.db" />
