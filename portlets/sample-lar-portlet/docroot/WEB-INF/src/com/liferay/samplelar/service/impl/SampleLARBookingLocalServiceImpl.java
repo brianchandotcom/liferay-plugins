@@ -16,7 +16,9 @@ package com.liferay.samplelar.service.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.samplelar.SampleLARBookingBookingNumberException;
@@ -32,6 +34,7 @@ import java.util.List;
 public class SampleLARBookingLocalServiceImpl
 	extends SampleLARBookingLocalServiceBaseImpl {
 
+	@Override
 	public SampleLARBooking addSampleLARBooking(
 			long userId, long groupId, String bookingNumber,
 			ServiceContext serviceContext)
@@ -60,6 +63,16 @@ public class SampleLARBookingLocalServiceImpl
 		return sampleLARBooking;
 	}
 
+	@Override
+	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
+	public SampleLARBooking deleteSampleLARBooking(
+			SampleLARBooking sampleLARBooking)
+		throws SystemException {
+
+		return sampleLARBookingPersistence.remove(sampleLARBooking);
+	}
+
+	@Override
 	public void deleteSampleLARBookings(long groupId) throws SystemException {
 		List<SampleLARBooking> sampleLARBookings =
 			sampleLARBookingPersistence.findByGroupId(groupId);
@@ -70,6 +83,7 @@ public class SampleLARBookingLocalServiceImpl
 		}
 	}
 
+	@Override
 	public SampleLARBooking updateSampleLARBooking(
 			long userId, long sampleLARBookingId, String bookingNumber,
 			ServiceContext serviceContext)
