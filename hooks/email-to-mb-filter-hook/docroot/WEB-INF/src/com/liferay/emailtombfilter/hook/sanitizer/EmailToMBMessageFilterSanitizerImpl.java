@@ -21,12 +21,14 @@ import com.liferay.portal.kernel.sanitizer.Sanitizer;
 import com.liferay.portal.kernel.sanitizer.SanitizerException;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.messageboards.model.MBMessage;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -100,9 +102,38 @@ public class EmailToMBMessageFilterSanitizerImpl implements Sanitizer {
 			_log.debug("Sanitizing " + className + "#" + classPK);
 		}
 
-		s = s.substring(0, matcher.start());
+		StringBuilder sb = new StringBuilder();
 
-		return s.trim();
+		sb.append(s.substring(0, matcher.start()));
+
+		String quotedText = s.substring(matcher.end(), s.length());
+
+		String[] quotedTextLines = quotedText.split("\r\n|\n|\r");
+
+		int lastTextPos = 0;
+		int lastQuotedTextPos = 0;
+
+		for (int i = 0; i < quotedTextLines.length; i++ ) {
+			if (Validator.isNotNull(quotedTextLines[i])) {
+				if (quotedTextLines[i].startsWith(StringPool.GREATER_THAN)) {
+					lastQuotedTextPos = i;
+
+					if ((lastTextPos > 0) &&
+						(lastTextPos < lastQuotedTextPos)) {
+
+						return s;
+					}
+				}
+				else {
+					lastTextPos = i;
+
+					sb.append(quotedTextLines[i]);
+					sb.append(StringPool.RETURN_NEW_LINE);
+				}
+			}
+		}
+
+		return sb.toString();
 	}
 
 	private static final Pattern _pattern = Pattern.compile(
