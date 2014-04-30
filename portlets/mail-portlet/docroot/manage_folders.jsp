@@ -40,7 +40,7 @@ long accountId = ParamUtil.getLong(request, "accountId");
 			Folder folder = folders.get(i);
 		%>
 
-			<tr class="results-row no-hover<%= ((i % 2) == 0) ? " alt" : "" %>">
+			<tr class="no-hover<%= ((i % 2) == 0) ? " alt" : "" %> results-row">
 				<td class="name">
 					<%= folder.getDisplayName() %>
 				</td>
@@ -93,7 +93,7 @@ long accountId = ParamUtil.getLong(request, "accountId");
 								displayName: displayName
 							}
 						),
-						dataType: 'json',
+						dataType: 'JSON',
 						method: 'POST',
 						on: {
 							failure: <portlet:namespace />onIOFailure,
@@ -126,7 +126,7 @@ long accountId = ParamUtil.getLong(request, "accountId");
 								folderId: id
 							}
 						),
-						dataType: 'json',
+						dataType: 'JSON',
 						method: 'POST',
 						on: {
 							failure: <portlet:namespace />onIOFailure,

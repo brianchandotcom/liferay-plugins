@@ -49,7 +49,7 @@ AUI.add(
 										'<button type="button" class="btn btn-primary calendar-add-event-btn">' +
 											Liferay.Language.get('add-calendar-booking') +
 										'</div>' +
-									 '</button>';
+									'</button>';
 
 		var TPL_MESSAGE_UPDATE_ALL_INVITED = '<p class="calendar-portlet-confirmation-text">' +
 												Liferay.Language.get('invited-users-will-be-notified') +
@@ -362,7 +362,7 @@ AUI.add(
 				A.io.request(
 					inviteesURL,
 					{
-						dataType: 'json',
+						dataType: 'JSON',
 						on: {
 							success: function() {
 								callback(this.get('responseData'));
@@ -400,7 +400,7 @@ AUI.add(
 				A.io.request(
 					renderingRulesURL,
 					{
-						dataType: 'json',
+						dataType: 'JSON',
 						on: {
 							success: function() {
 								callback(this.get('responseData'));
@@ -468,7 +468,7 @@ AUI.add(
 				A.io.request(
 					calendarBookingsURL,
 					{
-						dataType: 'json',
+						dataType: 'JSON',
 						on: {
 							failure: failure,
 							success: function() {
@@ -503,7 +503,7 @@ AUI.add(
 				A.io.request(
 					resourceCalendarsURL,
 					{
-						dataType: 'json',
+						dataType: 'JSON',
 						on: {
 							success: function() {
 								callback(this.get('responseData'));
@@ -543,7 +543,7 @@ AUI.add(
 							cmd: A.JSON.stringify(payload),
 							p_auth: Liferay.authToken
 						},
-						dataType: 'json',
+						dataType: 'JSON',
 						on: {
 							failure: callback.failure,
 							start: callback.start,
@@ -1882,7 +1882,7 @@ AUI.add(
 							[
 								{
 									cssClass: 'close',
-									label: "\u00D7",
+									label: '\u00D7',
 									on: {
 										click: A.bind(instance._handleCancelEvent, instance)
 									},
