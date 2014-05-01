@@ -81,6 +81,13 @@
 				padding: 0 10px;
 			}
 
+			a {
+				border-radius: 4px;
+				display: inline;
+				margin: 2px 2px;
+				padding: 5px 5px;
+			}
+
 			a:hover {
 				text-decoration: none;
 			}
@@ -204,8 +211,24 @@
 	.user-notifications-list {
 		margin: 0;
 
+		.mark-all-as-read {
+			background-color: #FFF;
+			border-radius: 4px;
+			color: #000;
+			margin: 10px 10px;
+			padding: 5px 5px;
+			text-decoration: none;
+
+			&:hover {
+				background: #2FA4F5;
+				color: #FFF;
+				cursor: pointer;
+			}
+		}
+
 		.user-notification {
 			color: #000;
+			margin: 5px;
 
 			&:hover {
 				color: #FFF;
@@ -219,6 +242,7 @@
 
 		.message.top {
 			border-bottom: 1px solid #D5D5D5;
+			margin-bottom: 10px;
 		}
 	}
 

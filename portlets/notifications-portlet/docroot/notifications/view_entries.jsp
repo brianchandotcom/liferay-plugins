@@ -25,6 +25,8 @@ int end = ParamUtil.getInteger(request, "end", delta);
 List<UserNotificationEvent> userNotificationEvents = null;
 int userNotificationEventsCount = 0;
 
+List<Long> userNotificationEventIds = new ArrayList<Long>();
+
 if (filter.equals("unread")) {
 	userNotificationEvents = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEvents(themeDisplay.getUserId(), false, start, end);
 	userNotificationEventsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), false);
@@ -51,11 +53,15 @@ else {
 	<c:when test="<%= (userNotificationEventsCount > delta) && fullView %>">
 		<li class="clearfix message top">
 			<span class="left-nav <%= start == 0 ? "disabled" : "previous" %>"><a href="javascript:;"><liferay-ui:message key="previous" /></a></span>
-			<span><liferay-ui:message arguments="<%= new Object[] {(start + 1), end, userNotificationEventsCount} %>" key="showing-x-x-of-x-results" translateArguments="<%= false %>" /></span>
+			<span><liferay-ui:message arguments="<%= new Object[] {(start + 1), end <= userNotificationEventsCount ? end : userNotificationEventsCount, userNotificationEventsCount} %>" key="showing-x-x-of-x-results" translateArguments="<%= false %>" /></span>
 			<span class="right-nav <%= userNotificationEventsCount <= end ? "disabled" : "next" %>"><a href="javascript:;"><liferay-ui:message key="next" /></a></span>
 		</li>
 	</c:when>
 </c:choose>
+
+<c:if test='<%= fullView && filter.equals("unread") %>'>
+	<div class="fullViewMarkAllAsRead"></div>
+</c:if>
 
 <%
 for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
@@ -88,39 +94,43 @@ for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
 				<div class="clearfix user-notification-link" data-href="<%= userNotificationFeedEntry.getLink() %>" data-openDialog="<%= String.valueOf(userNotificationFeedEntry.isOpenDialog()) %>">
 			</c:when>
 			<c:otherwise>
+
+				<%
+				userNotificationEventIds.add(userNotificationEvent.getUserNotificationEventId());
+				%>
+
 				<liferay-portlet:actionURL name="markAsRead" var="markAsReadURL"><portlet:param name="userNotificationEventId" value="<%= String.valueOf(userNotificationEvent.getUserNotificationEventId()) %>" /></liferay-portlet:actionURL>
 
-				<div class="clearfix user-notification-link" data-href="<%= userNotificationFeedEntry.getLink() %>" data-markAsReadURL="<%= markAsReadURL %>" data-openDialog="<%= String.valueOf(userNotificationFeedEntry.isOpenDialog()) %>">
+				<div class="clearfix user-notification-link" data-href="<%= userNotificationFeedEntry.getLink() %>" data-markAsReadURL="<%= markAsReadURL %>"  data-openDialog="<%= String.valueOf(userNotificationFeedEntry.isOpenDialog()) %>">
 			</c:otherwise>
 		</c:choose>
 
-			<div class="sender">
-				<span class="user-thumbnail">
-					<img alt="<%= userFullName %>" src="<%= userPortaitURL %>" />
+		<div class="sender">
+			<span class="user-thumbnail">
+				<img alt="<%= userFullName %>" src="<%= userPortaitURL %>" />
+			</span>
+		</div>
+
+		<div class="content">
+			<div class="body">
+				<%= userNotificationFeedEntry.getBody() %>
+			</div>
+
+			<div class="timestamp">
+				<span class="portlet-icon">
+					<liferay-portlet:icon-portlet
+						portlet="<%= PortletLocalServiceUtil.getPortletById(company.getCompanyId(), userNotificationEvent.getType()) %>"
+					/>
 				</span>
+
+				<%= simpleDateFormat.format(userNotificationEvent.getTimestamp()) %>
 			</div>
 
-			<div class="content">
-				<div class="body">
-					<%= userNotificationFeedEntry.getBody() %>
+			<c:if test='<%= !filter.equals("unread") %>'>
+				<div class="read">
+					<liferay-ui:message key='<%= read ? "read" : "unread" %>' />
 				</div>
-
-				<div class="timestamp">
-					<span class="portlet-icon">
-						<liferay-portlet:icon-portlet
-							portlet="<%= PortletLocalServiceUtil.getPortletById(company.getCompanyId(), userNotificationEvent.getType()) %>"
-						/>
-					</span>
-
-					<%= simpleDateFormat.format(userNotificationEvent.getTimestamp()) %>
-				</div>
-
-				<c:if test='<%= !filter.equals("unread") %>'>
-					<div class="read">
-						<liferay-ui:message key='<%= read ? "read" : "unread" %>' />
-					</div>
-				</c:if>
-			</div>
+			</c:if>
 		</div>
 	</li>
 
@@ -131,7 +141,7 @@ for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
 <c:if test="<%= !userNotificationEvents.isEmpty() && fullView %>">
 	<li class="clearfix message">
 		<span class="left-nav <%= start == 0 ? "disabled" : "previous" %>"><a href="javascript:;"><liferay-ui:message key="previous" /></a></span>
-		<span><liferay-ui:message arguments="<%= new Object[] {(start + 1), end, userNotificationEventsCount} %>" key="showing-x-x-of-x-results" translateArguments="<%= false %>" /></span>
+		<span><liferay-ui:message arguments="<%= new Object[] {(start + 1), end <= userNotificationEventsCount ? end : userNotificationEventsCount, userNotificationEventsCount} %>" key="showing-x-x-of-x-results" translateArguments="<%= false %>" /></span>
 		<span class="right-nav <%= userNotificationEventsCount <= end ? "disabled" : "next" %>"><a href="javascript:;"><liferay-ui:message key="next" /></a></span>
 	</li>
 </c:if>
@@ -158,79 +168,26 @@ for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
 		</liferay-portlet:renderURL>
 
 		<a href="<%= viewAllNotifications %>"><liferay-ui:message key="view-all-notifications" /></a>
+
+		<c:if test="<%= !userNotificationEventIds.isEmpty() %>">
+			<div class="dockbarMarkAllAsRead"></div>
+		</c:if>
 	</li>
 </c:if>
 
-<aui:script use="aui-base,aui-io-plugin-deprecated">
-	<c:if test='<%= filter.equals("unread") %>'>
-		var unreadCount = A.one('#portlet_<%= PortletKeys.NOTIFICATIONS %> .user-notifications-sidebar .unread .count');
-
-		if (unreadCount) {
-			unreadCount.setHTML('<%= userNotificationEventsCount %>');
+<aui:script use="aui-base">
+	Liferay.Notifications.init(
+		{
+			baseActionURL: '<%= PortletURLFactoryUtil.create(request, portletDisplay.getId(), themeDisplay.getPlid(), PortletRequest.ACTION_PHASE) %>',
+			baseRenderURL: '<%= PortletURLFactoryUtil.create(request, portletDisplay.getId(), themeDisplay.getPlid(), PortletRequest.RENDER_PHASE) %>',
+			baseResourceURL: '<%= PortletURLFactoryUtil.create(request, portletDisplay.getId(), themeDisplay.getPlid(), PortletRequest.RESOURCE_PHASE) %>',
+			currentPageNotificationEventsCount: <%= userNotificationEventIds.size() %>,
+			delta: <%= delta %>,
+			end: <%= end %>,
+			filter: '<%= HtmlUtil.escape(filter) %>',
+			start: <%= start %>,
+			userNotificationEventsCount: <%= userNotificationEventsCount %>,
+			userNotificationEventIds: '<%= StringUtil.merge(userNotificationEventIds) %>'
 		}
-	</c:if>
-
-	var userNotificationsList = A.one('#portlet_<%= PortletKeys.NOTIFICATIONS %> .user-notifications-list-container .user-notifications-list');
-
-	if (userNotificationsList) {
-		userNotificationsList.delegate(
-			'click',
-			function(event) {
-				event.preventDefault();
-
-				if (userNotificationsList) {
-					if (!userNotificationsList.io) {
-						userNotificationsList.plug(
-							A.Plugin.IO,
-							{
-							autoLoad: false
-							}
-						);
-					}
-
-					<portlet:renderURL var="nextURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-						<portlet:param name="mvcPath" value="/notifications/view_entries.jsp" />
-						<portlet:param name="filter" value="<%= filter %>" />
-						<portlet:param name="fullView" value="<%= String.valueOf(fullView) %>" />
-						<portlet:param name="start" value="<%= String.valueOf(start + delta) %>" />
-						<portlet:param name="end" value="<%= String.valueOf(end + delta) %>" />
-					</portlet:renderURL>
-
-					userNotificationsList.io.set('uri', '<%= nextURL %>');
-					userNotificationsList.io.start();
-				}
-			},
-			'.message .next a'
-		);
-
-		userNotificationsList.delegate(
-			'click',
-			function(event) {
-				event.preventDefault();
-
-				if (userNotificationsList) {
-					if (!userNotificationsList.io) {
-						userNotificationsList.plug(
-							A.Plugin.IO,
-							{
-							autoLoad: false
-							}
-						);
-					}
-
-					<portlet:renderURL var="previousURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
-						<portlet:param name="mvcPath" value="/notifications/view_entries.jsp" />
-						<portlet:param name="filter" value="<%= filter %>" />
-						<portlet:param name="fullView" value="<%= String.valueOf(fullView) %>" />
-						<portlet:param name="start" value="<%= String.valueOf(start - delta) %>" />
-						<portlet:param name="end" value="<%= String.valueOf(end - delta) %>" />
-					</portlet:renderURL>
-
-					userNotificationsList.io.set('uri', '<%= previousURL %>');
-					userNotificationsList.io.start();
-				}
-			},
-			'.message .previous a'
-		);
-	}
+	);
 </aui:script>
