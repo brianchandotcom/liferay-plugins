@@ -2091,6 +2091,94 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="war-alloy-portlet">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-module-properties
+				module.dir="@{module.dir}"
+			/>
+
+			<if>
+				<available file="@{module.dir}/docroot/WEB-INF/portlet.xml" />
+				<then>
+					<var name="portlet.xml.content" unset="true" />
+
+					<loadfile property="portlet.xml.content" srcFile="@{module.dir}/docroot/WEB-INF/portlet.xml" /> 
+
+					<if>
+						<contains string="${portlet.xml.content}" substring="com.liferay.alloy.mvc.AlloyPortlet" />
+						<then>
+							<for param="dir">
+								<dirset dir="@{module.dir}/docroot/WEB-INF/jsp" includes="*" />
+								<sequential>
+									<if>
+										<available file="@{dir}/views" type="dir" />
+										<then>
+											<antelope:stringutil property="module.dir" string="@{module.dir}">
+												<antelope:replace regex="\\" replacement="/" />
+											</antelope:stringutil>
+
+											<antelope:stringutil property="dir" string="@{dir}">
+												<antelope:replace regex="\\" replacement="/" />
+											</antelope:stringutil>
+
+											<antelope:stringutil property="dir" string="${dir}">
+												<antelope:replace regex="${module.dir}/docroot/" replacement="" />
+											</antelope:stringutil>
+
+											<zip
+												destfile="${plugin.file}"
+												update="true"
+											>
+												<mappedresources>
+													<globmapper from="*" to="${dir}/views/touch.jsp" />
+													<string><![CDATA[<%@ include file="init.jsp" %>
+
+<%@ page import="com.liferay.portal.model.Portlet" %>
+<%@ page import="com.liferay.portal.service.PortletLocalServiceUtil" %>
+
+<%@ page import="java.util.Set" %>
+
+<%
+Portlet portlet = PortletLocalServiceUtil.getPortletById(portletDisplay.getId());
+
+Set<String> paths = application.getResourcePaths("/WEB-INF/jsp/" + portlet.getFriendlyURLMapping() + "/controllers/");
+
+for (String path : paths) {
+	int x = path.lastIndexOf("/");
+	int y = path.indexOf("_controller.jsp");
+
+	if (y == -1) {
+		continue;
+	}
+
+	String controller = path.substring(x + 1, y);
+%>
+
+	<portlet:resourceURL var="resourceURL">
+		<portlet:param name="controller" value="<%= controller %>" />
+		<portlet:param name="action" value="touch" />
+	</portlet:resourceURL>
+
+	<iframe height="0" src="<%= resourceURL %>" style="display: none; visibility: hidden;" width="0"></iframe>
+
+<%
+}
+%>]]></string>
+												</mappedresources>
+											</zip>
+										</then>
+									</if>
+								</sequential>
+							</for>
+						</then>
+					</if>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="war-macro">
 		<attribute name="module.dir" />
 
@@ -2123,6 +2211,10 @@ Please find a solution that does not require portal-impl.jar.
 						/>
 
 						<war-web
+							module.dir="@{module.dir}"
+						/>
+
+						<war-alloy-portlet
 							module.dir="@{module.dir}"
 						/>
 					</then>
