@@ -676,8 +676,8 @@ $default-box-shadow-v-offset: 1px;
 		}
 
 		.carousel-panel-right {
-				right: 5%;
 				position: absolute;
+				right: 5%;
 				top: 40%;
 				width: 50%;
 		}
@@ -729,7 +729,7 @@ $default-box-shadow-v-offset: 1px;
 
 				bottom: 0;
 				color: #FFF;
-				padding: 5px 0px 5px 7px;
+				padding: 5px 0 5px 7px;
 				position: absolute;
 				right: 0;
 				text-decoration: none;
@@ -749,8 +749,8 @@ $default-box-shadow-v-offset: 1px;
 			a.carousel-menu-next, a.carousel-menu-prev {
 				background-image: none;
 				color: #FFF;
-				height: auto;
 				font-size: 30px;
+				height: auto;
 				margin: 0;
 				position: absolute;
 				text-decoration: none;
@@ -968,7 +968,7 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
-	.zoe-panel-PANEL-ABOUT-US, .zoe-panel-post { 
+	.zoe-panel-PANEL-ABOUT-US, .zoe-panel-post {
 		.zoe-panel {
 			@include box-shadow(none);
 		}
