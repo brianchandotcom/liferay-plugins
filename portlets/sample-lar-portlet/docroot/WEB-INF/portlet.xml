@@ -4,7 +4,7 @@
 	<portlet>
 		<portlet-name>1</portlet-name>
 		<display-name>Sample LAR</display-name>
-		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
+		<portlet-class>com.liferay.samplelar.portlet.SampleLARPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/view.jsp</value>
@@ -14,7 +14,7 @@
 			<mime-type>text/html</mime-type>
 		</supports>
 		<supported-locale>en</supported-locale>
-		<resource-bundle>com.liferay.samplelar.resources.Resource</resource-bundle>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>Sample LAR</title>
 			<short-title>Sample LAR</short-title>
