@@ -229,7 +229,7 @@ if (comment) {
 
 	var TPL_SEARCH_RESULTS = '<div class="microblogs-autocomplete">' +
 		'<div class="thumbnail">' +
-			'<img src="{portraitURL}" alt="{fullName}" />' +
+			'<img alt="{fullName}" src="{portraitURL}" />' +
 		'</div>' +
 		'<div>' +
 			'<span class="user-name">{fullName}</span><br />' +
@@ -249,7 +249,7 @@ if (comment) {
 
 			var remaining = (150 - contentInput.val().length);
 
-			var disabled = ((remaining == 150) || (contentInput.get('value') == "") || (remaining < 0));
+			var disabled = ((remaining == 150) || (contentInput.get('value') == '') || (remaining < 0));
 
 			countdown.html(remaining);
 
@@ -493,7 +493,7 @@ if (comment) {
 				updateContainer = A.one('#<portlet:namespace />commentsContainer<%= microblogsEntryId %>');
 			</c:if>
 
-			Liferay.Microblogs.updateMicroblogs(form, url.get("value"), updateContainer);
+			Liferay.Microblogs.updateMicroblogs(form, url.get('value'), updateContainer);
 
 			<c:if test="<%= repost %>">
 				Liferay.Microblogs.closePopup();
