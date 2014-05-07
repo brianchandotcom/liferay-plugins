@@ -14,7 +14,7 @@
 		<dynamic-content><![CDATA[]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="banner_button_text" type="text">
-		<dynamic-content><![CDATA[Call To Action]]></dynamic-content>
+		<dynamic-content><![CDATA[Call to Action]]></dynamic-content>
 		<dynamic-element name="banner_button_link" type="text">
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>

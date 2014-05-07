@@ -1,8 +1,6 @@
 @import "compass";
 @import "mixins";
 
-@import url(custom_common.css);
-
 $mainContentSpacing: 20px;
 
 /* ---------- Common color variables ---------- */

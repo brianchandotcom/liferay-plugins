@@ -8,6 +8,7 @@
 		<dynamic-content><![CDATA[4]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="pricing_table_heading" type="text">
+		<dynamic-content><![CDATA[Silver]]></dynamic-content>
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>
 		</dynamic-element>
@@ -30,6 +31,7 @@
 			<dynamic-content><![CDATA[Fusce dapibus]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="button_text" type="text">
+			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 			<dynamic-element name="link" type="text">
 				<dynamic-content><![CDATA[1]]></dynamic-content>
 			</dynamic-element>
@@ -39,11 +41,10 @@
 			<dynamic-element name="size" type="select">
 				<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 			</dynamic-element>
-			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Silver]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="pricing_table_heading" type="text">
+		<dynamic-content><![CDATA[Gold]]></dynamic-content>
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>
 		</dynamic-element>
@@ -66,6 +67,7 @@
 			<dynamic-content><![CDATA[Fusce dapibus]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="button_text" type="text">
+			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 			<dynamic-element name="link" type="text">
 				<dynamic-content><![CDATA[1]]></dynamic-content>
 			</dynamic-element>
@@ -75,11 +77,10 @@
 			<dynamic-element name="size" type="select">
 				<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 			</dynamic-element>
-			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Gold]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="pricing_table_heading" type="text">
+		<dynamic-content><![CDATA[Platinum]]></dynamic-content>
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>
 		</dynamic-element>
@@ -102,6 +103,7 @@
 			<dynamic-content><![CDATA[Fusce dapibus]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="button_text" type="text">
+			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 			<dynamic-element name="link" type="text">
 				<dynamic-content><![CDATA[1]]></dynamic-content>
 			</dynamic-element>
@@ -111,11 +113,10 @@
 			<dynamic-element name="size" type="select">
 				<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 			</dynamic-element>
-			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Platinum]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="pricing_table_heading" type="text">
+		<dynamic-content><![CDATA[Diamond]]></dynamic-content>
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>
 		</dynamic-element>
@@ -138,6 +139,7 @@
 			<dynamic-content><![CDATA[Fusce dapibus]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="button_text" type="text">
+			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 			<dynamic-element name="link" type="text">
 				<dynamic-content><![CDATA[1]]></dynamic-content>
 			</dynamic-element>
@@ -147,8 +149,6 @@
 			<dynamic-element name="size" type="select">
 				<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 			</dynamic-element>
-			<dynamic-content><![CDATA[Purchase]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Diamond]]></dynamic-content>
 	</dynamic-element>
 </root>
