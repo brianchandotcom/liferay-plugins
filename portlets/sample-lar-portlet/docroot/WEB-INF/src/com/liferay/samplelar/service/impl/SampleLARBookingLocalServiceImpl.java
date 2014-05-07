@@ -64,6 +64,17 @@ public class SampleLARBookingLocalServiceImpl
 	}
 
 	@Override
+	public SampleLARBooking deleteSampleLARBooking(long sampleLARBookingId)
+		throws SystemException {
+
+		SampleLARBooking sampleLARBooking =
+			sampleLARBookingPersistence.fetchByPrimaryKey(sampleLARBookingId);
+
+		return sampleLARBookingLocalService.deleteSampleLARBooking(
+			sampleLARBooking);
+	}
+
+	@Override
 	@SystemEvent(type = SystemEventConstants.TYPE_DELETE)
 	public SampleLARBooking deleteSampleLARBooking(
 			SampleLARBooking sampleLARBooking)
@@ -81,6 +92,19 @@ public class SampleLARBookingLocalServiceImpl
 			sampleLARBookingLocalService.deleteSampleLARBooking(
 				sampleLARBooking);
 		}
+	}
+
+	@Override
+	public List<SampleLARBooking> getSampleLARBookings(
+			long groupId, int start, int end)
+		throws SystemException {
+
+		return sampleLARBookingPersistence.findByGroupId(groupId, start, end);
+	}
+
+	@Override
+	public int getSampleLARBookingsCount(long groupId) throws SystemException {
+		return sampleLARBookingPersistence.countByGroupId(groupId);
 	}
 
 	@Override

@@ -14,63 +14,28 @@
  */
 --%>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/init.jsp" %>
 
-<%@ page import="java.util.Date" %>
+<aui:fieldset label="sample-lar-portlet-information">
+	<div class="sample-lar-paragraph">
+		This is the <strong>Sample LAR Portlet</strong>. It demonstrates exporting, importing, and staging capabilities that can be implemented in a portlet.
+	</div>
 
-<portlet:defineObjects />
+	<div class="sample-lar-paragraph">
+		The portlet's sample data can be exported to a LAR file. And data from LAR files can be imported into the portlet. To export or import portlet data, click on the gear icon of the portlet and select <em>Export/Import</em>.
+	</div>
 
-<%
-long exportDate = Long.parseLong(portletPreferences.getValue("last-export-date", "0"));
-long importDate = Long.parseLong(portletPreferences.getValue("last-import-date", "0"));
-%>
+	<div class="sample-lar-paragraph">
+		In addition, the portlet supports staging. It's easy to enable staging for its content. First, navigate to the site's <em>Configuration</em> page, click on <em>Site Settings</em> in the side menu, and click on <em>Staging</em> in the Advanced section. Then select either <em>Remote Live</em> or <em>Local Live</em>, and select <em>Sample LAR</em> in the Content Type section. Any changes to the portlet's content will be staged for publishing.
+	</div>
+</aui:fieldset>
 
-This is the <strong>Sample LAR Portlet</strong>. This was made to demonstrate the portlet
-LAR plugin feature.
+<aui:fieldset label="sample-bookings">
+	<portlet:actionURL name="addSampleLARBooking" var="addSampleLARBookingURL">
+		<portlet:param name="mvcPath" value="/view.jsp" />
+	</portlet:actionURL>
 
-<br /><br />
+	<aui:button href="<%= addSampleLARBookingURL %>" value="add-sample-booking" />
 
-This portlet plugin allows you to store data in the LAR file (Liferay Archive)
-when the portlet exists in the Community being exported.
-
-<br /><br />
-
-Date of last export:
-
-<%
-if (exportDate == 0) {
-%>
-
-	Never
-
-<%
-}
-else {
-%>
-
-	<%= new Date(exportDate) %>
-
-<%
-}
-%>
-
-<br />
-
-Date of last import:
-
-<%
-if (importDate == 0) {
-%>
-
-	Never
-
-<%
-}
-else {
-%>
-
-	<%= new Date(importDate) %>
-
-<%
-}
-%>
+	<%@ include file="/view_sample_lar_bookings.jsp" %>
+</aui:fieldset>
