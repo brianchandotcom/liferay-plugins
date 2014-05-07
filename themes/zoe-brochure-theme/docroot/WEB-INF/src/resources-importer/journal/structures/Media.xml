@@ -71,14 +71,14 @@
 				</meta-data>
 			</dynamic-element>
 			<dynamic-element dataType="string" indexType="keyword" multiple="false" name="media_icon_alignment" readOnly="false" repeatable="false" required="false" showLabel="true" type="select" width="large">
-				<dynamic-element name="media_icon_alignment_left" type="option" value="pull-left">
+				<dynamic-element name="media_icon_alignment_left" type="option" value="align-left">
 					<meta-data locale="en_US">
 						<entry name="label">
 							<![CDATA[Left]]>
 						</entry>
 					</meta-data>
 				</dynamic-element>
-				<dynamic-element name="media_icon_alignment_right" type="option" value="pull-right">
+				<dynamic-element name="media_icon_alignment_right" type="option" value="align-right">
 					<meta-data locale="en_US">
 						<entry name="label">
 							<![CDATA[Right]]>
@@ -90,7 +90,7 @@
 						<![CDATA[Icon Alignment]]>
 					</entry>
 					<entry name="predefinedValue">
-						<![CDATA[["pull-left"]]]>
+						<![CDATA[["align-left"]]]>
 					</entry>
 					<entry name="tip">
 						<![CDATA[]]>
