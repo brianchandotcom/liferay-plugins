@@ -21,6 +21,7 @@
 			<dynamic-content><![CDATA[[$FILE=carousel_image1.jpg$]]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="carousel_button_text" type="text">
+			<dynamic-content><![CDATA[See For Yourself]]></dynamic-content>
 			<dynamic-element name="carousel_button_link" type="text">
 				<dynamic-content><![CDATA[1]]></dynamic-content>
 			</dynamic-element>
@@ -30,7 +31,6 @@
 			<dynamic-element name="carousel_button_size" type="select">
 				<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 			</dynamic-element>
-				<dynamic-content><![CDATA[See For Yourself]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="carousel_caption_alignment" type="select">
 			<dynamic-content><![CDATA[left]]></dynamic-content>
