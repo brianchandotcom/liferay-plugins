@@ -20,21 +20,18 @@ package com.liferay.microblogs.service.persistence;
 import com.liferay.microblogs.model.MicroblogsEntry;
 import com.liferay.microblogs.model.MicroblogsEntryConstants;
 import com.liferay.microblogs.model.impl.MicroblogsEntryImpl;
+import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.Type;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.ClassResolverUtil;
-import com.liferay.portal.kernel.util.MethodKey;
-import com.liferay.portal.kernel.util.PortalClassInvoker;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -69,23 +66,6 @@ public class MicroblogsEntryFinderImpl
 	public static final String FIND_BY_U_T_MU =
 		MicroblogsEntryFinder.class.getName() + ".findByU_T_MU";
 
-	public MicroblogsEntryFinderImpl() {
-		try {
-			MethodKey methodKey = new MethodKey(
-				ClassResolverUtil.resolveByPortalClassLoader(
-					"com.liferay.util.dao.orm.CustomSQL"),
-				"get", String.class);
-
-			_joinBySocialRelationSQL = (String)PortalClassInvoker.invoke(
-				methodKey,
-				"com.liferay.portal.service.persistence." +
-					"UserFinder.joinBySocialRelation");
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-		}
-	}
-
 	public int countByUserId(long userId) throws SystemException {
 		Session session = null;
 
@@ -93,9 +73,6 @@ public class MicroblogsEntryFinderImpl
 			session = openSession();
 
 			String sql = CustomSQLUtil.get(COUNT_BY_USER_ID);
-
-			sql = StringUtil.replace(
-				sql, "[$JOIN_BY_SOCIAL_RELATION$]", _joinBySocialRelationSQL);
 
 			SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
@@ -105,6 +82,7 @@ public class MicroblogsEntryFinderImpl
 
 			qPos.add(MicroblogsEntryConstants.TYPE_EVERYONE);
 			qPos.add(userId);
+			qPos.add(SocialRelationConstants.TYPE_UNI_ENEMY);
 			qPos.add(userId);
 			qPos.add(userId);
 			qPos.add(MicroblogsEntryConstants.TYPE_REPLY);
@@ -263,23 +241,32 @@ public class MicroblogsEntryFinderImpl
 
 			String sql = CustomSQLUtil.get(FIND_BY_USER_ID);
 
-			sql = StringUtil.replace(
-				sql, "[$JOIN_BY_SOCIAL_RELATION$]", _joinBySocialRelationSQL);
-
 			SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
-			q.addEntity("MicroblogsEntry", MicroblogsEntryImpl.class);
+			q.addScalar("microblogsEntryId", Type.LONG);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(MicroblogsEntryConstants.TYPE_EVERYONE);
 			qPos.add(userId);
+			qPos.add(SocialRelationConstants.TYPE_UNI_ENEMY);
 			qPos.add(userId);
 			qPos.add(userId);
 			qPos.add(MicroblogsEntryConstants.TYPE_REPLY);
 
-			return (List<MicroblogsEntry>)QueryUtil.list(
+			Iterator<Long> itr = (Iterator<Long>)QueryUtil.iterate(
 				q, getDialect(), start, end);
+
+			List<MicroblogsEntry> microblogsEntries =
+				new ArrayList<MicroblogsEntry>();
+
+			while (itr.hasNext()) {
+				microblogsEntries.add(
+					MicroblogsEntryLocalServiceUtil.fetchMicroblogsEntry(
+						(Long)itr.next()));
+			}
+
+			return microblogsEntries;
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -389,10 +376,5 @@ public class MicroblogsEntryFinderImpl
 			closeSession(session);
 		}
 	}
-
-	private static Log _log = LogFactoryUtil.getLog(
-		MicroblogsEntryFinderImpl.class);
-
-	private String _joinBySocialRelationSQL;
 
 }
