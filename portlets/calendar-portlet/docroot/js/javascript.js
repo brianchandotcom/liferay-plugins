@@ -33,14 +33,6 @@ AUI.add(
 
 		var STR_SPACE = ' ';
 
-		var TPL_CALENDAR_BOOKINGS_URL = '{calendarBookingsURL}&{portletNamespace}calendarIds={calendarIds}&{portletNamespace}startTime={startTime}&{portletNamespace}endTime={endTime}&{portletNamespace}statuses={statuses}';
-
-		var TPL_INVITEES_URL = '{inviteesURL}&{portletNamespace}parentCalendarBookingId={calendarBookingId}';
-
-		var TPL_RENDERING_RULES_URL = '{renderingRulesURL}&{portletNamespace}calendarIds={calendarIds}&{portletNamespace}startTime={startTime}&{portletNamespace}endTime={endTime}&{portletNamespace}ruleName={ruleName}';
-
-		var TPL_RESOURCE_CALENDARS_URL = '{resourceCalendarsURL}&{portletNamespace}calendarResourceId={calendarResourceId}';
-
 		var CONTROLS_NODE = 'controlsNode';
 
 		var ICON_ADD_EVENT_NODE = 'iconAddEventNode';
@@ -96,13 +88,9 @@ AUI.add(
 		Liferay.Time = Time;
 
 		var CalendarUtil = {
-			CALENDAR_BOOKINGS_URL: null,
-			INVITEES_URL: null,
 			INVOKER_URL: themeDisplay.getPathContext() + '/api/jsonws/invoke',
 			NOTIFICATION_DEFAULT_TYPE: 'email',
 			PORTLET_NAMESPACE: STR_BLANK,
-			RENDERING_RULES_URL: null,
-			RESOURCE_CALENDARS_URL: null,
 			USER_TIME_ZONE: 'UTC',
 
 			availableCalendars: {},
@@ -350,24 +338,10 @@ AUI.add(
 			getCalendarBookingInvitees: function(calendarBookingId, callback) {
 				var instance = this;
 
-				var inviteesURL = Lang.sub(
-					TPL_INVITEES_URL,
+				instance.invokeResourceURL(
+					'calendarBookingInvitees',
 					{
-						calendarBookingId: calendarBookingId,
-						inviteesURL: instance.INVITEES_URL,
-						portletNamespace: instance.PORTLET_NAMESPACE
-					}
-				);
-
-				A.io.request(
-					inviteesURL,
-					{
-						dataType: 'JSON',
-						on: {
-							success: function() {
-								callback(this.get('responseData'));
-							}
-						}
+						calendarBookingId: calendarBookingId
 					}
 				);
 			},
@@ -385,28 +359,15 @@ AUI.add(
 			getCalendarRenderingRules: function(calendarIds, startDate, endDate, ruleName, callback) {
 				var instance = this;
 
-				var renderingRulesURL = Lang.sub(
-					TPL_RENDERING_RULES_URL,
+				instance.invokeResourceURL(
+					'calendarRenderingRules',
 					{
 						calendarIds: calendarIds.join(),
 						endTime: endDate.getTime(),
-						portletNamespace: instance.PORTLET_NAMESPACE,
-						renderingRulesURL: instance.RENDERING_RULES_URL,
 						ruleName: ruleName,
 						startTime: startDate.getTime()
-					}
-				);
-
-				A.io.request(
-					renderingRulesURL,
-					{
-						dataType: 'JSON',
-						on: {
-							success: function() {
-								callback(this.get('responseData'));
-							}
-						}
-					}
+					},
+					callback
 				);
 			},
 
@@ -448,34 +409,20 @@ AUI.add(
 				);
 			},
 
-			getEvents: function(startDate, endDate, status, success, failure) {
+			getEvents: function(startDate, endDate, status, callback) {
 				var instance = this;
 
 				var calendarIds = AObject.keys(instance.availableCalendars);
 
-				var calendarBookingsURL = Lang.sub(
-					TPL_CALENDAR_BOOKINGS_URL,
+				instance.invokeResourceURL(
+					'calendarBookings',
 					{
-						calendarBookingsURL: instance.CALENDAR_BOOKINGS_URL,
 						calendarIds: calendarIds.join(','),
 						endTime: endDate.getTime(),
-						portletNamespace: instance.PORTLET_NAMESPACE,
 						startTime: startDate.getTime(),
 						statuses: status.join(',')
-					}
-				);
-
-				A.io.request(
-					calendarBookingsURL,
-					{
-						dataType: 'JSON',
-						on: {
-							failure: failure,
-							success: function() {
-								success(this.get('responseData'));
-							}
-						}
-					}
+					},
+					callback
 				);
 			},
 
@@ -491,25 +438,12 @@ AUI.add(
 			getResourceCalendars: function(calendarResourceId, callback) {
 				var instance = this;
 
-				var resourceCalendarsURL = Lang.sub(
-					TPL_RESOURCE_CALENDARS_URL,
+				instance.invokeResourceURL(
+					'resourceCalendars',
 					{
 						calendarResourceId: calendarResourceId,
-						portletNamespace: instance.PORTLET_NAMESPACE,
-						resourceCalendarsURL: instance.RESOURCE_CALENDARS_URL
-					}
-				);
-
-				A.io.request(
-					resourceCalendarsURL,
-					{
-						dataType: 'JSON',
-						on: {
-							success: function() {
-								callback(this.get('responseData'));
-							}
-						}
-					}
+					},
+					callback
 				);
 			},
 
@@ -525,6 +459,28 @@ AUI.add(
 					{
 						success: function() {
 							callback(this.get('responseData'));
+						}
+					}
+				);
+			},
+
+			invokeResourceURL: function(resourceId, parameters, callback) {
+				var instance = this;
+
+				var url = Liferay.PortletURL.createResourceURL()
+
+				url.setParameters(parameters);
+				url.setPortletId('1_WAR_calendarportlet');
+				url.setResourceId(resourceId);
+
+				A.io.request(
+					url.toString(),
+					{
+						dataType: 'json',
+						on: {
+							success: function() {
+								callback(this.get('responseData'));
+							}
 						}
 					}
 				);
