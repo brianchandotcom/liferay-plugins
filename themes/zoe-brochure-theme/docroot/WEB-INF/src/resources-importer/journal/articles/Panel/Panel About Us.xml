@@ -7,7 +7,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[4]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Nellie Henry]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">
@@ -47,7 +46,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Stacey Chambers]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">
@@ -87,7 +85,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Gregory Murray]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">
@@ -127,7 +124,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Neal Bowers]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">
@@ -167,7 +163,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Nettie Sherman]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">
@@ -207,7 +202,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Larry Newton]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">
@@ -247,7 +241,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Devin Washington]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">
@@ -287,7 +280,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Ebony Estrada]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">

@@ -7,7 +7,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[1]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[Some Content]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -40,7 +39,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[Some More Content]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -73,7 +71,6 @@
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[Even More Content]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">

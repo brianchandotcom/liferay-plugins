@@ -7,7 +7,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[4]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="pricing_table_heading" type="text">
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>
@@ -44,7 +43,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Silver]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="pricing_table_heading" type="text">
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>
@@ -81,7 +79,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Gold]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="pricing_table_heading" type="text">
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>
@@ -118,7 +115,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Platinum]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="pricing_table_heading" type="text">
 		<dynamic-element name="currency_symbol" type="text">
 			<dynamic-content><![CDATA[$]]></dynamic-content>

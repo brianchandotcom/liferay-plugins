@@ -7,7 +7,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[3]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -48,7 +47,6 @@ sales-de@liferay.com<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -87,7 +85,6 @@ sales-es@liferay.com<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -126,7 +123,6 @@ Tel: +36 (1) 786 4575<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -171,7 +167,6 @@ sales-uk@liferay.com<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -211,7 +206,6 @@ Fax: +353 1 905 8029<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">

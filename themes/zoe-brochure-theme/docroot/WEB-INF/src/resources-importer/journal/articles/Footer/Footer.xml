@@ -9,7 +9,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Footer Column #1]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="footer_column_title" type="text">
 		<dynamic-element name="column_content" type="textarea">
 			<dynamic-content>
@@ -18,7 +17,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Footer Column #2]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="footer_column_title" type="text">
 		<dynamic-element name="column_content" type="textarea">
 			<dynamic-content>
@@ -27,7 +25,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Footer Column #3]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="footer_column_title" type="text">
 		<dynamic-element name="column_content" type="textarea">
 			<dynamic-content>
@@ -36,7 +33,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Footer Column #4]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="secondary_footer_content" type="textarea">
 		<dynamic-content>
 			<![CDATA[<div class="powered-by">Powered by <a href="http://www.liferay.com">Liferay</a></div>]]>

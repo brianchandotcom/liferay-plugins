@@ -7,7 +7,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[3]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-element name="panel_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
@@ -48,7 +47,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Marketing Message #1]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-element name="panel_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
@@ -88,7 +86,6 @@
 		</dynamic-element>
 		<dynamic-content><![CDATA[Marketing Message #2]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-element name="panel_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
