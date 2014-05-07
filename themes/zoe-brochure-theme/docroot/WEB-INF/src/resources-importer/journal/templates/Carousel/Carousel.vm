@@ -9,7 +9,7 @@
 		overflow: hidden;
 		position: relative;
 	}
-	
+
 	.ie6 #${content_class}, .ie7 #${content_class}, .ie8 #${content_class} {
 		#if (!$carousel_maximum_height.data.isEmpty())
 			height: $carousel_maximum_height.data${carousel_maximum_height.units.data};

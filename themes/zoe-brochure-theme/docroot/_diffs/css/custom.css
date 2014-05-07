@@ -621,7 +621,7 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
-	/* ---------- Zoe Carousel ---------- */
+	/* ---------- Zoe carousel ---------- */
 
 	.zoe-carousel {
 		margin-left: -$mainContentSpacing;
@@ -874,7 +874,7 @@ $default-box-shadow-v-offset: 1px;
 		}
 	}
 
-	/* ---------- Home Page ---------- */
+	/* ---------- Home page ---------- */
 
 	.media-MEDIA-HOME-PAGE {
 		@include box-sizing(border-box);
@@ -1024,7 +1024,7 @@ $default-box-shadow-v-offset: 1px;
 			margin-bottom: 0;
 		}
 
-		/* ---------- Dockbar Tablet and Below ---------- */
+		/* ---------- Dockbar tablet and below ---------- */
 
 		#navigation {
 			top: 0;
