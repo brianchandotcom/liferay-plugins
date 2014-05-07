@@ -3,7 +3,7 @@
 <root>
 	<dynamic-element name="zoe_divider_icon" type="text">
 		<dynamic-element name="size" type="text">
-				<dynamic-content><![CDATA[30px]]></dynamic-content>
+			<dynamic-content><![CDATA[30px]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-content><![CDATA[icon-bolt]]></dynamic-content>
 	</dynamic-element>

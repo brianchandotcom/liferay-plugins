@@ -7,7 +7,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[1]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="panel_heading" type="text">
 		<dynamic-content><![CDATA[Want to Hire Us?]]></dynamic-content>
 		<dynamic-element name="panel_icon" type="text">

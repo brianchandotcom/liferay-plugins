@@ -4,7 +4,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[4]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #1]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">
@@ -35,7 +34,6 @@
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #2]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">
@@ -66,7 +64,6 @@
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #3]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">
@@ -97,7 +94,6 @@
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #4]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">
@@ -128,7 +124,6 @@
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #5]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">
@@ -159,7 +154,6 @@
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #6]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">
@@ -190,7 +184,6 @@
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #7]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">
@@ -221,7 +214,6 @@
 			<dynamic-content><![CDATA[1]]></dynamic-content>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="clickable_panel_heading" type="text">
 		<dynamic-content><![CDATA[Topic #8]]></dynamic-content>
 		<dynamic-element name="clickable_panel_icon" type="text">

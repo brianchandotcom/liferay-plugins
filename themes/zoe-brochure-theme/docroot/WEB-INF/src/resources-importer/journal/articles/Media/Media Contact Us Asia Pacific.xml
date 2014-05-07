@@ -7,7 +7,6 @@
 	<dynamic-element name="number_of_columns" type="select">
 		<dynamic-content><![CDATA[3]]></dynamic-content>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -52,7 +51,6 @@ sales-cn@liferay.com<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -95,7 +93,6 @@ sales-jp@liferay.com<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
@@ -139,7 +136,6 @@ sales-in@liferay.com<br>
 			</dynamic-element>
 		</dynamic-element>
 	</dynamic-element>
-
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
