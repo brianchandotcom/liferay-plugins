@@ -248,20 +248,25 @@ $default-box-shadow-v-offset: 1px;
 					padding: 20px 25px;
 				}
 
+				&.active > a {
+					background-color: #FBFBFB;
+					border-top: 5px solid #89C8D6;
+				}
+
 				&.active.hover > a {
-					background-color: #FFF;
-					border-top: 5px solid #EEE;
+					background-color: #FBFBFB;
+					border-top: 5px solid #89C8D6;
 					color: #333;
 				}
 
 				&.hover > a {
-					background-color: #333;
+					background-color: #AAA;
 					border-top: 5px solid #2ECC40;
 					color: #FFF;
 				}
 
 				> a:focus, > a:hover {
-					background-color: #333;
+					background-color: #AAA;
 					color: #FFF;
 				}
 			}
@@ -369,12 +374,12 @@ $default-box-shadow-v-offset: 1px;
 				margin-top: 15px;
 			}
 
-			> .media-image.pull-left {
+			> .media-image.align-left {
 				margin-right: 6%;
 				text-align: center;
 			}
 
-			> .media-image.pull-right {
+			> .media-image.align-right {
 				margin-left: 6%;
 				text-align: center;
 			}
@@ -799,16 +804,16 @@ $default-box-shadow-v-offset: 1px;
 				margin-top: 70px;
 			}
 
-			> .pull-left {
+			> .align-left {
 				margin-right: 50px;
 			}
 
-			> .pull-right {
+			> .align-right {
 				margin-left: 50px;
 			}
 
 			.media-image {
-				&.pull-left, &.pull-right {
+				&.align-left, &.align-right {
 					width: auto;
 				}
 			}
@@ -1000,13 +1005,13 @@ $default-box-shadow-v-offset: 1px;
 		}
 
 		.media-MEDIA-ABOUT-US .media > .media-image {
-			&.pull-left {
+			&.align-left {
 				float: none;
 				margin: 0 auto;
 				text-align: center;
 			}
 
-			&.pull-right {
+			&.align-right {
 				float: none;
 				margin: 0 auto;
 				text-align: center;
@@ -1169,6 +1174,20 @@ $default-box-shadow-v-offset: 1px;
 
 			.site-name {
 				vertical-align: sub;
+			}
+		}
+
+		.media {
+			.media-heading {
+				margin: 20px 0;
+				text-align: center;
+			}
+
+			.media-image {
+				&.align-left, &.align-right {
+					float: none;
+					margin: 0 auto;
+				}
 			}
 		}
 

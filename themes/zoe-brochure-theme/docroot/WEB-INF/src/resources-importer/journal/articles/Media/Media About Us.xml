@@ -18,7 +18,7 @@
 				<dynamic-content><![CDATA[[$FILE=clipboard.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_alignment" type="select">
-				<dynamic-content><![CDATA[pull-left]]></dynamic-content>
+				<dynamic-content><![CDATA[align-left]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_shape" type="select">
 				<dynamic-content><![CDATA[]]></dynamic-content>
@@ -48,7 +48,7 @@
 				<dynamic-content><![CDATA[[$FILE=map.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_alignment" type="select">
-				<dynamic-content><![CDATA[pull-right]]></dynamic-content>
+				<dynamic-content><![CDATA[align-right]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_shape" type="select">
 				<dynamic-content><![CDATA[]]></dynamic-content>
@@ -78,7 +78,7 @@
 				<dynamic-content><![CDATA[[$FILE=infinity_loop.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_alignment" type="select">
-				<dynamic-content><![CDATA[pull-left]]></dynamic-content>
+				<dynamic-content><![CDATA[align-left]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_shape" type="select">
 				<dynamic-content><![CDATA[]]></dynamic-content>
