@@ -10,15 +10,7 @@
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
-			<dynamic-content>
-				<![CDATA[<b>Los Angeles (Global HQ)</b><br>
-1400 Montefino Ave.<br>
-Diamond Bar, CA 91765<br>
-Office Hours: 9AM-6PM PT<br>
-+1-877-LIFERAY (1-877-543-3729)<br>
-sales@liferay.com<br>
-]]>
-			</dynamic-content>
+			<dynamic-content><![CDATA[<b>Los Angeles (Global HQ)</b><br>1400 Montefino Ave.<br>Diamond Bar, CA 91765<br>Office Hours: 9AM-6PM PT<br>+1-877-LIFERAY (1-877-543-3729)<br>sales@liferay.com<br>]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="media_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
@@ -48,15 +40,7 @@ sales@liferay.com<br>
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
-			<dynamic-content>
-				<![CDATA[<b>Chicago</b><br>
-205 W. Wacker Dr, Suite 513<br>
-Chicago, IL 60606<br>
-Office Hours: 9AM-6PM CT<br>
-+1-877-LIFERAY (1-877-543-3729)<br>
-sales@liferay.com<br>
-]]>
-			</dynamic-content>
+			<dynamic-content><![CDATA[<b>Chicago</b><br>205 W. Wacker Dr, Suite 513<br>Chicago, IL 60606<br>Office Hours: 9AM-6PM CT<br>+1-877-LIFERAY (1-877-543-3729)<br>sales@liferay.com<br>]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="media_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
@@ -86,14 +70,7 @@ sales@liferay.com<br>
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
-			<dynamic-content>
-				<![CDATA[<b>Brazil (SAm HQ)</b><br>
-Rua Jacó Velosino, 290, 10° andar,<br>
-Recife, PE<br>
-Tel: +55 81 3033 1405<br>
-sales-br@liferay.com<br>
-]]>
-			</dynamic-content>
+			<dynamic-content><![CDATA[<b>Brazil (SAm HQ)</b><br>Rua Jacó Velosino, 290, 10° andar,<br>Recife, PE<br>Tel: +55 81 3033 1405<br>sales-br@liferay.com<br>]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="media_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
@@ -123,14 +100,7 @@ sales-br@liferay.com<br>
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
-			<dynamic-content>
-				<![CDATA[<b>Brazil</b><br>
-Alameda Santos, 2480, 1° andar,<br>
-São Paulo, SP<br>
-Tel: +55 11 2364 5640<br>
-sales-br@liferay.com<br>
-]]>
-			</dynamic-content>
+			<dynamic-content><![CDATA[<b>Brazil</b><br>Alameda Santos, 2480, 1° andar,<br>São Paulo, SP<br>Tel: +55 11 2364 5640<br>sales-br@liferay.com<br>]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="media_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>

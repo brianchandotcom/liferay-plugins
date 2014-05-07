@@ -5,10 +5,10 @@
 		<dynamic-content><![CDATA[]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="carousel_maximum_height" type="ddm-integer">
+		<dynamic-content><![CDATA[500]]></dynamic-content>
 		<dynamic-element name="units" type="select">
 			<dynamic-content><![CDATA[px]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[500]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="duration" type="select">
 		<dynamic-content><![CDATA[3]]></dynamic-content>
@@ -17,8 +17,9 @@
 		<dynamic-content><![CDATA[false]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="carousel_text" type="text">
+		<dynamic-content><![CDATA[Fusce condimentum nunc ac nisi vulputate fringilla.]]></dynamic-content>
 		<dynamic-element name="image" type="ddm-documentlibrary">
-			<dynamic-content><![CDATA[[$FILE=carousel_image1.jpg$]]]></dynamic-content>
+			<dynamic-content><![CDATA[[$FILE=carousel_image_1.jpg$]]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="carousel_button_text" type="text">
 			<dynamic-content><![CDATA[See For Yourself]]></dynamic-content>
@@ -35,13 +36,14 @@
 		<dynamic-element name="carousel_caption_alignment" type="select">
 			<dynamic-content><![CDATA[left]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Fusce condimentum nunc ac nisi vulputate fringilla.]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="carousel_text" type="text">
+		<dynamic-content><![CDATA[Fusce condimentum nunc ac nisi vulputate fringilla.]]></dynamic-content>
 		<dynamic-element name="image" type="ddm-documentlibrary">
-			<dynamic-content><![CDATA[[$FILE=carousel_image2.jpg$]]]></dynamic-content>
+			<dynamic-content><![CDATA[[$FILE=carousel_image_2.jpg$]]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="carousel_button_text" type="text">
+			<dynamic-content><![CDATA[See for Yourself]]></dynamic-content>
 			<dynamic-element name="carousel_button_link" type="ddm-link-to-page">
 				<dynamic-content><![CDATA[]]></dynamic-content>
 			</dynamic-element>
@@ -51,18 +53,18 @@
 			<dynamic-element name="carousel_button_size" type="select">
 				<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 			</dynamic-element>
-				<dynamic-content><![CDATA[See For Yourself]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="carousel_caption_alignment" type="select">
 			<dynamic-content><![CDATA[right]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Fusce condimentum nunc ac nisi vulputate fringilla.]]></dynamic-content>
 	</dynamic-element>
 	<dynamic-element name="carousel_text" type="text">
+		<dynamic-content><![CDATA[Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
 		<dynamic-element name="image" type="ddm-documentlibrary">
-			<dynamic-content><![CDATA[[$FILE=carousel_image3.jpg$]]]></dynamic-content>
+			<dynamic-content><![CDATA[[$FILE=carousel_image_3.jpg$]]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="carousel_button_text" type="text">
+			<dynamic-content><![CDATA[See for Yourself]]></dynamic-content>
 			<dynamic-element name="carousel_button_link" type="ddm-link-to-page">
 				<dynamic-content><![CDATA[]]></dynamic-content>
 			</dynamic-element>
@@ -72,11 +74,9 @@
 			<dynamic-element name="carousel_button_size" type="select">
 				<dynamic-content><![CDATA[btn-large]]></dynamic-content>
 			</dynamic-element>
-				<dynamic-content><![CDATA[See For Yourself]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="carousel_caption_alignment" type="select">
 			<dynamic-content><![CDATA[center]]></dynamic-content>
 		</dynamic-element>
-		<dynamic-content><![CDATA[Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.]]></dynamic-content>
 	</dynamic-element>
 </root>

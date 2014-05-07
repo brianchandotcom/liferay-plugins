@@ -10,14 +10,12 @@
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[Some Content]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
-			<dynamic-content>
-				<![CDATA[Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an. Movet nostro te pri, eos in dicam admodum constituto, mel possim omnesque an. No nam altera viderer labitur, duo id viris omittam copiosae, in ceteros percipitur his. Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an.]]>
-			</dynamic-content>
+			<dynamic-content><![CDATA[Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an. Movet nostro te pri, eos in dicam admodum constituto, mel possim omnesque an. No nam altera viderer labitur, duo id viris omittam copiosae, in ceteros percipitur his. Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an.]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="media_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
 			<dynamic-element name="media_image" type="ddm-documentlibrary">
-				<dynamic-content><![CDATA[[$FILE=Clipboard.png$]]]></dynamic-content>
+				<dynamic-content><![CDATA[[$FILE=clipboard.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_alignment" type="select">
 				<dynamic-content><![CDATA[pull-left]]></dynamic-content>
@@ -42,14 +40,12 @@
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[Some More Content]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
-			<dynamic-content>
-				<![CDATA[Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an. Movet nostro te pri, eos in dicam admodum constituto, mel possim omnesque an. No nam altera viderer labitur, duo id viris omittam copiosae, in ceteros percipitur his. Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an.]]>
-			</dynamic-content>
+			<dynamic-content><![CDATA[Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an. Movet nostro te pri, eos in dicam admodum constituto, mel possim omnesque an. No nam altera viderer labitur, duo id viris omittam copiosae, in ceteros percipitur his. Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an.]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="media_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
 			<dynamic-element name="media_image" type="ddm-documentlibrary">
-				<dynamic-content><![CDATA[[$FILE=Map.png$]]]></dynamic-content>
+				<dynamic-content><![CDATA[[$FILE=map.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_alignment" type="select">
 				<dynamic-content><![CDATA[pull-right]]></dynamic-content>
@@ -74,14 +70,12 @@
 	<dynamic-element name="media_heading" type="text">
 		<dynamic-content><![CDATA[Even More Content]]></dynamic-content>
 		<dynamic-element name="media_content" type="textarea">
-			<dynamic-content>
-				<![CDATA[Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an. Movet nostro te pri, eos in dicam admodum constituto, mel possim omnesque an. No nam altera viderer labitur, duo id viris omittam copiosae, in ceteros percipitur his. Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an.]]>
-			</dynamic-content>
+			<dynamic-content><![CDATA[Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an. Movet nostro te pri, eos in dicam admodum constituto, mel possim omnesque an. No nam altera viderer labitur, duo id viris omittam copiosae, in ceteros percipitur his. Tale vituperata cu nec, tempor conclusionemque eam ne. Pri graeci splendide ne, sea nostrum omnesque facilisis at, pri ad summo invenire. Mel volutpat adipiscing scriptorem ex. Vis delenit meliore an.]]></dynamic-content>
 		</dynamic-element>
 		<dynamic-element name="media_icon" type="text">
 			<dynamic-content><![CDATA[]]></dynamic-content>
 			<dynamic-element name="media_image" type="ddm-documentlibrary">
-				<dynamic-content><![CDATA[[$FILE=Infinity-Loop.png$]]]></dynamic-content>
+				<dynamic-content><![CDATA[[$FILE=infinity_loop.png$]]]></dynamic-content>
 			</dynamic-element>
 			<dynamic-element name="media_icon_alignment" type="select">
 				<dynamic-content><![CDATA[pull-left]]></dynamic-content>
