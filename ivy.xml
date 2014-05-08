@@ -5,7 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
 >
-	<info module="com.liferay.plugins" organisation="com.liferay.plugins">
+	<info module="${ivy.module.name}" organisation="${ivy.module.name}">
 		<license name="LGPL 2.1" url="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt" />
 
 		<description homepage="http://www.liferay.com" />

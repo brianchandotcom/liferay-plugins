@@ -19,6 +19,8 @@
 		replace="\."
 	/>
 
+	<property name="ivy.module.name" value="com.liferay.plugins" />
+
 	<if>
 		<not>
 			<available file="${ivy.home}/ivy-${ivy.version}.jar" />
