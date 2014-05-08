@@ -188,7 +188,7 @@ if (comment) {
 	%>
 
 	<div class="<%= rowCssClass %>">
-		<aui:button cssClass="microblogs-post pull-left" disabled="<%= !repost %>" name="submit" type="submit" value="post" />
+		<aui:button cssClass="microblogs-post pull-left" disabled="<%= !repost %>" type="submit" value="post" />
 
 		<c:if test="<%= repost %>">
 			<aui:button onClick="Liferay.Microblogs.closePopup();" type="cancel" />
@@ -245,7 +245,7 @@ if (comment) {
 			var contentInput = event.currentTarget;
 
 			var countdown = form.one('.microblogs-countdown');
-			var submitButton = form.one('#<portlet:namespace />submit');
+			var submitButton = form.one('.microblogs-post');
 
 			var remaining = (150 - contentInput.val().length);
 
