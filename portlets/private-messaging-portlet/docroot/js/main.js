@@ -57,19 +57,19 @@ AUI.add(
 					deleteMessages: function(mbThreadIds) {
 						var instance = this;
 
-						instance._sendRequest(instance._getActionURL('deleteMessages').toString(), mbThreadIds);
+						instance._sendRequest(instance._getActionURL('deleteMessages').toString(), 'delete-x-',  mbThreadIds);
 					},
 
 					markMessagesAsRead: function(mbThreadIds) {
 						var instance = this;
 
-						instance._sendRequest(instance._getActionURL('markMessagesAsRead').toString(), mbThreadIds);
+						instance._sendRequest(instance._getActionURL('markMessagesAsRead').toString(), 'mark-x-as-read-', mbThreadIds);
 					},
 
 					markMessagesAsUnread: function(mbThreadIds) {
 						var instance = this;
 
-						instance._sendRequest(instance._getActionURL('markMessagesAsUnread').toString(), mbThreadIds);
+						instance._sendRequest(instance._getActionURL('markMessagesAsUnread').toString(), 'mark-x-as-unread-', mbThreadIds);
 					},
 
 					_bindCheckAllMessages: function() {
@@ -145,7 +145,7 @@ AUI.add(
 										if (confirm(Liferay.Language.get('are-your-sure-you-want-to-delete-the-message'))) {
 											var currentTarget = event.currentTarget;
 
-											instance._sendRequest(currentTarget.getAttribute('data-delete-message-url'));
+											instance._sendRequest(currentTarget.getAttribute('data-delete-message-url'), 'delete-x-');
 										}
 									},
 									instance
@@ -237,7 +237,7 @@ AUI.add(
 										if (confirm(Liferay.Language.get('are-your-sure-you-want-to-mark-the-message-as-unread'))) {
 											var currentTarget = event.currentTarget;
 
-											instance._sendRequest(currentTarget.getAttribute('data-mark-as-unread-url'));
+											instance._sendRequest(currentTarget.getAttribute('data-mark-as-unread-url'), 'mark-x-as-unread-');
 										}
 									},
 									instance
@@ -319,6 +319,34 @@ AUI.add(
 						}
 					},
 
+					_displayMessage: function(key, success, selectedMessagesCount) {
+						var instance = this;
+
+						instance._hideButtons();
+
+						var confirmationMessage = instance.byId('confirmationMessage');
+
+						confirmationMessage.show();
+
+						if (success) {
+							confirmationMessage.addClass('alert-success');
+						}
+						else {
+							confirmationMessage.addClass('alert-error');
+						}
+
+						confirmationMessage.setStyle('display', 'inline');
+
+						confirmationMessage.setHTML(instance._getConfirmationMessage(key,success, selectedMessagesCount));
+
+						setTimeout(
+							function() {
+								confirmationMessage.hide();
+							},
+							4000
+						);
+					},
+
 					_getActionURL: function(name) {
 						var instance = this;
 
@@ -337,6 +365,14 @@ AUI.add(
 						return portletURL;
 					},
 
+					_getConfirmationMessage: function(key, success, selectedMessagesCount) {
+						var param = selectedMessagesCount + ' message' + (selectedMessagesCount > 1 ? 's' : '');
+
+						var key = success ? key + 'successfully' : key + 'failed';
+
+						return Lang.sub(Liferay.Language.get(key), [param]);
+					},
+
 					_getSelectedMessageIds: function() {
 						var instance = this;
 
@@ -353,6 +389,24 @@ AUI.add(
 						);
 
 						return mbThreadIds;
+					},
+
+					_hideButtons: function() {
+						var instance = this;
+
+						if (instance._deleteMessagesButton) {
+							instance._deleteMessagesButton.hide();
+							instance._markMessagesAsReadButton.hide();
+							instance._markMessagesAsUnreadButton.hide();
+						}
+
+						instance._deleteMessageButton = instance.byId('deleteMessage');
+						instance._markMessageAsUnreadButton = instance.byId('markMessageAsUnread');
+
+						if (instance._deleteMessageButton) {
+							instance._deleteMessageButton.hide();
+							instance._markMessageAsUnreadButton.hide();
+						}
 					},
 
 					_newMessage: function(mbThreadId) {
@@ -395,19 +449,24 @@ AUI.add(
 						);
 					},
 
-					_sendRequest: function(request, mbThreadIds) {
+					_sendRequest: function(request, key, mbThreadIds) {
 						var instance = this;
 
-						var request = Liferay.Util.addParams(instance._namespace + 'mbThreadIds=' + mbThreadIds, request) || request;
+						var request = mbThreadIds ? Liferay.Util.addParams(instance._namespace + 'mbThreadIds=' + mbThreadIds, request) : request;
 
 						A.io.request(
 							request,
 							{
-								on: {
-									success: function(event, id, obj) {
+								after: {
+									success: function() {
+										var response = this.get('responseData');
+
+										instance._displayMessage(key, response.success, ((mbThreadIds && mbThreadIds.length > 1) ? mbThreadIds.length : 1));
+
 										A.config.win.location = themeDisplay.getLayoutURL();
 									}
-								}
+								},
+								dataType: STR_JSON
 							}
 						);
 					}

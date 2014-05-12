@@ -24,6 +24,8 @@ boolean hasExistingRecipients = false;
 %>
 
 <aui:button-row cssClass="controls">
+	<div class="alert hide" id="<portlet:namespace />confirmationMessage"></div>
+
 	<liferay-portlet:actionURL name="markMessagesAsUnread" var="markAsUnreadURL">
 		<portlet:param name="mbThreadIds" value="<%= String.valueOf(mbThreadId) %>" />
 	</liferay-portlet:actionURL>
