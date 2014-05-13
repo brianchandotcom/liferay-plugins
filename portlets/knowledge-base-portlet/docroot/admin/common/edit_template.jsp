@@ -26,7 +26,8 @@ String content = BeanParamUtil.getString(kbTemplate, request, "content");
 
 <liferay-ui:header
 	backURL="<%= redirect %>"
-	title='<%= (kbTemplate != null) ? kbTemplate.getTitle() : "new-template" %>'
+	localizeTitle="<%= (kbTemplate == null) %>"
+	title='<%= (kbTemplate == null) ? "new-template" : kbTemplate.getTitle() %>'
 />
 
 <liferay-portlet:actionURL name="updateKBTemplate" var="updateKBTemplateURL" />

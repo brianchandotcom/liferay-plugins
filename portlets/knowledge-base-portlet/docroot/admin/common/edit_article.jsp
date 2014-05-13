@@ -32,7 +32,8 @@ String dirName = ParamUtil.getString(request, "dirName");
 
 <liferay-ui:header
 	backURL="<%= redirect %>"
-	title='<%= (kbArticle != null) ? kbArticle.getTitle() : "new-article" %>'
+	localizeTitle="<%= (kbArticle == null) %>"
+	title='<%= (kbArticle == null) ? "new-article" : kbArticle.getTitle() %>'
 />
 
 <liferay-portlet:actionURL name="updateKBArticle" var="updateKBArticleURL" />
