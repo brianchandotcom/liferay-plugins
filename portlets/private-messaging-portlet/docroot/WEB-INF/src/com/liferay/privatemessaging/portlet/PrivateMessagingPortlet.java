@@ -19,8 +19,6 @@ package com.liferay.privatemessaging.portlet;
 
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.UserScreenNameException;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.ByteArrayFileInputStream;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -80,7 +78,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 
 	public void deleteMessages(
 			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws PortalException, SystemException {
+		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -88,10 +86,21 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		long[] mbThreadIds = ParamUtil.getLongValues(
 			actionRequest, "mbThreadIds");
 
-		for (long mbThreadId : mbThreadIds) {
-			UserThreadLocalServiceUtil.deleteUserThread(
-				themeDisplay.getUserId(), mbThreadId);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			for (long mbThreadId : mbThreadIds) {
+				UserThreadLocalServiceUtil.deleteUserThread(
+					themeDisplay.getUserId(), mbThreadId);
+			}
+
+			jsonObject.put("success", Boolean.TRUE);
 		}
+		catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
+		}
+
+		super.writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	public void getMessageAttachment(
@@ -123,7 +132,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 
 	public void markMessagesAsRead(
 			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws PortalException, SystemException {
+		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -131,15 +140,26 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		long[] mbThreadIds = ParamUtil.getLongValues(
 			actionRequest, "mbThreadIds");
 
-		for (long mbThreadId : mbThreadIds) {
-			UserThreadLocalServiceUtil.markUserThreadAsRead(
-				themeDisplay.getUserId(), mbThreadId);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			for (long mbThreadId : mbThreadIds) {
+				UserThreadLocalServiceUtil.markUserThreadAsRead(
+					themeDisplay.getUserId(), mbThreadId);
+			}
+
+			jsonObject.put("success", Boolean.TRUE);
 		}
+		catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
+		}
+
+		super.writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	public void markMessagesAsUnread(
 			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws PortalException, SystemException {
+		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -147,10 +167,21 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		long[] mbThreadIds = ParamUtil.getLongValues(
 			actionRequest, "mbThreadIds");
 
-		for (long mbThreadId : mbThreadIds) {
-			UserThreadLocalServiceUtil.markUserThreadAsUnread(
-				themeDisplay.getUserId(), mbThreadId);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			for (long mbThreadId : mbThreadIds) {
+				UserThreadLocalServiceUtil.markUserThreadAsUnread(
+					themeDisplay.getUserId(), mbThreadId);
+			}
+
+			jsonObject.put("success", Boolean.TRUE);
 		}
+		catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
+		}
+
+		super.writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	public void sendMessage(
