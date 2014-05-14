@@ -16,31 +16,19 @@ package com.liferay.portal.settings;
 
 import java.io.IOException;
 
-import java.util.Collection;
-
-import javax.portlet.ValidatorException;
+import java.util.Date;
 
 /**
- * @author Raymond Augé
- * @author Jorge Ferrer
  * @author Iván Zaera
  */
-public interface Settings {
+public interface ArchivedSettings extends Settings {
 
-	public Settings getDefaultSettings();
+	public void delete() throws IOException;
 
-	public Collection<String> getSetKeys();
+	public Date getModifiedDate();
 
-	public String getValue(String key, String defaultValue);
+	public String getName();
 
-	public String[] getValues(String key, String[] defaultValue);
-
-	public void reset(String key);
-
-	public Settings setValue(String key, String value);
-
-	public Settings setValues(String key, String[] values);
-
-	public void store() throws IOException, ValidatorException;
+	public String getUserName();
 
 }
