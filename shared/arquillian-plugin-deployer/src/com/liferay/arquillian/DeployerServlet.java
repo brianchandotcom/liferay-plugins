@@ -71,9 +71,11 @@ public class DeployerServlet extends HttpServlet {
 
 		_contextPathHeader = GetterUtil.getString(
 			config.getInitParameter("contextPathHeader"), BUNDLE_CONTEXT_PATH);
+
 		_deployerServletInstallLocation = GetterUtil.getString(
 			config.getInitParameter(
 				"deployerServletInstallLocation"), DEPLOYER_SERVLET_LOCATION);
+
 		_installTimeout = GetterUtil.getLong(
 			config.getInitParameter("installTimeout"), TIMEOUT);
 	}
@@ -103,7 +105,7 @@ public class DeployerServlet extends HttpServlet {
 		throws IOException, ServletException {
 
 		try {
-			InputStream bundleInputStream = getUploadedBundleInputStream(
+			InputStream bundleInputStream = _getUploadedBundleInputStream(
 				request);
 
 			BundleContext bundleContext = _bundle.getBundleContext();
@@ -126,7 +128,7 @@ public class DeployerServlet extends HttpServlet {
 				(ServletContext)servletContextServiceTracker.waitForService(
 					_installTimeout);
 
-			Servlet arquillianServletRunner = waitForServlet(
+			Servlet arquillianServletRunner = _waitForServlet(
 				servletContext, "ArquillianServletRunner", _installTimeout);
 
 			if (arquillianServletRunner == null) {
@@ -141,7 +143,7 @@ public class DeployerServlet extends HttpServlet {
 				_contextPathHeader, servletContext.getContextPath());
 		}
 		catch (Exception e) {
-			signalError(e, response);
+			_signalError(e, response);
 		}
 		finally {
 			ServletOutputStream outputStream = response.getOutputStream();
@@ -150,7 +152,8 @@ public class DeployerServlet extends HttpServlet {
 		}
 	}
 
-	protected InputStream getUploadedBundleInputStream(HttpServletRequest request)
+	private InputStream _getUploadedBundleInputStream(
+			HttpServletRequest httpServletRequest)
 		throws FileUploadException, IOException {
 
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -166,24 +169,28 @@ public class DeployerServlet extends HttpServlet {
 
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
-		List<FileItem> items = upload.parseRequest(request);
+		List<FileItem> items = upload.parseRequest(httpServletRequest);
 
 		FileItem fileItem = items.get(0);
 
 		return fileItem.getInputStream();
 	}
 
-	protected void signalError(Throwable t, HttpServletResponse response) {
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	private void _signalError(
+		Throwable throwable, HttpServletResponse httpServletResponse) {
+
+		httpServletResponse.setStatus(
+			HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
 		try {
-			ServletOutputStream outputStream = response.getOutputStream();
+			ServletOutputStream outputStream =
+				httpServletResponse.getOutputStream();
 
-			response.setContentType(StringPool.UTF8);
+			httpServletResponse.setContentType(StringPool.UTF8);
 
 			PrintWriter printWriter = new PrintWriter(outputStream);
 
-			t.printStackTrace(printWriter);
+			throwable.printStackTrace(printWriter);
 
 			printWriter.flush();
 		}
@@ -192,7 +199,7 @@ public class DeployerServlet extends HttpServlet {
 		}
 	}
 
-	private Servlet waitForServlet(
+	private Servlet _waitForServlet(
 		ServletContext servletContext, String servletName, long timeout) {
 
 		long elapsedTime = 0;
@@ -225,6 +232,5 @@ public class DeployerServlet extends HttpServlet {
 	private String _contextPathHeader;
 	private String _deployerServletInstallLocation;
 	private long _installTimeout;
-	private ServiceTracker<Servlet, Servlet> _servletServletServiceTracker;
 
 }
