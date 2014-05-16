@@ -75,8 +75,8 @@ public class DeployerServlet extends HttpServlet {
 			config.getInitParameter("contextPathHeader"), BUNDLE_CONTEXT_PATH);
 
 		_deployerServletInstallLocation = GetterUtil.getString(
-			config.getInitParameter(
-				"deployerServletInstallLocation"), DEPLOYER_SERVLET_LOCATION);
+			config.getInitParameter("deployerServletInstallLocation"),
+			DEPLOYER_SERVLET_LOCATION);
 
 		_installTimeout = GetterUtil.getLong(
 			config.getInitParameter("installTimeout"), TIMEOUT);
@@ -223,6 +223,12 @@ public class DeployerServlet extends HttpServlet {
 			}
 
 			try {
+
+				// Our current Http Service implementation returns a valid
+				// servlet so we currently can rely on this method invocation.
+				// The way we discover the servlet will be improved when a
+				// newer version of the Http Service is in place
+
 				found = servletContext.getServlet(servletName);
 			}
 			catch (ServletException e) {
