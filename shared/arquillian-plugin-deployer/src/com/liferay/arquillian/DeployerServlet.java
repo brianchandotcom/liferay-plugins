@@ -14,6 +14,8 @@
 
 package com.liferay.arquillian;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -194,8 +196,12 @@ public class DeployerServlet extends HttpServlet {
 
 			printWriter.flush();
 		}
-		catch (IOException e) {
-			e.printStackTrace();
+		catch (IOException ioe) {
+			if (_log.isErrorEnabled()) {
+				_log.error(
+					"Unexpected error while signaling " +
+						throwable.getMessage(), ioe);
+			}
 		}
 	}
 
@@ -227,6 +233,8 @@ public class DeployerServlet extends HttpServlet {
 
 		return found;
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(DeployerServlet.class);
 
 	private Bundle _bundle;
 	private String _contextPathHeader;
