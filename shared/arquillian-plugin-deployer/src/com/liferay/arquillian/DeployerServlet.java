@@ -106,6 +106,8 @@ public class DeployerServlet extends HttpServlet {
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException, ServletException {
 
+		ServiceTracker servletContextServiceTracker = null;
+
 		try {
 			InputStream bundleInputStream = _getUploadedBundleInputStream(
 				request);
@@ -121,7 +123,7 @@ public class DeployerServlet extends HttpServlet {
 				"(&(objectClass=javax.servlet." + "ServletContext)(bundle.id=" +
 					newBundle.getBundleId() + "))");
 
-			ServiceTracker servletContextServiceTracker = new ServiceTracker(
+			servletContextServiceTracker = new ServiceTracker(
 				bundleContext, bundleContextFilter, null);
 
 			servletContextServiceTracker.open();
@@ -148,6 +150,10 @@ public class DeployerServlet extends HttpServlet {
 			_signalError(e, response);
 		}
 		finally {
+			if (servletContextServiceTracker != null) {
+				servletContextServiceTracker.close();
+			}
+
 			ServletOutputStream outputStream = response.getOutputStream();
 
 			outputStream.flush();
