@@ -33,7 +33,7 @@ $default-box-shadow-v-offset: 1px;
 	}
 
 	body {
-		background-color :#EAEAEA;
+		background-color: #EAEAEA;
 		font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	}
 
@@ -161,7 +161,7 @@ $default-box-shadow-v-offset: 1px;
 
 		.navigation {
 			background: transparent;
-			border-top: 0;
+			border-top-width: 0;
 			padding: 0;
 		}
 	}
@@ -299,7 +299,7 @@ $default-box-shadow-v-offset: 1px;
 				color: #FFF;
 
 				&:focus, &:hover {
-					color:#FFF;
+					color: #FFF;
 					text-decoration: underline;
 				}
 			}
