@@ -20,6 +20,13 @@ package com.liferay.repository.external;
  */
 public interface CredentialsProvider {
 
+	/**
+	 * Returns a login identifier, which can be a screen name, an e-mail
+	 * address, or a numeric user id. The type of data returned depends on the
+	 * return of method {@link ExtRepository#getAuthType()} from the external
+	 * repository implementation.
+	 * @return
+	 */
 	public String getLogin();
 
 	public String getPassword();
