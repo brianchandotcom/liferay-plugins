@@ -14,32 +14,25 @@
 
 package com.liferay.rtl.hook.filter.dynamiccss;
 
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
-import com.liferay.portal.kernel.io.unsync.UnsyncPrintWriter;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContextPathUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.SessionParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.UnsyncPrintWriterPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.ModelHintsConstants;
 import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.Theme;
 import com.liferay.portal.service.ThemeLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.rtl.scripting.ruby.RubyExecutor;
 import com.liferay.rtl.util.PropsValues;
 
 import java.io.File;
@@ -48,9 +41,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,10 +58,6 @@ public class DynamicCSSUtil {
 
 	public static void init() {
 		try {
-			_rubyScript = StringUtil.read(
-				PortalClassLoaderUtil.getClassLoader(),
-				"com/liferay/portal/servlet/filters/dynamiccss/main.rb");
-
 			RTLCSSUtil.init();
 		}
 		catch (Exception e) {
@@ -130,8 +117,6 @@ public class DynamicCSSUtil {
 
 		String parsedContent = null;
 
-		boolean themeCssFastLoad = _isThemeCssFastLoad(request, themeDisplay);
-
 		URLConnection resourceURLConnection = null;
 
 		URL resourceURL = servletContext.getResource(resourcePath);
@@ -149,52 +134,26 @@ public class DynamicCSSUtil {
 			cacheResourceURLConnection = cacheResourceURL.openConnection();
 		}
 
-		if (themeCssFastLoad && (cacheResourceURLConnection != null) &&
+		if ((cacheResourceURLConnection != null) &&
 			(resourceURLConnection != null) &&
 			(cacheResourceURLConnection.getLastModified() ==
 				resourceURLConnection.getLastModified())) {
 
 			parsedContent = StringUtil.read(
 				cacheResourceURLConnection.getInputStream());
-		}
-		else {
-			content = _parseStaticTokens(content);
 
-			String queryString = request.getQueryString();
-
-			if (!themeCssFastLoad && Validator.isNotNull(queryString)) {
-				content = propagateQueryString(content, queryString);
-			}
-
-			parsedContent = _parseSass(
-				servletContext, request, themeDisplay, theme, resourcePath,
-				content);
-
-			if (isRightToLeft(request) &&
-				!RTLCSSUtil.isExcludedPath(resourcePath)) {
-
-				// Append custom CSS for RTL
-
-				URL rtlCustomResourceURL = _getRtlCustomResourceURL(
-					servletContext, resourcePath);
-
-				if (rtlCustomResourceURL != null) {
-					URLConnection rtlCustomResourceURLConnection =
-						rtlCustomResourceURL.openConnection();
-
-					String rtlCustomContent = StringUtil.read(
-						rtlCustomResourceURLConnection.getInputStream());
-
-					String parsedRtlCustomContent = _parseSass(
-						servletContext, request, themeDisplay, theme,
-						resourcePath, rtlCustomContent);
-
-					parsedContent += parsedRtlCustomContent;
+			if (_isThemeCssFastLoad(request, themeDisplay)) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(
+						"Disabling the CSS fast load is unsupported. " +
+							"Serving CSS cache: " + cacheResourceURL.getPath());
 				}
 			}
 		}
 
 		if (Validator.isNull(parsedContent)) {
+			_log.error("Unable to serve CSS cache for " + resourcePath);
+
 			return content;
 		}
 
@@ -409,93 +368,6 @@ public class DynamicCSSUtil {
 			request, "css_fast_load", PropsValues.THEME_CSS_FAST_LOAD);
 	}
 
-	private static String _parseSass(
-			ServletContext servletContext, HttpServletRequest request,
-			ThemeDisplay themeDisplay, Theme theme, String resourcePath,
-			String content)
-		throws Exception {
-
-		Map<String, Object> inputObjects = new HashMap<String, Object>();
-
-		String cssThemePath = _getCssThemePath(
-			servletContext, request, themeDisplay, theme);
-
-		inputObjects.put("content", content);
-		inputObjects.put("cssRealPath", resourcePath);
-		inputObjects.put("cssThemePath", cssThemePath);
-
-		File sassTempDir = _getSassTempDir(servletContext);
-
-		inputObjects.put("sassCachePath", sassTempDir.getCanonicalPath());
-
-		UnsyncByteArrayOutputStream unsyncByteArrayOutputStream =
-			new UnsyncByteArrayOutputStream();
-
-		UnsyncPrintWriter unsyncPrintWriter = UnsyncPrintWriterPool.borrow(
-			unsyncByteArrayOutputStream);
-
-		inputObjects.put("out", unsyncPrintWriter);
-
-		_rubyExecutor.eval(null, inputObjects, null, _rubyScript);
-
-		unsyncPrintWriter.flush();
-
-		return unsyncByteArrayOutputStream.toString();
-	}
-
-	private static String _parseStaticTokens(String content) {
-		return StringUtil.replace(
-			content,
-			new String[] {
-				"@model_hints_constants_text_display_height@",
-				"@model_hints_constants_text_display_width@",
-				"@model_hints_constants_textarea_display_height@",
-				"@model_hints_constants_textarea_display_width@"
-			},
-			new String[] {
-				ModelHintsConstants.TEXT_DISPLAY_HEIGHT,
-				ModelHintsConstants.TEXT_DISPLAY_WIDTH,
-				ModelHintsConstants.TEXTAREA_DISPLAY_HEIGHT,
-				ModelHintsConstants.TEXTAREA_DISPLAY_WIDTH
-			});
-	}
-
-	/**
-	 * @see {@link AggregateFilter#aggregateCss(String, String)}
-	 */
-	private static String propagateQueryString(
-		String content, String queryString) {
-
-		StringBuilder sb = new StringBuilder(content.length());
-
-		int pos = 0;
-
-		while (true) {
-			int importX = content.indexOf(_CSS_IMPORT_BEGIN, pos);
-			int importY = content.indexOf(
-				_CSS_IMPORT_END, importX + _CSS_IMPORT_BEGIN.length());
-
-			if ((importX == -1) || (importY == -1)) {
-				sb.append(content.substring(pos));
-
-				break;
-			}
-
-			sb.append(content.substring(pos, importY));
-			sb.append(CharPool.QUESTION);
-			sb.append(queryString);
-			sb.append(_CSS_IMPORT_END);
-
-			pos = importY + _CSS_IMPORT_END.length();
-		}
-
-		return sb.toString();
-	}
-
-	private static final String _CSS_IMPORT_BEGIN = "@import url(";
-
-	private static final String _CSS_IMPORT_END = ");";
-
 	private static final String _SASS_DIR = "sass";
 
 	private static final String _SASS_DIR_KEY =
@@ -507,7 +379,5 @@ public class DynamicCSSUtil {
 		"\\/([^\\/]+)-theme\\/", Pattern.CASE_INSENSITIVE);
 	private static Pattern _portalThemePattern = Pattern.compile(
 		"themes\\/([^\\/]+)\\/css", Pattern.CASE_INSENSITIVE);
-	private static RubyExecutor _rubyExecutor = new RubyExecutor();
-	private static String _rubyScript;
 
 }
