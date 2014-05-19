@@ -54,7 +54,7 @@
 			<dynamic-element dataType="document-library" fieldNamespace="ddm" indexType="keyword" name="icon_image" readOnly="false" repeatable="false" required="false" showLabel="true" type="ddm-documentlibrary" width="large">
 				<meta-data locale="en_US">
 					<entry name="label">
-						<![CDATA[or Image]]>
+						<![CDATA[Or Image]]>
 					</entry>
 					<entry name="predefinedValue">
 						<![CDATA[]]>

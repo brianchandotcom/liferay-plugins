@@ -127,7 +127,7 @@
 				<![CDATA[[]]]>
 			</entry>
 			<entry name="tip">
-				<![CDATA[In seconds]]>
+				<![CDATA[In Seconds]]>
 			</entry>
 		</meta-data>
 	</dynamic-element>
@@ -140,7 +140,7 @@
 				<![CDATA[false]]>
 			</entry>
 			<entry name="tip">
-				<![CDATA[Display the Controls that allows selecting which carousel image to display]]>
+				<![CDATA[Display the controls that allows selecting which carousel image to display.]]>
 			</entry>
 		</meta-data>
 	</dynamic-element>
