@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<ivy-module
+	version="2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+>
+	<info module="arquillian-liferay-container-adapter" organisation="com.liferay" />
+
+	<dependencies defaultconf="default">
+		<dependency name="org.osgi.compendium" org="org.osgi" rev="4.3.1" />
+		<dependency name="org.osgi.core" org="org.osgi" rev="4.3.1" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-container-spi" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-container-test-spi" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.protocol" name="arquillian-protocol-servlet" rev="1.1.2.Final" />
+		<!--<dependency org="org.apache.httpcomponents" name="httpclient" rev="4.2" />
+		  <dependency org="org.apache.httpcomponents" name="httpmime" rev="4.2" />-->
+		<dependency org="org.osgi" name="org.osgi.core" rev="4.3.1" />
+		<dependency org="junit" name="junit" rev="4.11" />
+		<dependency org="org.jboss.arquillian.junit" name="arquillian-junit-container" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.core" name="arquillian-core-impl-base" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.test" name="arquillian-test-impl-base" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.junit" name="arquillian-junit-core" rev="1.1.2.Final" />
+		<dependency org="org.jboss.shrinkwrap" name="shrinkwrap-api" rev="1.1.2" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-container-test-spi" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.config" name="arquillian-config-api" rev="1.1.2.Final" />
+		<dependency org="org.jboss.shrinkwrap" name="shrinkwrap-spi" rev="1.1.2" />
+		<dependency org="org.jboss.shrinkwrap.descriptors" name="shrinkwrap-descriptors-spi" rev="2.0.0-alpha-3" />
+		<dependency org="org.jboss.arquillian.core" name="arquillian-core-spi" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-container-spi" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.test" name="arquillian-test-spi" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-container-test-api" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.protocol" name="arquillian-protocol-servlet" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-container-test-impl-base" rev="1.1.2.Final" />
+		<dependency org="org.jboss.shrinkwrap" name="shrinkwrap-impl-base" rev="1.1.2" />
+		<dependency org="org.jboss.shrinkwrap.descriptors" name="shrinkwrap-descriptors-api-base" rev="2.0.0-alpha-3" />
+		<dependency org="org.jboss.arquillian.config" name="arquillian-config-impl-base" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.core" name="arquillian-core-api" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.container" name="arquillian-container-impl-base" rev="1.1.2.Final" />
+		<dependency org="org.jboss.arquillian.test" name="arquillian-test-api" rev="1.1.2.Final" />
+	</dependencies>
+</ivy-module>
