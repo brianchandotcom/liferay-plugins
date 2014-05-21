@@ -50,7 +50,7 @@ public class LiferayTestEnricher implements TestEnricher {
 		for (Field declaredField : declaredFields) {
 			if (declaredField.isAnnotationPresent(ServiceReference.class)) {
 
-				injectField(declaredField, testCase);
+				_injectField(declaredField, testCase);
 			}
 		}
 	}
@@ -67,7 +67,7 @@ public class LiferayTestEnricher implements TestEnricher {
 			Annotation[] parameterAnnotations = parametersAnnotations[i];
 
 			if (contains(parameterAnnotations, ServiceReference.class)) {
-				parameters[i] = resolve(
+				parameters[i] = _resolve(
 					parameterTypes[i], method.getDeclaringClass());
 			}
 		}
@@ -75,7 +75,7 @@ public class LiferayTestEnricher implements TestEnricher {
 		return parameters;
 	}
 
-	private Bundle getBundle(Class<?> testCaseClass) {
+	private Bundle _getBundle(Class<?> testCaseClass) {
 		ClassLoader classLoader = testCaseClass.getClassLoader();
 
 		if (classLoader instanceof BundleReference) {
@@ -86,16 +86,16 @@ public class LiferayTestEnricher implements TestEnricher {
 			"Test is not running inside BundleContext " + classLoader);
 	}
 
-	private void injectField(Field declaredField, Object testCase) {
+	private void _injectField(Field declaredField, Object testCase) {
 		Class<?> componentClass = declaredField.getType();
 
-		Object service = resolve(componentClass, testCase.getClass());
+		Object service = _resolve(componentClass, testCase.getClass());
 
-		setField(declaredField, testCase, service);
+		_setField(declaredField, testCase, service);
 	}
 
-	private Object resolve(Class<?> componentClass, Class<?> testCaseClass) {
-		Bundle bundle = getBundle(testCaseClass);
+	private Object _resolve(Class<?> componentClass, Class<?> testCaseClass) {
+		Bundle bundle = _getBundle(testCaseClass);
 
 		BundleContext bundleContext = bundle.getBundleContext();
 
@@ -105,7 +105,7 @@ public class LiferayTestEnricher implements TestEnricher {
 		return bundleContext.getService(serviceReference);
 	}
 
-	private void setField(
+	private void _setField(
 		Field declaredField, Object testCase, Object service) {
 
 		boolean accessible = declaredField.isAccessible();

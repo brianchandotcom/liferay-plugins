@@ -18,7 +18,6 @@ import aQute.bnd.osgi.Analyzer;
 import aQute.bnd.osgi.Jar;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 import java.util.Collection;
 import java.util.jar.Manifest;
@@ -96,7 +95,7 @@ public class LiferayOSGiProtocolProcessor implements ProtocolArchiveProcessor {
 			ByteArrayAsset byteArrayAsset = new ByteArrayAsset(
 				baos.toByteArray());
 
-			replaceManifest(applicationArchive, byteArrayAsset);
+			_replaceManifest(applicationArchive, byteArrayAsset);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -106,7 +105,7 @@ public class LiferayOSGiProtocolProcessor implements ProtocolArchiveProcessor {
 		}
 	}
 
-	private void replaceManifest(
+	private void _replaceManifest(
 		Archive<?> archive, ByteArrayAsset byteArrayAsset) {
 
 		archive.delete(MANIFEST_PATH);

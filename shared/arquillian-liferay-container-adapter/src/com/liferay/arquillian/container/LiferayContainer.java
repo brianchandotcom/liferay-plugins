@@ -87,7 +87,7 @@ public class LiferayContainer
 		return new ProtocolDescription(SERVLET_2_5);
 	}
 
-	private String buildDeploymentUrl() {
+	private String _buildDeploymentUrl() {
 		String arquillianDeployerContext =
 			_liferayContainerConfiguration.getArquillianDeployerContext();
 
@@ -115,21 +115,21 @@ public class LiferayContainer
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 
 		try {
-			String deploymentUrl = buildDeploymentUrl();
+			String deploymentUrl = _buildDeploymentUrl();
 
 			HttpPost httpPost = new HttpPost(deploymentUrl);
 
-			MultipartEntity entity = createMultipartEntity(archive);
+			MultipartEntity entity = _createMultipartEntity(archive);
 
 			httpPost.setEntity(entity);
 
 			HttpResponse response = httpClient.execute(httpPost);
 
-			checkErrors(response);
+			_checkErrors(response);
 
 			Header contextPath = response.getFirstHeader("Bundle-Context-Path");
 
-			ProtocolMetaData protocolMetaData = createProtocolMetadata(
+			ProtocolMetaData protocolMetaData = _createProtocolMetadata(
 				contextPath);
 
 			return protocolMetaData;
@@ -145,7 +145,7 @@ public class LiferayContainer
 		}
 	}
 
-	private MultipartEntity createMultipartEntity(Archive<?> archive) {
+	private MultipartEntity _createMultipartEntity(Archive<?> archive) {
 		ZipExporter zipView = archive.as(ZipExporter.class);
 
 		InputStream inputStream = zipView.exportAsInputStream();
@@ -159,7 +159,7 @@ public class LiferayContainer
 		return entity;
 	}
 
-	private ProtocolMetaData createProtocolMetadata(Header contextPath) {
+	private ProtocolMetaData _createProtocolMetadata(Header contextPath) {
 		ProtocolMetaData protocolMetaData = new ProtocolMetaData();
 
 		HTTPContext httpContext = new HTTPContext(
@@ -175,7 +175,7 @@ public class LiferayContainer
 		return protocolMetaData;
 	}
 
-	private void checkErrors(HttpResponse response)
+	private void _checkErrors(HttpResponse response)
 		throws DeploymentException, IOException {
 
 		StatusLine statusLine = response.getStatusLine();
@@ -183,7 +183,7 @@ public class LiferayContainer
 		int statusCode = statusLine.getStatusCode();
 
 		if (statusCode != HttpStatus.SC_OK) {
-			final String stackTrace = getBodyAsString(response);
+			final String stackTrace = _getBodyAsString(response);
 
 			throw new DeploymentException(stackTrace) {
 
@@ -210,7 +210,7 @@ public class LiferayContainer
 		}
 	}
 
-	private String getBodyAsString(HttpResponse response) throws IOException {
+	private String _getBodyAsString(HttpResponse response) throws IOException {
 		HttpEntity responseEntity = response.getEntity();
 
 		InputStream content = responseEntity.getContent();
@@ -232,7 +232,7 @@ public class LiferayContainer
 
 	@Override
 	public void undeploy(Archive<?> archive) throws DeploymentException {
-		String deploymentUrl = buildDeploymentUrl();
+		String deploymentUrl = _buildDeploymentUrl();
 
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 

@@ -40,7 +40,7 @@ public class ExecutionListenerAdapter {
 	public void after(@Observes After event) {
 		for (
 			ExecutionTestListener executionTestListener :
-				getExecutionTestListeners()) {
+				_getExecutionTestListeners()) {
 
 			executionTestListener.runAfterTest(
 				new TestContext(
@@ -51,7 +51,7 @@ public class ExecutionListenerAdapter {
 	public void afterClass(@Observes AfterClass event) {
 		for (
 			ExecutionTestListener executionTestListener :
-				getExecutionTestListeners()) {
+				_getExecutionTestListeners()) {
 
 			executionTestListener.runAfterClass(
 				new TestContext(event.getTestClass().getJavaClass()));
@@ -61,7 +61,7 @@ public class ExecutionListenerAdapter {
 	public void before(@Observes Before event) {
 		for (
 			ExecutionTestListener executionTestListener :
-				getExecutionTestListeners()) {
+				_getExecutionTestListeners()) {
 
 			executionTestListener.runBeforeTest(
 				new TestContext(
@@ -72,14 +72,14 @@ public class ExecutionListenerAdapter {
 	public void beforeClass(@Observes BeforeClass event) {
 		for (
 			ExecutionTestListener executionTestListener :
-				getExecutionTestListeners()) {
+				_getExecutionTestListeners()) {
 
 			executionTestListener.runBeforeClass(
 				new TestContext(event.getTestClass().getJavaClass()));
 		}
 	}
 
-	private Collection<ExecutionTestListener> getExecutionTestListeners() {
+	private Collection<ExecutionTestListener> _getExecutionTestListeners() {
 		if (_executionTestListeners == null) {
 			_executionTestListeners = _serviceLoaderInstance.get().all(
 				ExecutionTestListener.class);

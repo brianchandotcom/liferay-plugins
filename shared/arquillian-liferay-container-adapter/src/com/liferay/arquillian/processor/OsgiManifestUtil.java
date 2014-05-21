@@ -117,7 +117,7 @@ public class OsgiManifestUtil {
 
 				existingValues.add(value);
 
-				existingValue = join(",", existingValues);
+				existingValue = _join(",", existingValues);
 			}
 		}
 
@@ -142,7 +142,7 @@ public class OsgiManifestUtil {
 		_manifest = manifest;
 	}
 
-	private String join(String delim, Collection<String> existingValues) {
+	private String _join(String delim, Collection<String> existingValues) {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		for (String each : existingValues) {
