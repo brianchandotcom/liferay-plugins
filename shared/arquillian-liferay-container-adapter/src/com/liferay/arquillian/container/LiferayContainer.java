@@ -57,58 +57,6 @@ public class LiferayContainer
 	public static final String ARQUILLIAN_DEPLOY = "/arquillian-deploy";
 
 	@Override
-	public Class<LiferayContainerConfiguration> getConfigurationClass() {
-		return LiferayContainerConfiguration.class;
-	}
-
-	@Override
-	public void setup(
-		LiferayContainerConfiguration liferayContainerConfiguration) {
-
-		_liferayContainerConfiguration = liferayContainerConfiguration;
-	}
-
-	@Override
-	public void start() throws LifecycleException {
-
-		// NOOP
-
-	}
-
-	@Override
-	public void stop() throws LifecycleException {
-
-		// NOOP
-
-	}
-
-	@Override
-	public ProtocolDescription getDefaultProtocol() {
-		return new ProtocolDescription(SERVLET_2_5);
-	}
-
-	private String _buildDeploymentUrl() {
-		String arquillianDeployerContext =
-			_liferayContainerConfiguration.getArquillianDeployerContext();
-
-		String host = _liferayContainerConfiguration.getHost();
-
-		int port = _liferayContainerConfiguration.getPort();
-
-		String moduleFrameworkContext =
-			_liferayContainerConfiguration.getModuleFrameworkContext();
-
-		String portalContextRoot =
-			_liferayContainerConfiguration.getPortalContextRoot();
-
-		String protocol = _liferayContainerConfiguration.getProtocol();
-
-		return protocol + "://" + host + ":" + port + "/" + portalContextRoot +
-			"/" + moduleFrameworkContext + "/" + arquillianDeployerContext +
-			ARQUILLIAN_DEPLOY;
-	}
-
-	@Override
 	public ProtocolMetaData deploy(Archive<?> archive)
 		throws DeploymentException {
 
@@ -143,6 +91,84 @@ public class LiferayContainer
 		catch (IOException e) {
 			throw new DeploymentException("Invalid URL for portal", e);
 		}
+	}
+
+	@Override
+	public void deploy(Descriptor descriptor) throws DeploymentException {
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	@Override
+	public Class<LiferayContainerConfiguration> getConfigurationClass() {
+		return LiferayContainerConfiguration.class;
+	}
+
+	@Override
+	public ProtocolDescription getDefaultProtocol() {
+		return new ProtocolDescription(SERVLET_2_5);
+	}
+
+	@Override
+	public void setup(
+		LiferayContainerConfiguration liferayContainerConfiguration) {
+
+		_liferayContainerConfiguration = liferayContainerConfiguration;
+	}
+
+	@Override
+	public void start() throws LifecycleException {
+
+		// NOOP
+
+	}
+
+	@Override
+	public void stop() throws LifecycleException {
+
+		// NOOP
+
+	}
+
+	@Override
+	public void undeploy(Archive<?> archive) throws DeploymentException {
+		String deploymentUrl = _buildDeploymentUrl();
+
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+
+		HttpDelete httpDelete = new HttpDelete(deploymentUrl);
+
+		try {
+			httpClient.execute(httpDelete);
+		}
+		catch (IOException e) {
+			throw new DeploymentException("Error undeploying", e);
+		}
+	}
+
+	@Override
+	public void undeploy(Descriptor descriptor) throws DeploymentException {
+		throw new UnsupportedOperationException("Not implemented");
+	}
+
+	private String _buildDeploymentUrl() {
+		String arquillianDeployerContext =
+			_liferayContainerConfiguration.getArquillianDeployerContext();
+
+		String host = _liferayContainerConfiguration.getHost();
+
+		int port = _liferayContainerConfiguration.getPort();
+
+		String moduleFrameworkContext =
+			_liferayContainerConfiguration.getModuleFrameworkContext();
+
+		String portalContextRoot =
+			_liferayContainerConfiguration.getPortalContextRoot();
+
+		String protocol = _liferayContainerConfiguration.getProtocol();
+
+		return protocol + "://" + host + ":" + port + "/" + portalContextRoot +
+			"/" + moduleFrameworkContext + "/" + arquillianDeployerContext +
+			ARQUILLIAN_DEPLOY;
 	}
 
 	private MultipartEntity _createMultipartEntity(Archive<?> archive) {
@@ -228,32 +254,6 @@ public class LiferayContainer
 		finally {
 			scanner.close();
 		}
-	}
-
-	@Override
-	public void undeploy(Archive<?> archive) throws DeploymentException {
-		String deploymentUrl = _buildDeploymentUrl();
-
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-
-		HttpDelete httpDelete = new HttpDelete(deploymentUrl);
-
-		try {
-			httpClient.execute(httpDelete);
-		}
-		catch (IOException e) {
-			throw new DeploymentException("Error undeploying", e);
-		}
-	}
-
-	@Override
-	public void deploy(Descriptor descriptor) throws DeploymentException {
-		throw new UnsupportedOperationException("Not implemented");
-	}
-
-	@Override
-	public void undeploy(Descriptor descriptor) throws DeploymentException {
-		throw new UnsupportedOperationException("Not implemented");
 	}
 
 	private LiferayContainerConfiguration _liferayContainerConfiguration;
