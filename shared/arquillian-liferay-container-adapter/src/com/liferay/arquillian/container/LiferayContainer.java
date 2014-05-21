@@ -232,7 +232,7 @@ public class LiferayContainer
 
 				@Override
 				public void printStackTrace() {
-					System.out.println("REMOTE: " + stackTrace);
+					System.err.println("REMOTE: " + stackTrace);
 				}
 
 				@Override
