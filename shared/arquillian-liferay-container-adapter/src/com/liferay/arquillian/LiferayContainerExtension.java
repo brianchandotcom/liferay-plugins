@@ -40,4 +40,5 @@ public class LiferayContainerExtension implements LoadableExtension {
 			LiferayExtensionAuxiliaryAppender.class);
 		builder.service(TestEnricher.class, LiferayTestEnricher.class);
 	}
+
 }

@@ -58,6 +58,7 @@ public class LiferayTestEnricher implements TestEnricher {
 	@Override
 	public Object[] resolve(Method method) {
 		Class<?>[] parameterTypes = method.getParameterTypes();
+
 		Annotation[][] parametersAnnotations = method.getParameterAnnotations();
 
 		Object[] parameters = new Object[parameterTypes.length];
@@ -66,8 +67,8 @@ public class LiferayTestEnricher implements TestEnricher {
 			Annotation[] parameterAnnotations = parametersAnnotations[i];
 
 			if (contains(parameterAnnotations, ServiceReference.class)) {
-				parameters[i] = resolve(parameterTypes[i],
-					method.getDeclaringClass());
+				parameters[i] = resolve(
+					parameterTypes[i], method.getDeclaringClass());
 			}
 		}
 
@@ -82,7 +83,7 @@ public class LiferayTestEnricher implements TestEnricher {
 		}
 
 		throw new RuntimeException(
-			"Test is not running inside BundleContext" + classLoader);
+			"Test is not running inside BundleContext " + classLoader);
 	}
 
 	private void injectField(Field declaredField, Object testCase) {
@@ -113,7 +114,8 @@ public class LiferayTestEnricher implements TestEnricher {
 
 		try {
 			declaredField.set(testCase, service);
-		} catch (IllegalAccessException e) {
+		}
+		catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
 

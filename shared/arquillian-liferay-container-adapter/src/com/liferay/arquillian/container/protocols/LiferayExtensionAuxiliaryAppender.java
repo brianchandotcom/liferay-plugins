@@ -46,4 +46,5 @@ public class LiferayExtensionAuxiliaryAppender
 
 		return archive;
 	}
+
 }

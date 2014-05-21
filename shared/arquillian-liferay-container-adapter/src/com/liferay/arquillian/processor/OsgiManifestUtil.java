@@ -112,8 +112,8 @@ public class OsgiManifestUtil {
 			}
 			else {
 				LinkedHashSet<String> existingValues =
-					new LinkedHashSet<String>(Arrays.asList(
-						existingValue.split(",")));
+					new LinkedHashSet<String>(
+						Arrays.asList(existingValue.split(",")));
 
 				existingValues.add(value);
 
@@ -156,4 +156,5 @@ public class OsgiManifestUtil {
 	}
 
 	private Manifest _manifest;
+
 }

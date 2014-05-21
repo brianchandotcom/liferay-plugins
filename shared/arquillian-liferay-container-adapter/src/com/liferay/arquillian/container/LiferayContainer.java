@@ -88,18 +88,23 @@ public class LiferayContainer
 	}
 
 	private String buildDeploymentUrl() {
-		String protocol = _liferayContainerConfiguration.getProtocol();
-		String host = _liferayContainerConfiguration.getHost();
-		int port = _liferayContainerConfiguration.getPort();
-		String portalContextRoot =
-			_liferayContainerConfiguration.getPortalContextRoot();
-		String moduleFrameworkContext =
-			_liferayContainerConfiguration.getModuleFrameworkContext();
 		String arquillianDeployerContext =
 			_liferayContainerConfiguration.getArquillianDeployerContext();
 
-		return protocol+"://"+host+":"+port+"/"+portalContextRoot+"/"+
-			moduleFrameworkContext+"/"+ arquillianDeployerContext+
+		String host = _liferayContainerConfiguration.getHost();
+
+		int port = _liferayContainerConfiguration.getPort();
+
+		String moduleFrameworkContext =
+			_liferayContainerConfiguration.getModuleFrameworkContext();
+
+		String portalContextRoot =
+			_liferayContainerConfiguration.getPortalContextRoot();
+
+		String protocol = _liferayContainerConfiguration.getProtocol();
+
+		return protocol + "://" + host + ":" + port + "/" + portalContextRoot +
+			"/" + moduleFrameworkContext + "/" + arquillianDeployerContext +
 			ARQUILLIAN_DEPLOY;
 	}
 
@@ -150,6 +155,7 @@ public class LiferayContainer
 		entity.addPart(
 			archive.getName(),
 			new InputStreamBody(inputStream, archive.getName()));
+
 		return entity;
 	}
 
@@ -165,6 +171,7 @@ public class LiferayContainer
 			contextPath.getValue()));
 
 		protocolMetaData.addContext(httpContext);
+
 		return protocolMetaData;
 	}
 

@@ -80,4 +80,5 @@ public class LiferayContainerConfiguration implements ContainerConfiguration {
 	private int _port = 8080;
 	private String _portalContextRoot = "";
 	private String _protocol = "http";
+
 }

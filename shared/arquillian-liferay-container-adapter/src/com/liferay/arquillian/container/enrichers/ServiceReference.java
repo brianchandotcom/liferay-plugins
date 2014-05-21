@@ -27,4 +27,5 @@ import java.lang.annotation.Target;
 public @interface ServiceReference {
 
 	public String filter() default "";
+
 }

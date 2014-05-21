@@ -33,4 +33,5 @@ public class LiferayProtocolRemoteExtension implements RemoteLoadableExtension {
 
 		builder.observer(ExecutionListenerAdapter.class);
 	}
+
 }

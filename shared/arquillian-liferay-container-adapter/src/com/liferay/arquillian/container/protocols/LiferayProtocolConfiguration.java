@@ -17,7 +17,7 @@ package com.liferay.arquillian.container.protocols;
 import org.jboss.arquillian.container.test.spi.client.protocol.ProtocolConfiguration;
 
 /**
- * Created by sac on 17/01/14.
+ * @author Carlos Sierra Andrés
  */
 public class LiferayProtocolConfiguration implements ProtocolConfiguration {
 }
