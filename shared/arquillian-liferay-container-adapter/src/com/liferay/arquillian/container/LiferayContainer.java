@@ -29,11 +29,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import org.jboss.arquillian.container.spi.client.container.DeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
@@ -60,16 +61,19 @@ public class LiferayContainer
 	public ProtocolMetaData deploy(Archive<?> archive)
 		throws DeploymentException {
 
-		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+
+		HttpClient httpClient = httpClientBuilder.build();
 
 		try {
 			String deploymentUrl = _buildDeploymentUrl();
 
 			HttpPost httpPost = new HttpPost(deploymentUrl);
 
-			MultipartEntity entity = _createMultipartEntity(archive);
+			MultipartEntityBuilder multipartEntityBuilder =
+				_createMultipartEntity(archive);
 
-			httpPost.setEntity(entity);
+			httpPost.setEntity(multipartEntityBuilder.build());
 
 			HttpResponse response = httpClient.execute(httpPost);
 
@@ -133,7 +137,9 @@ public class LiferayContainer
 	public void undeploy(Archive<?> archive) throws DeploymentException {
 		String deploymentUrl = _buildDeploymentUrl();
 
-		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+
+		HttpClient httpClient = httpClientBuilder.build();
 
 		HttpDelete httpDelete = new HttpDelete(deploymentUrl);
 
@@ -171,18 +177,19 @@ public class LiferayContainer
 			ARQUILLIAN_DEPLOY;
 	}
 
-	private MultipartEntity _createMultipartEntity(Archive<?> archive) {
+	private MultipartEntityBuilder _createMultipartEntity(Archive<?> archive) {
+		MultipartEntityBuilder multipartEntityBuilder =
+			MultipartEntityBuilder.create();
+
 		ZipExporter zipView = archive.as(ZipExporter.class);
 
 		InputStream inputStream = zipView.exportAsInputStream();
 
-		MultipartEntity entity = new MultipartEntity();
-
-		entity.addPart(
+		multipartEntityBuilder.addPart(
 			archive.getName(),
 			new InputStreamBody(inputStream, archive.getName()));
 
-		return entity;
+		return multipartEntityBuilder;
 	}
 
 	private ProtocolMetaData _createProtocolMetadata(Header contextPath) {
