@@ -65,7 +65,8 @@ public class MembersActivitiesPortlet extends MVCPortlet {
 
 			outputStream = resourceResponse.getPortletOutputStream();
 
-			Class<?> clazz = portalClassLoader.loadClass(_className);
+			Class<?> clazz = portalClassLoader.loadClass(
+				"com.liferay.portlet.activities.action.RSSAction");
 
 			Method method = ReflectionUtil.getDeclaredMethod(
 				clazz, "getRSS", ResourceRequest.class, ResourceResponse.class);
@@ -88,9 +89,6 @@ public class MembersActivitiesPortlet extends MVCPortlet {
 			outputStream.close();
 		}
 	}
-
-	private static final String _className =
-		"com.liferay.portlet.activities.action.RSSAction";
 
 	private static Log _log = LogFactoryUtil.getLog(
 		MembersActivitiesPortlet.class);
