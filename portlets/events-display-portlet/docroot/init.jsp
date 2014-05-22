@@ -32,6 +32,7 @@ page import="com.liferay.calendar.model.CalendarResource" %><%@
 page import="com.liferay.calendar.service.CalendarBookingServiceUtil" %><%@
 page import="com.liferay.calendar.service.CalendarResourceLocalServiceUtil" %><%@
 page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
+page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayPortletURL" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.util.ArrayUtil" %><%@
@@ -58,6 +59,7 @@ page import="com.liferay.portal.service.GroupLocalServiceUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
 page import="com.liferay.portal.util.PortletKeys" %><%@
 page import="com.liferay.portlet.PortletURLFactoryUtil" %><%@
+page import="com.liferay.portlet.eventsdisplay.util.EventsDisplayUtil" %><%@
 page import="com.liferay.portlet.eventsdisplay.util.comparator.CalendarBookingTimeComparator" %>
 
 <%@ page import="java.text.Format" %>
@@ -65,7 +67,9 @@ page import="com.liferay.portlet.eventsdisplay.util.comparator.CalendarBookingTi
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.Calendar" %><%@
 page import="java.util.Date" %><%@
-page import="java.util.List" %>
+page import="java.util.HashMap" %><%@
+page import="java.util.List" %><%@
+page import="java.util.Map" %>
 
 <%@ page import="javax.portlet.PortletMode" %><%@
 page import="javax.portlet.PortletRequest" %>
@@ -80,5 +84,6 @@ int maxDaysDisplayed = PrefsParamUtil.getInteger(portletPreferences, request, "m
 
 Calendar jCalendar = CalendarFactoryUtil.getCalendar(timeZone, locale);
 
+Format dateFormatDate = FastDateFormatFactoryUtil.getSimpleDateFormat("EEE, MMM dd", locale, timeZone);
 Format dateFormatTime = FastDateFormatFactoryUtil.getTime(locale, timeZone);
 %>
