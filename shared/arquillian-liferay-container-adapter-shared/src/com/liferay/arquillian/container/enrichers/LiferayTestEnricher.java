@@ -25,6 +25,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 
 /**
+ * This class is called to enrich the test case instance with @ServiceReference.
+ * The annotated fields or parameters will be resolved from the OSGi bundle
+ * context.
+ *
  * @author Carlos Sierra Andrés
  */
 public class LiferayTestEnricher implements TestEnricher {
@@ -95,6 +99,10 @@ public class LiferayTestEnricher implements TestEnricher {
 	}
 
 	private Object _resolve(Class<?> componentClass, Class<?> testCaseClass) {
+		/* We should check for the type of the injection point and act in a
+		different way when we are asked for a collection instead of a single
+		service.*/
+
 		Bundle bundle = _getBundle(testCaseClass);
 
 		BundleContext bundleContext = bundle.getBundleContext();

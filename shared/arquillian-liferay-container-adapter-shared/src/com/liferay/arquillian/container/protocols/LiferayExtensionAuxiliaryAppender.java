@@ -25,6 +25,12 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 /**
+ * This appender packs all classes needed for the extension to work in the
+ * liferay instance.
+ *
+ * This also register the remote extension that will configure the in-container
+ * part of the runner.
+ *
  * @author Carlos Sierra Andrés
  */
 public class LiferayExtensionAuxiliaryAppender
@@ -35,10 +41,13 @@ public class LiferayExtensionAuxiliaryAppender
 		JavaArchive archive = ShrinkWrap.create(
 			JavaArchive.class, "arquillian-extension-liferay-osgi.jar");
 
+
+		//registers remote extension to configure remote side of the runner
 		archive.addAsServiceProvider(
 			RemoteLoadableExtension.class,
 			LiferayProtocolRemoteExtension.class);
 
+		//Packs needed classes
 		archive.addClasses(
 			ServiceReference.class, LiferayTestEnricher.class,
 			LiferayProtocolRemoteExtension.class,

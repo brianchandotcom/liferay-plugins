@@ -20,12 +20,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Marker interface to annotate those fields or method parameters in the test
+ * case instance that we need arquillian to resolve using OSGi.
+ *
  * @author Carlos Sierra Andrés
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 public @interface ServiceReference {
 
+	/**
+	 * This will allow to ask for a filtered service. Not implemented yet.
+	 *
+	 * @return
+	 */
 	public String filter() default "";
 
 }

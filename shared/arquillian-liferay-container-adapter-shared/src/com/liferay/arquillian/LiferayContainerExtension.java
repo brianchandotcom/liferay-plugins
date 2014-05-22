@@ -26,6 +26,9 @@ import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.test.spi.TestEnricher;
 
 /**
+ * Arquillian Extension that registers all our services into arquillian
+ * infrastructure.
+ *
  * @author Carlos Sierra Andrés
  */
 public class LiferayContainerExtension implements LoadableExtension {

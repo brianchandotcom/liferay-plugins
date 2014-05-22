@@ -49,6 +49,16 @@ import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
 
 /**
+ * This class implements a Liferay Container for Arquillian.
+ *
+ * Upon request this LiferayContainer will deploy or undeploy a bundled test
+ * into a running liferay instance. It will return all the details about
+ * the deployment for Arquillian runner to execute the tests and collect the
+ * results.
+ *
+ * This container adapter needs arquillian-plugin-deployer deployed in the
+ * server for the communication.
+ *
  * @author Carlos Sierra Andrés
  */
 public class LiferayContainer
@@ -57,6 +67,17 @@ public class LiferayContainer
 	public static final String SERVLET_2_5 = "Servlet 2.5";
 	public static final String ARQUILLIAN_DEPLOY = "/arquillian-deploy";
 
+	/**
+	 * Deploys the especified archive into the container.
+	 * It expects a header "Bundle-Context-Path" containing the actual
+	 * deployment context of the test at hand.
+	 *
+	 * @param archive
+	 * @return The information about the deployment for arquillian to find
+	 * the test infrastructure
+	 *
+	 * @throws DeploymentException
+	 */
 	@Override
 	public ProtocolMetaData deploy(Archive<?> archive)
 		throws DeploymentException {
@@ -119,6 +140,12 @@ public class LiferayContainer
 		_liferayContainerConfiguration = liferayContainerConfiguration;
 	}
 
+	/**
+	 * This method is only needed in the "managed" approach. We don't implement
+	 * it for the moment.
+	 *
+	 * @throws LifecycleException
+	 */
 	@Override
 	public void start() throws LifecycleException {
 
@@ -126,6 +153,12 @@ public class LiferayContainer
 
 	}
 
+	/**
+	 * This method is only needed in the "managed" approach. We don't implement
+	 * it for the moment.
+	 *
+	 * @throws LifecycleException
+	 */
 	@Override
 	public void stop() throws LifecycleException {
 
@@ -133,6 +166,13 @@ public class LiferayContainer
 
 	}
 
+	/**
+	 * Undeploys the test bundle from liferay instance using
+	 * arquillian-plugin-deployer.
+	 *
+	 * @param archive
+	 * @throws DeploymentException
+	 */
 	@Override
 	public void undeploy(Archive<?> archive) throws DeploymentException {
 		String deploymentUrl = _buildDeploymentUrl();
