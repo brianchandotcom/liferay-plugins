@@ -19,8 +19,6 @@ import com.liferay.sync.engine.service.persistence.SyncPropPersistence;
 
 import java.sql.SQLException;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,35 +27,32 @@ import org.slf4j.LoggerFactory;
  */
 public class SyncPropService {
 
-	public static SyncProp addSyncProp(String key, Object value)
-		throws Exception {
+	public static boolean getBoolean(String key) {
+		return getBoolean(key, false);
+	}
 
-		SyncProp syncProp = new SyncProp();
+	public static boolean getBoolean(String key, boolean defaultValue) {
+		String value = getValue(key);
 
-		syncProp.setKey(key);
-		syncProp.setValue(String.valueOf(value));
+		if (value == null) {
+			return defaultValue;
+		}
 
-		_syncPropPersistence.create(syncProp);
-
-		return syncProp;
+		return Boolean.parseBoolean(value);
 	}
 
 	public static int getInteger(String key) {
-		try {
-			List<SyncProp> syncProps = _syncPropPersistence.queryForEq(
-				"key", key);
+		return getInteger(key, 0);
+	}
 
-			SyncProp syncProp = syncProps.get(0);
+	public static int getInteger(String key, int defaultValue) {
+		String value = getValue(key);
 
-			if (syncProp == null) {
-				return 0;
-			}
-
-			return Integer.parseInt(syncProp.getValue());
+		if (value == null) {
+			return defaultValue;
 		}
-		catch (SQLException sqle) {
-			return 0;
-		}
+
+		return Integer.parseInt(value);
 	}
 
 	public static SyncPropPersistence getSyncPropPersistence() {
@@ -75,6 +70,34 @@ public class SyncPropService {
 		}
 
 		return _syncPropPersistence;
+	}
+
+	public static String getValue(String key) {
+		try {
+			SyncProp syncProp = _syncPropPersistence.queryForId(key);
+
+			if (syncProp == null) {
+				return null;
+			}
+
+			return syncProp.getValue();
+		}
+		catch (SQLException sqle) {
+			return null;
+		}
+	}
+
+	public static SyncProp updateSyncProp(String key, Object value)
+		throws Exception {
+
+		SyncProp syncProp = new SyncProp();
+
+		syncProp.setKey(key);
+		syncProp.setValue(String.valueOf(value));
+
+		_syncPropPersistence.createOrUpdate(syncProp);
+
+		return syncProp;
 	}
 
 	private static Logger _logger = LoggerFactory.getLogger(
