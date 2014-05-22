@@ -49,6 +49,10 @@ import org.osgi.framework.Filter;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
+ * This servlet installs or uninstalls a OSGi bundle received by a POST request,
+ * then waits for the Arquillian servlet runner to be started, and then returns
+ * Arquillian test runner context in the response.
+ *
  * @author Carlos Sierra Andrés
  */
 public class DeployerServlet extends HttpServlet {
