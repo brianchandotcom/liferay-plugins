@@ -5,5 +5,5 @@
 	<import file="../../build-common-osgi-plugin.xml" />
 
 	<property name="auto.deploy.dir" value="${liferay.home}/osgi/portal" />
-	<property name="plugin.name" value="arquillian-liferay-container-adapter" />
+	<property name="plugin.name" value="arquillian-liferay-container-adapter-shared" />
 </project>
