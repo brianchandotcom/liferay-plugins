@@ -1,8 +1,24 @@
+/* ---------- Configuration ---------- */
+
+.portlet-configuration .kb-edit-link {
+	margin: 5px 0 0;
+}
+
 /* ---------- Portlet ---------- */
 
 .knowledge-base-portlet-display {
-	.kb-display-tools {
-		float: right;
-		padding: 5px 5px 0 0;
+	.kbarticle-navigation {
+		li, ul {
+			list-style: none;
+		}
+
+		.kbarticle-expanded {
+			color: #555;
+			font-weight: bold;
+		}
+
+		.kbarticle-selected {
+			color: #555;
+		}
 	}
 }
