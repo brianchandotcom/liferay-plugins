@@ -3,11 +3,7 @@
 
 <routes>
 	<route>
-		<pattern></pattern>
-		<implicit-parameter name="mvcPath">/display/view.jsp</implicit-parameter>
-	</route>
-	<route>
-		<pattern>/rss</pattern>
+		<pattern>/{instanceId}/rss</pattern>
 		<ignored-parameter name="mvcPath" />
 		<ignored-parameter name="p_p_state" />
 		<implicit-parameter name="p_p_cacheability">cacheLevelPage</implicit-parameter>
@@ -15,43 +11,21 @@
 		<implicit-parameter name="p_p_resource_id">rss</implicit-parameter>
 	</route>
 	<route>
-		<pattern>/administrator</pattern>
-		<implicit-parameter name="mvcPath">/display/view_admin_panel.jsp</implicit-parameter>
+		<pattern>/{instanceId}/{resourcePrimKey:\d+}</pattern>
+		<implicit-parameter name="mvcPath">/article/view_article.jsp</implicit-parameter>
 		<implicit-parameter name="p_p_state">normal</implicit-parameter>
 	</route>
 	<route>
-		<pattern>/home</pattern>
-		<implicit-parameter name="mvcPath">/display/view.jsp</implicit-parameter>
+		<pattern>/{instanceId}/{resourcePrimKey:\d+}/{status:-?\d+}/history</pattern>
+		<implicit-parameter name="mvcPath">/article/history.jsp</implicit-parameter>
 		<implicit-parameter name="p_p_state">normal</implicit-parameter>
 	</route>
 	<route>
-		<pattern>/my-subscriptions</pattern>
-		<implicit-parameter name="mvcPath">/display/view_subscribed_articles.jsp</implicit-parameter>
-		<implicit-parameter name="p_p_state">normal</implicit-parameter>
+		<pattern>/{instanceId}/{resourcePrimKey:\d+}/{status:-?\d+}/history/{p_p_state}</pattern>
+		<implicit-parameter name="mvcPath">/article/history.jsp</implicit-parameter>
 	</route>
 	<route>
-		<pattern>/recent-articles</pattern>
-		<implicit-parameter name="mvcPath">/display/view_recent_articles.jsp</implicit-parameter>
-		<implicit-parameter name="p_p_state">normal</implicit-parameter>
-	</route>
-	<route>
-		<pattern>/search</pattern>
-		<implicit-parameter name="mvcPath">/display/search.jsp</implicit-parameter>
-		<implicit-parameter name="p_p_state">normal</implicit-parameter>
-	</route>
-	<route>
-		<pattern>/article/{resourcePrimKey:\d+}</pattern>
-		<implicit-parameter name="mvcPath">/display/view_article.jsp</implicit-parameter>
-		<implicit-parameter name="p_p_state">normal</implicit-parameter>
-	</route>
-	<route>
-		<pattern>/template/{kbTemplateId:\d+}</pattern>
-		<implicit-parameter name="mvcPath">/display/view_template.jsp</implicit-parameter>
-		<implicit-parameter name="p_p_state">normal</implicit-parameter>
-	</route>
-	<route>
-		<pattern>/article/{resourcePrimKey:\d+}/{status:-?\d+}/history</pattern>
-		<implicit-parameter name="mvcPath">/display/history.jsp</implicit-parameter>
-		<implicit-parameter name="p_p_state">normal</implicit-parameter>
+		<pattern>/{instanceId}/{resourcePrimKey:\d+}/{p_p_state}</pattern>
+		<implicit-parameter name="mvcPath">/article/view_article.jsp</implicit-parameter>
 	</route>
 </routes>
