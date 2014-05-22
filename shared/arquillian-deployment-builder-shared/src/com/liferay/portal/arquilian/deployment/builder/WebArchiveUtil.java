@@ -14,11 +14,11 @@
 
 package com.liferay.portal.arquilian.deployment.builder;
 
-import com.liferay.portal.arquilian.deployment.builder.util.AntLogger;
-
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.tools.ant.BuildEvent;
+import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 
@@ -31,124 +31,106 @@ import org.junit.rules.TemporaryFolder;
  * @author Manuel de la Peña
  * @author Cristina González
  */
-public class WebArchiveUtil implements BuildConstants {
+public class WebArchiveUtil {
 
 	public static WebArchive createJarWebArchive() throws IOException {
+		TemporaryFolder temporaryFolder = new TemporaryFolder();
+
 		try {
-			_temporaryFolder = new TemporaryFolder();
+			temporaryFolder.create();
 
-			_temporaryFolder.create();
+			File rootFile = temporaryFolder.getRoot();
 
-			_temporaryFolderRoot = _temporaryFolder.getRoot();
+			Project project = getProject();
 
-			Project antProject = configureAntProjectForJar();
+			project.setProperty("auto.deploy.dir", rootFile.getAbsolutePath());
 
-			antProject.executeTarget(TARGET_DEPLOY);
-
-			String pluginFullVersion = antProject.getProperty(
-				PROPERTY_PLUGIN_FULL_VERSION);
+			project.executeTarget("deploy");
 
 			StringBuilder sb = new StringBuilder(4);
 
-			sb.append(antProject.getProperty(PROPERTY_PLUGIN_NAME));
+			sb.append(project.getProperty("plugin.name"));
 			sb.append("-");
-			sb.append(pluginFullVersion);
-			sb.append(EXTENSION_JAR);
+			sb.append(project.getProperty("plugin.full.version"));
+			sb.append(".jar");
 
-			File jarFile = new File(
-				_temporaryFolderRoot.getAbsolutePath(), sb.toString());
+			File jarFile = new File(rootFile.getAbsolutePath(), sb.toString());
 
-			WebArchive webArchive = ShrinkWrap.createFromZipFile(
-				WebArchive.class, jarFile);
-
-			return webArchive;
+			return ShrinkWrap.createFromZipFile(WebArchive.class, jarFile);
 		}
 		finally {
-			_temporaryFolder.delete();
+			temporaryFolder.delete();
 		}
 	}
 
-	public static WebArchive createWebArchive() throws IOException {
+	public static WebArchive createWarWebArchive() throws IOException {
+		TemporaryFolder temporaryFolder = new TemporaryFolder();
+
 		try {
-			_temporaryFolder = new TemporaryFolder();
+			temporaryFolder.create();
 
-			_temporaryFolder.create();
+			File rootFile = temporaryFolder.getRoot();
 
-			_temporaryFolderRoot = _temporaryFolder.getRoot();
+			Project project = getProject();
 
-			Project antProject = configureAntProjectForWar();
+			project.setProperty(
+				"app.server.deploy.dir", rootFile.getAbsolutePath());
+			project.setProperty("auto.deploy.unpack.war", "false");
 
-			antProject.executeTarget(TARGET_DIRECT_DEPLOY);
-
-			String pluginName = antProject.getProperty(PROPERTY_PLUGIN_NAME);
-
-			pluginName += EXTENSION_WAR;
+			project.executeTarget("direct-deploy");
 
 			File warFile = new File(
-				_temporaryFolderRoot.getAbsolutePath(), pluginName);
+				rootFile.getAbsolutePath(),
+				project.getProperty("plugin.name") + ".war");
 
-			WebArchive webArchive = ShrinkWrap.createFromZipFile(
-				WebArchive.class, warFile);
-
-			return webArchive;
+			return ShrinkWrap.createFromZipFile(WebArchive.class, warFile);
 		}
 		finally {
-			_temporaryFolder.delete();
+			temporaryFolder.delete();
 		}
 	}
 
-	protected static AntLogger configureAntLogger() {
-		AntLogger antLogger = new AntLogger();
-
-		antLogger.setErrorPrintStream(System.err);
-		antLogger.setOutputPrintStream(System.out);
-		antLogger.setMessageOutputLevel(Project.MSG_INFO);
-
-		return antLogger;
-	}
-
-	protected static Project configureAntProject() {
-		File buildFile = new File(BUILD_XML_FILE_NAME);
+	protected static Project getProject() {
+		File buildFile = new File("build.xml");
 
 		Project project = new Project();
 
-		project.setUserProperty(PROPERTY_ANT_FILE, buildFile.getAbsolutePath());
+		DefaultLogger defaultLogger = new DefaultLogger() {
 
-		project.addBuildListener(configureAntLogger());
+			@Override
+			public void buildFinished(BuildEvent buildEvent) {
+				System.out.println("[BUILD FINISHED]");
+			}
+
+			@Override
+			public void buildStarted(BuildEvent buildEvent) {
+				System.out.println("[BUILD STARTED]");
+			}
+
+			@Override
+			public void messageLogged(BuildEvent buildEvent) {
+				System.out.println(buildEvent.getMessage());
+			}
+
+		};
+
+		defaultLogger.setErrorPrintStream(System.err);
+		defaultLogger.setMessageOutputLevel(Project.MSG_INFO);
+		defaultLogger.setOutputPrintStream(System.out);
+
+		project.addBuildListener(defaultLogger);
+
+		project.setUserProperty("ant.file", buildFile.getAbsolutePath());
 
 		project.init();
 
 		ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
 
-		project.addReference(PROPERTY_ANT_PROJECTHELPER, projectHelper);
+		project.addReference("ant.projectHelper", projectHelper);
 
 		projectHelper.parse(project, buildFile);
 
 		return project;
 	}
-
-	protected static Project configureAntProjectForJar() {
-		Project project = configureAntProject();
-
-		project.setProperty(
-			PROPERTY_AUTO_DEPLOY_DIR, _temporaryFolderRoot.getAbsolutePath());
-
-		return project;
-	}
-
-	protected static Project configureAntProjectForWar() {
-		Project project = configureAntProject();
-
-		project.setProperty(
-			PROPERTY_APP_SERVER_DEPLOY_DIR,
-			_temporaryFolderRoot.getAbsolutePath());
-
-		project.setProperty(PROPERTY_AUTO_DEPLOY_UNPACK_WAR, "false");
-
-		return project;
-	}
-
-	private static TemporaryFolder _temporaryFolder;
-	private static File _temporaryFolderRoot;
 
 }
