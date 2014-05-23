@@ -20,26 +20,6 @@
 <%@ include file="/init.jsp" %>
 
 <%
-List<Long> groupIds = new ArrayList<Long>();
-
-Group group = GroupLocalServiceUtil.getGroup(layout.getGroupId());
-
-boolean regularSite = group.isRegularSite();
-
-if (regularSite) {
-	groupIds.add(group.getGroupId());
-}
-else if (group.isUser() && themeDisplay.isSignedIn()) {
-	for (Group mySite : user.getMySites()) {
-		groupIds.add(mySite.getGroupId());
-	}
-}
-else {
-	Group guestGroup = GroupLocalServiceUtil.getGroup(themeDisplay.getCompanyId(), GroupConstants.GUEST);
-
-	groupIds.add(guestGroup.getGroupId());
-}
-
 Calendar displayStartTimeJCalendar = (Calendar)jCalendar.clone();
 
 displayStartTimeJCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -49,27 +29,9 @@ displayStartTimeJCalendar.set(Calendar.MILLISECOND, 0);
 
 long displayEndTime = jCalendar.getTimeInMillis() + (Time.DAY * maxDaysDisplayed);
 
-List<Long> calendarResourceIds = new ArrayList<Long>();
-
-if (!regularSite) {
-	for (long groupId : groupIds) {
-		long classNameId = PortalUtil.getClassNameId(Group.class);
-
-		if (group.isUser()) {
-			classNameId = PortalUtil.getClassNameId(User.class);
-		}
-
-		CalendarResource calendarResource = CalendarResourceLocalServiceUtil.fetchCalendarResource(classNameId, groupId);
-
-		if (calendarResource != null) {
-			calendarResourceIds.add(calendarResource.getCalendarResourceId());
-		}
-	}
-}
-
 int[] statuses = {WorkflowConstants.STATUS_APPROVED};
 
-Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, ArrayUtil.toLongArray(groupIds), ArrayUtil.toLongArray(calendarResourceIds), displayStartTimeJCalendar, displayEndTime, statuses, jCalendar);
+Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, layout.getGroupId(), displayStartTimeJCalendar, displayEndTime, statuses, jCalendar);
 %>
 
 <c:choose>

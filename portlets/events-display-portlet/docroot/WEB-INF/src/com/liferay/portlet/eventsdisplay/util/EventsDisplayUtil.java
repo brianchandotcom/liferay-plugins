@@ -18,12 +18,20 @@
 package com.liferay.portlet.eventsdisplay.util;
 
 import com.liferay.calendar.model.CalendarBooking;
+import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.service.CalendarBookingServiceUtil;
+import com.liferay.calendar.service.CalendarResourceLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.GroupConstants;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -58,15 +66,17 @@ public class EventsDisplayUtil {
 	}
 
 	public static Map<Integer, List<CalendarBooking>> getCalendarBookings(
-			int maxDaysDisplayed, ThemeDisplay themeDisplay, long[] groupIds,
-			long[] calendarResourceIds, Calendar displayStartTimeJCalendar,
-			long displayEndTime, int[] statuses, Calendar jCalendar)
+			int maxDaysDisplayed, ThemeDisplay themeDisplay, long layoutGroupId,
+			Calendar displayStartTimeJCalendar, long displayEndTime,
+			int[] statuses, Calendar jCalendar)
 		throws PortalException, SystemException {
+
+		long[] groupIds = getGroupIds(layoutGroupId, themeDisplay);
 
 		List<CalendarBooking> calendarBookings =
 			CalendarBookingServiceUtil.search(
 				themeDisplay.getCompanyId(), groupIds, null,
-				calendarResourceIds, -1, null,
+				getCalendarResourceIds(layoutGroupId, groupIds), -1, null,
 				displayStartTimeJCalendar.getTimeInMillis(), displayEndTime,
 				true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
@@ -123,6 +133,66 @@ public class EventsDisplayUtil {
 		}
 
 		return sortedCalendarBookings;
+	}
+
+	protected static long[] getCalendarResourceIds(
+			long layoutGroupId, long[] groupIds)
+		throws PortalException, SystemException {
+
+		Group group = GroupLocalServiceUtil.getGroup(layoutGroupId);
+
+		if (group.isRegularSite()) {
+			return null;
+		}
+
+		List<Long> calendarResourceIds = new ArrayList<Long>();
+
+		for (long groupId : groupIds) {
+			long classNameId = PortalUtil.getClassNameId(Group.class);
+
+			if (group.isUser()) {
+				classNameId = PortalUtil.getClassNameId(User.class);
+			}
+
+			CalendarResource calendarResource =
+				CalendarResourceLocalServiceUtil.fetchCalendarResource(
+					classNameId, groupId);
+
+			if (calendarResource != null) {
+				calendarResourceIds.add(
+					calendarResource.getCalendarResourceId());
+			}
+		}
+
+		return ArrayUtil.toLongArray(calendarResourceIds);
+	}
+
+	protected static long[] getGroupIds(
+			long layoutGroupId, ThemeDisplay themeDisplay)
+		throws PortalException, SystemException {
+
+		List<Long> groupIds = new ArrayList<Long>();
+
+		Group group = GroupLocalServiceUtil.getGroup(layoutGroupId);
+
+		if (group.isRegularSite()) {
+			groupIds.add(group.getGroupId());
+		}
+		else if (group.isUser() && themeDisplay.isSignedIn()) {
+			User user = themeDisplay.getUser();
+
+			for (Group mySite : user.getMySites()) {
+				groupIds.add(mySite.getGroupId());
+			}
+		}
+		else {
+			Group guestGroup = GroupLocalServiceUtil.getGroup(
+				themeDisplay.getCompanyId(), GroupConstants.GUEST);
+
+			groupIds.add(guestGroup.getGroupId());
+		}
+
+		return ArrayUtil.toLongArray(groupIds);
 	}
 
 }
