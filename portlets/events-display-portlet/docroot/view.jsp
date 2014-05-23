@@ -71,49 +71,7 @@ int[] statuses = {WorkflowConstants.STATUS_APPROVED};
 
 List<CalendarBooking> calendarBookings = CalendarBookingServiceUtil.search(themeDisplay.getCompanyId(), ArrayUtil.toLongArray(groupIds), null, ArrayUtil.toLongArray(calendarResourceIds), -1, null, displayStartTimeJCalendar.getTimeInMillis(), displayEndTime, true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
-Map<Integer, List<CalendarBooking>> sortedCalendarBookings = new HashMap<Integer, List<CalendarBooking>>();
-
-for (int i = 0; i < maxDaysDisplayed; i++) {
-	sortedCalendarBookings.put(i, new ArrayList<CalendarBooking>());
-}
-
-for (CalendarBooking calendarBooking : calendarBookings) {
-	if (Validator.isNull(calendarBooking.getTitle())) {
-		continue;
-	}
-
-	if (!calendarBooking.isAllDay() && (calendarBooking.getEndTime() < jCalendar.getTimeInMillis())) {
-		continue;
-	}
-
-	Calendar bookingStartTimeJCalendar = Calendar.getInstance(timeZone, locale);
-
-	long startTime = calendarBooking.getStartTime();
-
-	if (calendarBooking.isAllDay()) {
-		startTime -= timeZone.getRawOffset();
-
-		if (timeZone.inDaylightTime(new Date(startTime))) {
-			startTime -= timeZone.getDSTSavings();
-		}
-	}
-
-	bookingStartTimeJCalendar.setTimeInMillis(startTime);
-
-	Calendar diplayEndTimeJCalendar = (Calendar)displayStartTimeJCalendar.clone();
-
-	for (int i = 0; i < maxDaysDisplayed; i++) {
-		List<CalendarBooking> currentCalendarBookings = sortedCalendarBookings.get(i);
-
-		diplayEndTimeJCalendar.add(Calendar.DAY_OF_YEAR, 1);
-
-		if (bookingStartTimeJCalendar.before(diplayEndTimeJCalendar)) {
-			currentCalendarBookings.add(calendarBooking);
-
-			break;
-		}
-	}
-}
+Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.sortCalendarBookingsByDays(maxDaysDisplayed, themeDisplay, displayStartTimeJCalendar, jCalendar, calendarBookings);
 %>
 
 <c:choose>

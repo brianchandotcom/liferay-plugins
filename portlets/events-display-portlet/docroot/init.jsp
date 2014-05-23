@@ -49,7 +49,6 @@ page import="com.liferay.portal.kernel.util.PropsKeys" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.kernel.util.Time" %><%@
-page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.workflow.WorkflowConstants" %><%@
 page import="com.liferay.portal.model.Group" %><%@
 page import="com.liferay.portal.model.GroupConstants" %><%@
@@ -66,8 +65,6 @@ page import="com.liferay.portlet.eventsdisplay.util.comparator.CalendarBookingTi
 
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.Calendar" %><%@
-page import="java.util.Date" %><%@
-page import="java.util.HashMap" %><%@
 page import="java.util.List" %><%@
 page import="java.util.Map" %>
 

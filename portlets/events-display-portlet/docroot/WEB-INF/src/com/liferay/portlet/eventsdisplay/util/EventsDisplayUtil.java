@@ -18,9 +18,16 @@
 package com.liferay.portlet.eventsdisplay.util;
 
 import com.liferay.calendar.model.CalendarBooking;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.theme.ThemeDisplay;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * @author Sherry Yang
@@ -44,6 +51,67 @@ public class EventsDisplayUtil {
 		}
 
 		return true;
+	}
+
+	public static Map<Integer, List<CalendarBooking>>
+		sortCalendarBookingsByDays(
+			int maxDaysDisplayed, ThemeDisplay themeDisplay,
+			Calendar displayStartTimeJCalendar, Calendar jCalendar,
+			List<CalendarBooking> calendarBookings) {
+
+		Map<Integer, List<CalendarBooking>> sortedCalendarBookings =
+			new HashMap<Integer, List<CalendarBooking>>();
+
+		for (int i = 0; i < maxDaysDisplayed; i++) {
+			sortedCalendarBookings.put(i, new ArrayList<CalendarBooking>());
+		}
+
+		for (CalendarBooking calendarBooking : calendarBookings) {
+			if (Validator.isNull(calendarBooking.getTitle())) {
+				continue;
+			}
+
+			if (!calendarBooking.isAllDay() &&
+				(calendarBooking.getEndTime() < jCalendar.getTimeInMillis())) {
+
+				continue;
+			}
+
+			TimeZone timeZone = themeDisplay.getTimeZone();
+
+			Calendar bookingStartTimeJCalendar = Calendar.getInstance(
+				timeZone, themeDisplay.getLocale());
+
+			long startTime = calendarBooking.getStartTime();
+
+			if (calendarBooking.isAllDay()) {
+				startTime -= timeZone.getRawOffset();
+
+				if (timeZone.inDaylightTime(new Date(startTime))) {
+					startTime -= timeZone.getDSTSavings();
+				}
+			}
+
+			bookingStartTimeJCalendar.setTimeInMillis(startTime);
+
+			Calendar diplayEndTimeJCalendar =
+				(Calendar)displayStartTimeJCalendar.clone();
+
+			for (int i = 0; i < maxDaysDisplayed; i++) {
+				List<CalendarBooking> currentCalendarBookings =
+					sortedCalendarBookings.get(i);
+
+				diplayEndTimeJCalendar.add(Calendar.DAY_OF_YEAR, 1);
+
+				if (bookingStartTimeJCalendar.before(diplayEndTimeJCalendar)) {
+					currentCalendarBookings.add(calendarBooking);
+
+					break;
+				}
+			}
+		}
+
+		return sortedCalendarBookings;
 	}
 
 }
