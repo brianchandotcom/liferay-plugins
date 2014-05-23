@@ -38,21 +38,17 @@ public class MoveFolderHandler extends BaseJSONHandler {
 		SyncFile remoteSyncFile = objectMapper.readValue(
 			response, new TypeReference<SyncFile>() {});
 
-		SyncFile parentLocalSyncFile = SyncFileService.fetchSyncFile(
-			remoteSyncFile.getParentFolderId(),
-			remoteSyncFile.getRepositoryId(), getSyncAccountId());
-
-		String filePathName = null;
-
-		if (parentLocalSyncFile != null) {
-			filePathName = FilePathNameUtil.getFilePathName(
-				parentLocalSyncFile.getFilePathName(),
-				remoteSyncFile.getName());
-		}
-
 		SyncFile localSyncFile = (SyncFile)getParameterValue("syncFile");
 
-		localSyncFile.setFilePathName(filePathName);
+		SyncFile parentLocalSyncFile = SyncFileService.fetchSyncFile(
+			remoteSyncFile.getRepositoryId(), getSyncAccountId(),
+			remoteSyncFile.getParentFolderId());
+
+		localSyncFile.setFilePathName(
+			FilePathNameUtil.getFilePathName(
+				parentLocalSyncFile.getFilePathName(),
+				remoteSyncFile.getName()));
+
 		localSyncFile.setModifiedTime(remoteSyncFile.getModifiedTime());
 
 		SyncFileService.update(localSyncFile);
