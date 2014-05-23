@@ -69,9 +69,7 @@ if (!regularSite) {
 
 int[] statuses = {WorkflowConstants.STATUS_APPROVED};
 
-List<CalendarBooking> calendarBookings = CalendarBookingServiceUtil.search(themeDisplay.getCompanyId(), ArrayUtil.toLongArray(groupIds), null, ArrayUtil.toLongArray(calendarResourceIds), -1, null, displayStartTimeJCalendar.getTimeInMillis(), displayEndTime, true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-
-Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.sortCalendarBookingsByDays(maxDaysDisplayed, themeDisplay, displayStartTimeJCalendar, jCalendar, calendarBookings);
+Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, ArrayUtil.toLongArray(groupIds), ArrayUtil.toLongArray(calendarResourceIds), displayStartTimeJCalendar, displayEndTime, statuses, jCalendar);
 %>
 
 <c:choose>

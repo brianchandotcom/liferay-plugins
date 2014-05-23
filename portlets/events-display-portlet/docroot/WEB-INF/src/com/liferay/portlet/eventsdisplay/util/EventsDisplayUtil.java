@@ -18,6 +18,10 @@
 package com.liferay.portlet.eventsdisplay.util;
 
 import com.liferay.calendar.model.CalendarBooking;
+import com.liferay.calendar.service.CalendarBookingServiceUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.theme.ThemeDisplay;
 
@@ -53,11 +57,18 @@ public class EventsDisplayUtil {
 		return true;
 	}
 
-	public static Map<Integer, List<CalendarBooking>>
-		sortCalendarBookingsByDays(
-			int maxDaysDisplayed, ThemeDisplay themeDisplay,
-			Calendar displayStartTimeJCalendar, Calendar jCalendar,
-			List<CalendarBooking> calendarBookings) {
+	public static Map<Integer, List<CalendarBooking>> getCalendarBookings(
+			int maxDaysDisplayed, ThemeDisplay themeDisplay, long[] groupIds,
+			long[] calendarResourceIds, Calendar displayStartTimeJCalendar,
+			long displayEndTime, int[] statuses, Calendar jCalendar)
+		throws PortalException, SystemException {
+
+		List<CalendarBooking> calendarBookings =
+			CalendarBookingServiceUtil.search(
+				themeDisplay.getCompanyId(), groupIds, null,
+				calendarResourceIds, -1, null,
+				displayStartTimeJCalendar.getTimeInMillis(), displayEndTime,
+				true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 		Map<Integer, List<CalendarBooking>> sortedCalendarBookings =
 			new HashMap<Integer, List<CalendarBooking>>();
