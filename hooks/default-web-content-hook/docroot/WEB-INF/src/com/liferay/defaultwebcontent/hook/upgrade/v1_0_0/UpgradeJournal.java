@@ -14,6 +14,7 @@
 
 package com.liferay.defaultwebcontent.hook.upgrade.v1_0_0;
 
+import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.upgrade.util.UpgradeProcessUtil;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -24,8 +25,13 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.journal.service.JournalStructureLocalServiceUtil;
-import com.liferay.portlet.journal.service.JournalTemplateLocalServiceUtil;
+import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
+import com.liferay.portlet.dynamicdatamapping.model.DDMStructureConstants;
+import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
+import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
+import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
+import com.liferay.portlet.journal.model.JournalArticle;
+import com.liferay.portlet.journal.util.JournalConverterUtil;
 
 import java.io.InputStream;
 
@@ -59,12 +65,17 @@ public class UpgradeJournal extends UpgradeProcess {
 
 		ServiceContext serviceContext = new ServiceContext();
 
-		serviceContext.setAddCommunityPermissions(true);
+		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 
-		JournalStructureLocalServiceUtil.addStructure(
-			userId, groupId, "ARTICLE", false, StringPool.BLANK, nameMap,
-			descriptionMap, xsd, serviceContext);
+		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.addStructure(
+			userId, groupId, 0, PortalUtil.getClassNameId(JournalArticle.class),
+			"ARTICLE", nameMap, descriptionMap,
+			JournalConverterUtil.getDDMXSD(xsd), "xml",
+			DDMStructureConstants.TYPE_DEFAULT, serviceContext);
+
+		_ddmStructureIds.put(
+			groupId + "#" + "ARTICLE", ddmStructure.getStructureId());
 
 		// Carousel
 
@@ -77,9 +88,15 @@ public class UpgradeJournal extends UpgradeProcess {
 
 		xsd = getFileAsString("/structures/multiple_item_carousel.xml");
 
-		JournalStructureLocalServiceUtil.addStructure(
-			userId, groupId, "MULTIPLE-ITEM-CAROUSEL", false, StringPool.BLANK,
-			nameMap, descriptionMap, xsd, serviceContext);
+		ddmStructure = DDMStructureLocalServiceUtil.addStructure(
+			userId, groupId, 0, PortalUtil.getClassNameId(JournalArticle.class),
+			"MULTIPLE-ITEM-CAROUSEL", nameMap, descriptionMap,
+			JournalConverterUtil.getDDMXSD(xsd), "xml",
+			DDMStructureConstants.TYPE_DEFAULT, serviceContext);
+
+		_ddmStructureIds.put(
+			groupId + "#" + "MULTIPLE-ITEM-CAROUSEL",
+			ddmStructure.getStructureId());
 
 		// Multiple Item
 
@@ -93,15 +110,22 @@ public class UpgradeJournal extends UpgradeProcess {
 
 		xsd = getFileAsString("/structures/multiple_item.xml");
 
-		JournalStructureLocalServiceUtil.addStructure(
-			userId, groupId, "MULTIPLE-ITEM", false, StringPool.BLANK, nameMap,
-			descriptionMap, xsd, serviceContext);
+		ddmStructure = DDMStructureLocalServiceUtil.addStructure(
+			userId, groupId, 0, PortalUtil.getClassNameId(JournalArticle.class),
+			"MULTIPLE-ITEM", nameMap, descriptionMap,
+			JournalConverterUtil.getDDMXSD(xsd), "xml",
+			DDMStructureConstants.TYPE_DEFAULT, serviceContext);
+
+		_ddmStructureIds.put(
+			groupId + "#" + "MULTIPLE-ITEM", ddmStructure.getStructureId());
 	}
 
 	protected void addJournalTemplates(long groupId, long userId, Locale locale)
 		throws Exception {
 
 		// Regular Article Description
+
+		long classPK = _ddmStructureIds.get(groupId + "#" + "ARTICLE");
 
 		Map<Locale, String> nameMap = new HashMap<Locale, String>();
 
@@ -113,17 +137,20 @@ public class UpgradeJournal extends UpgradeProcess {
 			locale,
 			"This template only displays brief descriptions of web content");
 
-		String xsl = getFileAsString("/templates/article_description.vm");
+		String script = getFileAsString("/templates/article_description.vm");
 
 		ServiceContext serviceContext = new ServiceContext();
 
-		serviceContext.setAddCommunityPermissions(true);
+		serviceContext.setAddGroupPermissions(true);
 		serviceContext.setAddGuestPermissions(true);
 
-		JournalTemplateLocalServiceUtil.addTemplate(
-			userId, groupId, "ARTICLE-DESCRIPTION", false, "ARTICLE", nameMap,
-			descriptionMap, xsl, true, "vm", true, false, StringPool.BLANK,
-			null, serviceContext);
+		DDMTemplateLocalServiceUtil.addTemplate(
+			userId, groupId, PortalUtil.getClassNameId(DDMStructure.class),
+			classPK, "ARTICLE-DESCRIPTION", nameMap, descriptionMap,
+			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
+			DDMTemplateConstants.TEMPLATE_MODE_CREATE,
+			TemplateConstants.LANG_TYPE_VM, script, true, false,
+			StringPool.BLANK, null, serviceContext);
 
 		// Regular Article
 
@@ -135,14 +162,20 @@ public class UpgradeJournal extends UpgradeProcess {
 				"content like, titles, main image, body, and author " +
 					"information.");
 
-		xsl = getFileAsString("/templates/regular_article.vm");
+		script = getFileAsString("/templates/regular_article.vm");
 
-		JournalTemplateLocalServiceUtil.addTemplate(
-			userId, groupId, "REGULAR-ARTICLE", false, "ARTICLE", nameMap,
-			descriptionMap, xsl, true, "vm", true, false, StringPool.BLANK,
-			null, serviceContext);
+		DDMTemplateLocalServiceUtil.addTemplate(
+			userId, groupId, PortalUtil.getClassNameId(DDMStructure.class),
+			classPK, "REGULAR-ARTICLE", nameMap, descriptionMap,
+			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
+			DDMTemplateConstants.TEMPLATE_MODE_CREATE,
+			TemplateConstants.LANG_TYPE_VM, script, true, false,
+			StringPool.BLANK, null, serviceContext);
 
 		// Carousel
+
+		classPK = _ddmStructureIds.get(
+			groupId + "#" + "MULTIPLE-ITEM-CAROUSEL");
 
 		nameMap.put(locale, "Carousel");
 
@@ -151,14 +184,19 @@ public class UpgradeJournal extends UpgradeProcess {
 			"This is the carousel template that utilizes Alloy UI to display " +
 				"repeatable content as a slideshow.");
 
-		xsl = getFileAsString("/templates/multiple_item_carousel.vm");
+		script = getFileAsString("/templates/multiple_item_carousel.vm");
 
-		JournalTemplateLocalServiceUtil.addTemplate(
-			userId, groupId, "MULTIPLE-ITEM-CAROUSEL", false,
-			"MULTIPLE-ITEM-CAROUSEL", nameMap, descriptionMap, xsl, true, "vm",
-			true, false, StringPool.BLANK, null, serviceContext);
+		DDMTemplateLocalServiceUtil.addTemplate(
+			userId, groupId, PortalUtil.getClassNameId(DDMStructure.class),
+			classPK, "MULTIPLE-ITEM-CAROUSEL", nameMap, descriptionMap,
+			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
+			DDMTemplateConstants.TEMPLATE_MODE_CREATE,
+			TemplateConstants.LANG_TYPE_VM, script, true, false,
+			StringPool.BLANK, null, serviceContext);
 
 		// Featured Items
+
+		classPK = _ddmStructureIds.get(groupId + "#" + "MULTIPLE-ITEM");
 
 		nameMap.put(locale, "Featured Items");
 
@@ -167,11 +205,14 @@ public class UpgradeJournal extends UpgradeProcess {
 			"This is a template that utilizes the Multiple Item Structure, " +
 				"and displays the data as Featured Items.");
 
-		xsl = getFileAsString("/templates/multiple_item_feature.vm");
+		script = getFileAsString("/templates/multiple_item_feature.vm");
 
-		JournalTemplateLocalServiceUtil.addTemplate(
-			userId, groupId, "MULTIPLE-ITEM-FEATURE", false, "MULTIPLE-ITEM",
-			nameMap, descriptionMap, xsl, true, "vm", true, false,
+		DDMTemplateLocalServiceUtil.addTemplate(
+			userId, groupId, PortalUtil.getClassNameId(DDMStructure.class),
+			classPK, "MULTIPLE-ITEM-FEATURE", nameMap, descriptionMap,
+			DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY,
+			DDMTemplateConstants.TEMPLATE_MODE_CREATE,
+			TemplateConstants.LANG_TYPE_VM, script, true, false,
 			StringPool.BLANK, null, serviceContext);
 	}
 
@@ -199,5 +240,7 @@ public class UpgradeJournal extends UpgradeProcess {
 
 		return new String(FileUtil.getBytes(is));
 	}
+
+	private Map<String, Long> _ddmStructureIds = new HashMap<String, Long>();
 
 }
