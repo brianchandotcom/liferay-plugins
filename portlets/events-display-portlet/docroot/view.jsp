@@ -27,11 +27,7 @@ displayStartTimeJCalendar.set(Calendar.MINUTE, 0);
 displayStartTimeJCalendar.set(Calendar.SECOND, 0);
 displayStartTimeJCalendar.set(Calendar.MILLISECOND, 0);
 
-long displayEndTime = jCalendar.getTimeInMillis() + (Time.DAY * maxDaysDisplayed);
-
-int[] statuses = {WorkflowConstants.STATUS_APPROVED};
-
-Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, layout.getGroupId(), displayStartTimeJCalendar, displayEndTime, statuses, jCalendar);
+Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, layout.getGroupId(), displayStartTimeJCalendar, jCalendar);
 %>
 
 <c:choose>

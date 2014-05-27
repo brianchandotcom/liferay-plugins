@@ -25,7 +25,9 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.User;
@@ -67,18 +69,20 @@ public class EventsDisplayUtil {
 
 	public static Map<Integer, List<CalendarBooking>> getCalendarBookings(
 			int maxDaysDisplayed, ThemeDisplay themeDisplay, long layoutGroupId,
-			Calendar displayStartTimeJCalendar, long displayEndTime,
-			int[] statuses, Calendar jCalendar)
+			Calendar displayStartTimeJCalendar, Calendar jCalendar)
 		throws PortalException, SystemException {
 
 		long[] groupIds = getGroupIds(layoutGroupId, themeDisplay);
+
+		long displayEndTime =
+			jCalendar.getTimeInMillis() + (Time.DAY * maxDaysDisplayed);
 
 		List<CalendarBooking> calendarBookings =
 			CalendarBookingServiceUtil.search(
 				themeDisplay.getCompanyId(), groupIds, null,
 				getCalendarResourceIds(layoutGroupId, groupIds), -1, null,
 				displayStartTimeJCalendar.getTimeInMillis(), displayEndTime,
-				true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+				true, _STATUSES, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 		Map<Integer, List<CalendarBooking>> sortedCalendarBookings =
 			new HashMap<Integer, List<CalendarBooking>>();
@@ -194,5 +198,7 @@ public class EventsDisplayUtil {
 
 		return ArrayUtil.toLongArray(groupIds);
 	}
+
+	private static final int[] _STATUSES = {WorkflowConstants.STATUS_APPROVED};
 
 }
