@@ -27,7 +27,7 @@ else if (group.isRegularSite()) {
 ResourceURL rssURL = liferayPortletResponse.createResourceURL();
 
 rssURL.setCacheability(ResourceURL.FULL);
-rssURL.setParameter("struts_action", "/activities/rss");
+rssURL.setParameter("struts_action", "/members_activities/rss");
 
 String taglibFeedTitle = LanguageUtil.format(pageContext, "subscribe-to-x's-activities", group.getDescriptiveName(locale), false);
 String taglibFeedLinkMessage = LanguageUtil.format(pageContext, "subscribe-to-x's-activities", group.getDescriptiveName(locale), false);
