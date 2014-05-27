@@ -41,13 +41,13 @@ public class MembersActivitiesPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws IOException, PortletException {
 
-		OutputStream outputStream = null;
-
-		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
-
 		Thread currentThread = Thread.currentThread();
 
 		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
+
+		ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+
+		OutputStream outputStream = null;
 
 		try {
 			if (contextClassLoader != portalClassLoader) {
