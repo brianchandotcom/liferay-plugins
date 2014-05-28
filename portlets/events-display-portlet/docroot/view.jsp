@@ -20,14 +20,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-Calendar displayStartTimeJCalendar = (Calendar)jCalendar.clone();
-
-displayStartTimeJCalendar.set(Calendar.HOUR_OF_DAY, 0);
-displayStartTimeJCalendar.set(Calendar.MINUTE, 0);
-displayStartTimeJCalendar.set(Calendar.SECOND, 0);
-displayStartTimeJCalendar.set(Calendar.MILLISECOND, 0);
-
-Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, layout.getGroupId(), displayStartTimeJCalendar, jCalendar);
+Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, layout.getGroupId(), jCalendar);
 %>
 
 <c:choose>
@@ -58,7 +51,7 @@ Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.g
 						<c:otherwise>
 
 							<%
-								Calendar startTimeJCalendar = (Calendar)displayStartTimeJCalendar.clone();
+								Calendar startTimeJCalendar = EventsDisplayUtil.getDisplayStartTimeJCalendar(jCalendar);
 								startTimeJCalendar.add(Calendar.DAY_OF_YEAR, i);
 								String eventDay = LanguageUtil.format(pageContext, "x's-events", dateFormatDate.format(startTimeJCalendar.getTimeInMillis()), false);
 							%>

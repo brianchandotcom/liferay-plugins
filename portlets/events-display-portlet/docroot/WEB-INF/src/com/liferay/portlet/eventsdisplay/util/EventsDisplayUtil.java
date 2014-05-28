@@ -69,10 +69,13 @@ public class EventsDisplayUtil {
 
 	public static Map<Integer, List<CalendarBooking>> getCalendarBookings(
 			int maxDaysDisplayed, ThemeDisplay themeDisplay, long layoutGroupId,
-			Calendar displayStartTimeJCalendar, Calendar jCalendar)
+			Calendar jCalendar)
 		throws PortalException, SystemException {
 
 		long[] groupIds = getGroupIds(layoutGroupId, themeDisplay);
+
+		Calendar displayStartTimeJCalendar = getDisplayStartTimeJCalendar(
+			jCalendar);
 
 		long displayEndTime =
 			jCalendar.getTimeInMillis() + (Time.DAY * maxDaysDisplayed);
@@ -137,6 +140,17 @@ public class EventsDisplayUtil {
 		}
 
 		return sortedCalendarBookings;
+	}
+
+	public static Calendar getDisplayStartTimeJCalendar(Calendar jCalendar) {
+		Calendar displayStartTimeJCalendar = (Calendar)jCalendar.clone();
+
+		displayStartTimeJCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		displayStartTimeJCalendar.set(Calendar.MINUTE, 0);
+		displayStartTimeJCalendar.set(Calendar.SECOND, 0);
+		displayStartTimeJCalendar.set(Calendar.MILLISECOND, 0);
+
+		return displayStartTimeJCalendar;
 	}
 
 	protected static long[] getCalendarResourceIds(
