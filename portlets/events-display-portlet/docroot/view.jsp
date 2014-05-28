@@ -20,49 +20,52 @@
 <%@ include file="/init.jsp" %>
 
 <%
-Map<Integer, List<CalendarBooking>> sortedCalendarBookings = EventsDisplayUtil.getCalendarBookings(maxDaysDisplayed, themeDisplay, layout.getGroupId(), jCalendar);
+Map<Integer, List<CalendarBooking>> calendarBookings = EventsDisplayUtil.getCalendarBookings(layout.getGroupId(), themeDisplay, jCalendar, maxDaysDisplayed);
 %>
 
 <c:choose>
-	<c:when test="<%= EventsDisplayUtil.checkEmpty(sortedCalendarBookings) %>">
+	<c:when test="<%= EventsDisplayUtil.checkEmpty(calendarBookings) %>">
 		<liferay-ui:message key="there-are-no-more-events-today" />
 	</c:when>
 	<c:otherwise>
 
 		<%
 		for (int i = 0 ; i < maxDaysDisplayed; i++) {
-			List<CalendarBooking> currentCalendarBookings = sortedCalendarBookings.get(i);
+			List<CalendarBooking> curCalendarBookings = calendarBookings.get(i);
 
-			if (!currentCalendarBookings.isEmpty()) {
+			if (curCalendarBookings.isEmpty()) {
+				continue;
+			}
 
-				ListUtil.sort(currentCalendarBookings, new CalendarBookingTimeComparator(locale));
+			ListUtil.sort(curCalendarBookings, new CalendarBookingTimeComparator(locale));
 
-				request.setAttribute("view.jsp-calendarBookings", currentCalendarBookings);
+			request.setAttribute("view.jsp-calendarBookings", curCalendarBookings);
 		%>
 
-				<liferay-util:include page="/view_events.jsp" servletContext="<%= application %>">
-					<c:choose>
-						<c:when test="<%= i == 0 %>">
-							<liferay-util:param name="searchContainerName" value="todays-events" />
-						</c:when>
-						<c:when test="<%= i == 1 %>">
-							<liferay-util:param name="searchContainerName" value="tomorrows-events" />
-						</c:when>
-						<c:otherwise>
+			<liferay-util:include page="/view_events.jsp" servletContext="<%= application %>">
+				<c:choose>
+					<c:when test="<%= i == 0 %>">
+						<liferay-util:param name="searchContainerName" value="todays-events" />
+					</c:when>
+					<c:when test="<%= i == 1 %>">
+						<liferay-util:param name="searchContainerName" value="tomorrows-events" />
+					</c:when>
+					<c:otherwise>
 
-							<%
-								Calendar startTimeJCalendar = EventsDisplayUtil.getDisplayStartTimeJCalendar(jCalendar);
-								startTimeJCalendar.add(Calendar.DAY_OF_YEAR, i);
-								String eventDay = LanguageUtil.format(pageContext, "x's-events", dateFormatDate.format(startTimeJCalendar.getTimeInMillis()), false);
-							%>
+						<%
+						Calendar startTimeJCalendar = EventsDisplayUtil.getDisplayStartTimeJCalendar(jCalendar);
 
-							<liferay-util:param name="searchContainerName" value="<%= eventDay %>" />
-						</c:otherwise>
-					</c:choose>
-				</liferay-util:include>
+						startTimeJCalendar.add(Calendar.DAY_OF_YEAR, i);
+
+						String eventDay = LanguageUtil.format(pageContext, "x-events", dateFormatDate.format(startTimeJCalendar.getTimeInMillis()), false);
+						%>
+
+						<liferay-util:param name="searchContainerName" value="<%= eventDay %>" />
+					</c:otherwise>
+				</c:choose>
+			</liferay-util:include>
 
 		<%
-			}
 		}
 		%>
 
