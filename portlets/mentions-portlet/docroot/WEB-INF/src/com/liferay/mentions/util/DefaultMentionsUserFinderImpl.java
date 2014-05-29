@@ -14,17 +14,18 @@
 
 package com.liferay.mentions.util;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.WildcardMode;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.search.Hits;
-import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.usersadmin.util.UsersAdminUtil;
+import com.liferay.portal.util.comparator.UserScreenNameComparator;
+import com.liferay.portlet.social.util.SocialInteractionsConfiguration;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -33,15 +34,58 @@ import java.util.List;
 public class DefaultMentionsUserFinderImpl implements MentionsUserFinder {
 
 	@Override
-	public List<User> getUsers(String query, ThemeDisplay themeDisplay)
+	public List<User> getUsers(
+			long companyId, long userId, String query,
+			SocialInteractionsConfiguration socialInteractionsConfiguration)
 		throws PortalException, SystemException {
 
-		Hits hits = UserLocalServiceUtil.search(
-			themeDisplay.getCompanyId(), query, query, query, query,
-			StringPool.BLANK, WorkflowConstants.STATUS_APPROVED, null, false, 0,
-			100, (Sort)null);
+		if (socialInteractionsConfiguration.
+				isSocialInteractionsAnyUserEnabled()) {
 
-		return UsersAdminUtil.getUsers(hits);
+			LinkedHashMap<String, Object> params =
+				new LinkedHashMap<String, Object>();
+
+			params.put("wildcardMode", WildcardMode.TRAILING);
+
+			return UserLocalServiceUtil.search(
+				companyId, query, WorkflowConstants.STATUS_APPROVED, params, 0,
+				_MAX_USERS, new UserScreenNameComparator());
+		}
+
+		User user = UserLocalServiceUtil.getUser(userId);
+
+		int[] types =
+			socialInteractionsConfiguration.
+				getSocialInteractionsSocialRelationTypesArray();
+
+		if (socialInteractionsConfiguration.
+				isSocialInteractionsSocialRelationTypesEnabled() &&
+			socialInteractionsConfiguration.
+				isSocialInteractionsSitesEnabled()) {
+
+			return UserLocalServiceUtil.searchSocial(
+				user.getGroupIds(), userId, types, query, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS);
+		}
+
+		if (socialInteractionsConfiguration.
+				isSocialInteractionsSitesEnabled()) {
+
+			return UserLocalServiceUtil.searchSocial(
+				companyId, user.getGroupIds(), query, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS);
+		}
+
+		if (socialInteractionsConfiguration.
+				isSocialInteractionsSocialRelationTypesEnabled()) {
+
+			return UserLocalServiceUtil.searchSocial(
+				userId, types, query, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		}
+
+		return Collections.emptyList();
 	}
+
+	private static int _MAX_USERS = 100;
 
 }
