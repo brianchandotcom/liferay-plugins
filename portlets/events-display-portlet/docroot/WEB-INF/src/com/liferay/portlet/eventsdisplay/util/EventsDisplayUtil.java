@@ -48,7 +48,7 @@ import java.util.TimeZone;
  */
 public class EventsDisplayUtil {
 
-	public static boolean checkEmpty(
+	public static boolean isEmpty(
 		Map<Integer, List<CalendarBooking>> calendarBookingsMap) {
 
 		if (calendarBookingsMap.isEmpty()) {

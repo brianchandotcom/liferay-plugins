@@ -24,7 +24,7 @@ Map<Integer, List<CalendarBooking>> calendarBookings = EventsDisplayUtil.getCale
 %>
 
 <c:choose>
-	<c:when test="<%= EventsDisplayUtil.checkEmpty(calendarBookings) %>">
+	<c:when test="<%= EventsDisplayUtil.isEmpty(calendarBookings) %>">
 		<liferay-ui:message key="there-are-no-more-events-today" />
 	</c:when>
 	<c:otherwise>

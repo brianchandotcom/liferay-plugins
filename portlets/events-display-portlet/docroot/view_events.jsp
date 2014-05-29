@@ -93,7 +93,7 @@ List<CalendarBooking> calendarBookings = (List<CalendarBooking>)request.getAttri
 						</c:otherwise>
 					</c:choose>
 				</span>
-l
+
 				<c:if test="<%= group.isUser() %>">
 					<span class="event-site">
 						<a href="<%= groupURL.toString() %>"><%= group.getDescriptiveName(locale) %></a>
