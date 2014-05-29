@@ -40,29 +40,26 @@ Map<Integer, List<CalendarBooking>> calendarBookings = EventsDisplayUtil.getCale
 			ListUtil.sort(curCalendarBookings, new CalendarBookingTimeComparator(locale));
 
 			request.setAttribute("view.jsp-calendarBookings", curCalendarBookings);
+
+			String searchContainerName = StringPool.BLANK;
+
+			if (i == 0) {
+				searchContainerName = "todays-events";
+			}
+			else if (i == 1) {
+				searchContainerName = "tomorrows-events";
+			}
+			else {
+				Calendar startTimeJCalendar = EventsDisplayUtil.getDisplayStartTimeJCalendar(jCalendar);
+
+				startTimeJCalendar.add(Calendar.DAY_OF_YEAR, i);
+
+				searchContainerName = LanguageUtil.format(pageContext, "x-events", dateFormatDate.format(startTimeJCalendar.getTimeInMillis()), false);
+			}
 		%>
 
 			<liferay-util:include page="/view_events.jsp" servletContext="<%= application %>">
-				<c:choose>
-					<c:when test="<%= i == 0 %>">
-						<liferay-util:param name="searchContainerName" value="todays-events" />
-					</c:when>
-					<c:when test="<%= i == 1 %>">
-						<liferay-util:param name="searchContainerName" value="tomorrows-events" />
-					</c:when>
-					<c:otherwise>
-
-						<%
-						Calendar startTimeJCalendar = EventsDisplayUtil.getDisplayStartTimeJCalendar(jCalendar);
-
-						startTimeJCalendar.add(Calendar.DAY_OF_YEAR, i);
-
-						String eventDay = LanguageUtil.format(pageContext, "x-events", dateFormatDate.format(startTimeJCalendar.getTimeInMillis()), false);
-						%>
-
-						<liferay-util:param name="searchContainerName" value="<%= eventDay %>" />
-					</c:otherwise>
-				</c:choose>
+				<liferay-util:param name="searchContainerName" value="<%= searchContainerName %>" />
 			</liferay-util:include>
 
 		<%
