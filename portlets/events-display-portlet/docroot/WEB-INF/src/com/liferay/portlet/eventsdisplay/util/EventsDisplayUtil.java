@@ -48,25 +48,6 @@ import java.util.TimeZone;
  */
 public class EventsDisplayUtil {
 
-	public static boolean isEmpty(
-		Map<Integer, List<CalendarBooking>> calendarBookingsMap) {
-
-		if (calendarBookingsMap.isEmpty()) {
-			return true;
-		}
-
-		for (int key : calendarBookingsMap.keySet()) {
-			List<CalendarBooking> calendarBookings = calendarBookingsMap.get(
-				key);
-
-			if (!calendarBookings.isEmpty()) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	public static Map<Integer, List<CalendarBooking>> getCalendarBookings(
 			long layoutGroupId, ThemeDisplay themeDisplay, Calendar jCalendar,
 			int maxDaysDisplayed)
@@ -151,6 +132,25 @@ public class EventsDisplayUtil {
 		displayStartTimeJCalendar.set(Calendar.MILLISECOND, 0);
 
 		return displayStartTimeJCalendar;
+	}
+
+	public static boolean isEmpty(
+		Map<Integer, List<CalendarBooking>> calendarBookingsMap) {
+
+		if (calendarBookingsMap.isEmpty()) {
+			return true;
+		}
+
+		for (int key : calendarBookingsMap.keySet()) {
+			List<CalendarBooking> calendarBookings = calendarBookingsMap.get(
+				key);
+
+			if (!calendarBookings.isEmpty()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	protected static long[] getCalendarResourceIds(
