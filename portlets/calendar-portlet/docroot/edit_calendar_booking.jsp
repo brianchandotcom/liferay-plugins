@@ -352,8 +352,8 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 						Liferay.CalendarMessageUtil.confirm(
 							content,
-							Liferay.Language.get('continue'),
-							Liferay.Language.get('dont-change-the-event'),
+							'<%= UnicodeLanguageUtil.get(pageContext, "continue") %>',
+							'<%= UnicodeLanguageUtil.get(pageContext, "dont-change-the-event") %>',
 							function() {
 								submitForm(document.<portlet:namespace />fm);
 
@@ -411,7 +411,7 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 		A.each(
 			Liferay.CalendarUtil.availableCalendars,
-			function(item, index, collection) {
+			function(item, index) {
 				item.set('disabled', true);
 			}
 		);
@@ -444,7 +444,7 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 					A.each(
 						Liferay.CalendarUtil.availableCalendars,
-						function(item, index, collection) {
+						function(item, index) {
 							item.set('visible', false);
 						}
 					);
