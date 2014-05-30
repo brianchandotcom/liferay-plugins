@@ -50,7 +50,13 @@ AUI.add(
 
 							event.halt();
 
-							dialog.io.set('form', {id: form.getDOM()});
+							dialog.io.set(
+								'form',
+								{
+									id: form.getDOM()
+								}
+							);
+
 							dialog.io.set('uri', form.getAttribute('action'));
 
 							dialog.io.start();
@@ -144,14 +150,14 @@ AUI.add(
 					var emailAddresses = [];
 
 					instance._invitedMembersList.all('.user').each(
-						function(user, index, collection) {
-							userIds.push(user.attr('data-userId'));
+						function(item, index) {
+							userIds.push(item.attr('data-userId'));
 						}
 					);
 
 					instance._invitedEmailList.all('.user').each(
-						function(emailAddress, index, collection) {
-							emailAddresses.push(emailAddress.attr('data-emailAddress'));
+						function(item, index) {
+							emailAddresses.push(item.attr('data-emailAddress'));
 						}
 					);
 
