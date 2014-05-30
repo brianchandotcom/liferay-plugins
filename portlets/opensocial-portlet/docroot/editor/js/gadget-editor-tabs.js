@@ -115,7 +115,7 @@ AUI.add(
 						var tab = null;
 
 						instance.some(
-							function(item, index, collection) {
+							function(item, index) {
 								if (item.get(ID) === id) {
 									tab = item;
 
@@ -182,30 +182,37 @@ AUI.add(
 					aceEditor: {
 						validator: '_validateAceEditor'
 					},
+
 					dirtyIndicatorNode: {
 						validator: '_validateDirtyIndicatorNode'
 					},
-					fileName: {
-						validator: Lang.isString
-					},
+
 					entryId: {
 						setter: function(value) {
 							return String(value);
 						},
 						value: STR_EMPTY
 					},
+
+					fileName: {
+						validator: Lang.isString
+					},
+
 					isDirty: {
 						validator: Lang.isBoolean,
 						value: false
 					},
+
 					isNew: {
 						validator: Lang.isBoolean,
 						value: true
 					},
+
 					isRendered: {
 						validator: Lang.isBoolean,
 						value: false
 					},
+
 					label: {
 						validator: Lang.isString
 					}
@@ -216,15 +223,6 @@ AUI.add(
 				NAME: 'tab-editor',
 
 				prototype: {
-					bindUI: function() {
-						var instance = this;
-
-						TabEditor.superclass.bindUI.apply(this, arguments);
-
-						instance.on('isDirtyChange', instance._onIsDirtyChange);
-						instance.on('labelChange', instance._onLabelChange);
-					},
-
 					initializer: function(config) {
 						var instance = this;
 
@@ -263,6 +261,15 @@ AUI.add(
 						var instance = this;
 
 						TabEditor.superclass.renderUI.apply(this, arguments);
+					},
+
+					bindUI: function() {
+						var instance = this;
+
+						TabEditor.superclass.bindUI.apply(this, arguments);
+
+						instance.on('isDirtyChange', instance._onIsDirtyChange);
+						instance.on('labelChange', instance._onLabelChange);
 					},
 
 					searchEditorText: function(searchText, caseInsensitive, replaceText, doReplace) {

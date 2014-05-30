@@ -54,9 +54,6 @@ AUI.add(
 
 		var TreeViewEditor = A.Component.create(
 			{
-				EXTENDS: A.TreeView,
-
-				NAME: 'tree-view-editor',
 
 				ATTRS: {
 					activeEditable: {
@@ -74,6 +71,10 @@ AUI.add(
 						}
 					}
 				},
+
+				EXTENDS: A.TreeView,
+
+				NAME: 'tree-view-editor',
 
 				prototype: {
 					addNewNodeToFolder: function(label, isLeaf, parentId) {
@@ -155,7 +156,7 @@ AUI.add(
 
 						AArray.each(
 							children,
-							function(item, index, collection) {
+							function(item, index) {
 								if (item.isLeaf()) {
 									fileEntryChildren.push(item);
 								}
@@ -199,18 +200,14 @@ AUI.add(
 
 		var TreeNodeEditor = A.Component.create(
 			{
-				EXTENDS: A.TreeNodeIO,
-
-				NAME: 'tree-node-editor',
-
 				ATTRS: {
 					editable: {},
 
 					entryId: {
-						value: STR_EMPTY,
 						setter: function(value) {
 							return String(value);
-						}
+						},
+						value: STR_EMPTY
 					},
 
 					fileEntryLoaded: {
@@ -238,7 +235,21 @@ AUI.add(
 					}
 				},
 
+				EXTENDS: A.TreeNodeIO,
+
+				NAME: 'tree-node-editor',
+
 				prototype: {
+					renderUI: function() {
+						var instance = this;
+
+						TreeNodeEditor.superclass.renderUI.apply(this, arguments);
+
+						instance._renderContextMenu();
+						instance._renderEditable();
+						instance._renderFileEntryLoaded();
+					},
+
 					bindUI: function() {
 						var instance = this;
 
@@ -250,16 +261,6 @@ AUI.add(
 						instance.after('permissionsChange', instance._afterPermissionsChange);
 
 						instance.on('entryIdChange', instance._onEntryIdChange);
-					},
-
-					renderUI: function() {
-						var instance = this;
-
-						TreeNodeEditor.superclass.renderUI.apply(this, arguments);
-
-						instance._renderContextMenu();
-						instance._renderEditable();
-						instance._renderFileEntryLoaded();
 					},
 
 					appendChild: function(node) {
@@ -338,7 +339,7 @@ AUI.add(
 
 						AArray.each(
 							children,
-							function(item, index, collection) {
+							function(item, index) {
 								if (item.isLeaf()) {
 									fileEntryChildren.push(item);
 								}
@@ -540,7 +541,7 @@ AUI.add(
 
 											AArray.each(
 												contextMenu.get('children')[0],
-												function(item, index, collection) {
+												function(item, index) {
 													if (A.instanceOf(item, A.Button)) {
 														item.render();
 													}
@@ -766,10 +767,6 @@ AUI.add(
 
 		var EditableEditor = A.Component.create(
 			{
-				EXTENDS: A.Editable,
-
-				NAME: 'editable-editor',
-
 				ATTRS: {
 					entryId: {
 						setter: function(value) {
@@ -778,6 +775,10 @@ AUI.add(
 						value: STR_EMPTY
 					}
 				},
+
+				EXTENDS: A.Editable,
+
+				NAME: 'editable-editor',
 
 				prototype: {
 					_afterFocusedChangeEditable: function(event) {
