@@ -105,8 +105,7 @@ public class WebFormPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		String portletId = (String)actionRequest.getAttribute(
-			WebKeys.PORTLET_ID);
+		String portletId = PortalUtil.getPortletId(actionRequest);
 
 		PortletPreferences preferences =
 			PortletPreferencesFactoryUtil.getPortletSetup(
@@ -202,7 +201,16 @@ public class WebFormPortlet extends MVCPortlet {
 			}
 
 			if (emailSuccess && databaseSuccess && fileSuccess) {
-				SessionMessages.add(actionRequest, "success");
+				if (Validator.isNull(successURL)) {
+					SessionMessages.add(actionRequest, "success");
+				}
+				else {
+					SessionMessages.add(
+						actionRequest,
+						portletId +
+							SessionMessages.
+								KEY_SUFFIX_HIDE_DEFAULT_SUCCESS_MESSAGE);
+				}
 			}
 			else {
 				SessionErrors.add(actionRequest, "error");
