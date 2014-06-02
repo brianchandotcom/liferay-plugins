@@ -4,6 +4,27 @@
 <project name="portlets" basedir="." default="deploy" xmlns:antelope="antlib:ise.antelope.tasks">
 	<import file="../build-common-plugins.xml" />
 
+	<target name="add-arquillian-support">
+		<for param="module.name">
+			<path>
+				<dirset dir="." excludes="${plugins.excludes}" includes="${plugins.includes}" />
+			</path>
+			<sequential>
+				<mkdir dir="@{module.name}/test/integration" />
+
+				<copy todir="@{module.name}/test/integration" overwrite="yes">
+					<fileset file="${sdk.dir}/tools/arquillian/arquillian.xml" />
+				</copy>
+
+				<replace dir="@{module.name}/test/integration">
+					<replacefilter token="@arquillian.jmx.password@" value="${arquillian.jmx.password}" />
+					<replacefilter token="@arquillian.jmx.port@" value="${arquillian.jmx.port}" />
+					<replacefilter token="@arquillian.jmx.user@" value="${arquillian.jmx.user}" />
+				</replace>
+			</sequential>
+		</for>
+	</target>
+
 	<target name="create">
 		<if>
 			<or>

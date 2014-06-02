@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+
+<project name="plugins-dist" basedir="." default="add-arquillian-support">
+	<import file="build.xml" />
+
+	<if>
+		<isset property="java.security" />
+		<then>
+			<property name="java.security.manager.option" value="-Djava.security.manager" />
+		</then>
+		<else>
+			<property name="java.security.manager.option" value="" />
+		</else>
+	</if>
+
+	<target name="add-arquillian-support">
+		<if>
+			<equals arg1="${java.security.manager.option}" arg2="" />
+			<then>
+				<var name="java.security.config" value="" />
+			</then>
+			<else>
+				<if>
+					<os family="windows" />
+					<then>
+						<var name="java.security.config" value="${java.security.manager.option} -Djava.security.policy==%CATALINA_BASE%/conf/catalina.policy" />
+					</then>
+					<else>
+						<var name="java.security.config" value="${java.security.manager.option} -Djava.security.policy==$CATALINA_BASE/conf/catalina.policy" />
+					</else>
+				</if>
+			</else>
+		</if>
+
+		<unzip
+			dest="${app.server.tomcat.dir}/webapps"
+			src="tools/servers/tomcat/webapps/manager.zip"
+			>
+		</unzip>
+
+		<copy
+			file="${app.server.tomcat.dir}/bin/setenv.bat"
+			overwrite="true"
+			tofile="${app.server.tomcat.dir}/bin/setenv.bat.orig"
+		>
+		</copy>
+
+		<copy
+			file="${app.server.tomcat.dir}/bin/setenv.sh"
+			overwrite="true"
+			tofile="${app.server.tomcat.dir}/bin/setenv.sh.orig"
+		>
+		</copy>
+
+		<copy
+			file="${app.server.tomcat.dir}/conf/tomcat-users.xml"
+			overwrite="true"
+			tofile="${app.server.tomcat.dir}/conf/tomcat-users.xml.orig"
+		>
+		</copy>
+
+		<if>
+			<equals arg1="${arquillian.jmx.port}" arg2="" />
+			<then>
+				<var name="arquillian.jmx.port" value="8099" />
+			</then>
+		</if>
+
+		<copy
+			file="tools/servers/tomcat/bin/setenv.bat"
+			overwrite="true"
+			tofile="${app.server.tomcat.dir}/bin/setenv.bat"
+		>
+			<filterset>
+				<filter token="arquillian.jmx.port" value="${arquillian.jmx.port}" />
+				<filter token="java.security.config" value="${java.security.config}" />
+				<filter token="java.version" value="${jdk.windows.version}" />
+			</filterset>
+		</copy>
+
+		<copy
+			file="tools/servers/tomcat/bin/setenv.sh"
+			overwrite="true"
+			tofile="${app.server.tomcat.dir}/bin/setenv.sh"
+		>
+			<filterset>
+				<filter token="arquillian.jmx.port" value="${arquillian.jmx.port}" />
+				<filter token="java.security.config" value="${java.security.config}" />
+			</filterset>
+		</copy>
+
+		<if>
+			<equals arg1="${arquillian.jmx.password}" arg2="" />
+			<then>
+				<var name="arquillian.jmx.password" value="tomcat" />
+			</then>
+		</if>
+
+		<if>
+			<equals arg1="${arquillian.jmx.user}" arg2="" />
+			<then>
+				<var name="arquillian.jmx.user" value="tomcat" />
+			</then>
+		</if>
+
+		<copy
+			file="tools/servers/tomcat/conf/tomcat-users.xml"
+			overwrite="true"
+			tofile="${app.server.tomcat.dir}/conf/tomcat-users.xml"
+		>
+			<filterset>
+				<filter token="arquillian.jmx.password" value="${arquillian.jmx.password}" />
+				<filter token="arquillian.jmx.user" value="${arquillian.jmx.user}" />
+			</filterset>
+		</copy>
+
+		<chmod perm="a+x">
+			<fileset dir="${app.server.tomcat.dir}/bin">
+				<include name="*.sh" />
+			</fileset>
+		</chmod>
+	</target>
+</project>

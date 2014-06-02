@@ -3,4 +3,18 @@
 
 <project name="build-common-hook">
 	<import file="../build-common-plugin.xml" />
+
+	<target name="add-arquillian-support">
+		<mkdir dir="${basedir}/test/integration" />
+
+		<copy todir="${basedir}/test/integration" overwrite="yes">
+			<fileset file="${sdk.dir}/tools/arquillian/arquillian.xml" />
+		</copy>
+
+		<replace dir="${basedir}/test/integration">
+			<replacefilter token="@arquillian.jmx.password@" value="${arquillian.jmx.password}" />
+			<replacefilter token="@arquillian.jmx.port@" value="${arquillian.jmx.port}" />
+			<replacefilter token="@arquillian.jmx.user@" value="${arquillian.jmx.user}" />
+		</replace>
+	</target>
 </project>
