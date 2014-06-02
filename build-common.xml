@@ -1963,6 +1963,23 @@ Please find a solution that does not require portal-impl.jar.
 			        </unzip>
 
 			        <delete file="tomcat.zip" />
+
+					<copy
+						file="${app.server.dir}/conf/tomcat-users.xml"
+						overwrite="true"
+						tofile="${app.server.dir}/conf/tomcat-users.xml.orig"
+					/>
+
+					<echo file="${app.server.dir}/conf/tomcat-users.xml"><![CDATA[<?xml version='1.0' encoding='utf-8'?>
+
+<tomcat-users>
+	<role rolename="tomcat"/>
+	<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<role rolename="manager-jmx"/>
+	<role rolename="manager-status"/>
+	<user username="tomcat" password="tomcat" roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status"/>
+</tomcat-users>]]></echo>
 				</then>
 			</if>
 		</sequential>
