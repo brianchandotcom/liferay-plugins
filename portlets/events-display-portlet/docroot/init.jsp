@@ -67,7 +67,7 @@ page import="javax.portlet.PortletRequest" %>
 
 <%
 int eventsPerPage = PrefsParamUtil.getInteger(portletPreferences, request, "eventsPerPage", 10);
-int maxDaysDisplayed = PrefsParamUtil.getInteger(portletPreferences, request, "maxDaysDisplayed", 1);
+int maxDaysDisplayed = PrefsParamUtil.getInteger(portletPreferences, request, "maxDaysDisplayed", 5);
 
 Calendar jCalendar = CalendarFactoryUtil.getCalendar(timeZone, locale);
 
