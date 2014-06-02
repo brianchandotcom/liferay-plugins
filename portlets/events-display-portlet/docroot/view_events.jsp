@@ -83,11 +83,16 @@ List<CalendarBooking> calendarBookings = (List<CalendarBooking>)request.getAttri
 					<a href="<%= eventHREF %>"><%= StringUtil.shorten(HtmlUtil.escape(calendarBooking.getTitle(locale)), 40) %></a>
 				</span>
 
-				<c:if test="<%= !calendarBooking.isAllDay() %>">
-					<span class="event-time">
-						<%= dateFormatTime.format(calendarBooking.getStartTime()) %>
-					</span>
-				</c:if>
+				<span class="event-time">
+					<c:choose>
+						<c:when test="<%= calendarBooking.isAllDay() %>">
+							<liferay-ui:message key = "all-day" />
+						</c:when>
+						<c:otherwise>
+							<%= dateFormatTime.format(calendarBooking.getStartTime()) %>
+						</c:otherwise>
+					</c:choose>
+				</span>
 
 				<c:if test="<%= group.isUser() %>">
 					<span class="event-site">
