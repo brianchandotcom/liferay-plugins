@@ -1978,7 +1978,7 @@ Please find a solution that does not require portal-impl.jar.
 	<role rolename="manager-script"/>
 	<role rolename="manager-jmx"/>
 	<role rolename="manager-status"/>
-	<user username="tomcat" password="tomcat" roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status"/>
+	<user username="${app.server.tomcat.manager.user}" password="${app.server.tomcat.manager.password}" roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status"/>
 </tomcat-users>]]></echo>
 				</then>
 			</if>
