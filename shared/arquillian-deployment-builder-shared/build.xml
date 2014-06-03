@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="arquillian-deployment-builder-shared" basedir="." default="deploy">
+	<property name="ivy.resolve.transitive.dependencies" value="true" />
+
+	<property name="plugin.version" value="1" />
+
+	<import file="../build-common-shared.xml" />
+</project>
