@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.osgi.util;
+package com.liferay.osgi.util.service;
 
 import com.liferay.portal.kernel.util.ProxyUtil;
 

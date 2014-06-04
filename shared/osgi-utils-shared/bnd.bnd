@@ -1,2 +1,3 @@
 Bundle-Name: OSGi Utils
-Export-Package: com.liferay.osgi.util
+Export-Package:\
+	com.liferay.osgi.util.service
