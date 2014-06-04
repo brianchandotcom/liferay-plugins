@@ -1,2 +1,2 @@
-Bundle-Name: Service Utils
+Bundle-Name: OSGi Utils
 Export-Package: com.liferay.osgi.util
