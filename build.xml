@@ -9,6 +9,7 @@
 		<dirset dir="layouttpl" excludes="${plugins.excludes}" includes="${plugins.includes}" />
 		<dirset dir="portlets" excludes="${plugins.excludes}" includes="${plugins.includes}" />
 		<dirset dir="shared" excludes="${plugins.excludes}" includes="${plugins.includes}" />
+		<dirset dir="suites" excludes="${plugins.excludes}" includes="${plugins.includes}" />
 		<dirset dir="themes" excludes="${plugins.excludes}" includes="${plugins.includes}" />
 		<dirset dir="webs" excludes="${plugins.excludes}" includes="${plugins.includes}" />
 	</path>
