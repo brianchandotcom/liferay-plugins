@@ -14,18 +14,15 @@
 
 package com.liferay.osgi.util.service;
 
-import javax.naming.ServiceUnavailableException;
-
 /**
  * @author Carlos Sierra Andrés
  */
-public class OsgiServiceUnavailableException
-	extends ServiceUnavailableException {
+public class ServiceUnavailableException extends RuntimeException {
 
-	public OsgiServiceUnavailableException(Class<?> clazz) {
+	public ServiceUnavailableException(Class<?> clazz) {
 		super(clazz.toString());
 
-		this._clazz = clazz;
+		_clazz = clazz;
 	}
 
 	public Class<?> getUnavailableServiceClass() {
