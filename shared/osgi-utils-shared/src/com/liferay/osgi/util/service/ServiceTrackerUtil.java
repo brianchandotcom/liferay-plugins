@@ -21,7 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.framework.ServiceReference;
 
 /**
  * @author Carlos Sierra Andrés
@@ -29,38 +29,36 @@ import org.osgi.util.tracker.ServiceTracker;
 public class ServiceTrackerUtil {
 
 	public static <T> T getService(
-			final Class<T> clazz, BundleContext bundleContext) {
-
-		final ServiceTracker<T, T> serviceTracker = new ServiceTracker<T, T>(
-			bundleContext, clazz, null);
-
-		serviceTracker.open();
+		final Class<T> clazz, final BundleContext bundleContext) {
 
 		ClassLoader classLoader = clazz.getClassLoader();
 
 		Object serviceProxy = ProxyUtil.newProxyInstance(
 			classLoader, new Class[]{clazz},
-			new InvocationHandler() {
+				new InvocationHandler() {
 
-				@Override
-				public Object invoke(
-						Object object, Method method, Object[] parameters)
-					throws Throwable {
+					@Override
+					public Object invoke(
+							Object object, Method method, Object[] parameters)
+						throws Throwable {
 
-					T service = serviceTracker.getService();
+						ServiceReference<T> serviceReference =
+							bundleContext.getServiceReference(clazz);
 
-					if (service == null) {
-						throw new OsgiServiceUnavailableException(clazz);
+						T service = bundleContext.getService(serviceReference);
+
+						if (service == null) {
+							throw new ServiceUnavailableException(clazz);
+						}
+
+						try {
+							return method.invoke(service, parameters);
+						}
+						catch (InvocationTargetException ite) {
+							throw ite.getTargetException();
+						}
 					}
-
-					try {
-						return method.invoke(service, parameters);
-					}
-					catch (InvocationTargetException ite) {
-						throw ite.getTargetException();
-					}
-				}
-			});
+				});
 
 		return (T)serviceProxy;
 	}
