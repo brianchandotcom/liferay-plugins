@@ -67,6 +67,12 @@
 					<if>
 						<available file="@{ivy.xml.dir}/ivy.xml" />
 						<then>
+							<ivy:resolve
+								file="${sdk.dir}/ivy-test.xml"
+								log="download-only"
+								transitive="true"
+							/>
+
 							<checksum file="@{ivy.xml.dir}/ivy.xml" verifyproperty="ivy.xml.unmodified" />
 
 							<if>
