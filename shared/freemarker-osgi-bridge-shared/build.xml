@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project>
+	<property name="plugin.full.version" value="1.0.0" />
+	<property name="plugin.name" value="com.liferay.freemarker.osgi.bridge" />
+
+	<import file="../../build-common-osgi-plugin.xml" />
+</project>
