@@ -1,0 +1,2 @@
+Bundle-Name: Liferay Freemarker Osgi Bridge
+Export-Package: com.liferay.freemarker.osgi.servlet
