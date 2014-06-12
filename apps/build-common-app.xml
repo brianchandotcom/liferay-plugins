@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="build-common-app">
+	<import file="../build-common.xml" />
+
+	<target name="clean">
+		<loop-modules-target
+			target.name="clean"
+		/>
+	</target>
+
+	<target name="deploy">
+		<loop-modules-target
+			target.name="deploy"
+		/>
+	</target>
+
+	<macrodef name="loop-modules-target">
+		<attribute name="target.name" />
+
+		<sequential>
+			<for param="app.module.path">
+				<path>
+					<dirset dir="${basedir}" excludes="${plugins.excludes}" includes="${plugins.includes}" />
+				</path>
+
+				<sequential>
+					<ant-execute
+						ant.dir="@{app.module.path}"
+						ant.target="@{target.name}"
+					/>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+</project>
