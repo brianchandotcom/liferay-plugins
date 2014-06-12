@@ -54,6 +54,7 @@ import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
@@ -92,7 +93,8 @@ public class CalendarBookingLocalServiceImpl
 			Map<Locale, String> descriptionMap, String location, long startTime,
 			long endTime, boolean allDay, String recurrence, long firstReminder,
 			String firstReminderType, long secondReminder,
-			String secondReminderType, ServiceContext serviceContext)
+			String secondReminderType, boolean sendEmail,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar booking
@@ -174,7 +176,7 @@ public class CalendarBookingLocalServiceImpl
 		calendarBookingPersistence.update(calendarBooking);
 
 		addChildCalendarBookings(
-			calendarBooking, childCalendarIds, serviceContext);
+			calendarBooking, childCalendarIds, sendEmail, serviceContext);
 
 		// Resources
 
@@ -197,10 +199,29 @@ public class CalendarBookingLocalServiceImpl
 
 		// Workflow
 
+		serviceContext.setAttribute("sendEmail", sendEmail);
+
 		calendarBookingApprovalWorkflow.startWorkflow(
 			userId, calendarBooking, serviceContext);
 
 		return calendarBooking;
+	}
+
+	@Override
+	public CalendarBooking addCalendarBooking(
+			long userId, long calendarId, long[] childCalendarIds,
+			long parentCalendarBookingId, Map<Locale, String> titleMap,
+			Map<Locale, String> descriptionMap, String location, long startTime,
+			long endTime, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		return addCalendarBooking(
+			userId, calendarId, childCalendarIds, parentCalendarBookingId,
+			titleMap, descriptionMap, location, startTime, endTime, allDay,
+			recurrence, firstReminder, firstReminderType, secondReminder,
+			secondReminderType, true, serviceContext);
 	}
 
 	@Override
@@ -709,7 +730,7 @@ public class CalendarBookingLocalServiceImpl
 			Map<Locale, String> descriptionMap, String location, long startTime,
 			long endTime, boolean allDay, String recurrence, long firstReminder,
 			String firstReminderType, long secondReminder,
-			String secondReminderType, int status,
+			String secondReminderType, int status, boolean sendEmail,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
@@ -773,7 +794,7 @@ public class CalendarBookingLocalServiceImpl
 		calendarBookingPersistence.update(calendarBooking);
 
 		addChildCalendarBookings(
-			calendarBooking, childCalendarIds, serviceContext);
+			calendarBooking, childCalendarIds, sendEmail, serviceContext);
 
 		// Asset
 
@@ -792,10 +813,30 @@ public class CalendarBookingLocalServiceImpl
 
 		// Workflow
 
+		serviceContext.setAttribute("sendEmail", sendEmail);
+
 		calendarBookingApprovalWorkflow.invokeTransition(
 			userId, calendarBooking, status, serviceContext);
 
 		return calendarBooking;
+	}
+
+	@Override
+	public CalendarBooking updateCalendarBooking(
+			long userId, long calendarBookingId, long calendarId,
+			long[] childCalendarIds, Map<Locale, String> titleMap,
+			Map<Locale, String> descriptionMap, String location, long startTime,
+			long endTime, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, int status,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		return updateCalendarBooking(
+			userId, calendarBookingId, calendarId, childCalendarIds, titleMap,
+			descriptionMap, location, startTime, endTime, allDay, recurrence,
+			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, true, serviceContext);
 	}
 
 	@Override
@@ -930,20 +971,13 @@ public class CalendarBookingLocalServiceImpl
 					CalendarBookingWorkflowConstants.STATUS_IN_TRASH,
 					serviceContext);
 
-				try {
-					NotificationType notificationType =
-						NotificationType.parse(
-							PortletPropsValues.
-								CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+				boolean sendEmail = ParamUtil.getBoolean(
+					serviceContext, "sendEmail");
 
-					NotificationUtil.notifyCalendarBookingRecipients(
-						childCalendarBooking, notificationType,
+				if (sendEmail) {
+					sendNotification(
+						childCalendarBooking,
 						NotificationTemplateType.MOVED_TO_TRASH);
-				}
-				catch (Exception e) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(e, e);
-					}
 				}
 			}
 		}
@@ -963,20 +997,12 @@ public class CalendarBookingLocalServiceImpl
 					CalendarBookingWorkflowConstants.STATUS_PENDING,
 					serviceContext);
 
-				try {
-					NotificationType notificationType =
-						NotificationType.parse(
-							PortletPropsValues.
-								CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+				boolean sendEmail = ParamUtil.getBoolean(
+					serviceContext, "sendEmail");
 
-					NotificationUtil.notifyCalendarBookingRecipients(
-						childCalendarBooking, notificationType,
-						NotificationTemplateType.INVITE);
-				}
-				catch (Exception e) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(e, e);
-					}
+				if (sendEmail) {
+					sendNotification(
+						childCalendarBooking, NotificationTemplateType.INVITE);
 				}
 			}
 		}
@@ -1039,7 +1065,7 @@ public class CalendarBookingLocalServiceImpl
 
 	protected void addChildCalendarBookings(
 			CalendarBooking calendarBooking, long[] childCalendarIds,
-			ServiceContext serviceContext)
+			boolean sendEmail, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		if (!calendarBooking.isMasterBooking()) {
@@ -1087,27 +1113,18 @@ public class CalendarBookingLocalServiceImpl
 				calendarBooking.getSecondReminder(),
 				calendarBooking.getSecondReminderType(), serviceContext);
 
-			try {
-				NotificationType notificationType = NotificationType.parse(
-					PortletPropsValues.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+			NotificationTemplateType notificationTemplateType =
+				NotificationTemplateType.INVITE;
 
-				NotificationTemplateType notificationTemplateType =
-					NotificationTemplateType.INVITE;
+			if (existingCalendarBookingIds.contains(
+					childCalendarBooking.getCalendarId())) {
 
-				if (existingCalendarBookingIds.contains(
-						childCalendarBooking.getCalendarId())) {
-
-					notificationTemplateType = NotificationTemplateType.UPDATE;
-				}
-
-				NotificationUtil.notifyCalendarBookingRecipients(
-					childCalendarBooking, notificationType,
-					notificationTemplateType);
+				notificationTemplateType = NotificationTemplateType.UPDATE;
 			}
-			catch (Exception e) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(e, e);
-				}
+
+			if (sendEmail) {
+				sendNotification(
+					childCalendarBooking, notificationTemplateType);
 			}
 		}
 	}
@@ -1118,6 +1135,24 @@ public class CalendarBookingLocalServiceImpl
 		jsonObject.put("title", calendarBooking.getTitle());
 
 		return jsonObject.toString();
+	}
+
+	protected void sendNotification(
+		CalendarBooking calendarBooking,
+		NotificationTemplateType notificationTemplateType) {
+
+		try {
+			NotificationType notificationType = NotificationType.parse(
+				PortletPropsValues.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+
+			NotificationUtil.notifyCalendarBookingRecipients(
+				calendarBooking, notificationType, notificationTemplateType);
+		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
+		}
 	}
 
 	protected void validate(

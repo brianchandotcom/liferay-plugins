@@ -413,7 +413,7 @@ public class CalendarICalDataHandler implements CalendarDataHandler {
 				CalendarBookingConstants.PARENT_CALENDAR_BOOKING_ID_DEFAULT,
 				titleMap, descriptionMap, locationString, startDate.getTime(),
 				endDate.getTime(), allDay, recurrence, firstReminder,
-				firstReminderType, secondReminder, secondReminderType,
+				firstReminderType, secondReminder, secondReminderType, false,
 				serviceContext);
 		}
 		else {
@@ -422,7 +422,7 @@ public class CalendarICalDataHandler implements CalendarDataHandler {
 				childCalendarIdsArray, titleMap, descriptionMap, locationString,
 				startDate.getTime(), endDate.getTime(), allDay, recurrence,
 				firstReminder, firstReminderType, secondReminder,
-				secondReminderType, calendarBooking.getStatus(),
+				secondReminderType, calendarBooking.getStatus(), false,
 				serviceContext);
 		}
 	}
