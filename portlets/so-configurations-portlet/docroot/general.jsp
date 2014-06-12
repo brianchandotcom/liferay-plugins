@@ -19,12 +19,10 @@
 
 <%@ include file="/init.jsp" %>
 
-<%@ page import="com.liferay.so.util.SocialOfficeConstants" %>
-
 <%
-String portletResource = ParamUtil.getString(request, "portletResource");
+Role soRole = RoleLocalServiceUtil.getRole(themeDisplay.getCompanyId(), RoleConstants.SOCIAL_OFFICE_USER);
 
-int maxResultSize = GetterUtil.getInteger(portletPreferences.getValue("maxResultSize", null), 10);
+boolean addSitePermission = ResourcePermissionLocalServiceUtil.hasResourcePermission(themeDisplay.getCompanyId(), PortletKeys.PORTAL, ResourceConstants.SCOPE_COMPANY, String.valueOf(themeDisplay.getCompanyId()), soRole.getRoleId(), ActionKeys.ADD_COMMUNITY);
 
 portletPreferences = PortletPreferencesLocalServiceUtil.getPreferences(themeDisplay.getCompanyId(), themeDisplay.getCompanyId(), PortletKeys.PREFS_OWNER_TYPE_COMPANY, LayoutConstants.DEFAULT_PLID, PortletKeys.SO_CONFIGURATIONS);
 
@@ -33,3 +31,24 @@ boolean enablePublicRestrictedSites = GetterUtil.getBoolean(portletPreferences.g
 boolean enablePrivateRestrictedSites = GetterUtil.getBoolean(portletPreferences.getValue("enablePrivateRestrictedSites", null), true);
 boolean enablePrivateSites = GetterUtil.getBoolean(portletPreferences.getValue("enablePrivateSites", null), true);
 %>
+
+<h3><liferay-ui:message key="general" /></h3>
+
+<portlet:actionURL name="updateGeneralConfigurations" var="updateGeneralConfigurationsURL">
+	<portlet:param name="redirect" value="<%= currentURL %>" />
+</portlet:actionURL>
+
+<aui:form action="<%= updateGeneralConfigurationsURL %>" method="post" name="fm">
+	<aui:input checked="<%= addSitePermission %>" label="social-office-users-can-add-sites" name="addSitePermission" type="checkbox" />
+
+	<liferay-ui:message key="select-which-type-of-sites-users-can-add" />
+
+	<div class="site-types" id="<portlet:namespace />siteTypes">
+		<aui:input checked="<%= enableOpenSites %>" label="open" name="preferences--enableOpenSites--" type="checkbox" />
+		<aui:input checked="<%= enablePublicRestrictedSites %>" label="public-restricted" name="preferences--enablePublicRestrictedSites--" type="checkbox" />
+		<aui:input checked="<%= enablePrivateRestrictedSites %>" label="private-restricted" name="preferences--enablePrivateRestrictedSites--" type="checkbox" />
+		<aui:input checked="<%= enablePrivateSites %>" label="private" name="preferences--enablePrivateSites--" type="checkbox" />
+	</div>
+
+	<aui:button type="submit" />
+</aui:form>

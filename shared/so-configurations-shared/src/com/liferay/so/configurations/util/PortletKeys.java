@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -15,29 +14,15 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
---%>
 
-<%@ include file="/init.jsp" %>
+package com.liferay.so.configurations.util;
 
-<%
-String tabs1 = ParamUtil.getString(request, "tabs1", "assign-social-office");
-%>
+/**
+ * @author Matthew Kong
+ */
+public class PortletKeys extends com.liferay.portal.util.PortletKeys {
 
-<liferay-portlet:renderURL var="portletURL">
-	<portlet:param name="tabs1" value="<%= tabs1 %>" />
-</liferay-portlet:renderURL>
+	public static final String SO_CONFIGURATIONS =
+		"1_WAR_soconfigurationsportlet";
 
-<liferay-ui:tabs
-	names="assign-social-office,general"
-	param="tabs1"
-	url="<%= portletURL.toString() %>"
-/>
-
-<c:choose>
-	<c:when test='<%= tabs1.equals("assign-social-office") %>'>
-		<liferay-util:include page="/assign_so.jsp" servletContext="<%= application %>" />
-	</c:when>
-	<c:when test='<%= tabs1.equals("general") %>'>
-		<liferay-util:include page="/general.jsp" servletContext="<%= application %>" />
-	</c:when>
-</c:choose>
+}
