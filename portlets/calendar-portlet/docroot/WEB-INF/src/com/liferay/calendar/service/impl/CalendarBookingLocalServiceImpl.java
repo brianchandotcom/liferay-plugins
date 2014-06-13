@@ -54,6 +54,7 @@ import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
@@ -930,21 +931,9 @@ public class CalendarBookingLocalServiceImpl
 					CalendarBookingWorkflowConstants.STATUS_IN_TRASH,
 					serviceContext);
 
-				try {
-					NotificationType notificationType =
-						NotificationType.parse(
-							PortletPropsValues.
-								CALENDAR_NOTIFICATION_DEFAULT_TYPE);
-
-					NotificationUtil.notifyCalendarBookingRecipients(
-						childCalendarBooking, notificationType,
-						NotificationTemplateType.MOVED_TO_TRASH);
-				}
-				catch (Exception e) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(e, e);
-					}
-				}
+				sendNotification(
+					childCalendarBooking,
+					NotificationTemplateType.MOVED_TO_TRASH, serviceContext);
 			}
 		}
 		else if (oldStatus ==
@@ -963,21 +952,9 @@ public class CalendarBookingLocalServiceImpl
 					CalendarBookingWorkflowConstants.STATUS_PENDING,
 					serviceContext);
 
-				try {
-					NotificationType notificationType =
-						NotificationType.parse(
-							PortletPropsValues.
-								CALENDAR_NOTIFICATION_DEFAULT_TYPE);
-
-					NotificationUtil.notifyCalendarBookingRecipients(
-						childCalendarBooking, notificationType,
-						NotificationTemplateType.INVITE);
-				}
-				catch (Exception e) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(e, e);
-					}
-				}
+				sendNotification(
+					childCalendarBooking, NotificationTemplateType.INVITE,
+					serviceContext);
 			}
 		}
 
@@ -1087,28 +1064,17 @@ public class CalendarBookingLocalServiceImpl
 				calendarBooking.getSecondReminder(),
 				calendarBooking.getSecondReminderType(), serviceContext);
 
-			try {
-				NotificationType notificationType = NotificationType.parse(
-					PortletPropsValues.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+			NotificationTemplateType notificationTemplateType =
+				NotificationTemplateType.INVITE;
 
-				NotificationTemplateType notificationTemplateType =
-					NotificationTemplateType.INVITE;
+			if (existingCalendarBookingIds.contains(
+					childCalendarBooking.getCalendarId())) {
 
-				if (existingCalendarBookingIds.contains(
-						childCalendarBooking.getCalendarId())) {
-
-					notificationTemplateType = NotificationTemplateType.UPDATE;
-				}
-
-				NotificationUtil.notifyCalendarBookingRecipients(
-					childCalendarBooking, notificationType,
-					notificationTemplateType);
+				notificationTemplateType = NotificationTemplateType.UPDATE;
 			}
-			catch (Exception e) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(e, e);
-				}
-			}
+
+			sendNotification(
+				childCalendarBooking, notificationTemplateType, serviceContext);
 		}
 	}
 
@@ -1118,6 +1084,32 @@ public class CalendarBookingLocalServiceImpl
 		jsonObject.put("title", calendarBooking.getTitle());
 
 		return jsonObject.toString();
+	}
+
+	protected void sendNotification(
+		CalendarBooking calendarBooking,
+		NotificationTemplateType notificationTemplateType,
+		ServiceContext serviceContext) {
+
+		boolean sendNotification = ParamUtil.getBoolean(
+			serviceContext, "sendNotification", true);
+
+		if (!sendNotification) {
+			return;
+		}
+
+		try {
+			NotificationType notificationType = NotificationType.parse(
+				PortletPropsValues.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+
+			NotificationUtil.notifyCalendarBookingRecipients(
+				calendarBooking, notificationType, notificationTemplateType);
+		}
+		catch (Exception e) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
+		}
 	}
 
 	protected void validate(
