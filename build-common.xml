@@ -15,14 +15,14 @@
 	</path>
 
 	<script classpathref="lib.classpath" language="beanshell">
-		String isPortalInvoked = project.getProperty("is.portal.invoked");
-
-		if (isPortalInvoked != null) {
+		if (Boolean.getBoolean(project.getProperty("portal.invoked"))) {
 			import org.apache.tools.ant.ComponentHelper;
 
 			ComponentHelper componentHelper = ComponentHelper.getComponentHelper(project);
 
-			componentHelper.getAntTypeTable().clear();
+			Hashtable antTypeTable = componentHelper.getAntTypeTable();
+
+			antTypeTable.clear();
 
 			componentHelper.initDefaultDefinitions();
 		}
