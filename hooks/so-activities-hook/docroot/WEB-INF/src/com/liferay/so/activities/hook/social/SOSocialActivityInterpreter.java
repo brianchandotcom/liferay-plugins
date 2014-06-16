@@ -447,7 +447,7 @@ public abstract class SOSocialActivityInterpreter
 				continue;
 			}
 
-			if (!isAfterDisplayDate(activity)) {
+			if (!isVisible(activity)) {
 				continue;
 			}
 
@@ -504,12 +504,6 @@ public abstract class SOSocialActivityInterpreter
 		return false;
 	}
 
-	protected boolean isAfterDisplayDate(SocialActivity activity)
-		throws Exception {
-
-		return true;
-	}
-
 	protected boolean isExpired(
 		SocialActivitySet activitySet, boolean comment) {
 
@@ -531,6 +525,10 @@ public abstract class SOSocialActivityInterpreter
 		}
 
 		return false;
+	}
+
+	protected boolean isVisible(SocialActivity activity) throws Exception {
+		return true;
 	}
 
 	protected String wrapLink(String link, String iconPath, String text) {

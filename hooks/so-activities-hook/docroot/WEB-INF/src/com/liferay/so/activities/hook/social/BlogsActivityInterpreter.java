@@ -14,6 +14,8 @@
 
 package com.liferay.so.activities.hook.social;
 
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -39,6 +41,43 @@ public class BlogsActivityInterpreter extends SOSocialActivityInterpreter {
 
 	public String[] getClassNames() {
 		return _CLASS_NAMES;
+	}
+
+	@Override
+	public void updateActivitySet(long activityId)
+		throws PortalException, SystemException {
+
+		SocialActivity activity =
+			SocialActivityLocalServiceUtil.fetchSocialActivity(activityId);
+
+		if ((activity == null) || (activity.getActivitySetId() > 0)) {
+			return;
+		}
+
+		long activitySetId = getActivitySetId(activityId);
+
+		if (activitySetId > 0) {
+			SocialActivitySetLocalServiceUtil.incrementActivityCount(
+				activitySetId, activityId);
+
+			return;
+		}
+
+		SocialActivitySet activitySet =
+			SocialActivitySetLocalServiceUtil.addActivitySet(activityId);
+
+		if (activity.getType() != SocialActivityKeyConstants.BLOGS_ADD_ENTRY) {
+			return;
+		}
+
+		BlogsEntry blogsEntry = BlogsEntryLocalServiceUtil.getBlogsEntry(
+			activity.getClassPK());
+
+		Date displayDate = blogsEntry.getDisplayDate();
+
+		activitySet.setModifiedDate(displayDate.getTime());
+
+		SocialActivitySetLocalServiceUtil.updateSocialActivitySet(activitySet);
 	}
 
 	@Override
@@ -200,36 +239,28 @@ public class BlogsActivityInterpreter extends SOSocialActivityInterpreter {
 	}
 
 	@Override
-	protected boolean isAfterDisplayDate(SocialActivity activity)
-		throws Exception {
-
+	protected boolean isVisible(SocialActivity activity) throws Exception {
 		BlogsEntry blogsEntry = BlogsEntryLocalServiceUtil.fetchBlogsEntry(
 			activity.getClassPK());
 
-		if (blogsEntry == null) {
+		if ((blogsEntry == null) || !blogsEntry.isVisible()) {
 			return false;
 		}
 
-		SocialActivitySet activitySet =
-			SocialActivitySetLocalServiceUtil.getSocialActivitySet(
-				activity.getActivitySetId());
+		if ((activity.getType() ==
+				SocialActivityKeyConstants.BLOGS_ADD_COMMENT) ||
+			(activity.getType() ==
+				SocialActivityKeyConstants.BLOGS_UPDATE_ENTRY) ||
+			(activity.getType() == SocialActivityConstants.TYPE_ADD_COMMENT)) {
 
-		Date displayDate = blogsEntry.getDisplayDate();
+			Date displayDate = blogsEntry.getDisplayDate();
 
-		long displayTime = displayDate.getTime();
-
-		if (displayTime < System.currentTimeMillis()) {
-			return true;
+			if (activity.getCreateDate() < displayDate.getTime()) {
+				return false;
+			}
 		}
 
-		if (displayTime > activitySet.getModifiedDate()) {
-			activitySet.setModifiedDate(displayTime);
-
-			SocialActivitySetLocalServiceUtil.updateSocialActivitySet(
-				activitySet);
-		}
-
-		return false;
+		return true;
 	}
 
 	private static final String[] _CLASS_NAMES = {BlogsEntry.class.getName()};
