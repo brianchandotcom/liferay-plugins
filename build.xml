@@ -166,7 +166,7 @@
 			/>
 			<zipfileset
 				dir="."
-				includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar"
+				includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar,lib/com.liferay.ant.clean.parent.definitions-1.0.0-SNAPSHOT.jar"
 				prefix="liferay-plugins-sdk-${lp.version}"
 			/>
 		</zip>

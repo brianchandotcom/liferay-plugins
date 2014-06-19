@@ -14,6 +14,10 @@
 		<fileset dir="${sdk.dir}/lib" includes="*.jar" />
 	</path>
 
+	<taskdef name="clean-parent-definitions" classname="com.liferay.ant.clean.parent.definitions.CleanParentDefinitionsTask" classpathref="lib.classpath" />
+
+	<clean-parent-definitions />
+
 	<taskdef classpathref="lib.classpath" resource="ise/antelope/tasks/antlib.xml" uri="antlib:ise.antelope.tasks" />
 	<taskdef classpathref="lib.classpath" resource="net/sf/antcontrib/antlib.xml" />
 
