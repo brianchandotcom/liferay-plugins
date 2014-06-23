@@ -34,9 +34,14 @@ List<KBArticle> childKBArticles = KBArticleServiceUtil.getKBArticles(scopeGroupI
 
 				<div class="kb-element-header">
 					<liferay-portlet:renderURL var="viewKBArticleURL">
-						<portlet:param name="mvcPath" value='<%= templatePath + "view_article.jsp" %>' />
-						<portlet:param name="resourcePrimKey" value="<%= String.valueOf(childrenKBArticle.getResourcePrimKey()) %>" />
-						<portlet:param name="status" value="<%= String.valueOf(status) %>" />
+						<c:choose>
+							<c:when test="<%= Validator.isNotNull(childrenKBArticle.getUrlTitle()) %>">
+								<portlet:param name="urlTitle" value="<%= childrenKBArticle.getUrlTitle() %>" />
+							</c:when>
+							<c:otherwise>
+								<portlet:param name="resourcePrimKey" value="<%= String.valueOf(childrenKBArticle.getResourcePrimKey()) %>" />
+							</c:otherwise>
+						</c:choose>
 					</liferay-portlet:renderURL>
 
 					<liferay-ui:icon
