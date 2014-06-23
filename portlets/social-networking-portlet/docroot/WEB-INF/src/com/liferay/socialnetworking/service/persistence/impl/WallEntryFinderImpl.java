@@ -14,9 +14,6 @@
 
 package com.liferay.socialnetworking.service.persistence.impl;
 
-import com.liferay.socialnetworking.service.persistence.WallEntryFinder;
-import com.liferay.socialnetworking.service.persistence.WallEntryUtil;
-
 import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.SQLQuery;
@@ -26,6 +23,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.socialnetworking.model.WallEntry;
 import com.liferay.socialnetworking.model.impl.WallEntryImpl;
+import com.liferay.socialnetworking.service.persistence.WallEntryFinder;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
 import java.util.Iterator;
@@ -44,8 +42,7 @@ public class WallEntryFinderImpl
 		WallEntryFinder.class.getName() + ".findByG1_G2_U1_U2";
 
 	public int countByG1_G2_U1_U2(
-			long groupId1, long groupId2, long userId1, long userId2)
-		throws SystemException {
+		long groupId1, long groupId2, long userId1, long userId2) {
 
 		Session session = null;
 
@@ -86,9 +83,8 @@ public class WallEntryFinderImpl
 	}
 
 	public List<WallEntry> findByG1_G2_U1_U2(
-			long groupId1, long groupId2, long userId1, long userId2, int start,
-			int end)
-		throws SystemException {
+		long groupId1, long groupId2, long userId1, long userId2, int start,
+		int end) {
 
 		Session session = null;
 
