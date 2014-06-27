@@ -283,8 +283,7 @@ public class KBArticleServiceClp implements KBArticleService {
 		java.lang.String dirName, java.lang.String shortFileName,
 		java.io.InputStream inputStream,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName3,
 				_methodParameterTypes3,
@@ -309,10 +308,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -330,8 +325,7 @@ public class KBArticleServiceClp implements KBArticleService {
 		java.lang.String content, java.lang.String description,
 		java.lang.String[] sections, java.lang.String dirName,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -364,10 +358,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -384,8 +374,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	public void deleteAttachment(long companyId, long groupId,
 		java.lang.String portletId, long resourcePrimKey,
 		java.lang.String fileName)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName5,
 				_methodParameterTypes5,
@@ -408,10 +397,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -425,8 +410,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public com.liferay.knowledgebase.model.KBArticle deleteKBArticle(
 		long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -438,10 +422,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -458,8 +438,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public void deleteKBArticles(long groupId, long[] resourcePrimKeys)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName7,
 				_methodParameterTypes7,
@@ -476,10 +455,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -494,8 +469,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	public java.io.File getAttachment(long companyId, long groupId,
 		java.lang.String portletId, long resourcePrimKey,
 		java.lang.String fileName)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -520,10 +494,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -539,8 +509,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getGroupKBArticles(
 		long groupId, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -561,10 +530,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -578,8 +543,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	}
 
 	@Override
-	public int getGroupKBArticlesCount(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
+	public int getGroupKBArticlesCount(long groupId, int status) {
 		Object returnObj = null;
 
 		try {
@@ -588,10 +552,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -609,8 +569,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	public java.lang.String getGroupKBArticlesRSS(int status, int rssDelta,
 		java.lang.String rssDisplayStyle, java.lang.String rssFormat,
 		com.liferay.portal.theme.ThemeDisplay themeDisplay)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -635,10 +594,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -654,8 +609,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public com.liferay.knowledgebase.model.KBArticle getKBArticle(
 		long resourcePrimKey, int version)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -668,10 +622,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -689,8 +639,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticleAndAllDescendantKBArticles(
 		long groupId, long resourcePrimKey, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -709,10 +658,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -728,8 +673,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticleAndAllDescendants(
 		long groupId, long resourcePrimKey, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -748,10 +692,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -769,8 +709,7 @@ public class KBArticleServiceClp implements KBArticleService {
 		int rssDelta, java.lang.String rssDisplayStyle,
 		java.lang.String rssFormat,
 		com.liferay.portal.theme.ThemeDisplay themeDisplay)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -797,10 +736,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -817,8 +752,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticles(
 		long groupId, long parentResourcePrimKey, int status, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -841,10 +775,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -860,8 +790,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticles(
 		long groupId, long[] resourcePrimKeys, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -884,10 +813,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -903,8 +828,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticles(
 		long groupId, long[] resourcePrimKeys, int status,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -923,10 +847,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -941,7 +861,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public int getKBArticlesCount(long groupId, long parentResourcePrimKey,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		int status) {
 		Object returnObj = null;
 
 		try {
@@ -951,10 +871,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -970,7 +886,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public int getKBArticlesCount(long groupId, long[] resourcePrimKeys,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		int status) {
 		Object returnObj = null;
 
 		try {
@@ -986,10 +902,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -1009,8 +921,7 @@ public class KBArticleServiceClp implements KBArticleService {
 		int status, java.util.Date startDate, java.util.Date endDate,
 		boolean andOperator, int[] curStartValues, int cur, int delta,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -1047,10 +958,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -1066,8 +973,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticleVersions(
 		long groupId, long resourcePrimKey, int status, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -1090,10 +996,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -1108,7 +1010,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public int getKBArticleVersionsCount(long groupId, long resourcePrimKey,
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		int status) {
 		Object returnObj = null;
 
 		try {
@@ -1118,10 +1020,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -1138,8 +1036,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public com.liferay.knowledgebase.model.KBArticle getLatestKBArticle(
 		long resourcePrimKey, int status)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -1152,10 +1049,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -1174,8 +1067,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getSectionsKBArticles(
 		long groupId, java.lang.String[] sections, int status, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -1198,10 +1090,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -1216,8 +1104,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public int getSectionsKBArticlesCount(long groupId,
-		java.lang.String[] sections, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		java.lang.String[] sections, int status) {
 		Object returnObj = null;
 
 		try {
@@ -1233,10 +1120,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -1254,8 +1137,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	public java.util.List<com.liferay.knowledgebase.model.KBArticle> getSiblingKBArticles(
 		long groupId, long parentResourcePrimKey, int status, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
 		Object returnObj = null;
 
 		try {
@@ -1278,10 +1160,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -1296,8 +1174,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public int getSiblingKBArticlesCount(long groupId,
-		long parentResourcePrimKey, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		long parentResourcePrimKey, int status) {
 		Object returnObj = null;
 
 		try {
@@ -1307,10 +1184,6 @@ public class KBArticleServiceClp implements KBArticleService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -1327,8 +1200,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public void moveKBArticle(long resourcePrimKey, long parentResourcePrimKey,
 		double priority)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName29,
 				_methodParameterTypes29,
@@ -1339,10 +1211,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -1358,8 +1226,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public void subscribeGroupKBArticles(long groupId,
 		java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName30,
 				_methodParameterTypes30,
@@ -1370,10 +1237,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -1388,8 +1251,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public void subscribeKBArticle(long groupId, long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName31,
 				_methodParameterTypes31,
@@ -1400,10 +1262,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -1419,8 +1277,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public void unsubscribeGroupKBArticles(long groupId,
 		java.lang.String portletId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName32,
 				_methodParameterTypes32,
@@ -1431,10 +1288,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -1449,8 +1302,7 @@ public class KBArticleServiceClp implements KBArticleService {
 
 	@Override
 	public void unsubscribeKBArticle(long resourcePrimKey)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName33,
 				_methodParameterTypes33, new Object[] { resourcePrimKey });
@@ -1460,10 +1312,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -1480,8 +1328,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	public java.lang.String updateAttachments(java.lang.String portletId,
 		long resourcePrimKey, java.lang.String dirName,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -1504,10 +1351,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -1526,8 +1369,7 @@ public class KBArticleServiceClp implements KBArticleService {
 		java.lang.String description, java.lang.String[] sections,
 		java.lang.String dirName,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -1556,10 +1398,6 @@ public class KBArticleServiceClp implements KBArticleService {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
 
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
 			}
@@ -1575,8 +1413,7 @@ public class KBArticleServiceClp implements KBArticleService {
 	@Override
 	public void updateKBArticlesPriorities(long groupId,
 		java.util.Map<java.lang.Long, java.lang.Double> resourcePrimKeyToPriorityMap)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableService.invokeMethod(_methodName36,
 				_methodParameterTypes36,
@@ -1591,10 +1428,6 @@ public class KBArticleServiceClp implements KBArticleService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {

@@ -1168,35 +1168,15 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	@Override
-	public com.liferay.calendar.model.CalendarBooking getParentCalendarBooking() {
+	public java.util.TimeZone getTimeZone() {
 		try {
-			String methodName = "getParentCalendarBooking";
+			String methodName = "getTimeZone";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			com.liferay.calendar.model.CalendarBooking returnObj = (com.liferay.calendar.model.CalendarBooking)invokeOnRemoteModel(methodName,
-					parameterTypes, parameterValues);
-
-			return returnObj;
-		}
-		catch (Exception e) {
-			throw new UnsupportedOperationException(e);
-		}
-	}
-
-	@Override
-	public java.util.List<com.liferay.calendar.model.CalendarBooking> getChildCalendarBookings() {
-		try {
-			String methodName = "getChildCalendarBookings";
-
-			Class<?>[] parameterTypes = new Class<?>[] {  };
-
-			Object[] parameterValues = new Object[] {  };
-
-			java.util.List<com.liferay.calendar.model.CalendarBooking> returnObj =
-				(java.util.List<com.liferay.calendar.model.CalendarBooking>)invokeOnRemoteModel(methodName,
+			java.util.TimeZone returnObj = (java.util.TimeZone)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -1226,15 +1206,15 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	@Override
-	public com.liferay.calendar.model.Calendar getCalendar() {
+	public com.liferay.calendar.model.CalendarBooking getParentCalendarBooking() {
 		try {
-			String methodName = "getCalendar";
+			String methodName = "getParentCalendarBooking";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			com.liferay.calendar.model.Calendar returnObj = (com.liferay.calendar.model.Calendar)invokeOnRemoteModel(methodName,
+			com.liferay.calendar.model.CalendarBooking returnObj = (com.liferay.calendar.model.CalendarBooking)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -1283,15 +1263,34 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	@Override
-	public java.util.TimeZone getTimeZone() {
+	public com.liferay.calendar.model.CalendarResource getCalendarResource() {
 		try {
-			String methodName = "getTimeZone";
+			String methodName = "getCalendarResource";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			java.util.TimeZone returnObj = (java.util.TimeZone)invokeOnRemoteModel(methodName,
+			com.liferay.calendar.model.CalendarResource returnObj = (com.liferay.calendar.model.CalendarResource)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public com.liferay.calendar.model.Calendar getCalendar() {
+		try {
+			String methodName = "getCalendar";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			com.liferay.calendar.model.Calendar returnObj = (com.liferay.calendar.model.Calendar)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -1321,15 +1320,16 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	@Override
-	public com.liferay.calendar.model.CalendarResource getCalendarResource() {
+	public java.util.List<com.liferay.calendar.model.CalendarBooking> getChildCalendarBookings() {
 		try {
-			String methodName = "getCalendarResource";
+			String methodName = "getChildCalendarBookings";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			com.liferay.calendar.model.CalendarResource returnObj = (com.liferay.calendar.model.CalendarResource)invokeOnRemoteModel(methodName,
+			java.util.List<com.liferay.calendar.model.CalendarBooking> returnObj =
+				(java.util.List<com.liferay.calendar.model.CalendarBooking>)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
