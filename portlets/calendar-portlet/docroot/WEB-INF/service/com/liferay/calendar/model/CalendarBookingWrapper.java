@@ -1379,21 +1379,18 @@ public class CalendarBookingWrapper implements CalendarBooking,
 
 	@Override
 	public com.liferay.calendar.model.Calendar getCalendar()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _calendarBooking.getCalendar();
 	}
 
 	@Override
 	public com.liferay.calendar.model.CalendarResource getCalendarResource()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _calendarBooking.getCalendarResource();
 	}
 
 	@Override
-	public java.util.List<com.liferay.calendar.model.CalendarBooking> getChildCalendarBookings()
-		throws com.liferay.portal.kernel.exception.SystemException {
+	public java.util.List<com.liferay.calendar.model.CalendarBooking> getChildCalendarBookings() {
 		return _calendarBooking.getChildCalendarBookings();
 	}
 
@@ -1409,8 +1406,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 
 	@Override
 	public com.liferay.calendar.model.CalendarBooking getParentCalendarBooking()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _calendarBooking.getParentCalendarBooking();
 	}
 
@@ -1426,8 +1422,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 
 	@Override
 	public java.util.TimeZone getTimeZone()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _calendarBooking.getTimeZone();
 	}
 
