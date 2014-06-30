@@ -21,13 +21,12 @@ import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.permission.KBArticlePermission;
 import com.liferay.knowledgebase.util.ActionKeys;
 import com.liferay.knowledgebase.util.PortletKeys;
-import com.liferay.portal.NoSuchLayoutException;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.struts.StrutsAction;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -35,6 +34,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutTypePortlet;
@@ -43,12 +43,14 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.PortletMode;
@@ -79,13 +81,13 @@ public class FindKBArticleAction extends BaseStrutsAction {
 			request, "status", WorkflowConstants.STATUS_APPROVED);
 		boolean maximized = ParamUtil.getBoolean(request, "maximized");
 
+		KBArticle kbArticle = getKBArticle(resourcePrimKey, status);
+
 		if (!isValidPlid(plid)) {
 			plid = themeDisplay.getPlid();
 		}
 
 		PortletURL portletURL = null;
-
-		KBArticle kbArticle = getKBArticle(resourcePrimKey, status);
 
 		if (kbArticle == null) {
 			portletURL = getDynamicPortletURL(plid, status, request);
@@ -117,13 +119,47 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		return null;
 	}
 
+	protected List<Layout> getCandidateLayouts(
+			long plid, boolean privateLayout, KBArticle kbArticle)
+		throws PortalException {
+
+		List<Layout> candidateLayouts = new ArrayList<Layout>();
+
+		Group group = GroupLocalServiceUtil.getGroup(kbArticle.getGroupId());
+
+		if (group.isLayout()) {
+			Layout layout = LayoutLocalServiceUtil.getLayout(
+				group.getClassPK());
+
+			candidateLayouts.add(layout);
+
+			group = layout.getGroup();
+		}
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+			group.getGroupId(), privateLayout, LayoutConstants.TYPE_PORTLET);
+
+		candidateLayouts.addAll(layouts);
+
+		Layout selLayout = LayoutLocalServiceUtil.getLayout(plid);
+
+		if ((selLayout.getGroupId() == kbArticle.getGroupId()) &&
+			selLayout.isTypePortlet()) {
+
+			candidateLayouts.remove(selLayout);
+			candidateLayouts.add(0, selLayout);
+		}
+
+		return candidateLayouts;
+	}
+
 	protected PortletURL getDynamicPortletURL(
 			long plid, int status, HttpServletRequest request)
 		throws Exception {
 
 		String portletId = getPortletId(plid);
 
-		PortletURL portletURL = getKBArticleURL(plid, portletId, request);
+		PortletURL portletURL = getKBArticleURL(plid, portletId, null, request);
 
 		if (status != WorkflowConstants.STATUS_APPROVED) {
 			portletURL.setParameter("status", String.valueOf(status));
@@ -177,20 +213,8 @@ public class FindKBArticleAction extends BaseStrutsAction {
 			HttpServletRequest request)
 		throws Exception {
 
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-			kbArticle.getGroupId(), privateLayout,
-			LayoutConstants.TYPE_PORTLET);
-
-		Layout selLayout = LayoutLocalServiceUtil.getLayout(plid);
-
-		if ((selLayout.getGroupId() == kbArticle.getGroupId()) &&
-			selLayout.isTypePortlet()) {
-
-			layouts = ListUtil.copy(layouts);
-
-			layouts.remove(selLayout);
-			layouts.add(0, selLayout);
-		}
+		List<Layout> layouts = getCandidateLayouts(
+			plid, privateLayout, kbArticle);
 
 		for (Layout layout : layouts) {
 			LayoutTypePortlet layoutTypePortlet =
@@ -204,7 +228,8 @@ public class FindKBArticleAction extends BaseStrutsAction {
 
 				if (rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_DISPLAY)) {
 					return getKBArticleURL(
-						layout.getPlid(), portlet.getPortletId(), request);
+						layout.getPlid(), portlet.getPortletId(), kbArticle,
+						request);
 				}
 
 				if (rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_SECTION)) {
@@ -236,7 +261,8 @@ public class FindKBArticleAction extends BaseStrutsAction {
 						}
 
 						return getKBArticleURL(
-							layout.getPlid(), portlet.getPortletId(), request);
+							layout.getPlid(), portlet.getPortletId(), kbArticle,
+							request);
 					}
 				}
 
@@ -267,7 +293,8 @@ public class FindKBArticleAction extends BaseStrutsAction {
 
 					if (rootResourcePrimKey == selRootResourcePrimKey) {
 						return getKBArticleURL(
-							layout.getPlid(), portlet.getPortletId(), request);
+							layout.getPlid(), portlet.getPortletId(), kbArticle,
+							request);
 					}
 				}
 			}
@@ -277,7 +304,8 @@ public class FindKBArticleAction extends BaseStrutsAction {
 	}
 
 	protected PortletURL getKBArticleURL(
-			long plid, String portletId, HttpServletRequest request)
+			long plid, String portletId, KBArticle kbArticle,
+			HttpServletRequest request)
 		throws Exception {
 
 		long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
@@ -289,9 +317,6 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		if (rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_ARTICLE)) {
 			mvcPath = "/article/view_article.jsp";
 		}
-		else if (rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_DISPLAY)) {
-			mvcPath = "/display/view_article.jsp";
-		}
 		else if (rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_SECTION)) {
 			mvcPath = "/section/view_article.jsp";
 		}
@@ -299,9 +324,17 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		PortletURL portletURL = PortletURLFactoryUtil.create(
 			request, portletId, plid, PortletRequest.RENDER_PHASE);
 
-		portletURL.setParameter("mvcPath", mvcPath);
-		portletURL.setParameter(
-			"resourcePrimKey", String.valueOf(resourcePrimKey));
+		if (mvcPath != null) {
+			portletURL.setParameter("mvcPath", mvcPath);
+		}
+
+		if ((kbArticle == null) || Validator.isNull(kbArticle.getUrlTitle())) {
+			portletURL.setParameter(
+				"resourcePrimKey", String.valueOf(resourcePrimKey));
+		}
+		else {
+			portletURL.setParameter("urlTitle", kbArticle.getUrlTitle());
+		}
 
 		portletURL.setPortletMode(PortletMode.VIEW);
 
@@ -327,11 +360,10 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		return PortletKeys.KNOWLEDGE_BASE_ARTICLE_DEFAULT_INSTANCE;
 	}
 
-	protected boolean isValidPlid(long plid) throws Exception {
-		try {
-			LayoutLocalServiceUtil.getLayout(plid);
-		}
-		catch (NoSuchLayoutException nsle) {
+	protected boolean isValidPlid(long plid) throws PortalException {
+		Layout layout = LayoutLocalServiceUtil.fetchLayout(plid);
+
+		if (layout == null) {
 			return false;
 		}
 
