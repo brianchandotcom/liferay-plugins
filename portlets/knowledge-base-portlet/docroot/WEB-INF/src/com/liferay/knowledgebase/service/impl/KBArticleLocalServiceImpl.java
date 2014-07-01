@@ -18,6 +18,7 @@ import com.liferay.knowledgebase.KBArticleContentException;
 import com.liferay.knowledgebase.KBArticlePriorityException;
 import com.liferay.knowledgebase.KBArticleTitleException;
 import com.liferay.knowledgebase.NoSuchArticleException;
+import com.liferay.knowledgebase.admin.importer.KBArticleImporter;
 import com.liferay.knowledgebase.admin.social.AdminActivityKeys;
 import com.liferay.knowledgebase.admin.util.AdminSubscriptionSender;
 import com.liferay.knowledgebase.admin.util.AdminUtil;
@@ -83,6 +84,7 @@ import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -258,6 +260,18 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		addKBArticleResources(kbArticle, groupPermissions, guestPermissions);
 	}
 
+	public void addKBArticlesMarkdown(
+			long userId, long groupId, String fileName, InputStream inputStream,
+			ServiceContext serviceContext)
+		throws IOException, PortalException {
+
+		KBArticleImporter kbArticleImporter = new KBArticleImporter();
+
+		kbArticleImporter.processZipFile(
+			userId, groupId, fileName, inputStream,
+			new HashMap<String, FileEntry>(), serviceContext);
+	}
+
 	public void checkAttachments() throws PortalException {
 		for (long companyId : PortalUtil.getCompanyIds()) {
 			checkAttachments(companyId);
@@ -388,6 +402,22 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 	}
 
+	public KBArticle fetchKBArticleByUrlTitle(long groupId, String urlTitle) {
+
+		// Fetch the latest KB article that is approved, if none are approved,
+		// fetch the latest unapproved KB article
+
+		KBArticle kbArticle = fetchLatestKBArticleByUrlTitle(
+			groupId, urlTitle, WorkflowConstants.STATUS_APPROVED);
+
+		if (kbArticle == null) {
+			kbArticle = fetchLatestKBArticleByUrlTitle(
+				groupId, urlTitle, WorkflowConstants.STATUS_PENDING);
+		}
+
+		return kbArticle;
+	}
+
 	@Override
 	public KBArticle fetchLatestKBArticle(long resourcePrimKey, int status)
 		throws PortalException {
@@ -399,6 +429,29 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		return kbArticlePersistence.fetchByR_S_First(
 			resourcePrimKey, status, new KBArticleVersionComparator());
+	}
+
+	public KBArticle fetchLatestKBArticleByUrlTitle(
+		long groupId, String urlTitle, int status) {
+
+		List<KBArticle> kbArticles = null;
+
+		OrderByComparator orderByComparator = new KBArticleVersionComparator();
+
+		if (status == WorkflowConstants.STATUS_ANY) {
+			kbArticles = kbArticlePersistence.findByG_UT(
+				groupId, urlTitle, 0, 1, orderByComparator);
+		}
+		else {
+			kbArticles = kbArticlePersistence.findByG_UT_ST(
+				groupId, urlTitle, status, 0, 1, orderByComparator);
+		}
+
+		if (kbArticles.isEmpty()) {
+			return null;
+		}
+
+		return kbArticles.get(0);
 	}
 
 	public List<KBArticle> getAllDescendantKBArticles(
@@ -503,14 +556,15 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		// Get the latest KB article that is approved, if none are approved, get
 		// the latest unapproved KB article
 
-		try {
-			return getLatestKBArticleByUrlTitle(
-				groupId, urlTitle, WorkflowConstants.STATUS_APPROVED);
+		KBArticle kbArticle = fetchKBArticleByUrlTitle(groupId, urlTitle);
+
+		if (kbArticle == null) {
+			throw new NoSuchArticleException(
+				"No KBArticle exists with the key {groupId=" + groupId +
+					", urlTitle=" + urlTitle + "}");
 		}
-		catch (NoSuchArticleException nsae) {
-			return getLatestKBArticleByUrlTitle(
-				groupId, urlTitle, WorkflowConstants.STATUS_PENDING);
-		}
+
+		return kbArticle;
 	}
 
 	public List<KBArticle> getKBArticles(
@@ -623,26 +677,16 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			long groupId, String urlTitle, int status)
 		throws PortalException {
 
-		List<KBArticle> kbArticles = null;
+		KBArticle latestKBArticle = fetchLatestKBArticleByUrlTitle(
+			groupId, urlTitle, status);
 
-		OrderByComparator orderByComparator = new KBArticleVersionComparator();
-
-		if (status == WorkflowConstants.STATUS_ANY) {
-			kbArticles = kbArticlePersistence.findByG_UT(
-				groupId, urlTitle, 0, 1, orderByComparator);
-		}
-		else {
-			kbArticles = kbArticlePersistence.findByG_UT_ST(
-				groupId, urlTitle, status, 0, 1, orderByComparator);
-		}
-
-		if (kbArticles.isEmpty()) {
+		if (latestKBArticle == null) {
 			throw new NoSuchArticleException(
 				"No KBArticle exists with the key {groupId=" + groupId +
 					", urlTitle=" + urlTitle + ", status=" + status + "}");
 		}
 
-		return kbArticles.get(0);
+		return latestKBArticle;
 	}
 
 	public List<KBArticle> getSectionsKBArticles(

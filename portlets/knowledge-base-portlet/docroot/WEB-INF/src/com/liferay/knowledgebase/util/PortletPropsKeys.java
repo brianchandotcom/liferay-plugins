@@ -51,4 +51,19 @@ public class PortletPropsKeys {
 	public static final String ADMIN_KB_ARTICLE_SECTIONS =
 		"admin.kb.article.sections";
 
+	public static final String MARKDOWN_IMPORTER_ARTICLE_EXTENSIONS =
+		"markdown.importer.article.extensions";
+
+	public static final String MARKDOWN_IMPORTER_ARTICLE_HOME =
+		"markdown.importer.article.home";
+
+	public static final String MARKDOWN_IMPORTER_ARTICLE_INTRO =
+		"markdown.importer.article.intro";
+
+	public static final String MARKDOWN_IMPORTER_IMAGE_FILE_EXTENSIONS =
+		"markdown.importer.image.file.extensions";
+
+	public static final String MARKDOWN_IMPORTER_IMAGE_FOLDER =
+		"markdown.importer.image.folder";
+
 }
