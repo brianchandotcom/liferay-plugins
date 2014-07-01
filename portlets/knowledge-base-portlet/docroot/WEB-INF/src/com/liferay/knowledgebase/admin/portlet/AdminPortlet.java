@@ -15,6 +15,7 @@
 package com.liferay.knowledgebase.admin.portlet;
 
 import com.liferay.knowledgebase.KBArticleContentException;
+import com.liferay.knowledgebase.KBArticleImportException;
 import com.liferay.knowledgebase.KBArticlePriorityException;
 import com.liferay.knowledgebase.KBArticleTitleException;
 import com.liferay.knowledgebase.KBCommentContentException;
@@ -48,9 +49,11 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -205,6 +208,44 @@ public class AdminPortlet extends MVCPortlet {
 
 		KBTemplateServiceUtil.deleteKBTemplates(
 			themeDisplay.getScopeGroupId(), kbTemplateIds);
+	}
+
+	public void importFile(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		UploadPortletRequest uploadPortletRequest =
+			PortalUtil.getUploadPortletRequest(actionRequest);
+
+		String fileName = uploadPortletRequest.getFileName("file");
+
+		if (Validator.isNull(fileName)) {
+			throw new KBArticleImportException("No import filename");
+		}
+
+		InputStream inputStream = null;
+
+		try {
+			inputStream = uploadPortletRequest.getFileAsStream("file");
+
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(
+				AdminPortlet.class.getName(), actionRequest);
+
+			serviceContext.setGuestPermissions(new String[] {ActionKeys.VIEW});
+
+			KBArticleServiceUtil.addKBArticlesMarkdown(
+				themeDisplay.getScopeGroupId(), fileName, inputStream,
+				serviceContext);
+		}
+		catch (KBArticleImportException kbaie) {
+			SessionErrors.add(actionRequest, kbaie.getClass(), kbaie);
+		}
+		finally {
+			StreamUtil.cleanUp(inputStream);
+		}
 	}
 
 	public void moveKBArticle(
