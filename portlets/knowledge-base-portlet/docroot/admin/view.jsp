@@ -30,6 +30,15 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 	<liferay-portlet:renderURLParams varImpl="searchURL" />
 	<aui:input name="resourcePrimKeys" type="hidden" />
 
+	<liferay-ui:error exception="<%= KBArticleImportException.class %>">
+
+		<%
+		KBArticleImportException kbaie = (KBArticleImportException)errorException;
+		%>
+
+		<%= LanguageUtil.format(locale, "an-unexpected-error-occurred-while-importing-articles-x", kbaie.getLocalizedMessage()) %>
+	</liferay-ui:error>
+
 	<liferay-ui:error exception="<%= KBArticlePriorityException.class %>" message='<%= LanguageUtil.format(request, "please-enter-a-priority-that-is-greater-than-x", "0", false) %>' translateMessage="<%= false %>" />
 
 	<aui:fieldset>
@@ -146,6 +155,8 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 				<aui:button-row cssClass="float-container">
 					<c:if test="<%= AdminPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_KB_ARTICLE) %>">
 						<liferay-util:include page="/admin/common/add_article_button.jsp" servletContext="<%= application %>" />
+
+						<liferay-util:include page="/admin/import_articles_button.jsp" servletContext="<%= application %>" />
 					</c:if>
 
 					<c:if test="<%= AdminPermission.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS) && GroupPermissionUtil.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS) %>">
