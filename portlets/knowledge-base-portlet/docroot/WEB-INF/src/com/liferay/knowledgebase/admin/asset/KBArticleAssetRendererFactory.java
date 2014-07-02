@@ -42,6 +42,10 @@ public class KBArticleAssetRendererFactory extends BaseAssetRendererFactory {
 
 	public static final String TYPE = "article";
 
+	public KBArticleAssetRendererFactory() {
+		setLinkable(true);
+	}
+
 	@Override
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException {
