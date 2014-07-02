@@ -74,6 +74,7 @@ String backURL = PortalUtil.getCurrentURL(request);
 							);
 						}
 					},
+					icon: 'icon-plus',
 					id: 'add'
 				},
 				{
@@ -98,6 +99,7 @@ String backURL = PortalUtil.getCurrentURL(request);
 							);
 						}
 					},
+					icon: 'icon-calendar',
 					id: 'manage'
 				}
 			],
@@ -146,6 +148,7 @@ String backURL = PortalUtil.getCurrentURL(request);
 						}
 					);
 				},
+				icon: 'icon-plus',
 				id: 'addEvent'
 			},
 			{
@@ -161,6 +164,7 @@ String backURL = PortalUtil.getCurrentURL(request);
 
 					instance.set('visible', false);
 				},
+				icon: 'icon-remove',
 				id: 'hide'
 			},
 			{
@@ -210,6 +214,7 @@ String backURL = PortalUtil.getCurrentURL(request);
 						}
 					);
 				},
+				icon: 'icon-edit',
 				id: 'settings'
 			},
 			{
@@ -255,6 +260,7 @@ String backURL = PortalUtil.getCurrentURL(request);
 						}
 					);
 				},
+				icon: 'icon-lock',
 				id: 'permissions'
 			},
 			{
@@ -284,13 +290,13 @@ String backURL = PortalUtil.getCurrentURL(request);
 						);
 					}
 				},
+				icon: 'icon-remove',
 				id: 'delete'
 			},
 
 			<c:if test="<%= enableRSS %>">
 				{
 					caption: '<liferay-ui:message key="rss" />',
-					cssClass: 'calendar-subscribe-link',
 					fn: function(event) {
 						var instance = this;
 
@@ -313,6 +319,7 @@ String backURL = PortalUtil.getCurrentURL(request);
 
 						instance.set('visible', false);
 					},
+					icon: 'icon-rss',
 					id: 'subscribe'
 				},
 			</c:if>
