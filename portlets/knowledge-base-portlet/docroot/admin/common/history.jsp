@@ -121,14 +121,10 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 				/>
 
 				<c:if test="<%= (status == WorkflowConstants.STATUS_ANY) || KBArticlePermission.contains(permissionChecker, kbArticle, ActionKeys.UPDATE) %>">
-					<liferay-ui:search-container-column-text
-						cssClass="kb-column-no-wrap"
-						href="<%= rowURL %>"
-						name="status"
-						orderable="<%= true %>"
-						value='<%= curKBArticle.getStatus() + " (" + LanguageUtil.get(request, WorkflowConstants.getStatusLabel(curKBArticle.getStatus())) + ")" %>'
-					/>
-				</c:if>
+				<liferay-ui:search-container-column-status
+					name="status"
+					orderable="<%= true %>"
+				/>
 
 				<liferay-ui:search-container-column-text
 					cssClass="kb-column-no-wrap"

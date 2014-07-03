@@ -91,12 +91,9 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 					property="title"
 				/>
 
-				<liferay-ui:search-container-column-text
-					cssClass="kb-column-no-wrap"
-					href="<%= rowURL %>"
+				<liferay-ui:search-container-column-status
 					name="status"
 					orderable="<%= true %>"
-					value='<%= curKBArticle.getStatus() + " (" + LanguageUtil.get(request, WorkflowConstants.getStatusLabel(curKBArticle.getStatus())) + ")" %>'
 				/>
 
 				<liferay-ui:search-container-column-text
