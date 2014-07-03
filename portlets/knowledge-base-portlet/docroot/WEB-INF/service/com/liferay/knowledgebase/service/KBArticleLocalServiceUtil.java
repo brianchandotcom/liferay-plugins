@@ -511,6 +511,12 @@ public class KBArticleLocalServiceUtil {
 				   .getKBArticlesCount(groupId, parentResourcePrimKey, status);
 	}
 
+	public static com.liferay.knowledgebase.model.KBArticle[] getKBArticlesPrevAndNext(
+		long kbArticleId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getKBArticlesPrevAndNext(kbArticleId);
+	}
+
 	public static java.util.List<com.liferay.knowledgebase.model.KBArticle> getKBArticleVersions(
 		long resourcePrimKey, int status, int start, int end,
 		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
