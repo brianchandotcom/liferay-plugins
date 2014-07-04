@@ -21,10 +21,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.messageboards.model.MBMessage;
-import com.liferay.portlet.messageboards.service.MBMessageLocalService;
-import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
-import com.liferay.portlet.messageboards.service.MBMessageLocalServiceWrapper;
+import com.liferay.portlet.blogs.model.BlogsEntry;
+import com.liferay.portlet.blogs.service.BlogsEntryLocalService;
+import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
+import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceWrapper;
 
 import java.io.Serializable;
 
@@ -32,41 +32,41 @@ import java.util.Map;
 
 /**
  * @author Sergio González
- * @author Iván Zaera
  */
-public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
+public class MentionsBlogsEntryServiceImpl
+	extends BlogsEntryLocalServiceWrapper {
 
-	public MentionsMessageServiceImpl(
-		MBMessageLocalService mbMessageLocalService) {
+	public MentionsBlogsEntryServiceImpl(
+		BlogsEntryLocalService blogsEntryLocalService) {
 
-		super(mbMessageLocalService);
+		super(blogsEntryLocalService);
 	}
 
 	@Override
-	public MBMessage updateStatus(
-			long userId, long messageId, int status,
+	public BlogsEntry updateStatus(
+			long userId, long entryId, int status,
 			ServiceContext serviceContext,
 			Map<String, Serializable> workflowContext)
 		throws PortalException {
 
-		MBMessage message = MBMessageLocalServiceUtil.getMessage(messageId);
+		BlogsEntry entry = BlogsEntryLocalServiceUtil.getEntry(entryId);
 
-		int oldStatus = message.getStatus();
+		int oldStatus = entry.getStatus();
 
-		message = super.updateStatus(
-			userId, messageId, status, serviceContext, workflowContext);
+		entry = super.updateStatus(
+			userId, entryId, status, serviceContext, workflowContext);
 
 		if ((status != WorkflowConstants.STATUS_APPROVED) ||
 			(oldStatus == WorkflowConstants.STATUS_IN_TRASH) ||
 			(oldStatus == WorkflowConstants.STATUS_APPROVED)) {
 
-			return message;
+			return entry;
 		}
 
-		long siteGroupId = PortalUtil.getSiteGroupId(message.getGroupId());
+		long siteGroupId = PortalUtil.getSiteGroupId(entry.getGroupId());
 
 		if (!MentionsUtil.isMentionsEnabled(siteGroupId)) {
-			return message;
+			return entry;
 		}
 
 		String contentURL = (String)serviceContext.getAttribute("contentURL");
@@ -79,11 +79,10 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 		MentionsNotifier mentionsNotifier = new MentionsNotifier();
 
 		mentionsNotifier.notify(
-			message.getUserId(), message.getGroupId(), message.getBody(),
-			message.getModelClassName(), message.getMessageId(),
-			serviceContext);
+			entry.getUserId(), entry.getGroupId(), entry.getContent(),
+			BlogsEntry.class.getName(), entry.getEntryId(), serviceContext);
 
-		return message;
+		return entry;
 	}
 
 }
