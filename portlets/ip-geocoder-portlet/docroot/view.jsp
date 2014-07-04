@@ -18,14 +18,14 @@
 
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
-<%@ page import="com.liferay.ipgeocoder.model.IPInfo" %>
-<%@ page import="com.liferay.ipgeocoder.util.IPGeocoderUtil" %>
+<%@ page import="com.liferay.ip.geocoder.IPInfo" %>
+<%@ page import="com.liferay.ip.geocoder.util.IPGeocoderServiceClient" %>
 <%@ page import="com.liferay.portal.util.PortalUtil" %>
 
 <%
 HttpServletRequest originalRequest = PortalUtil.getOriginalServletRequest(request);
 
-IPInfo ipInfo = IPGeocoderUtil.getIPInfo(originalRequest.getRemoteAddr());
+IPInfo ipInfo = IPGeocoderServiceClient.getIPInfo(originalRequest.getRemoteAddr());
 %>
 
 <c:choose>
