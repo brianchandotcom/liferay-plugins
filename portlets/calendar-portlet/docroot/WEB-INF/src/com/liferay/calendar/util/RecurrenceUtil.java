@@ -98,6 +98,31 @@ public class RecurrenceUtil {
 		return expandedCalendarBookings;
 	}
 
+	public static CalendarBooking getCalendarBookingInstance(
+		CalendarBooking calendarBooking, int instanceIndex) {
+
+		try {
+			CalendarBookingIterator calendarBookingIterator =
+				new CalendarBookingIterator(calendarBooking);
+
+			while (calendarBookingIterator.hasNext()) {
+				CalendarBooking calendarBookingInstance =
+					calendarBookingIterator.next();
+
+				if (calendarBookingInstance.getInstanceIndex() ==
+						instanceIndex) {
+
+					return calendarBookingInstance;
+				}
+			}
+		}
+		catch (ParseException pe) {
+			_log.error("Unable to parse data ", pe);
+		}
+
+		return null;
+	}
+
 	public static int getIndexOfInstance(
 		String recurrence, long recurrenceStartTime, long instanceStartTime) {
 
