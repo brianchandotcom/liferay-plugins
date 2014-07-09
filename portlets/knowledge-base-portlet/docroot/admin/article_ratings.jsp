@@ -24,6 +24,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 	<liferay-ui:ratings
 		className="<%= KBArticle.class.getName() %>"
 		classPK="<%= kbArticle.getResourcePrimKey() %>"
-		numberOfStars="10"
+		numberOfStars="<%= PortletPropsValues.KNOWLEDGE_BASE_RATINGS_NUMBER_OF_STARS %>"
 	/>
 </c:if>
