@@ -174,7 +174,7 @@ public class CalendarUtil {
 			orderByAsc = true;
 		}
 
-		OrderByComparator<Calendar> orderByComparator = 
+		OrderByComparator<Calendar> orderByComparator =
 			new CalendarNameComparator(orderByAsc);
 
 		return orderByComparator;

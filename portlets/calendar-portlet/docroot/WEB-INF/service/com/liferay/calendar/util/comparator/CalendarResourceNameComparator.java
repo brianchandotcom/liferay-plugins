@@ -21,7 +21,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
  * @author Eduardo Lundgren
  * @author Fabio Pezzutto
  */
-public class CalendarResourceNameComparator 
+public class CalendarResourceNameComparator
 	extends OrderByComparator<CalendarResource> {
 
 	public static final String ORDER_BY_ASC =
@@ -42,7 +42,7 @@ public class CalendarResourceNameComparator
 
 	@Override
 	public int compare(
-		CalendarResource calendarResource1, 
+		CalendarResource calendarResource1,
 		CalendarResource calendarResource2) {
 
 		String name1 = calendarResource1.getName();
