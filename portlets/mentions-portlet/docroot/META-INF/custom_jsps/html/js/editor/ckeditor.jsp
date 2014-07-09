@@ -20,27 +20,34 @@
 	<liferay-portlet:resourceURL portletName="1_WAR_mentionsportlet" var="autoCompleteUserURL" />
 
 	<aui:script>
-		CKEDITOR.on(
-			'instanceCreated',
-			function(event) {
-				var ckEditor = event.editor;
+		var editor = CKEDITOR.instances['<%= name %>'];
 
-				ckEditor.config.autocomplete = {
-					requestTemplate: function(query) {
-						return 'query=' + query;
-					},
-					trigger: [
-						{
-							resultFilters: function(query, results) { return results; },
-							resultTextLocator: 'screenName',
-							term: '@',
-							tplReplace: '<a href="{profileURL}">@{screenName}</a>',
-							tplResults: '<div class="taglib-user-display display-style-3" style="padding:5px;"><span><span class="user-profile-image" style="background-image: url(\'{portraitURL}\'); background-size: 32px 32px; height: 32px; width: 32px;margin-right:5px;"></span><span class="user-name">{fullName}</span><span class="user-details"> (@{screenName})</span></span></div>',
-							source: '<%= autoCompleteUserURL.toString() %>'
-						}
-					]
-				};
-			}
-		);
+		var configAutocomplete = function(editor) {
+			editor.config.autocomplete = {
+				requestTemplate: 'query={query}',
+				trigger: [
+					{
+						resultFilters: function(query, results) { return results; },
+						resultTextLocator: 'screenName',
+						source: '<%= autoCompleteUserURL.toString() + "&" + PortalUtil.getPortletNamespace("1_WAR_mentionsportlet") %>',
+						term: '@',
+						tplReplace: '<a href="{profileURL}">@{screenName}</a>',
+						tplResults: '<div class="display-style-3 taglib-user-display" style="padding:5px;"><span><span class="user-profile-image" style="background-image: url(\'{portraitURL}\'); background-size: 32px 32px; height: 32px; margin-right:5px; width: 32px;"></span><span class="user-name">{fullName}</span><span class="user-details"> (@{screenName})</span></span></div>'
+					}
+				]
+			};
+		}
+
+		if (editor) {
+			configAutocomplete(editor);
+		}
+		else {
+			CKEDITOR.once(
+				'instanceCreated',
+				function(event) {
+					configAutocomplete(event.editor);
+				}
+			);
+		}
 	</aui:script>
 </c:if>
