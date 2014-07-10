@@ -111,6 +111,15 @@ public class CalendarBookingLocalServiceWrapper
 	@Override
 	public void deleteCalendarBookingInstance(
 		com.liferay.calendar.model.CalendarBooking calendarBooking,
+		int instanceIndex, boolean allFollowing)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_calendarBookingLocalService.deleteCalendarBookingInstance(calendarBooking,
+			instanceIndex, allFollowing);
+	}
+
+	@Override
+	public void deleteCalendarBookingInstance(
+		com.liferay.calendar.model.CalendarBooking calendarBooking,
 		long startTime, boolean allFollowing)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_calendarBookingLocalService.deleteCalendarBookingInstance(calendarBooking,
@@ -586,6 +595,10 @@ public class CalendarBookingLocalServiceWrapper
 			serviceContext);
 	}
 
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link CalendarBookingLocalService#updateCalendarBookingInstance(long, long, int, long, long[], Map, Map, String, long, long, boolean, String, boolean, long, String, long, String, int, ServiceContext)}
+	*/
+	@Deprecated
 	@Override
 	public com.liferay.calendar.model.CalendarBooking updateCalendarBookingInstance(
 		long userId, long calendarBookingId, long calendarId,
@@ -605,6 +618,10 @@ public class CalendarBookingLocalServiceWrapper
 			secondReminderType, status, serviceContext);
 	}
 
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link CalendarBookingLocalService#updateCalendarBookingInstance(long, long, long, Map, Map, String, long, long, boolean, String, boolean, long, String, long, String, int, ServiceContext)}
+	*/
+	@Deprecated
 	@Override
 	public com.liferay.calendar.model.CalendarBooking updateCalendarBookingInstance(
 		long userId, long calendarBookingId, long calendarId,
@@ -620,6 +637,44 @@ public class CalendarBookingLocalServiceWrapper
 			calendarBookingId, calendarId, titleMap, descriptionMap, location,
 			startTime, endTime, allDay, recurrence, allFollowing,
 			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
+	}
+
+	@Override
+	public com.liferay.calendar.model.CalendarBooking updateCalendarBookingInstance(
+		long userId, long calendarBookingId, int instanceIndex,
+		long calendarId, long[] childCalendarIds,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String location, long startTime, long endTime,
+		boolean allDay, java.lang.String recurrence, boolean allFollowing,
+		long firstReminder, java.lang.String firstReminderType,
+		long secondReminder, java.lang.String secondReminderType, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _calendarBookingLocalService.updateCalendarBookingInstance(userId,
+			calendarBookingId, instanceIndex, calendarId, childCalendarIds,
+			titleMap, descriptionMap, location, startTime, endTime, allDay,
+			recurrence, allFollowing, firstReminder, firstReminderType,
+			secondReminder, secondReminderType, status, serviceContext);
+	}
+
+	@Override
+	public com.liferay.calendar.model.CalendarBooking updateCalendarBookingInstance(
+		long userId, long calendarBookingId, int instanceIndex,
+		long calendarId,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String location, long startTime, long endTime,
+		boolean allDay, java.lang.String recurrence, boolean allFollowing,
+		long firstReminder, java.lang.String firstReminderType,
+		long secondReminder, java.lang.String secondReminderType, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _calendarBookingLocalService.updateCalendarBookingInstance(userId,
+			calendarBookingId, instanceIndex, calendarId, titleMap,
+			descriptionMap, location, startTime, endTime, allDay, recurrence,
+			allFollowing, firstReminder, firstReminderType, secondReminder,
 			secondReminderType, status, serviceContext);
 	}
 
