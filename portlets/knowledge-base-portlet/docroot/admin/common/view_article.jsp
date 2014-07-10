@@ -28,29 +28,36 @@ if (enableKBArticleViewCountIncrement && !kbArticle.isDraft()) {
 }
 %>
 
-<liferay-util:include page="/admin/article_breadcrumbs.jsp" servletContext="<%= application %>" />
-
 <div class="float-container kb-entity-header">
-	<div class="kb-title">
-		<%= HtmlUtil.escape(kbArticle.getTitle()) %>
-	</div>
+	<h1 class="kb-title">
+		<%= kbArticle.getTitle() %>
+	</h1>
+
+	<c:if test="<%= !kbArticle.isApproved() %>">
+		<div class="kb-article-status">
+			<aui:model-context bean="<%= kbArticle %>" model="<%= KBArticle.class %>" />
+
+			<aui:workflow-status status="<%= kbArticle.getStatus() %>" />
+		</div>
+	</c:if>
 
 	<div class="kb-tools">
 		<liferay-util:include page="/admin/article_tools.jsp" servletContext="<%= application %>" />
 	</div>
 </div>
 
+<%
+request.setAttribute("article_icons.jsp-kb_article", kbArticle);
+%>
+
+<liferay-util:include page="/admin/article_icons.jsp" servletContext="<%= application %>" />
+
 <div class="kb-entity-body">
-
-	<%
-	request.setAttribute("article_icons.jsp-kb_article", kbArticle);
-	%>
-
-	<liferay-util:include page="/admin/article_icons.jsp" servletContext="<%= application %>" />
-
 	<div class="kb-article-body" id="<portlet:namespace /><%= kbArticle.getResourcePrimKey() %>">
 		<%= kbArticle.getContent() %>
 	</div>
+
+	<liferay-util:include page="/admin/article_child.jsp" servletContext="<%= application %>" />
 
 	<liferay-util:include page="/admin/article_siblings.jsp" servletContext="<%= application %>" />
 
@@ -64,9 +71,7 @@ if (enableKBArticleViewCountIncrement && !kbArticle.isDraft()) {
 
 	<liferay-util:include page="/admin/article_ratings.jsp" servletContext="<%= application %>" />
 
-	<liferay-util:include page="/admin/article_social_bookmarks.jsp" servletContext="<%= application %>" />
-
 	<liferay-util:include page="/admin/article_comments.jsp" servletContext="<%= application %>" />
 
-	<liferay-util:include page="/admin/article_child.jsp" servletContext="<%= application %>" />
+	<liferay-util:include page="/admin/article_social_bookmarks.jsp" servletContext="<%= application %>" />
 </div>
