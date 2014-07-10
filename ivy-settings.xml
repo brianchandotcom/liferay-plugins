@@ -8,10 +8,16 @@
 			<artifact pattern="${user.home}/.m2/repository/[organisation]/[module]/[revision]/[artifact]-[revision](-[classifier]).[ext]" />
 		</filesystem>
 
+		<ibiblio m2compatible="true" name="arquillian-snapshots" root="http://repository-arquillian.forge.cloudbees.com/snapshot/" />
+		<ibiblio m2compatible="true" name="shrinkwrap-snapshots" root="http://repository-shrinkwrap.forge.cloudbees.com/snapshot/" />
+
 		<chain dual="true" name="default">
 			<resolver ref="local-m2" />
 
 			<resolver ref="liferay-public" />
+
+			<resolver ref="arquillian-snapshots" />
+			<resolver ref="shrinkwrap-snapshots" />
 		</chain>
 	</resolvers>
 </ivysettings>
