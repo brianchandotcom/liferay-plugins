@@ -16,7 +16,10 @@ package com.liferay.mentions.hook.service.impl;
 
 import com.liferay.mentions.util.MentionsNotifier;
 import com.liferay.mentions.util.MentionsUtil;
+import com.liferay.mentions.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.parsers.bbcode.BBCodeTranslatorUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.ServiceContext;
@@ -25,6 +28,7 @@ import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalService;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceWrapper;
+import com.liferay.util.ContentUtil;
 
 import java.io.Serializable;
 
@@ -78,9 +82,29 @@ public class MentionsMessageServiceImpl extends MBMessageLocalServiceWrapper {
 				"contentURL", workflowContext.get("url"));
 		}
 
+		String content = message.getBody();
+
+		if (message.isFormatBBCode()) {
+			content = BBCodeTranslatorUtil.getHTML(content);
+		}
+
+		content = HtmlUtil.extractText(content);
+
+		String subject = ContentUtil.get(
+			PortletPropsValues.COMMENT_MENTION_EMAIL_SUBJECT);
+		String body = ContentUtil.get(
+			PortletPropsValues.COMMENT_MENTION_EMAIL_BODY);
+
+		if (!message.isDiscussion()) {
+			subject = ContentUtil.get(
+				PortletPropsValues.ASSET_ENTRY_MENTION_EMAIL_SUBJECT);
+			body = ContentUtil.get(
+				PortletPropsValues.ASSET_ENTRY_MENTION_EMAIL_BODY);
+		}
+
 		mentionsNotifier.notify(
-			message.getUserId(), message.getGroupId(), message.getBody(),
-			message.getModelClassName(), message.getMessageId(),
+			message.getUserId(), message.getGroupId(), content,
+			message.getModelClassName(), message.getMessageId(), subject, body,
 			serviceContext);
 
 		return message;
