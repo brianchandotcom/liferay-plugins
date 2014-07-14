@@ -71,6 +71,7 @@ import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Phone;
+import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
@@ -83,6 +84,7 @@ import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.comparator.UserLastNameComparator;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.announcements.service.AnnouncementsDeliveryLocalServiceUtil;
@@ -371,10 +373,18 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				continue;
 			}
 
+			String portletId = PortalUtil.getPortletId(actionRequest);
+			String rootPortletId = PortletConstants.getRootPortletId(portletId);
+
+			JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+
+			extraDataJSONObject.put(WebKeys.PORTLET_ID, rootPortletId);
+
 			SocialRequest socialRequest =
 				SocialRequestLocalServiceUtil.addRequest(
 					themeDisplay.getUserId(), 0, User.class.getName(),
-					themeDisplay.getUserId(), type, StringPool.BLANK, userId);
+					themeDisplay.getUserId(), type,
+					extraDataJSONObject.toString(), userId);
 
 			sendNotificationEvent(socialRequest);
 		}

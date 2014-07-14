@@ -21,12 +21,12 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Organization;
+import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
@@ -39,6 +39,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.UserPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.portlet.social.service.SocialRelationLocalServiceUtil;
@@ -70,7 +71,7 @@ public class SummaryPortlet extends MVCPortlet {
 
 		User user = UserLocalServiceUtil.getUserById(group.getClassPK());
 
-		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+		JSONObject extraDataJSONObject = getExtraDataJSONObject(actionRequest);
 
 		String addFriendMessage = ParamUtil.getString(
 			actionRequest, "addFriendMessage");
@@ -113,44 +114,46 @@ public class SummaryPortlet extends MVCPortlet {
 		if (group.getType() == GroupConstants.TYPE_SITE_OPEN) {
 			UserLocalServiceUtil.addGroupUsers(
 				group.getGroupId(), new long[] {themeDisplay.getUserId()});
+
+			return;
 		}
-		else {
-			Role siteAdminRole = RoleLocalServiceUtil.getRole(
-				themeDisplay.getCompanyId(), RoleConstants.SITE_ADMINISTRATOR);
 
-			LinkedHashMap<String, Object> userParams =
-				new LinkedHashMap<String, Object>();
+		Role siteAdminRole = RoleLocalServiceUtil.getRole(
+			themeDisplay.getCompanyId(), RoleConstants.SITE_ADMINISTRATOR);
 
-			userParams.put(
-				"userGroupRole",
-				new Long[] {group.getGroupId(), siteAdminRole.getRoleId()});
+		LinkedHashMap<String, Object> userParams =
+			new LinkedHashMap<String, Object>();
 
-			List<User> users = UserLocalServiceUtil.search(
+		userParams.put(
+			"userGroupRole",
+			new Long[] {group.getGroupId(), siteAdminRole.getRoleId()});
+
+		List<User> users = UserLocalServiceUtil.search(
+			themeDisplay.getCompanyId(), null,
+			WorkflowConstants.STATUS_APPROVED, userParams, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, (OrderByComparator)null);
+
+		if (users.isEmpty()) {
+			Role adminRole = RoleLocalServiceUtil.getRole(
+				themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
+
+			userParams.clear();
+
+			userParams.put("usersRoles", adminRole.getRoleId());
+
+			users = UserLocalServiceUtil.search(
 				themeDisplay.getCompanyId(), null,
 				WorkflowConstants.STATUS_APPROVED, userParams,
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, (OrderByComparator)null);
+		}
 
-			if (users.isEmpty()) {
-				Role adminRole = RoleLocalServiceUtil.getRole(
-					themeDisplay.getCompanyId(), RoleConstants.ADMINISTRATOR);
+		JSONObject extraDataJSONObject = getExtraDataJSONObject(actionRequest);
 
-				userParams.clear();
-
-				userParams.put("usersRoles", adminRole.getRoleId());
-
-				users = UserLocalServiceUtil.search(
-					themeDisplay.getCompanyId(), null,
-					WorkflowConstants.STATUS_APPROVED, userParams,
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-					(OrderByComparator)null);
-			}
-
-			for (User user : users) {
-				SocialRequestLocalServiceUtil.addRequest(
-					themeDisplay.getUserId(), 0, Group.class.getName(),
-					group.getGroupId(), MembersRequestKeys.ADD_MEMBER,
-					StringPool.BLANK, user.getUserId());
-			}
+		for (User user : users) {
+			SocialRequestLocalServiceUtil.addRequest(
+				themeDisplay.getUserId(), 0, Group.class.getName(),
+				group.getGroupId(), MembersRequestKeys.ADD_MEMBER,
+				extraDataJSONObject.toString(), user.getUserId());
 		}
 	}
 
@@ -195,11 +198,13 @@ public class SummaryPortlet extends MVCPortlet {
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, (OrderByComparator)null);
 		}
 
+		JSONObject extraDataJSONObject = getExtraDataJSONObject(actionRequest);
+
 		for (User user : users) {
 			SocialRequestLocalServiceUtil.addRequest(
 				themeDisplay.getUserId(), 0, Organization.class.getName(),
 				organization.getOrganizationId(), MembersRequestKeys.ADD_MEMBER,
-				StringPool.BLANK, user.getUserId());
+				extraDataJSONObject.toString(), user.getUserId());
 		}
 	}
 
@@ -271,6 +276,17 @@ public class SummaryPortlet extends MVCPortlet {
 		ExpandoValueLocalServiceUtil.addValue(
 			themeDisplay.getCompanyId(), User.class.getName(), "SN", "aboutMe",
 			user.getUserId(), aboutMe);
+	}
+
+	protected JSONObject getExtraDataJSONObject(ActionRequest actionRequest) {
+		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
+
+		String portletId = PortalUtil.getPortletId(actionRequest);
+
+		extraDataJSONObject.put(
+			WebKeys.PORTLET_ID, PortletConstants.getRootPortletId(portletId));
+
+		return extraDataJSONObject;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(SummaryPortlet.class);
