@@ -873,6 +873,10 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		return search(null, keywords, sorts);
 	}
 
+	protected String serveIOResponse(ActionRequest actionRequest) {
+		return null;
+	}
+
 	protected void setAlloyServiceInvokerClass(Class<?> clazz) {
 		alloyServiceInvoker = new AlloyServiceInvoker(clazz.getName());
 	}
