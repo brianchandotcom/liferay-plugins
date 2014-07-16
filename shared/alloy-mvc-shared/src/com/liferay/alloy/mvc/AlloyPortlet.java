@@ -16,6 +16,7 @@ package com.liferay.alloy.mvc;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
@@ -164,7 +165,7 @@ public class AlloyPortlet extends GenericPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		String json = null;
+		String jsonString = null;
 
 		String controller = ParamUtil.getString(actionRequest, "controller");
 
@@ -178,23 +179,29 @@ public class AlloyPortlet extends GenericPortlet {
 		String action = ParamUtil.getString(actionRequest, "action");
 
 		try {
-			if (action.equals("dynamicQuery")) {
-				json = serveDynamicQuery(
+			if (action.equals("custom")) {
+				jsonString = baseAlloyControllerImpl.serveIOResponse(
+					actionRequest);
+			}
+			else if (action.equals("dynamicQuery")) {
+				jsonString = serveDynamicQuery(
 					baseAlloyControllerImpl, actionRequest);
 			}
-			else if (action.equals("custom")) {
-				json = baseAlloyControllerImpl.serveIOResponse(actionRequest);
-			}
 			else if (action.equals("search")) {
-				json = serveSearch(baseAlloyControllerImpl, actionRequest);
+				jsonString = serveSearch(
+					baseAlloyControllerImpl, actionRequest);
 			}
 		}
 		catch (Exception e) {
-			json = "{ 'error': 'An unexpected exception occurred.' }";
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+			jsonObject.put("error", "An unexpected exception occurred.");
+
+			jsonString = jsonObject.toString();
 		}
 
-		if (json != null) {
-			writeJSON(actionRequest, actionResponse, json);
+		if (Validator.isNotNull(jsonString)) {
+			writeJSON(actionRequest, actionResponse, jsonString);
 		}
 	}
 
