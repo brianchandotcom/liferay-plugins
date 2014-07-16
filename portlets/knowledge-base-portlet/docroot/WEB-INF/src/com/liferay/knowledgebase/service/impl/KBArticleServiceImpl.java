@@ -55,7 +55,6 @@ import com.sun.syndication.feed.synd.SyndLink;
 import com.sun.syndication.feed.synd.SyndLinkImpl;
 import com.sun.syndication.io.FeedException;
 
-import java.io.File;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -71,24 +70,11 @@ import java.util.Map;
 public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 
 	@Override
-	public void addAttachment(
-			String portletId, long resourcePrimKey, String dirName,
-			String shortFileName, InputStream inputStream,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		checkAttachmentPermissions(
-			serviceContext.getScopeGroupId(), portletId, resourcePrimKey);
-
-		kbArticleLocalService.addAttachment(
-			dirName, shortFileName, inputStream, serviceContext);
-	}
-
-	@Override
 	public KBArticle addKBArticle(
 			String portletId, long parentResourcePrimKey, String title,
 			String urlTitle, String content, String description,
-			String[] sections, String dirName, ServiceContext serviceContext)
+			String[] sections, String[] selectedFileNames,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		if (portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
@@ -104,7 +90,7 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 
 		return kbArticleLocalService.addKBArticle(
 			getUserId(), parentResourcePrimKey, title, urlTitle, content,
-			description, sections, dirName, serviceContext);
+			description, sections, selectedFileNames, serviceContext);
 	}
 
 	@Override
@@ -121,29 +107,17 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	}
 
 	@Override
-	public void deleteAttachment(
-			long companyId, long groupId, String portletId,
-			long resourcePrimKey, String fileName)
+	public void addTempAttachment(
+			long groupId, long resourcePrimKey, String fileName,
+			String tempFolderName, InputStream inputStream, String mimeType)
 		throws PortalException {
 
-		if ((resourcePrimKey <= 0) &&
-			portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
+		checkAttachmentPermissions(
+			groupId, PortletKeys.KNOWLEDGE_BASE_ADMIN, resourcePrimKey);
 
-			AdminPermission.check(
-				getPermissionChecker(), groupId, ActionKeys.ADD_KB_ARTICLE);
-		}
-		else if ((resourcePrimKey <= 0) &&
-				 portletId.equals(PortletKeys.KNOWLEDGE_BASE_DISPLAY)) {
-
-			DisplayPermission.check(
-				getPermissionChecker(), groupId, ActionKeys.ADD_KB_ARTICLE);
-		}
-		else {
-			KBArticlePermission.check(
-				getPermissionChecker(), resourcePrimKey, ActionKeys.UPDATE);
-		}
-
-		kbArticleLocalService.deleteAttachment(companyId, fileName);
+		kbArticleLocalService.addTempAttachment(
+			groupId, getUserId(), fileName, tempFolderName, inputStream,
+			mimeType);
 	}
 
 	@Override
@@ -167,14 +141,16 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	}
 
 	@Override
-	public File getAttachment(
-			long companyId, long groupId, String portletId,
-			long resourcePrimKey, String fileName)
+	public void deleteTempAttachment(
+			long groupId, long resourcePrimKey, String fileName,
+			String tempFolderName)
 		throws PortalException {
 
-		checkAttachmentPermissions(groupId, portletId, resourcePrimKey);
+		checkAttachmentPermissions(
+			groupId, PortletKeys.KNOWLEDGE_BASE_ADMIN, resourcePrimKey);
 
-		return kbArticleLocalService.getAttachment(companyId, fileName);
+		kbArticleLocalService.deleteTempAttachment(
+			groupId, getUserId(), fileName, tempFolderName);
 	}
 
 	@Override
@@ -629,6 +605,14 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	}
 
 	@Override
+	public String[] getTempAttachmentNames(long groupId, String tempFolderName)
+		throws PortalException {
+
+		return kbArticleLocalService.getTempAttachmentNames(
+			groupId, getUserId(), tempFolderName);
+	}
+
+	@Override
 	public void moveKBArticle(
 			long resourcePrimKey, long parentResourcePrimKey, double priority)
 		throws PortalException {
@@ -696,39 +680,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	}
 
 	@Override
-	public String updateAttachments(
-			String portletId, long resourcePrimKey, String dirName,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		if ((resourcePrimKey <= 0) &&
-			portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
-
-			AdminPermission.check(
-				getPermissionChecker(), serviceContext.getScopeGroupId(),
-				ActionKeys.ADD_KB_ARTICLE);
-		}
-		else if ((resourcePrimKey <= 0) &&
-				 portletId.equals(PortletKeys.KNOWLEDGE_BASE_DISPLAY)) {
-
-			DisplayPermission.check(
-				getPermissionChecker(), serviceContext.getScopeGroupId(),
-				ActionKeys.ADD_KB_ARTICLE);
-		}
-		else {
-			KBArticlePermission.check(
-				getPermissionChecker(), resourcePrimKey, ActionKeys.UPDATE);
-		}
-
-		return kbArticleLocalService.updateAttachments(
-			resourcePrimKey, dirName, serviceContext);
-	}
-
-	@Override
 	public KBArticle updateKBArticle(
 			long resourcePrimKey, String title, String content,
-			String description, String[] sections, String dirName,
-			ServiceContext serviceContext)
+			String description, String[] sections, String[] selectedFileNames,
+			long[] removeFileEntryIds, ServiceContext serviceContext)
 		throws PortalException {
 
 		KBArticlePermission.check(
@@ -736,7 +691,7 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 
 		return kbArticleLocalService.updateKBArticle(
 			getUserId(), resourcePrimKey, title, content, description, sections,
-			dirName, serviceContext);
+			selectedFileNames, removeFileEntryIds, serviceContext);
 	}
 
 	@Override

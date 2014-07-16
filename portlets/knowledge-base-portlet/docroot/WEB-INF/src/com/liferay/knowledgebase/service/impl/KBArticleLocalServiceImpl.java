@@ -19,11 +19,13 @@ import com.liferay.knowledgebase.KBArticlePriorityException;
 import com.liferay.knowledgebase.KBArticleTitleException;
 import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.admin.importer.KBArticleImporter;
+import com.liferay.knowledgebase.admin.portlet.AdminPortlet;
 import com.liferay.knowledgebase.admin.social.AdminActivityKeys;
 import com.liferay.knowledgebase.admin.util.AdminSubscriptionSender;
 import com.liferay.knowledgebase.admin.util.AdminUtil;
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.KBArticleConstants;
+import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.base.KBArticleLocalServiceBaseImpl;
 import com.liferay.knowledgebase.util.KnowledgeBaseUtil;
 import com.liferay.knowledgebase.util.PortletKeys;
@@ -42,7 +44,6 @@ import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
@@ -55,37 +56,27 @@ import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.systemevent.SystemEventHierarchyEntryThreadLocal;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.util.StreamUtil;
-import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.TempFileUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
-import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.SystemEventConstants;
-import com.liferay.portal.model.Ticket;
 import com.liferay.portal.model.User;
 import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.SubscriptionSender;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetLink;
 import com.liferay.portlet.asset.model.AssetLinkConstants;
-import com.liferay.portlet.documentlibrary.DuplicateDirectoryException;
-import com.liferay.portlet.documentlibrary.FileNameException;
-import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
-import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 
-import java.io.File;
 import java.io.InputStream;
 
 import java.util.ArrayList;
@@ -105,38 +96,11 @@ import javax.portlet.PortletPreferences;
 public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 	@Override
-	public void addAttachment(
-			String dirName, String shortFileName, InputStream inputStream,
-			ServiceContext serviceContext)
-		throws PortalException {
-
-		if (!isValidDirName(dirName)) {
-			throw new FileNameException();
-		}
-
-		if (!isValidFileName(shortFileName)) {
-			throw new FileNameException();
-		}
-
-		if (!DLStoreUtil.hasDirectory(
-				serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
-				dirName)) {
-
-			DLStoreUtil.addDirectory(
-				serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
-				dirName);
-		}
-
-		DLStoreUtil.addFile(
-			serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
-			dirName + StringPool.SLASH + shortFileName, inputStream);
-	}
-
-	@Override
 	public KBArticle addKBArticle(
 			long userId, long parentResourcePrimKey, String title,
 			String urlTitle, String content, String description,
-			String[] sections, String dirName, ServiceContext serviceContext)
+			String[] sections, String[] selectedFileNames,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		// KB article
@@ -207,7 +171,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		// Attachments
 
-		addKBArticleAttachments(userId, kbArticle, dirName, serviceContext);
+		addKBArticleAttachments(userId, kbArticle, selectedFileNames);
 
 		// Workflow
 
@@ -281,17 +245,13 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	@Override
-	public void checkAttachments() throws PortalException {
-		for (long companyId : PortalUtil.getCompanyIds()) {
-			checkAttachments(companyId);
-		}
-	}
-
-	@Override
-	public void deleteAttachment(long companyId, String fileName)
+	public void addTempAttachment(
+			long groupId, long userId, String fileName, String tempFolderName,
+			InputStream inputStream, String mimeType)
 		throws PortalException {
 
-		DLStoreUtil.deleteFile(companyId, CompanyConstants.SYSTEM, fileName);
+		TempFileUtil.addTempFile(
+			groupId, userId, fileName, tempFolderName, inputStream, mimeType);
 	}
 
 	@Override
@@ -377,7 +337,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		// Attachments
 
-		deleteKBArticleAttachments(kbArticle);
+		PortletFileRepositoryUtil.deletePortletFolder(
+			kbArticle.getAttachmentsFolderId());
 
 		// Subscriptions
 
@@ -412,6 +373,14 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		for (KBArticle kbArticle : kbArticles) {
 			kbArticleLocalService.deleteKBArticle(kbArticle);
 		}
+	}
+
+	@Override
+	public void deleteTempAttachment(
+			long groupId, long userId, String fileName, String tempFolderName)
+		throws PortalException {
+
+		TempFileUtil.deleteTempFile(groupId, userId, fileName, tempFolderName);
 	}
 
 	@Override
@@ -470,14 +439,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		return getAllDescendantKBArticles(
 			resourcePrimKey, status, orderByComparator, false);
-	}
-
-	@Override
-	public File getAttachment(long companyId, String fileName)
-		throws PortalException {
-
-		return DLStoreUtil.getFile(
-			companyId, CompanyConstants.SYSTEM, fileName);
 	}
 
 	@Override
@@ -818,6 +779,15 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	@Override
+	public String[] getTempAttachmentNames(
+			long groupId, long userId, String tempFolderName)
+		throws PortalException {
+
+		return TempFileUtil.getTempFileEntryNames(
+			groupId, userId, tempFolderName);
+	}
+
+	@Override
 	public void moveKBArticle(
 			long userId, long resourcePrimKey, long parentResourcePrimKey,
 			double priority)
@@ -903,60 +873,10 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	@Override
-	public String updateAttachments(
-			long resourcePrimKey, String dirName, ServiceContext serviceContext)
-		throws PortalException {
-
-		if (isValidDirName(dirName)) {
-			return dirName;
-		}
-
-		Ticket ticket = ticketLocalService.addTicket(
-			serviceContext.getCompanyId(), User.class.getName(),
-			serviceContext.getUserId(), 0, null, getTicketExpirationDate(),
-			serviceContext);
-
-		StringBundler sb = new StringBundler(5);
-
-		sb.append(_TEMP_DIR_NAME_PREFIX);
-		sb.append(StringPool.SLASH);
-		sb.append(counterLocalService.increment());
-		sb.append(StringPool.SLASH);
-		sb.append(ticket.getKey());
-
-		dirName = sb.toString();
-
-		ticket.setExtraInfo(dirName);
-
-		ticketLocalService.updateTicket(ticket);
-
-		DLStoreUtil.addDirectory(
-			serviceContext.getCompanyId(), CompanyConstants.SYSTEM, dirName);
-
-		if (resourcePrimKey <= 0) {
-			return dirName;
-		}
-
-		KBArticle kbArticle = getLatestKBArticle(
-			resourcePrimKey, WorkflowConstants.STATUS_ANY);
-
-		List<FileEntry> attachmentsFileEntries =
-			kbArticle.getAttachmentsFileEntries();
-
-		for (FileEntry fileEntry : attachmentsFileEntries) {
-			addAttachment(
-				dirName, fileEntry.getTitle(), fileEntry.getContentStream(),
-				serviceContext);
-		}
-
-		return dirName;
-	}
-
-	@Override
 	public KBArticle updateKBArticle(
 			long userId, long resourcePrimKey, String title, String content,
-			String description, String[] sections, String dirName,
-			ServiceContext serviceContext)
+			String description, String[] sections, String[] selectedFileNames,
+			long[] removeFileEntryIds, ServiceContext serviceContext)
 		throws PortalException {
 
 		// KB article
@@ -1040,8 +960,9 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		// Attachments
 
-		updateKBArticleAttachments(
-			userId, kbArticle, oldVersion, dirName, serviceContext);
+		addKBArticleAttachments(userId, kbArticle, selectedFileNames);
+
+		removeKBArticleAttachments(removeFileEntryIds);
 
 		// Workflow
 
@@ -1218,19 +1139,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		indexer.reindex(kbArticle);
 
-		// Attachments
-
-		if (!kbArticle.isFirstVersion()) {
-			deleteKBArticleAttachments(kbArticle, resourcePrimKey);
-		}
-
-		String dirName =
-			KBArticleConstants.DIR_NAME_PREFIX + kbArticle.getKbArticleId();
-
-		addKBArticleAttachments(userId, kbArticle, dirName, serviceContext);
-
-		deleteKBArticleAttachments(kbArticle, kbArticle.getKbArticleId());
-
 		// Subscriptions
 
 		notifySubscribers(kbArticle, serviceContext);
@@ -1262,72 +1170,55 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticlePersistence.update(kbArticle);
 	}
 
-	protected void addKBArticleAttachments(
-			long userId, KBArticle kbArticle, String dirName,
-			ServiceContext serviceContext)
+	protected void addAttachment(
+			long userId, long resourcePrimKey, String fileName,
+			InputStream inputStream, String mimeType)
 		throws PortalException {
 
-		try {
-			DLStoreUtil.addDirectory(
-				serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
-				kbArticle.getAttachmentsDirName());
-		}
-		catch (DuplicateDirectoryException dde) {
-			_log.error("Directory already exists for " + dde.getMessage());
-		}
+		KBArticle kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
+			resourcePrimKey, WorkflowConstants.STATUS_ANY);
 
-		if (Validator.isNull(dirName) ||
-			!DLStoreUtil.hasDirectory(
-				serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
-				dirName)) {
+		PortletFileRepositoryUtil.addPortletFileEntry(
+			kbArticle.getGroupId(), userId, KBArticle.class.getName(),
+			kbArticle.getClassPK(), PortletKeys.KNOWLEDGE_BASE_ARTICLE,
+			kbArticle.getAttachmentsFolderId(), inputStream, fileName, mimeType,
+			false);
+	}
 
+	protected void addKBArticleAttachment(
+			long userId, long groupId, long resourcePrimKey,
+			String selectedFileName)
+		throws PortalException {
+
+		FileEntry tempFileEntry = null;
+
+		tempFileEntry = TempFileUtil.getTempFile(
+			groupId, userId, selectedFileName, _TEMP_FOLDER_NAME);
+
+		InputStream inputStream = tempFileEntry.getContentStream();
+		String mimeType = tempFileEntry.getMimeType();
+
+		addAttachment(
+			userId, resourcePrimKey, selectedFileName, inputStream,
+			mimeType);
+
+		if (tempFileEntry != null) {
+			TempFileUtil.deleteTempFile(tempFileEntry.getFileEntryId());
+		}
+	}
+
+	protected void addKBArticleAttachments(
+			long userId, KBArticle kbArticle, String[] selectedFileNames)
+		throws PortalException {
+
+		if (ArrayUtil.isEmpty(selectedFileNames)) {
 			return;
 		}
 
-		String[] fileNames = DLStoreUtil.getFileNames(
-			serviceContext.getCompanyId(), CompanyConstants.SYSTEM, dirName);
-
-		if (fileNames.length > 0) {
-			PortletFileRepositoryUtil.deletePortletFileEntries(
-				serviceContext.getScopeGroupId(),
-				kbArticle.getAttachmentsFolderId());
-		}
-
-		for (String fileName : fileNames) {
-			InputStream inputStream = null;
-
-			try {
-				byte[] bytes = DLStoreUtil.getFileAsBytes(
-					serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
-					fileName);
-
-				inputStream = new UnsyncByteArrayInputStream(bytes);
-
-				String mimeType = KnowledgeBaseUtil.getMimeType(
-					bytes, fileName);
-				String shortFileName = FileUtil.getShortFileName(fileName);
-
-				PortletFileRepositoryUtil.addPortletFileEntry(
-					serviceContext.getScopeGroupId(), userId,
-					KBArticle.class.getName(), kbArticle.getClassPK(),
-					PortletKeys.KNOWLEDGE_BASE_ARTICLE,
-					kbArticle.getAttachmentsFolderId(), inputStream,
-					shortFileName, mimeType, true);
-
-				DLStoreUtil.deleteFile(
-					serviceContext.getCompanyId(), CompanyConstants.SYSTEM,
-					dirName + StringPool.SLASH + shortFileName);
-			}
-			finally {
-				StreamUtil.cleanUp(inputStream);
-			}
-		}
-
-		Ticket ticket = ticketLocalService.fetchTicket(
-			StringUtil.extractLast(dirName, StringPool.SLASH));
-
-		if (ticket != null) {
-			ticketLocalService.deleteTicket(ticket);
+		for (String selectedFileName : selectedFileNames) {
+			addKBArticleAttachment(
+				userId, kbArticle.getGroupId(), kbArticle.getResourcePrimKey(),
+				selectedFileName);
 		}
 	}
 
@@ -1418,58 +1309,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		return dynamicQuery.add(junction);
 	}
 
-	protected void checkAttachments(long companyId) throws PortalException {
-		if (!DLStoreUtil.hasDirectory(
-				companyId, CompanyConstants.SYSTEM, _TEMP_DIR_NAME_PREFIX)) {
-
-			return;
-		}
-
-		Date now = new Date();
-
-		String[] dirNames = DLStoreUtil.getFileNames(
-			companyId, CompanyConstants.SYSTEM, _TEMP_DIR_NAME_PREFIX);
-
-		for (String dirName : dirNames) {
-			String[] attachmentDirNames = DLStoreUtil.getFileNames(
-				companyId, CompanyConstants.SYSTEM,
-				KnowledgeBaseUtil.trimLeadingSlash(dirName));
-
-			for (String attachmentDirName : attachmentDirNames) {
-				String[] fileNames = DLStoreUtil.getFileNames(
-					companyId, CompanyConstants.SYSTEM,
-					KnowledgeBaseUtil.trimLeadingSlash(attachmentDirName));
-
-				File file = null;
-
-				for (String fileName : fileNames) {
-					try {
-						file = DLStoreUtil.getFile(
-							companyId, CompanyConstants.SYSTEM,
-							KnowledgeBaseUtil.trimLeadingSlash(fileName));
-					}
-					catch (Exception e) {
-						if (_log.isWarnEnabled()) {
-							_log.warn(
-								"Unable to get temp file: " + e.getMessage());
-						}
-					}
-
-					if (file != null) {
-						break;
-					}
-				}
-
-				if ((file != null) &&
-					(now.getTime() - file.lastModified()) > Time.DAY) {
-
-					DLStoreUtil.deleteDirectory(
-						companyId, CompanyConstants.SYSTEM, dirName);
-				}
-			}
-		}
-	}
-
 	protected void deleteAssets(KBArticle kbArticle) throws PortalException {
 		assetEntryLocalService.deleteEntry(
 			KBArticle.class.getName(), kbArticle.getClassPK());
@@ -1477,31 +1316,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		if (!kbArticle.isApproved() && !kbArticle.isFirstVersion()) {
 			assetEntryLocalService.deleteEntry(
 				KBArticle.class.getName(), kbArticle.getResourcePrimKey());
-		}
-	}
-
-	protected void deleteKBArticleAttachments(KBArticle kbArticle)
-		throws PortalException {
-
-		deleteKBArticleAttachments(kbArticle, kbArticle.getClassPK());
-
-		if (!kbArticle.isApproved() && !kbArticle.isFirstVersion()) {
-			deleteKBArticleAttachments(
-				kbArticle, kbArticle.getResourcePrimKey());
-		}
-	}
-
-	protected void deleteKBArticleAttachments(
-			KBArticle kbArticle, long folderId)
-		throws PortalException {
-
-		try {
-			DLStoreUtil.deleteDirectory(
-				kbArticle.getCompanyId(), CompanyConstants.SYSTEM,
-				KBArticleConstants.DIR_NAME_PREFIX + folderId);
-		}
-		catch (NoSuchDirectoryException nsde) {
-			_log.error("No directory found for " + nsde.getMessage());
 		}
 	}
 
@@ -1767,30 +1581,6 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		return urlTitle;
 	}
 
-	protected boolean isValidDirName(String dirName) {
-		String key = StringUtil.extractLast(dirName, StringPool.SLASH);
-
-		if (key == null) {
-			return false;
-		}
-
-		Ticket ticket = ticketLocalService.fetchTicket(key);
-
-		if (ticket == null) {
-			return false;
-		}
-
-		if (!Validator.equals(ticket.getExtraInfo(), dirName)) {
-			return false;
-		}
-
-		ticket.setExpirationDate(getTicketExpirationDate());
-
-		ticket = ticketLocalService.updateTicket(ticket);
-
-		return true;
-	}
-
 	protected boolean isValidFileName(String name) {
 		if ((name == null) || name.contains(StringPool.BACK_SLASH) ||
 			name.contains(StringPool.SLASH)) {
@@ -1911,29 +1701,15 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		subscriptionSender.flushNotificationsAsync();
 	}
 
-	protected void updateKBArticleAttachments(
-			long userId, KBArticle kbArticle, int oldVersion, String dirName,
-			ServiceContext serviceContext)
+	protected void removeKBArticleAttachments(long[] removeFileEntryIds)
 		throws PortalException {
 
-		if (kbArticle.getVersion() > oldVersion) {
-			String oldDirName =
-				KBArticleConstants.DIR_NAME_PREFIX +
-					kbArticle.getResourcePrimKey();
-
-			if (Validator.isNull(dirName)) {
-				addKBArticleAttachments(
-					userId, kbArticle, oldDirName, serviceContext);
-			}
-			else {
-				addKBArticleAttachments(
-					userId, kbArticle, dirName, serviceContext);
-			}
+		if (ArrayUtil.isEmpty(removeFileEntryIds)) {
+			return;
 		}
-		else if (Validator.isNotNull(dirName)) {
-			deleteKBArticleAttachments(kbArticle, kbArticle.getClassPK());
 
-			addKBArticleAttachments(userId, kbArticle, dirName, serviceContext);
+		for (long removeFileEntryId : removeFileEntryIds) {
+			PortletFileRepositoryUtil.deletePortletFileEntry(removeFileEntryId);
 		}
 	}
 
@@ -1998,8 +1774,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 	}
 
-	private static final String _TEMP_DIR_NAME_PREFIX =
-		"knowledgebase/temp/attachments";
+	private static final String _TEMP_FOLDER_NAME =
+		AdminPortlet.class.getName();
 
 	private static final long _TICKET_EXPIRATION = Time.HOUR;
 

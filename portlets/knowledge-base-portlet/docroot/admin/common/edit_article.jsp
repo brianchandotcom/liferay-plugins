@@ -26,8 +26,6 @@ long resourcePrimKey = BeanParamUtil.getLong(kbArticle, request, "resourcePrimKe
 long parentResourcePrimKey = BeanParamUtil.getLong(kbArticle, request, "parentResourcePrimKey", KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY);
 String content = BeanParamUtil.getString(kbArticle, request, "content", BeanPropertiesUtil.getString(kbTemplate, "content"));
 String[] sections = AdminUtil.unescapeSections(BeanPropertiesUtil.getString(kbArticle, "sections", StringUtil.merge(PortletPropsValues.ADMIN_KB_ARTICLE_DEFAULT_SECTIONS)));
-
-String dirName = ParamUtil.getString(request, "dirName");
 %>
 
 <liferay-ui:header
@@ -35,6 +33,25 @@ String dirName = ParamUtil.getString(request, "dirName");
 	localizeTitle="<%= (kbArticle == null) %>"
 	title='<%= (kbArticle == null) ? "new-article" : kbArticle.getTitle() %>'
 />
+
+<liferay-ui:error exception="<%= DuplicateFileException.class %>" message="please-enter-a-unique-document-name" />
+<liferay-ui:error exception="<%= FileNameException.class %>" message="please-enter-a-file-with-a-valid-file-name" />
+<liferay-ui:error exception="<%= NoSuchFileException.class %>" message="the-document-could-not-be-found" />
+
+<liferay-ui:error exception="<%= FileSizeException.class %>">
+
+	<%
+	long fileMaxSize = PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE);
+
+	if (fileMaxSize == 0) {
+		fileMaxSize = PrefsPropsUtil.getLong(PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE);
+	}
+
+	fileMaxSize /= 1024;
+	%>
+
+	<liferay-ui:message arguments="<%= fileMaxSize %>" key="please-enter-a-file-with-a-valid-file-size-no-larger-than-x" translateArguments="<%= false %>" />
+</liferay-ui:error>
 
 <liferay-portlet:actionURL name="updateKBArticle" var="updateKBArticleURL" />
 
@@ -44,7 +61,6 @@ String dirName = ParamUtil.getString(request, "dirName");
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="resourcePrimKey" type="hidden" value="<%= String.valueOf(resourcePrimKey) %>" />
 	<aui:input name="parentResourcePrimKey" type="hidden" value="<%= parentResourcePrimKey %>" />
-	<aui:input name="dirName" type="hidden" value="<%= dirName %>" />
 	<aui:input name="workflowAction" type="hidden" value="<%= WorkflowConstants.ACTION_SAVE_DRAFT %>" />
 
 	<liferay-ui:error exception="<%= KBArticleContentException.class %>" message="please-enter-valid-content" />
@@ -88,14 +104,6 @@ String dirName = ParamUtil.getString(request, "dirName");
 			<aui:input name="description" />
 		</c:if>
 
-		<aui:field-wrapper label="attachments">
-			<div id="<portlet:namespace />attachments">
-				<liferay-util:include page="/admin/attachments.jsp" servletContext="<%= application %>">
-					<liferay-util:param name="dirName" value="<%= (kbArticle != null) ? kbArticle.getAttachmentsDirName() : StringPool.BLANK %>" />
-				</liferay-util:include>
-			</div>
-		</aui:field-wrapper>
-
 		<c:if test="<%= ArrayUtil.isNotEmpty(PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) && (parentResourcePrimKey == KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) %>">
 			<aui:model-context bean="<%= null %>" model="<%= KBArticle.class %>" />
 
@@ -130,6 +138,14 @@ String dirName = ParamUtil.getString(request, "dirName");
 			</aui:field-wrapper>
 		</c:if>
 
+		<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= false %>" persistState="<%= true %>" title="attachments">
+			<aui:fieldset>
+				<div id="<portlet:namespace />attachments">
+					<liferay-util:include page="/admin/attachments.jsp" servletContext="<%= application %>" />
+				</div>
+			</aui:fieldset>
+		</liferay-ui:panel>
+
 		<liferay-ui:panel collapsible="<%= true %>" defaultState="closed" extended="<%= false %>" persistState="<%= true %>" title="categorization">
 			<aui:fieldset>
 				<aui:input classPK="<%= (kbArticle != null) ? kbArticle.getClassPK() : 0 %>" name="categories" type="assetCategories" />
@@ -158,6 +174,35 @@ String dirName = ParamUtil.getString(request, "dirName");
 </aui:form>
 
 <aui:script>
+	Liferay.provide(
+		window,
+		'<portlet:namespace />updateMultipleKBArticleAttachments',
+		function() {
+			var A = AUI();
+			var Lang = A.Lang;
+
+			var selectedFileNameContainer = A.one('#<portlet:namespace />selectedFileNameContainer');
+
+			var inputTpl = '<input id="<portlet:namespace />selectedFileName{0}" name="<portlet:namespace />selectedFileName" type="hidden" value="{1}" />';
+
+			var values = A.all('input[name=<portlet:namespace />selectUploadedFile]:checked').val();
+
+			var buffer = [];
+			var dataBuffer = [];
+			var length = values.length;
+
+			for (var i = 0; i < length; i++) {
+				dataBuffer[0] = i;
+				dataBuffer[1] = values[i];
+
+				buffer[i] = Lang.sub(inputTpl, dataBuffer);
+			}
+
+			selectedFileNameContainer.html(buffer.join(''));
+		},
+		['aui-base']
+	);
+
 	function <portlet:namespace />initEditor() {
 		return '<%= UnicodeFormatter.toString(content) %>';
 	}
@@ -167,14 +212,12 @@ String dirName = ParamUtil.getString(request, "dirName");
 		<portlet:namespace />updateKBArticle();
 	}
 
-	function <portlet:namespace />updateAttachments(dirName, html) {
-		document.<portlet:namespace />fm.<portlet:namespace />dirName.value = dirName;
-		document.getElementById('<portlet:namespace />attachments').innerHTML = html;
-	}
-
 	function <portlet:namespace />updateKBArticle() {
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (kbArticle == null) ? Constants.ADD : Constants.UPDATE %>';
 		document.<portlet:namespace />fm.<portlet:namespace />content.value = window.<portlet:namespace />editor.getHTML();
+
+		<portlet:namespace />updateMultipleKBArticleAttachments();
+
 		submitForm(document.<portlet:namespace />fm);
 	}
 </aui:script>

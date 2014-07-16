@@ -29,44 +29,102 @@ if (kbArticle != null) {
 %>
 
 <div class="kb-attachments">
+	<aui:input name="removeFileEntryIds" type="hidden" />
 
-	<%
-	for (FileEntry fileEntry : attachmentsFileEntries) {
-	%>
-
-		<div>
-			<liferay-portlet:resourceURL id="attachment" var="clipURL">
-				<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-			</liferay-portlet:resourceURL>
-
-			<liferay-ui:icon
-				iconCssClass="icon-paper-clip"
-				label="<%= true %>"
-				message='<%= fileEntry.getTitle() + " (" + TextFormatter.formatKB(fileEntry.getSize(), locale) + "k)" %>'
-				url="<%= clipURL %>"
-			/>
-		</div>
-
-	<%
-	}
-	%>
-
-	<liferay-portlet:renderURL var="selectAttachmentsURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="mvcPath" value='<%= templatePath + "select_attachments.jsp" %>' />
-		<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
-		<portlet:param name="status" value="<%= String.valueOf(WorkflowConstants.STATUS_ANY) %>" />
-	</liferay-portlet:renderURL>
-
-	<liferay-portlet:actionURL name="updateAttachments" var="updateAttachmentsURL">
-		<portlet:param name="redirect" value="<%= selectAttachmentsURL %>" />
-		<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
-	</liferay-portlet:actionURL>
-
-	<%
-	String taglibOnClick = "var selectAttachmentsWindow = window.open('" + updateAttachmentsURL + "&" + renderResponse.getNamespace() + "dirName=' + document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "dirName.value, 'selectAttachments', 'directories=no,height=640,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=680'); void(''); selectAttachmentsWindow.focus();";
-	%>
-
-	<div class="kb-edit-link">
-		<aui:a href="javascript:;" onClick="<%= taglibOnClick %>"><liferay-ui:message key='<%= (!attachmentsFileEntries.isEmpty()) ? "attachments" : "add-attachments" %>' /> &raquo;</aui:a>
+	<div class="lfr-dynamic-uploader">
+		<div class="lfr-upload-container" id="<portlet:namespace />fileUpload"></div>
 	</div>
+
+	<span id="<portlet:namespace />selectedFileNameContainer"></span>
+
+	<div class="hide" id="<portlet:namespace />metadataExplanationContainer"></div>
+
+	<div class="hide selected" id="<portlet:namespace />selectedFileNameMetadataContainer"></div>
+
+	<c:if test="<%= !attachmentsFileEntries.isEmpty() %>">
+		<h4><liferay-ui:message key="saved-attachments" /></h4>
+
+		<div id="<portlet:namespace />existingAttachmentsContainer">
+
+			<%
+			for (FileEntry fileEntry : attachmentsFileEntries) {
+			%>
+
+				<div id="<portlet:namespace />fileEntryIdWrapper<%= fileEntry.getFileEntryId() %>">
+					<liferay-portlet:resourceURL id="attachment" var="clipURL">
+						<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+					</liferay-portlet:resourceURL>
+
+					<liferay-ui:icon
+						iconCssClass="icon-paper-clip"
+						label="<%= true %>"
+						message='<%= fileEntry.getTitle() + " (" + TextFormatter.formatKB(fileEntry.getSize(), locale) + "k)" %>'
+						url="<%= clipURL %>"
+					/>
+
+					<%
+					String taglibURL = "javascript:" + renderResponse.getNamespace() + "deleteFileEntry('" + fileEntry.getFileEntryId() + "');";
+					%>
+
+					<liferay-ui:icon-delete
+						label="<%= false %>"
+						url="<%= taglibURL %>"
+					/>
+				</div>
+
+			<%
+			}
+			%>
+
+		</div>
+	</c:if>
 </div>
+
+<%
+Date expirationDate = new Date(System.currentTimeMillis() + GetterUtil.getInteger(PropsUtil.get(PropsKeys.SESSION_TIMEOUT)) * Time.MINUTE);
+
+Ticket ticket = TicketLocalServiceUtil.addTicket(user.getCompanyId(), User.class.getName(), user.getUserId(), TicketConstants.TYPE_IMPERSONATE, null, expirationDate, new ServiceContext());
+%>
+
+<aui:script use="liferay-upload">
+	new Liferay.Upload(
+		{
+			boundingBox: '#<portlet:namespace />fileUpload',
+			deleteFile: '<liferay-portlet:actionURL name="deleteTempAttachment" doAsUserId="<%= user.getUserId() %>"><portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" /></liferay-portlet:actionURL>&ticketKey=<%= ticket.getKey() %><liferay-ui:input-permissions-params modelName="<%= KBArticle.class.getName() %>" />',
+			fileDescription: '<%= StringUtil.merge(PrefsPropsUtil.getStringArray(PropsKeys.DL_FILE_EXTENSIONS, StringPool.COMMA)) %>',
+			maxFileSize: '<%= PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE) %> B',
+			metadataContainer: '#<portlet:namespace />selectedFileNameMetadataContainer',
+			metadataExplanationContainer: '#<portlet:namespace />metadataExplanationContainer',
+			namespace: '<portlet:namespace />',
+			tempFileURL: {
+				method: Liferay.Service.bind('/knowledge-base-portlet.kbarticle/get-temp-attachment-names'),
+				params: {
+					groupId: <%= scopeGroupId %>,
+					tempFolderName: 'com.liferay.knowledgebase.admin.portlet.AdminPortlet'
+				}
+			},
+			uploadFile: '<liferay-portlet:actionURL name="addTempAttachment" doAsUserId="<%= user.getUserId() %>"><portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" /></liferay-portlet:actionURL>&ticketKey=<%= ticket.getKey() %><liferay-ui:input-permissions-params modelName="<%= KBArticle.class.getName() %>" />'
+		}
+	);
+</aui:script>
+
+<aui:script use="aui-base">
+	var removeFileEntryIds = [];
+
+	Liferay.provide(
+		window,
+		'<portlet:namespace />deleteFileEntry',
+		function(fileEntryId) {
+			var removeFileEntryIdsInput = A.one('#<portlet:namespace />removeFileEntryIds');
+
+			removeFileEntryIds.push(fileEntryId);
+
+			removeFileEntryIdsInput.val(removeFileEntryIds.join());
+
+			var fileEntryIdWrapper = A.one('#<portlet:namespace />fileEntryIdWrapper' + fileEntryId);
+
+			fileEntryIdWrapper.hide();
+		},
+		[]
+	);
+</aui:script>
