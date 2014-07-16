@@ -4,6 +4,65 @@
 <project name="build-common-osgi-plugin">
 	<import file="build-common-plugin.xml" />
 
+	<target name="build-service">
+		<mkdir dir="${basedir}/src/WEB-INF/sql" />
+
+		<copy todir="${basedir}/classes">
+			<fileset dir="${basedir}/src" excludes="**/*.java" />
+		</copy>
+
+		<path id="service.classpath">
+			<path refid="lib.classpath" />
+			<path refid="portal.classpath" />
+			<fileset dir="${app.server.lib.portal.dir}" includes="commons-digester.jar,commons-lang.jar,easyconf.jar" />
+			<pathelement location="${base.dir}/classes" />
+		</path>
+
+		<java
+			classname="com.liferay.portal.tools.servicebuilder.ServiceBuilder"
+			classpathref="service.classpath"
+			fork="true"
+			newenvironment="true"
+			outputproperty="build-service.output"
+		>
+			<jvmarg value="-Xms128m" />
+			<jvmarg value="-Xmx512m" />
+			<jvmarg value="-Xss2048k" />
+			<arg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
+			<arg value="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger" />
+			<arg value="service.api.dir=${api.dir}/src" />
+			<arg value="service.auto.namespace.tables=false" />
+			<arg value="service.build.number=1" />
+			<arg value="service.build.number.increment=true" />
+			<arg value="service.hbm.file=${basedir}/src/META-INF/module-hbm.xml" />
+			<arg value="service.impl.dir=${basedir}/src" />
+			<arg value="service.input.file=${service.input.file}" />
+			<arg value="service.model.hints.file=${basedir}/src/META-INF/portlet-model-hints.xml" />
+			<arg value="service.osgi.module=true" />
+			<arg value="service.props.util=com.liferay.portal.util.PropsUtil" />
+			<arg value="service.resources.dir=${basedir}/src" />
+			<arg value="service.spring.file=${basedir}/src/META-INF/spring/services.xml" />
+			<arg value="service.spring.namespaces=beans,osgi" />
+			<arg value="service.sql.dir=${basedir}/src/WEB-INF/sql" />
+			<arg value="service.sql.file=tables.sql" />
+			<arg value="service.sql.indexes.file=indexes.sql" />
+			<arg value="service.sql.sequences.file=sequences.sql" />
+			<arg value="service.target.entity.name=${service.target.entity.name}" />
+			<arg value="service.test.dir=${test.dir}/src" />
+		</java>
+
+		<delete file="ServiceBuilder.temp" />
+
+		<echo>${build-service.output}</echo>
+
+		<if>
+			<contains string="${build-service.output}" substring="Error" />
+			<then>
+				<fail>Service Builder generated exceptions.</fail>
+			</then>
+		</if>
+	</target>
+
 	<target name="jar">
 		<jar-macro
 			module.dir="${basedir}"
