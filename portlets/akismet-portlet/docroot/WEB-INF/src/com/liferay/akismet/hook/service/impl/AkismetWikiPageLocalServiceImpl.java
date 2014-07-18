@@ -64,20 +64,13 @@ public class AkismetWikiPageLocalServiceImpl
 				serviceContext);
 		}
 
-		boolean enabled = isWikiEnabled(userId, nodeId, serviceContext);
-
-		if (enabled) {
-			serviceContext.setWorkflowAction(
-				WorkflowConstants.ACTION_SAVE_DRAFT);
-		}
-
 		WikiPage page = super.addPage(
 			userId, nodeId, title, version, content, summary, minorEdit, format,
 			head, parentTitle, redirectTitle, serviceContext);
 
 		AkismetData akismetData = updateAkismetData(page, serviceContext);
 
-		if (!enabled) {
+		if (!isWikiEnabled(userId, nodeId, serviceContext)) {
 			return page;
 		}
 
@@ -99,16 +92,7 @@ public class AkismetWikiPageLocalServiceImpl
 			page.setSummary(AkismetConstants.WIKI_PAGE_PENDING_APPROVAL);
 			page.setStatus(WorkflowConstants.STATUS_APPROVED);
 
-			page = super.updateWikiPage(page);
-
-			ServiceContext newServiceContext = new ServiceContext();
-
-			newServiceContext.setFormDate(page.getModifiedDate());
-
-			return super.updatePage(
-				userId, nodeId, title, page.getVersion(), null,
-				StringPool.BLANK, true, format, parentTitle, redirectTitle,
-				newServiceContext);
+			return super.updateWikiPage(page);
 		}
 		finally {
 			NotificationThreadLocal.setEnabled(notificationEnabled);
@@ -131,20 +115,13 @@ public class AkismetWikiPageLocalServiceImpl
 				format, parentTitle, redirectTitle, serviceContext);
 		}
 
-		boolean enabled = isWikiEnabled(userId, nodeId, serviceContext);
-
-		if (enabled) {
-			serviceContext.setWorkflowAction(
-				WorkflowConstants.ACTION_SAVE_DRAFT);
-		}
-
 		WikiPage page = super.updatePage(
 			userId, nodeId, title, version, content, summary, minorEdit, format,
 			parentTitle, redirectTitle, serviceContext);
 
 		AkismetData akismetData = updateAkismetData(page, serviceContext);
 
-		if (!enabled) {
+		if (!isWikiEnabled(userId, nodeId, serviceContext)) {
 			return page;
 		}
 
@@ -171,21 +148,17 @@ public class AkismetWikiPageLocalServiceImpl
 			WikiPage previousPage = AkismetUtil.getWikiPage(
 				page.getNodeId(), page.getTitle(), page.getVersion(), true);
 
+			if (previousPage == null) {
+				return page;
+			}
+
 			ServiceContext newServiceContext = new ServiceContext();
 
 			newServiceContext.setFormDate(page.getModifiedDate());
 
-			if (previousPage != null) {
-				return super.revertPage(
-					userId, nodeId, title, previousPage.getVersion(),
-					newServiceContext);
-			}
-			else {
-				return super.updatePage(
-					userId, nodeId, title, page.getVersion(), null,
-					StringPool.BLANK, true, format, parentTitle, redirectTitle,
-					newServiceContext);
-			}
+			return super.revertPage(
+				userId, nodeId, title, previousPage.getVersion(),
+				newServiceContext);
 		}
 		finally {
 			NotificationThreadLocal.setEnabled(notificationEnabled);
