@@ -208,6 +208,10 @@
 		<column name="content" type="String" />
 		<column name="helpful" type="boolean" />
 
+		<!-- Feedback lifecycle -->
+
+		<column name="status" type="int" />
+
 		<!-- Order -->
 
 		<order by="desc">
@@ -223,6 +227,10 @@
 			<finder-column name="groupId" />
 			<finder-column name="classNameId" />
 		</finder>
+		<finder name="G_S" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="status" />
+		</finder>
 		<finder name="C_C" return-type="Collection">
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
@@ -235,6 +243,7 @@
 
 		<!-- References -->
 
+		<reference package-path="com.liferay.portal" entity="PortletPreferences" />
 		<reference package-path="com.liferay.portlet.social" entity="SocialActivity" />
 	</entity>
 	<entity name="KBTemplate" uuid="true" local-service="true" remote-service="true">

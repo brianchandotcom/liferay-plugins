@@ -16,12 +16,16 @@ package com.liferay.knowledgebase.service.impl;
 
 import com.liferay.knowledgebase.KBCommentContentException;
 import com.liferay.knowledgebase.admin.social.AdminActivityKeys;
+import com.liferay.knowledgebase.admin.util.AdminSubscriptionSender;
+import com.liferay.knowledgebase.admin.util.AdminUtil;
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.KBComment;
+import com.liferay.knowledgebase.model.KBCommentConstants;
 import com.liferay.knowledgebase.model.KBTemplate;
 import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.KBTemplateLocalServiceUtil;
 import com.liferay.knowledgebase.service.base.KBCommentLocalServiceBaseImpl;
+import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -29,14 +33,18 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.SubscriptionSender;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.portlet.PortletPreferences;
 
 /**
  * @author Peter Shin
@@ -72,8 +80,13 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setClassPK(classPK);
 		kbComment.setContent(content);
 		kbComment.setHelpful(helpful);
+		kbComment.setStatus(KBCommentConstants.STATUS_PENDING);
 
 		kbCommentPersistence.update(kbComment);
+
+		// Feedback notifications
+
+		notifyFeedbackUser(kbComment, serviceContext);
 
 		// Social
 
@@ -139,6 +152,13 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 
 	@Override
 	public List<KBComment> getKBComments(
+		long groupId, int status, int start, int end) {
+
+		return kbCommentPersistence.findByG_S(groupId, status, start, end);
+	}
+
+	@Override
+	public List<KBComment> getKBComments(
 		String className, long classPK, int start, int end,
 		OrderByComparator<KBComment> orderByComparator) {
 
@@ -146,6 +166,11 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 
 		return kbCommentPersistence.findByC_C(
 			classNameId, classPK, start, end, orderByComparator);
+	}
+
+	@Override
+	public int getKBCommentsCount(long groupId, int status) {
+		return kbCommentPersistence.countByG_S(groupId, status);
 	}
 
 	@Override
@@ -158,7 +183,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 	@Override
 	public KBComment updateKBComment(
 			long kbCommentId, long classNameId, long classPK, String content,
-			boolean helpful, ServiceContext serviceContext)
+			boolean helpful, int status, ServiceContext serviceContext)
 		throws PortalException {
 
 		// KB comment
@@ -173,6 +198,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setClassPK(classPK);
 		kbComment.setContent(content);
 		kbComment.setHelpful(helpful);
+		kbComment.setStatus(status);
 
 		kbCommentPersistence.update(kbComment);
 
@@ -189,6 +215,93 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 			0);
 
 		return kbComment;
+	}
+
+	public KBComment updateStatus(
+			long kbCommentId, int status, ServiceContext serviceContext)
+		throws PortalException {
+
+		KBComment kbComment = kbCommentPersistence.findByPrimaryKey(
+			kbCommentId);
+
+		kbComment.setStatus(status);
+
+		kbCommentPersistence.update(kbComment);
+
+		notifyFeedbackUser(kbComment, serviceContext);
+
+		return kbComment;
+	}
+
+	protected void notifyFeedbackUser(
+			KBComment kbComment, ServiceContext serviceContext)
+		throws PortalException {
+
+		PortletPreferences preferences =
+			portletPreferencesLocalService.getPreferences(
+				kbComment.getCompanyId(), kbComment.getGroupId(),
+				PortletKeys.PREFS_OWNER_TYPE_GROUP,
+				PortletKeys.PREFS_PLID_SHARED, PortletKeys.KNOWLEDGE_BASE_ADMIN,
+				null);
+
+		if (!AdminUtil.isFeedbackStatusChangeNotificationEnabled(
+				kbComment.getStatus(), preferences)) {
+
+			return;
+		}
+
+		String fromName = AdminUtil.getEmailFromName(
+			preferences, serviceContext.getCompanyId());
+		String fromAddress = AdminUtil.getEmailFromAddress(
+			preferences, kbComment.getCompanyId());
+
+		KBArticle kbArticle = kbArticleLocalService.getLatestKBArticle(
+			kbComment.getClassPK(), WorkflowConstants.STATUS_APPROVED);
+
+		String kbArticleContent = StringUtil.replace(
+			kbArticle.getContent(),
+			new String[] {
+				"href=\"/", "src=\"/"
+			},
+			new String[] {
+				"href=\"" + serviceContext.getPortalURL() + "/",
+				"src=\"" + serviceContext.getPortalURL() + "/"
+			});
+
+		String subject =
+			AdminUtil.getEmailKBArticleFeedbackNotificationSubject(
+				kbComment.getStatus(), preferences);
+
+		String body = AdminUtil.getEmailKBArticleFeedbackNotificationBody(
+			kbComment.getStatus(), preferences);
+
+		SubscriptionSender subscriptionSender = new AdminSubscriptionSender(
+			kbArticle, serviceContext);
+
+		subscriptionSender.setBody(body);
+		subscriptionSender.setCompanyId(kbArticle.getCompanyId());
+		subscriptionSender.setContextAttribute(
+			"[$ARTICLE_CONTENT$]", kbArticleContent, false);
+		subscriptionSender.setContextAttribute(
+			"[$ARTICLE_TITLE$]", kbArticle.getTitle(), false);
+		subscriptionSender.setContextAttribute(
+			"[$COMMENT_CONTENT$]", kbComment.getContent(), false);
+		subscriptionSender.setContextUserPrefix("ARTICLE");
+		subscriptionSender.setFrom(fromAddress, fromName);
+		subscriptionSender.setHtmlFormat(true);
+		subscriptionSender.setMailId("kb_article", kbArticle.getKbArticleId());
+		subscriptionSender.setPortletId(serviceContext.getPortletId());
+		subscriptionSender.setReplyToAddress(fromAddress);
+		subscriptionSender.setScopeGroupId(kbArticle.getGroupId());
+		subscriptionSender.setSubject(subject);
+		subscriptionSender.setUserId(kbArticle.getUserId());
+
+		User user = userLocalService.getUser(kbComment.getUserId());
+
+		subscriptionSender.addRuntimeSubscribers(
+			user.getEmailAddress(), user.getFullName());
+
+		subscriptionSender.flushNotificationsAsync();
 	}
 
 	protected void putTitle(JSONObject jsonObject, KBComment kbComment) {

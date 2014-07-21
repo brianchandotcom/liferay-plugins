@@ -44,6 +44,7 @@ page import="com.liferay.knowledgebase.model.KBTemplateSearchDisplay" %><%@
 page import="com.liferay.knowledgebase.service.KBArticleLocalServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.KBArticleServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.KBCommentLocalServiceUtil" %><%@
+page import="com.liferay.knowledgebase.service.KBCommentServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.KBTemplateServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.permission.AdminPermission" %><%@
 page import="com.liferay.knowledgebase.service.permission.DisplayPermission" %><%@
@@ -125,6 +126,7 @@ page import="com.liferay.portlet.documentlibrary.NoSuchFileException" %><%@
 page import="com.liferay.portlet.journal.model.JournalArticle" %><%@
 page import="com.liferay.portlet.messageboards.model.MBMessage" %><%@
 page import="com.liferay.portlet.wiki.model.WikiPage" %><%@
+page import="com.liferay.taglib.search.DateSearchEntry" %><%@
 page import="com.liferay.taglib.search.ResultRow" %><%@
 page import="com.liferay.util.RSSUtil" %>
 
