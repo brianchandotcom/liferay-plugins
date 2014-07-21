@@ -22,6 +22,7 @@ import com.liferay.knowledgebase.model.KBTemplate;
 import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.KBTemplateLocalServiceUtil;
 import com.liferay.knowledgebase.service.base.KBCommentLocalServiceBaseImpl;
+import com.liferay.knowledgebase.util.comparator.KBCommentCreateDateComparator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -134,18 +135,37 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 
 		long classNameId = classNameLocalService.getClassNameId(className);
 
-		return kbCommentPersistence.findByU_C_C(userId, classNameId, classPK);
+		return kbCommentPersistence.findByU_C_C_Last(
+			userId, classNameId, classPK, new KBCommentCreateDateComparator());
+	}
+
+	@Override
+	public List<KBComment> getKBComments(
+		long userId, String className, long classPK, int start, int end,
+		OrderByComparator<KBComment> orderByComparator) {
+
+		long classNameId = classNameLocalService.getClassNameId(className);
+
+		return kbCommentPersistence.findByU_C_C(
+			userId, classNameId, classPK, start, end, orderByComparator);
 	}
 
 	@Override
 	public List<KBComment> getKBComments(
 		String className, long classPK, int start, int end,
-		OrderByComparator<KBComment> orderByComparator) {
+		OrderByComparator orderByComparator) {
 
 		long classNameId = classNameLocalService.getClassNameId(className);
 
 		return kbCommentPersistence.findByC_C(
 			classNameId, classPK, start, end, orderByComparator);
+	}
+
+	@Override
+	public int getKBCommentsCount(long userId, String className, long classPK) {
+		long classNameId = classNameLocalService.getClassNameId(className);
+
+		return kbCommentPersistence.countByU_C_C(userId, classNameId, classPK);
 	}
 
 	@Override
