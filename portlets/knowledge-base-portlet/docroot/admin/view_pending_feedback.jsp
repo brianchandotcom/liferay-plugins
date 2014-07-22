@@ -16,18 +16,12 @@
 
 <%@ include file="/admin/init.jsp" %>
 
-<c:choose>
-	<c:when test="<%= redirect.equals(currentURL) %>">
-		<liferay-util:include page="/admin/top_tabs.jsp" servletContext="<%= application %>" />
-	</c:when>
-	<c:otherwise>
+<%
+String emptyResultsMessage = "no-pending-feedback-was-found";
 
-		<%
-		KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
-		%>
+int feedbackStatus = KBCommentConstants.STATUS_PENDING;
 
-		<liferay-ui:header title="<%= kbArticle.getTitle() %>" />
-	</c:otherwise>
-</c:choose>
+String navItem = "viewPendingFeedback";
+%>
 
-<liferay-util:include page="/admin/common/view_article.jsp" servletContext="<%= application %>" />
+<%@ include file="/admin/view_feedback_in_state.jspf" %>

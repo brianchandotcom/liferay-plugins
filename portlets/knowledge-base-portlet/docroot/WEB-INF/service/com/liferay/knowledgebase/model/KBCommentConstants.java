@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,22 +11,22 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/admin/init.jsp" %>
+package com.liferay.knowledgebase.model;
 
-<c:choose>
-	<c:when test="<%= redirect.equals(currentURL) %>">
-		<liferay-util:include page="/admin/top_tabs.jsp" servletContext="<%= application %>" />
-	</c:when>
-	<c:otherwise>
+/**
+ * @author Adolfo Pérez
+ */
+public class KBCommentConstants {
 
-		<%
-		KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
-		%>
+	public static final int STATUS_ANY = -1;
 
-		<liferay-ui:header title="<%= kbArticle.getTitle() %>" />
-	</c:otherwise>
-</c:choose>
+	public static final int STATUS_IN_PROGRESS = 2;
 
-<liferay-util:include page="/admin/common/view_article.jsp" servletContext="<%= application %>" />
+	public static final int STATUS_NONE = -2;
+
+	public static final int STATUS_PENDING = 1;
+
+	public static final int STATUS_RESOLVED = 0;
+
+}

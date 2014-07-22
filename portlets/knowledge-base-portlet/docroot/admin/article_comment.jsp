@@ -33,8 +33,16 @@ KBComment kbComment = (KBComment)request.getAttribute("article_comment.jsp-kb_co
 			/>
 		</td>
 		<td valign="top" width="90%">
+			<portlet:renderURL var="viewKBArticleURL">
+				<portlet:param name="mvcPath" value='<%= templatePath + "view_article.jsp" %>' />
+				<portlet:param name="resourcePrimKey" value="<%= String.valueOf(kbArticle.getResourcePrimKey()) %>" />
+				<portlet:param name="redirect" value="<%= currentURL %>" />
+			</portlet:renderURL>
+
+			<h4><a href="<%= viewKBArticleURL %>"><%= HtmlUtil.escape(kbArticle.getTitle()) %></a></h4>
+
 			<div>
-				<strong class="kb-question"><liferay-ui:message key="was-this-information-helpful" /></strong>
+				<span class="kb-question"><liferay-ui:message key="was-this-information-helpful" /></span>
 
 				<c:choose>
 					<c:when test="<%= kbComment.getHelpful() %>">
@@ -52,25 +60,54 @@ KBComment kbComment = (KBComment)request.getAttribute("article_comment.jsp-kb_co
 				<%= HtmlUtil.escape(kbComment.getContent()) %>
 			</div>
 
-			<br />
+			<div class="kb-article-comment-date">
 
-			<div>
-				<%= LanguageUtil.format(request, "posted-on-x", dateFormatDateTime.format(kbComment.getModifiedDate()), false) %>
+				<%
+				DateSearchEntry dateSearchEntry = new DateSearchEntry();
+
+				dateSearchEntry.setDate(kbComment.getModifiedDate());
+				%>
+
+				<span class="icon icon-calendar"></span> <%= dateSearchEntry.getName(pageContext) %>
 			</div>
 
-			<c:if test="<%= KBCommentPermission.contains(permissionChecker, kbComment, ActionKeys.DELETE) %>">
-				<br />
+			<%
+			int feedbackStatus = kbComment.getStatus();
 
-				<liferay-portlet:actionURL name="deleteKBComment" var="deleteURL">
-					<portlet:param name="kbCommentId" value="<%= String.valueOf(kbComment.getKbCommentId()) %>" />
-					<portlet:param name="redirect" value="<%= redirect %>" />
-				</liferay-portlet:actionURL>
+			int previousStatus = KnowledgeBaseUtil.getPreviousStatus(feedbackStatus);
+			int nextStatus = KnowledgeBaseUtil.getNextStatus(feedbackStatus);
+			%>
 
-				<liferay-ui:icon-delete
-					label="<%= true %>"
-					url="<%= deleteURL %>"
-				/>
-			</c:if>
+			<div class="kb-feedback-actions">
+				<c:if test="<%= previousStatus != KBCommentConstants.STATUS_NONE %>">
+					<liferay-portlet:actionURL name="updateKBCommentStatus" var="previousStatusURL">
+						<portlet:param name="kbCommentId" value="<%= String.valueOf(kbComment.getKbCommentId()) %>" />
+						<portlet:param name="redirect" value="<%= redirect %>" />
+						<portlet:param name="status" value="<%= String.valueOf(previousStatus) %>" />
+					</liferay-portlet:actionURL>
+
+					<aui:button href="<%= previousStatusURL %>" value="<%= KnowledgeBaseUtil.getStatusTransitionLabel(previousStatus) %>" />
+				</c:if>
+
+				<c:if test="<%= nextStatus != KBCommentConstants.STATUS_NONE %>">
+					<liferay-portlet:actionURL name="updateKBCommentStatus" var="nextStatusURL">
+						<portlet:param name="kbCommentId" value="<%= String.valueOf(kbComment.getKbCommentId()) %>" />
+						<portlet:param name="redirect" value="<%= redirect %>" />
+						<portlet:param name="status" value="<%= String.valueOf(nextStatus) %>" />
+					</liferay-portlet:actionURL>
+
+					<aui:button href="<%= nextStatusURL %>" value="<%= KnowledgeBaseUtil.getStatusTransitionLabel(nextStatus) %>" />
+				</c:if>
+
+				<c:if test="<%= feedbackStatus == KBCommentConstants.STATUS_RESOLVED && KBCommentPermission.contains(permissionChecker, kbComment, ActionKeys.DELETE) %>">
+					<liferay-portlet:actionURL name="deleteKBComment" var="deleteURL">
+						<portlet:param name="kbCommentId" value="<%= String.valueOf(kbComment.getKbCommentId()) %>" />
+						<portlet:param name="redirect" value="<%= redirect %>" />
+					</liferay-portlet:actionURL>
+
+					<aui:button cssClass="kb-feedback-delete" href="<%= deleteURL %>" value="delete" />
+				</c:if>
+			</div>
 		</td>
 	</tr>
 	</table>
