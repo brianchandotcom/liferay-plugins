@@ -44,7 +44,7 @@ public class SyncSitePersistence extends BasePersistenceImpl<SyncSite, Long> {
 		fieldValues.put("filePathName", filePathName);
 		fieldValues.put("syncAccountId", syncAccountId);
 
-		List<SyncSite> syncSites = queryForFieldValues(fieldValues);
+		List<SyncSite> syncSites = queryForFieldValuesArgs(fieldValues);
 
 		if ((syncSites == null) || syncSites.isEmpty()) {
 			return null;
