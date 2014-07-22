@@ -298,7 +298,7 @@
 		<mkdir dir="${service.base.dir}/service-classes" />
 
 		<path id="service.classpath">
-			<path refid="lib.classpath" />
+			<path refid="plugin.classpath" />
 			<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
 			<fileset dir="${service.base.dir}/lib" excludes="${plugin.name}-service.jar" includes="*.jar" />
 		</path>
