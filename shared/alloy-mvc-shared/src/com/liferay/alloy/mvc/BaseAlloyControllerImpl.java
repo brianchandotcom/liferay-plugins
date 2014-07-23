@@ -750,6 +750,10 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		user = themeDisplay.getUser();
 	}
 
+	protected String processDataRequest(ActionRequest actionRequest) {
+		return null;
+	}
+
 	protected void redirectTo(PortletURL portletURL) {
 		redirectTo(portletURL.toString());
 	}
