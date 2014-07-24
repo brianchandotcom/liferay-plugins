@@ -750,6 +750,10 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		user = themeDisplay.getUser();
 	}
 
+	protected String processDataRequest(ActionRequest actionRequest) {
+		return null;
+	}
+
 	protected void redirectTo(PortletURL portletURL) {
 		redirectTo(portletURL.toString());
 	}
@@ -797,6 +801,14 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 	protected AlloySearchResult search(
 			Map<String, Serializable> attributes, String keywords, Sort[] sorts)
+		throws Exception {
+
+		return search(attributes, keywords, sorts, portletRequest, request);
+	}
+
+	protected AlloySearchResult search(
+			Map<String, Serializable> attributes, String keywords, Sort[] sorts,
+			PortletRequest portletRequest, HttpServletRequest request)
 		throws Exception {
 
 		if (indexer == null) {
