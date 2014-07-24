@@ -12,24 +12,29 @@
  * details.
  */
 
-package com.liferay.sync.util;
+package com.liferay.sync;
+
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
- * @author Dennis Ju
+ * @author Brian Wing Shun Chan
  */
-public class PortletPropsKeys
-	extends com.liferay.sync.shared.util.PortletPropsKeys {
+public class SyncServicesUnavailableException extends PortalException {
 
-	public static final String SYNC_AUTH_VERIFIER_PIPELINE =
-		"sync.auth.verifier.pipeline";
+	public SyncServicesUnavailableException() {
+		super();
+	}
 
-	public static final String SYNC_FILE_DIFF_CACHE_DELETE_INTERVAL =
-		"sync.file.diff.cache.delete.interval";
+	public SyncServicesUnavailableException(String msg) {
+		super(msg);
+	}
 
-	public static final String SYNC_FILE_DIFF_CACHE_ENABLED =
-		"sync.file.diff.cache.enabled";
+	public SyncServicesUnavailableException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
-	public static final String SYNC_FILE_DIFF_CACHE_EXPIRATION_TIME =
-		"sync.file.diff.cache.expiration.time";
+	public SyncServicesUnavailableException(Throwable cause) {
+		super(cause);
+	}
 
 }
