@@ -125,6 +125,10 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 
 		where.and();
 
+		where.ne("state", SyncFile.STATE_IN_PROGRESS_DOWNLOADING);
+
+		where.and();
+
 		where.eq("syncAccountId", syncAccountId);
 
 		where.and();
@@ -136,6 +140,17 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 
 	public List<SyncFile> findByState(int state) throws SQLException {
 		return queryForEq("state", state);
+	}
+
+	public List<SyncFile> findByS_S(int state, long syncAccountId)
+		throws SQLException {
+
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+
+		fieldValues.put("state", state);
+		fieldValues.put("syncAccountId", syncAccountId);
+
+		return queryForFieldValues(fieldValues);
 	}
 
 	public List<SyncFile> findBySyncAccountId(long syncAccountId)

@@ -36,8 +36,6 @@ import com.liferay.sync.engine.util.FileUtil;
 import com.liferay.sync.engine.util.IODeltaUtil;
 import com.liferay.sync.engine.util.PropsValues;
 
-import java.math.BigDecimal;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -72,7 +70,7 @@ public class SyncFileService {
 		String mimeType = Files.probeContentType(filePath);
 
 		SyncFile syncFile = addSyncFile(
-			_VERSION_DEFAULT, checksum, name, FileUtil.getFileKey(filePath),
+			"", checksum, name, FileUtil.getFileKey(filePath),
 			FilePathNameUtil.getFilePathName(filePath), mimeType, name,
 			folderId, repositoryId, syncAccountId, SyncFile.TYPE_FILE);
 
@@ -80,7 +78,7 @@ public class SyncFileService {
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put("changeLog", _VERSION_DEFAULT);
+		parameters.put("changeLog", "");
 		parameters.put("checksum", checksum);
 		parameters.put("description", "");
 		parameters.put("filePath", filePath);
@@ -229,7 +227,7 @@ public class SyncFileService {
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put("changeLog", null);
+		parameters.put("changeLog", syncFile.getChangeLog());
 		parameters.put("fileEntryId", syncFile.getTypePK());
 		parameters.put("majorVersion", false);
 		parameters.put("syncFile", syncFile);
@@ -326,11 +324,15 @@ public class SyncFileService {
 	}
 
 	public static void deleteSyncFile(SyncFile syncFile) {
+		deleteSyncFile(syncFile, false);
+	}
+
+	public static void deleteSyncFile(SyncFile syncFile, boolean quiet) {
 		try {
 
 			// Sync file
 
-			_syncFilePersistence.delete(syncFile);
+			_syncFilePersistence.delete(syncFile, quiet);
 
 			if (!syncFile.isFolder()) {
 				return;
@@ -420,6 +422,19 @@ public class SyncFileService {
 	public static List<SyncFile> findSyncFiles(int state) {
 		try {
 			return _syncFilePersistence.findByState(state);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+
+			return Collections.emptyList();
+		}
+	}
+
+	public static List<SyncFile> findSyncFiles(int state, long syncAccountId) {
+		try {
+			return _syncFilePersistence.findByS_S(state, syncAccountId);
 		}
 		catch (SQLException sqle) {
 			if (_logger.isDebugEnabled()) {
@@ -608,7 +623,6 @@ public class SyncFileService {
 
 		Path deltaFilePath = null;
 
-		String changeLog = incrementChangeLog(syncFile.getVersion());
 		String name = String.valueOf(filePath.getFileName());
 		String sourceChecksum = syncFile.getChecksum();
 		String sourceFileName = syncFile.getName();
@@ -626,7 +640,6 @@ public class SyncFileService {
 				deltaFilePath);
 		}
 
-		syncFile.setChangeLog(changeLog);
 		syncFile.setChecksum(targetChecksum);
 		syncFile.setFilePathName(FilePathNameUtil.getFilePathName(filePath));
 		syncFile.setName(name);
@@ -642,7 +655,7 @@ public class SyncFileService {
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
-		parameters.put("changeLog", changeLog);
+		parameters.put("changeLog", syncFile.getChangeLog());
 		parameters.put("checksum", targetChecksum);
 		parameters.put("description", syncFile.getDescription());
 		parameters.put("fileEntryId", syncFile.getTypePK());
@@ -767,23 +780,6 @@ public class SyncFileService {
 			return null;
 		}
 	}
-
-	protected static String incrementChangeLog(String versionString) {
-		if (versionString == null) {
-			return null;
-		}
-
-		BigDecimal versionBigDecimal = new BigDecimal(versionString);
-
-		versionBigDecimal = versionBigDecimal.add(_CHANGE_LOG_INCREMENT);
-
-		return versionBigDecimal.toString();
-	}
-
-	private static final BigDecimal _CHANGE_LOG_INCREMENT = new BigDecimal(
-		".1");
-
-	private static final String _VERSION_DEFAULT = "1.0";
 
 	private static Logger _logger = LoggerFactory.getLogger(
 		SyncFileService.class);
