@@ -73,7 +73,7 @@ public class MWUserServiceImpl extends MWUserServiceBaseImpl {
 	}
 
 	public boolean sendPasswordByUserId(
-			long companyId, long userId, ServiceContext serviceContext)
+			long userId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		User user = userLocalService.getUserById(userId);
