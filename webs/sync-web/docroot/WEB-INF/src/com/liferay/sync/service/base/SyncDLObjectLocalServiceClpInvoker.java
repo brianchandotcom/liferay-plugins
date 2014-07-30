@@ -135,11 +135,13 @@ public class SyncDLObjectLocalServiceClpInvoker {
 				"java.lang.String"
 			};
 
-		_methodName84 = "getLatestModifiedTime";
+		_methodName84 = "deleteSyncDLObjects";
 
-		_methodParameterTypes84 = new String[] {  };
+		_methodParameterTypes84 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
 
-		_methodName85 = "removeOldPWCSyncDLObjects";
+		_methodName85 = "getLatestModifiedTime";
 
 		_methodParameterTypes85 = new String[] {  };
 	}
@@ -277,14 +279,15 @@ public class SyncDLObjectLocalServiceClpInvoker {
 
 		if (_methodName84.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes84, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getLatestModifiedTime();
+			SyncDLObjectLocalServiceUtil.deleteSyncDLObjects((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1]);
+
+			return null;
 		}
 
 		if (_methodName85.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
-			SyncDLObjectLocalServiceUtil.removeOldPWCSyncDLObjects();
-
-			return null;
+			return SyncDLObjectLocalServiceUtil.getLatestModifiedTime();
 		}
 
 		throw new UnsupportedOperationException();

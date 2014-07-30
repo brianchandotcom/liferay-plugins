@@ -105,6 +105,9 @@ public interface SyncDLObjectLocalService extends BaseLocalService,
 		long syncDLObjectId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
+	public void deleteSyncDLObjects(java.lang.String type,
+		java.lang.String version);
+
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery();
 
 	/**
@@ -232,8 +235,6 @@ public interface SyncDLObjectLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
-
-	public void removeOldPWCSyncDLObjects();
 
 	/**
 	* Sets the Spring bean ID for this bean.
