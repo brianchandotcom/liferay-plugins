@@ -110,6 +110,11 @@ public class SyncDLObjectLocalServiceUtil {
 		return getService().deleteSyncDLObject(syncDLObjectId);
 	}
 
+	public static void deleteSyncDLObjects(java.lang.String type,
+		java.lang.String version) {
+		getService().deleteSyncDLObjects(type, version);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return getService().dynamicQuery();
 	}

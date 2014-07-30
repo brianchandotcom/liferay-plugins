@@ -109,6 +109,12 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 	}
 
 	@Override
+	public void deleteSyncDLObjects(java.lang.String type,
+		java.lang.String version) {
+		_syncDLObjectLocalService.deleteSyncDLObjects(type, version);
+	}
+
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _syncDLObjectLocalService.dynamicQuery();
 	}
