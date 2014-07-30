@@ -46,6 +46,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.solr.facet.SolrFacetFieldCollector;
 import com.liferay.portal.search.solr.facet.SolrFacetQueryCollector;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -137,6 +139,16 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 					String facetQuery =
 						facetConfiguration.getFieldName() +
 							StringPool.COLON + range;
+
+					solrQuery.addFacetQuery(facetQuery);
+				}
+
+				Serializable modified = searchContext.getAttribute("modified");
+
+				if (Validator.isNotNull(modified)) {
+					String facetQuery =
+						facetConfiguration.getFieldName() + StringPool.COLON +
+							GetterUtil.getString(modified);
 
 					solrQuery.addFacetQuery(facetQuery);
 				}
