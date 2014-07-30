@@ -419,19 +419,6 @@ public class SyncFileService {
 		}
 	}
 
-	public static List<SyncFile> findSyncFiles(int state) {
-		try {
-			return _syncFilePersistence.findByState(state);
-		}
-		catch (SQLException sqle) {
-			if (_logger.isDebugEnabled()) {
-				_logger.debug(sqle.getMessage(), sqle);
-			}
-
-			return Collections.emptyList();
-		}
-	}
-
 	public static List<SyncFile> findSyncFiles(int state, long syncAccountId) {
 		try {
 			return _syncFilePersistence.findByS_S(state, syncAccountId);
@@ -499,6 +486,19 @@ public class SyncFileService {
 			}
 
 			return Collections.emptyList();
+		}
+	}
+
+	public static long getSyncFileCount(int state) {
+		try {
+			return _syncFilePersistence.countByState(state);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+
+			return 0;
 		}
 	}
 

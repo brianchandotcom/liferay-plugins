@@ -14,6 +14,7 @@
 
 package com.liferay.sync.engine.service.persistence;
 
+import com.j256.ormlite.dao.ReferenceObjectCache;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.stmt.Where;
@@ -33,6 +34,18 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 
 	public SyncFilePersistence() throws SQLException {
 		super(SyncFile.class);
+
+		setObjectCache(ReferenceObjectCache.makeSoftCache());
+	}
+
+	public long countByState(int state) throws SQLException {
+		QueryBuilder<SyncFile, Long> queryBuilder = queryBuilder();
+
+		Where<SyncFile, Long> where = queryBuilder.where();
+
+		where.eq("state", state);
+
+		return where.countOf();
 	}
 
 	public SyncFile fetchByFK_S(String fileKey, long syncAccountId)
@@ -136,10 +149,6 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 		where.ne("type", SyncFile.TYPE_SYSTEM);
 
 		return query(queryBuilder.prepare());
-	}
-
-	public List<SyncFile> findByState(int state) throws SQLException {
-		return queryForEq("state", state);
 	}
 
 	public List<SyncFile> findByS_S(int state, long syncAccountId)
