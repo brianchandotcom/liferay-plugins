@@ -233,6 +233,8 @@ public interface SyncDLObjectLocalService extends BaseLocalService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
 
+	public void removeOldPWCSyncDLObjects();
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*

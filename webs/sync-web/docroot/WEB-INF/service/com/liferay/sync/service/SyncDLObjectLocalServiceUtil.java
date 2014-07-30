@@ -260,6 +260,10 @@ public class SyncDLObjectLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static void removeOldPWCSyncDLObjects() {
+		getService().removeOldPWCSyncDLObjects();
+	}
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*

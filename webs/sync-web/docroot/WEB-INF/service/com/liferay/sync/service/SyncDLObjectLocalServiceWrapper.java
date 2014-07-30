@@ -275,6 +275,11 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 			arguments);
 	}
 
+	@Override
+	public void removeOldPWCSyncDLObjects() {
+		_syncDLObjectLocalService.removeOldPWCSyncDLObjects();
+	}
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*

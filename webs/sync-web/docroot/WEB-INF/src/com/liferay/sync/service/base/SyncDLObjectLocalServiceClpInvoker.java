@@ -138,6 +138,10 @@ public class SyncDLObjectLocalServiceClpInvoker {
 		_methodName84 = "getLatestModifiedTime";
 
 		_methodParameterTypes84 = new String[] {  };
+
+		_methodName85 = "removeOldPWCSyncDLObjects";
+
+		_methodParameterTypes85 = new String[] {  };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -276,6 +280,13 @@ public class SyncDLObjectLocalServiceClpInvoker {
 			return SyncDLObjectLocalServiceUtil.getLatestModifiedTime();
 		}
 
+		if (_methodName85.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes85, parameterTypes)) {
+			SyncDLObjectLocalServiceUtil.removeOldPWCSyncDLObjects();
+
+			return null;
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -323,4 +334,6 @@ public class SyncDLObjectLocalServiceClpInvoker {
 	private String[] _methodParameterTypes83;
 	private String _methodName84;
 	private String[] _methodParameterTypes84;
+	private String _methodName85;
+	private String[] _methodParameterTypes85;
 }

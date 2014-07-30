@@ -130,13 +130,17 @@ public class SyncDLObjectLocalServiceClp implements SyncDLObjectLocalService {
 
 		_methodParameterTypes19 = new String[] {  };
 
-		_methodName21 = "setBeanIdentifier";
+		_methodName21 = "removeOldPWCSyncDLObjects";
 
-		_methodParameterTypes21 = new String[] { "java.lang.String" };
+		_methodParameterTypes21 = new String[] {  };
 
-		_methodName22 = "updateSyncDLObject";
+		_methodName22 = "setBeanIdentifier";
 
-		_methodParameterTypes22 = new String[] {
+		_methodParameterTypes22 = new String[] { "java.lang.String" };
+
+		_methodName23 = "updateSyncDLObject";
+
+		_methodParameterTypes23 = new String[] {
 				"com.liferay.sync.model.SyncDLObject"
 			};
 	}
@@ -728,10 +732,29 @@ public class SyncDLObjectLocalServiceClp implements SyncDLObjectLocalService {
 	}
 
 	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+	public void removeOldPWCSyncDLObjects() {
 		try {
 			_invokableLocalService.invokeMethod(_methodName21,
-				_methodParameterTypes21,
+				_methodParameterTypes21, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName22,
+				_methodParameterTypes22,
 				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
 		}
 		catch (Throwable t) {
@@ -753,8 +776,8 @@ public class SyncDLObjectLocalServiceClp implements SyncDLObjectLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22,
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23,
 					new Object[] { ClpSerializer.translateInput(syncDLObject) });
 		}
 		catch (Throwable t) {
@@ -817,4 +840,6 @@ public class SyncDLObjectLocalServiceClp implements SyncDLObjectLocalService {
 	private String[] _methodParameterTypes21;
 	private String _methodName22;
 	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
 }
