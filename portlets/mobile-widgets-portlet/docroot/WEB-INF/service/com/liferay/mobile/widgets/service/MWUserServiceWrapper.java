@@ -56,11 +56,19 @@ public class MWUserServiceWrapper implements MWUserService,
 		return _mwUserService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use
+	* {@link com.liferay.mobile.widgets.service.MWUserServiceUtil} to access
+	* the MWUser remote service.
+	*/
 	@Override
 	public boolean sendPasswordByEmailAddress(long companyId,
 		java.lang.String emailAddress,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _mwUserService.sendPasswordByEmailAddress(companyId,
 			emailAddress, serviceContext);
 	}
@@ -69,17 +77,18 @@ public class MWUserServiceWrapper implements MWUserService,
 	public boolean sendPasswordByScreenName(long companyId,
 		java.lang.String screenName,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _mwUserService.sendPasswordByScreenName(companyId, screenName,
 			serviceContext);
 	}
 
 	@Override
-	public boolean sendPasswordByUserId(long companyId, long userId,
+	public boolean sendPasswordByUserId(long userId,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
-		return _mwUserService.sendPasswordByUserId(companyId, userId,
-			serviceContext);
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _mwUserService.sendPasswordByUserId(userId, serviceContext);
 	}
 
 	/**

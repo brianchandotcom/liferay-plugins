@@ -51,6 +51,13 @@ import java.rmi.RemoteException;
  * @generated
  */
 public class MWUserServiceSoap {
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use
+	* {@link com.liferay.mobile.widgets.service.MWUserServiceUtil} to access
+	* the MWUser remote service.
+	*/
 	public static boolean sendPasswordByEmailAddress(long companyId,
 		java.lang.String emailAddress,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -85,12 +92,12 @@ public class MWUserServiceSoap {
 		}
 	}
 
-	public static boolean sendPasswordByUserId(long companyId, long userId,
+	public static boolean sendPasswordByUserId(long userId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws RemoteException {
 		try {
-			boolean returnValue = MWUserServiceUtil.sendPasswordByUserId(companyId,
-					userId, serviceContext);
+			boolean returnValue = MWUserServiceUtil.sendPasswordByUserId(userId,
+					serviceContext);
 
 			return returnValue;
 		}

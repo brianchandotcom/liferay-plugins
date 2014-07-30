@@ -49,7 +49,7 @@ public class MWUserServiceClp implements MWUserService {
 		_methodName5 = "sendPasswordByUserId";
 
 		_methodParameterTypes5 = new String[] {
-				"long", "long", "com.liferay.portal.service.ServiceContext"
+				"long", "com.liferay.portal.service.ServiceContext"
 			};
 	}
 
@@ -107,7 +107,8 @@ public class MWUserServiceClp implements MWUserService {
 	public boolean sendPasswordByEmailAddress(long companyId,
 		java.lang.String emailAddress,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
@@ -124,8 +125,12 @@ public class MWUserServiceClp implements MWUserService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof java.lang.Exception) {
-				throw (java.lang.Exception)t;
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -144,7 +149,8 @@ public class MWUserServiceClp implements MWUserService {
 	public boolean sendPasswordByScreenName(long companyId,
 		java.lang.String screenName,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
@@ -161,8 +167,12 @@ public class MWUserServiceClp implements MWUserService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof java.lang.Exception) {
-				throw (java.lang.Exception)t;
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -178,18 +188,17 @@ public class MWUserServiceClp implements MWUserService {
 	}
 
 	@Override
-	public boolean sendPasswordByUserId(long companyId, long userId,
+	public boolean sendPasswordByUserId(long userId,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableService.invokeMethod(_methodName5,
 					_methodParameterTypes5,
 					new Object[] {
-						companyId,
-						
-					userId,
+						userId,
 						
 					ClpSerializer.translateInput(serviceContext)
 					});
@@ -197,8 +206,12 @@ public class MWUserServiceClp implements MWUserService {
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof java.lang.Exception) {
-				throw (java.lang.Exception)t;
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {

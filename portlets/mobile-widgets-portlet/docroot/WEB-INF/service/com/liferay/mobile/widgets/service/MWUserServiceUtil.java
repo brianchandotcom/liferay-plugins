@@ -63,10 +63,18 @@ public class MWUserServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use
+	* {@link com.liferay.mobile.widgets.service.MWUserServiceUtil} to access
+	* the MWUser remote service.
+	*/
 	public static boolean sendPasswordByEmailAddress(long companyId,
 		java.lang.String emailAddress,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .sendPasswordByEmailAddress(companyId, emailAddress,
 			serviceContext);
@@ -75,17 +83,18 @@ public class MWUserServiceUtil {
 	public static boolean sendPasswordByScreenName(long companyId,
 		java.lang.String screenName,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .sendPasswordByScreenName(companyId, screenName,
 			serviceContext);
 	}
 
-	public static boolean sendPasswordByUserId(long companyId, long userId,
+	public static boolean sendPasswordByUserId(long userId,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception {
-		return getService()
-				   .sendPasswordByUserId(companyId, userId, serviceContext);
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().sendPasswordByUserId(userId, serviceContext);
 	}
 
 	public static void clearService() {

@@ -64,17 +64,27 @@ public interface MWUserService extends BaseService, InvokableService {
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use
+	* {@link com.liferay.mobile.widgets.service.MWUserServiceUtil} to access
+	* the MWUser remote service.
+	*/
 	public boolean sendPasswordByEmailAddress(long companyId,
 		java.lang.String emailAddress,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception;
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public boolean sendPasswordByScreenName(long companyId,
 		java.lang.String screenName,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception;
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
-	public boolean sendPasswordByUserId(long companyId, long userId,
+	public boolean sendPasswordByUserId(long userId,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws java.lang.Exception;
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

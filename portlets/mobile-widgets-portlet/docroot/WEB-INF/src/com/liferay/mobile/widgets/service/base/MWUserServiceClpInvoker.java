@@ -49,7 +49,7 @@ public class MWUserServiceClpInvoker {
 		_methodName26 = "sendPasswordByUserId";
 
 		_methodParameterTypes26 = new String[] {
-				"long", "long", "com.liferay.portal.service.ServiceContext"
+				"long", "com.liferay.portal.service.ServiceContext"
 			};
 	}
 
@@ -84,8 +84,7 @@ public class MWUserServiceClpInvoker {
 		if (_methodName26.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes26, parameterTypes)) {
 			return MWUserServiceUtil.sendPasswordByUserId(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue(),
-				(com.liferay.portal.service.ServiceContext)arguments[2]);
+				(com.liferay.portal.service.ServiceContext)arguments[1]);
 		}
 
 		throw new UnsupportedOperationException();
