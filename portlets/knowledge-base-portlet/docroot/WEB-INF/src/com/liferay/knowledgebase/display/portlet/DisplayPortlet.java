@@ -144,6 +144,8 @@ public class DisplayPortlet extends MVCPortlet {
 		long kbCommentId = ParamUtil.getLong(actionRequest, "kbCommentId");
 
 		KBCommentServiceUtil.deleteKBComment(kbCommentId);
+
+		SessionMessages.add(actionRequest, "feedbackDeleted");
 	}
 
 	public void deleteTempAttachment(
@@ -451,6 +453,24 @@ public class DisplayPortlet extends MVCPortlet {
 				kbCommentId, classNameId, classPK, content, helpful,
 				serviceContext);
 		}
+
+		SessionMessages.add(actionRequest, "feedbackSaved");
+	}
+
+	public void updateKBCommentStatus(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws PortalException {
+
+		long kbCommentId = ParamUtil.getLong(actionRequest, "kbCommentId");
+
+		int status = ParamUtil.getInteger(actionRequest, "status");
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			KBComment.class.getName(), actionRequest);
+
+		KBCommentServiceUtil.updateStatus(kbCommentId, status, serviceContext);
+
+		SessionMessages.add(actionRequest, "feedbackStatusUpdated");
 	}
 
 	@Override

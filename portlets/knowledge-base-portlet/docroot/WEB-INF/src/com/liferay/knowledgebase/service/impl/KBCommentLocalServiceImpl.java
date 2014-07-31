@@ -81,7 +81,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setClassPK(classPK);
 		kbComment.setContent(content);
 		kbComment.setHelpful(helpful);
-		kbComment.setStatus(KBCommentConstants.STATUS_PENDING);
+		kbComment.setStatus(KBCommentConstants.STATUS_NEW);
 
 		kbCommentPersistence.update(kbComment);
 
@@ -182,6 +182,17 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 	}
 
 	@Override
+	public List<KBComment> getKBComments(
+		String className, long classPK, int[] status, int start, int end) {
+
+		long classNameId = classNameLocalService.getClassNameId(className);
+
+		return kbCommentPersistence.findByC_C_S(
+			classNameId, classPK, status, start, end,
+			new KBCommentCreateDateComparator());
+	}
+
+	@Override
 	public int getKBCommentsCount(long groupId, int status) {
 		return kbCommentPersistence.countByG_S(groupId, status);
 	}
@@ -199,6 +210,22 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		long classNameId = classNameLocalService.getClassNameId(className);
 
 		return kbCommentPersistence.countByC_C(classNameId, classPK);
+	}
+
+	@Override
+	public int getKBCommentsCount(String className, long classPK, int status) {
+		long classNameId = classNameLocalService.getClassNameId(className);
+
+		return kbCommentPersistence.countByC_C_S(classNameId, classPK, status);
+	}
+
+	@Override
+	public int getKBCommentsCount(
+		String className, long classPK, int[] status) {
+
+		long classNameId = classNameLocalService.getClassNameId(className);
+
+		return kbCommentPersistence.countByC_C_S(classNameId, classPK, status);
 	}
 
 	@Override

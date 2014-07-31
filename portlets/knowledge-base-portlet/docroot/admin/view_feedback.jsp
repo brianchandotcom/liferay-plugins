@@ -18,55 +18,27 @@
 
 <liferay-util:include page="/admin/top_tabs.jsp" servletContext="<%= application %>" />
 
+<liferay-ui:success
+	key="feedbackDeleted"
+	message="feedback-deleted-successfully"
+/>
+
+<liferay-ui:success
+	key="feedbackStatusUpdated"
+	message="feedback-status-updated-successfully"
+/>
+
+<liferay-ui:success
+	key="feedbackSaved"
+	message="feedback-saved-successfully"
+/>
+
 <%
-String navItem = ParamUtil.getString(request, "navItem", "viewPendingFeedback");
+String navItem = ParamUtil.getString(request, "navItem", "viewNewFeedback");
+
+KBFeedbackListDisplayContext kbFeedbackListDisplayContext = new KBFeedbackListDisplayContext(scopeGroupId, navItem);
+
+request.setAttribute(WebKeys.KB_FEEDBACK_LIST_DISPLAY_CONTEXT, kbFeedbackListDisplayContext);
 %>
 
-<aui:nav-bar>
-	<aui:nav cssClass="navbar-nav">
-		<portlet:renderURL var="viewPendingFeedbackURL">
-			<portlet:param name="mvcPath" value="/admin/view_feedback.jsp" />
-			<portlet:param name="navItem" value="viewPendingFeedback" />
-		</portlet:renderURL>
-
-		<aui:nav-item
-			href="<%= viewPendingFeedbackURL %>"
-			label="pending"
-			selected='<%= navItem.equals("viewPendingFeedback") %>'
-		/>
-
-		<portlet:renderURL var="viewInProgressFeedbackURL">
-			<portlet:param name="mvcPath" value="/admin/view_feedback.jsp" />
-			<portlet:param name="navItem" value="viewInProgressFeedback" />
-		</portlet:renderURL>
-
-		<aui:nav-item
-			href="<%= viewInProgressFeedbackURL %>"
-			label="in-progress"
-			selected='<%= navItem.equals("viewInProgressFeedback") %>'
-		/>
-
-		<portlet:renderURL var="viewResolvedFeedbackURL">
-			<portlet:param name="mvcPath" value="/admin/view_feedback.jsp" />
-			<portlet:param name="navItem" value="viewResolvedFeedback" />
-		</portlet:renderURL>
-
-		<aui:nav-item
-			href="<%= viewResolvedFeedbackURL %>"
-			label="resolved"
-			selected='<%= navItem.equals("viewResolvedFeedback") %>'
-		/>
-	</aui:nav>
-</aui:nav-bar>
-
-<c:choose>
-	<c:when test='<%= navItem.equals("viewInProgressFeedback") %>'>
-		<liferay-util:include page="/admin/view_in_progress_feedback.jsp" servletContext="<%= application %>" />
-	</c:when>
-	<c:when test='<%= navItem.equals("viewPendingFeedback") %>'>
-		<liferay-util:include page="/admin/view_pending_feedback.jsp" servletContext="<%= application %>" />
-	</c:when>
-	<c:otherwise>
-		<liferay-util:include page="/admin/view_resolved_feedback.jsp" servletContext="<%= application %>" />
-	</c:otherwise>
-</c:choose>
+<liferay-util:include page="/admin/common/view_feedback_by_status.jsp" servletContext="<%= application %>" />
