@@ -20,20 +20,32 @@
 	<aui:row>
 		<aui:col cssClass="nav-bar user-notifications-sidebar" width="<%= 25 %>">
 			<div class="nav">
-				<a class="clearfix selected unread" href="javascript:;">
-					<span class="title"><liferay-ui:message key="unread" /></span>
-
-					<%
-					int unreadUserNotificationsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), false);
-					%>
-
-					<span class="count"><%= unreadUserNotificationsCount %></span>
+				<a class="all-notifications clearfix selected" href="javascript:;">
+					<span class="title"><liferay-ui:message key="all-notifications" /></span>
 				</a>
 			</div>
 
 			<div class="nav">
-				<a class="all-notifications clearfix" href="javascript:;">
-					<span class="title"><liferay-ui:message key="all-notifications" /></span>
+				<a class="clearfix unread-actionable" href="javascript:;">
+					<span class="title"><liferay-ui:message key="unread-actionable-notifications" /></span>
+
+					<%
+					int unreadActionableUserNotificationsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), UserNotificationDeliveryConstants.TYPE_WEBSITE, true, false);
+					%>
+
+					<span class="count"><%= unreadActionableUserNotificationsCount %></span>
+				</a>
+			</div>
+
+			<div class="nav">
+				<a class="clearfix unread-nonactionable" href="javascript:;">
+					<span class="title"><liferay-ui:message key="unread-nonactionable-notifications" /></span>
+
+					<%
+					int unreadNonActionableUserNotificationsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), UserNotificationDeliveryConstants.TYPE_WEBSITE, false, false);
+					%>
+
+					<span class="count"><%= unreadNonActionableUserNotificationsCount %></span>
 				</a>
 			</div>
 
@@ -55,10 +67,9 @@
 <aui:script use="aui-base">
 	var userNotificationsList = A.one('#portlet_<%= PortletKeys.NOTIFICATIONS %> .user-notifications-list-container .user-notifications-list');
 
-	<portlet:renderURL var="unreadURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+	<portlet:renderURL var="allNotificationsURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 		<portlet:param name="mvcPath" value="/notifications/view_entries.jsp" />
-		<portlet:param name="filter" value="unread" />
 	</portlet:renderURL>
 
-	Liferay.Notifications.renderNotificationsList(userNotificationsList, '<%= unreadURL %>');
+	Liferay.Notifications.renderNotificationsList(userNotificationsList, '<%= allNotificationsURL %>');
 </aui:script>

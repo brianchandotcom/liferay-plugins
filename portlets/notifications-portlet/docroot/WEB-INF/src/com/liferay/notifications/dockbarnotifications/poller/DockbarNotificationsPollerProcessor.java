@@ -55,6 +55,36 @@ public class DockbarNotificationsPollerProcessor extends BasePollerProcessor {
 		pollerResponse.setParameter(
 			"timestamp", String.valueOf(System.currentTimeMillis()));
 
+		int totalUserNotificationsCount =
+			UserNotificationEventLocalServiceUtil.
+				getUserNotificationEventsCount(pollerRequest.getUserId());
+
+		pollerResponse.setParameter(
+			"totalUserNotificationsCount",
+			String.valueOf(totalUserNotificationsCount));
+
+		int unreadActionableUserNotificationsCount =
+			UserNotificationEventLocalServiceUtil.
+				getArchivedUserNotificationEventsCount(
+					pollerRequest.getUserId(),
+					UserNotificationDeliveryConstants.TYPE_WEBSITE, true,
+					false);
+
+		pollerResponse.setParameter(
+			"unreadActionableUserNotificationsCount",
+			String.valueOf(unreadActionableUserNotificationsCount));
+
+		int unreadNonActionableUserNotificationsCount =
+			UserNotificationEventLocalServiceUtil.
+				getArchivedUserNotificationEventsCount(
+					pollerRequest.getUserId(),
+					UserNotificationDeliveryConstants.TYPE_WEBSITE, false,
+					false);
+
+		pollerResponse.setParameter(
+			"unreadNonActionableUserNotificationsCount",
+			String.valueOf(unreadNonActionableUserNotificationsCount));
+
 		int unreadUserNotificationsCount =
 			UserNotificationEventLocalServiceUtil.
 				getArchivedUserNotificationEventsCount(
