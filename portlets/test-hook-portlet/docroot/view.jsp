@@ -61,7 +61,7 @@
 	<%
 	boolean value = true;
 
-	List<String> classNames = TestHookFilterUtil.FilterNameList.getClassNames();
+	List<String> classNames = TestHookFilterUtil.getClassNames();
 
 	List<String> filterNames = new ArrayList<String>();
 
