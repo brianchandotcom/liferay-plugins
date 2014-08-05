@@ -59,20 +59,13 @@
 <p>
 
 	<%
-	boolean value = true;
+	List<String> filterClassNames = TestHookFilterUtil.getFilterClassNames();
 
-	List<String> classNames = TestHookFilterUtil.getClassNames();
-
-	List<String> filterNames = new ArrayList<String>();
-
-	filterNames.add("BeforeHookFilter");
-	filterNames.add("HookFilter");
-	filterNames.add("AfterHookFilter");
-
-	if (classNames.size() > 0) {
+	if (filterClassNames.size() > 0) {
+		List<String> expectedFilterClassNames = ListUtil.fromArray(new String[] {"BeforeHookFilter", "HookFilter", "AfterHookFilter"});
 	%>
 
-		filter order test=<%= _assertEquals(filterNames, classNames) %><br />
+		filter order test=<%= _assertEquals(expectedFilterClassNames, filterClassNames) %><br />
 
 	<%
 	}

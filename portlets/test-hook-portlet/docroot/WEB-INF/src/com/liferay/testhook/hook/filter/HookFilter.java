@@ -40,9 +40,7 @@ public class HookFilter implements Filter {
 			FilterChain filterChain)
 		throws IOException, ServletException {
 
-		String className = this.getClass().getSimpleName();
-
-		TestHookFilterUtil.addClassName(className);
+		TestHookFilterUtil.addFilterClass(getClass());
 
 		filterChain.doFilter(servletRequest, servletResponse);
 	}

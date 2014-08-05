@@ -24,14 +24,14 @@ import java.util.List;
  */
 public class TestHookFilterUtil {
 
-	public static void addClassName(String className) {
-		_classNames.add(className);
+	public static void addFilterClass(Class<?> filterClazz) {
+		_filterClassNames.add(filterClazz.getSimpleName());
 	}
 
-	public static List<String> getClassNames() {
-		return ListUtil.unique(_classNames);
+	public static List<String> getFilterClassNames() {
+		return ListUtil.unique(_filterClassNames);
 	}
 
-	private static List<String> _classNames = new ArrayList<String>();
+	private static List<String> _filterClassNames = new ArrayList<String>();
 
 }
