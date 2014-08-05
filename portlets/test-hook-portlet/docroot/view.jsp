@@ -54,6 +54,25 @@
 	com.liferay.portal.service.UserLocalService=<%= _assertEquals(TestHookUserImpl.class.getName(), UserLocalServiceUtil.getUserByEmailAddress(themeDisplay.getCompanyId(), "test@liferay.com").getClass().getName()) %>
 </p>
 
+<h3>filter order</h3>
+
+<p>
+
+	<%
+	List<String> filterClassNames = TestHookFilterUtil.getFilterClassNames();
+
+	if (filterClassNames.size() > 0) {
+		List<String> expectedFilterClassNames = ListUtil.fromArray(new String[] {"BeforeHookFilter", "HookFilter", "AfterHookFilter"});
+	%>
+
+		filter order test=<%= _assertEquals(expectedFilterClassNames, filterClassNames) %><br />
+
+	<%
+	}
+	%>
+
+</p>
+
 <%!
 private static String _assertEquals(Object expected, Object actual) {
 	return _assertTrue(Validator.equals(expected, actual));
