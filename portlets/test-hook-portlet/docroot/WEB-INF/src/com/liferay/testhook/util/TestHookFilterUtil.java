@@ -14,6 +14,8 @@
 
 package com.liferay.testhook.util;
 
+import com.liferay.portal.kernel.util.ListUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +25,11 @@ import java.util.List;
 public class TestHookFilterUtil {
 
 	public static void addClassName(String className) {
-		if (!_classNames.contains(className)) {
-			_classNames.add(className);
-		}
+		_classNames.add(className);
 	}
 
 	public static List<String> getClassNames() {
-		return _classNames;
+		return ListUtil.unique(_classNames);
 	}
 
 	private static List<String> _classNames = new ArrayList<String>();
