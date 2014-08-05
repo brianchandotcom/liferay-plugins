@@ -70,25 +70,9 @@
 	filterNames.add("AfterHookFilter");
 
 	if (classNames.size() > 0) {
-		if (classNames.size() != filterNames.size()) {
 	%>
 
-			filter order size test=<%= _assertFalse(!value) %><br />
-
-	<%
-			return;
-		}
-
-		for (int i = 0; i < filterNames.size(); i++) {
-			if (!classNames.get(i).equals(filterNames.get(i))) {
-				value = false;
-
-				break;
-			}
-		}
-	%>
-
-		filter order test=<%= _assertTrue(value) %><br />
+		filter order test=<%= _assertEquals(filterNames, classNames) %><br />
 
 	<%
 	}
