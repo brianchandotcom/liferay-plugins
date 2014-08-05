@@ -32,7 +32,6 @@ public class BeforeHookFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		System.out.println("Called BeforeHookFilter.destroy()");
 	}
 
 	@Override
@@ -50,7 +49,6 @@ public class BeforeHookFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) {
-		System.out.println("Called BeforeHookFilter.init()");
 	}
 
 }
