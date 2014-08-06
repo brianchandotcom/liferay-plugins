@@ -1,0 +1,11 @@
+Import-Package:\
+	com.liferay.portal.kernel.dao.orm,\
+	com.liferay.portal.kernel.exception,\
+	com.liferay.portal.kernel.lar,\
+	com.liferay.portal.kernel.search,\
+	com.liferay.portal.kernel.util,\
+	com.liferay.portal.model,\
+	com.liferay.portal.service,\
+	*
+
+Include-Resource: classes
