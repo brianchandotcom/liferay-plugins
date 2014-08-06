@@ -51,7 +51,7 @@
 
 			<div class="nav">
 				<a class="manage clearfix" href="javascript:;">
-					<span class="title"><liferay-ui:message key="notification-delivery" /></span>
+					<span class="title"><liferay-ui:message key="notification-delivery-settings" /></span>
 				</a>
 			</div>
 		</aui:col>

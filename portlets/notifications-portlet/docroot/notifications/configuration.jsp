@@ -35,10 +35,10 @@
 	</div>
 
 	<%
-	Map<String, List<UserNotificationDefinition>> userNotificationDefinitionsMap = UserNotificationManagerUtil.getUserNotificationDefinitions();
+	List<List<UserNotificationDefinition>> userNotificationDefinitionsList = UserNotificationManagerUtil.getUserNotificationDefinitionsList();
 
-	for (Map.Entry<String, List<UserNotificationDefinition>> entry : userNotificationDefinitionsMap.entrySet()) {
-		String portletId = entry.getKey();
+	for (List<UserNotificationDefinition> userNotificationDefinitions : userNotificationDefinitionsList) {
+		String portletId = userNotificationDefinitions.get(0).getPortletId();
 
 		Portlet portlet = PortletLocalServiceUtil.getPortletById(portletId);
 	%>
@@ -48,8 +48,6 @@
 			<tbody>
 
 			<%
-			List<UserNotificationDefinition> userNotificationDefinitions = entry.getValue();
-
 			for (UserNotificationDefinition userNotificationDefinition : userNotificationDefinitions) {
 			%>
 
