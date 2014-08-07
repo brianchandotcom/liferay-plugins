@@ -18,13 +18,19 @@ import com.liferay.io.delta.ByteChannelReader;
 import com.liferay.io.delta.ByteChannelWriter;
 import com.liferay.io.delta.DeltaUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.util.ClassUtil;
 import com.liferay.portal.kernel.util.Digester;
 import com.liferay.portal.kernel.util.DigesterUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Lock;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
@@ -41,6 +47,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.lang.reflect.InvocationTargetException;
+
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -52,6 +60,71 @@ import java.util.Date;
  * @author Dennis Ju
  */
 public class SyncUtil {
+
+	public static String buildExceptionMessage(Throwable throwable) {
+
+		// SYNC-1253
+
+		StringBundler sb = new StringBundler(13);
+
+		if (throwable instanceof InvocationTargetException) {
+			throwable = throwable.getCause();
+		}
+
+		String throwableMessage = throwable.getMessage();
+
+		if (Validator.isNull(throwableMessage)) {
+			throwableMessage = throwable.toString();
+		}
+
+		sb.append(StringPool.QUOTE);
+		sb.append(throwableMessage);
+		sb.append(StringPool.QUOTE);
+		sb.append(StringPool.COMMA_AND_SPACE);
+		sb.append("\"error\": ");
+
+		JSONObject errorJSONObject = JSONFactoryUtil.createJSONObject();
+
+		errorJSONObject.put("message", throwableMessage);
+		errorJSONObject.put("type", ClassUtil.getClassName(throwable));
+
+		sb.append(errorJSONObject.toString());
+
+		sb.append(StringPool.COMMA_AND_SPACE);
+		sb.append("\"throwable\": \"");
+		sb.append(throwable.toString());
+		sb.append(StringPool.QUOTE);
+
+		if (throwable.getCause() == null) {
+			return StringUtil.unquote(sb.toString());
+		}
+
+		sb.append(StringPool.COMMA_AND_SPACE);
+		sb.append("\"rootCause\": ");
+
+		Throwable rootCauseThrowable = throwable;
+
+		while (rootCauseThrowable.getCause() != null) {
+			rootCauseThrowable = rootCauseThrowable.getCause();
+		}
+
+		JSONObject rootCauseJSONObject = JSONFactoryUtil.createJSONObject();
+
+		throwableMessage = rootCauseThrowable.getMessage();
+
+		if (Validator.isNull(throwableMessage)) {
+			throwableMessage = rootCauseThrowable.toString();
+		}
+
+		rootCauseJSONObject.put("message", throwableMessage);
+
+		rootCauseJSONObject.put(
+			"type", ClassUtil.getClassName(rootCauseThrowable));
+
+		sb.append(rootCauseJSONObject);
+
+		return StringUtil.unquote(sb.toString());
+	}
 
 	public static String getChecksum(DLFileVersion dlFileVersion)
 		throws PortalException {

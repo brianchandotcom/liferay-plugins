@@ -27,9 +27,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.util.EntityUtils;
 
@@ -46,20 +48,47 @@ public class BaseJSONHandler extends BaseHandler {
 	}
 
 	@Override
+	public Void handleResponse(HttpResponse httpResponse) {
+		try {
+			StatusLine statusLine = httpResponse.getStatusLine();
+
+			if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
+				String response = getResponseString(httpResponse);
+
+				if (handlePortalException(getException(response))) {
+					return null;
+				}
+
+				_logger.error("Status code {}", statusLine.getStatusCode());
+
+				throw new HttpResponseException(
+					statusLine.getStatusCode(), statusLine.getReasonPhrase());
+			}
+
+			doHandleResponse(httpResponse);
+		}
+		catch (Exception e) {
+			handleException(e);
+		}
+
+		return null;
+	}
+
+	@Override
 	protected void doHandleResponse(HttpResponse httpResponse)
 		throws Exception {
 
-		HttpEntity httpEntity = httpResponse.getEntity();
+		String response = getResponseString(httpResponse);
 
-		String response = EntityUtils.toString(httpEntity);
-
-		if (!handlePortalException(getException(response))) {
-			if (_logger.isTraceEnabled()) {
-				_logger.trace("Handling response {}", response);
-			}
-
-			processResponse(response);
+		if (handlePortalException(getException(response))) {
+			return;
 		}
+
+		if (_logger.isTraceEnabled()) {
+			_logger.trace("Handling response {}", response);
+		}
+
+		processResponse(response);
 	}
 
 	protected String getException(String response) {
@@ -68,19 +97,31 @@ public class BaseJSONHandler extends BaseHandler {
 		JsonNode responseJsonNode = null;
 
 		try {
+			response = StringEscapeUtils.unescapeJson(response);
+
 			responseJsonNode = objectMapper.readTree(response);
 		}
 		catch (Exception e) {
 			return "";
 		}
 
-		JsonNode exceptionJsonNode = responseJsonNode.get("exception");
+		JsonNode errorJsonNode = responseJsonNode.get("error");
 
-		if (exceptionJsonNode == null) {
+		if (errorJsonNode == null) {
 			return "";
 		}
 
-		return exceptionJsonNode.asText();
+		JsonNode typeJsonNode = errorJsonNode.get("type");
+
+		return typeJsonNode.asText();
+	}
+
+	protected String getResponseString(HttpResponse httpResponse)
+		throws Exception {
+
+		HttpEntity httpEntity = httpResponse.getEntity();
+
+		return EntityUtils.toString(httpEntity);
 	}
 
 	protected boolean handlePortalException(String exception) throws Exception {
@@ -157,7 +198,11 @@ public class BaseJSONHandler extends BaseHandler {
 
 			retryServerConnection();
 		}
-		else if (exception.equals("java.lang.RuntimeException")) {
+		else if (exception.equals(
+					"com.liferay.portal.kernel.jsonwebservice." +
+						"NoSuchJSONWebServiceException") ||
+				 exception.equals("java.lang.RuntimeException")) {
+
 			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 				getSyncAccountId());
 
