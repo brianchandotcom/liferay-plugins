@@ -85,6 +85,8 @@ else {
 </div>
 
 <aui:script use="datatype-number,liferay-so-site-list">
+	var Lang = A.Lang;
+
 	var directoryContainer = A.one('#<portlet:namespace />directory');
 
 	var navigationContainer = directoryContainer.all('.directory-navigation');
@@ -154,7 +156,7 @@ else {
 						'</a>' +
 					'</span>';
 
-				return A.Lang.sub(
+				return Lang.sub(
 					siteActionTemplate,
 					{
 						actionClassNames: actionClassNames,
@@ -200,24 +202,24 @@ else {
 
 						if (result.deleteURL) {
 							if (result.deleteURL == '<%= StringPool.FALSE %>') {
-								deleteHTML = getSiteActionHtml('delete', 'disabled', Liferay.Language.get("you-cannot-delete-the-current-site"), '#')
+								deleteHTML = getSiteActionHtml('delete', 'disabled', '<liferay-ui:message key="you-cannot-delete-the-current-site" />', '#')
 							}
 							else {
-								deleteHTML = getSiteActionHtml('action delete', 'delete-site', Liferay.Language.get("delete-site"), result.deleteURL);
+								deleteHTML = getSiteActionHtml('action delete', 'delete-site', '<liferay-ui:message key="delete-site" />', result.deleteURL);
 							}
 						}
 
 						var favoriteHTML;
 
 						if (result.favoriteURL == '<%= StringPool.BLANK %>') {
-							favoriteHTML = getSiteActionHtml('favorite', 'disabled', Liferay.Language.get("you-must-be-a-member-of-the-site-to-add-to-favorites"), '#');
+							favoriteHTML = getSiteActionHtml('favorite', 'disabled', '<liferay-ui:message key="you-must-be-a-member-of-the-site-to-add-to-favorites" />', '#');
 						}
 						else {
 							if (result.favoriteURL) {
-								favoriteHTML = getSiteActionHtml('action favorite', '', Liferay.Language.get("add-to-favorites"), result.favoriteURL);
+								favoriteHTML = getSiteActionHtml('action favorite', '', '<liferay-ui:message key="add-to-favorites" />', result.favoriteURL);
 							}
 							else {
-								favoriteHTML = getSiteActionHtml('action unfavorite', '', Liferay.Language.get("remove-from-favorites"), result.unfavoriteURL);
+								favoriteHTML = getSiteActionHtml('action unfavorite', '', '<liferay-ui:message key="remove-from-favorites" />', result.unfavoriteURL);
 							}
 						}
 
@@ -240,23 +242,23 @@ else {
 
 						if (leaveURLOnly) {
 							if (result.leaveURL) {
-								leaveHTML = getSiteActionHtml('action leave', 'leave-site', Liferay.Language.get("leave-site"), result.leaveURL)
+								leaveHTML = getSiteActionHtml('action leave', 'leave-site', '<liferay-ui:message key="leave-site" />', result.leaveURL)
 							}
 							else {
-								leaveHTML = getSiteActionHtml('action leave', 'disabled', Liferay.Language.get("you-cannot-leave-the-site-as-a-user-group-member-or-organization-member"), '#');
+								leaveHTML = getSiteActionHtml('action leave', 'disabled', '<liferay-ui:message key="you-cannot-leave-the-site-as-a-user-group-member-or-organization-member" />', '#');
 							}
 						}
 
-						return A.Lang.sub(
+						return Lang.sub(
 							siteTemplate,
 							{
 								classNames: classNames.join(' '),
 								deleteHTML: deleteHTML,
 								favoriteHTML: favoriteHTML,
-								joinHTML: (result.joinURL ? getSiteActionHtml('action join', 'join-site', Liferay.Language.get("join-site"), result.joinURL) : ''),
+								joinHTML: (result.joinURL ? getSiteActionHtml('action join', 'join-site', '<liferay-ui:message key="join-site" />', result.joinURL) : ''),
 								leaveHTML: leaveHTML,
-								requestHTML: (result.requestUrl ? getSiteActionHtml('action request', 'request-site', Liferay.Language.get("request-membership"), result.requestUrl) : ''),
-								requestedHTML: (result.membershipRequested ? getSiteActionHtml('action requested', '', Liferay.Language.get("membership-requested"), '#') : ''),
+								requestedHTML: (result.membershipRequested ? getSiteActionHtml('action requested', '', '<liferay-ui:message key="membership-requested" />', '#') : ''),
+								requestHTML: (result.requestUrl ? getSiteActionHtml('action request', 'request-site', '<liferay-ui:message key="request-membership" />', result.requestUrl) : ''),
 								siteDescription: result.description,
 								siteName: name
 							}
@@ -366,7 +368,7 @@ else {
 					siteName = siteNode.one('.name');
 				}
 
-				var unescapedSiteName = Liferay.Util.unescapeHTML(siteName.getContent());
+				var unescapedSiteName = Lang.String.unescapeHTML(siteName.getContent());
 
 				if (currentTargetClass == 'leave-site') {
 					confirmMessage = '<%= LanguageUtil.format(request, "are-you-sure-you-want-to-leave-x", "' + unescapedSiteName + '", false) %>';
