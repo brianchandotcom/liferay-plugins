@@ -5,6 +5,7 @@ AUI.add(
 		var AObject = A.Object;
 		var DateMath = A.DataType.DateMath;
 		var Lang = A.Lang;
+		var LString = Lang.String;
 
 		var RecurrenceUtil = Liferay.RecurrenceUtil;
 		var Workflow = Liferay.Workflow;
@@ -825,7 +826,7 @@ AUI.add(
 					content: {
 						getter: function(val) {
 							if (val) {
-								val = Liferay.Util.escapeHTML(val);
+								val = LString.escapeHTML(val);
 							}
 
 							return val;
@@ -1667,7 +1668,7 @@ AUI.add(
 								'<p class="calendar-portlet-confirmation-text">',
 								Lang.sub(
 									Liferay.Language.get('you-are-about-to-make-changes-that-will-only-effect-your-calendar-x'),
-									[Liferay.Util.escapeHTML(calendar.get('name'))]
+									[LString.escapeHTML(calendar.get('name'))]
 								),
 								'</p>'
 							].join(STR_BLANK);
