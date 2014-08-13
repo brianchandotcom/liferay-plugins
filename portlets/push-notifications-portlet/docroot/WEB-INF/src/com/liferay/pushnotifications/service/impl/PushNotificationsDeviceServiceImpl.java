@@ -99,8 +99,11 @@ public class PushNotificationsDeviceServiceImpl
 
 	@Override
 	public void sendPushNotification(String message) throws PortalException {
+		long userId = getUserId();
+
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
+		jsonObject.put("userId", String.valueOf(userId));
 		jsonObject.put("message", message);
 
 		if (_log.isDebugEnabled()) {

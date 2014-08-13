@@ -86,6 +86,12 @@ public class ApplePushNotificationsSender implements PushNotificationsSender {
 	protected String buildPayload(JSONObject jsonObject) {
 		PayloadBuilder builder = PayloadBuilder.newPayload();
 
+		String userId = jsonObject.getString("userId");
+
+		if (userId != null) {
+			builder.customField("userId", userId);
+		}
+
 		String message = jsonObject.getString("message");
 
 		if (message != null) {
