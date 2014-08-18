@@ -1,0 +1,5 @@
+Bundle-Name: Google Documents Handler
+Bundle-SymbolicName: com.liferay.google.documenthandler
+Bundle-Version: 1.0.0
+Include-Resource: classes
+Private-Package: *
