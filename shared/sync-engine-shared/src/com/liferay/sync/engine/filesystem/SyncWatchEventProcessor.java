@@ -40,12 +40,25 @@ public class SyncWatchEventProcessor implements Runnable {
 
 	@Override
 	public void run() {
+		List<SyncWatchEvent> syncWatchEvents = SyncWatchEventService.findAll(
+			"eventType", true);
+
+		if (syncWatchEvents.isEmpty()) {
+			return;
+		}
+
+		SyncWatchEvent latestSyncWatchEvent = syncWatchEvents.get(
+			syncWatchEvents.size() - 1);
+
+		if ((System.currentTimeMillis() - latestSyncWatchEvent.getTimestamp())
+				<= 500) {
+
+			return;
+		}
+
 		if (_logger.isTraceEnabled()) {
 			_logger.trace("Processing sync watch events");
 		}
-
-		List<SyncWatchEvent> syncWatchEvents = SyncWatchEventService.findAll(
-			"eventType", true);
 
 		for (SyncWatchEvent syncWatchEvent : syncWatchEvents) {
 			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
@@ -148,11 +161,18 @@ public class SyncWatchEventProcessor implements Runnable {
 
 		Path sourceFilePath = Paths.get(syncFile.getFilePathName());
 
-		if (parentTargetFilePath.equals(sourceFilePath.getParent())) {
-			if (!FileUtil.hasFileChanged(syncFile)) {
-				return;
-			}
+		if (targetFilePath.equals(sourceFilePath) &&
+			!FileUtil.hasFileChanged(syncFile)) {
+		}
+		else if (Files.exists(sourceFilePath)) {
+			SyncFileService.addFileSyncFile(
+				targetFilePath, parentSyncFile.getTypePK(),
+				parentSyncFile.getRepositoryId(),
+				syncWatchEvent.getSyncAccountId());
 
+			return;
+		}
+		else if (parentTargetFilePath.equals(sourceFilePath.getParent())) {
 			SyncFileService.updateFileSyncFile(
 				targetFilePath, syncWatchEvent.getSyncAccountId(), syncFile,
 				false);
@@ -211,11 +231,17 @@ public class SyncWatchEventProcessor implements Runnable {
 
 		Path sourceFilePath = Paths.get(syncFile.getFilePathName());
 
-		if (parentTargetFilePath.equals(sourceFilePath.getParent())) {
-			if (targetFilePath.equals(sourceFilePath)) {
-				return;
-			}
+		if (targetFilePath.equals(sourceFilePath)) {
+		}
+		else if (Files.exists(sourceFilePath)) {
+			SyncFileService.addFolderSyncFile(
+				targetFilePath, parentSyncFile.getTypePK(),
+				parentSyncFile.getRepositoryId(),
+				syncWatchEvent.getSyncAccountId());
 
+			return;
+		}
+		else if (parentTargetFilePath.equals(sourceFilePath.getParent())) {
 			SyncFileService.updateFolderSyncFile(
 				targetFilePath, syncWatchEvent.getSyncAccountId(), syncFile);
 		}
