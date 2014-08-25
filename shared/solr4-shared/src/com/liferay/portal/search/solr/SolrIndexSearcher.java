@@ -37,7 +37,7 @@ import com.liferay.portal.kernel.search.facet.collector.FacetCollector;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -227,27 +227,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
-	protected float addScore(
-		SolrDocument solrDocument, List<Float> scores, float maxScore,
-		boolean scoreEnabled) {
-
-		if (scoreEnabled) {
-			float score = GetterUtil.getFloat(
-				String.valueOf(solrDocument.getFieldValue("score")));
-
-			if (score > maxScore) {
-				maxScore = score;
-			}
-
-			scores.add(score);
-		}
-		else {
-			scores.add(maxScore);
-		}
-
-		return maxScore;
-	}
-
 	protected void addSelectedFields(
 		SolrQuery solrQuery, QueryConfig queryConfig) {
 	}
@@ -288,42 +267,27 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 		Map<String, List<String>> uidHighlights = highlights.get(key);
 
-		boolean localizedSearch = true;
+		String localizedFieldName = DocumentImpl.getLocalizedName(
+			locale, fieldName);
 
-		String defaultLanguageId = LocaleUtil.toLanguageId(
-			LocaleUtil.getDefault());
-		String queryLanguageId = LocaleUtil.toLanguageId(locale);
+		String snippetFieldName = localizedFieldName;
 
-		if (defaultLanguageId.equals(queryLanguageId)) {
-			localizedSearch = false;
-		}
-
-		List<String> snippets = null;
-
-		String snippetFieldName = fieldName;
-
-		if (localizedSearch) {
-			String localizedFieldName = DocumentImpl.getLocalizedName(
-				locale, fieldName);
-
-			snippets = uidHighlights.get(localizedFieldName);
-
-			if (snippets != null) {
-				snippetFieldName = localizedFieldName;
-			}
-		}
+		List<String> snippets = uidHighlights.get(localizedFieldName);
 
 		if (snippets == null) {
 			snippets = uidHighlights.get(fieldName);
+
+			snippetFieldName = fieldName;
 		}
 
-		String snippet = StringUtil.merge(snippets, StringPool.TRIPLE_PERIOD);
+		String snippet = StringPool.BLANK;
 
-		if (Validator.isNotNull(snippet)) {
-			snippet = snippet.concat(StringPool.TRIPLE_PERIOD);
-		}
-		else {
-			snippet = StringPool.BLANK;
+		if (ListUtil.isNotEmpty(snippets)) {
+			snippet = StringUtil.merge(snippets, StringPool.TRIPLE_PERIOD);
+
+			if (Validator.isNotNull(snippet)) {
+				snippet = snippet.concat(StringPool.TRIPLE_PERIOD);
+			}
 		}
 
 		if (!snippet.equals(StringPool.BLANK)) {
@@ -343,23 +307,25 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 	}
 
 	protected void addSort(SolrQuery solrQuery, Sort[] sorts) {
-		if (sorts != null) {
-			for (Sort sort : sorts) {
-				if (sort == null) {
-					continue;
-				}
+		if (ArrayUtil.isEmpty(sorts)) {
+			return;
+		}
 
-				String sortFieldName = DocumentImpl.getSortFieldName(
-					sort, "score");
-
-				ORDER order = ORDER.asc;
-
-				if (sort.isReverse() || sortFieldName.equals("score")) {
-					order = ORDER.desc;
-				}
-
-				solrQuery.addSort(new SortClause(sortFieldName, order));
+		for (Sort sort : sorts) {
+			if (sort == null) {
+				continue;
 			}
+
+			String sortFieldName = DocumentImpl.getSortFieldName(
+				sort, "score");
+
+			ORDER order = ORDER.asc;
+
+			if (sort.isReverse() || sortFieldName.equals("score")) {
+				order = ORDER.desc;
+			}
+
+			solrQuery.addSort(new SortClause(sortFieldName, order));
 		}
 	}
 
@@ -382,23 +348,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		translateQuery(solrQuery, searchContext, query);
 
 		return _solrServer.query(solrQuery, METHOD.POST);
-	}
-
-	protected Float[] normalizeScores(
-		List<Float> scores, QueryConfig queryConfig, float maxScore,
-		int numDocuments) {
-
-		Float[] scoresArray = scores.toArray(new Float[numDocuments]);
-
-		if (queryConfig.isScoreEnabled() && (numDocuments > 0) &&
-			(maxScore > 0)) {
-
-			for (int i = 0; i < scoresArray.length; i++) {
-				scoresArray[i] = scoresArray[i] / maxScore;
-			}
-		}
-
-		return scoresArray;
 	}
 
 	protected Document processSolrDocument(SolrDocument solrDocument) {
@@ -500,11 +449,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		Set<String> queryTerms = new HashSet<String>();
 		List<Float> scores = new ArrayList<Float>();
 
-		float maxScore = -1;
-
 		if (solrDocumentList.getNumFound() > 0) {
-			QueryConfig queryConfig = query.getQueryConfig();
-
 			Map<String, Map<String, List<String>>> highlights =
 				queryResponse.getHighlighting();
 
@@ -513,9 +458,10 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 				documents.add(document);
 
-				maxScore = addScore(
-					solrDocument, scores, maxScore,
-					queryConfig.isScoreEnabled());
+				float score = GetterUtil.getFloat(
+					String.valueOf(solrDocument.getFieldValue("score")));
+
+				scores.add(score);
 
 				addSnippets(
 					solrDocument, document, searchContext.getQueryConfig(),
@@ -527,11 +473,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		hits.setLength((int)total);
 		hits.setQuery(query);
 		hits.setQueryTerms(queryTerms.toArray(new String[queryTerms.size()]));
-
-		Float[] scoresArray = normalizeScores(
-			scores, query.getQueryConfig(), maxScore, documents.size());
-
-		hits.setScores(scoresArray);
+		hits.setScores(scores.toArray(new Float[scores.size()]));
 
 		return hits;
 	}
