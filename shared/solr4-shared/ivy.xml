@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<ivy-module
+	version="2.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd"
+>
+	<info module="${ivy.module.name}" organisation="com.liferay">
+		<extends extendType="configurations,description,info" location="${sdk.dir}/ivy.xml" module="com.liferay.sdk" organisation="com.liferay" revision="latest.integration" />
+	</info>
+
+	<dependencies defaultconf="default">
+		<dependency name="commons-cli" org="commons-cli" rev="1.2" />
+		<dependency name="commons-codec" org="commons-codec" rev="1.7" />
+		<dependency name="commons-fileupload" org="commons-fileupload" rev="1.2.1" />
+		<dependency name="commons-io" org="commons-io" rev="2.1" />
+		<dependency name="commons-lang" org="commons-lang" rev="2.6" />
+		<dependency name="httpclient" org="org.apache.httpcomponents" rev="4.2.3" />
+		<dependency name="httpcore" org="org.apache.httpcomponents" rev="4.2.2" />
+		<dependency name="httpmime" org="org.apache.httpcomponents" rev="4.2.3" />
+		<dependency name="guava" org="com.google.guava" rev="13.0.1" />
+		<dependency name="lucene-analyzers-common" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-analyzers-icu" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-analyzers-kuromoji" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-analyzers-smartcn" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-codecs" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-core" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-grouping" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-highlighter" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-join" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-memory" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-misc" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-queries" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-queryparser" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-spatial" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="lucene-suggest" org="org.apache.lucene" rev="4.3.1" />
+		<dependency name="noggit" org="org.noggit" rev="0.5" />
+		<dependency name="org.restlet" org="org.restlet.jee" rev="2.1.1" />
+		<dependency name="org.restlet.ext.servlet" org="org.restlet.jee" rev="2.1.1" />
+		<dependency name="noggit" org="org.noggit" rev="0.5" />
+		<dependency name="slf4j-api" org="org.slf4j" rev="1.6.6" />
+		<dependency name="solr-core" org="org.apache.solr" rev="4.3.1" />
+		<dependency name="solr-solrj" org="org.apache.solr" rev="4.3.1" />
+		<dependency name="wstx-asl" org="org.codehaus.woodstox" rev="3.2.7" />
+		<dependency name="zookeeper" org="org.apache.zookeeper" rev="3.4.5" />
+	</dependencies>
+</ivy-module>
