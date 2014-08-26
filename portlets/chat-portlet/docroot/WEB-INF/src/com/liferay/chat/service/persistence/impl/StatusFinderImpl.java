@@ -25,6 +25,9 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.CompanyThreadLocal;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
@@ -59,6 +62,7 @@ public class StatusFinderImpl
 
 			SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
+			q.addScalar("userUuid", Type.STRING);
 			q.addScalar("userId", Type.LONG);
 			q.addScalar("screenName", Type.STRING);
 			q.addScalar("firstName", Type.STRING);
@@ -66,12 +70,15 @@ public class StatusFinderImpl
 			q.addScalar("lastName", Type.STRING);
 			q.addScalar("portraitId", Type.LONG);
 			q.addScalar("awake", Type.BOOLEAN);
+			q.addScalar("male", Type.BOOLEAN);
+			q.addScalar("groupId", Type.LONG);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
 			qPos.add(companyId);
 			qPos.add(userId);
 			qPos.add(modifiedDate);
+			qPos.add(ClassNameLocalServiceUtil.getClassNameId(User.class));
 
 			return (List<Object[]>)QueryUtil.list(q, getDialect(), start, end);
 		}
@@ -96,6 +103,7 @@ public class StatusFinderImpl
 
 			SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
+			q.addScalar("userUuid", Type.STRING);
 			q.addScalar("userId", Type.LONG);
 			q.addScalar("screenName", Type.STRING);
 			q.addScalar("firstName", Type.STRING);
@@ -103,6 +111,8 @@ public class StatusFinderImpl
 			q.addScalar("lastName", Type.STRING);
 			q.addScalar("portraitId", Type.LONG);
 			q.addScalar("awake", Type.BOOLEAN);
+			q.addScalar("male", Type.BOOLEAN);
+			q.addScalar("groupId", Type.LONG);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
@@ -113,7 +123,9 @@ public class StatusFinderImpl
 			}
 
 			qPos.add(modifiedDate);
+			qPos.add(CompanyThreadLocal.getCompanyId());
 			qPos.add(userId);
+			qPos.add(ClassNameLocalServiceUtil.getClassNameId(User.class));
 
 			return (List<Object[]>)QueryUtil.list(q, getDialect(), start, end);
 		}
@@ -139,6 +151,7 @@ public class StatusFinderImpl
 
 			SQLQuery q = session.createSynchronizedSQLQuery(sql);
 
+			q.addScalar("userUuid", Type.STRING);
 			q.addScalar("userId", Type.LONG);
 			q.addScalar("screenName", Type.STRING);
 			q.addScalar("firstName", Type.STRING);
@@ -146,6 +159,8 @@ public class StatusFinderImpl
 			q.addScalar("lastName", Type.STRING);
 			q.addScalar("portraitId", Type.LONG);
 			q.addScalar("awake", Type.BOOLEAN);
+			q.addScalar("male", Type.BOOLEAN);
+			q.addScalar("groupId", Type.LONG);
 
 			QueryPos qPos = QueryPos.getInstance(q);
 
@@ -156,7 +171,9 @@ public class StatusFinderImpl
 			}
 
 			qPos.add(modifiedDate);
+			qPos.add(CompanyThreadLocal.getCompanyId());
 			qPos.add(userId);
+			qPos.add(ClassNameLocalServiceUtil.getClassNameId(User.class));
 
 			return (List<Object[]>)QueryUtil.list(q, getDialect(), start, end);
 		}
