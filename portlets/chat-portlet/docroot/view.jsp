@@ -87,15 +87,19 @@
 
 										<%
 										for (Object[] buddy : buddies) {
-											long userId = (Long)buddy[0];
-											String firstName = (String)buddy[2];
-											String middleName = (String)buddy[3];
-											String lastName = (String)buddy[4];
-											long portraitId = (Long)buddy[5];
+											String firstName = (String)buddy[1];
+											long groupId = (Long)buddy[2];
+											String lastName = (String)buddy[3];
+											boolean male = (Boolean)buddy[4];
+											String middleName = (String)buddy[5];
+											long portraitId = (Long)buddy[6];
+											String screenName = (String)buddy[7];
+											long userId = (Long)buddy[8];
+											String userUuid = (String)buddy[9];
 										%>
 
-											<li class="active user" userId="<%= userId %>">
-												<img alt="" src="<%= themeDisplay.getPathImage() %>/user_portrait?img_id=<%= portraitId %>&t=<%= WebServerServletTokenUtil.getToken(portraitId) %>" />
+											<li class="active user" data-groupId="<%= groupId %>" data-userId="<%= userId %>">
+												<img alt="" src="<%= UserConstants.getPortraitURL(themeDisplay.getPathImage(), male, portraitId, userUuid) %>" />
 
 												<div class="name">
 													<%= HtmlUtil.escape(ContactConstants.getFullName(firstName, middleName, lastName)) %>
