@@ -372,8 +372,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 			Query query)
 		throws Exception {
 
-		long startTime = System.currentTimeMillis();
-
 		boolean allResults = false;
 
 		if ((searchContext.getStart() == QueryUtil.ALL_POS) &&
@@ -451,12 +449,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 		hits.setScores(scoresArray);
 
-		float searchTime =
-			(float)(System.currentTimeMillis() - startTime) / Time.SECOND;
-
-		hits.setSearchTime(searchTime);
 		hits.setSnippets(snippets.toArray(new String[subsetTotal]));
-		hits.setStart(startTime);
 
 		return hits;
 	}
