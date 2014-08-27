@@ -151,6 +151,12 @@ public class SyncEngine {
 
 		Path filePath = Paths.get(syncAccount.getFilePathName());
 
+		SyncWatchEventProcessor syncWatchEventProcessor =
+			new SyncWatchEventProcessor(syncAccountId);
+
+		_syncWatchEventProcessorExecutorService.scheduleAtFixedRate(
+			syncWatchEventProcessor, 0, 3, TimeUnit.SECONDS);
+
 		WatchEventListener watchEventListener = new SyncSiteWatchEventListener(
 			syncAccountId);
 
@@ -160,7 +166,8 @@ public class SyncEngine {
 
 		_executorService.execute(watcher);
 
-		scheduleGetSyncDLObjectUpdateEvent(syncAccount, watcher);
+		scheduleGetSyncDLObjectUpdateEvent(
+			syncAccount, syncWatchEventProcessor, watcher);
 	}
 
 	protected static void doStart() throws Exception {
@@ -177,15 +184,6 @@ public class SyncEngine {
 
 		SyncClientUpdater.scheduleAutoUpdateChecker(
 			SyncPropService.getInteger("updateCheckInterval", 1440));
-
-		SyncWatchEventProcessor syncWatchEventProcessor =
-			new SyncWatchEventProcessor();
-
-		_syncWatchEventProcessorExecutorService =
-			Executors.newSingleThreadScheduledExecutor();
-
-		_syncWatchEventProcessorExecutorService.scheduleAtFixedRate(
-			syncWatchEventProcessor, 0, 3, TimeUnit.SECONDS);
 
 		List<SyncAccount> syncAccounts = SyncAccountService.findAll();
 
@@ -325,7 +323,9 @@ public class SyncEngine {
 	}
 
 	protected static void scheduleGetSyncDLObjectUpdateEvent(
-		final SyncAccount syncAccount, Watcher watcher) {
+		final SyncAccount syncAccount,
+		final SyncWatchEventProcessor syncWatchEventProcessor,
+		Watcher watcher) {
 
 		Runnable runnable = new Runnable() {
 
@@ -335,8 +335,9 @@ public class SyncEngine {
 					SyncAccountService.fetchSyncAccount(
 						syncAccount.getSyncAccountId());
 
-				if (updatedSyncAccount.getState() !=
-						SyncAccount.STATE_CONNECTED) {
+				if ((updatedSyncAccount.getState() !=
+						SyncAccount.STATE_CONNECTED) ||
+					syncWatchEventProcessor.isInProgress()) {
 
 					return;
 				}
@@ -394,6 +395,7 @@ public class SyncEngine {
 	private static Map<Long, Object[]> _syncAccountTasks =
 		new HashMap<Long, Object[]>();
 	private static ScheduledExecutorService
-		_syncWatchEventProcessorExecutorService;
+		_syncWatchEventProcessorExecutorService =
+			Executors.newScheduledThreadPool(5);
 
 }
