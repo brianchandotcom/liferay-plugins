@@ -228,27 +228,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
-	protected float addScore(
-		SolrDocument solrDocument, List<Float> scores, float maxScore,
-		boolean scoreEnabled) {
-
-		if (scoreEnabled) {
-			float score = GetterUtil.getFloat(
-				String.valueOf(solrDocument.getFieldValue("score")));
-
-			if (score > maxScore) {
-				maxScore = score;
-			}
-
-			scores.add(score);
-		}
-		else {
-			scores.add(maxScore);
-		}
-
-		return maxScore;
-	}
-
 	protected void addSelectedFields(
 		SolrQuery solrQuery, QueryConfig queryConfig) {
 	}
@@ -386,23 +365,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		return _solrServer.query(solrQuery, METHOD.POST);
 	}
 
-	protected Float[] normalizeScores(
-		List<Float> scores, QueryConfig queryConfig, float maxScore,
-		int numDocuments) {
-
-		Float[] scoresArray = scores.toArray(new Float[numDocuments]);
-
-		if (queryConfig.isScoreEnabled() && (numDocuments > 0) &&
-			(maxScore > 0)) {
-
-			for (int i = 0; i < scoresArray.length; i++) {
-				scoresArray[i] = scoresArray[i] / maxScore;
-			}
-		}
-
-		return scoresArray;
-	}
-
 	protected Hits processQueryResponse(
 			QueryResponse queryResponse, SearchContext searchContext,
 			Query query)
@@ -437,9 +399,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		List<Float> scores = new ArrayList<Float>();
 		List<String> snippets = new ArrayList<String>();
 
-		float maxScore = -1;
 		Set<String> queryTerms = new HashSet<String>();
-		int subsetTotal = 0;
 
 		if (solrDocumentList.getNumFound() > 0) {
 			QueryConfig queryConfig = query.getQueryConfig();
@@ -456,25 +416,21 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 					solrDocument, document, queryConfig, queryTerms,
 					highlights);
 
-				maxScore = addScore(
-					solrDocument, scores, maxScore,
-					queryConfig.isScoreEnabled());
+				float score = GetterUtil.getFloat(
+					String.valueOf(solrDocument.getFieldValue("score")));
 
-				subsetTotal++;
+				scores.add(score);
 			}
 		}
 
-		hits.setDocs(documents.toArray(new Document[subsetTotal]));
+		hits.setDocs(documents.toArray(new Document[documents.size()]));
 		hits.setLength((int)total);
 		hits.setQuery(query);
 		hits.setQueryTerms(queryTerms.toArray(new String[queryTerms.size()]));
 
-		Float[] scoresArray = normalizeScores(
-			scores, query.getQueryConfig(), maxScore, documents.size());
+		hits.setScores(scores.toArray(new Float[scores.size()]));
 
-		hits.setScores(scoresArray);
-
-		hits.setSnippets(snippets.toArray(new String[subsetTotal]));
+		hits.setSnippets(snippets.toArray(new String[snippets.size()]));
 
 		return hits;
 	}
