@@ -202,6 +202,28 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		SolrQuery solrQuery, QueryConfig queryConfig) {
 	}
 
+	protected void addSort(SolrQuery solrQuery, Sort[] sorts) {
+		if (ArrayUtil.isEmpty(sorts)) {
+			return;
+		}
+
+		for (Sort sort : sorts) {
+			if (sort == null) {
+				continue;
+			}
+
+			String sortFieldName = DocumentImpl.getSortFieldName(sort, "score");
+
+			ORDER order = ORDER.asc;
+
+			if (sort.isReverse() || sortFieldName.equals("score")) {
+				order = ORDER.desc;
+			}
+
+			solrQuery.addSort(new SortClause(sortFieldName, order));
+		}
+	}
+
 	protected Hits doSearch(SearchContext searchContext, Query query)
 		throws Exception {
 
@@ -216,6 +238,9 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		addPagination(
 			solrQuery, searchContext.getStart(), searchContext.getEnd());
 		addSelectedFields(solrQuery, queryConfig);
+		addSort(solrQuery, searchContext.getSorts());
+
+		solrQuery.setIncludeScore(queryConfig.isScoreEnabled());
 
 		QueryResponse queryResponse = _solrServer.query(solrQuery, METHOD.POST);
 
@@ -427,8 +452,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 		SolrQuery solrQuery = new SolrQuery();
 
-		solrQuery.setIncludeScore(queryConfig.isScoreEnabled());
-
 		QueryTranslatorUtil.translateForSolr(query);
 
 		String queryString = query.toString();
@@ -443,25 +466,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		sb.append(companyId);
 
 		solrQuery.setQuery(sb.toString());
-
-		if (sorts != null) {
-			for (Sort sort : sorts) {
-				if (sort == null) {
-					continue;
-				}
-
-				String sortFieldName = DocumentImpl.getSortFieldName(
-					sort, "score");
-
-				ORDER order = ORDER.asc;
-
-				if (sort.isReverse() || sortFieldName.equals("score")) {
-					order = ORDER.desc;
-				}
-
-				solrQuery.addSort(new SortClause(sortFieldName, order));
-			}
-		}
 
 		return solrQuery;
 	}
