@@ -86,13 +86,10 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		stopWatch.start();
 
 		try {
-			SolrQuery solrQuery = new SolrQuery();
-
-			QueryResponse queryResponse = doSearch(
-				solrQuery, searchContext, query);
+			QueryResponse queryResponse = doSearch(searchContext, query);
 
 			Hits hits = processQueryResponse(
-				solrQuery, queryResponse, searchContext, query);
+				queryResponse, searchContext, query);
 
 			hits.setStart(stopWatch.getStartTime());
 
@@ -276,9 +273,10 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
-	protected QueryResponse doSearch(
-			SolrQuery solrQuery, SearchContext searchContext, Query query)
+	protected QueryResponse doSearch(SearchContext searchContext, Query query)
 		throws Exception {
+
+		SolrQuery solrQuery = new SolrQuery();
 
 		QueryConfig queryConfig = query.getQueryConfig();
 
@@ -370,9 +368,11 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 	}
 
 	protected Hits processQueryResponse(
-			SolrQuery solrQuery, QueryResponse queryResponse,
-			SearchContext searchContext, Query query)
+			QueryResponse queryResponse, SearchContext searchContext,
+			Query query)
 		throws Exception {
+
+		long startTime = System.currentTimeMillis();
 
 		boolean allResults = false;
 
@@ -382,52 +382,22 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 			allResults = true;
 		}
 
-		updateFacetCollectors(queryResponse, searchContext);
-
-		return subset(
-			solrQuery, query, query.getQueryConfig(), queryResponse,
-			allResults);
-	}
-
-	protected Document processSolrDocument(SolrDocument solrDocument) {
-		Document document = new DocumentImpl();
-
-		Collection<String> names = solrDocument.getFieldNames();
-
-		for (String name : names) {
-			Collection<Object> fieldValues = solrDocument.getFieldValues(name);
-
-			Field field = new Field(
-				name,
-				ArrayUtil.toStringArray(
-					fieldValues.toArray(new Object[fieldValues.size()])));
-
-			document.add(field);
-		}
-
-		return document;
-	}
-
-	protected Hits subset(
-			SolrQuery solrQuery, Query query, QueryConfig queryConfig,
-			QueryResponse queryResponse, boolean allResults)
-		throws Exception {
-
-		long startTime = System.currentTimeMillis();
-
-		Hits hits = new HitsImpl();
-
 		SolrDocumentList solrDocumentList = queryResponse.getResults();
 
 		long total = solrDocumentList.getNumFound();
 
 		if (allResults && (total > 0)) {
-			solrQuery.setRows((int)total);
+			searchContext.setStart(0);
+			searchContext.setEnd((int)total);
 
-			queryResponse = _solrServer.query(solrQuery);
+			queryResponse = doSearch(searchContext, query);
 
-			return subset(solrQuery, query, queryConfig, queryResponse, false);
+			solrDocumentList = queryResponse.getResults();
 		}
+
+		updateFacetCollectors(queryResponse, searchContext);
+
+		Hits hits = new HitsImpl();
 
 		List<Document> documents = new ArrayList<Document>();
 		List<Float> scores = new ArrayList<Float>();
@@ -437,33 +407,38 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		Set<String> queryTerms = new HashSet<String>();
 		int subsetTotal = 0;
 
-		for (SolrDocument solrDocument : solrDocumentList) {
-			Document document = processSolrDocument(solrDocument);
+		if (solrDocumentList.getNumFound() > 0) {
+			QueryConfig queryConfig = query.getQueryConfig();
 
-			documents.add(document);
+			for (SolrDocument solrDocument : solrDocumentList) {
+				Document document = processSolrDocument(solrDocument);
 
-			String snippet = StringPool.BLANK;
+				documents.add(document);
 
-			if (queryConfig.isHighlightEnabled()) {
-				snippet = getSnippet(
-					solrDocument, queryConfig, queryTerms,
-					queryResponse.getHighlighting(), Field.CONTENT);
+				String snippet = StringPool.BLANK;
 
-				if (Validator.isNull(snippet)) {
+				if (queryConfig.isHighlightEnabled()) {
 					snippet = getSnippet(
 						solrDocument, queryConfig, queryTerms,
-						queryResponse.getHighlighting(), Field.TITLE);
+						queryResponse.getHighlighting(), Field.CONTENT);
+
+					if (Validator.isNull(snippet)) {
+						snippet = getSnippet(
+							solrDocument, queryConfig, queryTerms,
+							queryResponse.getHighlighting(), Field.TITLE);
+					}
+
+					if (Validator.isNotNull(snippet)) {
+						snippets.add(snippet);
+					}
 				}
 
-				if (Validator.isNotNull(snippet)) {
-					snippets.add(snippet);
-				}
+				maxScore = addScore(
+					solrDocument, scores, maxScore,
+					queryConfig.isScoreEnabled());
+
+				subsetTotal++;
 			}
-
-			maxScore = addScore(
-				solrDocument, scores, maxScore, queryConfig.isScoreEnabled());
-
-			subsetTotal++;
 		}
 
 		hits.setDocs(documents.toArray(new Document[subsetTotal]));
@@ -484,6 +459,25 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		hits.setStart(startTime);
 
 		return hits;
+	}
+
+	protected Document processSolrDocument(SolrDocument solrDocument) {
+		Document document = new DocumentImpl();
+
+		Collection<String> names = solrDocument.getFieldNames();
+
+		for (String name : names) {
+			Collection<Object> fieldValues = solrDocument.getFieldValues(name);
+
+			Field field = new Field(
+				name,
+				ArrayUtil.toStringArray(
+					fieldValues.toArray(new Object[fieldValues.size()])));
+
+			document.add(field);
+		}
+
+		return document;
 	}
 
 	protected void translateQuery(
