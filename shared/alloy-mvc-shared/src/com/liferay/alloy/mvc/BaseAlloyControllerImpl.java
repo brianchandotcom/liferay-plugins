@@ -172,6 +172,11 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		else if (lifecycle.equals(PortletRequest.RESOURCE_PHASE)) {
 			executeResource(method);
 		}
+
+		if (alloyNotificationProcessor != null) {
+			alloyNotificationProcessor.process(
+				request, themeDisplay, controllerPath, actionPath);
+		}
 	}
 
 	@Override
@@ -902,6 +907,12 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		return search(null, keywords, sorts);
 	}
 
+	protected void setAlloyNotificationProcessor(
+		AlloyNotificationProcessor alloyNotificationProcessor) {
+
+		this.alloyNotificationProcessor = alloyNotificationProcessor;
+	}
+
 	protected void setAlloyServiceInvokerClass(Class<?> clazz) {
 		alloyServiceInvoker = new AlloyServiceInvoker(clazz.getName());
 	}
@@ -997,6 +1008,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	protected String actionPath;
 	protected ActionRequest actionRequest;
 	protected ActionResponse actionResponse;
+	protected AlloyNotificationProcessor alloyNotificationProcessor;
 	protected AlloyPortlet alloyPortlet;
 	protected AlloyServiceInvoker alloyServiceInvoker;
 	protected ClassLoader classLoader;
