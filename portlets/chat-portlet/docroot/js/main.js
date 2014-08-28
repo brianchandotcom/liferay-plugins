@@ -93,10 +93,19 @@ AUI().use(
 				return now() - instance._getOffset();
 			},
 
-			getUserImagePath: function(userId) {
+			getUserImagePath: function(portraitURL) {
 				var instance = this;
 
-				return themeDisplay.getPathImage() + '/user_portrait?img_id=' + userId;
+				var userImagePath = themeDisplay.getPathImage();
+
+				if (Lang.isNumber(parseInt(portraitURL, 10))) {
+					userImagePath += '/user_portrait?img_id=' + portraitURL;
+				}
+				else {
+					userImagePath += portraitURL;
+				}
+
+				return userImagePath;
 			},
 
 			_convertToClientTimestamp: function(time) {
@@ -927,7 +936,7 @@ AUI().use(
 					{
 						panelId: options.userId,
 						panelTitle: options.fullName,
-						panelIcon: options.portraitId,
+						panelIcon: options.portraitURL,
 						statusMessage: options.statusMessage
 					}
 				);
@@ -982,7 +991,7 @@ AUI().use(
 							instance._createChatSession(
 								{
 									fullName: buddy.fullName,
-									portraitId: buddy.portraitId,
+									portraitURL: buddy.portraitURL,
 									statusMessage: buddy.statusMessage,
 									userId: userId
 								}
@@ -1255,7 +1264,7 @@ AUI().use(
 								{
 									fullName: buddy.fullName,
 									open: false,
-									portraitId: buddy.portraitId,
+									portraitURL: buddy.portraitURL,
 									statusMessage: buddy.statusMessage,
 									userId: item
 								}
@@ -1301,10 +1310,10 @@ AUI().use(
 
 					currentBuddies[buddy.userId] = buddy;
 
-					var userImagePath = Liferay.Chat.Util.getUserImagePath(buddy.portraitId);
+					var userImagePath = Liferay.Chat.Util.getUserImagePath(buddy.portraitURL);
 
 					buffer.push(
-						'<li class="user active" data-userId="' + buddy.userId + '" data-groupId="' + buddy.groupId + '">' +
+						'<li class="active user" data-groupId="' + buddy.groupId + '" data-userId="' + buddy.userId + '">' +
 							'<img alt="" src="' + userImagePath + '" />' +
 							'<div class="name">' + LString.escapeHTML(buddy.fullName) + '</div>' +
 							'<div class="buddy-services">');
@@ -1378,10 +1387,10 @@ AUI().use(
 							if (!chat && entry.content) {
 								chat = instance._createChatSession(
 									{
-										portraitId: buddy.portraitId,
-										userId: buddy.userId,
 										fullName: buddy.fullName,
-										statusMessage: buddy.statusMessage
+										statusMessage: buddy.statusMessage,
+										portraitURL: buddy.portraitURL,
+										userId: buddy.userId
 									}
 								);
 							}
