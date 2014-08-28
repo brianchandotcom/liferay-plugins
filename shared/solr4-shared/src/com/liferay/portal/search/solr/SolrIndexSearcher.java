@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -251,6 +253,96 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		SolrQuery solrQuery, QueryConfig queryConfig) {
 	}
 
+	protected void addSnippets(
+		SolrDocument solrDocument, Document document, QueryConfig queryConfig,
+		Set<String> queryTerms,
+		Map<String, Map<String, List<String>>> highlights) {
+
+		if (!queryConfig.isHighlightEnabled()) {
+			return;
+		}
+
+		addSnippets(
+			solrDocument, document, queryTerms, highlights,
+			Field.ASSET_CATEGORY_TITLES, queryConfig.getLocale());
+		addSnippets(
+			solrDocument, document, queryTerms, highlights, Field.CONTENT,
+			queryConfig.getLocale());
+		addSnippets(
+			solrDocument, document, queryTerms, highlights, Field.DESCRIPTION,
+			queryConfig.getLocale());
+		addSnippets(
+			solrDocument, document, queryTerms, highlights, Field.TITLE,
+			queryConfig.getLocale());
+	}
+
+	protected void addSnippets(
+		SolrDocument solrDocument, Document document, Set<String> queryTerms,
+		Map<String, Map<String, List<String>>> highlights, String fieldName,
+		Locale locale) {
+
+		if (MapUtil.isEmpty(highlights)) {
+			return;
+		}
+
+		String key = (String)solrDocument.getFieldValue(Field.UID);
+
+		Map<String, List<String>> uidHighlights = highlights.get(key);
+
+		boolean localizedSearch = true;
+
+		String defaultLanguageId = LocaleUtil.toLanguageId(
+			LocaleUtil.getDefault());
+		String queryLanguageId = LocaleUtil.toLanguageId(locale);
+
+		if (defaultLanguageId.equals(queryLanguageId)) {
+			localizedSearch = false;
+		}
+
+		List<String> snippets = null;
+
+		String snippetFieldName = fieldName;
+
+		if (localizedSearch) {
+			String localizedFieldName = DocumentImpl.getLocalizedName(
+				locale, fieldName);
+
+			snippets = uidHighlights.get(localizedFieldName);
+
+			if (snippets != null) {
+				snippetFieldName = localizedFieldName;
+			}
+		}
+
+		if (snippets == null) {
+			snippets = uidHighlights.get(fieldName);
+		}
+
+		String snippet = StringUtil.merge(snippets, StringPool.TRIPLE_PERIOD);
+
+		if (Validator.isNotNull(snippet)) {
+			snippet = snippet.concat(StringPool.TRIPLE_PERIOD);
+		}
+		else {
+			snippet = StringPool.BLANK;
+		}
+
+		if (!snippet.equals(StringPool.BLANK)) {
+			Matcher matcher = _pattern.matcher(snippet);
+
+			while (matcher.find()) {
+				queryTerms.add(matcher.group(1));
+			}
+
+			snippet = StringUtil.replace(snippet, "<em>", "");
+			snippet = StringUtil.replace(snippet, "</em>", "");
+		}
+
+		document.addText(
+			Field.SNIPPET.concat(StringPool.UNDERLINE).concat(snippetFieldName),
+			snippet);
+	}
+
 	protected void addSort(SolrQuery solrQuery, Sort[] sorts) {
 		if (ArrayUtil.isEmpty(sorts)) {
 			return;
@@ -292,62 +384,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		translateQuery(solrQuery, searchContext, query);
 
 		return _solrServer.query(solrQuery, METHOD.POST);
-	}
-
-	protected String getSnippet(
-		SolrDocument solrDocument, QueryConfig queryConfig,
-		Set<String> queryTerms,
-		Map<String, Map<String, List<String>>> highlights, String field) {
-
-		if (highlights == null) {
-			return StringPool.BLANK;
-		}
-
-		String key = (String)solrDocument.getFieldValue(Field.UID);
-
-		Map<String, List<String>> uidHighlights = highlights.get(key);
-
-		boolean localizedSearch = true;
-
-		String defaultLanguageId = LocaleUtil.toLanguageId(
-			LocaleUtil.getDefault());
-		String queryLanguageId = LocaleUtil.toLanguageId(
-			queryConfig.getLocale());
-
-		if (defaultLanguageId.equals(queryLanguageId)) {
-			localizedSearch = false;
-		}
-
-		if (localizedSearch) {
-			String localizedName = DocumentImpl.getLocalizedName(
-				queryConfig.getLocale(), field);
-
-			if (solrDocument.containsKey(localizedName)) {
-				field = localizedName;
-			}
-		}
-
-		List<String> snippets = uidHighlights.get(field);
-
-		String snippet = StringUtil.merge(snippets, "...");
-
-		if (Validator.isNotNull(snippet)) {
-			snippet = snippet + "...";
-		}
-		else {
-			snippet = StringPool.BLANK;
-		}
-
-		Matcher matcher = _pattern.matcher(snippet);
-
-		while (matcher.find()) {
-			queryTerms.add(matcher.group(1));
-		}
-
-		snippet = StringUtil.replace(snippet, "<em>", "");
-		snippet = StringUtil.replace(snippet, "</em>", "");
-
-		return snippet;
 	}
 
 	protected Float[] normalizeScores(
@@ -408,28 +444,17 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		if (solrDocumentList.getNumFound() > 0) {
 			QueryConfig queryConfig = query.getQueryConfig();
 
+			Map<String, Map<String, List<String>>> highlights =
+				queryResponse.getHighlighting();
+
 			for (SolrDocument solrDocument : solrDocumentList) {
 				Document document = processSolrDocument(solrDocument);
 
 				documents.add(document);
 
-				String snippet = StringPool.BLANK;
-
-				if (queryConfig.isHighlightEnabled()) {
-					snippet = getSnippet(
-						solrDocument, queryConfig, queryTerms,
-						queryResponse.getHighlighting(), Field.CONTENT);
-
-					if (Validator.isNull(snippet)) {
-						snippet = getSnippet(
-							solrDocument, queryConfig, queryTerms,
-							queryResponse.getHighlighting(), Field.TITLE);
-					}
-
-					if (Validator.isNotNull(snippet)) {
-						snippets.add(snippet);
-					}
-				}
+				addSnippets(
+					solrDocument, document, queryConfig, queryTerms,
+					highlights);
 
 				maxScore = addScore(
 					solrDocument, scores, maxScore,
