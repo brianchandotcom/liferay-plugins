@@ -58,6 +58,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
@@ -80,17 +81,46 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
 
+		StopWatch stopWatch = new StopWatch();
+
+		stopWatch.start();
+
 		try {
-			return doSearch(searchContext, query);
+			SolrQuery solrQuery = new SolrQuery();
+
+			QueryResponse queryResponse = doSearch(
+				solrQuery, searchContext, query);
+
+			Hits hits = processQueryResponse(
+				solrQuery, queryResponse, searchContext, query);
+
+			hits.setStart(stopWatch.getStartTime());
+
+			float searchTime = stopWatch.getTime() / Time.SECOND;
+
+			hits.setSearchTime(searchTime);
+
+			return hits;
 		}
 		catch (Exception e) {
-			_log.error(e, e);
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
 
 			if (!_swallowException) {
 				throw new SearchException(e.getMessage());
 			}
 
 			return new HitsImpl();
+		}
+		finally {
+			if (_log.isInfoEnabled()) {
+				stopWatch.stop();
+
+				_log.info(
+					"Searching " + query.toString() + " took " +
+						stopWatch.getTime() + " ms");
+			}
 		}
 	}
 
@@ -225,10 +255,9 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
-	protected Hits doSearch(SearchContext searchContext, Query query)
+	protected QueryResponse doSearch(
+			SolrQuery solrQuery, SearchContext searchContext, Query query)
 		throws Exception {
-
-		SolrQuery solrQuery = new SolrQuery();
 
 		QueryConfig queryConfig = query.getQueryConfig();
 
@@ -243,19 +272,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 		translateQuery(solrQuery, searchContext, query);
 
-		QueryResponse queryResponse = _solrServer.query(solrQuery, METHOD.POST);
-
-		boolean allResults = false;
-
-		if (solrQuery.getRows() == 0) {
-			allResults = true;
-		}
-
-		updateFacetCollectors(queryResponse, searchContext);
-
-		return subset(
-			solrQuery, query, query.getQueryConfig(), queryResponse,
-			allResults);
+		return _solrServer.query(solrQuery, METHOD.POST);
 	}
 
 	protected String getSnippet(
@@ -312,6 +329,26 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		snippet = StringUtil.replace(snippet, "</em>", "");
 
 		return snippet;
+	}
+
+	protected Hits processQueryResponse(
+			SolrQuery solrQuery, QueryResponse queryResponse,
+			SearchContext searchContext, Query query)
+		throws Exception {
+
+		boolean allResults = false;
+
+		if ((searchContext.getStart() == QueryUtil.ALL_POS) &&
+			(searchContext.getEnd() == QueryUtil.ALL_POS)) {
+
+			allResults = true;
+		}
+
+		updateFacetCollectors(queryResponse, searchContext);
+
+		return subset(
+			solrQuery, query, query.getQueryConfig(), queryResponse,
+			allResults);
 	}
 
 	protected Hits subset(
