@@ -202,6 +202,19 @@
 										cssClass += STR_SPACE + item.cssClass;
 									}
 
+									var icon = STR_BLANK;
+
+									if (item.icon) {
+										icon = Lang.sub(
+											TPL_ICON,
+											{
+												iconClass: item.icon
+											}
+										);
+
+										caption = [icon, caption].join(STR_SPACE);
+									}
+
 									var li = A.Node.create(
 										Lang.sub(
 											TPL_SIMPLE_MENU_ITEM,
@@ -212,17 +225,6 @@
 											}
 										)
 									);
-
-									if (item.icon) {
-										var icon = Lang.sub(
-											TPL_ICON,
-											{
-												iconClass: item.icon
-											}
-										);
-
-										caption = [icon, caption].join(STR_SPACE);
-									}
 
 									li.setContent(caption);
 
@@ -627,13 +629,13 @@
 							return A.merge(
 								{
 									align: {
-										points: [ A.WidgetPositionAlign.TL, A.WidgetPositionAlign.BL ]
+										points: [A.WidgetPositionAlign.TL, A.WidgetPositionAlign.BL]
 									},
-									bubbleTargets: [ instance ],
+									bubbleTargets: [instance],
 									constrain: true,
 									host: instance,
 									items: [],
-									plugins: [ A.Plugin.OverlayAutohide ],
+									plugins: [A.Plugin.OverlayAutohide],
 									visible: false,
 									width: 290,
 									zIndex: Liferay.zIndex.MENU
@@ -1022,10 +1024,31 @@
 					Liferay.Language.get('december')
 				],
 
+				POSITION_LABELS: {
+					'-1': Liferay.Language.get('last'),
+					'1': Liferay.Language.get('first'),
+					'2': Liferay.Language.get('second'),
+					'3': Liferay.Language.get('third'),
+					'4': Liferay.Language.get('fourth')
+				},
+
+				WEEKDAY_LABELS: {
+					FR: Liferay.Language.get('weekday.FR'),
+					MO: Liferay.Language.get('weekday.MO'),
+					SA: Liferay.Language.get('weekday.SA'),
+					SU: Liferay.Language.get('weekday.SU'),
+					TH: Liferay.Language.get('weekday.TH'),
+					TU: Liferay.Language.get('weekday.TU'),
+					WE: Liferay.Language.get('weekday.WE')
+				},
+
 				getSummary: function(recurrence) {
 					var instance = this;
 
+					var month = null;
+					var position = null;
 					var template = [];
+					var weekDay = null;
 
 					if (recurrence.interval == 1) {
 						template.push(recurrence.frequency);
@@ -1034,7 +1057,19 @@
 						template.push(Liferay.Language.get('every'), ' {interval} {intervalLabel}');
 					}
 
-					if ((recurrence.frequency == instance.FREQUENCY.WEEKLY) && (recurrence.weekdays.length > 0)) {
+					if (recurrence.positionalWeekday) {
+						if (recurrence.frequency == instance.FREQUENCY.MONTHLY) {
+							template.push(STR_SPACE, Liferay.Language.get('on'), ' {position} {weekDay}');
+						}
+						else {
+							template.push(STR_SPACE, Liferay.Language.get('on-the'), ' {position} {weekDay} ', Liferay.Language.get('of'), ' {month}');
+						}
+
+						month = instance.MONTH_LABELS[recurrence.positionalWeekday.month];
+						position = instance.POSITION_LABELS[recurrence.positionalWeekday.position];
+						weekDay = instance.WEEKDAY_LABELS[recurrence.positionalWeekday.weekday];
+					}
+					else if ((recurrence.frequency == instance.FREQUENCY.WEEKLY) && (recurrence.weekdays.length > 0)) {
 						template.push(STR_SPACE, TPL_SPAN, Liferay.Language.get('on'), TPL_SPAN_CLOSE, ' {weekDays}');
 					}
 
@@ -1067,6 +1102,9 @@
 							count: recurrence.count,
 							interval: recurrence.interval,
 							intervalLabel: instance.INTERVAL_LABELS[recurrence.frequency],
+							month: month,
+							position: position,
+							weekDay: weekDay,
 							weekDays: recurrence.weekdays.join(', ')
 						}
 					);
@@ -1093,12 +1131,12 @@
 						return {
 							label: label,
 							on: {
-								click: function(event, buttonItem) {
+								click: function() {
 									if (callback) {
-										callback.apply(confirmationPanel, arguments);
+										callback.apply(this, arguments);
 									}
 
-									confirmationPanel.hide();
+									this.hide();
 								}
 							}
 						};
@@ -1148,12 +1186,12 @@
 						return {
 							label: label,
 							on: {
-								click: function(event, buttonItem) {
+								click: function() {
 									if (callback) {
-										callback.apply(confirmationPanel, arguments);
+										callback.apply(this, arguments);
 									}
 
-									confirmationPanel.hide();
+									this.hide();
 								}
 							}
 						};
@@ -1190,7 +1228,8 @@
 							cssClass: 'alert-success',
 							destroyOnHide: true,
 							duration: 1
-						}).render(container);
+						}
+					).render(container);
 				}
 			};
 		},

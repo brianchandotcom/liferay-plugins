@@ -207,7 +207,7 @@ AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.getEntry(CalendarBookin
 
 <c:if test="<%= calendarBooking.isRecurring() %>">
 	<aui:script use="liferay-calendar-recurrence-util">
-		var summaryNode = A.one("#<portlet:namespace />recurrenceSummary");
+		var summaryNode = A.one('#<portlet:namespace />recurrenceSummary');
 
 		var endValue = 'never';
 		var untilDate = null;
@@ -234,7 +234,7 @@ AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.getEntry(CalendarBookin
 
 		List<Weekday> weekdays = new ArrayList<Weekday>();
 
-		for (PositionalWeekday positionalWeekday : recurrence.getWeekdays()) {
+		for (PositionalWeekday positionalWeekday : recurrence.getPositionalWeekdays()) {
 			weekdays.add(positionalWeekday.getWeekday());
 		}
 		%>
