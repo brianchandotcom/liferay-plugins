@@ -1,4 +1,11 @@
 @import "compass";
+@import "mixins";
+
+/* ---------- Mixins ---------- */
+
+@mixin default-border-radius {
+	@include border-radius(4px);
+}
 
 @mixin keyframes($name) {
 	@-o-keyframes #{$name} {
@@ -22,52 +29,49 @@
 	0% {
 		@include transform(rotate(5deg));
 	}
+
 	25% {
-		@include transform(translate(3px, -4px), rotate(0deg));
+		@include transform(translate(3px, -4px), rotate(0));
 	}
+
 	50% {
 		@include transform(rotate(-5deg));
 	}
+
 	75% {
-		@include transform(rotate(0deg));
+		@include transform(rotate(0));
 	}
+
 	100% {
 		@include transform(translate(0, 0), rotate(5deg));
 	}
 }
 
+/* ---------- Dockbar & notifications portlet ---------- */
+
 .dockbar-user-notifications, .notifications-portlet {
-	.user-notifications-count {
-		background-color: #0066B3;
-		border: 1px solid #0066B3;
-		display: block;
-		line-height: 1.25em;
-		margin: 4px 0;
-		padding: 2px 6px;
-		position: relative;
+	.non-actionable .user-notification {
+		&, &.archived {
+			&:hover, &.hover {
+				background-color: #F3F3F3;
+				cursor: pointer;
 
-		&.alert {
-			background-color: #FAA732;
-			border: 1px solid #FAA732;
-			color: #FFF;
-
-			@include experimental(animation, shakeNotificationCount 0.8s linear infinite);
-			@include experimental(animation-iteration-count, 2);
-			@include experimental(transform-origin, 50% 50%);
+				.mark-as-read {
+					display: block;
+				}
+			}
 		}
 	}
 
-	.dropdown-menu {
-		@include box-sizing(border-box);
-
-		width: 350px;
+	.actionable .timestamp {
+		display: none;
 	}
 
 	.user-notifications-list {
 		list-style: none;
 		padding: 5px;
 
-		.message {
+		.pagination, .message {
 			padding: 5px;
 			text-align: center;
 
@@ -98,34 +102,46 @@
 			}
 		}
 
-		.separator {
-			background-color: #DCDCDC;
-			height: 1px;
-			margin-bottom: 3px;
-			margin-top: 5px;
+		.message {
+			margin: 10px 0;
+		}
+
+		.user-notifications {
+			clear: both;
 		}
 
 		.user-notification {
-			background: #FFF;
-
-			@include border-radius(4px);
-
-			margin-bottom: 10px;
+			line-height: 20px;
 			padding: 10px;
+			position: relative;
 
-			&:hover, &.hover {
-				background: #FAFAFA;
-				cursor: pointer;
+			.mark-as-read {
+				color: #999;
+
+				@include default-border-radius;
+
+				display: none;
+				position: absolute;
+				right: 4px;
+				top: 4px;
+
+				&:hover {
+					background-color: rgba(0, 0, 0, 0.1);
+				}
+
+				i {
+					padding: 4px 5px;
+				}
 			}
 
 			.btn {
 				margin-right: 10px;
 			}
 
-			.icon-remove-circle {
-				left: 330px;
-				position: relative;
-				top: 20px;
+			.left-container {
+				margin-left: 0;
+				margin-right: 20px;
+				min-height: 1px;
 			}
 
 			.sender {
@@ -145,12 +161,6 @@
 						width: 30px;
 					}
 				}
-
-				.portlet-icon {
-					bottom: 0;
-					left: 0;
-					position: absolute;
-				}
 			}
 
 			.read {
@@ -158,23 +168,101 @@
 				font-size: 11px;
 			}
 
-			.timestamp {
-				display: inline;
-				font-size: 11px;
-			}
-
 			.content {
 				margin-left: 40px;
 			}
 
-			.body {
-				color: #222;
+			.body-container {
+				color: #444;
 				overflow: hidden;
 				text-overflow: ellipsis;
+
+				.title {
+					color: #222;
+				}
+			}
+
+			.timestamp {
+				color: #999;
+				font-size: 11px;
 			}
 		}
 	}
+
+	.mark-all-as-read {
+		float: right;
+	}
 }
+
+/* ---------- Dockbar notifications ---------- */
+
+.aui {
+	.dockbar .nav li.dropdown.dockbar-user-notifications .dropdown-menu {
+		left: auto;
+		max-height: none;
+		padding: 10px;
+		right: 0;
+
+		&.pull-right:after {
+			right: 20px;
+		}
+	}
+}
+
+.dockbar-user-notifications {
+	.dropdown-toggle .user-notifications-count {
+		background-color: #0066B3;
+		border: 1px solid #0066B3;
+
+		@include default-border-radius;
+
+		display: block;
+		line-height: 1.25em;
+		margin: 4px 0;
+		padding: 2px 6px;
+		position: relative;
+
+		&.alert {
+			background-color: #FAA732;
+			border: 1px solid #FAA732;
+			color: #FFF;
+
+			@include experimental(animation, shakeNotificationCount 0.8s linear infinite);
+			@include experimental(animation-iteration-count, 2);
+			@include experimental(transform-origin, 50% 50%);
+		}
+	}
+
+	.dropdown-menu {
+		width: 350px;
+	}
+
+	.actionable, .non-actionable {
+		background-color: #FFF;
+
+		@include default-border-radius;
+	}
+
+	.non-actionable {
+		margin-bottom: 10px;
+	}
+
+	.user-notifications-header {
+		border-bottom: 1px solid #2AAAE6;
+		min-height: 31px;
+		padding: 0 10px;
+
+		& > span {
+			line-height: 2.25em;
+		}
+
+		.title {
+			float: left;
+		}
+	}
+}
+
+/* ---------- Notifications portlet ---------- */
 
 .notifications-portlet {
 	.nav {
@@ -192,6 +280,10 @@
 				float: right;
 			}
 
+			&:hover, &.selected {
+				@include default-border-radius;
+			}
+
 			&:hover {
 				text-decoration: none;
 			}
@@ -203,65 +295,116 @@
 		}
 	}
 
-	.notifications-container, .user-notifications-list-container {
-		@include box-sizing(border-box);
+	.non-actionable .user-notification {
+		background-color: #EDEDED;
+		overflow: hidden;
+
+		&.archived {
+			background-color: #FFF;
+
+			.title {
+				font-weight: normal;
+			}
+		}
+
+		.title {
+			font-weight: bold;
+		}
+
+		.timestamp {
+			color: #666;
+		}
 	}
 
 	.user-notifications-list-container {
 		border: 1px solid #D5D5D5;
 
-		.loading-mask {
-			min-height: 30px;
-		}
+		@include box-sizing(border-box);
+		@include default-border-radius;
 	}
 
-	.user-notifications-list {
+	.user-notifications-list{
 		margin: 0;
+		padding: 0;
 
-		.mark-all-as-read {
-			background-color: #FFF;
-			border-radius: 4px;
-			color: #000;
-			margin: 10px 10px;
-			padding: 5px 5px;
-			text-decoration: none;
+		.pagination {
+			@include box-sizing(border-box);
 
-			&:hover {
-				background: #2FA4F5;
-				color: #FFF;
-				cursor: pointer;
+			display: flex;
+			margin: 0;
+			min-height: 31px;
+			width: 100%;
+
+			&:before {
+				display: none;
+			}
+
+			.next, .page-info, .previous {
+				float: none;
+			}
+
+			&.top {
+				border-bottom: 1px solid #D5D5D5;
+			}
+
+			&.bottom {
+				border-top: 1px solid #D5D5D5;
+			}
+
+			.page-info {
+				color: #999;
+				flex-grow: 2;
 			}
 		}
 
-		.user-notification {
-			color: #000;
-			margin: 5px;
+		.mark-all-as-read {
+			margin: 10px 20px;
+			min-height: 20px;
+		}
 
-			&:hover {
-				color: #FFF;
-				background: #2FA4F5
-			}
-
-			a {
-				color: #009AE5;
-			}
+		.user-notifications {
+			clear: both;
+			margin-bottom: 40px;
 		}
 
 		.message.top {
 			border-bottom: 1px solid #D5D5D5;
 			margin-bottom: 10px;
 		}
+
+		.user-notification {
+			border-top: 1px solid #DDD;
+			color: #000;
+			margin: 0 20px;
+
+			&:last-child {
+				border-bottom: 1px solid #DDD;
+			}
+
+			.mark-as-read {
+				float: right;
+			}
+		}
+
+		.body-container {
+			float: left;
+		}
+
+		.timestamp {
+			float: right;
+		}
 	}
+
+	/* ---------- Notification delivery ---------- */
 
 	.manage-notifications {
 		overflow: auto;
-
-		.table {
-			max-width: none;
-		}
+		padding: 10px;
 
 		.title {
-			margin-bottom: 10px;
+			font-size: 1.5em;
+			line-height: 1.2em;
+			margin-bottom: 30px;
 
 			.notification-delivery {
 				font-size: 16px;
@@ -272,14 +415,29 @@
 
 		.notification-deliveries {
 			caption {
+				color: #AAA;
 				font-size: 14px;
-				font-weight: bold;
 				margin-bottom: 10px 0;
 				text-align: left;
 			}
 		}
+
+		.table {
+			max-width: none;
+
+			tbody {
+				border-top: 1px solid #DDD;
+			}
+
+			td {
+				background-color: transparent;
+				border-top-width: 0;
+			}
+		}
 	}
 }
+
+/* ---------- Layout ---------- */
 
 .span1, .span2, .span3, .span4, .span5, .span6 {
 	.notifications-portlet {
@@ -294,29 +452,52 @@
 	width: 70%;
 }
 
-/* ---------- Extras ---------- */
+/* ---------- Internet explorer ---------- */
 
-.dockbar-user-notifications .user-notifications-count, .notifications-portlet .nav a:hover, .notifications-portlet .nav a.selected, .notifications-portlet .user-notifications-list-container {
-	@include border-radius(4px);
+.ie8 .user-thumbnail img {
+	max-width: none;
 }
 
-.aui {
-	li.user-notification {
-		line-height: 20px;
-	}
+/* ---------- Touch ---------- */
 
-	.dockbar .navbar-inner .container .nav-collapse > .nav li.dropdown.dockbar-user-notifications > ul.dropdown-menu {
-		left: auto;
-		max-height: none;
-		padding: 10px;
-		right: 0;
-
-		&.pull-right:after {
-			right: 20px;
+.touch {
+	.dockbar-user-notifications, .notifications-portlet {
+		.user-notification {
+			&, &.archived {
+				&, &:hover, &.hover {
+					.mark-as-read {
+						display: none;
+					}
+				}
+			}
 		}
 	}
 }
 
-.ie8 .user-thumbnail img {
-	max-width: none;
+/* ---------- Responsive ---------- */
+
+@include respond-to(phone) {
+	.notifications-portlet, .dockbar-user-notifications {
+		.user-notifications-list {
+			.user-notification {
+				margin: 0;
+
+				.body-container {
+					width: 100%;
+
+					.btn {
+						display: inline-block;
+						margin-left: 5%;
+						margin-right: 0;
+						width: 45%;
+					}
+				}
+			}
+
+			.timestamp {
+				clear: both;
+				float: none;
+			}
+		}
+	}
 }
