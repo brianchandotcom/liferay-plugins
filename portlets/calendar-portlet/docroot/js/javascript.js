@@ -256,6 +256,7 @@ AUI.add(
 						endDate: endDate.getTime(),
 						firstReminder: calendarBooking.firstReminder,
 						firstReminderType: calendarBooking.firstReminderType,
+						hasChildCalendarBookings: calendarBooking.hasChildCalendarBookings,
 						instanceIndex: calendarBooking.instanceIndex,
 						location: calendarBooking.location,
 						parentCalendarBookingId: calendarBooking.parentCalendarBookingId,
@@ -448,23 +449,6 @@ AUI.add(
 						calendarResourceId: calendarResourceId
 					},
 					callback
-				);
-			},
-
-			hasChildCalendarBookings: function(schedulerEvent, callback) {
-				var instance = this;
-
-				instance.invokeService(
-					{
-						'/calendar-portlet.calendarbooking/has-child-calendar-bookings': {
-							parentCalendarBookingId: schedulerEvent.get('calendarBookingId')
-						}
-					},
-					{
-						success: function() {
-							callback(this.get('responseData'));
-						}
-					}
 				);
 			},
 
@@ -854,6 +838,11 @@ AUI.add(
 						setter: String,
 						validator: isValue,
 						value: CalendarUtil.NOTIFICATION_DEFAULT_TYPE
+					},
+
+					hasChildCalendarBookings: {
+						validator: isBoolean,
+						value: false
 					},
 
 					instanceIndex: {
@@ -1404,16 +1393,6 @@ AUI.add(
 						return offset;
 					},
 
-					_hasChildCalendarBookingsPromise: function(schedulerEvent) {
-						var instance = this;
-
-						return A.Promise(
-							function(resolve) {
-								CalendarUtil.hasChildCalendarBookings(schedulerEvent, resolve);
-							}
-						);
-					},
-
 					_onClickAddEvent: function(event) {
 						var instance = this;
 
@@ -1503,7 +1482,6 @@ AUI.add(
 					_promptSchedulerEventUpdate: function(data) {
 						var instance = this;
 
-						var hasChild = data[3];
 						var schedulerEvent = data[0];
 
 						instance.queue = new A.AsyncQueue();
@@ -1521,7 +1499,7 @@ AUI.add(
 						}
 
 						if (schedulerEvent.isMasterBooking()) {
-							if (hasChild) {
+							if (schedulerEvent.get('hasChildCalendarBookings')) {
 								instance.queue.add(
 									{
 										args: [data],
@@ -1570,7 +1548,7 @@ AUI.add(
 					_queueableQuestionResolver: function(data) {
 						var instance = this;
 
-						var answers = data[4];
+						var answers = data[3];
 						var duration = data[2];
 						var offset = data[1];
 						var schedulerEvent = data[0];
@@ -1591,7 +1569,7 @@ AUI.add(
 					_queueableQuestionUpdateAllInvited: function(data) {
 						var instance = this;
 
-						var answers = data[4];
+						var answers = data[3];
 
 						var showNextQuestion = A.bind(instance.queue.run, instance.queue);
 
@@ -1618,7 +1596,7 @@ AUI.add(
 					_queueableQuestionUpdateRecurring: function(data) {
 						var instance = this;
 
-						var answers = data[4];
+						var answers = data[3];
 
 						var showNextQuestion = A.bind(instance.queue.run, instance.queue);
 
@@ -1654,7 +1632,7 @@ AUI.add(
 					_queueableQuestionUserCalendarOnly: function(data) {
 						var instance = this;
 
-						var answers = data[4];
+						var answers = data[3];
 						var schedulerEvent = data[0];
 
 						var showNextQuestion = A.bind(instance.queue.run, instance.queue);
@@ -1700,7 +1678,6 @@ AUI.add(
 							schedulerEvent,
 							instance._getCalendarBookingOffset(schedulerEvent, changedAttributes),
 							instance._getCalendarBookingDuration(schedulerEvent),
-							instance._hasChildCalendarBookingsPromise(schedulerEvent),
 							answers
 						)
 						.then(
