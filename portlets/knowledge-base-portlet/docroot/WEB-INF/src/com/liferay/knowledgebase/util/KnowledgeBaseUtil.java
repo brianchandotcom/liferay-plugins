@@ -14,6 +14,7 @@
 
 package com.liferay.knowledgebase.util;
 
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.KBComment;
 import com.liferay.knowledgebase.model.KBCommentConstants;
@@ -51,7 +52,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.ModelHintsUtil;
-import com.liferay.portal.util.PortalUtil;
 
 import java.io.InputStream;
 
