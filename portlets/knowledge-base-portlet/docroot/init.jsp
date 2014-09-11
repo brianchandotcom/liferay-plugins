@@ -25,7 +25,8 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.knowledgebase.KBArticleContentException" %><%@
+<%@ page import="com.liferay.compat.portal.util.PortalUtil" %><%@
+page import="com.liferay.knowledgebase.KBArticleContentException" %><%@
 page import="com.liferay.knowledgebase.KBArticleImportException" %><%@
 page import="com.liferay.knowledgebase.KBArticlePriorityException" %><%@
 page import="com.liferay.knowledgebase.KBArticleSourceURLException" %><%@
@@ -108,7 +109,6 @@ page import="com.liferay.portal.service.TicketLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.WorkflowDefinitionLinkLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.permission.GroupPermissionUtil" %><%@
 page import="com.liferay.portal.service.permission.PortletPermissionUtil" %><%@
-page import="com.liferay.portal.util.PortalUtil" %><%@
 page import="com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil" %><%@
 page import="com.liferay.portlet.asset.model.AssetCategory" %><%@
 page import="com.liferay.portlet.asset.model.AssetEntry" %><%@

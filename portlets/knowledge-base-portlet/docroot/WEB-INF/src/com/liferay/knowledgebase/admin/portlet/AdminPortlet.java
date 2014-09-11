@@ -14,6 +14,7 @@
 
 package com.liferay.knowledgebase.admin.portlet;
 
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.knowledgebase.KBArticleContentException;
 import com.liferay.knowledgebase.KBArticleImportException;
 import com.liferay.knowledgebase.KBArticlePriorityException;
@@ -57,7 +58,6 @@ import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.AssetCategoryException;
 import com.liferay.portlet.asset.AssetTagException;

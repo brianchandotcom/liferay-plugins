@@ -14,6 +14,7 @@
 
 package com.liferay.knowledgebase.admin.lar;
 
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.KBComment;
 import com.liferay.knowledgebase.model.KBTemplate;
@@ -32,7 +33,6 @@ import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.lar.StagedModelType;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.util.PortalUtil;
 
 import java.util.List;
 
