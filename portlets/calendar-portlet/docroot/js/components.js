@@ -790,7 +790,7 @@
 				'</label>' +
 				'<label class="reminder-type" for="{portletNamespace}reminder{i}">' +
 					'<input id="{portletNamespace}reminderType{i}" name="{portletNamespace}reminderType{i}" type="hidden" value="email" />' +
-					'{email}'+
+					'{email}' +
 				'</label>' +
 				'<input class="input-mini reminder-value" name="{portletNamespace}reminderValue{i}" type="text" size="5" value="{time.value}" <tpl if="disabled">disabled="disabled"</tpl> /> ' +
 				'<select class="reminder-duration span2" name="{portletNamespace}reminderDuration{i}" <tpl if="disabled">disabled="disabled"</tpl>>' +
@@ -1115,8 +1115,9 @@
 				openConfirmationPanel: function(actionName, onlyThisInstanceFn, allFollowingFn, allEventsInFn, cancelFn) {
 					var instance = this;
 
-					var titleText;
 					var changeDeleteText;
+					var confirmationPanel;
+					var titleText;
 
 					if (actionName === 'delete') {
 						titleText = Liferay.Language.get('delete-recurring-event');
@@ -1142,7 +1143,7 @@
 						};
 					};
 
-					var confirmationPanel = Liferay.Util.Window.getWindow(
+					confirmationPanel = Liferay.Util.Window.getWindow(
 						{
 							dialog:	{
 								bodyContent: changeDeleteText,
@@ -1182,6 +1183,8 @@
 				confirm: function(message, yesButtonLabel, noButtonLabel, yesFn, noFn) {
 					var instance = this;
 
+					var confirmationPanel;
+
 					var getButtonConfig = function(label, callback) {
 						return {
 							label: label,
@@ -1191,13 +1194,13 @@
 										callback.apply(this, arguments);
 									}
 
-									this.hide();
+									confirmationPanel.hide();
 								}
 							}
 						};
 					};
 
-					var confirmationPanel = Liferay.Util.Window.getWindow(
+					confirmationPanel = Liferay.Util.Window.getWindow(
 						{
 							dialog : {
 								bodyContent: message,
