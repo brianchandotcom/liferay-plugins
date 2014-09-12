@@ -23,6 +23,7 @@ import com.google.ical.values.DateValueImpl;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.TimeZoneUtil;
 
 import java.text.ParseException;
@@ -104,6 +105,10 @@ public class CalendarBookingIterator implements Iterator<CalendarBooking> {
 
 	private TimeZone _getTimeZone(CalendarBooking calendarBooking) {
 		try {
+			if (calendarBooking.isAllDay()) {
+				return TimeZone.getTimeZone(StringPool.UTC);
+			}
+
 			return calendarBooking.getTimeZone();
 		}
 		catch (Exception e) {
