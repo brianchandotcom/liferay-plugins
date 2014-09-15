@@ -14,6 +14,12 @@
 
 package com.liferay.knowledgebase.portlet;
 
+import com.liferay.knowledgebase.KBArticleContentException;
+import com.liferay.knowledgebase.KBArticlePriorityException;
+import com.liferay.knowledgebase.KBArticleTitleException;
+import com.liferay.knowledgebase.KBCommentContentException;
+import com.liferay.knowledgebase.NoSuchArticleException;
+import com.liferay.knowledgebase.NoSuchCommentException;
 import com.liferay.knowledgebase.model.KBComment;
 import com.liferay.knowledgebase.model.KBCommentConstants;
 import com.liferay.knowledgebase.service.KBArticleServiceUtil;
@@ -21,7 +27,6 @@ import com.liferay.knowledgebase.service.KBCommentLocalServiceUtil;
 import com.liferay.knowledgebase.service.KBCommentServiceUtil;
 import com.liferay.knowledgebase.util.WebKeys;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
@@ -35,10 +40,17 @@ import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.asset.AssetCategoryException;
+import com.liferay.portlet.asset.AssetTagException;
+import com.liferay.portlet.documentlibrary.DuplicateFileException;
+import com.liferay.portlet.documentlibrary.FileNameException;
+import com.liferay.portlet.documentlibrary.FileSizeException;
+import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.InputStream;
@@ -249,7 +261,7 @@ public class BaseKBPortlet extends MVCPortlet {
 
 	public void updateKBCommentStatus(
 			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		long kbCommentId = ParamUtil.getLong(actionRequest, "kbCommentId");
 
@@ -261,6 +273,29 @@ public class BaseKBPortlet extends MVCPortlet {
 		KBCommentServiceUtil.updateStatus(kbCommentId, status, serviceContext);
 
 		SessionMessages.add(actionRequest, "feedbackStatusUpdated");
+	}
+
+	@Override
+	protected boolean isSessionErrorException(Throwable cause) {
+		if (cause instanceof AssetCategoryException ||
+			cause instanceof AssetTagException ||
+			cause instanceof DuplicateFileException ||
+			cause instanceof FileNameException ||
+			cause instanceof FileSizeException ||
+			cause instanceof KBArticleContentException ||
+			cause instanceof KBArticlePriorityException ||
+			cause instanceof KBArticleTitleException ||
+			cause instanceof KBCommentContentException ||
+			cause instanceof NoSuchArticleException ||
+			cause instanceof NoSuchCommentException ||
+			cause instanceof NoSuchFileException ||
+			cause instanceof PrincipalException ||
+			super.isSessionErrorException(cause)) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	private static final String _TEMP_FOLDER_NAME =
