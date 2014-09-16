@@ -37,11 +37,11 @@ import com.liferay.portal.kernel.search.facet.collector.FacetCollector;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.solr.facet.SolrFacetFieldCollector;
 import com.liferay.portal.search.solr.facet.SolrFacetQueryCollector;
@@ -57,6 +57,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.time.StopWatch;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
@@ -79,17 +80,42 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 	public Hits search(SearchContext searchContext, Query query)
 		throws SearchException {
 
+		StopWatch stopWatch = new StopWatch();
+
+		stopWatch.start();
+
 		try {
-			return doSearch(searchContext, query);
+			SolrQuery solrQuery = new SolrQuery();
+
+			QueryResponse queryResponse = doSearch(
+				solrQuery, searchContext, query);
+
+			Hits hits = processQueryResponse(
+				solrQuery, queryResponse, searchContext, query);
+
+			hits.setStart(stopWatch.getStartTime());
+
+			return hits;
 		}
 		catch (Exception e) {
-			_log.error(e, e);
+			if (_log.isWarnEnabled()) {
+				_log.warn(e, e);
+			}
 
 			if (!_swallowException) {
 				throw new SearchException(e.getMessage());
 			}
 
 			return new HitsImpl();
+		}
+		finally {
+			if (_log.isInfoEnabled()) {
+				stopWatch.stop();
+
+				_log.info(
+					"Searching " + query.toString() + " took " +
+						stopWatch.getTime() + " ms");
+			}
 		}
 	}
 
@@ -204,6 +230,27 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
+	protected float addScore(
+		SolrDocument solrDocument, List<Float> scores, float maxScore,
+		boolean scoreEnabled) {
+
+		if (scoreEnabled) {
+			float score = GetterUtil.getFloat(
+				String.valueOf(solrDocument.getFieldValue("score")));
+
+			if (score > maxScore) {
+				maxScore = score;
+			}
+
+			scores.add(score);
+		}
+		else {
+			scores.add(maxScore);
+		}
+
+		return maxScore;
+	}
+
 	protected void addSelectedFields(
 		SolrQuery solrQuery, QueryConfig queryConfig) {
 
@@ -246,10 +293,9 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
-	protected Hits doSearch(SearchContext searchContext, Query query)
+	protected QueryResponse doSearch(
+			SolrQuery solrQuery, SearchContext searchContext, Query query)
 		throws Exception {
-
-		SolrQuery solrQuery = new SolrQuery();
 
 		QueryConfig queryConfig = query.getQueryConfig();
 
@@ -264,40 +310,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 
 		translateQuery(searchContext, query, solrQuery);
 
-		QueryResponse queryResponse = _solrServer.query(solrQuery, METHOD.POST);
-
-		boolean allResults = false;
-
-		if (solrQuery.getRows() == 0) {
-			allResults = true;
-		}
-
-		List<FacetField> facetFields = queryResponse.getFacetFields();
-
-		if (facetFields != null) {
-			Map<String, Facet> facets = searchContext.getFacets();
-
-			for (FacetField facetField : facetFields) {
-				Facet facet = facets.get(facetField.getName());
-
-				FacetCollector facetCollector = null;
-
-				if (facet instanceof RangeFacet) {
-					facetCollector = new SolrFacetQueryCollector(
-						facetField.getName(), queryResponse.getFacetQuery());
-				}
-				else {
-					facetCollector = new SolrFacetFieldCollector(
-						facetField.getName(), facetField);
-				}
-
-				facet.setFacetCollector(facetCollector);
-			}
-		}
-
-		return subset(
-			solrQuery, query, query.getQueryConfig(), queryResponse,
-			allResults);
+		return _solrServer.query(solrQuery, METHOD.POST);
 	}
 
 	protected String getSnippet(
@@ -356,6 +369,62 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		return snippet;
 	}
 
+	protected Float[] normalizeScores(
+		List<Float> scores, QueryConfig queryConfig, float maxScore,
+		int numDocuments) {
+
+		Float[] scoresArray = scores.toArray(new Float[numDocuments]);
+
+		if (queryConfig.isScoreEnabled() && (numDocuments > 0) &&
+			(maxScore > 0)) {
+
+			for (int i = 0; i < scoresArray.length; i++) {
+				scoresArray[i] = scoresArray[i] / maxScore;
+			}
+		}
+
+		return scoresArray;
+	}
+
+	protected Hits processQueryResponse(
+			SolrQuery solrQuery, QueryResponse queryResponse,
+			SearchContext searchContext, Query query)
+		throws Exception {
+
+		boolean allResults = false;
+
+		if ((searchContext.getStart() == QueryUtil.ALL_POS) &&
+			(searchContext.getEnd() == QueryUtil.ALL_POS)) {
+
+			allResults = true;
+		}
+
+		updateFacetCollectors(queryResponse, searchContext);
+
+		return subset(
+			solrQuery, query, query.getQueryConfig(), queryResponse,
+			allResults);
+	}
+
+	protected Document processSolrDocument(SolrDocument solrDocument) {
+		Document document = new DocumentImpl();
+
+		Collection<String> names = solrDocument.getFieldNames();
+
+		for (String name : names) {
+			Collection<Object> fieldValues = solrDocument.getFieldValues(name);
+
+			Field field = new Field(
+				name,
+				ArrayUtil.toStringArray(
+					fieldValues.toArray(new Object[fieldValues.size()])));
+
+			document.add(field);
+		}
+
+		return document;
+	}
+
 	protected Hits subset(
 			SolrQuery solrQuery, Query query, QueryConfig queryConfig,
 			QueryResponse queryResponse, boolean allResults)
@@ -386,21 +455,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		int subsetTotal = 0;
 
 		for (SolrDocument solrDocument : solrDocumentList) {
-			Document document = new DocumentImpl();
-
-			Collection<String> names = solrDocument.getFieldNames();
-
-			for (String name : names) {
-				Collection<Object> fieldValues = solrDocument.getFieldValues(
-					name);
-
-				Field field = new Field(
-					name,
-					ArrayUtil.toStringArray(
-						fieldValues.toArray(new Object[fieldValues.size()])));
-
-				document.add(field);
-			}
+			Document document = processSolrDocument(solrDocument);
 
 			documents.add(document);
 
@@ -422,19 +477,8 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 				}
 			}
 
-			if (queryConfig.isScoreEnabled()) {
-				float score = GetterUtil.getFloat(
-					String.valueOf(solrDocument.getFieldValue("score")));
-
-				if (score > maxScore) {
-					maxScore = score;
-				}
-
-				scores.add(score);
-			}
-			else {
-				scores.add(maxScore);
-			}
+			maxScore = addScore(
+				solrDocument, scores, maxScore, queryConfig.isScoreEnabled());
 
 			subsetTotal++;
 		}
@@ -444,22 +488,12 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		hits.setQuery(query);
 		hits.setQueryTerms(queryTerms.toArray(new String[queryTerms.size()]));
 
-		Float[] scoresArray = scores.toArray(new Float[subsetTotal]);
-
-		if (queryConfig.isScoreEnabled() && (subsetTotal > 0) &&
-			(maxScore > 0)) {
-
-			for (int i = 0; i < scoresArray.length; i++) {
-				scoresArray[i] = scoresArray[i] / maxScore;
-			}
-		}
+		Float[] scoresArray = normalizeScores(
+			scores, query.getQueryConfig(), maxScore, documents.size());
 
 		hits.setScores(scoresArray);
 
-		float searchTime =
-			(float)(System.currentTimeMillis() - startTime) / Time.SECOND;
-
-		hits.setSearchTime(searchTime);
+		hits.setSearchTime(queryResponse.getQTime());
 		hits.setSnippets(snippets.toArray(new String[subsetTotal]));
 		hits.setStart(startTime);
 
@@ -484,6 +518,35 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		sb.append(searchContext.getCompanyId());
 
 		solrQuery.setQuery(sb.toString());
+	}
+
+	protected void updateFacetCollectors(
+		QueryResponse queryResponse, SearchContext searchContext) {
+
+		Map<String, Facet> facetsMap = searchContext.getFacets();
+
+		List<FacetField> facetFields = queryResponse.getFacetFields();
+
+		if (ListUtil.isEmpty(facetFields)) {
+			return;
+		}
+
+		for (FacetField facetField : facetFields) {
+			Facet facet = facetsMap.get(facetField.getName());
+
+			FacetCollector facetCollector = null;
+
+			if (facet instanceof RangeFacet) {
+				facetCollector = new SolrFacetQueryCollector(
+					facetField.getName(), queryResponse.getFacetQuery());
+			}
+			else {
+				facetCollector = new SolrFacetFieldCollector(
+					facetField.getName(), facetField);
+			}
+
+			facet.setFacetCollector(facetCollector);
+		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(SolrIndexSearcher.class);
