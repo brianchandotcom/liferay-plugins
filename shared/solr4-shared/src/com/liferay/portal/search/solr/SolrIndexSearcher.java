@@ -38,7 +38,7 @@ import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -85,13 +86,12 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		stopWatch.start();
 
 		try {
-			SolrQuery solrQuery = new SolrQuery();
-
 			QueryResponse queryResponse = search(
-				solrQuery, searchContext, query);
+				searchContext, query, searchContext.getStart(),
+				searchContext.getEnd());
 
 			Hits hits = processQueryResponse(
-				solrQuery, queryResponse, searchContext, query);
+				queryResponse, searchContext, query);
 
 			hits.setStart(stopWatch.getStartTime());
 
@@ -263,6 +263,81 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		solrQuery.setFields(selectedFieldNames);
 	}
 
+	protected void addSnippets(
+		SolrDocument solrDocument, Document document, QueryConfig queryConfig,
+		Set<String> queryTerms,
+		Map<String, Map<String, List<String>>> highlights) {
+
+		if (!queryConfig.isHighlightEnabled()) {
+			return;
+		}
+
+		addSnippets(
+			solrDocument, document, queryTerms, highlights,
+			Field.ASSET_CATEGORY_TITLES, queryConfig.getLocale());
+		addSnippets(
+			solrDocument, document, queryTerms, highlights, Field.CONTENT,
+			queryConfig.getLocale());
+		addSnippets(
+			solrDocument, document, queryTerms, highlights, Field.DESCRIPTION,
+			queryConfig.getLocale());
+		addSnippets(
+			solrDocument, document, queryTerms, highlights, Field.TITLE,
+			queryConfig.getLocale());
+	}
+
+	protected void addSnippets(
+		SolrDocument solrDocument, Document document, Set<String> queryTerms,
+		Map<String, Map<String, List<String>>> highlights, String fieldName,
+		Locale locale) {
+
+		if (MapUtil.isEmpty(highlights)) {
+			return;
+		}
+
+		String key = (String)solrDocument.getFieldValue(Field.UID);
+
+		Map<String, List<String>> uidHighlights = highlights.get(key);
+
+		String localizedFieldName = DocumentImpl.getLocalizedName(
+			locale, fieldName);
+
+		String snippetFieldName = localizedFieldName;
+
+		List<String> snippets = uidHighlights.get(localizedFieldName);
+
+		if (snippets == null) {
+			snippets = uidHighlights.get(fieldName);
+
+			snippetFieldName = fieldName;
+		}
+
+		String snippet = StringPool.BLANK;
+
+		if (ListUtil.isNotEmpty(snippets)) {
+			snippet = StringUtil.merge(snippets, StringPool.TRIPLE_PERIOD);
+
+			if (Validator.isNotNull(snippet)) {
+				snippet = snippet.concat(StringPool.TRIPLE_PERIOD);
+			}
+		}
+
+		if (!snippet.equals(StringPool.BLANK)) {
+			Matcher matcher = _pattern.matcher(snippet);
+
+			while (matcher.find()) {
+				queryTerms.add(matcher.group(1));
+			}
+
+			snippet = StringUtil.replace(snippet, "<em>", StringPool.BLANK);
+			snippet = StringUtil.replace(snippet, "</em>", StringPool.BLANK);
+		}
+
+		document.addText(
+			Field.SNIPPET.concat(StringPool.UNDERLINE).concat(snippetFieldName),
+			snippet);
+	}
+
 	protected void addSort(SolrQuery solrQuery, Sort[] sorts) {
 		if (ArrayUtil.isEmpty(sorts)) {
 			return;
@@ -293,62 +368,6 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		}
 	}
 
-	protected String getSnippet(
-		SolrDocument solrDocument, QueryConfig queryConfig,
-		Set<String> queryTerms,
-		Map<String, Map<String, List<String>>> highlights, String field) {
-
-		if (highlights == null) {
-			return StringPool.BLANK;
-		}
-
-		String key = (String)solrDocument.getFieldValue(Field.UID);
-
-		Map<String, List<String>> uidHighlights = highlights.get(key);
-
-		boolean localizedSearch = true;
-
-		String defaultLanguageId = LocaleUtil.toLanguageId(
-			LocaleUtil.getDefault());
-		String queryLanguageId = LocaleUtil.toLanguageId(
-			queryConfig.getLocale());
-
-		if (defaultLanguageId.equals(queryLanguageId)) {
-			localizedSearch = false;
-		}
-
-		if (localizedSearch) {
-			String localizedName = DocumentImpl.getLocalizedName(
-				queryConfig.getLocale(), field);
-
-			if (solrDocument.containsKey(localizedName)) {
-				field = localizedName;
-			}
-		}
-
-		List<String> snippets = uidHighlights.get(field);
-
-		String snippet = StringUtil.merge(snippets, "...");
-
-		if (Validator.isNotNull(snippet)) {
-			snippet = snippet + "...";
-		}
-		else {
-			snippet = StringPool.BLANK;
-		}
-
-		Matcher matcher = _pattern.matcher(snippet);
-
-		while (matcher.find()) {
-			queryTerms.add(matcher.group(1));
-		}
-
-		snippet = StringUtil.replace(snippet, "<em>", "");
-		snippet = StringUtil.replace(snippet, "</em>", "");
-
-		return snippet;
-	}
-
 	protected Float[] normalizeScores(
 		List<Float> scores, QueryConfig queryConfig, float maxScore,
 		int numDocuments) {
@@ -367,9 +386,11 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 	}
 
 	protected Hits processQueryResponse(
-			SolrQuery solrQuery, QueryResponse queryResponse,
-			SearchContext searchContext, Query query)
+			QueryResponse queryResponse, SearchContext searchContext,
+			Query query)
 		throws Exception {
+
+		long startTime = System.currentTimeMillis();
 
 		boolean allResults = false;
 
@@ -379,72 +400,21 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 			allResults = true;
 		}
 
-		updateFacetCollectors(queryResponse, searchContext);
-
-		return subset(
-			solrQuery, query, query.getQueryConfig(), queryResponse,
-			allResults);
-	}
-
-	protected Document processSolrDocument(SolrDocument solrDocument) {
-		Document document = new DocumentImpl();
-
-		Collection<String> names = solrDocument.getFieldNames();
-
-		for (String name : names) {
-			Collection<Object> fieldValues = solrDocument.getFieldValues(name);
-
-			Field field = new Field(
-				name,
-				ArrayUtil.toStringArray(
-					fieldValues.toArray(new Object[fieldValues.size()])));
-
-			document.add(field);
-		}
-
-		return document;
-	}
-
-	protected QueryResponse search(
-			SolrQuery solrQuery, SearchContext searchContext, Query query)
-		throws Exception {
-
-		QueryConfig queryConfig = query.getQueryConfig();
-
-		addFacets(solrQuery, searchContext);
-		addHighlights(solrQuery, queryConfig);
-		addPagination(
-			solrQuery, searchContext.getStart(), searchContext.getEnd());
-		addSelectedFields(solrQuery, queryConfig);
-		addSort(solrQuery, searchContext.getSorts());
-
-		solrQuery.setIncludeScore(queryConfig.isScoreEnabled());
-
-		translateQuery(solrQuery, searchContext, query);
-
-		return _solrServer.query(solrQuery, METHOD.POST);
-	}
-
-	protected Hits subset(
-			SolrQuery solrQuery, Query query, QueryConfig queryConfig,
-			QueryResponse queryResponse, boolean allResults)
-		throws Exception {
-
-		long startTime = System.currentTimeMillis();
-
-		Hits hits = new HitsImpl();
-
 		SolrDocumentList solrDocumentList = queryResponse.getResults();
 
 		long total = solrDocumentList.getNumFound();
 
 		if (allResults && (total > 0)) {
-			solrQuery.setRows((int)total);
+			queryResponse = search(searchContext, query, 0, (int)total);
 
-			queryResponse = _solrServer.query(solrQuery);
+			solrDocumentList = queryResponse.getResults();
 
-			return subset(solrQuery, query, queryConfig, queryResponse, false);
+			total = solrDocumentList.getNumFound();
 		}
+
+		updateFacetCollectors(queryResponse, searchContext);
+
+		Hits hits = new HitsImpl();
 
 		List<Document> documents = new ArrayList<Document>();
 		List<Float> scores = new ArrayList<Float>();
@@ -454,28 +424,19 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		Set<String> queryTerms = new HashSet<String>();
 		int subsetTotal = 0;
 
+		QueryConfig queryConfig = query.getQueryConfig();
+
+		Map<String, Map<String, List<String>>> highlights =
+			queryResponse.getHighlighting();
+
 		for (SolrDocument solrDocument : solrDocumentList) {
 			Document document = processSolrDocument(solrDocument);
 
 			documents.add(document);
 
-			String snippet = StringPool.BLANK;
-
-			if (queryConfig.isHighlightEnabled()) {
-				snippet = getSnippet(
-					solrDocument, queryConfig, queryTerms,
-					queryResponse.getHighlighting(), Field.CONTENT);
-
-				if (Validator.isNull(snippet)) {
-					snippet = getSnippet(
-						solrDocument, queryConfig, queryTerms,
-						queryResponse.getHighlighting(), Field.TITLE);
-				}
-
-				if (Validator.isNotNull(snippet)) {
-					snippets.add(snippet);
-				}
-			}
+			addSnippets(
+				solrDocument, document, queryConfig, queryTerms,
+				highlights);
 
 			maxScore = addScore(
 				solrDocument, scores, maxScore, queryConfig.isScoreEnabled());
@@ -498,6 +459,46 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		hits.setStart(startTime);
 
 		return hits;
+	}
+
+	protected Document processSolrDocument(SolrDocument solrDocument) {
+		Document document = new DocumentImpl();
+
+		Collection<String> names = solrDocument.getFieldNames();
+
+		for (String name : names) {
+			Collection<Object> fieldValues = solrDocument.getFieldValues(name);
+
+			Field field = new Field(
+				name,
+				ArrayUtil.toStringArray(
+					fieldValues.toArray(new Object[fieldValues.size()])));
+
+			document.add(field);
+		}
+
+		return document;
+	}
+
+	protected QueryResponse search(
+			SearchContext searchContext, Query query, int start, int end)
+		throws Exception {
+
+		SolrQuery solrQuery = new SolrQuery();
+
+		QueryConfig queryConfig = query.getQueryConfig();
+
+		addFacets(solrQuery, searchContext);
+		addHighlights(solrQuery, queryConfig);
+		addPagination(solrQuery, start, end);
+		addSelectedFields(solrQuery, queryConfig);
+		addSort(solrQuery, searchContext.getSorts());
+
+		solrQuery.setIncludeScore(queryConfig.isScoreEnabled());
+
+		translateQuery(solrQuery, searchContext, query);
+
+		return _solrServer.query(solrQuery, METHOD.POST);
 	}
 
 	protected void translateQuery(
