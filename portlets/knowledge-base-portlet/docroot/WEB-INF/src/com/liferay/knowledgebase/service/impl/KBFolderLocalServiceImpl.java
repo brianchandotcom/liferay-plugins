@@ -20,24 +20,70 @@ import com.liferay.knowledgebase.model.KBFolderConstants;
 import com.liferay.knowledgebase.service.base.KBFolderLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.ServiceContext;
 
+import java.util.Date;
 import java.util.List;
 
 /**
- * The implementation of the k b folder local service.
- *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.knowledgebase.service.KBFolderLocalService} interface.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
- *
- * @author Brian Wing Shun Chan
- * @see com.liferay.knowledgebase.service.base.KBFolderLocalServiceBaseImpl
- * @see com.liferay.knowledgebase.service.KBFolderLocalServiceUtil
+ * @author Adolfo Pérez
  */
 public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
+
+	@Override
+	public KBFolder addKBFolder(
+			long userId, long groupId, long parentResourceClassNameId,
+			long parentResourcePrimKey, String name, String description,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		validateParent(parentResourceClassNameId, parentResourcePrimKey);
+
+		long kbFolderId = counterLocalService.increment();
+
+		KBFolder kbFolder = kbFolderPersistence.create(kbFolderId);
+
+		User user = userPersistence.findByPrimaryKey(userId);
+
+		Date now = DateUtil.newDate();
+
+		kbFolder.setUuid(serviceContext.getUuid());
+		kbFolder.setUserId(userId);
+		kbFolder.setUserName(user.getFullName());
+		kbFolder.setCompanyId(user.getCompanyId());
+		kbFolder.setGroupId(groupId);
+		kbFolder.setParentKBFolderId(parentResourcePrimKey);
+		kbFolder.setName(name);
+		kbFolder.setDescription(description);
+		kbFolder.setModifiedDate(now);
+		kbFolder.setCreateDate(now);
+
+		kbFolderPersistence.update(kbFolder);
+
+		// Resources
+
+		if (serviceContext.isAddGroupPermissions() ||
+			serviceContext.isAddGuestPermissions()) {
+
+			resourceLocalService.addResources(
+				kbFolder.getCompanyId(), kbFolder.getGroupId(),
+				kbFolder.getUserId(), KBFolder.class.getName(),
+				kbFolder.getKbFolderId(), false,
+				serviceContext.isAddGroupPermissions(),
+				serviceContext.isAddGuestPermissions());
+		}
+		else {
+			resourceLocalService.addModelResources(
+				kbFolder.getCompanyId(), kbFolder.getGroupId(),
+				kbFolder.getUserId(), KBFolder.class.getName(),
+				kbFolder.getKbFolderId(), serviceContext.getGroupPermissions(),
+				serviceContext.getGuestPermissions());
+		}
+
+		return kbFolder;
+	}
 
 	@Override
 	public List<KBFolder> getFolders(
@@ -59,6 +105,33 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 		return kbFolderPersistence.countByG_P(groupId, parentKBFolderId);
 	}
 
+	@Override
+	public KBFolder updateKBFolder(
+			long userId, long groupId, long parentResourceClassNameId,
+			long parentResourcePrimKey, long kbFolderId, String name,
+			String description)
+		throws PortalException, SystemException {
+
+		validateParent(parentResourceClassNameId, parentResourcePrimKey);
+
+		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(kbFolderId);
+
+		User user = userPersistence.findByPrimaryKey(userId);
+
+		Date now = DateUtil.newDate();
+
+		kbFolder.setUserId(userId);
+		kbFolder.setUserName(user.getFullName());
+		kbFolder.setCompanyId(user.getCompanyId());
+		kbFolder.setGroupId(groupId);
+		kbFolder.setParentKBFolderId(parentResourcePrimKey);
+		kbFolder.setName(name);
+		kbFolder.setDescription(description);
+		kbFolder.setModifiedDate(now);
+
+		return kbFolderPersistence.update(kbFolder);
+	}
+
 	protected void validateFolder(long groupId, long kbFolderId)
 		throws NoSuchFolderException, SystemException {
 
@@ -66,14 +139,41 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 			return;
 		}
 
-		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(
-			kbFolderId);
+		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(kbFolderId);
 
 		if (kbFolder.getGroupId() != groupId) {
 			throw new NoSuchFolderException(
 				String.format(
 					"No KBFolder found in group %s with kbFolderId %s", groupId,
 					kbFolderId));
+		}
+	}
+
+	protected void validateParent(
+			long parentResourceClassNameId, long parentResourcePrimKey)
+		throws PortalException, SystemException {
+
+		long kbFolderClassNameId = classNameLocalService.getClassNameId(
+			KBFolderConstants.getClassName());
+
+		KBFolder parentKBFolder = null;
+
+		if (parentResourceClassNameId == kbFolderClassNameId) {
+			if (parentResourcePrimKey ==
+					KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+
+				return;
+			}
+
+			parentKBFolder = kbFolderPersistence.fetchByPrimaryKey(
+				parentResourcePrimKey);
+		}
+
+		if (parentKBFolder == null) {
+			throw new NoSuchFolderException(
+				String.format(
+					"No KBFolder found with kbFolderId %",
+					parentResourcePrimKey));
 		}
 	}
 

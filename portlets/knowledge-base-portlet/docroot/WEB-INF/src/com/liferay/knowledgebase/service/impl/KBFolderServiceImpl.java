@@ -16,29 +16,44 @@ package com.liferay.knowledgebase.service.impl;
 
 import com.liferay.knowledgebase.model.KBFolder;
 import com.liferay.knowledgebase.service.base.KBFolderServiceBaseImpl;
-import com.liferay.knowledgebase.service.permission.AdminPermission;
 import com.liferay.knowledgebase.service.permission.KBFolderPermission;
 import com.liferay.knowledgebase.util.ActionKeys;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.service.ServiceContext;
 
 import java.util.List;
 
 /**
- * The implementation of the k b folder remote service.
- *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.knowledgebase.service.KBFolderService} interface.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
- *
- * @author Brian Wing Shun Chan
- * @see com.liferay.knowledgebase.service.base.KBFolderServiceBaseImpl
- * @see com.liferay.knowledgebase.service.KBFolderServiceUtil
+ * @author Adolfo Pérez
  */
 public class KBFolderServiceImpl extends KBFolderServiceBaseImpl {
+
+	@Override
+	public KBFolder addKBFolder(
+			long groupId, long parentResourceClassNameId,
+			long parentResourcePrimKey, String name, String description,
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		KBFolderPermission.check(
+			getPermissionChecker(), groupId, parentResourcePrimKey,
+			ActionKeys.ADD_KB_FOLDER);
+
+		return kbFolderLocalService.addKBFolder(
+			getUserId(), groupId, parentResourceClassNameId,
+			parentResourcePrimKey, name, description, serviceContext);
+	}
+
+	@Override
+	public KBFolder getFolder(long kbFolderId)
+		throws PortalException, SystemException {
+
+		KBFolderPermission.check(
+			getPermissionChecker(), kbFolderId, ActionKeys.VIEW);
+
+		return kbFolderLocalService.getKBFolder(kbFolderId);
+	}
 
 	@Override
 	public List<KBFolder> getFolders(
@@ -50,10 +65,25 @@ public class KBFolderServiceImpl extends KBFolderServiceBaseImpl {
 	}
 
 	@Override
-	public int getFoldersCount(long groupId, long parentFolderId)
+	public int getFoldersCount(long groupId, long parentKBFolderId)
 		throws PortalException, SystemException {
 
-		return kbFolderPersistence.filterCountByG_P(groupId, parentFolderId);
+		return kbFolderPersistence.filterCountByG_P(groupId, parentKBFolderId);
+	}
+
+	@Override
+	public KBFolder updateKBFolder(
+			long groupId, long parentResourceClassNameId,
+			long parentResourcePrimKey, long kbFolderId, String name,
+			String description)
+		throws PortalException, SystemException {
+
+		KBFolderPermission.check(
+			getPermissionChecker(), kbFolderId, ActionKeys.UPDATE);
+
+		return kbFolderLocalService.updateKBFolder(
+			getUserId(), groupId, parentResourceClassNameId,
+			parentResourcePrimKey, kbFolderId, name, description);
 	}
 
 }
