@@ -22,4 +22,8 @@
 	<portlet:param name="redirect" value="<%= redirect %>" />
 </portlet:renderURL>
 
-<aui:nav-item href="<%= importURL %>" label="import" />
+<aui:nav-item
+	href="<%= importURL %>"
+	iconCssClass="icon-hdd"
+	label="import"
+/>
