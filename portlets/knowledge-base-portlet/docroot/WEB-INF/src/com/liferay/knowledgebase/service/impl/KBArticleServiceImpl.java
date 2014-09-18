@@ -71,9 +71,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 
 	@Override
 	public KBArticle addKBArticle(
-			String portletId, long parentResourcePrimKey, String title,
-			String urlTitle, String content, String description,
-			String sourceURL, String[] sections, String[] selectedFileNames,
+			String portletId, long parentResourceClassNameId,
+			long parentResourcePrimKey, String title, String urlTitle,
+			String content, String description, String sourceURL,
+			String[] sections, String[] selectedFileNames,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -89,22 +90,23 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		}
 
 		return kbArticleLocalService.addKBArticle(
-			getUserId(), parentResourcePrimKey, title, urlTitle, content,
-			description, sourceURL, sections, selectedFileNames,
-			serviceContext);
+			getUserId(), parentResourceClassNameId, parentResourcePrimKey,
+			title, urlTitle, content, description, sourceURL, sections,
+			selectedFileNames, serviceContext);
 	}
 
 	@Override
 	public void addKBArticlesMarkdown(
-			long groupId, String fileName, InputStream inputStream,
-			ServiceContext serviceContext)
+			long groupId, long parentKBFolderId, String fileName,
+			InputStream inputStream, ServiceContext serviceContext)
 		throws PortalException {
 
 		AdminPermission.check(
 			getPermissionChecker(), groupId, ActionKeys.ADD_KB_ARTICLE);
 
 		kbArticleLocalService.addKBArticlesMarkdown(
-			getUserId(), groupId, fileName, inputStream, serviceContext);
+			getUserId(), groupId, parentKBFolderId, fileName, inputStream,
+			serviceContext);
 	}
 
 	@Override
@@ -615,7 +617,8 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 
 	@Override
 	public void moveKBArticle(
-			long resourcePrimKey, long parentResourcePrimKey, double priority)
+			long resourcePrimKey, long parentResourceClassNameId,
+			long parentResourcePrimKey, double priority)
 		throws PortalException {
 
 		KBArticlePermission.check(
@@ -623,7 +626,8 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			ActionKeys.MOVE_KB_ARTICLE);
 
 		kbArticleLocalService.moveKBArticle(
-			getUserId(), resourcePrimKey, parentResourcePrimKey, priority);
+			getUserId(), resourcePrimKey, parentResourceClassNameId,
+			parentResourcePrimKey, priority);
 	}
 
 	@Override

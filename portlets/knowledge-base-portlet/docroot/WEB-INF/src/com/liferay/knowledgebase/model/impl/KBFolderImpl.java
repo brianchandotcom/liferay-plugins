@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,14 +11,30 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/admin/init.jsp" %>
+package com.liferay.knowledgebase.model.impl;
 
-<portlet:renderURL var="importURL">
-	<portlet:param name="mvcPath" value="/admin/import.jsp" />
-	<portlet:param name="parentKBFolderId" value="<%= String.valueOf(KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) %>" />
-	<portlet:param name="redirect" value="<%= redirect %>" />
-</portlet:renderURL>
+import com.liferay.knowledgebase.model.KBFolderConstants;
+import com.liferay.portal.util.PortalUtil;
 
-<aui:nav-item href="<%= importURL %>" label="import" />
+/**
+ * @author Adolfo Pérez
+ */
+public class KBFolderImpl extends KBFolderBaseImpl {
+
+	public KBFolderImpl() {
+	}
+
+	@Override
+	public long getClassNameId() {
+		if (_classNameId == 0) {
+			_classNameId = PortalUtil.getClassNameId(
+				KBFolderConstants.getClassName());
+		}
+
+		return _classNameId;
+	}
+
+	private long _classNameId;
+
+}
