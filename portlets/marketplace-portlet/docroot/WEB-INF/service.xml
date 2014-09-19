@@ -78,5 +78,6 @@
 		<exception>AppTitle</exception>
 		<exception>AppVersion</exception>
 		<exception>DuplicateApp</exception>
+		<exception>ModulePluginIdentifier</exception>
 	</exceptions>
 </service-builder>
