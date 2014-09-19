@@ -337,6 +337,12 @@ public class ClpSerializer {
 				throwable.getCause());
 		}
 
+		if (className.equals(
+					"com.liferay.marketplace.ModulePluginIdentifierException")) {
+			return new com.liferay.marketplace.ModulePluginIdentifierException(throwable.getMessage(),
+				throwable.getCause());
+		}
+
 		if (className.equals("com.liferay.marketplace.NoSuchAppException")) {
 			return new com.liferay.marketplace.NoSuchAppException(throwable.getMessage(),
 				throwable.getCause());
