@@ -30,8 +30,9 @@ public class ModuleLocalServiceImpl extends ModuleLocalServiceBaseImpl {
 
 	@Override
 	public Module addModule(
-		long userId, long appId, String bundleSymbolicName,
-		String bundleVersion, String contextName) throws PortalException {
+			long userId, long appId, String bundleSymbolicName,
+			String bundleVersion, String contextName)
+		throws PortalException {
 
 		Module module = fetchModule(
 			appId, bundleSymbolicName, bundleVersion, contextName);
