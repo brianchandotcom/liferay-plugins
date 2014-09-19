@@ -103,6 +103,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 /**
  * @author Brian Wing Shun Chan
  */
@@ -159,7 +161,15 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 				actionRequest.setAttribute(
 					CALLED_PROCESS_ACTION, Boolean.TRUE.toString());
 
-				renderError("an-unexpected-system-error-occurred");
+				String message = "an-unexpected-system-error-occurred";
+
+				Throwable throwable = ExceptionUtils.getRootCause(e);
+
+				if (throwable instanceof AlloyException) {
+					message = throwable.getMessage();
+				}
+
+				renderError(message);
 
 				actionRequest.setAttribute(VIEW_PATH, viewPath);
 
