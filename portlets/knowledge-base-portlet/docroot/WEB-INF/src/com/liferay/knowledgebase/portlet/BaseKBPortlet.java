@@ -391,7 +391,7 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 	protected abstract String buildEditURL(
 			ActionRequest actionRequest, ActionResponse actionResponse,
 			KBArticle kbArticle)
-		throws PortalException, SystemException;
+		throws PortalException;
 
 	protected void checkExceededSizeLimit(HttpServletRequest request)
 		throws PortalException {
