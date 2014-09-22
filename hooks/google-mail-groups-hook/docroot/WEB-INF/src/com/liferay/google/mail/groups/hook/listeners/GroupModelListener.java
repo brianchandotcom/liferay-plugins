@@ -14,12 +14,12 @@
 
 package com.liferay.google.mail.groups.hook.listeners;
 
-import com.liferay.google.apps.connector.GGroupManager;
-import com.liferay.google.apps.connector.GoogleAppsConnectionFactoryUtil;
+import com.google.api.services.admin.directory.Directory;
+
 import com.liferay.google.mail.groups.util.GoogleMailGroupsUtil;
-import com.liferay.google.mail.groups.util.PortletPropsValues;
 import com.liferay.portal.ModelListenerException;
-import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
@@ -48,10 +48,11 @@ public class GroupModelListener extends BaseModelListener<Group> {
 
 				@Override
 				public void onAssociation(
-						User user, Group group, GGroupManager gGroupManager)
+						User user, Group group, Directory directory)
 					throws Exception {
 
-					gGroupManager.addGGroupMember(
+					GoogleMailGroupsUtil.addGGroupMember(
+						directory,
 						GoogleMailGroupsUtil.getGroupEmailAddress(group),
 						GoogleMailGroupsUtil.getUserEmailAddress(user));
 				}
@@ -59,7 +60,7 @@ public class GroupModelListener extends BaseModelListener<Group> {
 			};
 		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			_log.error(e);
 		}
 	}
 
@@ -70,17 +71,12 @@ public class GroupModelListener extends BaseModelListener<Group> {
 		}
 
 		try {
-			GGroupManager gGroupManager =
-				GoogleAppsConnectionFactoryUtil.getGGroupManager(
-					group.getCompanyId());
-
-			gGroupManager.addGGroup(
-				GoogleMailGroupsUtil.getGroupEmailAddress(group),
-				group.getDescriptiveName(), StringPool.BLANK,
-				PortletPropsValues.EMAIL_PERMISSION);
+			GoogleMailGroupsUtil.addGGroup(
+				GoogleMailGroupsUtil.getDirectory(), group.getDescriptiveName(),
+				GoogleMailGroupsUtil.getGroupEmailAddress(group));
 		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			_log.error(e);
 		}
 	}
 
@@ -91,15 +87,12 @@ public class GroupModelListener extends BaseModelListener<Group> {
 		}
 
 		try {
-			GGroupManager gGroupManager =
-				GoogleAppsConnectionFactoryUtil.getGGroupManager(
-					group.getCompanyId());
-
-			gGroupManager.deleteGGroup(
+			GoogleMailGroupsUtil.deleteGGroup(
+				GoogleMailGroupsUtil.getDirectory(),
 				GoogleMailGroupsUtil.getGroupEmailAddress(group));
 		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			_log.error(e);
 		}
 	}
 
@@ -115,7 +108,7 @@ public class GroupModelListener extends BaseModelListener<Group> {
 
 				@Override
 				public void onAssociation(
-						User user, Group group, GGroupManager gGroupManager)
+						User user, Group group, Directory directory)
 					throws Exception {
 
 					if (GroupLocalServiceUtil.hasUserGroup(
@@ -124,7 +117,8 @@ public class GroupModelListener extends BaseModelListener<Group> {
 						return;
 					}
 
-					gGroupManager.deleteGGroupMember(
+					GoogleMailGroupsUtil.deleteGGroupMember(
+						directory,
 						GoogleMailGroupsUtil.getGroupEmailAddress(group),
 						GoogleMailGroupsUtil.getUserEmailAddress(user));
 				}
@@ -132,9 +126,11 @@ public class GroupModelListener extends BaseModelListener<Group> {
 			};
 		}
 		catch (Exception e) {
-			throw new ModelListenerException(e);
+			_log.error(e);
 		}
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(GroupModelListener.class);
 
 	private abstract class OnAssociation {
 
@@ -166,17 +162,15 @@ public class GroupModelListener extends BaseModelListener<Group> {
 					(Long)associationClassPK);
 			}
 
-			GGroupManager gGroupManager =
-				GoogleAppsConnectionFactoryUtil.getGGroupManager(
-					group.getCompanyId());
+			Directory directory = GoogleMailGroupsUtil.getDirectory();
 
 			for (User user : users) {
-				onAssociation(user, group, gGroupManager);
+				onAssociation(user, group, directory);
 			}
 		}
 
 		public abstract void onAssociation(
-				User user, Group group, GGroupManager gGroupManager)
+				User user, Group group, Directory directory)
 			throws Exception;
 	}
 
