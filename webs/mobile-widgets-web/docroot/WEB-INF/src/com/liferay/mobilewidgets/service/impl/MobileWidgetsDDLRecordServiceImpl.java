@@ -25,8 +25,10 @@ import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.FieldConstants;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -39,10 +41,10 @@ public class MobileWidgetsDDLRecordServiceImpl
 	public JSONObject getDDLRecord(long ddlRecordId, Locale locale)
 		throws PortalException, SystemException {
 
-		JSONObject ddlRecordJSONObject = JSONFactoryUtil.createJSONObject();
-
 		DDLRecord ddlRecord = ddlRecordPersistence.findByPrimaryKey(
 			ddlRecordId);
+
+		Map<String, Object> ddlRecordAttributes = new HashMap<String, Object>();
 
 		Fields fields = ddlRecord.getFields();
 
@@ -53,14 +55,16 @@ public class MobileWidgetsDDLRecordServiceImpl
 		}
 
 		for (Field field : fields) {
-			String fieldValue = String.valueOf(field.getValue(locale));
+			Object fieldValue = getTypedFieldValue(field, locale);
 
-			if (isDateField(field.getType())) {
-				fieldValue = field.getRenderedValue(locale);
+			if (fieldValue != null) {
+				ddlRecordAttributes.put(field.getName(), fieldValue);
 			}
-
-			ddlRecordJSONObject.put(field.getName(), fieldValue);
 		}
+
+		JSONObject ddlRecordJSONObject =
+			JSONFactoryUtil.createJSONObject(
+				JSONFactoryUtil.looseSerialize(ddlRecordAttributes));
 
 		return ddlRecordJSONObject;
 	}
@@ -76,12 +80,22 @@ public class MobileWidgetsDDLRecordServiceImpl
 			ddlRecordSetId, userId, start, end);
 
 		for (DDLRecord ddlRecord : ddlRecords) {
-			JSONObject ddlRecordJSONObject = getDDLRecord(
-				ddlRecord.getRecordId(), locale);
+			JSONObject ddlRecordJSONObject = JSONFactoryUtil.createJSONObject();
+
+			Map<String, Object> ddlRecordModelAttributes =
+				ddlRecord.getModelAttributes();
+
+			JSONObject ddlRecordModelAttributesJSONObject =
+				JSONFactoryUtil.createJSONObject(
+					JSONFactoryUtil.looseSerialize(ddlRecordModelAttributes));
 
 			ddlRecordJSONObject.put(
-				"modelAttributes",
-				JSONFactoryUtil.looseSerialize(ddlRecord.getModelAttributes()));
+				"modelAttributes", ddlRecordModelAttributesJSONObject);
+
+			JSONObject ddlRecordValuesJSONObject = getDDLRecord(
+				ddlRecord.getRecordId(), locale);
+
+			ddlRecordJSONObject.put("modelValues", ddlRecordValuesJSONObject);
 
 			ddlRecordsJSONArray.put(ddlRecordJSONObject);
 		}
@@ -96,12 +110,52 @@ public class MobileWidgetsDDLRecordServiceImpl
 		return ddlRecordPersistence.countByR_U(ddlRecordSetId, userId);
 	}
 
-	protected boolean isDateField(String fieldType) {
-		if (fieldType.indexOf(FieldConstants.DATE) != -1) {
-			return true;
+	protected Object getTypedFieldValue(Field field, Locale locale)
+		throws PortalException, SystemException {
+
+		Object fieldValue;
+
+		String fieldStringValue = String.valueOf(field.getValue(locale));
+
+		String dataType = field.getDataType();
+
+		if (fieldStringValue.equals("null")) {
+			fieldValue = null;
+		}
+		else if (dataType.equals(FieldConstants.BOOLEAN)) {
+			fieldValue = Boolean.valueOf(fieldStringValue);
+		}
+		else if (dataType.equals(FieldConstants.INTEGER)) {
+			fieldValue = Integer.valueOf(fieldStringValue);
+		}
+		else if (dataType.equals(FieldConstants.LONG)) {
+			fieldValue = Long.valueOf(fieldStringValue);
+		}
+		else if (dataType.equals(FieldConstants.SHORT)) {
+			fieldValue = Short.valueOf(fieldStringValue);
+		}
+		else if (dataType.equals(FieldConstants.FLOAT) ||
+				 dataType.equals(FieldConstants.NUMBER)) {
+
+			fieldValue = Float.valueOf(fieldStringValue);
+		}
+		else if (dataType.equals(FieldConstants.DATE)) {
+			fieldValue = field.getRenderedValue(locale);
+		}
+		else if (dataType.equals(FieldConstants.DOCUMENT_LIBRARY)) {
+			if (fieldStringValue.equals("")) {
+				fieldValue = null;
+			}
+			else {
+				fieldValue = JSONFactoryUtil.looseSerialize(
+					JSONFactoryUtil.looseDeserialize(fieldStringValue));
+			}
+		}
+		else {
+			fieldValue = fieldStringValue;
 		}
 
-		return false;
+		return fieldValue;
 	}
 
 }
