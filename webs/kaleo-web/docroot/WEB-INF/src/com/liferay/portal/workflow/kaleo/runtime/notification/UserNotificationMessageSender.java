@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
@@ -46,19 +47,16 @@ public class UserNotificationMessageSender
 		JSONObject jsonObject = populateJSONObject(
 			notificationMessage, executionContext);
 
-		NotificationEvent notificationEvent =
-			NotificationEventFactoryUtil.createNotificationEvent(
-				System.currentTimeMillis(), PortletKeys.MY_WORKFLOW_TASKS,
-				jsonObject);
-
-		notificationEvent.setDeliveryRequired(0);
-
 		for (NotificationRecipient notificationRecipient :
 				notificationRecipients) {
 
 			if (notificationRecipient.getUserId() > 0) {
-				UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-					notificationRecipient.getUserId(), notificationEvent);
+				UserNotificationEventLocalServiceUtil.
+					sendUserNotificationEvents(
+						notificationRecipient.getUserId(),
+						PortletKeys.MY_WORKFLOW_TASKS,
+						UserNotificationDeliveryConstants.TYPE_WEBSITE,
+						jsonObject);
 			}
 		}
 	}
