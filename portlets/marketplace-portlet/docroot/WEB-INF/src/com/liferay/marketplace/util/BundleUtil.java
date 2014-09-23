@@ -15,6 +15,7 @@
 package com.liferay.marketplace.util;
 
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
@@ -187,10 +188,12 @@ public class BundleUtil {
 
 			ObjectName objectName = new ObjectName(_FRAMEWORK_OBJECT_NAME);
 
+			long[] bundleIdsArray = ArrayUtil.toArray(
+				bundleIds.toArray(new Long[bundleIds.size()]));
+
 			mBeanServer.invoke(
-				objectName, "uninstallBundle",
-				bundleIds.toArray(new Object[bundleIds.size()]),
-				new String[] {long.class.getName()});
+				objectName, "uninstallBundles", new Object[] {bundleIdsArray},
+				new String[] {long[].class.getName()});
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
