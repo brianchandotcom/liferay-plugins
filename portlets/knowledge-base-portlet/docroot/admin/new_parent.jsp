@@ -23,8 +23,6 @@ KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_
 
 long resourcePrimKey = BeanParamUtil.getLong(kbArticle, request, "resourcePrimKey");
 
-long defaultClassNameId = PortalUtil.getClassNameId(KBFolderConstants.getClassName());
-
 long parentResourcePrimKey = BeanParamUtil.getLong(kbArticle, request, "parentResourcePrimKey");
 
 double priority = BeanParamUtil.getDouble(kbArticle, request, "priority");
@@ -38,7 +36,6 @@ double priority = BeanParamUtil.getDouble(kbArticle, request, "priority");
 	<liferay-portlet:renderURL var="selectKBArticleURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="mvcPath" value='<%= templatePath + "select_article.jsp" %>' />
 		<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
-		<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(defaultClassNameId) %>" />
 		<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY) %>" />
 		<portlet:param name="status" value="<%= String.valueOf(status) %>" />
 	</liferay-portlet:renderURL>
