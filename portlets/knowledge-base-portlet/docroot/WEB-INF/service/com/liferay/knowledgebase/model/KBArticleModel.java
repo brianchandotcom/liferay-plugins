@@ -258,6 +258,20 @@ public interface KBArticleModel extends BaseModel<KBArticle>, ResourcedModel,
 	public void setParentResourcePrimKey(long parentResourcePrimKey);
 
 	/**
+	 * Returns the parent resource class name ID of this k b article.
+	 *
+	 * @return the parent resource class name ID of this k b article
+	 */
+	public long getParentResourceClassNameId();
+
+	/**
+	 * Sets the parent resource class name ID of this k b article.
+	 *
+	 * @param parentResourceClassNameId the parent resource class name ID of this k b article
+	 */
+	public void setParentResourceClassNameId(long parentResourceClassNameId);
+
+	/**
 	 * Returns the version of this k b article.
 	 *
 	 * @return the version of this k b article

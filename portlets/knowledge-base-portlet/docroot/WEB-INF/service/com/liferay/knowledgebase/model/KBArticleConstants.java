@@ -28,4 +28,8 @@ public class KBArticleConstants {
 
 	public static final String DIR_NAME_PREFIX = "knowledgebase/kbarticles/";
 
+	public static String getClassName() {
+		return KBArticle.class.getName();
+	}
+
 }

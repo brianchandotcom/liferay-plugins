@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 
@@ -178,7 +179,10 @@ public class KBArticleStagedModelDataHandler
 
 				if (existingKBArticle == null) {
 					importedKBArticle = KBArticleLocalServiceUtil.addKBArticle(
-						userId, parentResourcePrimKey, kbArticle.getTitle(),
+						userId,
+						PortalUtil.getClassNameId(
+							KBArticleConstants.getClassName()),
+						parentResourcePrimKey, kbArticle.getTitle(),
 						kbArticle.getUrlTitle(), kbArticle.getContent(),
 						kbArticle.getDescription(), kbArticle.getSourceURL(),
 						sections, null, serviceContext);
@@ -196,6 +200,8 @@ public class KBArticleStagedModelDataHandler
 
 					KBArticleLocalServiceUtil.moveKBArticle(
 						userId, existingKBArticle.getResourcePrimKey(),
+						PortalUtil.getClassNameId(
+							KBArticleConstants.getClassName()),
 						parentResourcePrimKey, kbArticle.getPriority());
 
 					importedKBArticle =
@@ -210,7 +216,9 @@ public class KBArticleStagedModelDataHandler
 		}
 		else {
 			importedKBArticle = KBArticleLocalServiceUtil.addKBArticle(
-				userId, parentResourcePrimKey, kbArticle.getTitle(),
+				userId,
+				PortalUtil.getClassNameId(KBArticleConstants.getClassName()),
+				parentResourcePrimKey, kbArticle.getTitle(),
 				kbArticle.getUrlTitle(), kbArticle.getContent(),
 				kbArticle.getDescription(), kbArticle.getSourceURL(), sections,
 				null, serviceContext);

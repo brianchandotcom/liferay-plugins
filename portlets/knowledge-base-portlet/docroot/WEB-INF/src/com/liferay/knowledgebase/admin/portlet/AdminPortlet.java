@@ -21,9 +21,11 @@ import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.NoSuchCommentException;
 import com.liferay.knowledgebase.NoSuchTemplateException;
 import com.liferay.knowledgebase.model.KBArticle;
+import com.liferay.knowledgebase.model.KBFolderConstants;
 import com.liferay.knowledgebase.model.KBTemplate;
 import com.liferay.knowledgebase.portlet.BaseKBPortlet;
 import com.liferay.knowledgebase.service.KBArticleServiceUtil;
+import com.liferay.knowledgebase.service.KBFolderServiceUtil;
 import com.liferay.knowledgebase.service.KBTemplateServiceUtil;
 import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.knowledgebase.util.WebKeys;
@@ -118,6 +120,10 @@ public class AdminPortlet extends BaseKBPortlet {
 
 		String fileName = uploadPortletRequest.getFileName("file");
 
+		long parentKbFolderId = ParamUtil.getLong(
+			uploadPortletRequest, "parentKbFolderId",
+			KBFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
 		if (Validator.isNull(fileName)) {
 			throw new KBArticleImportException("File name is null");
 		}
@@ -133,8 +139,8 @@ public class AdminPortlet extends BaseKBPortlet {
 			serviceContext.setGuestPermissions(new String[] {ActionKeys.VIEW});
 
 			KBArticleServiceUtil.addKBArticlesMarkdown(
-				themeDisplay.getScopeGroupId(), fileName, inputStream,
-				serviceContext);
+				themeDisplay.getScopeGroupId(), parentKbFolderId, fileName,
+				inputStream, serviceContext);
 		}
 		catch (KBArticleImportException kbaie) {
 			SessionErrors.add(actionRequest, kbaie.getClass(), kbaie);
@@ -248,6 +254,34 @@ public class AdminPortlet extends BaseKBPortlet {
 
 		KBArticleServiceUtil.updateKBArticlesPriorities(
 			themeDisplay.getScopeGroupId(), resourcePrimKeyToPriorityMap);
+	}
+
+	public void updateKBFolder(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws PortalException {
+
+		long groupId = PortalUtil.getScopeGroupId(actionRequest);
+		long kbFolderId = ParamUtil.getLong(actionRequest, "kbFolderId");
+		long parentResourceClassNameId = ParamUtil.getLong(
+			actionRequest, "parentResourceClassNameId");
+		long parentResourcePrimKey = ParamUtil.getLong(
+			actionRequest, "parentResourcePrimKey");
+
+		String name = ParamUtil.getString(actionRequest, "name");
+		String description = ParamUtil.getString(actionRequest, "description");
+
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		if (cmd.equals(Constants.ADD)) {
+			KBFolderServiceUtil.addKBFolder(
+				groupId, parentResourceClassNameId, parentResourcePrimKey, name,
+				description, ServiceContextFactory.getInstance(actionRequest));
+		}
+		else if (cmd.equals(Constants.UPDATE)) {
+			KBFolderServiceUtil.updateKBFolder(
+				parentResourceClassNameId, parentResourcePrimKey, kbFolderId,
+				name, description);
+		}
 	}
 
 	public void updateKBTemplate(

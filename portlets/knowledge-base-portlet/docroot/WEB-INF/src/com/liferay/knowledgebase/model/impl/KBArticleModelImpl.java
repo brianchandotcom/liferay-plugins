@@ -85,6 +85,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 			{ "modifiedDate", Types.TIMESTAMP },
 			{ "rootResourcePrimKey", Types.BIGINT },
 			{ "parentResourcePrimKey", Types.BIGINT },
+			{ "parentResourceClassNameId", Types.BIGINT },
 			{ "version", Types.INTEGER },
 			{ "title", Types.VARCHAR },
 			{ "urlTitle", Types.VARCHAR },
@@ -101,7 +102,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table KBArticle (uuid_ VARCHAR(75) null,kbArticleId LONG not null primary key,resourcePrimKey LONG,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,rootResourcePrimKey LONG,parentResourcePrimKey LONG,version INTEGER,title STRING null,urlTitle VARCHAR(75) null,content TEXT null,description STRING null,priority DOUBLE,sections STRING null,viewCount INTEGER,latest BOOLEAN,main BOOLEAN,sourceURL STRING null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table KBArticle (uuid_ VARCHAR(75) null,kbArticleId LONG not null primary key,resourcePrimKey LONG,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,rootResourcePrimKey LONG,parentResourcePrimKey LONG,parentResourceClassNameId LONG,version INTEGER,title STRING null,urlTitle VARCHAR(75) null,content TEXT null,description STRING null,priority DOUBLE,sections STRING null,viewCount INTEGER,latest BOOLEAN,main BOOLEAN,sourceURL STRING null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table KBArticle";
 	public static final String ORDER_BY_JPQL = " ORDER BY kbArticle.modifiedDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY KBArticle.modifiedDate DESC";
@@ -154,6 +155,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		model.setModifiedDate(soapModel.getModifiedDate());
 		model.setRootResourcePrimKey(soapModel.getRootResourcePrimKey());
 		model.setParentResourcePrimKey(soapModel.getParentResourcePrimKey());
+		model.setParentResourceClassNameId(soapModel.getParentResourceClassNameId());
 		model.setVersion(soapModel.getVersion());
 		model.setTitle(soapModel.getTitle());
 		model.setUrlTitle(soapModel.getUrlTitle());
@@ -244,6 +246,8 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("rootResourcePrimKey", getRootResourcePrimKey());
 		attributes.put("parentResourcePrimKey", getParentResourcePrimKey());
+		attributes.put("parentResourceClassNameId",
+			getParentResourceClassNameId());
 		attributes.put("version", getVersion());
 		attributes.put("title", getTitle());
 		attributes.put("urlTitle", getUrlTitle());
@@ -333,6 +337,13 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 		if (parentResourcePrimKey != null) {
 			setParentResourcePrimKey(parentResourcePrimKey);
+		}
+
+		Long parentResourceClassNameId = (Long)attributes.get(
+				"parentResourceClassNameId");
+
+		if (parentResourceClassNameId != null) {
+			setParentResourceClassNameId(parentResourceClassNameId);
 		}
 
 		Integer version = (Integer)attributes.get("version");
@@ -634,6 +645,17 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 	public long getOriginalParentResourcePrimKey() {
 		return _originalParentResourcePrimKey;
+	}
+
+	@JSON
+	@Override
+	public long getParentResourceClassNameId() {
+		return _parentResourceClassNameId;
+	}
+
+	@Override
+	public void setParentResourceClassNameId(long parentResourceClassNameId) {
+		_parentResourceClassNameId = parentResourceClassNameId;
 	}
 
 	@JSON
@@ -1067,6 +1089,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		kbArticleImpl.setModifiedDate(getModifiedDate());
 		kbArticleImpl.setRootResourcePrimKey(getRootResourcePrimKey());
 		kbArticleImpl.setParentResourcePrimKey(getParentResourcePrimKey());
+		kbArticleImpl.setParentResourceClassNameId(getParentResourceClassNameId());
 		kbArticleImpl.setVersion(getVersion());
 		kbArticleImpl.setTitle(getTitle());
 		kbArticleImpl.setUrlTitle(getUrlTitle());
@@ -1238,6 +1261,8 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 		kbArticleCacheModel.parentResourcePrimKey = getParentResourcePrimKey();
 
+		kbArticleCacheModel.parentResourceClassNameId = getParentResourceClassNameId();
+
 		kbArticleCacheModel.version = getVersion();
 
 		kbArticleCacheModel.title = getTitle();
@@ -1322,7 +1347,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(53);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1346,6 +1371,8 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		sb.append(getRootResourcePrimKey());
 		sb.append(", parentResourcePrimKey=");
 		sb.append(getParentResourcePrimKey());
+		sb.append(", parentResourceClassNameId=");
+		sb.append(getParentResourceClassNameId());
 		sb.append(", version=");
 		sb.append(getVersion());
 		sb.append(", title=");
@@ -1383,7 +1410,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(82);
+		StringBundler sb = new StringBundler(85);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.knowledgebase.model.KBArticle");
@@ -1432,6 +1459,10 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		sb.append(
 			"<column><column-name>parentResourcePrimKey</column-name><column-value><![CDATA[");
 		sb.append(getParentResourcePrimKey());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>parentResourceClassNameId</column-name><column-value><![CDATA[");
+		sb.append(getParentResourceClassNameId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>version</column-name><column-value><![CDATA[");
@@ -1523,6 +1554,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	private long _parentResourcePrimKey;
 	private long _originalParentResourcePrimKey;
 	private boolean _setOriginalParentResourcePrimKey;
+	private long _parentResourceClassNameId;
 	private int _version;
 	private int _originalVersion;
 	private boolean _setOriginalVersion;

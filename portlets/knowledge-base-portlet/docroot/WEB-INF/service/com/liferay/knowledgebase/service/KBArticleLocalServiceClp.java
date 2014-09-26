@@ -36,7 +36,7 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 		_methodName1 = "addKBArticle";
 
 		_methodParameterTypes1 = new String[] {
-				"long", "long", "java.lang.String", "java.lang.String",
+				"long", "long", "long", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String[][]", "java.lang.String[][]",
 				"com.liferay.portal.service.ServiceContext"
@@ -69,7 +69,8 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 		_methodName6 = "addKBArticlesMarkdown";
 
 		_methodParameterTypes6 = new String[] {
-				"long", "long", "java.lang.String", "java.io.InputStream",
+				"long", "long", "long", "java.lang.String",
+				"java.io.InputStream",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
@@ -339,7 +340,9 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 
 		_methodName59 = "moveKBArticle";
 
-		_methodParameterTypes59 = new String[] { "long", "long", "long", "double" };
+		_methodParameterTypes59 = new String[] {
+				"long", "long", "long", "long", "double"
+			};
 
 		_methodName60 = "search";
 
@@ -445,10 +448,11 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 
 	@Override
 	public com.liferay.knowledgebase.model.KBArticle addKBArticle(long userId,
-		long parentResourcePrimKey, java.lang.String title,
-		java.lang.String urlTitle, java.lang.String content,
-		java.lang.String description, java.lang.String sourceURL,
-		java.lang.String[] sections, java.lang.String[] selectedFileNames,
+		long parentResourceClassNameId, long parentResourcePrimKey,
+		java.lang.String title, java.lang.String urlTitle,
+		java.lang.String content, java.lang.String description,
+		java.lang.String sourceURL, java.lang.String[] sections,
+		java.lang.String[] selectedFileNames,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
@@ -458,6 +462,8 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 					_methodParameterTypes1,
 					new Object[] {
 						userId,
+						
+					parentResourceClassNameId,
 						
 					parentResourcePrimKey,
 						
@@ -629,7 +635,8 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 
 	@Override
 	public void addKBArticlesMarkdown(long userId, long groupId,
-		java.lang.String fileName, java.io.InputStream inputStream,
+		long parentKbFolderId, java.lang.String fileName,
+		java.io.InputStream inputStream,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
@@ -639,6 +646,8 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 					userId,
 					
 				groupId,
+					
+				parentKbFolderId,
 					
 				ClpSerializer.translateInput(fileName),
 					
@@ -2175,7 +2184,8 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 
 	@Override
 	public void moveKBArticle(long userId, long resourcePrimKey,
-		long parentResourcePrimKey, double priority)
+		long parentResourceClassNameId, long parentResourcePrimKey,
+		double priority)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName59,
@@ -2184,6 +2194,8 @@ public class KBArticleLocalServiceClp implements KBArticleLocalService {
 					userId,
 					
 				resourcePrimKey,
+					
+				parentResourceClassNameId,
 					
 				parentResourcePrimKey,
 					

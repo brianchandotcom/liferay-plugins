@@ -18,7 +18,12 @@
 
 <portlet:renderURL var="importURL">
 	<portlet:param name="mvcPath" value="/admin/import.jsp" />
+	<portlet:param name="parentKbFolderId" value="<%= String.valueOf(KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) %>" />
 	<portlet:param name="redirect" value="<%= redirect %>" />
 </portlet:renderURL>
 
-<aui:nav-item href="<%= importURL %>" label="import" />
+<aui:nav-item
+	href="<%= importURL %>"
+	iconCssClass="icon-hdd"
+	label="import"
+/>

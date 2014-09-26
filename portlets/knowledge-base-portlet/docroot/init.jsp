@@ -25,7 +25,9 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.knowledgebase.KBArticleContentException" %><%@
+<%@ page import="com.liferay.compat.portal.kernel.util.ArrayUtil" %><%@
+page import="com.liferay.knowledgebase.DuplicateKBFolderNameException" %><%@
+page import="com.liferay.knowledgebase.KBArticleContentException" %><%@
 page import="com.liferay.knowledgebase.KBArticleImportException" %><%@
 page import="com.liferay.knowledgebase.KBArticlePriorityException" %><%@
 page import="com.liferay.knowledgebase.KBArticleSourceURLException" %><%@
@@ -40,17 +42,21 @@ page import="com.liferay.knowledgebase.model.KBArticle" %><%@
 page import="com.liferay.knowledgebase.model.KBArticleConstants" %><%@
 page import="com.liferay.knowledgebase.model.KBArticleSearchDisplay" %><%@
 page import="com.liferay.knowledgebase.model.KBComment" %><%@
+page import="com.liferay.knowledgebase.model.KBFolder" %><%@
+page import="com.liferay.knowledgebase.model.KBFolderConstants" %><%@
 page import="com.liferay.knowledgebase.model.KBTemplate" %><%@
 page import="com.liferay.knowledgebase.model.KBTemplateSearchDisplay" %><%@
 page import="com.liferay.knowledgebase.service.KBArticleLocalServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.KBArticleServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.KBCommentLocalServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.KBCommentServiceUtil" %><%@
+page import="com.liferay.knowledgebase.service.KBFolderServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.KBTemplateServiceUtil" %><%@
 page import="com.liferay.knowledgebase.service.permission.AdminPermission" %><%@
 page import="com.liferay.knowledgebase.service.permission.DisplayPermission" %><%@
 page import="com.liferay.knowledgebase.service.permission.KBArticlePermission" %><%@
 page import="com.liferay.knowledgebase.service.permission.KBCommentPermission" %><%@
+page import="com.liferay.knowledgebase.service.permission.KBFolderPermission" %><%@
 page import="com.liferay.knowledgebase.service.permission.KBTemplatePermission" %><%@
 page import="com.liferay.knowledgebase.util.ActionKeys" %><%@
 page import="com.liferay.knowledgebase.util.KnowledgeBaseUtil" %><%@
