@@ -20,7 +20,6 @@ import com.liferay.knowledgebase.model.KBFolderConstants;
 import com.liferay.knowledgebase.service.base.KBFolderLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 
@@ -47,18 +46,18 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 
 		User user = userPersistence.findByPrimaryKey(userId);
 
-		Date now = DateUtil.newDate();
+		Date now = new Date();
 
 		kbFolder.setUuid(serviceContext.getUuid());
+		kbFolder.setGroupId(groupId);
+		kbFolder.setCompanyId(user.getCompanyId());
 		kbFolder.setUserId(userId);
 		kbFolder.setUserName(user.getFullName());
-		kbFolder.setCompanyId(user.getCompanyId());
-		kbFolder.setGroupId(groupId);
+		kbFolder.setCreateDate(now);
+		kbFolder.setModifiedDate(now);
 		kbFolder.setParentKbFolderId(parentResourcePrimKey);
 		kbFolder.setName(name);
 		kbFolder.setDescription(description);
-		kbFolder.setModifiedDate(now);
-		kbFolder.setCreateDate(now);
 
 		kbFolderPersistence.update(kbFolder);
 
@@ -67,18 +66,13 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 		if (serviceContext.isAddGroupPermissions() ||
 			serviceContext.isAddGuestPermissions()) {
 
-			resourceLocalService.addResources(
-				kbFolder.getCompanyId(), kbFolder.getGroupId(),
-				kbFolder.getUserId(), KBFolder.class.getName(),
-				kbFolder.getKbFolderId(), false,
-				serviceContext.isAddGroupPermissions(),
+			addKBFolderResources(
+				kbFolder, serviceContext.isAddGroupPermissions(),
 				serviceContext.isAddGuestPermissions());
 		}
 		else {
-			resourceLocalService.addModelResources(
-				kbFolder.getCompanyId(), kbFolder.getGroupId(),
-				kbFolder.getUserId(), KBFolder.class.getName(),
-				kbFolder.getKbFolderId(), serviceContext.getGroupPermissions(),
+			addKBFolderResources(
+				kbFolder, serviceContext.getGroupPermissions(),
 				serviceContext.getGuestPermissions());
 		}
 
@@ -103,29 +97,45 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 
 	@Override
 	public KBFolder updateKBFolder(
-			long userId, long groupId, long parentResourceClassNameId,
-			long parentResourcePrimKey, long kbFolderId, String name,
-			String description)
+			long parentResourceClassNameId, long parentResourcePrimKey,
+			long kbFolderId, String name, String description)
 		throws PortalException, SystemException {
 
 		validateParent(parentResourceClassNameId, parentResourcePrimKey);
 
 		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(kbFolderId);
 
-		User user = userPersistence.findByPrimaryKey(userId);
+		Date now = new Date();
 
-		Date now = DateUtil.newDate();
-
-		kbFolder.setUserId(userId);
-		kbFolder.setUserName(user.getFullName());
-		kbFolder.setCompanyId(user.getCompanyId());
-		kbFolder.setGroupId(groupId);
+		kbFolder.setModifiedDate(now);
 		kbFolder.setParentKbFolderId(parentResourcePrimKey);
 		kbFolder.setName(name);
 		kbFolder.setDescription(description);
-		kbFolder.setModifiedDate(now);
 
 		return kbFolderPersistence.update(kbFolder);
+	}
+
+	protected void addKBFolderResources(
+			KBFolder kbFolder, boolean addGroupPermissions,
+			boolean addGuestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.addResources(
+			kbFolder.getCompanyId(), kbFolder.getGroupId(),
+			kbFolder.getUserId(), KBFolder.class.getName(),
+			kbFolder.getKbFolderId(), false, addGroupPermissions,
+			addGuestPermissions);
+	}
+
+	protected void addKBFolderResources(
+			KBFolder kbFolder, String[] groupPermissions,
+			String[] guestPermissions)
+		throws PortalException, SystemException {
+
+		resourceLocalService.addModelResources(
+			kbFolder.getCompanyId(), kbFolder.getGroupId(),
+			kbFolder.getUserId(), KBFolder.class.getName(),
+			kbFolder.getKbFolderId(), groupPermissions, guestPermissions);
 	}
 
 	protected void validateParent(

@@ -73,17 +73,16 @@ public class KBFolderServiceImpl extends KBFolderServiceBaseImpl {
 
 	@Override
 	public KBFolder updateKBFolder(
-			long groupId, long parentResourceClassNameId,
-			long parentResourcePrimKey, long kbFolderId, String name,
-			String description)
+			long parentResourceClassNameId, long parentResourcePrimKey,
+			long kbFolderId, String name, String description)
 		throws PortalException, SystemException {
 
 		KBFolderPermission.check(
 			getPermissionChecker(), kbFolderId, ActionKeys.UPDATE);
 
 		return kbFolderLocalService.updateKBFolder(
-			getUserId(), groupId, parentResourceClassNameId,
-			parentResourcePrimKey, kbFolderId, name, description);
+			parentResourceClassNameId, parentResourcePrimKey, kbFolderId, name,
+			description);
 	}
 
 }

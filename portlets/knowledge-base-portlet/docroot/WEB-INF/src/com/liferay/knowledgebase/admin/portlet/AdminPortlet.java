@@ -279,12 +279,8 @@ public class AdminPortlet extends BaseKBPortlet {
 		}
 		else if (cmd.equals(Constants.UPDATE)) {
 			KBFolderServiceUtil.updateKBFolder(
-				groupId, parentResourceClassNameId, parentResourcePrimKey,
-				kbFolderId, name, description);
-		}
-		else {
-			throw new UnsupportedOperationException(
-				String.format("Unknown action name %s", cmd));
+				parentResourceClassNameId, parentResourcePrimKey, kbFolderId,
+				name, description);
 		}
 	}
 
