@@ -71,7 +71,7 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 				%>
 
 				<c:if test="<%= hasAddArticlePermission || hasAddFolderPermission %>">
-					<aui:nav-item dropdown="<%= true %>" id="addEntryButtons" label="add">
+					<aui:nav-item dropdown="<%= true %>" label="add">
 						<c:if test="<%= hasAddArticlePermission %>">
 							<liferay-util:include page="/admin/common/add_article_button.jsp" servletContext="<%= application %>" />
 						</c:if>
