@@ -25,15 +25,12 @@ if (kbFolderId != 0) {
 	kbFolder = KBFolderServiceUtil.getFolder(kbFolderId);
 }
 
-long defaultClassNameId = PortalUtil.getClassNameId(KBFolderConstants.getClassName());
-
 long defaultParentResourcePrimKey = KBFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
 if (kbFolder != null) {
 	defaultParentResourcePrimKey = kbFolder.getParentKbFolderId();
 }
 
-long parentResourceClassNameId = ParamUtil.getLong(request, "parentResourceClassNameId", defaultClassNameId);
 long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey", defaultParentResourcePrimKey);
 %>
 
@@ -50,7 +47,7 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (kbFolder == null) ? Constants.ADD : Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="kbFolderId" type="hidden" value="<%= String.valueOf(kbFolderId) %>" />
-	<aui:input name="parentResourceClassNameId" type="hidden" value="<%= parentResourceClassNameId %>" />
+	<aui:input name="parentResourceClassNameId" type="hidden" value="<%= PortalUtil.getClassNameId(KBFolderConstants.getClassName()) %>" />
 	<aui:input name="parentResourcePrimKey" type="hidden" value="<%= parentResourcePrimKey %>" />
 
 	<liferay-ui:error exception="<%= DuplicateKBFolderNameException.class %>" message="please-enter-a-unique-folder-name" />

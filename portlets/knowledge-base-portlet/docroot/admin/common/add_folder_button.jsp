@@ -17,15 +17,12 @@
 <%@ include file="/admin/init.jsp" %>
 
 <%
-long defaultClassNameId = PortalUtil.getClassNameId(KBFolderConstants.getClassName());
-
-long parentResourceClassNameId = ParamUtil.getLong(request, "parentResourceClassNameId", defaultClassNameId);
 long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey", KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY);
 %>
 
 <portlet:renderURL var="addFolderURL">
 	<portlet:param name="mvcPath" value="/admin/common/edit_folder.jsp" />
-	<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(parentResourceClassNameId) %>" />
+	<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(PortalUtil.getClassNameId(KBFolderConstants.getClassName())) %>" />
 	<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(parentResourcePrimKey) %>" />
 	<portlet:param name="redirect" value="<%= redirect %>" />
 </portlet:renderURL>
