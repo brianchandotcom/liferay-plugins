@@ -149,13 +149,11 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 			<liferay-ui:search-container
 				curParam="cur1"
 				id="kbFoldersAdminSearchContainer"
+				total="<%= KBFolderServiceUtil.getFoldersCount(scopeGroupId, parentResourcePrimKey) %>"
 			>
 
 				<%
-				if (parentResourceClassNameId == defaultClassNameId) {
-					searchContainer.setResults(KBFolderServiceUtil.getFolders(scopeGroupId, parentResourcePrimKey, searchContainer.getStart(), searchContainer.getEnd()));
-					searchContainer.setTotal(KBFolderServiceUtil.getFoldersCount(scopeGroupId, parentResourcePrimKey));
-				}
+				searchContainer.setResults(KBFolderServiceUtil.getFolders(scopeGroupId, parentResourcePrimKey, searchContainer.getStart(), searchContainer.getEnd()));
 				%>
 
 				<liferay-ui:search-container-row
