@@ -90,8 +90,6 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 			long groupId, long parentKbFolderId, int start, int end)
 		throws PortalException, SystemException {
 
-		validateFolder(groupId, parentKbFolderId);
-
 		return kbFolderPersistence.findByG_P(
 			groupId, parentKbFolderId, start, end);
 	}
@@ -99,8 +97,6 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 	@Override
 	public int getFoldersCount(long groupId, long parentKbFolderId)
 		throws PortalException, SystemException {
-
-		validateFolder(groupId, parentKbFolderId);
 
 		return kbFolderPersistence.countByG_P(groupId, parentKbFolderId);
 	}
@@ -130,23 +126,6 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 		kbFolder.setModifiedDate(now);
 
 		return kbFolderPersistence.update(kbFolder);
-	}
-
-	protected void validateFolder(long groupId, long kbFolderId)
-		throws NoSuchFolderException, SystemException {
-
-		if (kbFolderId == KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-			return;
-		}
-
-		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(kbFolderId);
-
-		if (kbFolder.getGroupId() != groupId) {
-			throw new NoSuchFolderException(
-				String.format(
-					"No KBFolder found in group %s with kbFolderId %s", groupId,
-					kbFolderId));
-		}
 	}
 
 	protected void validateParent(
