@@ -72,7 +72,7 @@
 		<field name="description" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
-		<field name="parentKBFolderId" type="long" />
+		<field name="parentKbFolderId" type="long" />
 	</model>
 	<model name="com.liferay.knowledgebase.model.KBTemplate">
 		<field name="uuid" type="String" />

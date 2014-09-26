@@ -45,6 +45,7 @@ public class KBArticleSoap implements Serializable {
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setRootResourcePrimKey(model.getRootResourcePrimKey());
 		soapModel.setParentResourcePrimKey(model.getParentResourcePrimKey());
+		soapModel.setParentResourceClassNameId(model.getParentResourceClassNameId());
 		soapModel.setVersion(model.getVersion());
 		soapModel.setTitle(model.getTitle());
 		soapModel.setUrlTitle(model.getUrlTitle());
@@ -200,6 +201,14 @@ public class KBArticleSoap implements Serializable {
 		_parentResourcePrimKey = parentResourcePrimKey;
 	}
 
+	public long getParentResourceClassNameId() {
+		return _parentResourceClassNameId;
+	}
+
+	public void setParentResourceClassNameId(long parentResourceClassNameId) {
+		_parentResourceClassNameId = parentResourceClassNameId;
+	}
+
 	public int getVersion() {
 		return _version;
 	}
@@ -339,6 +348,7 @@ public class KBArticleSoap implements Serializable {
 	private Date _modifiedDate;
 	private long _rootResourcePrimKey;
 	private long _parentResourcePrimKey;
+	private long _parentResourceClassNameId;
 	private int _version;
 	private String _title;
 	private String _urlTitle;

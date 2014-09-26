@@ -28730,6 +28730,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		kbArticleImpl.setModifiedDate(kbArticle.getModifiedDate());
 		kbArticleImpl.setRootResourcePrimKey(kbArticle.getRootResourcePrimKey());
 		kbArticleImpl.setParentResourcePrimKey(kbArticle.getParentResourcePrimKey());
+		kbArticleImpl.setParentResourceClassNameId(kbArticle.getParentResourceClassNameId());
 		kbArticleImpl.setVersion(kbArticle.getVersion());
 		kbArticleImpl.setTitle(kbArticle.getTitle());
 		kbArticleImpl.setUrlTitle(kbArticle.getUrlTitle());

@@ -64,6 +64,8 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 		attributes.put("modifiedDate", getModifiedDate());
 		attributes.put("rootResourcePrimKey", getRootResourcePrimKey());
 		attributes.put("parentResourcePrimKey", getParentResourcePrimKey());
+		attributes.put("parentResourceClassNameId",
+			getParentResourceClassNameId());
 		attributes.put("version", getVersion());
 		attributes.put("title", getTitle());
 		attributes.put("urlTitle", getUrlTitle());
@@ -150,6 +152,13 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 
 		if (parentResourcePrimKey != null) {
 			setParentResourcePrimKey(parentResourcePrimKey);
+		}
+
+		Long parentResourceClassNameId = (Long)attributes.get(
+				"parentResourceClassNameId");
+
+		if (parentResourceClassNameId != null) {
+			setParentResourceClassNameId(parentResourceClassNameId);
 		}
 
 		Integer version = (Integer)attributes.get("version");
@@ -281,6 +290,11 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 	}
 
 	@Override
+	public long getClassNameId() {
+		return _kbArticle.getClassNameId();
+	}
+
+	@Override
 	public long getClassPK() {
 		return _kbArticle.getClassPK();
 	}
@@ -384,6 +398,16 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 	public com.liferay.knowledgebase.model.KBArticle getParentKBArticle()
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _kbArticle.getParentKBArticle();
+	}
+
+	/**
+	* Returns the parent resource class name ID of this k b article.
+	*
+	* @return the parent resource class name ID of this k b article
+	*/
+	@Override
+	public long getParentResourceClassNameId() {
+		return _kbArticle.getParentResourceClassNameId();
 	}
 
 	/**
@@ -847,6 +871,16 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 	@Override
 	public void setNew(boolean n) {
 		_kbArticle.setNew(n);
+	}
+
+	/**
+	* Sets the parent resource class name ID of this k b article.
+	*
+	* @param parentResourceClassNameId the parent resource class name ID of this k b article
+	*/
+	@Override
+	public void setParentResourceClassNameId(long parentResourceClassNameId) {
+		_kbArticle.setParentResourceClassNameId(parentResourceClassNameId);
 	}
 
 	/**
