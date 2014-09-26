@@ -30,7 +30,7 @@ long defaultClassNameId = PortalUtil.getClassNameId(KBFolderConstants.getClassNa
 long defaultParentResourcePrimKey = KBFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
 if (kbFolder != null) {
-	defaultParentResourcePrimKey = kbFolder.getParentKBFolderId();
+	defaultParentResourcePrimKey = kbFolder.getParentKbFolderId();
 }
 
 long parentResourceClassNameId = ParamUtil.getLong(request, "parentResourceClassNameId", defaultClassNameId);

@@ -54,7 +54,7 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 		kbFolder.setUserName(user.getFullName());
 		kbFolder.setCompanyId(user.getCompanyId());
 		kbFolder.setGroupId(groupId);
-		kbFolder.setParentKBFolderId(parentResourcePrimKey);
+		kbFolder.setParentKbFolderId(parentResourcePrimKey);
 		kbFolder.setName(name);
 		kbFolder.setDescription(description);
 		kbFolder.setModifiedDate(now);
@@ -87,22 +87,22 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 
 	@Override
 	public List<KBFolder> getFolders(
-			long groupId, long parentKBFolderId, int start, int end)
+			long groupId, long parentKbFolderId, int start, int end)
 		throws PortalException, SystemException {
 
-		validateFolder(groupId, parentKBFolderId);
+		validateFolder(groupId, parentKbFolderId);
 
 		return kbFolderPersistence.findByG_P(
-			groupId, parentKBFolderId, start, end);
+			groupId, parentKbFolderId, start, end);
 	}
 
 	@Override
-	public int getFoldersCount(long groupId, long parentKBFolderId)
+	public int getFoldersCount(long groupId, long parentKbFolderId)
 		throws PortalException, SystemException {
 
-		validateFolder(groupId, parentKBFolderId);
+		validateFolder(groupId, parentKbFolderId);
 
-		return kbFolderPersistence.countByG_P(groupId, parentKBFolderId);
+		return kbFolderPersistence.countByG_P(groupId, parentKbFolderId);
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 		kbFolder.setUserName(user.getFullName());
 		kbFolder.setCompanyId(user.getCompanyId());
 		kbFolder.setGroupId(groupId);
-		kbFolder.setParentKBFolderId(parentResourcePrimKey);
+		kbFolder.setParentKbFolderId(parentResourcePrimKey);
 		kbFolder.setName(name);
 		kbFolder.setDescription(description);
 		kbFolder.setModifiedDate(now);

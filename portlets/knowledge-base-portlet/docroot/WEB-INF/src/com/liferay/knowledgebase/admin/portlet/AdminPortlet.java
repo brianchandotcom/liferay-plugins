@@ -120,8 +120,8 @@ public class AdminPortlet extends BaseKBPortlet {
 
 		String fileName = uploadPortletRequest.getFileName("file");
 
-		long parentKBFolderId = ParamUtil.getLong(
-			uploadPortletRequest, "parentKBFolderId",
+		long parentKbFolderId = ParamUtil.getLong(
+			uploadPortletRequest, "parentKbFolderId",
 			KBFolderConstants.DEFAULT_PARENT_FOLDER_ID);
 
 		if (Validator.isNull(fileName)) {
@@ -139,7 +139,7 @@ public class AdminPortlet extends BaseKBPortlet {
 			serviceContext.setGuestPermissions(new String[] {ActionKeys.VIEW});
 
 			KBArticleServiceUtil.addKBArticlesMarkdown(
-				themeDisplay.getScopeGroupId(), parentKBFolderId, fileName,
+				themeDisplay.getScopeGroupId(), parentKbFolderId, fileName,
 				inputStream, serviceContext);
 		}
 		catch (KBArticleImportException kbaie) {

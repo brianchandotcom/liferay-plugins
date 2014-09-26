@@ -54,7 +54,7 @@ import java.util.TreeMap;
 public class KBArticleImporter {
 
 	public void processZipFile(
-			long userId, long groupId, long parentKBFolderId,
+			long userId, long groupId, long parentKbFolderId,
 			InputStream inputStream, ServiceContext serviceContext)
 		throws KBArticleImportException {
 
@@ -69,7 +69,7 @@ public class KBArticleImporter {
 			Map<String, String> metadata = getMetadata(zipReader);
 
 			processKBArticleFiles(
-				userId, groupId, parentKBFolderId, zipReader, metadata,
+				userId, groupId, parentKbFolderId, zipReader, metadata,
 				serviceContext);
 		}
 		catch (IOException ioe) {
@@ -215,7 +215,7 @@ public class KBArticleImporter {
 	}
 
 	protected void processKBArticleFiles(
-			long userId, long groupId, long parentKBFolderId,
+			long userId, long groupId, long parentKbFolderId,
 			ZipReader zipReader, Map<String, String> metadata,
 			ServiceContext serviceContext)
 		throws KBArticleImportException {
@@ -246,7 +246,7 @@ public class KBArticleImporter {
 
 			long parentResourceClassNameId = PortalUtil.getClassNameId(
 				KBFolderConstants.getClassName());
-			long parentResourcePrimaryKey = parentKBFolderId;
+			long parentResourcePrimaryKey = parentKbFolderId;
 
 			long sectionResourceClassNameId = parentResourceClassNameId;
 			long sectionResourcePrimaryKey = parentResourcePrimaryKey;

@@ -272,13 +272,13 @@
 
 		<column name="name" type="String" />
 		<column name="description" type="String" />
-		<column name="parentKBFolderId" type="long" />
+		<column name="parentKbFolderId" type="long" />
 
 		<!-- Finder methods -->
 
 		<finder name="G_P" return-type="Collection">
 			<finder-column name="groupId" />
-			<finder-column name="parentKBFolderId" />
+			<finder-column name="parentKbFolderId" />
 		</finder>
 	</entity>
 	<entity name="KBTemplate" uuid="true" local-service="true" remote-service="true">
