@@ -14,17 +14,17 @@
 
 package com.liferay.knowledgebase.hook.upgrade;
 
-import com.liferay.knowledgebase.hook.upgrade.v1_4_0.UpgradeKBArticle;
+import com.liferay.knowledgebase.hook.upgrade.v1_3_2.UpgradeKBArticle;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
  * @author Adolfo Pérez
  */
-public class UpgradeProcess_1_4_0 extends UpgradeProcess {
+public class UpgradeProcess_1_3_2 extends UpgradeProcess {
 
 	@Override
 	public int getThreshold() {
-		return 140;
+		return 132;
 	}
 
 	@Override

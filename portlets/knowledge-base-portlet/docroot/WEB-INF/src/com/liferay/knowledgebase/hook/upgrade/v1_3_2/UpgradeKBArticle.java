@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.knowledgebase.hook.upgrade.v1_4_0;
+package com.liferay.knowledgebase.hook.upgrade.v1_3_2;
 
 import com.liferay.knowledgebase.model.KBArticleConstants;
 import com.liferay.knowledgebase.model.KBFolderConstants;
