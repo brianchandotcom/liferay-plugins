@@ -90,18 +90,37 @@ public class MicroblogsUtil {
 			MicroblogsEntry microblogsEntry, ServiceContext serviceContext)
 		throws PortalException {
 
-		String content = HtmlUtil.escape(microblogsEntry.getContent());
+		return getTaggedContent(microblogsEntry.getContent(), serviceContext);
+	}
+
+	public static String getTaggedContent(
+			String content, ServiceContext serviceContext)
+		throws PortalException {
+
+		content = replaceTags(content, serviceContext);
+
+		content = replaceUsers(content, serviceContext);
+
+		return content;
+	}
+
+	public static String replaceTags(
+			String content, ServiceContext serviceContext)
+		throws PortalException {
+
+		String escapedContent = HtmlUtil.escape(content);
 
 		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
 
-		Matcher matcher = _pattern1.matcher(microblogsEntry.getContent());
+		Matcher matcher = _pattern1.matcher(content);
 
 		while (matcher.find()) {
 			String result = matcher.group();
 
-			StringBuilder sb = new StringBuilder(5);
+			StringBuilder sb = new StringBuilder(6);
 
-			sb.append("<a href=\"");
+			sb.append("<span class=\"hashtag\">#</span>");
+			sb.append("<a class=\"hashtag-link\" href=\"");
 
 			PortletURL portletURL = null;
 
@@ -152,10 +171,18 @@ public class MicroblogsUtil {
 
 			String tagLink = sb.toString();
 
-			content = StringUtil.replace(content, result, tagLink);
+			escapedContent = StringUtil.replace(
+				escapedContent, result, tagLink);
 		}
 
-		matcher = _pattern2.matcher(content);
+		return escapedContent;
+	}
+
+	public static String replaceUsers(
+			String content, ServiceContext serviceContext)
+		throws PortalException {
+
+		Matcher matcher = _pattern2.matcher(content);
 
 		while (matcher.find()) {
 			String result = matcher.group();
@@ -171,8 +198,10 @@ public class MicroblogsUtil {
 				assetTagScreenName = assetTagScreenName.replace(
 					"]", StringPool.BLANK);
 
+				ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
 				User assetTagUser = UserLocalServiceUtil.getUserByScreenName(
-					microblogsEntry.getCompanyId(), assetTagScreenName);
+					themeDisplay.getCompanyId(), assetTagScreenName);
 
 				sb.append(assetTagUser.getDisplayURL(themeDisplay));
 
@@ -196,7 +225,7 @@ public class MicroblogsUtil {
 		return content;
 	}
 
-	private static Pattern _pattern1 = Pattern.compile("\\#\\S*");
+	private static Pattern _pattern1 = Pattern.compile("\\#[a-zA-Z]\\w*");
 	private static Pattern _pattern2 = Pattern.compile("\\[\\@\\S*\\]");
 
 }
