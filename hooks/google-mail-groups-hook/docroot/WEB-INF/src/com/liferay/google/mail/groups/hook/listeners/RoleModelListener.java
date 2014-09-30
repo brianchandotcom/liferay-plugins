@@ -16,10 +16,14 @@ package com.liferay.google.mail.groups.hook.listeners;
 
 import com.liferay.google.mail.groups.util.GoogleMailGroupsUtil;
 import com.liferay.google.mail.groups.util.PortletPropsValues;
-import com.liferay.portal.ModelListenerException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.process.ProcessCallable;
+import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.BaseModelListener;
@@ -31,7 +35,10 @@ import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
+import java.io.Serializable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -42,20 +49,16 @@ public class RoleModelListener extends BaseModelListener<Role> {
 
 	@Override
 	public void onAfterAddAssociation(
-			Object classPK, String associationClassName,
-			Object associationClassPK)
-		throws ModelListenerException {
+		Object classPK, String associationClassName,
+		Object associationClassPK) {
 
 		try {
-			new OnAssociation(
-				classPK, associationClassName, associationClassPK) {
+			List<User> users = getUsers(
+				classPK, associationClassName, associationClassPK);
 
-				@Override
-				public void onAssociation(List<User> users) throws Exception {
-					GoogleMailGroupsUtil.addGGroupManagers(users);
-				}
-
-			};
+			MessageBusUtil.sendMessage(
+				DestinationNames.ASYNC_SERVICE,
+				new OnAssociationProcessCallable(users, "addGroupManagers"));
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -64,77 +67,96 @@ public class RoleModelListener extends BaseModelListener<Role> {
 
 	@Override
 	public void onAfterRemoveAssociation(
-			Object classPK, String associationClassName,
-			Object associationClassPK)
-		throws ModelListenerException {
+		Object classPK, String associationClassName,
+		Object associationClassPK) {
 
 		try {
-			new OnAssociation(
-				classPK, associationClassName, associationClassPK) {
+			List<User> users = getUsers(
+				classPK, associationClassName, associationClassPK);
 
-				@Override
-				public void onAssociation(List<User> users) throws Exception {
-					GoogleMailGroupsUtil.removeGGroupManagers(users);
-				}
-
-			};
+			MessageBusUtil.sendMessage(
+				DestinationNames.ASYNC_SERVICE,
+				new OnAssociationProcessCallable(users, "removeGroupManagers"));
 		}
 		catch (Exception e) {
 			_log.error(e, e);
 		}
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(RoleModelListener.class);
+	protected List<User> getUsers(
+		Object classPK, String associationClassName,
+		Object associationClassPK) throws PortalException {
 
-	private abstract class OnAssociation {
+		Role role = RoleLocalServiceUtil.getRole((Long)classPK);
 
-		public OnAssociation(
-				Object classPK, String associationClassName,
-				Object associationClassPK)
-			throws Exception {
+		String roleName = role.getName();
 
-			Role role = RoleLocalServiceUtil.getRole((Long)classPK);
-
-			String roleName = role.getName();
-
-			if (!roleName.equals(PortletPropsValues.EMAIL_LARGE_GROUP_ROLE)) {
-				return;
-			}
-
-			List<User> users = new ArrayList<User>();
-
-			if (associationClassName.equals(Group.class.getName())) {
-				LinkedHashMap<String, Object> userParams =
-					new LinkedHashMap<String, Object>();
-
-				userParams.put("inherit", Boolean.TRUE);
-				userParams.put("usersGroups", associationClassPK);
-
-				users = UserLocalServiceUtil.search(
-					role.getCompanyId(), null,
-					WorkflowConstants.STATUS_APPROVED, userParams,
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-					(OrderByComparator)null);
-			}
-			else if (associationClassName.equals(
-						Organization.class.getName())) {
-
-				users = UserLocalServiceUtil.getOrganizationUsers(
-					(Long)associationClassPK);
-			}
-			else if (associationClassName.equals(User.class.getName())) {
-				users.add(
-					UserLocalServiceUtil.getUser((Long)associationClassPK));
-			}
-			else if (associationClassName.equals(UserGroup.class.getName())) {
-				users = UserLocalServiceUtil.getUserGroupUsers(
-					(Long)associationClassPK);
-			}
-
-			onAssociation(users);
+		if (!roleName.equals(PortletPropsValues.EMAIL_LARGE_GROUP_ROLE)) {
+			return null;
 		}
 
-		public abstract void onAssociation(List<User> users) throws Exception;
+		if (associationClassName.equals(Group.class.getName())) {
+			LinkedHashMap<String, Object> userParams =
+				new LinkedHashMap<String, Object>();
+
+			userParams.put("inherit", Boolean.TRUE);
+			userParams.put("usersGroups", associationClassPK);
+
+			return UserLocalServiceUtil.search(
+				role.getCompanyId(), null, WorkflowConstants.STATUS_APPROVED,
+				userParams, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				(OrderByComparator)null);
+		}
+
+		if (associationClassName.equals(Organization.class.getName())) {
+			return UserLocalServiceUtil.getOrganizationUsers(
+				(Long)associationClassPK);
+		}
+
+		if (associationClassName.equals(User.class.getName())) {
+			return Arrays.asList(
+				UserLocalServiceUtil.getUser((Long)associationClassPK));
+		}
+
+		if (associationClassName.equals(UserGroup.class.getName())) {
+			return UserLocalServiceUtil.getUserGroupUsers(
+				(Long)associationClassPK);
+		}
+
+		return new ArrayList<User>();
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(RoleModelListener.class);
+
+	private static class OnAssociationProcessCallable
+		implements ProcessCallable<Serializable> {
+
+		public OnAssociationProcessCallable(List<User> users, String action) {
+			_action = action;
+			_users = users;
+		}
+
+		@Override
+		public Serializable call() throws ProcessException {
+			try {
+				if (_action.equals("addGroupManagers")) {
+					GoogleMailGroupsUtil.addGroupManagers(_users);
+				}
+				else {
+					GoogleMailGroupsUtil.removeGroupManagers(_users);
+				}
+			}
+			catch (Exception e) {
+				throw new ProcessException(e);
+			}
+
+			return null;
+		}
+
+		private static final long serialVersionUID = 1L;
+
+		private String _action;
+		private List<User> _users;
 
 	}
 
