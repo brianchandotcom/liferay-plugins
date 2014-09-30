@@ -83,6 +83,23 @@ public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
 	}
 
 	@Override
+	public KBFolder deleteKBFolder(long kbFolderId) throws PortalException {
+		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(kbFolderId);
+
+		kbArticleLocalService.deleteKBArticles(
+			kbFolder.getGroupId(), kbFolder.getKbFolderId());
+
+		List<KBFolder> subfolders = kbFolderPersistence.findByG_P(
+			kbFolder.getGroupId(), kbFolder.getKbFolderId());
+
+		for (KBFolder subfolder : subfolders) {
+			deleteKBFolder(subfolder.getKbFolderId());
+		}
+
+		return kbFolderPersistence.remove(kbFolder);
+	}
+
+	@Override
 	public List<KBFolder> getKBFolders(
 			long groupId, long parentKBFolderId, int start, int end)
 		throws PortalException {

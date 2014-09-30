@@ -36,4 +36,33 @@ KBFolder kbFolder = (KBFolder)row.getObject();
 			url="<%= editURL %>"
 		/>
 	</c:if>
+
+	<c:if test="<%= KBFolderPermission.contains(permissionChecker, kbFolder, ActionKeys.DELETE) %>">
+		<liferay-portlet:actionURL name="deleteKBFolder" var="deleteURL">
+			<portlet:param name="mvcPath" value='<%= ParamUtil.getString(request, "mvcPath") %>' />
+			<portlet:param name="redirect" value="<%= redirect %>" />
+			<portlet:param name="kbFolderId" value="<%= String.valueOf(kbFolder.getKbFolderId()) %>" />
+		</liferay-portlet:actionURL>
+
+		<liferay-ui:icon-delete
+			url="<%= deleteURL %>"
+		/>
+	</c:if>
+
+	<c:if test="<%= KBFolderPermission.contains(permissionChecker, kbFolder, ActionKeys.PERMISSIONS) %>">
+		<liferay-security:permissionsURL
+			modelResource="<%= KBFolder.class.getName() %>"
+			modelResourceDescription="<%= kbFolder.getName() %>"
+			resourcePrimKey="<%= String.valueOf(kbFolder.getKbFolderId()) %>"
+			var="permissionsURL"
+			windowState="<%= LiferayWindowState.POP_UP.toString() %>"
+		/>
+
+		<liferay-ui:icon
+			image="permissions"
+			method="get"
+			url="<%= permissionsURL %>"
+			useDialog="<%= true %>"
+		/>
+	</c:if>
 </liferay-ui:icon-menu>

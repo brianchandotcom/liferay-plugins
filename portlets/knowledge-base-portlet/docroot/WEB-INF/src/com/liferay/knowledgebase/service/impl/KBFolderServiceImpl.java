@@ -47,6 +47,13 @@ public class KBFolderServiceImpl extends KBFolderServiceBaseImpl {
 			parentResourcePrimKey, name, description, serviceContext);
 	}
 
+	public KBFolder deleteKBFolder(long kbFolderId) throws PortalException {
+		KBFolderPermission.check(
+			getPermissionChecker(), kbFolderId, ActionKeys.DELETE);
+
+		return kbFolderLocalService.deleteKBFolder(kbFolderId);
+	}
+
 	@Override
 	public KBFolder getKBFolder(long kbFolderId) throws PortalException {
 		KBFolderPermission.check(
