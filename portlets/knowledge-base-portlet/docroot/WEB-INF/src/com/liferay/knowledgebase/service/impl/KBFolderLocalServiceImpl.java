@@ -16,11 +16,32 @@ package com.liferay.knowledgebase.service.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.knowledgebase.model.KBFolder;
 import com.liferay.knowledgebase.service.base.KBFolderLocalServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
+
+import java.util.List;
 
 /**
  * @author Brian Wing Shun Chan
  */
 @ProviderType
 public class KBFolderLocalServiceImpl extends KBFolderLocalServiceBaseImpl {
+
+	@Override
+	public List<KBFolder> getFolders(
+			long groupId, long parentKBFolderId, int start, int end)
+		throws PortalException {
+
+		return kbFolderPersistence.findByG_P(
+			groupId, parentKBFolderId, start, end);
+	}
+
+	@Override
+	public int getFoldersCount(long groupId, long parentKBFolderId)
+		throws PortalException {
+
+		return kbFolderPersistence.countByG_P(groupId, parentKBFolderId);
+	}
+
 }
