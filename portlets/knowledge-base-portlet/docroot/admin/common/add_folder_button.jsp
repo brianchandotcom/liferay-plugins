@@ -16,14 +16,19 @@
 
 <%@ include file="/admin/init.jsp" %>
 
-<portlet:renderURL var="importURL">
-	<portlet:param name="mvcPath" value="/admin/import.jsp" />
+<%
+long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey", KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY);
+%>
+
+<portlet:renderURL var="addFolderURL">
+	<portlet:param name="mvcPath" value="/admin/common/edit_folder.jsp" />
 	<portlet:param name="redirect" value="<%= redirect %>" />
-	<portlet:param name="parentKBFolderId" value="<%= String.valueOf(KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) %>" />
+	<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(PortalUtil.getClassNameId(KBFolderConstants.getClassName())) %>" />
+	<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(parentResourcePrimKey) %>" />
 </portlet:renderURL>
 
 <aui:nav-item
-	href="<%= importURL %>"
-	iconCssClass="icon-hdd"
-	label="import"
+	href="<%= addFolderURL %>"
+	iconCssClass="icon-folder-open"
+	label="folder"
 />

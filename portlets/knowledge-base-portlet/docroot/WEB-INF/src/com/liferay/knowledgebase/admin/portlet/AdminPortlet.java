@@ -21,10 +21,12 @@ import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.NoSuchCommentException;
 import com.liferay.knowledgebase.NoSuchTemplateException;
 import com.liferay.knowledgebase.model.KBArticle;
+import com.liferay.knowledgebase.model.KBFolder;
 import com.liferay.knowledgebase.model.KBFolderConstants;
 import com.liferay.knowledgebase.model.KBTemplate;
 import com.liferay.knowledgebase.portlet.BaseKBPortlet;
 import com.liferay.knowledgebase.service.KBArticleServiceUtil;
+import com.liferay.knowledgebase.service.KBFolderServiceUtil;
 import com.liferay.knowledgebase.service.KBTemplateServiceUtil;
 import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.knowledgebase.util.WebKeys;
@@ -253,6 +255,39 @@ public class AdminPortlet extends BaseKBPortlet {
 
 		KBArticleServiceUtil.updateKBArticlesPriorities(
 			themeDisplay.getScopeGroupId(), resourcePrimKeyToPriorityMap);
+	}
+
+	public void updateKBFolder(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws PortalException {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		long kbFolderId = ParamUtil.getLong(actionRequest, "kbFolderId");
+		long parentResourceClassNameId = ParamUtil.getLong(
+			actionRequest, "parentResourceClassNameId");
+		long parentResourcePrimKey = ParamUtil.getLong(
+			actionRequest, "parentResourcePrimKey");
+
+		String name = ParamUtil.getString(actionRequest, "name");
+		String description = ParamUtil.getString(actionRequest, "description");
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			KBFolder.class.getName(), actionRequest);
+
+		if (cmd.equals(Constants.ADD)) {
+			KBFolderServiceUtil.addKBFolder(
+				themeDisplay.getScopeGroupId(), parentResourceClassNameId,
+				parentResourcePrimKey, name, description, serviceContext);
+		}
+		else if (cmd.equals(Constants.UPDATE)) {
+			KBFolderServiceUtil.updateKBFolder(
+				parentResourceClassNameId, parentResourcePrimKey, kbFolderId,
+				name, description);
+		}
 	}
 
 	public void updateKBTemplate(
