@@ -40,6 +40,7 @@ page import="com.liferay.knowledgebase.model.KBArticle" %><%@
 page import="com.liferay.knowledgebase.model.KBArticleConstants" %><%@
 page import="com.liferay.knowledgebase.model.KBArticleSearchDisplay" %><%@
 page import="com.liferay.knowledgebase.model.KBComment" %><%@
+page import="com.liferay.knowledgebase.model.KBFolderConstants" %><%@
 page import="com.liferay.knowledgebase.model.KBTemplate" %><%@
 page import="com.liferay.knowledgebase.model.KBTemplateSearchDisplay" %><%@
 page import="com.liferay.knowledgebase.service.KBArticleLocalServiceUtil" %><%@
