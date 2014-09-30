@@ -169,11 +169,11 @@ String[] sections = AdminUtil.unescapeSections(BeanPropertiesUtil.getString(kbAr
 		</liferay-ui:panel>
 
 		<aui:button-row cssClass="kb-submit-buttons">
-			<aui:button type="submit" value='<%= ((kbArticle == null) || kbArticle.isApproved() || kbArticle.isDraft()) ? "save-as-draft" : "save" %>' />
-
 			<c:if test="<%= (kbArticle == null) || !kbArticle.isPending() %>">
-				<aui:button onClick='<%= renderResponse.getNamespace() + "publishKBArticle();" %>' value='<%= WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, KBArticle.class.getName()) ? "submit-for-publication" : "publish" %>' />
+				<aui:button onClick='<%= renderResponse.getNamespace() + "publishKBArticle();" %>' type="submit" value='<%= WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, KBArticle.class.getName()) ? "submit-for-publication" : "publish" %>' />
 			</c:if>
+
+			<aui:button primary="false" type="submit" value='<%= ((kbArticle == null) || kbArticle.isApproved() || kbArticle.isDraft()) ? "save-as-draft" : "save" %>' />
 
 			<aui:button href="<%= redirect %>" type="cancel" />
 		</aui:button-row>
