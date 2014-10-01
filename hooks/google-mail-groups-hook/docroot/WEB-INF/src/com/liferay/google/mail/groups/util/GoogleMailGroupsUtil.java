@@ -50,42 +50,6 @@ import java.util.List;
  */
 public class GoogleMailGroupsUtil {
 
-	public static void addGroupManagers(List<User> users)
-		throws PortalException {
-
-		for (User user : users) {
-			List<Group> groups = GroupLocalServiceUtil.getUserGroups(
-				user.getUserId(), true);
-
-			for (Group group : groups) {
-				if (!isSync(group)) {
-					continue;
-				}
-
-				String groupEmailAddress = getGroupEmailAddress(group);
-				String userEmailAddress = getUserEmailAddress(user);
-
-				Member member = GoogleDirectoryUtil.getGroupMember(
-					groupEmailAddress, userEmailAddress);
-
-				if (member == null) {
-					continue;
-				}
-
-				String gRole = member.getRole();
-
-				if (gRole.equals("MANAGER") || gRole.equals("OWNER")) {
-					continue;
-				}
-
-				member.setRole("MANAGER");
-
-				GoogleDirectoryUtil.updateGroupMember(
-					groupEmailAddress, userEmailAddress, member);
-			}
-		}
-	}
-
 	public static void checkLargeGroup(Group group) throws PortalException {
 		if ((PortletPropsValues.EMAIL_LARGE_GROUP_SIZE < 0) ||
 			Validator.isNull(PortletPropsValues.EMAIL_LARGE_GROUP_ROLE)) {
@@ -192,49 +156,6 @@ public class GoogleMailGroupsUtil {
 		return true;
 	}
 
-	public static void removeGroupManagers(List<User> users)
-		throws PortalException {
-
-		for (User user : users) {
-			if (RoleLocalServiceUtil.hasUserRole(
-					user.getUserId(), user.getCompanyId(),
-				PortletPropsValues.EMAIL_LARGE_GROUP_ROLE, true)) {
-
-				continue;
-			}
-
-			List<Group> groups = GroupLocalServiceUtil.getUserGroups(
-				user.getUserId(), true);
-
-			for (Group group : groups) {
-				if (!isSync(group)) {
-					continue;
-				}
-
-				String groupEmailAddress = getGroupEmailAddress(group);
-				String userEmailAddress = getUserEmailAddress(user);
-
-				Member member = GoogleDirectoryUtil.getGroupMember(
-					groupEmailAddress, userEmailAddress);
-
-				if (member == null) {
-					continue;
-				}
-
-				String gRole = member.getRole();
-
-				if (gRole.equals("MEMBER") || gRole.equals("OWNER")) {
-					continue;
-				}
-
-				member.setRole("MEMBER");
-
-				GoogleDirectoryUtil.updateGroupMember(
-					groupEmailAddress, userEmailAddress, member);
-			}
-		}
-	}
-
 	public static void syncGroups() throws Exception {
 		ActionableDynamicQuery actionableDynamicQuery =
 			new GroupActionableDynamicQuery() {
@@ -311,6 +232,32 @@ public class GoogleMailGroupsUtil {
 		actionableDynamicQuery.performActions();
 	}
 
+	public static void updateGroupMemberRoles(
+			List<User> users, String groupMemberRole)
+		throws PortalException {
+
+		for (User user : users) {
+			if (groupMemberRole.equals("MEMBER") &&
+				RoleLocalServiceUtil.hasUserRole(
+					user.getUserId(), user.getCompanyId(),
+					PortletPropsValues.EMAIL_LARGE_GROUP_ROLE, true)) {
+
+				continue;
+			}
+
+			List<Group> groups = GroupLocalServiceUtil.getUserGroups(
+				user.getUserId(), true);
+
+			for (Group group : groups) {
+				if (!isSync(group)) {
+					continue;
+				}
+
+				updateGroupMemberRole(group, user, groupMemberRole);
+			}
+		}
+	}
+
 	protected static void updateGroupManagers(Group group) {
 		Role role = RoleLocalServiceUtil.fetchRole(
 			group.getCompanyId(), PortletPropsValues.EMAIL_LARGE_GROUP_ROLE);
@@ -323,26 +270,35 @@ public class GoogleMailGroupsUtil {
 
 		for (User user : users) {
 			try {
-				String groupEmailAddress = getGroupEmailAddress(group);
-				String userEmailAddress = getUserEmailAddress(user);
-
-				Member member = GoogleDirectoryUtil.getGroupMember(
-					groupEmailAddress, userEmailAddress);
-
-				String gRole = member.getRole();
-
-				if (gRole.equals("MANAGER") || gRole.equals("OWNER")) {
-					continue;
-				}
-
-				member.setRole("MANAGER");
-
-				GoogleDirectoryUtil.updateGroupMember(
-					groupEmailAddress, userEmailAddress, member);
+				updateGroupMemberRole(group, user, "MANAGER");
 			}
 			catch (Exception e) {
 			}
 		}
+	}
+
+	protected static void updateGroupMemberRole(
+			Group group, User user, String groupMemberRole)
+		throws PortalException {
+
+		String groupEmailAddress = getGroupEmailAddress(group);
+		String userEmailAddress = getUserEmailAddress(user);
+
+		Member member = GoogleDirectoryUtil.getGroupMember(
+			groupEmailAddress, userEmailAddress);
+
+		String currentGroupMemberRole = member.getRole();
+
+		if (currentGroupMemberRole.equals(groupMemberRole) ||
+			currentGroupMemberRole.equals("OWNER")) {
+
+			return;
+		}
+
+		member.setRole(groupMemberRole);
+
+		GoogleDirectoryUtil.updateGroupMember(
+			groupEmailAddress, userEmailAddress, member);
 	}
 
 }
