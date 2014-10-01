@@ -62,7 +62,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 				</liferay-util:buffer>
 
 				<%
-				String taglibOnClick = "opener." + renderResponse.getNamespace() + "selectKBArticle('(" + LanguageUtil.get(locale, "none") + ")', '1.0', '" + KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY + "', '" + kbFolderClassNameId + "', '" + UnicodeFormatter.toString(html) + "'); window.close();";
+				String taglibOnClick = "opener." + renderResponse.getNamespace() + "selectKBEntry('(" + LanguageUtil.get(locale, "none") + ")', '1.0', '" + KBFolderConstants.DEFAULT_PARENT_FOLDER_ID + "', '" + kbFolderClassNameId + "', '" + UnicodeFormatter.toString(html) + "'); window.close();";
 				%>
 
 				<aui:button onClick="<%= taglibOnClick %>" value="remove" />
@@ -73,7 +73,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 
 		<div class="kb-select-article-breadcrumbs">
 			<liferay-portlet:renderURL var="breadcrumbURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-				<portlet:param name="mvcPath" value='<%= templatePath + "select_article.jsp" %>' />
+				<portlet:param name="mvcPath" value='<%= templatePath + "select_parent.jsp" %>' />
 				<portlet:param name="resourceClassNameId" value="<%= String.valueOf(resourceClassNameId) %>" />
 				<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
 				<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(kbFolderClassNameId) %>" />
@@ -125,7 +125,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 		</div>
 
 		<liferay-portlet:renderURL varImpl="iteratorURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-			<portlet:param name="mvcPath" value='<%= templatePath + "select_article.jsp" %>' />
+			<portlet:param name="mvcPath" value='<%= templatePath + "select_parent.jsp" %>' />
 			<portlet:param name="resourceClassNameId" value="<%= String.valueOf(resourceClassNameId) %>" />
 			<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
 			<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(parentResourceClassNameId) %>" />
@@ -154,7 +154,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 				>
 
 					<liferay-portlet:renderURL var="rowURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-						<portlet:param name="mvcPath" value='<%= templatePath + "select_article.jsp" %>' />
+						<portlet:param name="mvcPath" value='<%= templatePath + "select_parent.jsp" %>' />
 						<portlet:param name="resourceClassNameId" value="<%= String.valueOf(resourceClassNameId) %>" />
 						<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
 						<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(kbFolder.getClassNameId()) %>" />
@@ -201,7 +201,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 						</liferay-util:buffer>
 
 						<%
-						String taglibOnClick = "opener." + renderResponse.getNamespace() + "selectKBArticle('" + kbFolder.getName() + "', '1.0', '" + kbFolder.getKbFolderId() + "', '" + kbFolder.getClassNameId() + "', '" + UnicodeFormatter.toString(html) + "'); window.close();";
+						String taglibOnClick = "opener." + renderResponse.getNamespace() + "selectKBEntry('" + kbFolder.getName() + "', '1.0', '" + kbFolder.getKbFolderId() + "', '" + kbFolder.getClassNameId() + "', '" + UnicodeFormatter.toString(html) + "'); window.close();";
 						%>
 
 						<aui:button disabled="<%= (kbFolder.getKbFolderId() == resourcePrimKey) || (kbFolder.getKbFolderId() == oldParentResourcePrimKey) %>" onClick="<%= taglibOnClick %>" value="choose" />
@@ -233,7 +233,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 				modelVar="curKBArticle"
 			>
 				<liferay-portlet:renderURL var="rowURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-					<portlet:param name="mvcPath" value='<%= templatePath + "select_article.jsp" %>' />
+					<portlet:param name="mvcPath" value='<%= templatePath + "select_parent.jsp" %>' />
 					<portlet:param name="resourceClassNameId" value="<%= String.valueOf(resourceClassNameId) %>" />
 					<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
 					<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(curKBArticle.getClassNameId()) %>" />
@@ -282,7 +282,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 					</liferay-util:buffer>
 
 					<%
-					String taglibOnClick = "opener." + renderResponse.getNamespace() + "selectKBArticle('" + curKBArticle.getTitle() + "', '" + curKBArticle.getPriority() + "', '" + curKBArticle.getResourcePrimKey() + "', '" + curKBArticle.getClassNameId() + "', '" + UnicodeFormatter.toString(html) + "'); window.close();";
+					String taglibOnClick = "opener." + renderResponse.getNamespace() + "selectKBEntry('" + curKBArticle.getTitle() + "', '" + curKBArticle.getPriority() + "', '" + curKBArticle.getResourcePrimKey() + "', '" + curKBArticle.getClassNameId() + "', '" + UnicodeFormatter.toString(html) + "'); window.close();";
 					%>
 
 					<aui:button disabled="<%= (resourceClassNameId == kbFolderClassNameId) || (curKBArticle.getResourcePrimKey() == resourcePrimKey) || (curKBArticle.getResourcePrimKey() == oldParentResourcePrimKey) %>" onClick="<%= taglibOnClick %>" value="choose" />
