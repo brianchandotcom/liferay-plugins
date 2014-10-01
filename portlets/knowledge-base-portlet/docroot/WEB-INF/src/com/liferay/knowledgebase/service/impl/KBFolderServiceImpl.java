@@ -79,6 +79,16 @@ public class KBFolderServiceImpl extends KBFolderServiceBaseImpl {
 	}
 
 	@Override
+	public void moveKBFolder(long kbFolderId, long parentKBFolderId)
+		throws PortalException {
+
+		KBFolderPermission.check(
+			getPermissionChecker(), kbFolderId, ActionKeys.MOVE_KB_FOLDER);
+
+		kbFolderLocalService.moveKBFolder(kbFolderId, parentKBFolderId);
+	}
+
+	@Override
 	public KBFolder updateKBFolder(
 			long parentResourceClassNameId, long parentResourcePrimKey,
 			long kbFolderId, String name, String description)
