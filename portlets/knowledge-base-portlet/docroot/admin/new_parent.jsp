@@ -45,8 +45,8 @@ else {
 
 	<aui:input cssClass="input-mini kb-priority" id="parentPriority" inlineField="<%= true %>" label="" name="priority" type="text" value="<%= BigDecimal.valueOf(priority).toPlainString() %>" />
 
-	<liferay-portlet:renderURL var="selectKBArticleURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-		<portlet:param name="mvcPath" value='<%= templatePath + "select_article.jsp" %>' />
+	<liferay-portlet:renderURL var="selectKBObjectURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+		<portlet:param name="mvcPath" value='<%= templatePath + "select_parent.jsp" %>' />
 		<portlet:param name="resourceClassNameId" value="<%= String.valueOf(resourceClassNameId) %>" />
 		<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
 		<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(PortalUtil.getClassNameId(KBFolderConstants.getClassName())) %>" />
@@ -55,7 +55,7 @@ else {
 	</liferay-portlet:renderURL>
 
 	<%
-	String taglibOnClick = "var selectKBArticleWindow = window.open(" + renderResponse.getNamespace() + "getSelectKBArticleWindowURL(), 'selectKBArticle', 'directories=no,height=640,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=680'); void(''); selectKBArticleWindow.focus();";
+	String taglibOnClick = "var selectKBObjectWindow = window.open(" + renderResponse.getNamespace() + "getSelectKBObjectWindowURL(), 'selectKBObject', 'directories=no,height=640,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=680'); void(''); selectKBObjectWindow.focus();";
 	%>
 
 </div>
@@ -65,15 +65,15 @@ else {
 </div>
 
 <aui:script>
-	function <portlet:namespace />getSelectKBArticleWindowURL() {
+	function <portlet:namespace />getSelectKBObjectWindowURL() {
 		var oldParentResourceClassNameId = document.<portlet:namespace />fm.<portlet:namespace />parentResourceClassNameId.value;
 		var oldParentResourcePrimKey = document.<portlet:namespace />fm.<portlet:namespace />parentResourcePrimKey.value;
 
-		var selectKBArticleWindowURL = '<%= selectKBArticleURL %>';
+		var selectKBObjectWindowURL = '<%= selectKBObjectURL %>';
 
-		selectKBArticleWindowURL += '&<portlet:namespace />oldParentResourceClassNameId=' + oldParentResourceClassNameId;
-		selectKBArticleWindowURL += '&<portlet:namespace />oldParentResourcePrimKey=' + oldParentResourcePrimKey;
+		selectKBObjectWindowURL += '&<portlet:namespace />oldParentResourceClassNameId=' + oldParentResourceClassNameId;
+		selectKBObjectWindowURL += '&<portlet:namespace />oldParentResourcePrimKey=' + oldParentResourcePrimKey;
 
-		return selectKBArticleWindowURL;
+		return selectKBObjectWindowURL;
 	}
 </aui:script>
