@@ -19,6 +19,7 @@
 <%
 String portletResource = ParamUtil.getString(request, "portletResource");
 
+long resourceClassNameId = GetterUtil.getLong(portletPreferences.getValue("resourceClassNameId", null), PortalUtil.getClassNameId(KBFolderConstants.getClassName()));
 long resourcePrimKey = GetterUtil.getLong(portletPreferences.getValue("resourcePrimKey", null));
 
 boolean enableKBArticleDescription = GetterUtil.getBoolean(portletPreferences.getValue("enableKBArticleDescription", null));
@@ -36,4 +37,6 @@ boolean enableRSS = !PortalUtil.isRSSFeedsEnabled() ? false : GetterUtil.getBool
 int rssDelta = GetterUtil.getInteger(portletPreferences.getValue("rssDelta", StringPool.BLANK), SearchContainer.DEFAULT_DELTA);
 String rssDisplayStyle = portletPreferences.getValue("rssDisplayStyle", RSSUtil.DISPLAY_STYLE_DEFAULT);
 String rssFeedType = portletPreferences.getValue("rssFeedType", RSSUtil.FEED_TYPE_DEFAULT);
+
+PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(liferayPortletRequest);
 %>
