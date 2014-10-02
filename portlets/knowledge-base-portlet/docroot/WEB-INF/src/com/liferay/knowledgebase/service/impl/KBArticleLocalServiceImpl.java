@@ -27,6 +27,7 @@ import com.liferay.knowledgebase.admin.util.AdminSubscriptionSender;
 import com.liferay.knowledgebase.admin.util.AdminUtil;
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.KBArticleConstants;
+import com.liferay.knowledgebase.model.KBFolder;
 import com.liferay.knowledgebase.model.KBFolderConstants;
 import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.base.KBArticleLocalServiceBaseImpl;
@@ -146,7 +147,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setVersion(KBArticleConstants.DEFAULT_VERSION);
 		kbArticle.setTitle(title);
 		kbArticle.setUrlTitle(
-			getUniqueUrlTitle(kbArticleId, title, urlTitle, serviceContext));
+			getUniqueUrlTitle(
+				groupId, kbFolderId, kbArticleId, title, urlTitle));
 		kbArticle.setContent(content);
 		kbArticle.setDescription(description);
 		kbArticle.setPriority(priority);
@@ -414,6 +416,21 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	@Override
+	public KBArticle fetchKBArticleByUrlTitle(
+			long groupId, String kbFolderUrlTitle, String urlTitle)
+		throws PortalException {
+
+		List<KBArticle> kbArticles = kbArticleFinder.findByUrlTitle(
+			groupId, kbFolderUrlTitle, urlTitle, _STATUSES, 0, 1);
+
+		if (kbArticles.isEmpty()) {
+			return null;
+		}
+
+		return kbArticles.get(0);
+	}
+
+	@Override
 	public KBArticle fetchLatestKBArticle(long resourcePrimKey, int status) {
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return kbArticlePersistence.fetchByResourcePrimKey_First(
@@ -564,6 +581,24 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 				"No KBArticle exists with the key {groupId=" + groupId +
 					", kbFolderId=" + kbFolderId + ", urlTitle=" + urlTitle +
 						"}");
+		}
+
+		return kbArticle;
+	}
+
+	@Override
+	public KBArticle getKBArticleByUrlTitle(
+			long groupId, String kbFolderUrlTitle, String urlTitle)
+		throws PortalException {
+
+		KBArticle kbArticle = fetchKBArticleByUrlTitle(
+			groupId, kbFolderUrlTitle, urlTitle);
+
+		if (kbArticle == null) {
+			throw new NoSuchArticleException(
+				"No KBArticle with the key {groupId=" + groupId +
+					", urlTitle=" + urlTitle + "} found within a folder " +
+						"with urlTitle " + kbFolderUrlTitle);
 		}
 
 		return kbArticle;
@@ -820,44 +855,72 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		updatePermissionFields(
 			resourcePrimKey, parentResourceClassNameId, parentResourcePrimKey);
 
+		long kbFolderClassNameId = classNameLocalService.getClassNameId(
+			KBFolderConstants.getClassName());
+
+		long kbFolderId = KBFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+
+		if (parentResourceClassNameId == kbFolderClassNameId) {
+			kbFolderId = parentResourceClassNameId;
+		}
+		else {
+			KBArticle latestKBArticle = getLatestKBArticle(
+				parentResourcePrimKey, WorkflowConstants.STATUS_ANY);
+
+			kbFolderId = latestKBArticle.getKbFolderId();
+		}
+
 		List<KBArticle> kbArticles = getKBArticleVersions(
 			resourcePrimKey, WorkflowConstants.STATUS_ANY, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, new KBArticleVersionComparator());
 
-		for (KBArticle kbArticle : kbArticles) {
-			kbArticle.setParentResourceClassNameId(parentResourceClassNameId);
-			kbArticle.setParentResourcePrimKey(parentResourcePrimKey);
-			kbArticle.setPriority(priority);
+		for (KBArticle curKBArticle : kbArticles) {
+			curKBArticle.setParentResourceClassNameId(
+				parentResourceClassNameId);
+			curKBArticle.setParentResourcePrimKey(parentResourcePrimKey);
 
-			kbArticlePersistence.update(kbArticle);
+			if (parentResourceClassNameId == kbFolderClassNameId) {
+				curKBArticle.setKbFolderId(kbFolderId);
+			}
+
+			curKBArticle.setPriority(priority);
+
+			kbArticlePersistence.update(curKBArticle);
 		}
 
-		long kbFolderClassNameId = classNameLocalService.getClassNameId(
-			KBFolderConstants.getClassName());
+		KBArticle kbArticle = kbArticlePersistence.findByPrimaryKey(
+			resourcePrimKey);
 
-		if (parentResourceClassNameId == kbFolderClassNameId) {
+		if (kbArticle.getKbFolderId() != kbFolderId) {
 			List<KBArticle> descendantKBArticles = getAllDescendantKBArticles(
 				resourcePrimKey, WorkflowConstants.STATUS_ANY, null);
 
-			for (KBArticle kbArticle : descendantKBArticles) {
-				kbArticle.setKbFolderId(parentResourcePrimKey);
+			for (KBArticle curKBArticle : descendantKBArticles) {
+				List<KBArticle> kbArticleVersions = getKBArticleVersions(
+					curKBArticle.getResourcePrimKey(),
+					WorkflowConstants.STATUS_ANY, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, new KBArticleVersionComparator());
 
-				kbArticlePersistence.update(kbArticle);
+				for (KBArticle kbArticleVersion : kbArticleVersions) {
+					kbArticleVersion.setKbFolderId(kbFolderId);
+
+					kbArticlePersistence.update(kbArticleVersion);
+				}
 			}
 		}
 
 		// Social
 
-		KBArticle kbArticle = getLatestKBArticle(
+		KBArticle latestKBArticle = getLatestKBArticle(
 			resourcePrimKey, WorkflowConstants.STATUS_ANY);
 
 		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
-		extraDataJSONObject.put("title", kbArticle.getTitle());
+		extraDataJSONObject.put("title", latestKBArticle.getTitle());
 
-		if (kbArticle.isApproved() || !kbArticle.isFirstVersion()) {
+		if (latestKBArticle.isApproved() || !latestKBArticle.isFirstVersion()) {
 			socialActivityLocalService.addActivity(
-				userId, kbArticle.getGroupId(), KBArticle.class.getName(),
+				userId, latestKBArticle.getGroupId(), KBArticle.class.getName(),
 				resourcePrimKey, AdminActivityKeys.MOVE_KB_ARTICLE,
 				extraDataJSONObject.toString(), 0);
 		}
@@ -1560,75 +1623,52 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	protected String getUniqueUrlTitle(
-			long groupId, long kbArticleId, String title)
+			long groupId, long kbFolderId, long kbArticleId, String title)
 		throws PortalException {
 
 		String urlTitle = KnowledgeBaseUtil.getUrlTitle(kbArticleId, title);
 
-		for (int i = 1;; i++) {
-			KBArticle kbArticle = null;
+		String uniqueUrlTitle = urlTitle;
 
-			try {
-				kbArticle = getKBArticleByUrlTitle(
-					groupId, KBFolderConstants.DEFAULT_PARENT_FOLDER_ID,
-					urlTitle);
+		if (kbFolderId == KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+			int kbArticleCount = kbArticlePersistence.countByG_KBFI_UT_ST(
+				groupId, kbFolderId, uniqueUrlTitle, _STATUSES);
+
+			for (int i = 1; kbArticleCount > 0; i++) {
+				uniqueUrlTitle = urlTitle + StringPool.DASH + i;
+
+				kbArticleCount = kbArticlePersistence.countByG_KBFI_UT_ST(
+					groupId, kbFolderId, uniqueUrlTitle, _STATUSES);
 			}
-			catch (NoSuchArticleException nsae) {
-			}
 
-			if ((kbArticle == null) ||
-				(kbArticleId == kbArticle.getKbArticleId())) {
-
-				break;
-			}
-			else {
-				String suffix = StringPool.DASH + i;
-
-				String prefix = urlTitle;
-
-				if (urlTitle.length() > suffix.length()) {
-					prefix = urlTitle.substring(
-						0, urlTitle.length() - suffix.length());
-				}
-
-				urlTitle = prefix + suffix;
-			}
+			return uniqueUrlTitle;
 		}
 
-		return urlTitle;
+		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(kbFolderId);
+
+		int kbArticleCount = kbArticleFinder.countByUrlTitle(
+			groupId, kbFolder.getUrlTitle(), uniqueUrlTitle, _STATUSES);
+
+		for (int i = 1; kbArticleCount > 0; i++) {
+			uniqueUrlTitle = urlTitle + StringPool.DASH + i;
+
+			kbArticleCount = kbArticleFinder.countByUrlTitle(
+				groupId, kbFolder.getUrlTitle(), uniqueUrlTitle, _STATUSES);
+		}
+
+		return uniqueUrlTitle;
 	}
 
 	protected String getUniqueUrlTitle(
-			long kbArticleId, String title, String urlTitle,
-			ServiceContext serviceContext)
+			long groupId, long kbFolderId, long kbArticleId, String title,
+			String urlTitle)
 		throws PortalException {
 
-		if (Validator.isNotNull(urlTitle)) {
-			urlTitle = KnowledgeBaseUtil.getUrlTitle(kbArticleId, urlTitle);
-		}
-		else {
-			urlTitle = getUniqueUrlTitle(
-				serviceContext.getScopeGroupId(), kbArticleId, title);
+		if (Validator.isNull(urlTitle)) {
+			return getUniqueUrlTitle(groupId, kbFolderId, kbArticleId, title);
 		}
 
-		KBArticle kbArticle = null;
-
-		try {
-			kbArticle = getKBArticleByUrlTitle(
-				serviceContext.getScopeGroupId(),
-				KBFolderConstants.DEFAULT_PARENT_FOLDER_ID, urlTitle);
-		}
-		catch (NoSuchArticleException nsae) {
-		}
-
-		if ((kbArticle != null) &&
-			(kbArticleId != kbArticle.getKbArticleId())) {
-
-			urlTitle = getUniqueUrlTitle(
-				serviceContext.getScopeGroupId(), kbArticleId, urlTitle);
-		}
-
-		return urlTitle;
+		return getUniqueUrlTitle(groupId, kbFolderId, kbArticleId, urlTitle);
 	}
 
 	protected boolean isValidFileName(String name) {
@@ -1859,6 +1899,10 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			throw new KBArticleSourceURLException(sourceURL);
 		}
 	}
+
+	private static final int[] _STATUSES = new int[] {
+		WorkflowConstants.STATUS_APPROVED, WorkflowConstants.STATUS_PENDING
+	};
 
 	private static final String _TEMP_FOLDER_NAME =
 		AdminPortlet.class.getName();

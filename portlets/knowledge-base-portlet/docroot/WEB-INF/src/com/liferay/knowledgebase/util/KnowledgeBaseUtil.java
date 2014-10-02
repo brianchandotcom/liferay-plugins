@@ -20,7 +20,6 @@ import com.liferay.knowledgebase.model.KBCommentConstants;
 import com.liferay.knowledgebase.model.KBFolder;
 import com.liferay.knowledgebase.model.KBFolderConstants;
 import com.liferay.knowledgebase.model.KBTemplate;
-import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.KBArticleServiceUtil;
 import com.liferay.knowledgebase.service.KBFolderServiceUtil;
 import com.liferay.knowledgebase.util.comparator.KBArticleCreateDateComparator;
@@ -298,16 +297,10 @@ public class KnowledgeBaseUtil {
 			return parentResourcePrimKey;
 		}
 
-		while (parentResourceClassNameId != kbFolderClassNameId) {
-			KBArticle kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
-				parentResourcePrimKey, WorkflowConstants.STATUS_ANY);
+		KBArticle kbArticle = KBArticleServiceUtil.getLatestKBArticle(
+			parentResourcePrimKey, WorkflowConstants.STATUS_ANY);
 
-			parentResourceClassNameId =
-				kbArticle.getParentResourceClassNameId();
-			parentResourcePrimKey = kbArticle.getParentResourcePrimKey();
-		}
-
-		return parentResourcePrimKey;
+		return kbArticle.getKbFolderId();
 	}
 
 	public static OrderByComparator<KBTemplate> getKBTemplateOrderByComparator(
