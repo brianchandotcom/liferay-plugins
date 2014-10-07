@@ -19,7 +19,7 @@ AUI.add(
 						instance._nonActionableNotificationsList = config.nonActionableNotificationsList;
 						instance._portletKey = config.portletKey;
 
-						var userNotifications =  A.one('.dockbar-user-notifications');
+						var userNotifications = A.one('.dockbar-user-notifications');
 
 						userNotifications.on(
 							'click',
