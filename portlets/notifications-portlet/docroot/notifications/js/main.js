@@ -687,7 +687,40 @@ AUI.add(
 
 						instance._bindPreviousPageNotifications();
 
+						instance._bindUnsubscribe();
+
 						instance._bindViewNotification();
+					},
+
+					_bindUnsubscribe: function() {
+						var instance = this;
+
+						var notificationsContainer = A.one(instance._notificationsContainer);
+
+						var notificationsNode = notificationsContainer.one(instance._notificationsNode);
+
+						if (notificationsNode) {
+							notificationsNode.delegate(
+								'click',
+								function(event) {
+									var currentTarget = event.currentTarget;
+
+									var iconMenu = currentTarget.ancestor('.lfr-icon-menu');
+
+									iconMenu.addClass('open');
+
+									if (iconMenu.hasClass('open')) {
+										currentTarget.on(
+											'clickoutside',
+											function(event) {
+												currentTarget.ancestor().removeClass('open');
+											}
+										);
+									}
+								},
+								'.user-notification .dropdown-toggle'
+							);
+						}
 					},
 
 					_bindViewNotification: function() {
@@ -705,7 +738,7 @@ AUI.add(
 
 									var target = event.target;
 
-									if (target.hasClass('.mark-as-read') || target.ancestor('.mark-as-read') || (target._node.tagName == 'A')) {
+									if (target.hasClass('.mark-as-read') || target.ancestor('.mark-as-read') || (target._node.tagName == 'A') || (target.ancestor()._node.tagName == 'A')) {
 										return;
 									}
 
