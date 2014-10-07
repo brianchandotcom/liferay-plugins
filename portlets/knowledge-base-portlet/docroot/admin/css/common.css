@@ -84,8 +84,8 @@
 		@include respond-to(desktop) {
 			.kb-elements .kb-element {
 				display: inline-table;
-				padding: 0 2%;
 				margin: 1% 2%;
+				padding: 0 2%;
 				width: 41%;
 			}
 		}
@@ -127,14 +127,25 @@
 
 	.kb-article-feedback {
 		clear: both;
-		margin-left: 25px;
 
 		textarea {
-			width: 500px;
+			min-width: 98%;
+			padding: 1%;
+			width: 98%;
 		}
 
 		div.control-group {
 			margin-bottom: 5px;
+		}
+	}
+
+	@include respond-to(desktop) {
+		.kb-article-feedback {
+			margin-left: 25px;
+
+			textarea {
+				width: 500px;
+			}
 		}
 	}
 
@@ -145,8 +156,8 @@
 	}
 
 	.kb-article-siblings {
-		padding: 1em 0;
 		overflow: auto;
+		padding: 1em 0;
 		width: 100%;
 
 		.kb-article-next, .kb-article-previous {
