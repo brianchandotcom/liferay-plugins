@@ -687,12 +687,12 @@ AUI.add(
 
 						instance._bindPreviousPageNotifications();
 
-						instance._bindUnsubscribe();
+						instance._bindIconMenu();
 
 						instance._bindViewNotification();
 					},
 
-					_bindUnsubscribe: function() {
+					_bindIconMenu: function() {
 						var instance = this;
 
 						var notificationsContainer = A.one(instance._notificationsContainer);
