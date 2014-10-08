@@ -14,13 +14,16 @@
 
 package com.liferay.knowledgebase.hook.action;
 
-import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.admin.util.AdminUtil;
 import com.liferay.knowledgebase.model.KBArticle;
+import com.liferay.knowledgebase.model.KBFolder;
+import com.liferay.knowledgebase.model.KBFolderConstants;
 import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
+import com.liferay.knowledgebase.service.KBFolderLocalServiceUtil;
 import com.liferay.knowledgebase.service.permission.KBArticlePermission;
 import com.liferay.knowledgebase.util.ActionKeys;
 import com.liferay.knowledgebase.util.PortletKeys;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.struts.StrutsAction;
@@ -185,13 +188,10 @@ public class FindKBArticleAction extends BaseStrutsAction {
 	protected KBArticle getKBArticle(long resourcePrimKey, int status)
 		throws Exception {
 
-		KBArticle kbArticle = null;
+		KBArticle kbArticle = KBArticleLocalServiceUtil.fetchLatestKBArticle(
+			resourcePrimKey, status);
 
-		try {
-			kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
-				resourcePrimKey, status);
-		}
-		catch (NoSuchArticleException nsae) {
+		if (kbArticle == null) {
 			return null;
 		}
 
@@ -212,6 +212,8 @@ public class FindKBArticleAction extends BaseStrutsAction {
 			HttpServletRequest request)
 		throws Exception {
 
+		PortletURL firstMatchPortletURL = null;
+
 		List<Layout> layouts = getCandidateLayouts(
 			plid, privateLayout, kbArticle);
 
@@ -226,9 +228,42 @@ public class FindKBArticleAction extends BaseStrutsAction {
 					portlet.getPortletId());
 
 				if (rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_DISPLAY)) {
-					return getKBArticleURL(
-						layout.getPlid(), portlet.getPortletId(), kbArticle,
-						request);
+					PortletPreferences preferences =
+						PortletPreferencesFactoryUtil.getPortletSetup(
+							layout, portlet.getPortletId(), StringPool.BLANK);
+
+					long kbFolderClassNameId = PortalUtil.getClassNameId(
+						KBFolderConstants.getClassName());
+
+					long resourceClassNameId = GetterUtil.getLong(
+						preferences.getValue("resourceClassNameId", null),
+						kbFolderClassNameId);
+					long resourcePrimKey = GetterUtil.getLong(
+						preferences.getValue("resourcePrimKey", null),
+						KBFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
+					if (resourceClassNameId == kbFolderClassNameId) {
+						if (isParentFolder(
+								resourcePrimKey, kbArticle.getKbFolderId())) {
+
+							return getKBArticleURL(
+								layout.getPlid(), portlet.getPortletId(),
+								kbArticle, request);
+						}
+					}
+					else if (resourcePrimKey ==
+								kbArticle.getResourcePrimKey()) {
+
+						return getKBArticleURL(
+							layout.getPlid(), portlet.getPortletId(), kbArticle,
+							request);
+					}
+
+					if (firstMatchPortletURL == null) {
+						firstMatchPortletURL = getKBArticleURL(
+							layout.getPlid(), portlet.getPortletId(), kbArticle,
+							request);
+					}
 				}
 
 				if (rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_SECTION)) {
@@ -239,15 +274,12 @@ public class FindKBArticleAction extends BaseStrutsAction {
 					String[] kbArticlesSections = preferences.getValues(
 						"kbArticlesSections", new String[0]);
 
-					KBArticle rootKBArticle = null;
+					KBArticle rootKBArticle =
+						KBArticleLocalServiceUtil.fetchLatestKBArticle(
+							kbArticle.getRootResourcePrimKey(),
+							WorkflowConstants.STATUS_APPROVED);
 
-					try {
-						rootKBArticle =
-							KBArticleLocalServiceUtil.getLatestKBArticle(
-								kbArticle.getRootResourcePrimKey(),
-								WorkflowConstants.STATUS_APPROVED);
-					}
-					catch (NoSuchArticleException nsae) {
+					if (rootKBArticle == null) {
 						continue;
 					}
 
@@ -273,15 +305,11 @@ public class FindKBArticleAction extends BaseStrutsAction {
 					long resourcePrimKey = GetterUtil.getLong(
 						preferences.getValue("resourcePrimKey", null));
 
-					KBArticle selKBArticle = null;
+					KBArticle selKBArticle =
+						KBArticleLocalServiceUtil.fetchLatestKBArticle(
+							resourcePrimKey, WorkflowConstants.STATUS_APPROVED);
 
-					try {
-						selKBArticle =
-							KBArticleLocalServiceUtil.getLatestKBArticle(
-								resourcePrimKey,
-								WorkflowConstants.STATUS_APPROVED);
-					}
-					catch (NoSuchArticleException nsae) {
+					if (selKBArticle == null) {
 						continue;
 					}
 
@@ -295,11 +323,17 @@ public class FindKBArticleAction extends BaseStrutsAction {
 							layout.getPlid(), portlet.getPortletId(), kbArticle,
 							request);
 					}
+
+					if (firstMatchPortletURL == null) {
+						firstMatchPortletURL = getKBArticleURL(
+							layout.getPlid(), portlet.getPortletId(), kbArticle,
+							request);
+					}
 				}
 			}
 		}
 
-		return null;
+		return firstMatchPortletURL;
 	}
 
 	protected PortletURL getKBArticleURL(
@@ -333,6 +367,16 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		}
 		else {
 			portletURL.setParameter("urlTitle", kbArticle.getUrlTitle());
+
+			if (kbArticle.getKbFolderId() !=
+					KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+
+				KBFolder kbFolder = KBFolderLocalServiceUtil.getKBFolder(
+					kbArticle.getKbFolderId());
+
+				portletURL.setParameter(
+					"kbFolderUrlTitle", String.valueOf(kbFolder.getUrlTitle()));
+			}
 		}
 
 		portletURL.setPortletMode(PortletMode.VIEW);
@@ -357,6 +401,25 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		}
 
 		return PortletKeys.KNOWLEDGE_BASE_ARTICLE_DEFAULT_INSTANCE;
+	}
+
+	protected boolean isParentFolder(long resourcePrimKey, long kbFolderId)
+		throws PortalException {
+
+		while (kbFolderId !=
+					KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
+
+			if (resourcePrimKey == kbFolderId) {
+				return true;
+			}
+
+			KBFolder kbFolder = KBFolderLocalServiceUtil.getKBFolder(
+				kbFolderId);
+
+			kbFolderId = kbFolder.getParentKBFolderId();
+		}
+
+		return false;
 	}
 
 	protected boolean isValidPlid(long plid) throws Exception {
