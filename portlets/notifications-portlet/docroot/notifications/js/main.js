@@ -19,7 +19,7 @@ AUI.add(
 						instance._nonActionableNotificationsList = config.nonActionableNotificationsList;
 						instance._portletKey = config.portletKey;
 
-						var userNotifications =  A.one('.dockbar-user-notifications');
+						var userNotifications = A.one('.dockbar-user-notifications');
 
 						userNotifications.on(
 							'click',
@@ -494,6 +494,84 @@ AUI.add(
 						instance._end = instance._start + instance._delta;
 					},
 
+					_bindIconMenu: function() {
+						var instance = this;
+
+						var notificationsContainer = A.one(instance._notificationsContainer);
+
+						var notificationsNode = notificationsContainer.one(instance._notificationsNode);
+
+						if (notificationsNode) {
+							notificationsNode.delegate(
+								'click',
+								function(event) {
+									var currentTarget = event.currentTarget;
+
+									var currentRow = currentTarget.ancestor('.user-notification');
+
+									currentRow.plug(A.LoadingMask);
+
+									currentRow.loadingmask.show();
+
+									var unsubscribeLink = currentRow.one('.user-notification-link .unsubscribe');
+
+									var unsubscribeURL = unsubscribeLink.attr('data-unsubscribeURL');
+
+									if (unsubscribeURL) {
+										A.io.request(
+											unsubscribeURL,
+											{
+												after: {
+													success: function() {
+														var responseData = this.get('responseData');
+
+														if (responseData.success) {
+															currentRow.loadingmask.hide();
+
+															instance.render();
+														}
+														else {
+															currentRow.loadingmask.hide();
+
+															instance.render();
+
+															var notificationsNode = notificationsContainer.one(instance._notificationsNode);
+
+															notificationsContainer.insertBefore('<div class="alert alert-error">' + Liferay.Language.get('there-was-an-unexpected-error.-please-refresh-the-current-page') + '</div>', notificationsNode);
+														}
+													}
+												},
+												dataType: 'JSON'
+											}
+										);
+									}
+								},
+								'.user-notification .unsubscribe'
+							);
+
+							notificationsNode.delegate(
+								'click',
+								function(event) {
+									var currentTarget = event.currentTarget;
+
+									var iconMenu = currentTarget.ancestor('.lfr-icon-menu');
+
+									iconMenu.addClass('open');
+
+									if (iconMenu.hasClass('open')) {
+										currentTarget.on(
+											'clickoutside',
+											function(event) {
+												currentTarget.ancestor().removeClass('open');
+											}
+										);
+									}
+								},
+								'.user-notification .dropdown-toggle'
+							);
+						}
+					},
+
 					_bindMarkAllAsRead: function() {
 						var instance = this;
 
@@ -677,6 +755,8 @@ AUI.add(
 					_bindUI: function() {
 						var instance = this;
 
+						instance._bindIconMenu();
+
 						instance._bindMarkAllAsRead();
 
 						instance._bindMarkAsRead();
@@ -705,7 +785,7 @@ AUI.add(
 
 									var target = event.target;
 
-									if (target.hasClass('.mark-as-read') || target.ancestor('.mark-as-read') || (target._node.tagName == 'A')) {
+									if (target.hasClass('.mark-as-read') || target.ancestor('.mark-as-read') || (target._node.tagName == 'A') || (target.ancestor()._node.tagName == 'A')) {
 										return;
 									}
 

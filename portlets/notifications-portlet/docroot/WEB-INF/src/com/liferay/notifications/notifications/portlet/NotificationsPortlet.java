@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationFeedEntry;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -32,18 +33,19 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Portlet;
+import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationDeliveryLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.util.ContentUtil;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import java.text.Format;
 
@@ -151,6 +153,9 @@ public class NotificationsPortlet extends MVCPortlet {
 			else if (actionName.equals("setDelivered")) {
 				setDelivered(actionRequest, actionResponse);
 			}
+			else if (actionName.equals("unsubscribe")) {
+				unsubscribe(actionRequest, actionResponse);
+			}
 			else if (actionName.equals("updateUserNotificationDelivery")) {
 				updateUserNotificationDelivery(actionRequest, actionResponse);
 			}
@@ -216,6 +221,39 @@ public class NotificationsPortlet extends MVCPortlet {
 		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
+	public void unsubscribe(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long subscriptionId = ParamUtil.getLong(
+			actionRequest, "subscriptionId");
+		long userNotificationEventId = ParamUtil.getLong(
+			actionRequest, "userNotificationEventId");
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			SubscriptionLocalServiceUtil.deleteSubscription(subscriptionId);
+
+			UserNotificationEvent userNotificationEvent =
+				UserNotificationEventLocalServiceUtil.
+					fetchUserNotificationEvent(userNotificationEventId);
+
+			if (userNotificationEvent != null) {
+				if (!userNotificationEvent.isArchived()) {
+					updateArchived(userNotificationEventId);
+				}
+			}
+
+			jsonObject.put("success", Boolean.TRUE);
+		}
+		catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
+		}
+
+		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
 	public void updateUserNotificationDelivery(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
@@ -237,6 +275,74 @@ public class NotificationsPortlet extends MVCPortlet {
 		catch (Exception e) {
 			jsonObject.put("success", Boolean.FALSE);
 		}
+	}
+
+	protected String getIconMenu(
+			UserNotificationEvent userNotificationEvent,
+			LiferayPortletResponse liferayPortletResponse,
+			ThemeDisplay themeDisplay)
+		throws Exception {
+
+		String markAsReadLI = StringPool.BLANK;
+
+		if (!userNotificationEvent.isArchived()) {
+			markAsReadLI = StringUtil.replace(
+				_MARK_AS_READ_LI, "[$MARK_AS_READ_LABEL$]",
+				LanguageUtil.get(themeDisplay.getLocale(), "mark-as-read"));
+		}
+
+		String unsubscribeLI = StringPool.BLANK;
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+			userNotificationEvent.getPayload());
+
+		long subscriptionId = jsonObject.getLong("subscriptionId");
+
+		if (subscriptionId > 0) {
+			Subscription subscription =
+				SubscriptionLocalServiceUtil.fetchSubscription(subscriptionId);
+
+			if (subscription == null) {
+				subscriptionId = 0;
+			}
+		}
+
+		if (subscriptionId > 0) {
+			PortletURL unsubscribeActionURL =
+				liferayPortletResponse.createActionURL(
+					PortletKeys.NOTIFICATIONS);
+
+			unsubscribeActionURL.setParameter(
+				"subscriptionId", String.valueOf(subscriptionId));
+			unsubscribeActionURL.setParameter(
+				"userNotificationEventId",
+				String.valueOf(
+					userNotificationEvent.getUserNotificationEventId()));
+			unsubscribeActionURL.setWindowState(WindowState.NORMAL);
+			unsubscribeActionURL.setParameter(
+				"javax.portlet.action", "unsubscribe");
+
+			unsubscribeLI = StringUtil.replace(
+				_UNSUBSCRIBE_LI,
+				new String[] {
+					"[$UNSUBSCRIBE_LINK$]", "[$UNSUBSCRIBE_LABEL$]",
+					"[$UNSUBSCRIBE_INFO$]"},
+				new String[] {
+					unsubscribeActionURL.toString(),
+					LanguageUtil.get(themeDisplay.getLocale(), "unsubscribe"),
+					LanguageUtil.get(
+						themeDisplay.getLocale(),
+						"stop-receiving-notifications-from-this-asset")});
+		}
+
+		String listItems = markAsReadLI + unsubscribeLI;
+
+		if (!Validator.isBlank(listItems)) {
+			return StringUtil.replace(
+				_ICON_MENU_DIV, "[$LIST_ITEMS$]", listItems);
+		}
+
+		return StringPool.BLANK;
 	}
 
 	protected void getNotificationsCount(
@@ -398,7 +504,7 @@ public class NotificationsPortlet extends MVCPortlet {
 
 		String actionDiv = StringPool.BLANK;
 		String cssClass = StringPool.BLANK;
-		String markAsReadIcon = StringPool.BLANK;
+		String iconMenu = StringPool.BLANK;
 
 		if (userNotificationEvent.isActionRequired()) {
 			actionURL.setParameter(
@@ -423,11 +529,9 @@ public class NotificationsPortlet extends MVCPortlet {
 			if (userNotificationEvent.isArchived()) {
 				cssClass = "archived";
 			}
-			else {
-				markAsReadIcon = StringUtil.replace(
-					_MARK_AS_READ_ICON, "[$TITLE_MESSAGE$]",
-					LanguageUtil.get(themeDisplay.getLocale(), "mark-as-read"));
-			}
+
+			iconMenu = getIconMenu(
+				userNotificationEvent, liferayPortletResponse, themeDisplay);
 		}
 
 		Portlet portlet =
@@ -462,13 +566,12 @@ public class NotificationsPortlet extends MVCPortlet {
 		return StringUtil.replace(
 			ContentUtil.get(PortletPropsValues.USER_NOTIFICATION_ENTRY),
 			new String[] {
-				"[$ACTION_DIV$]", "[$BODY$]", "[$CSS_CLASS$]",
-				"[$MARK_AS_READ_ICON$]", "[$PORTLET_ICON$]", "[$PORTLET_NAME$]",
-				"[$TIMESTAMP$]", "[$TIMETITLE$]", "[$USER_FULL_NAME$]",
-				"[$USER_PORTRAIT_URL$]"},
+				"[$ACTION_DIV$]", "[$BODY$]", "[$CSS_CLASS$]","[$ICON_MENU$]",
+				"[$PORTLET_ICON$]", "[$PORTLET_NAME$]", "[$TIMESTAMP$]",
+				"[$TIMETITLE$]", "[$USER_FULL_NAME$]", "[$USER_PORTRAIT_URL$]"},
 			new String[] {
 				actionDiv, userNotificationFeedEntry.getBody(), cssClass,
-				markAsReadIcon, portletIcon, portletName,
+				iconMenu, portletIcon, portletName,
 				Time.getRelativeTimeDescription(
 					userNotificationEvent.getTimestamp(),
 					themeDisplay.getLocale(), themeDisplay.getTimeZone()),
@@ -493,12 +596,27 @@ public class NotificationsPortlet extends MVCPortlet {
 		"<div class=\"clearfix user-notification-delete\" data-deleteURL=\"" +
 			"[$DELETE_URL$]\">";
 
+	private static final String _ICON_MENU_DIV =
+		"<div class=\"lfr-icon-menu\"><a class=\"dropdown-toggle " +
+			"max-display-items-15\" href=\"javascript:;\"> " +
+			"<i class=\"caret\"></i></a>" +
+			"<ul class=\"dropdown-menu lfr-menu-list direction-left\">" +
+			"[$LIST_ITEMS$]</ul></div>";
+
 	private static final String _MARK_AS_READ_DIV =
 		"<div class=\"clearfix user-notification-link\" data-href=\"" +
 			"[$LINK$]\" data-markAsReadURL=\"[$MARK_AS_READ_URL$]\">";
 
-	private static final String _MARK_AS_READ_ICON =
-		"<div class=\"mark-as-read\" title=\"[$TITLE_MESSAGE$]\"><i class=\"" +
-			"icon-remove\"></i></div>";
+	private static final String _MARK_AS_READ_LI =
+		"<li><a class=\"taglib-icon mark-as-read\"href=\"javascript:;\">" +
+			"<i class=\"icon-remove\"></i><span class=\"taglib-text-icon\">" +
+			"[$MARK_AS_READ_LABEL$]</span></a></li>";
+
+	private static final String _UNSUBSCRIBE_LI =
+		"<li><a class=\"taglib-icon unsubscribe\" data-unsubscribeURL=\"" +
+			"[$UNSUBSCRIBE_LINK$]\" href=\"javascript:;\">" +
+			"<i class=\"icon-rss\"></i><span class=\"taglib-text-icon\">" +
+			"[$UNSUBSCRIBE_LABEL$]</span><div class=\"unsubscribe-info\">" +
+			"[$UNSUBSCRIBE_INFO$]</div></a></li>";
 
 }
