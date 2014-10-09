@@ -306,6 +306,24 @@ public class MicroblogsEntryLocalServiceImpl
 		return microblogsEntry;
 	}
 
+	protected static long getSubscriptionId(
+		long userId, MicroblogsEntry microblogsEntry) {
+
+		try {
+			Subscription subscription =
+				SubscriptionLocalServiceUtil.getSubscription(
+					microblogsEntry.getCompanyId(), userId,
+					MicroblogsEntry.class.getName(),
+					microblogsEntry.getReceiverMicroblogsEntryId());
+
+			return subscription.getSubscriptionId();
+		}
+		catch (PortalException pe) {
+		}
+
+		return 0;
+	}
+
 	protected List<Long> getReceiverUserIds(MicroblogsEntry microblogsEntry) {
 		List<Long> receiverUserIds = new ArrayList<Long>();
 
@@ -330,12 +348,6 @@ public class MicroblogsEntryLocalServiceImpl
 	protected void sendNotificationEvent(
 			MicroblogsEntry microblogsEntry, ServiceContext serviceContext)
 		throws PortalException {
-
-		if (microblogsEntry.getReceiverUserId() ==
-				microblogsEntry.getUserId()) {
-
-			return;
-		}
 
 		JSONObject notificationEventJSONObject =
 			JSONFactoryUtil.createJSONObject();
@@ -374,7 +386,7 @@ public class MicroblogsEntryLocalServiceImpl
 		MessageBusUtil.sendMessage(
 			DestinationNames.ASYNC_SERVICE,
 			new NotificationProcessCallable(
-				receiverUserIds, notificationEventJSONObject));
+				receiverUserIds, microblogsEntry, notificationEventJSONObject));
 	}
 
 	protected void validate(int type, long receiverMicroblogsEntryId)
@@ -403,10 +415,11 @@ public class MicroblogsEntryLocalServiceImpl
 		implements ProcessCallable<Serializable> {
 
 		public NotificationProcessCallable(
-			List<Long> receiverUserIds,
+			List<Long> receiverUserIds, MicroblogsEntry microblogsEntry,
 			JSONObject notificationEventJSONObject) {
 
 			_receiverUserIds = receiverUserIds;
+			_microblogsEntry = microblogsEntry;
 			_notificationEventJSONObject = notificationEventJSONObject;
 		}
 
@@ -414,7 +427,8 @@ public class MicroblogsEntryLocalServiceImpl
 		public Serializable call() throws ProcessException {
 			try {
 				sendUserNotifications(
-					_receiverUserIds, _notificationEventJSONObject);
+					_receiverUserIds, _microblogsEntry,
+					_notificationEventJSONObject);
 			}
 			catch (Exception e) {
 				throw new ProcessException(e);
@@ -424,7 +438,7 @@ public class MicroblogsEntryLocalServiceImpl
 		}
 
 		protected void sendUserNotifications(
-				List<Long> receiverUserIds,
+				List<Long> receiverUserIds, MicroblogsEntry microblogsEntry,
 				JSONObject notificationEventJSONObject)
 			throws PortalException {
 
@@ -441,6 +455,12 @@ public class MicroblogsEntryLocalServiceImpl
 				}
 
 				for (int j = start; j < end; j++) {
+					long subscriptionId = getSubscriptionId(
+						receiverUserIds.get(j), microblogsEntry);
+
+					notificationEventJSONObject.put(
+						"subscriptionId", subscriptionId);
+
 					if (UserNotificationManagerUtil.isDeliver(
 							receiverUserIds.get(j), PortletKeys.MICROBLOGS, 0,
 						MicroblogsEntryConstants.TYPE_REPLY,
@@ -470,6 +490,7 @@ public class MicroblogsEntryLocalServiceImpl
 
 		private static final long serialVersionUID = 1L;
 
+		private MicroblogsEntry _microblogsEntry;
 		private JSONObject _notificationEventJSONObject;
 		private List<Long> _receiverUserIds;
 
