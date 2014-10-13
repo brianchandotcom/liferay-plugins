@@ -18,6 +18,8 @@
 package com.liferay.microblogs.util;
 
 import com.liferay.microblogs.model.MicroblogsEntry;
+import com.liferay.microblogs.model.MicroblogsEntryConstants;
+import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -30,9 +32,11 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -40,6 +44,7 @@ import com.liferay.portal.util.comparator.UserFirstNameComparator;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.social.model.SocialRelationConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,6 +58,22 @@ import javax.portlet.WindowStateException;
  * @author Jonathan Lee
  */
 public class MicroblogsUtil {
+
+	public static List<String> getHashtags(String content) {
+		List<String> hashtags = new ArrayList<String>();
+
+		Matcher matcher = _hashtagPattern.matcher(content);
+
+		while (matcher.find()) {
+			String hashtag = matcher.group();
+
+			hashtag = hashtag.substring(1);
+
+			hashtags.add(hashtag);
+		}
+
+		return hashtags;
+	}
 
 	public static JSONArray getJSONRecipients(
 			long userId, ThemeDisplay themeDisplay)
@@ -86,6 +107,47 @@ public class MicroblogsUtil {
 		return jsonArray;
 	}
 
+	public static long getParentMicroblogsEntryId(
+		MicroblogsEntry microblogsEntry) {
+
+		if (microblogsEntry.getType() == MicroblogsEntryConstants.TYPE_REPOST) {
+			return microblogsEntry.getMicroblogsEntryId();
+		}
+
+		return microblogsEntry.getReceiverMicroblogsEntryId();
+	}
+
+	public static long getParentMicroblogsUserId(
+		MicroblogsEntry microblogsEntry) {
+
+		if (microblogsEntry.getType() == MicroblogsEntryConstants.TYPE_REPOST) {
+			return microblogsEntry.getUserId();
+		}
+
+		return microblogsEntry.getReceiverUserId();
+	}
+
+	public static List<Long> getSubscriberUserIds(
+		MicroblogsEntry microblogsEntry) {
+
+		List<Long> receiverUserIds = new ArrayList<Long>();
+
+		List<Subscription> subscriptions =
+			SubscriptionLocalServiceUtil.getSubscriptions(
+				microblogsEntry.getCompanyId(), MicroblogsEntry.class.getName(),
+				MicroblogsUtil.getParentMicroblogsEntryId(microblogsEntry));
+
+		for (Subscription subscription : subscriptions) {
+			if (microblogsEntry.getUserId() == subscription.getUserId()) {
+				continue;
+			}
+
+			receiverUserIds.add(subscription.getUserId());
+		}
+
+		return receiverUserIds;
+	}
+
 	public static String getTaggedContent(
 			MicroblogsEntry microblogsEntry, ServiceContext serviceContext)
 		throws PortalException {
@@ -104,6 +166,84 @@ public class MicroblogsUtil {
 		return content;
 	}
 
+	public static List<String> getTaggedUsersScreenNames(String content) {
+		List<String> screenNames = new ArrayList<String>();
+
+		Matcher matcher = _userTagPattern.matcher(content);
+
+		while (matcher.find()) {
+			String screenName = matcher.group();
+
+			screenName = screenName.replace("[@", StringPool.BLANK);
+			screenName = screenName.replace("]", StringPool.BLANK);
+
+			screenNames.add(screenName);
+		}
+
+		return screenNames;
+	}
+
+	public static boolean hasReplied(long parentMicroblogsEntryId, long userId)
+		throws PortalException {
+
+		List<MicroblogsEntry> microblogsEntries =
+			new ArrayList<MicroblogsEntry>();
+
+		microblogsEntries.addAll(
+			MicroblogsEntryLocalServiceUtil.
+				getReceiverMicroblogsEntryMicroblogsEntries(
+					MicroblogsEntryConstants.TYPE_REPLY,
+					parentMicroblogsEntryId, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS));
+
+		microblogsEntries.add(
+			MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(
+				parentMicroblogsEntryId));
+
+		for (MicroblogsEntry microblogsEntry : microblogsEntries) {
+			if (microblogsEntry.getUserId() == userId) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isTaggedUser(
+			long parentMicroblogsEntryId, long userId)
+		throws PortalException {
+
+		List<MicroblogsEntry> microblogsEntries =
+			new ArrayList<MicroblogsEntry>();
+
+		microblogsEntries.addAll(
+			MicroblogsEntryLocalServiceUtil.
+				getReceiverMicroblogsEntryMicroblogsEntries(
+					MicroblogsEntryConstants.TYPE_REPLY,
+					parentMicroblogsEntryId, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS));
+
+		microblogsEntries.add(
+			MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(
+				parentMicroblogsEntryId));
+
+		for (MicroblogsEntry microblogsEntry : microblogsEntries) {
+			List<String> userTagNames = getTaggedUsersScreenNames(
+				microblogsEntry.getContent());
+
+			for (String userTagName : userTagNames) {
+				if (UserLocalServiceUtil.getUserIdByScreenName(
+						microblogsEntry.getCompanyId(), userTagName) ==
+							userId) {
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public static String replaceTags(
 			String content, ServiceContext serviceContext)
 		throws PortalException {
@@ -112,7 +252,7 @@ public class MicroblogsUtil {
 
 		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
 
-		Matcher matcher = _pattern1.matcher(content);
+		Matcher matcher = _hashtagPattern.matcher(content);
 
 		while (matcher.find()) {
 			String result = matcher.group();
@@ -182,7 +322,7 @@ public class MicroblogsUtil {
 			String content, ServiceContext serviceContext)
 		throws PortalException {
 
-		Matcher matcher = _pattern2.matcher(content);
+		Matcher matcher = _userTagPattern.matcher(content);
 
 		while (matcher.find()) {
 			String result = matcher.group();
@@ -225,7 +365,7 @@ public class MicroblogsUtil {
 		return content;
 	}
 
-	private static Pattern _pattern1 = Pattern.compile("\\#[a-zA-Z]\\w*");
-	private static Pattern _pattern2 = Pattern.compile("\\[\\@\\S*\\]");
+	private static Pattern _hashtagPattern = Pattern.compile("\\#[a-zA-Z]\\w*");
+	private static Pattern _userTagPattern = Pattern.compile("\\[\\@\\S*\\]");
 
 }

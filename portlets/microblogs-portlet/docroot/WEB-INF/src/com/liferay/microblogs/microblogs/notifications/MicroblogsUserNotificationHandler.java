@@ -22,6 +22,7 @@ import com.liferay.microblogs.model.MicroblogsEntryConstants;
 import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 import com.liferay.microblogs.util.MicroblogsUtil;
 import com.liferay.microblogs.util.PortletKeys;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.notifications.BaseUserNotificationHandler;
@@ -70,18 +71,40 @@ public class MicroblogsUserNotificationHandler
 			return null;
 		}
 
+		String title = getBodyTitle(microblogsEntry, serviceContext);
+
+		String body = MicroblogsUtil.getTaggedContent(
+			StringUtil.shorten(microblogsEntry.getContent(), 50),
+			serviceContext);
+
+		return StringUtil.replace(
+			getBodyTemplate(), new String[] {"[$BODY$]", "[$TITLE$]"},
+			new String[] {body, title});
+	}
+
+	protected String getBodyTitle(
+			MicroblogsEntry microblogsEntry, ServiceContext serviceContext)
+		throws PortalException {
+
 		String title = StringPool.BLANK;
 
+		String userFullName = HtmlUtil.escape(
+			PortalUtil.getUserName(
+				microblogsEntry.getUserId(), StringPool.BLANK));
+
+		long parentMicroblogsEntryId =
+			MicroblogsUtil.getParentMicroblogsEntryId(microblogsEntry);
+
 		if (microblogsEntry.getType() == MicroblogsEntryConstants.TYPE_REPLY) {
-			String userFullName = HtmlUtil.escape(
-				PortalUtil.getUserName(
-					microblogsEntry.getUserId(), StringPool.BLANK));
-
-			title = serviceContext.translate(
-				"x-commented-on-your-post", userFullName);
-
-			if (microblogsEntry.getReceiverUserId() !=
+			if (MicroblogsUtil.getParentMicroblogsUserId(microblogsEntry) ==
 					serviceContext.getUserId()) {
+
+				title = serviceContext.translate(
+					"x-commented-on-your-post", userFullName);
+			}
+			else if (MicroblogsUtil.hasReplied(
+						parentMicroblogsEntryId,
+				serviceContext.getUserId())) {
 
 				User receiverUser = UserLocalServiceUtil.fetchUser(
 					microblogsEntry.getReceiverUserId());
@@ -92,15 +115,22 @@ public class MicroblogsUserNotificationHandler
 						receiverUser.getFullName());
 				}
 			}
+			else if (MicroblogsUtil.isTaggedUser(
+						parentMicroblogsEntryId,
+				serviceContext.getUserId())) {
+
+				title = serviceContext.translate(
+					"x-commented-on-a-post-you-are-tagged-in", userFullName);
+			}
+		}
+		else if (MicroblogsUtil.isTaggedUser(
+					parentMicroblogsEntryId, serviceContext.getUserId())) {
+
+			title = serviceContext.translate(
+				"x-tagged-you-in-a-post", userFullName);
 		}
 
-		String body = MicroblogsUtil.getTaggedContent(
-			StringUtil.shorten(microblogsEntry.getContent(), 50),
-			serviceContext);
-
-		return StringUtil.replace(
-			getBodyTemplate(), new String[] {"[$BODY$]", "[$TITLE$]"},
-			new String[] {body, title});
+		return title;
 	}
 
 	@Override
