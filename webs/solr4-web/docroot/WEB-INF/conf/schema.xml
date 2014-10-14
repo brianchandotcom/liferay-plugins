@@ -455,10 +455,12 @@
 		<field indexed="true" name="assetVocabularyId" stored="true" type="string" />
 		<field indexed="true" multiValued="true" name="assetVocabularyIds" stored="true" type="string" />
 		<field indexed="true" name="companyId" stored="true" type="long" />
-		<field indexed="true" name="comments" stored="true" termPositions="true" termVectors="true" type="text" />
+		<field indexed="true" name="comments" stored="true" type="text" />
 		<field indexed="true" name="content" stored="true" termPositions="true" termVectors="true" type="text" />
 		<field indexed="true" name="description" stored="true" termPositions="true" termVectors="true" type="text" />
 		<field indexed="true" name="createDate" stored="true" type="string" />
+		<field indexed="true" name="ddmContent" stored="true" termPositions="true" termVectors="true" type="text" />
+		<field indexed="true" name="endTime" stored="true" type="long" />
 		<field indexed="true" name="entryClassPK" stored="true" type="string" />
 		<field indexed="true" name="entryClassName" stored="true" type="string" />
 		<field indexed="true" name="expirationDate" stored="true" type="string" />
@@ -469,6 +471,7 @@
 		<field indexed="true" name="keywordSearch" omitNorms="true" omitTermFreqAndPositions="true" stored="true" type="textAuto" />
 		<field indexed="true" name="languageId" stored="true" type="string" />
 		<field indexed="true" name="leftOrganizationId" stored="true" type="slong" />
+		<field indexed="true" name="location" stored="true" type="text" />
 		<field indexed="true" name="modified" stored="true" type="string" />
 		<field indexed="true" name="nodeId" stored="true" type="string" />
 		<field indexed="true" name="parentCategoryId" stored="true" type="string" />
@@ -477,22 +480,27 @@
 		<field indexed="true" name="portletId" stored="true" type="string" />
 		<field indexed="true" name="properties" stored="true" type="string" />
 		<field indexed="true" name="publishDate" stored="true" type="string" />
+		<field indexed="true" name="recordSetId" stored="true" type="string" />
 		<field indexed="true" name="removedDate" stored="true" type="string" />
 		<field indexed="true" name="removedByUser" stored="true" type="string" />
 		<field indexed="true" name="rightOrganizationId" stored="true" type="slong" />
 		<field indexed="true"  multiValued="true" name="roleId" stored="true" type="string" />
+		<field indexed="true"  multiValued="true" name="roleIds" stored="true" type="string" />
 		<field indexed="true" name="rootEntryClassName" stored="true" type="string" />
 		<field indexed="true" name="rootEntryClassPK" stored="true" type="string" />
 		<field indexed="true" multiValued="true" name="scopeGroupId" stored="true" type="string" />
 		<field indexed="true" name="spellCheckWeight" stored="true" type="string" />
 		<field indexed="true" multiValued="true" name="spellCheckWord" stored="true" type="textSpell" />
-		<field indexed="true" name="subtitle" stored="true" termPositions="true" termVectors="true" type="text" />
+		<field indexed="true" multiValued="true" name="street" stored="true" type="string" />
+		<field indexed="true" name="subtitle" stored="true" type="text" />
 		<field indexed="true" name="status" stored="true" type="string" />
+		<field indexed="true" name="startTime" stored="true" type="long" />
 		<field indexed="true" name="title" stored="true" termPositions="true" termVectors="true" type="text" />
 		<field indexed="true" name="treePath" stored="true" type="string" />
 		<field indexed="true" name="type" stored="true" type="string" />
 		<field indexed="true" name="uid" stored="true" type="string" />
 		<field indexed="true" name="url" stored="true" type="string" />
+		<field indexed="true" name="userGroupId" stored="true" type="string" />
 		<field indexed="true" name="userId" stored="true" type="string" />
 		<field indexed="true" name="userName" stored="true" type="string" />
 		<field indexed="true" name="version" stored="true" type="string" />
@@ -595,7 +603,7 @@
 		This must be the last entry since the fields element is an ordered set.
 		-->
 
-		<dynamicField indexed="true" name="*" type="string" />
+		<dynamicField indexed="true" multiValued="true" name="*" type="string" />
 	</fields>
 	<uniqueKey>uid</uniqueKey>
 	<defaultSearchField>content</defaultSearchField>
