@@ -660,6 +660,9 @@ input, textarea {
 
 	.activity-item {
 		border-bottom: 1px solid $defaultBorderColor;
+
+		@include hashtag;
+
 		line-height: 1.5em;
 		padding: 1em;
 	}
@@ -1552,15 +1555,7 @@ input, textarea {
 /* ---------- Portlet: notifications ---------- */
 
 .dockbar-user-notifications, .notifications-portlet {
-	.hashtag {
-		color: #999;
-	}
-
-	.hashtag-link {
-		&, &:active, &:hover {
-			color: inherit;
-		}
-	}
+	@include hashtag;
 
 	.non-actionable .user-notification {
 		&, &.archived {
