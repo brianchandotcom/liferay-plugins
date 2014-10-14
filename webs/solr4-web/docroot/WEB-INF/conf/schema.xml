@@ -598,6 +598,7 @@
 		<dynamicField indexed="true" name="*_zh_HK" stored="true" termPositions="true" termOffsets="true" termVectors="true" type="text_cjk" />
 		<dynamicField indexed="true" name="*_zh_SG" stored="true" termPositions="true" termOffsets="true" termVectors="true" type="text_cjk" />
 		<dynamicField indexed="true" name="*_zh_TW" stored="true" termPositions="true" termOffsets="true" termVectors="true" type="text_cjk" />
+		<dynamicField indexed="true" name="ddm*" stored="true" type="text" />
 
 		<!--
 		This must be the last entry since the fields element is an ordered set.
