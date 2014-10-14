@@ -495,7 +495,7 @@
 		<field indexed="true" name="status" stored="true" type="string" />
 		<field indexed="true" name="startTime" stored="true" type="long" />
 		<field indexed="true" name="title" stored="true" termPositions="true" termVectors="true" type="text" />
-		<field indexed="true" name="treePath" stored="true" type="string" />
+		<field indexed="true" multiValued="true" name="treePath" stored="true" type="string" />
 		<field indexed="true" name="type" stored="true" type="string" />
 		<field indexed="true" name="uid" stored="true" type="string" />
 		<field indexed="true" name="url" stored="true" type="string" />
