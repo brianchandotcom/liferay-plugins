@@ -23,14 +23,17 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -44,7 +47,6 @@ import com.liferay.portlet.expando.model.ExpandoRow;
 import com.liferay.portlet.expando.service.ExpandoRowLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoTableLocalServiceUtil;
 import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.webform.util.PortletPropsValues;
 import com.liferay.webform.util.WebFormUtil;
 
@@ -268,7 +270,7 @@ public class WebFormPortlet extends MVCPortlet {
 			"databaseTableName", StringPool.BLANK);
 		String title = preferences.getValue("title", "no-title");
 
-		StringBuilder sb = new StringBuilder();
+		StringBundler sb = new StringBundler();
 
 		List<String> fieldLabels = new ArrayList<String>();
 
@@ -285,13 +287,13 @@ public class WebFormPortlet extends MVCPortlet {
 
 			fieldLabels.add(fieldLabel);
 
-			sb.append("\"");
-			sb.append(localizedfieldLabel.replaceAll("\"", "\\\""));
-			sb.append("\";");
+			sb.append(getCSVFormattedValue(localizedfieldLabel));
+			sb.append(PortletPropsValues.CSV_SEPARATOR);
 		}
 
-		sb.deleteCharAt(sb.length() - 1);
-		sb.append("\n");
+		sb.setIndex(sb.index() - 1);
+
+		sb.append(CharPool.NEW_LINE);
 
 		if (Validator.isNotNull(databaseTableName)) {
 			List<ExpandoRow> rows = ExpandoRowLocalServiceUtil.getRows(
@@ -305,15 +307,13 @@ public class WebFormPortlet extends MVCPortlet {
 						WebFormUtil.class.getName(), databaseTableName,
 						fieldName, row.getClassPK(), StringPool.BLANK);
 
-					data = data.replaceAll("\"", "\\\"");
-
-					sb.append("\"");
-					sb.append(data);
-					sb.append("\";");
+					sb.append(getCSVFormattedValue(data));
+					sb.append(PortletPropsValues.CSV_SEPARATOR);
 				}
 
-				sb.deleteCharAt(sb.length() - 1);
-				sb.append("\n");
+				sb.setIndex(sb.index() - 1);
+
+				sb.append(CharPool.NEW_LINE);
 			}
 		}
 
@@ -325,8 +325,19 @@ public class WebFormPortlet extends MVCPortlet {
 			resourceRequest, resourceResponse, fileName, bytes, contentType);
 	}
 
+	protected String getCSVFormattedValue(String value) {
+		StringBundler sb = new StringBundler(3);
+
+		sb.append(CharPool.QUOTE);
+		sb.append(
+			StringUtil.replace(value, CharPool.QUOTE, StringPool.DOUBLE_QUOTE));
+		sb.append(CharPool.QUOTE);
+
+		return sb.toString();
+	}
+
 	protected String getMailBody(Map<String, String> fieldsMap) {
-		StringBuilder sb = new StringBuilder();
+		StringBundler sb = new StringBundler();
 
 		for (String fieldLabel : fieldsMap.keySet()) {
 			String fieldValue = fieldsMap.get(fieldLabel);
@@ -334,7 +345,7 @@ public class WebFormPortlet extends MVCPortlet {
 			sb.append(fieldLabel);
 			sb.append(" : ");
 			sb.append(fieldValue);
-			sb.append("\n");
+			sb.append(CharPool.NEW_LINE);
 		}
 
 		return sb.toString();
@@ -371,24 +382,25 @@ public class WebFormPortlet extends MVCPortlet {
 
 	protected boolean saveFile(Map<String, String> fieldsMap, String fileName) {
 
-		// Save the file as a standard Excel CSV format. Use ; as a delimiter,
-		// quote each entry with double quotes, and escape double quotes in
-		// values a two double quotes.
+		// Save the file as a CSV format. Use delimiter from property
+		// CSV_SEPARATOR, quote each entry with double quotes, and escape
+		// double quotes in values a two double quotes.
 
-		StringBuilder sb = new StringBuilder();
+		StringBundler sb = new StringBundler();
 
 		for (String fieldLabel : fieldsMap.keySet()) {
 			String fieldValue = fieldsMap.get(fieldLabel);
 
-			sb.append("\"");
-			sb.append(StringUtil.replace(fieldValue, "\"", "\"\""));
-			sb.append("\";");
+			sb.append(getCSVFormattedValue(fieldValue));
+			sb.append(PortletPropsValues.CSV_SEPARATOR);
 		}
 
-		String s = sb.substring(0, sb.length() - 1) + "\n";
+		sb.setIndex(sb.index() - 1);
+
+		sb.append(CharPool.NEW_LINE);
 
 		try {
-			FileUtil.write(fileName, s, false, true);
+			FileUtil.write(fileName, sb.toString(), false, true);
 
 			return true;
 		}
