@@ -37,9 +37,9 @@ String[] sections = AdminUtil.unescapeSections(BeanPropertiesUtil.getString(kbAr
 
 <liferay-portlet:actionURL name="updateKBArticle" var="updateKBArticleURL" />
 
-<aui:form action="<%= updateKBArticleURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "updateKBArticle();" %>'>
+<aui:form action="<%= updateKBArticleURL %>" method="post" name="fm">
 	<aui:input name="mvcPath" type="hidden" value='<%= templatePath + "edit_article.jsp" %>' />
-	<aui:input name="<%= Constants.CMD %>" type="hidden" />
+	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (kbArticle == null) ? Constants.ADD : Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 	<aui:input name="resourcePrimKey" type="hidden" value="<%= String.valueOf(resourcePrimKey) %>" />
 	<aui:input name="parentResourceClassNameId" type="hidden" value="<%= parentResourceClassNameId %>" />
@@ -196,7 +196,7 @@ String[] sections = AdminUtil.unescapeSections(BeanPropertiesUtil.getString(kbAr
 
 		<aui:button-row cssClass="kb-submit-buttons">
 			<c:if test="<%= (kbArticle == null) || !kbArticle.isPending() %>">
-				<aui:button onClick='<%= renderResponse.getNamespace() + "publishKBArticle();" %>' type="submit" value='<%= WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, KBArticle.class.getName()) ? "submit-for-publication" : "publish" %>' />
+				<aui:button name="publish" type="submit" value='<%= WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(themeDisplay.getCompanyId(), scopeGroupId, KBArticle.class.getName()) ? "submit-for-publication" : "publish" %>' />
 			</c:if>
 
 			<aui:button primary="<%= false %>" type="submit" value='<%= (kbArticle == null) || kbArticle.isApproved() || kbArticle.isDraft() ? "save-as-draft" : "save" %>' />
@@ -205,6 +205,12 @@ String[] sections = AdminUtil.unescapeSections(BeanPropertiesUtil.getString(kbAr
 		</aui:button-row>
 	</aui:fieldset>
 </aui:form>
+
+<aui:script>
+	function <portlet:namespace />initEditor() {
+		return '<%= UnicodeFormatter.toString(content) %>';
+	}
+</aui:script>
 
 <aui:script use="aui-base,event-input">
 	var A = AUI();
@@ -242,60 +248,49 @@ String[] sections = AdminUtil.unescapeSections(BeanPropertiesUtil.getString(kbAr
 		}
 	);
 
-	Liferay.provide(
-		window,
-		'<portlet:namespace />initEditor',
+	var form = A.one('#<portlet:namespace />fm');
+	var publishButton = form.one('#<portlet:namespace />publish');
+
+	publishButton.on(
+		'click',
 		function() {
-			return '<%= UnicodeFormatter.toString(content) %>';
+			var workflowActionInput = form.one('#<portlet:namespace />workflowAction');
+
+			workflowActionInput.val('<%= WorkflowConstants.ACTION_PUBLISH %>');
 		}
 	);
 
-	Liferay.provide(
-		window,
-		'<portlet:namespace />publishKBArticle',
+	form.on(
+		'submit',
 		function() {
-			document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = '<%= WorkflowConstants.ACTION_PUBLISH %>';
-			<portlet:namespace />updateKBArticle();
+			var contentInput = form.one('#<portlet:namespace />content');
+
+			contentInput.val(<portlet:namespace />editor.getHTML());
+
+			updateMultipleKBArticleAttachments();
 		}
 	);
 
-	Liferay.provide(
-		window,
-		'<portlet:namespace />updateKBArticle',
-		function() {
-			document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (kbArticle == null) ? Constants.ADD : Constants.UPDATE %>';
-			document.<portlet:namespace />fm.<portlet:namespace />content.value = window.<portlet:namespace />editor.getHTML();
+	var updateMultipleKBArticleAttachments = function() {
+		var Lang = A.Lang;
 
-			<portlet:namespace />updateMultipleKBArticleAttachments();
+		var selectedFileNameContainer = A.one('#<portlet:namespace />selectedFileNameContainer');
 
-			submitForm(document.<portlet:namespace />fm);
+		var inputTpl = '<input id="<portlet:namespace />selectedFileName{0}" name="<portlet:namespace />selectedFileName" type="hidden" value="{1}" />';
+
+		var values = A.all('input[name=<portlet:namespace />selectUploadedFile]:checked').val();
+
+		var buffer = [];
+		var dataBuffer = [];
+		var length = values.length;
+
+		for (var i = 0; i < length; i++) {
+			dataBuffer[0] = i;
+			dataBuffer[1] = values[i];
+
+			buffer[i] = Lang.sub(inputTpl, dataBuffer);
 		}
-	);
 
-	Liferay.provide(
-		window,
-		'<portlet:namespace />updateMultipleKBArticleAttachments',
-		function() {
-			var Lang = A.Lang;
-
-			var selectedFileNameContainer = A.one('#<portlet:namespace />selectedFileNameContainer');
-
-			var inputTpl = '<input id="<portlet:namespace />selectedFileName{0}" name="<portlet:namespace />selectedFileName" type="hidden" value="{1}" />';
-
-			var values = A.all('input[name=<portlet:namespace />selectUploadedFile]:checked').val();
-
-			var buffer = [];
-			var dataBuffer = [];
-			var length = values.length;
-
-			for (var i = 0; i < length; i++) {
-				dataBuffer[0] = i;
-				dataBuffer[1] = values[i];
-
-				buffer[i] = Lang.sub(inputTpl, dataBuffer);
-			}
-
-			selectedFileNameContainer.html(buffer.join(''));
-		}
-	);
+		selectedFileNameContainer.html(buffer.join(''));
+	};
 </aui:script>

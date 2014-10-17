@@ -108,23 +108,29 @@ Ticket ticket = TicketLocalServiceUtil.addTicket(user.getCompanyId(), User.class
 	);
 </aui:script>
 
-<aui:script use="aui-base">
-	var removeFileEntryIds = [];
-
+<aui:script>
 	Liferay.provide(
 		window,
 		'<portlet:namespace />deleteFileEntry',
 		function(fileEntryId) {
+			var A = AUI();
+
 			var removeFileEntryIdsInput = A.one('#<portlet:namespace />removeFileEntryIds');
 
-			removeFileEntryIds.push(fileEntryId);
+			var fileEntries = removeFileEntryIdsInput.val();
 
-			removeFileEntryIdsInput.val(removeFileEntryIds.join());
+			if (fileEntries.length) {
+				fileEntries += ',';
+			}
+
+			fileEntries += fileEntryId;
+
+			removeFileEntryIdsInput.val(fileEntries);
 
 			var fileEntryIdWrapper = A.one('#<portlet:namespace />fileEntryIdWrapper' + fileEntryId);
 
 			fileEntryIdWrapper.hide();
 		},
-		[]
+		['aui-base']
 	);
 </aui:script>
