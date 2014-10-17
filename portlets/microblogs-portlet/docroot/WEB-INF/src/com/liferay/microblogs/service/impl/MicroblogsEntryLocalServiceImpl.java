@@ -561,9 +561,19 @@ public class MicroblogsEntryLocalServiceImpl
 					notificationEventJSONObject.put(
 						"subscriptionId", subscriptionId);
 
+					int notificationType = MicroblogsUtil.getNotificationType(
+						microblogsEntry, receiverUserIds.get(j));
+
+					if (notificationType == 0) {
+						continue;
+					}
+
+					notificationEventJSONObject.put(
+						"notificationType", notificationType);
+
 					if (UserNotificationManagerUtil.isDeliver(
 							receiverUserIds.get(j), PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY,
+						notificationType,
 						UserNotificationDeliveryConstants.TYPE_PUSH)) {
 
 						UserNotificationEventLocalServiceUtil.
@@ -575,7 +585,7 @@ public class MicroblogsEntryLocalServiceImpl
 
 					if (UserNotificationManagerUtil.isDeliver(
 							receiverUserIds.get(j), PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY,
+						notificationType,
 						UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
 
 						UserNotificationEventLocalServiceUtil.
