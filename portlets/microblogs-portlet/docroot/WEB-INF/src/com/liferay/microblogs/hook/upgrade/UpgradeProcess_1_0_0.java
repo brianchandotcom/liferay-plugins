@@ -16,6 +16,7 @@
  */
 package com.liferay.microblogs.hook.upgrade;
 
+import com.liferay.microblogs.hook.upgrade.v1_0_0.UpgradeUserNotificationEvent;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
