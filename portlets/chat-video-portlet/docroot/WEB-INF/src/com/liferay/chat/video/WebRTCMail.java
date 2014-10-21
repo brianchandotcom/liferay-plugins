@@ -17,7 +17,8 @@ package com.liferay.chat.video;
 import com.liferay.portal.kernel.json.JSONObject;
 
 /**
- * Represents abstract WebRTC mail, which is sent from a source WebRTC client to
+ * Represents <a href="http://en.wikipedia.org/wiki/WebRTC">Web Real-Time
+ * Communication</a> (WebRTC) mail, which is sent from a source WebRTC client to
  * a destination WebRTC client.
  *
  * @author Philippe Proulx

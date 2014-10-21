@@ -15,9 +15,10 @@
 package com.liferay.chat.video;
 
 /**
- * Represents the WebRTC connection between two WebRTC clients. It is owned by
+ * Represents a <a href="http://en.wikipedia.org/wiki/WebRTC">Web Real-Time
+ * Communication</a> (WebRTC) connection between two clients. It is owned by
  * both connected clients, but still holds a reference to the original (source)
- * caller.
+ * caller. The connections are thread-safe.
  *
  * @author Philippe Proulx
  */
