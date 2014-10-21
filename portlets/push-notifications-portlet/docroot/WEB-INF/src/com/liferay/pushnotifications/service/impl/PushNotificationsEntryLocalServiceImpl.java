@@ -21,11 +21,13 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.model.User;
 import com.liferay.pushnotifications.model.PushNotificationsDevice;
+import com.liferay.pushnotifications.model.PushNotificationsEntry;
 import com.liferay.pushnotifications.sender.PushNotificationsSender;
 import com.liferay.pushnotifications.service.base.PushNotificationsEntryLocalServiceBaseImpl;
 import com.liferay.pushnotifications.util.PushNotificationsConstants;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +37,26 @@ import java.util.Map;
 @ProviderType
 public class PushNotificationsEntryLocalServiceImpl
 	extends PushNotificationsEntryLocalServiceBaseImpl {
+
+	@Override
+	public PushNotificationsEntry addPushNotificationsEntry(
+		long userId, long parentEntryId, JSONObject payload) {
+
+		long pushNotificationsEntryId = counterLocalService.increment();
+
+		PushNotificationsEntry pushNotificationsEntry =
+			pushNotificationsEntryPersistence.create(pushNotificationsEntryId);
+
+		pushNotificationsEntry.setUserId(userId);
+		pushNotificationsEntry.setCreateDate(new Date());
+		pushNotificationsEntry.setParentEntryId(parentEntryId);
+
+		pushNotificationsEntry.setPayload(payload.toString());
+
+		pushNotificationsEntryPersistence.update(pushNotificationsEntry);
+
+		return pushNotificationsEntry;
+	}
 
 	@Override
 	public void sendPushNotification(JSONObject jsonObject, int start, int end)
@@ -48,7 +70,14 @@ public class PushNotificationsEntryLocalServiceImpl
 			long toUserId, JSONObject jsonObject, int start, int end)
 		throws PortalException {
 
-		addFromUserDetails(jsonObject);
+		long fromUserId = addFromUserDetails(jsonObject);
+		JSONObject payload = jsonObject.getJSONObject(
+			PushNotificationsConstants.PAYLOAD);
+		long parentEntryId = jsonObject.getLong(
+			PushNotificationsConstants.PARENT_ENTRY_ID,
+			PushNotificationsConstants.DEFAULT_PARENT_ENTRY_ID);
+
+		addPushNotificationsEntry(fromUserId, parentEntryId, payload);
 
 		for (Map.Entry<String, PushNotificationsSender> entry :
 				_pushNotificationsSenders.entrySet()) {
@@ -83,7 +112,7 @@ public class PushNotificationsEntryLocalServiceImpl
 		}
 	}
 
-	protected void addFromUserDetails(JSONObject jsonObject)
+	protected long addFromUserDetails(JSONObject jsonObject)
 		throws PortalException {
 
 		JSONObject fromUserJSONObject = jsonObject.getJSONObject(
@@ -99,6 +128,8 @@ public class PushNotificationsEntryLocalServiceImpl
 		fromUserJSONObject.put(
 			PushNotificationsConstants.PORTRAIT_ID, user.getPortraitId());
 		fromUserJSONObject.put(PushNotificationsConstants.UUID, user.getUuid());
+
+		return fromUserId;
 	}
 
 	@BeanReference(name = "pushNotificationsSenders")

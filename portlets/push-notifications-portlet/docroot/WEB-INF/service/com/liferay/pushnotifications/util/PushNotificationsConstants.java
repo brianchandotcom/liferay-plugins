@@ -19,11 +19,15 @@ package com.liferay.pushnotifications.util;
  */
 public class PushNotificationsConstants {
 
+	public static final long DEFAULT_PARENT_ENTRY_ID = 0;
+
 	public static final String FROM_USER = "fromUser";
 
 	public static final String FULL_NAME = "fullName";
 
 	public static final String MESSAGE = "message";
+
+	public static final String PARENT_ENTRY_ID = "parentEntryId";
 
 	public static final String PAYLOAD = "payload";
 
