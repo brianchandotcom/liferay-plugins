@@ -16,7 +16,7 @@ package com.liferay.pushnotifications.service.base;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.pushnotifications.service.PushNotificationsDeviceServiceUtil;
+import com.liferay.pushnotifications.service.PushNotificationsEntryServiceUtil;
 
 import java.util.Arrays;
 
@@ -25,8 +25,8 @@ import java.util.Arrays;
  * @generated
  */
 @ProviderType
-public class PushNotificationsDeviceServiceClpInvoker {
-	public PushNotificationsDeviceServiceClpInvoker() {
+public class PushNotificationsEntryServiceClpInvoker {
+	public PushNotificationsEntryServiceClpInvoker() {
 		_methodName30 = "getBeanIdentifier";
 
 		_methodParameterTypes30 = new String[] {  };
@@ -35,49 +35,42 @@ public class PushNotificationsDeviceServiceClpInvoker {
 
 		_methodParameterTypes31 = new String[] { "java.lang.String" };
 
-		_methodName36 = "addPushNotificationsDevice";
+		_methodName36 = "sendPushNotification";
 
-		_methodParameterTypes36 = new String[] {
-				"java.lang.String", "java.lang.String"
-			};
+		_methodParameterTypes36 = new String[] { "long", "java.lang.String" };
 
-		_methodName37 = "deletePushNotificationsDevice";
+		_methodName37 = "sendPushNotification";
 
 		_methodParameterTypes37 = new String[] { "java.lang.String" };
-
-		_methodName38 = "hasPermission";
-
-		_methodParameterTypes38 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
 		if (_methodName30.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes30, parameterTypes)) {
-			return PushNotificationsDeviceServiceUtil.getBeanIdentifier();
+			return PushNotificationsEntryServiceUtil.getBeanIdentifier();
 		}
 
 		if (_methodName31.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes31, parameterTypes)) {
-			PushNotificationsDeviceServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+			PushNotificationsEntryServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
 		if (_methodName36.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
-			return PushNotificationsDeviceServiceUtil.addPushNotificationsDevice((java.lang.String)arguments[0],
+			PushNotificationsEntryServiceUtil.sendPushNotification(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1]);
+
+			return null;
 		}
 
 		if (_methodName37.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes37, parameterTypes)) {
-			return PushNotificationsDeviceServiceUtil.deletePushNotificationsDevice((java.lang.String)arguments[0]);
-		}
+			PushNotificationsEntryServiceUtil.sendPushNotification((java.lang.String)arguments[0]);
 
-		if (_methodName38.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
-			return PushNotificationsDeviceServiceUtil.hasPermission((java.lang.String)arguments[0]);
+			return null;
 		}
 
 		throw new UnsupportedOperationException();
@@ -91,6 +84,4 @@ public class PushNotificationsDeviceServiceClpInvoker {
 	private String[] _methodParameterTypes36;
 	private String _methodName37;
 	private String[] _methodParameterTypes37;
-	private String _methodName38;
-	private String[] _methodParameterTypes38;
 }

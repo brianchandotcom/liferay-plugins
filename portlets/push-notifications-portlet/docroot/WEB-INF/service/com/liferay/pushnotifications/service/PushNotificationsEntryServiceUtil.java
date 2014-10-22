@@ -21,37 +21,26 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
 import com.liferay.portal.service.InvokableService;
 
 /**
- * Provides the remote service utility for PushNotificationsDevice. This utility wraps
- * {@link com.liferay.pushnotifications.service.impl.PushNotificationsDeviceServiceImpl} and is the
+ * Provides the remote service utility for PushNotificationsEntry. This utility wraps
+ * {@link com.liferay.pushnotifications.service.impl.PushNotificationsEntryServiceImpl} and is the
  * primary access point for service operations in application layer code running
  * on a remote server. Methods of this service are expected to have security
  * checks based on the propagated JAAS credentials because this service can be
  * accessed remotely.
  *
  * @author Silvio Santos
- * @see PushNotificationsDeviceService
- * @see com.liferay.pushnotifications.service.base.PushNotificationsDeviceServiceBaseImpl
- * @see com.liferay.pushnotifications.service.impl.PushNotificationsDeviceServiceImpl
+ * @see PushNotificationsEntryService
+ * @see com.liferay.pushnotifications.service.base.PushNotificationsEntryServiceBaseImpl
+ * @see com.liferay.pushnotifications.service.impl.PushNotificationsEntryServiceImpl
  * @generated
  */
 @ProviderType
-public class PushNotificationsDeviceServiceUtil {
+public class PushNotificationsEntryServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this class directly. Add custom service methods to {@link com.liferay.pushnotifications.service.impl.PushNotificationsDeviceServiceImpl} and rerun ServiceBuilder to regenerate this class.
+	 * Never modify this class directly. Add custom service methods to {@link com.liferay.pushnotifications.service.impl.PushNotificationsEntryServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
-	public static com.liferay.pushnotifications.model.PushNotificationsDevice addPushNotificationsDevice(
-		java.lang.String token, java.lang.String platform)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().addPushNotificationsDevice(token, platform);
-	}
-
-	public static com.liferay.pushnotifications.model.PushNotificationsDevice deletePushNotificationsDevice(
-		java.lang.String token)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePushNotificationsDevice(token);
-	}
 
 	/**
 	* Returns the Spring bean ID for this bean.
@@ -62,15 +51,21 @@ public class PushNotificationsDeviceServiceUtil {
 		return getService().getBeanIdentifier();
 	}
 
-	public static boolean hasPermission(java.lang.String actionId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().hasPermission(actionId);
-	}
-
 	public static java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	public static void sendPushNotification(java.lang.String payload)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().sendPushNotification(payload);
+	}
+
+	public static void sendPushNotification(long toUserId,
+		java.lang.String payload)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().sendPushNotification(toUserId, payload);
 	}
 
 	/**
@@ -86,19 +81,19 @@ public class PushNotificationsDeviceServiceUtil {
 		_service = null;
 	}
 
-	public static PushNotificationsDeviceService getService() {
+	public static PushNotificationsEntryService getService() {
 		if (_service == null) {
 			InvokableService invokableService = (InvokableService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					PushNotificationsDeviceService.class.getName());
+					PushNotificationsEntryService.class.getName());
 
-			if (invokableService instanceof PushNotificationsDeviceService) {
-				_service = (PushNotificationsDeviceService)invokableService;
+			if (invokableService instanceof PushNotificationsEntryService) {
+				_service = (PushNotificationsEntryService)invokableService;
 			}
 			else {
-				_service = new PushNotificationsDeviceServiceClp(invokableService);
+				_service = new PushNotificationsEntryServiceClp(invokableService);
 			}
 
-			ReferenceRegistry.registerReference(PushNotificationsDeviceServiceUtil.class,
+			ReferenceRegistry.registerReference(PushNotificationsEntryServiceUtil.class,
 				"_service");
 		}
 
@@ -109,8 +104,8 @@ public class PushNotificationsDeviceServiceUtil {
 	 * @deprecated As of 6.2.0
 	 */
 	@Deprecated
-	public void setService(PushNotificationsDeviceService service) {
+	public void setService(PushNotificationsEntryService service) {
 	}
 
-	private static PushNotificationsDeviceService _service;
+	private static PushNotificationsEntryService _service;
 }

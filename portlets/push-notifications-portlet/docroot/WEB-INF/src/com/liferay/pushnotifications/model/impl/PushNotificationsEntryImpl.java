@@ -12,31 +12,17 @@
  * details.
  */
 
-package com.liferay.pushnotifications.util;
+package com.liferay.pushnotifications.model.impl;
+
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * @author Bruno Farache
  */
-public class PushNotificationsConstants {
+@ProviderType
+public class PushNotificationsEntryImpl extends PushNotificationsEntryBaseImpl {
 
-	public static final long DEFAULT_PARENT_ENTRY_ID = 0;
-
-	public static final String FROM_USER = "fromUser";
-
-	public static final String FULL_NAME = "fullName";
-
-	public static final String MESSAGE = "message";
-
-	public static final String PARENT_ENTRY_ID = "parentEntryId";
-
-	public static final String PAYLOAD = "payload";
-
-	public static final String PORTRAIT_ID = "portraitId";
-
-	public static final String TO_USER = "toUser";
-
-	public static final String USER_ID = "userId";
-
-	public static final String UUID = "uuid";
+	public PushNotificationsEntryImpl() {
+	}
 
 }
