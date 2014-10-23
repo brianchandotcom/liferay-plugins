@@ -26,13 +26,19 @@ public interface Importer {
 
 	public long getGroupId();
 
+	public String getTargetClassName();
+
 	public long getTargetClassPK();
 
 	public void importResources() throws Exception;
 
 	public boolean isCompanyGroup() throws Exception;
 
+	public boolean isDeveloperModeEnabled();
+
 	public boolean isExisting();
+
+	public void setAppendVersion(boolean appendVersion);
 
 	public void setCompanyId(long companyId);
 
