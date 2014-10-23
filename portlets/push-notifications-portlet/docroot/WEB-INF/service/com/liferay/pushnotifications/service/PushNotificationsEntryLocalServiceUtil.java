@@ -209,6 +209,14 @@ public class PushNotificationsEntryLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
+	public static java.util.List<com.liferay.pushnotifications.model.PushNotificationsEntry> getPushNotificationsEntries(
+		long parentPushNotificationsEntryId, long lastAccessTime, int start,
+		int end) {
+		return getService()
+				   .getPushNotificationsEntries(parentPushNotificationsEntryId,
+			lastAccessTime, start, end);
+	}
+
 	/**
 	* Returns a range of all the push notifications entries.
 	*

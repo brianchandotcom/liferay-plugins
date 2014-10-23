@@ -45,6 +45,14 @@ public class PushNotificationsEntryServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.liferay.pushnotifications.model.PushNotificationsEntry> getPushNotificationsEntries(
+		long parentPushNotificationsEntryId, long lastAccessTime, int start,
+		int end) {
+		return _pushNotificationsEntryService.getPushNotificationsEntries(parentPushNotificationsEntryId,
+			lastAccessTime, start, end);
+	}
+
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {

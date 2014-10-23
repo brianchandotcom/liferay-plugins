@@ -25,8 +25,6 @@ import com.liferay.portlet.expando.model.ExpandoBridge;
 
 import java.io.Serializable;
 
-import java.util.Date;
-
 /**
  * The base model interface for the PushNotificationsEntry service. Represents a row in the &quot;PushNotificationsEntry&quot; database table, with each column mapped to a property of this class.
  *
@@ -105,18 +103,18 @@ public interface PushNotificationsEntryModel extends BaseModel<PushNotifications
 	public void setUserUuid(String userUuid);
 
 	/**
-	 * Returns the create date of this push notifications entry.
+	 * Returns the create time of this push notifications entry.
 	 *
-	 * @return the create date of this push notifications entry
+	 * @return the create time of this push notifications entry
 	 */
-	public Date getCreateDate();
+	public long getCreateTime();
 
 	/**
-	 * Sets the create date of this push notifications entry.
+	 * Sets the create time of this push notifications entry.
 	 *
-	 * @param createDate the create date of this push notifications entry
+	 * @param createTime the create time of this push notifications entry
 	 */
-	public void setCreateDate(Date createDate);
+	public void setCreateTime(long createTime);
 
 	/**
 	 * Returns the parent push notifications entry ID of this push notifications entry.
