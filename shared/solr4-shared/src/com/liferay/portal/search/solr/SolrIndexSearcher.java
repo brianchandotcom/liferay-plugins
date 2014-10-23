@@ -49,7 +49,6 @@ import com.liferay.portal.search.solr.facet.SolrFacetFieldCollector;
 import com.liferay.portal.search.solr.facet.SolrFacetQueryCollector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -238,8 +237,7 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		solrQuery.setHighlightSnippets(queryConfig.getHighlightSnippetSize());
 
 		for (String highlightFieldName : queryConfig.getHighlightFieldNames()) {
-			addHighlightedField(
-				solrQuery, queryConfig, highlightFieldName);
+			addHighlightedField(solrQuery, queryConfig, highlightFieldName);
 		}
 
 		solrQuery.setHighlightRequireFieldMatch(
@@ -464,7 +462,10 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 		sb.append(StringPool.COLON);
 		sb.append(searchContext.getCompanyId());
 
-		solrQuery.setQuery(sb.toString());
+		SolrPostProcesor solrPostProcesor = new SolrPostProcesor(
+			sb.toString(), searchContext.getKeywords());
+
+		solrQuery.setQuery(solrPostProcesor.postProcess());
 	}
 
 	protected void updateFacetCollectors(
