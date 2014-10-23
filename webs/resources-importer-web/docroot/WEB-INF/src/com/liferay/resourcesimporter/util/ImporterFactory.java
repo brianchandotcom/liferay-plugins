@@ -16,18 +16,14 @@ package com.liferay.resourcesimporter.util;
 
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
-import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.PortalRunMode;
 import com.liferay.portal.kernel.util.TextFormatter;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 
 import java.net.URL;
 import java.net.URLConnection;
 
-import java.util.Properties;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -47,26 +43,12 @@ public class ImporterFactory {
 		return _instance;
 	}
 
-	public static String getResourcesDir(Properties pluginPackageProperties) {
-		return pluginPackageProperties.getProperty(
-					"resources-importer-external-dir");
-	}
-
-	public static String getTargetClassName(
-		Properties pluginPackageProperties) {
-
-		return pluginPackageProperties.getProperty(
-					"resources-importer-target-class-name",
-					LayoutSetPrototype.class.getName());
-	}
-
 	public Importer createImporter(
 			long companyId, ServletContext servletContext,
-			Properties pluginPackageProperties)
+			PluginPackageProperties pluginPackageProperties)
 		throws Exception {
 
-		String resourcesDir = ImporterFactory.getResourcesDir(
-			pluginPackageProperties);
+		String resourcesDir = pluginPackageProperties.getResourcesDir();
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
 			RESOURCES_DIR);
@@ -141,7 +123,7 @@ public class ImporterFactory {
 
 	protected void configureImporter(
 			long companyId, Importer importer, ServletContext servletContext,
-			Properties pluginPackageProperties)
+			PluginPackageProperties pluginPackageProperties)
 		throws Exception {
 
 		importer.setCompanyId(companyId);
@@ -149,10 +131,9 @@ public class ImporterFactory {
 		importer.setServletContextName(servletContext.getServletContextName());
 
 		importer.setTargetClassName(
-			getTargetClassName(pluginPackageProperties));
+			pluginPackageProperties.getTargetClassName());
 
-		String targetValue = pluginPackageProperties.getProperty(
-			"resources-importer-target-value");
+		String targetValue = pluginPackageProperties.getTargetValue();
 
 		if (Validator.isNull(targetValue)) {
 			targetValue = TextFormatter.format(
@@ -167,25 +148,13 @@ public class ImporterFactory {
 
 		importer.setVersion(pluginPackage.getVersion());
 
-		boolean appendVersion = GetterUtil.getBoolean(
-			pluginPackageProperties.getProperty(
-				"resources-importer-append-version"),
-			true);
+		importer.setAppendVersion(pluginPackageProperties.isAppendVersion());
 
-		importer.setAppendVersion(appendVersion);
+		importer.setDeveloperModeEnabled(
+			pluginPackageProperties.isDeveloperModeEnabled());
 
-		boolean developerModeEnabled = GetterUtil.getBoolean(
-			pluginPackageProperties.getProperty(
-				"resources-importer-developer-mode-enabled")) ||
-			PortalRunMode.isTestMode();
-
-		importer.setDeveloperModeEnabled(developerModeEnabled);
-
-		boolean updateModeEnabled = GetterUtil.getBoolean(
-			pluginPackageProperties.getProperty(
-				"resources-importer-update-mode-enabled"));
-
-		importer.setUpdateModeEnabled(updateModeEnabled);
+		importer.setUpdateModeEnabled(
+			pluginPackageProperties.isUpdateModeEnabled());
 
 		importer.afterPropertiesSet();
 	}
