@@ -58,12 +58,12 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 			else if (MicroblogsUtil.hasReplied(
 						parentMicroblogsEntryId, userId)) {
 
-				return MicroblogsEntryConstants.TYPE_REPLY_TO_REPLY;
+				return MicroblogsEntryConstants.TYPE_REPLY_TO_REPLIED;
 			}
 			else if (MicroblogsUtil.isTaggedUser(
 						parentMicroblogsEntryId, true, userId)) {
 
-				return MicroblogsEntryConstants.TYPE_REPLY_TO_TAG;
+				return MicroblogsEntryConstants.TYPE_REPLY_TO_TAGGED;
 			}
 		}
 

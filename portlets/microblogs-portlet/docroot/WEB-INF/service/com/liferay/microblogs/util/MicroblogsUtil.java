@@ -136,19 +136,19 @@ public class MicroblogsUtil {
 			else if (hasReplied(parentMicroblogsEntryId, userId) &&
 					 UserNotificationManagerUtil.isDeliver(
 						userId, PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY_TO_REPLY,
+						MicroblogsEntryConstants.TYPE_REPLY_TO_REPLIED,
 						deliveryType)) {
 
-				return MicroblogsEntryConstants.TYPE_REPLY_TO_REPLY;
+				return MicroblogsEntryConstants.TYPE_REPLY_TO_REPLIED;
 			}
 			else if (MicroblogsUtil.isTaggedUser(
 						parentMicroblogsEntryId, true, userId) &&
 					 UserNotificationManagerUtil.isDeliver(
 						userId, PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY_TO_TAG,
+						MicroblogsEntryConstants.TYPE_REPLY_TO_TAGGED,
 						deliveryType)) {
 
-				return MicroblogsEntryConstants.TYPE_REPLY_TO_TAG;
+				return MicroblogsEntryConstants.TYPE_REPLY_TO_TAGGED;
 			}
 		}
 
@@ -307,9 +307,8 @@ public class MicroblogsUtil {
 		List<String> screenNames = getScreenNames(microblogsEntry.getContent());
 
 		for (String screenName : screenNames) {
-			long screenNameUserId =
-				UserLocalServiceUtil.getUserIdByScreenName(
-					microblogsEntry.getCompanyId(), screenName);
+			long screenNameUserId = UserLocalServiceUtil.getUserIdByScreenName(
+				microblogsEntry.getCompanyId(), screenName);
 
 			if (screenNameUserId == userId) {
 				return true;

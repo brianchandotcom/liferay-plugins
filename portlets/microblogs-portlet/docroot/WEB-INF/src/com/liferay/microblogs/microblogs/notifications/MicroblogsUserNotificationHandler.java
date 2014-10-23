@@ -105,7 +105,7 @@ public class MicroblogsUserNotificationHandler
 				"x-commented-on-your-post", userFullName);
 		}
 		else if (notificationType ==
-					MicroblogsEntryConstants.TYPE_REPLY_TO_REPLY) {
+					MicroblogsEntryConstants.TYPE_REPLY_TO_REPLIED) {
 
 			User receiverUser = UserLocalServiceUtil.fetchUser(
 				microblogsEntry.getReceiverUserId());
@@ -117,7 +117,7 @@ public class MicroblogsUserNotificationHandler
 			}
 		}
 		else if (notificationType ==
-					MicroblogsEntryConstants.TYPE_REPLY_TO_TAG) {
+					MicroblogsEntryConstants.TYPE_REPLY_TO_TAGGED) {
 
 			title = serviceContext.translate(
 				"x-commented-on-a-post-you-are-tagged-in", userFullName);
