@@ -203,10 +203,10 @@ public class ResourcesImporterHotDeployMessageListener
 
 		List<Company> companies = CompanyLocalServiceUtil.getCompanies();
 
-		ExportImportThreadLocal.setLayoutImportInProcess(true);
-		ExportImportThreadLocal.setPortletImportInProcess(true);
-
 		try {
+			ExportImportThreadLocal.setLayoutImportInProcess(true);
+			ExportImportThreadLocal.setPortletImportInProcess(true);
+
 			for (Company company : companies) {
 				importResources(
 					company, servletContext, message, pluginPackageProperties,
@@ -225,7 +225,7 @@ public class ResourcesImporterHotDeployMessageListener
 		initialize(message);
 	}
 
-	private boolean configureImporter(
+	private void configureImporter(
 			long companyId, Importer importer, ServletContext servletContext,
 			Properties pluginPackageProperties, String targetClassName)
 		throws Exception {
@@ -272,8 +272,6 @@ public class ResourcesImporterHotDeployMessageListener
 		importer.setUpdateModeEnabled(updateModeEnabled);
 
 		importer.afterPropertiesSet();
-
-		return developerModeEnabled;
 	}
 
 	private void importResources(
@@ -292,11 +290,11 @@ public class ResourcesImporterHotDeployMessageListener
 				company.getCompanyId(), resourcesDir, resourcePaths,
 				templatePaths, privateLARURL, publicLARURL);
 
-			boolean developerModeEnabled = configureImporter(
+			configureImporter(
 				company.getCompanyId(), importer, servletContext,
 				pluginPackageProperties, targetClassName);
 
-			if (!developerModeEnabled && importer.isExisting() &&
+			if (!importer.isDeveloperModeEnabled() && importer.isExisting() &&
 				!importer.isCompanyGroup()) {
 
 				if (_log.isInfoEnabled()) {
