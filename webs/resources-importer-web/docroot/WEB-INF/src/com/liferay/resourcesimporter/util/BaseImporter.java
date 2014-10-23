@@ -141,6 +141,11 @@ public abstract class BaseImporter implements Importer {
 	}
 
 	@Override
+	public String getTargetClassName() {
+		return targetClassName;
+	}
+
+	@Override
 	public long getTargetClassPK() {
 		return targetClassPK;
 	}
@@ -164,6 +169,11 @@ public abstract class BaseImporter implements Importer {
 		}
 
 		return group.isCompany();
+	}
+
+	@Override
+	public boolean isDeveloperModeEnabled() {
+		return developerModeEnabled;
 	}
 
 	@Override
