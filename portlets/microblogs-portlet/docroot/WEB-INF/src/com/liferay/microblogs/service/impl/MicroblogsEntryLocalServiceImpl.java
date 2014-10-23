@@ -30,7 +30,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.search.Indexer;
@@ -351,8 +350,6 @@ public class MicroblogsEntryLocalServiceImpl
 		}
 
 		notificationEventJSONObject.put("entryURL", entryURL);
-		notificationEventJSONObject.put(
-			"notificationType", microblogsEntry.getType());
 		notificationEventJSONObject.put("userId", microblogsEntry.getUserId());
 
 		List<Long> receiverUserIds = MicroblogsUtil.getSubscriberUserIds(
@@ -460,10 +457,13 @@ public class MicroblogsEntryLocalServiceImpl
 					notificationEventJSONObject.put(
 						"subscriptionId", subscriptionId);
 
-					if (UserNotificationManagerUtil.isDeliver(
-							receiverUserIds.get(j), PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY,
-						UserNotificationDeliveryConstants.TYPE_PUSH)) {
+					int notificationType = MicroblogsUtil.getNotificationType(
+						microblogsEntry, receiverUserIds.get(j),
+						UserNotificationDeliveryConstants.TYPE_PUSH);
+
+					if (notificationType != 0) {
+						notificationEventJSONObject.put(
+							"notificationType", notificationType);
 
 						UserNotificationEventLocalServiceUtil.
 							sendUserNotificationEvents(
@@ -472,10 +472,13 @@ public class MicroblogsEntryLocalServiceImpl
 								notificationEventJSONObject);
 					}
 
-					if (UserNotificationManagerUtil.isDeliver(
-							receiverUserIds.get(j), PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY,
-						UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+					notificationType = MicroblogsUtil.getNotificationType(
+						microblogsEntry, receiverUserIds.get(j),
+						UserNotificationDeliveryConstants.TYPE_WEBSITE);
+
+					if (notificationType != 0) {
+						notificationEventJSONObject.put(
+							"notificationType", notificationType);
 
 						UserNotificationEventLocalServiceUtil.
 							sendUserNotificationEvents(
