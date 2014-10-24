@@ -461,7 +461,7 @@ public class MicroblogsEntryLocalServiceImpl
 						microblogsEntry, receiverUserIds.get(j),
 						UserNotificationDeliveryConstants.TYPE_PUSH);
 
-					if (notificationType != 0) {
+					if (notificationType >= 0) {
 						notificationEventJSONObject.put(
 							"notificationType", notificationType);
 
@@ -476,7 +476,7 @@ public class MicroblogsEntryLocalServiceImpl
 						microblogsEntry, receiverUserIds.get(j),
 						UserNotificationDeliveryConstants.TYPE_WEBSITE);
 
-					if (notificationType != 0) {
+					if (notificationType >= 0) {
 						notificationEventJSONObject.put(
 							"notificationType", notificationType);
 
