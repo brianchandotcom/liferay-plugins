@@ -68,7 +68,6 @@ String eventName = PortalUtil.getPortletNamespace(PortletKeys.PORTLET_CONFIGURAT
 		showGuestGroup="<%= false %>"
 		showLayout="<%= false %>"
 		showParentGroups="<%= false %>"
-		showPortletBreadcrumb="<%= false %>"
 	/>
 
 	<c:if test="<%= parentResourceClassNameId == kbFolderClassNameId %>">
