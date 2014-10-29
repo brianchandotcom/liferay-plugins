@@ -31,10 +31,10 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.transaction.TransactionCommitCallbackRegistryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
@@ -56,6 +56,7 @@ import java.io.Serializable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * @author Jonathan Lee
@@ -425,10 +426,11 @@ public class MicroblogsEntryLocalServiceImpl
 	}
 
 	protected void sendNotificationEvent(
-			MicroblogsEntry microblogsEntry, ServiceContext serviceContext)
+			final MicroblogsEntry microblogsEntry,
+			ServiceContext serviceContext)
 		throws PortalException {
 
-		JSONObject notificationEventJSONObject =
+		final JSONObject notificationEventJSONObject =
 			JSONFactoryUtil.createJSONObject();
 
 		notificationEventJSONObject.put(
@@ -456,17 +458,27 @@ public class MicroblogsEntryLocalServiceImpl
 		}
 
 		notificationEventJSONObject.put("entryURL", entryURL);
-		notificationEventJSONObject.put(
-			"notificationType", microblogsEntry.getType());
 		notificationEventJSONObject.put("userId", microblogsEntry.getUserId());
 
-		List<Long> receiverUserIds = MicroblogsUtil.getSubscriberUserIds(
+		final List<Long> receiverUserIds = MicroblogsUtil.getSubscriberUserIds(
 			microblogsEntry);
 
-		MessageBusUtil.sendMessage(
-			DestinationNames.ASYNC_SERVICE,
-			new NotificationProcessCallable(
-				receiverUserIds, microblogsEntry, notificationEventJSONObject));
+		Callable<Void> callable = new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+				MessageBusUtil.sendMessage(
+					DestinationNames.ASYNC_SERVICE,
+					new NotificationProcessCallable(
+						receiverUserIds, microblogsEntry,
+						notificationEventJSONObject));
+
+				return null;
+			}
+
+		};
+
+		TransactionCommitCallbackRegistryUtil.registerCallback(callable);
 	}
 
 	protected void subscribeUsers(
@@ -565,10 +577,16 @@ public class MicroblogsEntryLocalServiceImpl
 					notificationEventJSONObject.put(
 						"subscriptionId", subscriptionId);
 
-					if (UserNotificationManagerUtil.isDeliver(
-							receiverUserIds.get(j), PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY,
-						UserNotificationDeliveryConstants.TYPE_PUSH)) {
+					int notificationType = MicroblogsUtil.getNotificationType(
+						microblogsEntry, receiverUserIds.get(j),
+						UserNotificationDeliveryConstants.TYPE_PUSH);
+
+					if (notificationType !=
+							MicroblogsEntryConstants.
+								NOTIFICATION_TYPE_UNKNOWN) {
+
+						notificationEventJSONObject.put(
+							"notificationType", notificationType);
 
 						UserNotificationEventLocalServiceUtil.
 							sendUserNotificationEvents(
@@ -577,10 +595,16 @@ public class MicroblogsEntryLocalServiceImpl
 								notificationEventJSONObject);
 					}
 
-					if (UserNotificationManagerUtil.isDeliver(
-							receiverUserIds.get(j), PortletKeys.MICROBLOGS, 0,
-						MicroblogsEntryConstants.TYPE_REPLY,
-						UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+					notificationType = MicroblogsUtil.getNotificationType(
+						microblogsEntry, receiverUserIds.get(j),
+						UserNotificationDeliveryConstants.TYPE_WEBSITE);
+
+					if (notificationType !=
+							MicroblogsEntryConstants.
+								NOTIFICATION_TYPE_UNKNOWN) {
+
+						notificationEventJSONObject.put(
+							"notificationType", notificationType);
 
 						UserNotificationEventLocalServiceUtil.
 							sendUserNotificationEvents(
