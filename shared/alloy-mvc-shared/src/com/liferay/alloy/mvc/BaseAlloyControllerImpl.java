@@ -18,6 +18,9 @@ import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.bean.ConstantsBeanFactoryUtil;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -31,12 +34,12 @@ import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortletBag;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
-import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.scheduler.CronText;
 import com.liferay.portal.kernel.scheduler.CronTrigger;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.Trigger;
+import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Field;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
@@ -300,16 +303,20 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	}
 
 	protected String buildIncludePath(String viewPath) {
-		if (viewPath.equals(_VIEW_PATH_ERROR)) {
-			return "/WEB-INF/jsp/".concat(
-				portlet.getFriendlyURLMapping()).concat("/views/error.jsp");
-		}
-
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(4);
 
 		sb.append("/WEB-INF/jsp/");
 		sb.append(portlet.getFriendlyURLMapping());
 		sb.append("/views/");
+
+		if (viewPath.equals(_VIEW_PATH_ERROR)) {
+			sb.append("error.jsp");
+
+			return sb.toString();
+		}
+
+		sb = new StringBundler(new String[] {sb.toString()}, 4);
+
 		sb.append(controllerPath);
 		sb.append(StringPool.SLASH);
 		sb.append(viewPath);
@@ -360,6 +367,14 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 		if (Validator.isNull(viewPath)) {
 			viewPath = actionPath;
+		}
+
+		if (Validator.isNotNull(format)) {
+			if (format.equals("json")) {
+				writeResponse(responseContent, ContentTypes.APPLICATION_JSON);
+			}
+
+			return;
 		}
 
 		String includePath = buildIncludePath(viewPath);
@@ -704,12 +719,28 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			log.debug("View path " + viewPath);
 		}
 
+		format = ParamUtil.getString(request, "format");
+
+		if (Validator.isNull(format)) {
+			Map<String, String> defaultRouteParameters =
+				alloyPortlet.getDefaultRouteParameters();
+
+			format = defaultRouteParameters.get("format");
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Format " + format);
+		}
+
 		if (mimeResponse != null) {
 			portletURL = mimeResponse.createRenderURL();
 
 			portletURL.setParameter("action", actionPath);
 			portletURL.setParameter("controller", controllerPath);
-			portletURL.setParameter("format", "html");
+
+			if (Validator.isNotNull(format)) {
+				portletURL.setParameter("format", format);
+			}
 
 			if (log.isDebugEnabled()) {
 				log.debug("Portlet URL " + portletURL);
@@ -1003,27 +1034,112 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		groupedModel.setGroupId(themeDisplay.getScopeGroupId());
 	}
 
+	protected void setJSONResponseContent(AlloySearchResult alloySearchResult)
+		throws Exception {
+
+		Hits hits = alloySearchResult.getHits();
+
+		Document[] documents = hits.getDocs();
+
+		setJSONResponseContent(documents);
+	}
+
+	protected void setJSONResponseContent(BaseModel<?> baseModel)
+		throws Exception {
+
+		responseContent = String.valueOf(toJSONObject(baseModel));
+	}
+
+	protected void setJSONResponseContent(Document document) throws Exception {
+		responseContent = String.valueOf(toJSONObject(document));
+	}
+
+	protected void setJSONResponseContent(Document[] documents)
+		throws Exception {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (Document document : documents) {
+			jsonArray.put(toJSONObject(document));
+		}
+
+		jsonObject.put(controllerPath, jsonArray);
+
+		responseContent = jsonObject.toString();
+	}
+
+	protected void setJSONResponseContent(List<BaseModel<?>> baseModels)
+		throws Exception {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (BaseModel<?> baseModel : baseModels) {
+			jsonArray.put(toJSONObject(baseModel));
+		}
+
+		jsonObject.put(controllerPath, jsonArray);
+
+		responseContent = jsonObject.toString();
+	}
+
 	protected void setPermissioned(boolean permissioned) {
 		this.permissioned = permissioned;
+	}
+
+	protected JSONObject toJSONObject(BaseModel<?> baseModel) {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		Map<String, Object> modelAttributes = baseModel.getModelAttributes();
+
+		for (String key : modelAttributes.keySet()) {
+			Object value = modelAttributes.get(key);
+
+			jsonObject.put(String.valueOf(key), String.valueOf(value));
+		}
+
+		return jsonObject;
+	}
+
+	protected JSONObject toJSONObject(Document document) {
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		Map<String, Field> fields = document.getFields();
+
+		for (String key : fields.keySet()) {
+			Field field = fields.get(key);
+
+			jsonObject.put(field.getName(), field.getValue());
+		}
+
+		return jsonObject;
 	}
 
 	protected String translate(String pattern, Object... arguments) {
 		return LanguageUtil.format(locale, pattern, arguments);
 	}
 
-	protected void writeJSON(Object json) throws Exception {
+	protected void writeResponse(Object payload, String contentType)
+		throws Exception {
+
 		if (actionResponse != null) {
 			HttpServletResponse response = PortalUtil.getHttpServletResponse(
 				actionResponse);
 
-			response.setContentType(ContentTypes.APPLICATION_JSON);
+			response.setContentType(contentType);
 
-			ServletResponseUtil.write(response, json.toString());
+			ServletResponseUtil.write(response, payload.toString());
 		}
-		else if (mimeResponse != null) {
-			mimeResponse.setContentType(ContentTypes.APPLICATION_JSON);
+		else if (renderResponse != null) {
+			renderResponse.setContentType(contentType);
 
-			PortletResponseUtil.write(mimeResponse, json.toString());
+			HttpServletResponse response = PortalUtil.getHttpServletResponse(
+				renderResponse);
+
+			ServletResponseUtil.write(response, payload.toString());
 		}
 	}
 
@@ -1050,6 +1166,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	protected String controllerPath;
 	protected EventRequest eventRequest;
 	protected EventResponse eventResponse;
+	protected String format;
 	protected Indexer indexer;
 	protected String indexerClassName;
 	protected String lifecycle;
@@ -1072,6 +1189,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	protected ResourceRequest resourceRequest;
 	protected ResourceResponse resourceResponse;
 	protected HttpServletResponse response;
+	protected String responseContent = StringPool.BLANK;
 	protected MessageListener schedulerMessageListener;
 	protected ServletConfig servletConfig;
 	protected ServletContext servletContext;

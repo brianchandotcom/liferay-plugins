@@ -157,6 +157,20 @@ public class AlloyPortlet extends GenericPortlet {
 		include(path, resourceRequest, resourceResponse);
 	}
 
+	protected String getControllerPath(PortletRequest portletRequest) {
+		String controllerPath = ParamUtil.getString(
+			portletRequest, "controller");
+
+		if (Validator.isNull(controllerPath)) {
+			Map<String, String> defaultRouteParameters =
+				getDefaultRouteParameters();
+
+			controllerPath = defaultRouteParameters.get("controller");
+		}
+
+		return controllerPath;
+	}
+
 	protected Map<String, String> getDefaultRouteParameters() {
 		/*Map<String, String> defaultRouteParameters =
 			new HashMap<String, String[]>();
@@ -176,15 +190,7 @@ public class AlloyPortlet extends GenericPortlet {
 
 		Portlet portlet = liferayPortletConfig.getPortlet();
 
-		String controllerPath = ParamUtil.getString(
-			portletRequest, "controller");
-
-		if (Validator.isNull(controllerPath)) {
-			Map<String, String> defaultRouteParameters =
-				getDefaultRouteParameters();
-
-			controllerPath = defaultRouteParameters.get("controller");
-		}
+		String controllerPath = getControllerPath(portletRequest);
 
 		StringBundler sb = new StringBundler(5);
 
