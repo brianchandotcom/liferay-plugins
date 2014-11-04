@@ -19,9 +19,9 @@ AUI.add(
 						instance._nonActionableNotificationsList = config.nonActionableNotificationsList;
 						instance._portletKey = config.portletKey;
 
-						var userNotifications = A.one('.dockbar-user-notifications');
+						var navAccountControls =  A.one('.nav-account-controls');
 
-						userNotifications.on(
+						navAccountControls.delegate(
 							'click',
 							function(event) {
 								var target = event.target;
@@ -30,15 +30,15 @@ AUI.add(
 									return;
 								}
 
-								instance._setDelivered();
-
 								var currentTarget = event.currentTarget;
+
+								instance._setDelivered(currentTarget.hasClass('actionable-container'));
 
 								var container = currentTarget.one('.dockbar-user-notifications-container');
 
 								container.toggleClass('open');
 
-								userNotifications.toggleClass('open');
+								currentTarget.toggleClass('open');
 
 								var menuOpen = container.hasClass('open');
 
@@ -47,14 +47,20 @@ AUI.add(
 										'clickoutside',
 										function(event) {
 											container.removeClass('open');
-											userNotifications.removeClass('open');
+											currentTarget.removeClass('open');
 										}
 									);
 
-									instance._nonActionableNotificationsList.render();
-									instance._actionableNotificationsList.render();
+									if (currentTarget.hasClass('actionable-container')) {
+										instance._actionableNotificationsList.render();
+									}
+
+									if (currentTarget.hasClass('non-actionable-container')) {
+										instance._nonActionableNotificationsList.render();
+									}
 								}
-							}
+							},
+							'.dockbar-user-notifications'
 						);
 
 						A.on(
@@ -83,11 +89,7 @@ AUI.add(
 										var response = this.get('responseData');
 
 										if (response) {
-											var newUserNotificationsCount = response.newUserNotificationsCount;
-											var timestamp = response.timestamp;
-											var unreadUserNotificationsCount = response.unreadUserNotificationsCount;
-
-											instance._updateDockbarNotificationsCount(newUserNotificationsCount, timestamp, unreadUserNotificationsCount);
+											instance._updateDockbarNotificationsCount(response);
 										}
 									}
 								}
@@ -98,23 +100,36 @@ AUI.add(
 					_onPollerUpdate: function(response) {
 						var instance = this;
 
-						instance._updateDockbarNotificationsCount(response.newUserNotificationsCount, response.timestamp, response.unreadUserNotificationsCount);
+						instance._updateDockbarNotificationsCount(response);
 					},
 
-					_setDelivered: function() {
+					_setDelivered: function(actionable) {
 						var instance = this;
 
 						var portletURL = new Liferay.PortletURL.createURL(instance._baseActionURL);
 
 						portletURL.setParameter('javax.portlet.action', 'setDelivered');
 
+						portletURL.setParameter('actionable', actionable);
+
 						portletURL.setWindowState('normal');
 
-						A.io.request(portletURL.toString());
+						A.io.request(
+							portletURL.toString(),
+							{
+								on: {
+									success: function() {
+										instance._getNotificationsCount();
+									}
+								}
+							}
+						);
 					},
 
-					_updateDockbarNotificationsCount: function(newUserNotificationsCount, timestamp, unreadUserNotificationsCount) {
+					_updateDockbarNotificationsCount: function(response) {
 						var instance = this;
+
+						var timestamp = response.timestamp;
 
 						if (!instance._previousTimestamp || (instance._previousTimestamp < timestamp)) {
 							instance._previousTimestamp = timestamp;
@@ -122,9 +137,27 @@ AUI.add(
 							var dockbarUserNotificationsCount = A.one('.dockbar-user-notifications .user-notifications-count');
 
 							if (dockbarUserNotificationsCount) {
-								dockbarUserNotificationsCount.toggleClass('alert', (newUserNotificationsCount > 0));
+								dockbarUserNotificationsCount.toggleClass('alert', (response.newUserNotificationsCount > 0));
 
-								dockbarUserNotificationsCount.setHTML(unreadUserNotificationsCount);
+								dockbarUserNotificationsCount.setHTML(response.unreadUserNotificationsCount);
+							}
+
+							var dockbarActionableUserNotificationsCount = A.one('.dockbar-user-notifications .actionable-user-notifications-count');
+
+							if (dockbarActionableUserNotificationsCount) {
+								dockbarActionableUserNotificationsCount.toggleClass('alert', (response.newActionableUserNotificationsCount > 0));
+								dockbarActionableUserNotificationsCount.toggleClass('hide', (response.unreadActionableUserNotificationsCount == 0));
+
+								dockbarActionableUserNotificationsCount.setHTML(response.unreadActionableUserNotificationsCount);
+							}
+
+							var dockbarNonActionableUserNotificationsCount = A.one('.dockbar-user-notifications .non-actionable-user-notifications-count');
+
+							if (dockbarNonActionableUserNotificationsCount) {
+								dockbarNonActionableUserNotificationsCount.toggleClass('alert', (response.newNonActionableUserNotificationsCount > 0));
+								dockbarNonActionableUserNotificationsCount.toggleClass('hide', (response.unreadNonActionableUserNotificationsCount == 0));
+
+								dockbarNonActionableUserNotificationsCount.setHTML(response.unreadNonActionableUserNotificationsCount);
 							}
 						}
 					}
