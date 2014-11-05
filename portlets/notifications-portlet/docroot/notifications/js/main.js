@@ -16,12 +16,12 @@ AUI.add(
 						instance._actionableNotificationsList = config.actionableNotificationsList;
 						instance._baseActionURL = config.baseActionURL;
 						instance._baseResourceURL = config.baseResourceURL;
-						instance._nonActionableNotificationsList = config.nonActionableNotificationsList;
+						instance._nonactionableNotificationsList = config.nonactionableNotificationsList;
 						instance._portletKey = config.portletKey;
 
-						var userNotifications = A.one('.dockbar-user-notifications');
+						var navAccountControls =  A.one('.nav-account-controls');
 
-						userNotifications.on(
+						navAccountControls.delegate(
 							'click',
 							function(event) {
 								var target = event.target;
@@ -30,15 +30,15 @@ AUI.add(
 									return;
 								}
 
-								instance._setDelivered();
-
 								var currentTarget = event.currentTarget;
+
+								instance._setDelivered(currentTarget.hasClass('actionable-container'));
 
 								var container = currentTarget.one('.dockbar-user-notifications-container');
 
 								container.toggleClass('open');
 
-								userNotifications.toggleClass('open');
+								currentTarget.toggleClass('open');
 
 								var menuOpen = container.hasClass('open');
 
@@ -47,14 +47,20 @@ AUI.add(
 										'clickoutside',
 										function(event) {
 											container.removeClass('open');
-											userNotifications.removeClass('open');
+											currentTarget.removeClass('open');
 										}
 									);
 
-									instance._nonActionableNotificationsList.render();
-									instance._actionableNotificationsList.render();
+									if (currentTarget.hasClass('actionable-container')) {
+										instance._actionableNotificationsList.render();
+									}
+
+									if (currentTarget.hasClass('nonactionable-container')) {
+										instance._nonactionableNotificationsList.render();
+									}
 								}
-							}
+							},
+							'.dockbar-user-notifications'
 						);
 
 						A.on(
@@ -83,11 +89,7 @@ AUI.add(
 										var response = this.get('responseData');
 
 										if (response) {
-											var newUserNotificationsCount = response.newUserNotificationsCount;
-											var timestamp = response.timestamp;
-											var unreadUserNotificationsCount = response.unreadUserNotificationsCount;
-
-											instance._updateDockbarNotificationsCount(newUserNotificationsCount, timestamp, unreadUserNotificationsCount);
+											instance._updateDockbarNotificationsCount(response);
 										}
 									}
 								}
@@ -98,23 +100,36 @@ AUI.add(
 					_onPollerUpdate: function(response) {
 						var instance = this;
 
-						instance._updateDockbarNotificationsCount(response.newUserNotificationsCount, response.timestamp, response.unreadUserNotificationsCount);
+						instance._updateDockbarNotificationsCount(response);
 					},
 
-					_setDelivered: function() {
+					_setDelivered: function(actionable) {
 						var instance = this;
 
 						var portletURL = new Liferay.PortletURL.createURL(instance._baseActionURL);
 
 						portletURL.setParameter('javax.portlet.action', 'setDelivered');
 
+						portletURL.setParameter('actionable', actionable);
+
 						portletURL.setWindowState('normal');
 
-						A.io.request(portletURL.toString());
+						A.io.request(
+							portletURL.toString(),
+							{
+								on: {
+									success: function() {
+										instance._getNotificationsCount();
+									}
+								}
+							}
+						);
 					},
 
-					_updateDockbarNotificationsCount: function(newUserNotificationsCount, timestamp, unreadUserNotificationsCount) {
+					_updateDockbarNotificationsCount: function(response) {
 						var instance = this;
+
+						var timestamp = response.timestamp;
 
 						if (!instance._previousTimestamp || (instance._previousTimestamp < timestamp)) {
 							instance._previousTimestamp = timestamp;
@@ -122,9 +137,27 @@ AUI.add(
 							var dockbarUserNotificationsCount = A.one('.dockbar-user-notifications .user-notifications-count');
 
 							if (dockbarUserNotificationsCount) {
-								dockbarUserNotificationsCount.toggleClass('alert', (newUserNotificationsCount > 0));
+								dockbarUserNotificationsCount.toggleClass('alert', (response.newUserNotificationsCount > 0));
 
-								dockbarUserNotificationsCount.setHTML(unreadUserNotificationsCount);
+								dockbarUserNotificationsCount.setHTML(response.unreadUserNotificationsCount);
+							}
+
+							var dockbarActionableUserNotificationsCount = A.one('.dockbar-user-notifications .actionable-user-notifications-count');
+
+							if (dockbarActionableUserNotificationsCount) {
+								dockbarActionableUserNotificationsCount.toggleClass('alert', (response.newActionableUserNotificationsCount > 0));
+								dockbarActionableUserNotificationsCount.toggleClass('hide', (response.unreadActionableUserNotificationsCount == 0));
+
+								dockbarActionableUserNotificationsCount.setHTML(response.unreadActionableUserNotificationsCount);
+							}
+
+							var dockbarNonactionableUserNotificationsCount = A.one('.dockbar-user-notifications .nonactionable-user-notifications-count');
+
+							if (dockbarNonactionableUserNotificationsCount) {
+								dockbarNonactionableUserNotificationsCount.toggleClass('alert', (response.newNonactionableUserNotificationsCount > 0));
+								dockbarNonactionableUserNotificationsCount.toggleClass('hide', (response.unreadNonactionableUserNotificationsCount == 0));
+
+								dockbarNonactionableUserNotificationsCount.setHTML(response.unreadNonactionableUserNotificationsCount);
 							}
 						}
 					}
@@ -158,7 +191,7 @@ AUI.add(
 
 						instance._actionableUserNotificationsStart = 0;
 						instance._baseRenderURL = config.baseRenderURL;
-						instance._nonActionableUserNotificationsStart = 0;
+						instance._nonactionableUserNotificationsStart = 0;
 						instance._notificationsList = config.notificationsList;
 
 						instance._notificationsList.render();
@@ -167,10 +200,10 @@ AUI.add(
 						var userNotificationsListNode = A.one('.notifications-portlet .user-notifications-container .user-notifications-list');
 						var userNotificationsContainerNode = A.one('.notifications-portlet .user-notifications-container');
 
-						var nonActionableUserNotificationsLink = A.one('.notifications-portlet .user-notifications-container .user-notifications-sidebar .nav .non-actionable');
+						var nonactionableUserNotificationsLink = A.one('.notifications-portlet .user-notifications-container .user-notifications-sidebar .nav .nonactionable');
 
-						if (nonActionableUserNotificationsLink) {
-							nonActionableUserNotificationsLink.on(
+						if (nonactionableUserNotificationsLink) {
+							nonactionableUserNotificationsLink.on(
 								'click',
 								function() {
 									var userNotificationsSidebar = A.one('.user-notifications-sidebar');
@@ -179,10 +212,10 @@ AUI.add(
 										userNotificationsSidebar.all('.nav a').removeClass('selected');
 									}
 
-									nonActionableUserNotificationsLink.addClass('selected');
+									nonactionableUserNotificationsLink.addClass('selected');
 
 									if (userNotificationsContainerNode) {
-										userNotificationsContainerNode.addClass('non-actionable');
+										userNotificationsContainerNode.addClass('nonactionable');
 										userNotificationsContainerNode.removeClass('actionable');
 									}
 
@@ -191,11 +224,11 @@ AUI.add(
 
 									instance._notificationsList.setActionable(false);
 
-									instance._notificationsList.setNotificationsCount('.non-actionable .count');
+									instance._notificationsList.setNotificationsCount('.nonactionable .count');
 
 									instance._actionableUserNotificationsStart = instance._notificationsList.getStart();
 
-									instance._notificationsList.setStart(instance._nonActionableUserNotificationsStart);
+									instance._notificationsList.setStart(instance._nonactionableUserNotificationsStart);
 
 									instance._notificationsList.render();
 								}
@@ -218,7 +251,7 @@ AUI.add(
 
 									if (userNotificationsContainerNode) {
 										userNotificationsContainerNode.addClass('actionable');
-										userNotificationsContainerNode.removeClass('non-actionable');
+										userNotificationsContainerNode.removeClass('nonactionable');
 									}
 
 									notificationsConfigurationNode.hide();
@@ -228,7 +261,7 @@ AUI.add(
 
 									instance._notificationsList.setNotificationsCount('.actionable .count');
 
-									instance._nonActionableUserNotificationsStart = instance._notificationsList.getStart();
+									instance._nonactionableUserNotificationsStart = instance._notificationsList.getStart();
 
 									instance._notificationsList.setStart(instance._actionableUserNotificationsStart);
 
