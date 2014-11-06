@@ -15,30 +15,30 @@
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
-package com.liferay.microblogs.hook.upgrade.v1_0_1;
+package com.liferay.microblogs.hook.upgrade.v1_0_2;
 
-import com.liferay.microblogs.model.MicroblogsEntryConstants;
+import com.liferay.microblogs.model.MicroblogsEntry;
 import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.util.PortalUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
- * @author Evan Thibodeau
+ * @author Matthew Kong
  */
-public class UpgradeUserNotificationEvent extends UpgradeProcess {
+public class UpgradeSocial extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		upgradeNotifications();
+		upgradeMicroblogActivities();
 	}
 
-	protected void updateNotification(
-			long userNotificationEventId, JSONObject jsonObject)
+	protected void updateSocialActivity(long activityId, JSONObject jsonObject)
 		throws Exception {
 
 		Connection con = null;
@@ -48,11 +48,10 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 			con = DataAccess.getUpgradeOptimizedConnection();
 
 			ps = con.prepareStatement(
-				"update UserNotificationEvent set payload = ? " +
-					"where userNotificationEventId = ?");
+				"update SocialActivity set extraData = ? where activityId = ?");
 
 			ps.setString(1, jsonObject.toString());
-			ps.setLong(2, userNotificationEventId);
+			ps.setLong(2, activityId);
 
 			ps.executeUpdate();
 		}
@@ -61,7 +60,7 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 		}
 	}
 
-	protected void upgradeNotifications() throws Exception {
+	protected void upgradeMicroblogActivities() throws Exception {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -70,33 +69,29 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 			con = DataAccess.getUpgradeOptimizedConnection();
 
 			ps = con.prepareStatement(
-				"select userNotificationEventId, payload from " +
-					"UserNotificationEvent where type_ = ?");
+				"select activityId, extraData from SocialActivity where " +
+					"classNameId = ?");
 
-			ps.setString(1, "1_WAR_microblogsportlet");
+			ps.setLong(1, PortalUtil.getClassNameId(MicroblogsEntry.class));
 
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				long userNotificationEventId = rs.getLong(
-					"userNotificationEventId");
-				String payload = rs.getString("payload");
+				long activityId = rs.getLong("activityId");
+				String extraData = rs.getString("extraData");
 
-				JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject(
-					payload);
+				JSONObject extraDataJSONObject =
+					JSONFactoryUtil.createJSONObject(extraData);
 
-				int notificationType = payloadJSONObject.getInt(
-					"notificationType");
+				long parentMicroblogsEntryId = extraDataJSONObject.getLong(
+					"receiverMicroblogsEntryId");
 
-				if (notificationType != 0) {
-					return;
-				}
+				extraDataJSONObject.put(
+					"parentMicroblogsEntryId", parentMicroblogsEntryId);
 
-				payloadJSONObject.put(
-					"notificationType",
-					MicroblogsEntryConstants.NOTIFICATION_TYPE_REPLY);
+				extraDataJSONObject.remove("receiverMicroblogsEntryId");
 
-				updateNotification(userNotificationEventId, payloadJSONObject);
+				updateSocialActivity(activityId, extraDataJSONObject);
 			}
 		}
 		finally {
