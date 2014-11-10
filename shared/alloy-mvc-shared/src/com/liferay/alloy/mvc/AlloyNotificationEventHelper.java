@@ -30,7 +30,7 @@ public abstract class AlloyNotificationEventHelper {
 
 	public abstract void addUserNotificationEvents(
 			HttpServletRequest request, String controllerPath,
-			String actionPath, Object payload)
+			String actionPath, JSONObject payloadJSONObject)
 		throws Exception;
 
 	protected void addUserNotificationEvent(
