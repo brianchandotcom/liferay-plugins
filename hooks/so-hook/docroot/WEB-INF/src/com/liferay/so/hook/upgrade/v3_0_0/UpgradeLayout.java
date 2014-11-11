@@ -17,26 +17,27 @@
 
 package com.liferay.so.hook.upgrade.v3_0_0;
 
-import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutTemplate;
 import com.liferay.portal.model.LayoutTypePortlet;
-import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
-import com.liferay.portal.service.persistence.LayoutActionableDynamicQuery;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.so.service.SocialOfficeServiceUtil;
+import com.liferay.portlet.expando.model.ExpandoTableConstants;
 import com.liferay.so.util.LayoutSetPrototypeUtil;
 import com.liferay.so.util.LayoutUtil;
 import com.liferay.so.util.PortletKeys;
 import com.liferay.so.util.SocialOfficeConstants;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * @author Matthew Kong
@@ -45,126 +46,164 @@ public class UpgradeLayout extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		for (long companyId : PortalUtil.getCompanyIds()) {
-			updateSOAnnouncements(companyId);
-		}
-	}
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
-	protected void updateSOAnnouncements(final long companyId)
-		throws Exception {
+		try {
+			con = DataAccess.getUpgradeOptimizedConnection();
 
-		ActionableDynamicQuery actionableDynamicQuery =
-			new LayoutActionableDynamicQuery() {
+			StringBuilder sb = new StringBuilder(8);
 
-			@Override
-			protected void performAction(Object object) throws PortalException {
-				Layout layout = (Layout)object;
+			sb.append("select Layout.plid from Layout ");
+			sb.append(getJoinSQL());
+			sb.append("where (Layout.typeSettings like '%");
+			sb.append(PortletKeys.ANNOUNCEMENTS);
+			sb.append("%') and ");
+			sb.append("(Layout.typeSettings not like '%");
+			sb.append(PortletKeys.SO_ANNOUNCEMENTS);
+			sb.append("%')");
 
-				if (!SocialOfficeServiceUtil.isSocialOfficeGroup(
-						layout.getGroupId())) {
+			ps = con.prepareStatement(sb.toString());
 
-					return;
-				}
+			rs = ps.executeQuery();
 
-				Group group = GroupLocalServiceUtil.fetchGroup(
-					layout.getGroupId());
+			while (rs.next()) {
+				long plid = rs.getLong("plid");
 
-				if (layout.isPublicLayout() && group.isUser()) {
-					return;
-				}
+				Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 
 				LayoutTypePortlet layoutTypePortlet =
 					(LayoutTypePortlet)layout.getLayoutType();
 
-				if (layoutTypePortlet.hasPortletId(
-						PortletKeys.SO_ANNOUNCEMENTS)) {
-
-					return;
-				}
+				LayoutTemplate layoutTemplate =
+					layoutTypePortlet.getLayoutTemplate();
 
 				UnicodeProperties typeSettingsProperties =
 					layout.getTypeSettingsProperties();
 
-				if (layoutTypePortlet.hasPortletId(PortletKeys.ANNOUNCEMENTS)) {
-					LayoutTemplate layoutTemplate =
-						layoutTypePortlet.getLayoutTemplate();
-
-					for (String columnName : layoutTemplate.getColumns()) {
-						String columnValue = typeSettingsProperties.getProperty(
-							columnName);
-
-						columnValue = StringUtil.replace(
-							columnValue, PortletKeys.ANNOUNCEMENTS,
-							PortletKeys.SO_ANNOUNCEMENTS);
-
-						typeSettingsProperties.setProperty(
-							columnName, columnValue);
-					}
-
-					layout.setTypeSettingsProperties(typeSettingsProperties);
-				}
-				else {
-					if (layout.getPriority() != 0) {
-						return;
-					}
-
-					if (layout.getGroupId() == _layoutSetPrototypeGroupId) {
-						return;
-					}
-
+				for (String columnName : layoutTemplate.getColumns()) {
 					String columnValue = typeSettingsProperties.getProperty(
-						"column-1");
+						columnName);
 
-					if (Validator.isNull(columnValue)) {
-						return;
-					}
+					columnValue = StringUtil.replace(
+						columnValue, PortletKeys.ANNOUNCEMENTS,
+						PortletKeys.SO_ANNOUNCEMENTS);
 
-					int columnPos = 0;
-
-					if (StringUtil.contains(
-							columnValue,
-							PortletKeys.MICROBLOGS_STATUS_UPDATE)) {
-
-						columnPos = 1;
-					}
-
-					layoutTypePortlet.addPortletId(
-						0, PortletKeys.SO_ANNOUNCEMENTS, "column-1", columnPos,
-						false);
-
-					layout = layoutTypePortlet.getLayout();
+					typeSettingsProperties.setProperty(columnName, columnValue);
 				}
+
+				layout.setTypeSettingsProperties(typeSettingsProperties);
 
 				LayoutLocalServiceUtil.updateLayout(layout);
 
 				LayoutUtil.addResources(layout, PortletKeys.SO_ANNOUNCEMENTS);
 			}
 
-			protected long getLayoutSetPrototypeGroupId(
-					long companyId, String layoutSetPrototypeKey)
-				throws Exception {
+			sb = new StringBuilder(6);
+			sb.append("select Layout.plid from Layout ");
+			sb.append(getJoinSQL());
+			sb.append("where (Layout.typeSettings not like '%");
+			sb.append(PortletKeys.SO_ANNOUNCEMENTS);
+			sb.append("%') and ");
+			sb.append("(Layout.priority = 0)");
 
-				LayoutSetPrototype layoutSetPrototype =
-					LayoutSetPrototypeUtil.fetchLayoutSetPrototype(
-						companyId, layoutSetPrototypeKey);
+			ps = con.prepareStatement(sb.toString());
 
-				if (layoutSetPrototype != null) {
-					return layoutSetPrototype.getGroupId();
-				}
+			rs = ps.executeQuery();
 
-				return 0;
-			}
+			while (rs.next()) {
+				long plid = rs.getLong("plid");
 
-			private long _layoutSetPrototypeGroupId =
-				getLayoutSetPrototypeGroupId(
-					companyId,
+				Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+
+				long layoutSetPrototypeGroupId = getLayoutSetPrototypeGroupId(
+					layout.getCompanyId(),
 					SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_USER_PUBLIC);
 
-		};
+				if (layout.getGroupId() == layoutSetPrototypeGroupId) {
+					return;
+				}
 
-		actionableDynamicQuery.setCompanyId(companyId);
+				LayoutTypePortlet layoutTypePortlet =
+					(LayoutTypePortlet)layout.getLayoutType();
 
-		actionableDynamicQuery.performActions();
+				UnicodeProperties typeSettingsProperties =
+					layout.getTypeSettingsProperties();
+
+				String columnValue = typeSettingsProperties.getProperty(
+					"column-1");
+
+				if (Validator.isNull(columnValue)) {
+					return;
+				}
+
+				int columnPos = 0;
+
+				if (StringUtil.contains(
+						columnValue,
+						PortletKeys.MICROBLOGS_STATUS_UPDATE)) {
+
+					columnPos = 1;
+				}
+
+				layoutTypePortlet.addPortletId(
+					0, PortletKeys.SO_ANNOUNCEMENTS, "column-1", columnPos,
+					false);
+
+				layout = layoutTypePortlet.getLayout();
+
+				LayoutLocalServiceUtil.updateLayout(layout);
+
+				LayoutUtil.addResources(layout, PortletKeys.SO_ANNOUNCEMENTS);
+			}
+		}
+		finally {
+			DataAccess.cleanUp(con, ps, rs);
+		}
+	}
+
+	protected String getJoinSQL() {
+		StringBuilder sb = new StringBuilder(18);
+
+		sb.append("inner join ExpandoValue on ");
+		sb.append("((ExpandoValue.classPK = Layout.groupId) and ");
+		sb.append("(ExpandoValue.data_ = 'true')) ");
+
+		sb.append("inner join ExpandoColumn on ");
+		sb.append("((ExpandoColumn.columnId = ExpandoValue.columnId) and ");
+		sb.append("(ExpandoColumn.name = 'socialOfficeEnabled')) ");
+
+		sb.append("inner join ExpandoTable on ");
+		sb.append("((ExpandoTable.tableId = ExpandoValue.tableId) and ");
+		sb.append("(ExpandoTable.name = '");
+		sb.append(ExpandoTableConstants.DEFAULT_TABLE_NAME);
+		sb.append("')) ");
+
+		sb.append("inner join Group_ on ");
+		sb.append("((Group_.groupId = Layout.groupId) and ");
+		sb.append("((Layout.privateLayout = true) or ");
+		sb.append("((Layout.privateLayout = false) and ");
+		sb.append("(Group_.classNameId != ");
+		sb.append(PortalUtil.getClassNameId(User.class));
+		sb.append(")))) ");
+
+		return sb.toString();
+	}
+
+	protected long getLayoutSetPrototypeGroupId(
+			long companyId, String layoutSetPrototypeKey)
+		throws Exception {
+
+		LayoutSetPrototype layoutSetPrototype =
+			LayoutSetPrototypeUtil.fetchLayoutSetPrototype(
+				companyId, layoutSetPrototypeKey);
+
+		if (layoutSetPrototype != null) {
+			return layoutSetPrototype.getGroupId();
+		}
+
+		return 0;
 	}
 
 }
