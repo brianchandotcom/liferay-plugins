@@ -11,6 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
+
 package com.liferay.socialcoding;
 
 import aQute.bnd.annotation.ProviderType;
@@ -24,7 +25,6 @@ import com.liferay.portal.NoSuchModelException;
 public class NoSuchJIRAProjectException extends NoSuchModelException {
 
 	public NoSuchJIRAProjectException() {
-		super();
 	}
 
 	public NoSuchJIRAProjectException(String msg) {
