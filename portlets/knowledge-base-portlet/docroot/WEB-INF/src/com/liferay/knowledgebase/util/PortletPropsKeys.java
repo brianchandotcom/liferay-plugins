@@ -34,38 +34,38 @@ public class PortletPropsKeys {
 		"admin.email.kb.article.added.subject";
 
 	public static final String
-		ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_IN_PROGRESS_BODY =
-			"admin.email.kb.article.feedback.in.progress.body";
+		ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_IN_PROGRESS_BODY =
+		"admin.email.kb.article.suggestion.in.progress.body";
 
 	public static final String
-		ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_IN_PROGRESS_ENABLED =
-			"admin.email.kb.article.feedback.in.progress.enabled";
+		ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_IN_PROGRESS_ENABLED =
+		"admin.email.kb.article.suggestion.in.progress.enabled";
 
 	public static final String
-		ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_IN_PROGRESS_SUBJECT =
-			"admin.email.kb.article.feedback.in.progress.subject";
+		ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_IN_PROGRESS_SUBJECT =
+		"admin.email.kb.article.suggestion.in.progress.subject";
 
-	public static final String ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_RECEIVED_BODY =
-		"admin.email.kb.article.feedback.received.body";
-
-	public static final String
-		ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_RECEIVED_ENABLED =
-			"admin.email.kb.article.feedback.received.enabled";
+	public static final String ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RECEIVED_BODY =
+		"admin.email.kb.article.suggestion.received.body";
 
 	public static final String
-		ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_RECEIVED_SUBJECT =
-			"admin.email.kb.article.feedback.received.subject";
-
-	public static final String ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_RESOLVED_BODY =
-		"admin.email.kb.article.feedback.resolved.body";
+		ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RECEIVED_ENABLED =
+		"admin.email.kb.article.suggestion.received.enabled";
 
 	public static final String
-		ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_RESOLVED_ENABLED =
-			"admin.email.kb.article.feedback.resolved.enabled";
+		ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RECEIVED_SUBJECT =
+		"admin.email.kb.article.suggestion.received.subject";
+
+	public static final String ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RESOLVED_BODY =
+		"admin.email.kb.article.suggestion.resolved.body";
 
 	public static final String
-		ADMIN_EMAIL_KB_ARTICLE_FEEDBACK_RESOLVED_SUBJECT =
-			"admin.email.kb.article.feedback.resolved.subject";
+		ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RESOLVED_ENABLED =
+		"admin.email.kb.article.suggestion.resolved.enabled";
+
+	public static final String
+		ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RESOLVED_SUBJECT =
+		"admin.email.kb.article.suggestion.resolved.subject";
 
 	public static final String ADMIN_EMAIL_KB_ARTICLE_UPDATED_BODY =
 		"admin.email.kb.article.updated.body";

@@ -54,15 +54,15 @@ else if (tabs2.equals("article-updated-email")) {
 	editorParam = "emailKBArticleUpdatedBody";
 	editorBody = emailKBArticleUpdatedBody;
 }
-else if (tabs2.equals("feedback-in-progress-email")) {
+else if (tabs2.equals("suggestion-in-progress-email")) {
 	editorParam = "emailKBArticleFeedbackInProgressBody";
 	editorBody = emailKBArticleFeedbackInProgressBody;
 }
-else if (tabs2.equals("feedback-received-email")) {
+else if (tabs2.equals("suggestion-received-email")) {
 	editorParam = "emailKBArticleFeedbackReceivedBody";
 	editorBody = emailKBArticleFeedbackReceivedBody;
 }
-else if (tabs2.equals("feedback-resolved-email")) {
+else if (tabs2.equals("suggestion-resolved-email")) {
 	editorParam = "emailKBArticleFeedbackResolvedBody";
 	editorBody = emailKBArticleFeedbackResolvedBody;
 }
@@ -76,7 +76,7 @@ else if (tabs2.equals("feedback-resolved-email")) {
 </liferay-portlet:renderURL>
 
 <liferay-ui:tabs
-	names="general,email-from,article-added-email,article-updated-email,feedback-received-email,feedback-in-progress-email,feedback-resolved-email,display-settings"
+	names="general,email-from,article-added-email,article-updated-email,suggestion-received-email,suggestion-in-progress-email,suggestion-resolved-email,display-settings"
 	param="tabs2"
 	url="<%= configurationRenderURL %>"
 />
@@ -313,25 +313,25 @@ else if (tabs2.equals("feedback-resolved-email")) {
 			</c:when>
 			<c:when test='<%= tabs2.startsWith("feedback-") %>'>
 				<c:choose>
-					<c:when test='<%= tabs2.equals("feedback-in-progress-email") %>'>
+					<c:when test='<%= tabs2.equals("suggestion-in-progress-email") %>'>
 						<aui:input label="enabled" name="preferences--emailKBArticleFeedbackInProgressEnabled--" type="checkbox" value="<%= emailKBArticleFeedbackInProgressEnabled %>" />
 					</c:when>
-					<c:when test='<%= tabs2.equals("feedback-received-email") %>'>
+					<c:when test='<%= tabs2.equals("suggestion-received-email") %>'>
 						<aui:input label="enabled" name="preferences--emailKBArticleFeedbackReceivedEnabled--" type="checkbox" value="<%= emailKBArticleFeedbackReceivedEnabled %>" />
 					</c:when>
-					<c:when test='<%= tabs2.equals("feedback-resolved-email") %>'>
+					<c:when test='<%= tabs2.equals("suggestion-resolved-email") %>'>
 						<aui:input label="enabled" name="preferences--emailKBArticleFeedbackResolvedEnabled--" type="checkbox" value="<%= emailKBArticleFeedbackResolvedEnabled %>" />
 					</c:when>
 				</c:choose>
 
 				<c:choose>
-					<c:when test='<%= tabs2.equals("feedback-in-progress-email") %>'>
+					<c:when test='<%= tabs2.equals("suggestion-in-progress-email") %>'>
 						<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleFeedbackInProgressSubject--" value="<%= emailKBArticleFeedbackInProgressSubject %>" />
 					</c:when>
-					<c:when test='<%= tabs2.equals("feedback-received-email") %>'>
+					<c:when test='<%= tabs2.equals("suggestion-received-email") %>'>
 						<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleFeedbackReceivedSubject--" value="<%= emailKBArticleFeedbackReceivedSubject %>" />
 					</c:when>
-					<c:when test='<%= tabs2.equals("feedback-resolved-email") %>'>
+					<c:when test='<%= tabs2.equals("suggestion-resolved-email") %>'>
 						<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleFeedbackResolvedSubject--" value="<%= emailKBArticleFeedbackResolvedSubject %>" />
 					</c:when>
 				</c:choose>
@@ -400,9 +400,9 @@ else if (tabs2.equals("feedback-resolved-email")) {
 						<aui:input label="enable-view-count-increment" name="preferences--enableKBArticleViewCountIncrement--" type="checkbox" value="<%= enableKBArticleViewCountIncrement %>" />
 					</c:when>
 					<c:when test='<%= tabs3.equals("template") %>'>
-						<aui:input label="enable-feedback" name="preferences--enableKBTemplateKBComments--" type="checkbox" value="<%= enableKBTemplateKBComments %>" />
+						<aui:input label="enable-suggestions" name="preferences--enableKBTemplateKBComments--" type="checkbox" value="<%= enableKBTemplateKBComments %>" />
 
-						<aui:input label="show-feedback" name="preferences--showKBTemplateKBComments--" type="checkbox" value="<%= showKBTemplateKBComments %>" />
+						<aui:input label="show-suggestions" name="preferences--showKBTemplateKBComments--" type="checkbox" value="<%= showKBTemplateKBComments %>" />
 					</c:when>
 				</c:choose>
 			</c:when>
