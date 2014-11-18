@@ -10,6 +10,7 @@ create table PushNotificationsEntry (
 	pushNotificationsEntryId LONG not null primary key,
 	userId LONG,
 	createTime LONG,
+	entryCount INTEGER,
 	parentPushNotificationsEntryId LONG,
 	payload STRING null
 );
