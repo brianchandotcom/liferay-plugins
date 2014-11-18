@@ -56,6 +56,7 @@ public class PushNotificationsEntryWrapper implements PushNotificationsEntry,
 		attributes.put("pushNotificationsEntryId", getPushNotificationsEntryId());
 		attributes.put("userId", getUserId());
 		attributes.put("createTime", getCreateTime());
+		attributes.put("entryCount", getEntryCount());
 		attributes.put("parentPushNotificationsEntryId",
 			getParentPushNotificationsEntryId());
 		attributes.put("payload", getPayload());
@@ -82,6 +83,12 @@ public class PushNotificationsEntryWrapper implements PushNotificationsEntry,
 
 		if (createTime != null) {
 			setCreateTime(createTime);
+		}
+
+		Integer entryCount = (Integer)attributes.get("entryCount");
+
+		if (entryCount != null) {
+			setEntryCount(entryCount);
 		}
 
 		Long parentPushNotificationsEntryId = (Long)attributes.get(
@@ -117,6 +124,16 @@ public class PushNotificationsEntryWrapper implements PushNotificationsEntry,
 	@Override
 	public long getCreateTime() {
 		return _pushNotificationsEntry.getCreateTime();
+	}
+
+	/**
+	* Returns the entry count of this push notifications entry.
+	*
+	* @return the entry count of this push notifications entry
+	*/
+	@Override
+	public int getEntryCount() {
+		return _pushNotificationsEntry.getEntryCount();
 	}
 
 	@Override
@@ -227,6 +244,16 @@ public class PushNotificationsEntryWrapper implements PushNotificationsEntry,
 	@Override
 	public void setCreateTime(long createTime) {
 		_pushNotificationsEntry.setCreateTime(createTime);
+	}
+
+	/**
+	* Sets the entry count of this push notifications entry.
+	*
+	* @param entryCount the entry count of this push notifications entry
+	*/
+	@Override
+	public void setEntryCount(int entryCount) {
+		_pushNotificationsEntry.setEntryCount(entryCount);
 	}
 
 	@Override
