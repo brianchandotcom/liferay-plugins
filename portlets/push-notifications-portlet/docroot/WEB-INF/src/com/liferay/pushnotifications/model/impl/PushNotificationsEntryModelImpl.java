@@ -72,10 +72,11 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 			{ "pushNotificationsEntryId", Types.BIGINT },
 			{ "userId", Types.BIGINT },
 			{ "createTime", Types.BIGINT },
+			{ "entryCount", Types.INTEGER },
 			{ "parentPushNotificationsEntryId", Types.BIGINT },
 			{ "payload", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table PushNotificationsEntry (pushNotificationsEntryId LONG not null primary key,userId LONG,createTime LONG,parentPushNotificationsEntryId LONG,payload STRING null)";
+	public static final String TABLE_SQL_CREATE = "create table PushNotificationsEntry (pushNotificationsEntryId LONG not null primary key,userId LONG,createTime LONG,entryCount INTEGER,parentPushNotificationsEntryId LONG,payload STRING null)";
 	public static final String TABLE_SQL_DROP = "drop table PushNotificationsEntry";
 	public static final String ORDER_BY_JPQL = " ORDER BY pushNotificationsEntry.createTime ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY PushNotificationsEntry.createTime ASC";
@@ -111,6 +112,7 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 		model.setPushNotificationsEntryId(soapModel.getPushNotificationsEntryId());
 		model.setUserId(soapModel.getUserId());
 		model.setCreateTime(soapModel.getCreateTime());
+		model.setEntryCount(soapModel.getEntryCount());
 		model.setParentPushNotificationsEntryId(soapModel.getParentPushNotificationsEntryId());
 		model.setPayload(soapModel.getPayload());
 
@@ -181,6 +183,7 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 		attributes.put("pushNotificationsEntryId", getPushNotificationsEntryId());
 		attributes.put("userId", getUserId());
 		attributes.put("createTime", getCreateTime());
+		attributes.put("entryCount", getEntryCount());
 		attributes.put("parentPushNotificationsEntryId",
 			getParentPushNotificationsEntryId());
 		attributes.put("payload", getPayload());
@@ -210,6 +213,12 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 
 		if (createTime != null) {
 			setCreateTime(createTime);
+		}
+
+		Integer entryCount = (Integer)attributes.get("entryCount");
+
+		if (entryCount != null) {
+			setEntryCount(entryCount);
 		}
 
 		Long parentPushNotificationsEntryId = (Long)attributes.get(
@@ -289,6 +298,17 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 
 	@JSON
 	@Override
+	public int getEntryCount() {
+		return _entryCount;
+	}
+
+	@Override
+	public void setEntryCount(int entryCount) {
+		_entryCount = entryCount;
+	}
+
+	@JSON
+	@Override
 	public long getParentPushNotificationsEntryId() {
 		return _parentPushNotificationsEntryId;
 	}
@@ -361,6 +381,7 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 		pushNotificationsEntryImpl.setPushNotificationsEntryId(getPushNotificationsEntryId());
 		pushNotificationsEntryImpl.setUserId(getUserId());
 		pushNotificationsEntryImpl.setCreateTime(getCreateTime());
+		pushNotificationsEntryImpl.setEntryCount(getEntryCount());
 		pushNotificationsEntryImpl.setParentPushNotificationsEntryId(getParentPushNotificationsEntryId());
 		pushNotificationsEntryImpl.setPayload(getPayload());
 
@@ -452,6 +473,8 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 
 		pushNotificationsEntryCacheModel.createTime = getCreateTime();
 
+		pushNotificationsEntryCacheModel.entryCount = getEntryCount();
+
 		pushNotificationsEntryCacheModel.parentPushNotificationsEntryId = getParentPushNotificationsEntryId();
 
 		pushNotificationsEntryCacheModel.payload = getPayload();
@@ -467,7 +490,7 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{pushNotificationsEntryId=");
 		sb.append(getPushNotificationsEntryId());
@@ -475,6 +498,8 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 		sb.append(getUserId());
 		sb.append(", createTime=");
 		sb.append(getCreateTime());
+		sb.append(", entryCount=");
+		sb.append(getEntryCount());
 		sb.append(", parentPushNotificationsEntryId=");
 		sb.append(getParentPushNotificationsEntryId());
 		sb.append(", payload=");
@@ -486,7 +511,7 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(22);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.pushnotifications.model.PushNotificationsEntry");
@@ -503,6 +528,10 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 		sb.append(
 			"<column><column-name>createTime</column-name><column-value><![CDATA[");
 		sb.append(getCreateTime());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>entryCount</column-name><column-value><![CDATA[");
+		sb.append(getEntryCount());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>parentPushNotificationsEntryId</column-name><column-value><![CDATA[");
@@ -527,6 +556,7 @@ public class PushNotificationsEntryModelImpl extends BaseModelImpl<PushNotificat
 	private long _createTime;
 	private long _originalCreateTime;
 	private boolean _setOriginalCreateTime;
+	private int _entryCount;
 	private long _parentPushNotificationsEntryId;
 	private long _originalParentPushNotificationsEntryId;
 	private boolean _setOriginalParentPushNotificationsEntryId;
