@@ -39,6 +39,7 @@ import com.liferay.portal.model.ResourceBlockConstants;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Subscription;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
@@ -495,7 +496,7 @@ public class CalendarImporterLocalServiceImpl
 	}
 
 	protected AssetCategory getAssetCategory(
-			long userId, long groupId, String name)
+			long userId, long groupId, long companyId, String name)
 		throws PortalException {
 
 		AssetVocabulary assetVocabulary = assetVocabularyPersistence.fetchByG_N(
@@ -504,6 +505,15 @@ public class CalendarImporterLocalServiceImpl
 		ServiceContext serviceContext = new ServiceContext();
 
 		serviceContext.setScopeGroupId(groupId);
+
+		User user = userPersistence.fetchByC_U(companyId, userId);
+
+		if (user == null) {
+			user = userPersistence.fetchByC_DU(companyId, true);
+
+			userId = user.getUserId();
+		}
+
 		serviceContext.setUserId(userId);
 
 		if (assetVocabulary == null) {
@@ -723,7 +733,7 @@ public class CalendarImporterLocalServiceImpl
 		assetCategories.add(
 			getAssetCategory(
 				calEvent.getUserId(), calEvent.getGroupId(),
-				calEvent.getType()));
+				calEvent.getCompanyId(), calEvent.getType()));
 
 		for (AssetCategory assetCategory : assetCategories) {
 			assetEntryLocalService.addAssetCategoryAssetEntry(
