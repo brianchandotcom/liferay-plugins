@@ -12,24 +12,22 @@
  * details.
  */
 
-package com.liferay.knowledgebase.util;
+package com.liferay.knowledgebase.hook.upgrade.v1_3_4;
+
+import com.liferay.knowledgebase.util.ActionKeys;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
- * @author Brian Wing Shun Chan
- * @author Peter Shin
+ * @author Adolfo Pérez
  */
-public class WebKeys implements com.liferay.portal.kernel.util.WebKeys {
+public class UpgradeResourceAction extends UpgradeProcess {
 
-	public static final String KNOWLEDGE_BASE_KB_ARTICLE =
-		"KNOWLEDGE_BASE_KB_ARTICLE";
-
-	public static final String
-		KNOWLEDGE_BASE_KB_SUGGESTION_LIST_DISPLAY_CONTEXT =
-			"KNOWLEDGE_BASE_KB_SUGGESTION_LIST_DISPLAY_CONTEXT";
-
-	public static final String KNOWLEDGE_BASE_KB_TEMPLATE =
-		"KNOWLEDGE_BASE_KB_TEMPLATE";
-
-	public static final String KNOWLEDGE_BASE_STATUS = "KNOWLEDGE_BASE_STATUS";
+	@Override
+	protected void doUpgrade() throws Exception {
+		runSQL(
+			"update ResourceAction set actionId = '" +
+				ActionKeys.VIEW_KB_SUGGESTIONS + "' where actionId = " +
+					"'VIEW_KB_FEEDBACK'");
+	}
 
 }

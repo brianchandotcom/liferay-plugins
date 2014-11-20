@@ -118,14 +118,14 @@ public class AdminUtil {
 			PortletPropsValues.ADMIN_EMAIL_KB_ARTICLE_ADDED_SUBJECT);
 	}
 
-	public static String getEmailKBArticleFeedbackInProgressBody(
+	public static String getEmailKBArticleSuggestionInProgressBody(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackInProgressBody = preferences.getValue(
-			"emailKBArticleFeedbackInProgressBody", StringPool.BLANK);
+		String emailKBArticleSuggestionInProgressBody = preferences.getValue(
+			"emailKBArticleSuggestionInProgressBody", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackInProgressBody)) {
-			return emailKBArticleFeedbackInProgressBody;
+		if (Validator.isNotNull(emailKBArticleSuggestionInProgressBody)) {
+			return emailKBArticleSuggestionInProgressBody;
 		}
 
 		return ContentUtil.get(
@@ -133,29 +133,29 @@ public class AdminUtil {
 				ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_IN_PROGRESS_BODY);
 	}
 
-	public static boolean getEmailKBArticleFeedbackInProgressEnabled(
+	public static boolean getEmailKBArticleSuggestionInProgressEnabled(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackInProgressEnabled = preferences.getValue(
-			"emailKBArticleFeedbackInProgressEnabled", StringPool.BLANK);
+		String emailKBArticleSuggestionInProgressEnabled = preferences.getValue(
+			"emailKBArticleSuggestionInProgressEnabled", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackInProgressEnabled)) {
+		if (Validator.isNotNull(emailKBArticleSuggestionInProgressEnabled)) {
 			return GetterUtil.getBoolean(
-				emailKBArticleFeedbackInProgressEnabled);
+				emailKBArticleSuggestionInProgressEnabled);
 		}
 
 		return PortletPropsValues.
 			ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_IN_PROGRESS_ENABLED;
 	}
 
-	public static String getEmailKBArticleFeedbackInProgressSubject(
+	public static String getEmailKBArticleSuggestionInProgressSubject(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackInProgressSubject = preferences.getValue(
-			"emailKBArticleFeedbackInProgressSubject", StringPool.BLANK);
+		String emailKBArticleSuggestionInProgressSubject = preferences.getValue(
+			"emailKBArticleSuggestionInProgressSubject", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackInProgressSubject)) {
-			return emailKBArticleFeedbackInProgressSubject;
+		if (Validator.isNotNull(emailKBArticleSuggestionInProgressSubject)) {
+			return emailKBArticleSuggestionInProgressSubject;
 		}
 
 		return ContentUtil.get(
@@ -163,84 +163,85 @@ public class AdminUtil {
 				ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_IN_PROGRESS_SUBJECT);
 	}
 
-	public static String getEmailKBArticleFeedbackNotificationBody(
+	public static String getEmailKBArticleSuggestionNotificationBody(
 		int status, PortletPreferences portletPreferences) {
 
 		if (status == KBCommentConstants.STATUS_COMPLETED) {
-			return AdminUtil.getEmailKBArticleFeedbackResolvedBody(
+			return AdminUtil.getEmailKBArticleSuggestionResolvedBody(
 				portletPreferences);
 		}
 		else if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
-			return AdminUtil.getEmailKBArticleFeedbackInProgressBody(
+			return AdminUtil.getEmailKBArticleSuggestionInProgressBody(
 				portletPreferences);
 		}
 		else if (status == KBCommentConstants.STATUS_NEW) {
-			return AdminUtil.getEmailKBArticleFeedbackReceivedBody(
+			return AdminUtil.getEmailKBArticleSuggestionReceivedBody(
 				portletPreferences);
 		}
 		else {
 			throw new IllegalArgumentException(
-				String.format("Unknown feedback status %s", status));
+				String.format("Unknown suggestion status %s", status));
 		}
 	}
 
-	public static String getEmailKBArticleFeedbackNotificationSubject(
+	public static String getEmailKBArticleSuggestionNotificationSubject(
 		int status, PortletPreferences portletPreferences) {
 
 		if (status == KBCommentConstants.STATUS_COMPLETED) {
-			return AdminUtil.getEmailKBArticleFeedbackResolvedSubject(
+			return AdminUtil.getEmailKBArticleSuggestionResolvedSubject(
 				portletPreferences);
 		}
 		else if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
-			return AdminUtil.getEmailKBArticleFeedbackInProgressSubject(
+			return AdminUtil.getEmailKBArticleSuggestionInProgressSubject(
 				portletPreferences);
 		}
 		else if (status == KBCommentConstants.STATUS_NEW) {
-			return AdminUtil.getEmailKBArticleFeedbackReceivedSubject(
+			return AdminUtil.getEmailKBArticleSuggestionReceivedSubject(
 				portletPreferences);
 		}
 		else {
 			throw new IllegalArgumentException(
-				String.format("Unknown feedback status %s", status));
+				String.format("Unknown suggestion status %s", status));
 		}
 	}
 
-	public static String getEmailKBArticleFeedbackReceivedBody(
+	public static String getEmailKBArticleSuggestionReceivedBody(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackReceivedBody = preferences.getValue(
-			"emailKBArticleFeedbackReceivedBody", StringPool.BLANK);
+		String emailKBArticleSuggestionReceivedBody = preferences.getValue(
+			"emailKBArticleSuggestionReceivedBody", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackReceivedBody)) {
-			return emailKBArticleFeedbackReceivedBody;
+		if (Validator.isNotNull(emailKBArticleSuggestionReceivedBody)) {
+			return emailKBArticleSuggestionReceivedBody;
 		}
 
 		return ContentUtil.get(
 			PortletPropsValues.ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RECEIVED_BODY);
 	}
 
-	public static boolean getEmailKBArticleFeedbackReceivedEnabled(
+	public static boolean getEmailKBArticleSuggestionReceivedEnabled(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackReceivedEnabled = preferences.getValue(
-			"emailKBArticleFeedbackReceivedEnabled", StringPool.BLANK);
+		String emailKBArticleSuggestionReceivedEnabled = preferences.getValue(
+			"emailKBArticleSuggestionReceivedEnabled", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackReceivedEnabled)) {
-			return GetterUtil.getBoolean(emailKBArticleFeedbackReceivedEnabled);
+		if (Validator.isNotNull(emailKBArticleSuggestionReceivedEnabled)) {
+			return GetterUtil.getBoolean(
+				emailKBArticleSuggestionReceivedEnabled);
 		}
 
 		return PortletPropsValues.
 			ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RECEIVED_ENABLED;
 	}
 
-	public static String getEmailKBArticleFeedbackReceivedSubject(
+	public static String getEmailKBArticleSuggestionReceivedSubject(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackReceivedSubject = preferences.getValue(
-			"emailKBArticleFeedbackReceivedSubject", StringPool.BLANK);
+		String emailKBArticleSuggestionReceivedSubject = preferences.getValue(
+			"emailKBArticleSuggestionReceivedSubject", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackReceivedSubject)) {
-			return emailKBArticleFeedbackReceivedSubject;
+		if (Validator.isNotNull(emailKBArticleSuggestionReceivedSubject)) {
+			return emailKBArticleSuggestionReceivedSubject;
 		}
 
 		return ContentUtil.get(
@@ -248,42 +249,43 @@ public class AdminUtil {
 				ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RECEIVED_SUBJECT);
 	}
 
-	public static String getEmailKBArticleFeedbackResolvedBody(
+	public static String getEmailKBArticleSuggestionResolvedBody(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackResolvedBody = preferences.getValue(
-			"emailKBArticleFeedbackResolvedBody", StringPool.BLANK);
+		String emailKBArticleSuggestionResolvedBody = preferences.getValue(
+			"emailKBArticleSuggestionResolvedBody", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackResolvedBody)) {
-			return emailKBArticleFeedbackResolvedBody;
+		if (Validator.isNotNull(emailKBArticleSuggestionResolvedBody)) {
+			return emailKBArticleSuggestionResolvedBody;
 		}
 
 		return ContentUtil.get(
 			PortletPropsValues.ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RESOLVED_BODY);
 	}
 
-	public static boolean getEmailKBArticleFeedbackResolvedEnabled(
+	public static boolean getEmailKBArticleSuggestionResolvedEnabled(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackResolvedEnabled = preferences.getValue(
-			"emailKBArticleFeedbackResolvedEnabled", StringPool.BLANK);
+		String emailKBArticleSuggestionResolvedEnabled = preferences.getValue(
+			"emailKBArticleSuggestionResolvedEnabled", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackResolvedEnabled)) {
-			return GetterUtil.getBoolean(emailKBArticleFeedbackResolvedEnabled);
+		if (Validator.isNotNull(emailKBArticleSuggestionResolvedEnabled)) {
+			return GetterUtil.getBoolean(
+				emailKBArticleSuggestionResolvedEnabled);
 		}
 
 		return PortletPropsValues.
 			ADMIN_EMAIL_KB_ARTICLE_SUGGESTION_RESOLVED_ENABLED;
 	}
 
-	public static String getEmailKBArticleFeedbackResolvedSubject(
+	public static String getEmailKBArticleSuggestionResolvedSubject(
 		PortletPreferences preferences) {
 
-		String emailKBArticleFeedbackResolvedSubject = preferences.getValue(
-			"emailKBArticleFeedbackResolvedSubject", StringPool.BLANK);
+		String emailKBArticleSuggestionResolvedSubject = preferences.getValue(
+			"emailKBArticleSuggestionResolvedSubject", StringPool.BLANK);
 
-		if (Validator.isNotNull(emailKBArticleFeedbackResolvedSubject)) {
-			return emailKBArticleFeedbackResolvedSubject;
+		if (Validator.isNotNull(emailKBArticleSuggestionResolvedSubject)) {
+			return emailKBArticleSuggestionResolvedSubject;
 		}
 
 		return ContentUtil.get(
@@ -426,17 +428,17 @@ public class AdminUtil {
 		return outputDocument.toString();
 	}
 
-	public static boolean isFeedbackStatusChangeNotificationEnabled(
+	public static boolean isSuggestionStatusChangeNotificationEnabled(
 		int status, PortletPreferences preferences) {
 
 		if (status == KBCommentConstants.STATUS_COMPLETED) {
-			return getEmailKBArticleFeedbackResolvedEnabled(preferences);
+			return getEmailKBArticleSuggestionResolvedEnabled(preferences);
 		}
 		else if (status == KBCommentConstants.STATUS_IN_PROGRESS) {
-			return getEmailKBArticleFeedbackInProgressEnabled(preferences);
+			return getEmailKBArticleSuggestionInProgressEnabled(preferences);
 		}
 		else if (status == KBCommentConstants.STATUS_NEW) {
-			return getEmailKBArticleFeedbackReceivedEnabled(preferences);
+			return getEmailKBArticleSuggestionReceivedEnabled(preferences);
 		}
 		else {
 			return false;

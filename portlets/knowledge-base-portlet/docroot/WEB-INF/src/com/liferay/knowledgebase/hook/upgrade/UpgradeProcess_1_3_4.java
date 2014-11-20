@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,14 +11,27 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/admin/init.jsp" %>
+package com.liferay.knowledgebase.hook.upgrade;
 
-<%
-String emptyResultsMessage = "no-in-progress-suggestion-was-found";
-int feedbackStatus = KBCommentConstants.STATUS_IN_PROGRESS;
-String navItem = "viewInProgressFeedback";
-%>
+import com.liferay.knowledgebase.hook.upgrade.v1_3_4.UpgradePortletPreferences;
+import com.liferay.knowledgebase.hook.upgrade.v1_3_4.UpgradeResourceAction;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
-<%@ include file="/admin/view_feedback_in_state.jspf" %>
+/**
+ * @author Adolfo Pérez
+ */
+public class UpgradeProcess_1_3_4 extends UpgradeProcess {
+
+	@Override
+	public int getThreshold() {
+		return 134;
+	}
+
+	@Override
+	protected void doUpgrade() throws Exception {
+		upgrade(UpgradePortletPreferences.class);
+		upgrade(UpgradeResourceAction.class);
+	}
+
+}

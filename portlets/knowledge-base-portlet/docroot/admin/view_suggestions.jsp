@@ -34,11 +34,11 @@
 />
 
 <%
-String navItem = ParamUtil.getString(request, "navItem", "viewNewFeedback");
+String navItem = ParamUtil.getString(request, "navItem", "viewNewSuggestions");
 
-KBFeedbackListDisplayContext kbFeedbackListDisplayContext = new KBFeedbackListDisplayContext(scopeGroupId, navItem);
+KBSuggestionListDisplayContext kbSuggestionListDisplayContext = new KBSuggestionListDisplayContext(scopeGroupId, navItem);
 
-request.setAttribute(WebKeys.KNOWLEDGE_BASE_KB_FEEDBACK_LIST_DISPLAY_CONTEXT, kbFeedbackListDisplayContext);
+request.setAttribute(WebKeys.KNOWLEDGE_BASE_KB_SUGGESTION_LIST_DISPLAY_CONTEXT, kbSuggestionListDisplayContext);
 %>
 
-<liferay-util:include page="/admin/common/view_feedback_by_status.jsp" servletContext="<%= application %>" />
+<liferay-util:include page="/admin/common/view_suggestions_by_status.jsp" servletContext="<%= application %>" />

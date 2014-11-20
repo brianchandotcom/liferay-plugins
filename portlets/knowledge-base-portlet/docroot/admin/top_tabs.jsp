@@ -48,13 +48,13 @@ String mvcPath = ParamUtil.getString(request, "mvcPath");
 	}
 
 	if (AdminPermission.contains(permissionChecker, scopeGroupId, ActionKeys.VIEW_KB_SUGGESTIONS)) {
-		PortletURL kbFeedbackURL = renderResponse.createRenderURL();
+		PortletURL kbSuggestionsURL = renderResponse.createRenderURL();
 
-		kbFeedbackURL.setParameter("mvcPath", "/admin/view_feedback.jsp");
+		kbSuggestionsURL.setParameter("mvcPath", "/admin/view_suggestions.jsp");
 
-		names.add("feedback");
-		urls.add(kbFeedbackURL.toString());
-		value = mvcPath.contains("feedback") ? names.get(names.size() - 1) : value;
+		names.add("suggestions");
+		urls.add(kbSuggestionsURL.toString());
+		value = mvcPath.contains("suggestions") ? names.get(names.size() - 1) : value;
 	}
 	%>
 
