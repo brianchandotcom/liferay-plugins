@@ -19,50 +19,20 @@
 <%
 KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
 
-List<Long> ancestorResourcePrimaryKeys = new ArrayList<Long>();
+KBNavigationDisplayContext kbNavigationDisplayContext = new KBNavigationDisplayContext(renderRequest, portalPreferences, portletPreferences, kbArticle);
 
-if (kbArticle != null) {
-	KBArticle latestKBArticle = KBArticleLocalServiceUtil.getLatestKBArticle(kbArticle.getResourcePrimKey(), WorkflowConstants.STATUS_APPROVED);
-
-	ancestorResourcePrimaryKeys = latestKBArticle.getAncestorResourcePrimaryKeys();
-
-	Collections.reverse(ancestorResourcePrimaryKeys);
-}
-else {
-	ancestorResourcePrimaryKeys.add(KBFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-}
+List<Long> ancestorResourcePrimaryKeys = kbNavigationDisplayContext.getAncestorResourcePrimaryKeys();
 
 long kbFolderClassNameId = PortalUtil.getClassNameId(KBFolderConstants.getClassName());
 
-long rootResourcePrimKey = KBFolderConstants.DEFAULT_PARENT_FOLDER_ID;
+long rootResourcePrimKey = kbNavigationDisplayContext.getRootResourcePrimKey();
 
-if (kbArticle != null) {
-	rootResourcePrimKey = KnowledgeBaseUtil.getKBFolderId(kbArticle.getParentResourceClassNameId(), kbArticle.getParentResourcePrimKey());
-}
+String currentKBFolderUrlTitle = kbNavigationDisplayContext.getCurrentKBFolderURLTitle();
 
-if (rootResourcePrimKey == KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-	rootResourcePrimKey = KnowledgeBaseUtil.getRootResourcePrimKey(renderRequest, scopeGroupId, resourceClassNameId, resourcePrimKey);
-}
+String pageTitle = kbNavigationDisplayContext.getPageTitle();
 
-String preferredKBFolderUrlTitle = portalPreferences.getValue(PortletKeys.KNOWLEDGE_BASE_DISPLAY, "preferredKBFolderUrlTitle");
-
-String currentKBFolderUrlTitle = preferredKBFolderUrlTitle;
-
-if (rootResourcePrimKey != KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-	KBFolder kbFolder = KBFolderServiceUtil.getKBFolder(rootResourcePrimKey);
-
-	String pageTitle = contentRootPrefix + " " + kbFolder.getName();
-
-	if (kbArticle != null) {
-		pageTitle = kbArticle.getTitle() + " - " + pageTitle;
-	}
-
+if (Validator.isNotNull(pageTitle)) {
 	PortalUtil.setPageTitle(pageTitle, request);
-
-	currentKBFolderUrlTitle = kbFolder.getUrlTitle();
-}
-else if (kbArticle != null) {
-	PortalUtil.setPageTitle(kbArticle.getTitle(), request);
 }
 %>
 
