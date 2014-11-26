@@ -19,7 +19,7 @@
 <%
 KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
 
-boolean hasUpdatePermission = KBArticlePermission.contains(permissionChecker, kbArticle, ActionKeys.UPDATE);
+boolean showAdminSuggestionView = SuggestionPermission.contains(permissionChecker, scopeGroupId, kbArticle, ActionKeys.VIEW_SUGGESTIONS);
 %>
 
 <c:if test="<%= enableKBArticleRatings %>">
@@ -28,7 +28,7 @@ boolean hasUpdatePermission = KBArticlePermission.contains(permissionChecker, kb
 	int kbCommentsCount = 0;
 	int pendingKBCommentsCount = 0;
 
-	if (hasUpdatePermission) {
+	if (showAdminSuggestionView) {
 		kbCommentsCount = KBCommentLocalServiceUtil.getKBCommentsCount(KBArticle.class.getName(), kbArticle.getClassPK());
 
 		pendingKBCommentsCount = KBCommentLocalServiceUtil.getKBCommentsCount(KBArticle.class.getName(), kbArticle.getClassPK(), new int[]{KBCommentConstants.STATUS_IN_PROGRESS, KBCommentConstants.STATUS_NEW});
@@ -57,7 +57,7 @@ boolean hasUpdatePermission = KBArticlePermission.contains(permissionChecker, kb
 
 					<a data-show-node-id="<portlet:namespace />previousCommentsContainer" href="javascript:void(0)">
 						<c:choose>
-							<c:when test="<%= hasUpdatePermission %>">
+							<c:when test="<%= showAdminSuggestionView %>">
 								<liferay-ui:message key="there-is-one-suggestion" />
 
 								<c:if test="<%= pendingKBCommentsCount > 0 %>">
@@ -75,7 +75,7 @@ boolean hasUpdatePermission = KBArticlePermission.contains(permissionChecker, kb
 
 					<a data-show-node-id="<portlet:namespace />previousCommentsContainer" href="javascript:void(0)">
 						<c:choose>
-							<c:when test="<%= hasUpdatePermission %>">
+							<c:when test="<%= showAdminSuggestionView %>">
 								<liferay-ui:message arguments="<%= kbCommentsCount %>" key="there-are-x-suggestions" />
 
 								<c:if test="<%= pendingKBCommentsCount > 0 %>">
@@ -168,7 +168,7 @@ boolean hasUpdatePermission = KBArticlePermission.contains(permissionChecker, kb
 		%>
 
 		<c:choose>
-			<c:when test="<%= hasUpdatePermission %>">
+			<c:when test="<%= showAdminSuggestionView %>">
 
 				<%
 				String navItem = ParamUtil.getString(request, "navItem", "viewNewSuggestions");
@@ -193,22 +193,11 @@ boolean hasUpdatePermission = KBArticlePermission.contains(permissionChecker, kb
 							emptyResultsMessage="no-comments-found"
 							iteratorURL="<%= iteratorURL %>"
 							orderByComparator='<%= KnowledgeBaseUtil.getKBCommentOrderByComparator("modified-date", "desc") %>'
+							total="<%= kbCommentsCount %>"
 						>
 
-							<%
-							List<KBComment> kbComments = null;
-
-							if (hasUpdatePermission) {
-								kbComments = KBCommentLocalServiceUtil.getKBComments(KBArticle.class.getName(), kbArticle.getClassPK(), searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-							}
-							else {
-								kbComments = KBCommentLocalServiceUtil.getKBComments(themeDisplay.getUserId(), KBArticle.class.getName(), kbArticle.getClassPK(), searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator());
-							}
-							%>
-
 							<liferay-ui:search-container-results
-								results="<%= kbComments %>"
-								total="<%= kbCommentsCount %>"
+								results="<%= KBCommentLocalServiceUtil.getKBComments(themeDisplay.getUserId(), KBArticle.class.getName(), kbArticle.getClassPK(), searchContainer.getStart(), searchContainer.getEnd(), searchContainer.getOrderByComparator()) %>"
 							/>
 
 							<liferay-ui:search-container-row
