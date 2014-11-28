@@ -51,6 +51,10 @@ public class PushNotificationsEntryLocalServiceImpl
 		PushNotificationsEntry pushNotificationsEntry =
 			pushNotificationsEntryPersistence.create(pushNotificationsEntryId);
 
+		payloadJSONObject.put(
+			PushNotificationsConstants.KEY_PUSH_NOTIFICATIONS_ENTRY_ID,
+			pushNotificationsEntryId);
+
 		pushNotificationsEntry.setUserId(userId);
 		pushNotificationsEntry.setCreateTime(System.currentTimeMillis());
 
@@ -79,7 +83,7 @@ public class PushNotificationsEntryLocalServiceImpl
 			long userId, long pushNotificationsEntryId)
 		throws PortalException {
 
-		return updateRatingsEntry(userId, pushNotificationsEntryId, 0);
+		return updateRatingsTotalScore(userId, pushNotificationsEntryId, 0);
 	}
 
 	@Override
@@ -96,7 +100,7 @@ public class PushNotificationsEntryLocalServiceImpl
 			long userId, long pushNotificationsEntryId)
 		throws PortalException {
 
-		return updateRatingsEntry(userId, pushNotificationsEntryId, 1);
+		return updateRatingsTotalScore(userId, pushNotificationsEntryId, 1);
 	}
 
 	@Override
@@ -205,7 +209,7 @@ public class PushNotificationsEntryLocalServiceImpl
 		return jsonObject;
 	}
 
-	protected PushNotificationsEntry updateRatingsEntry(
+	protected PushNotificationsEntry updateRatingsTotalScore(
 			long userId, long pushNotificationsEntryId, long score)
 		throws PortalException {
 
