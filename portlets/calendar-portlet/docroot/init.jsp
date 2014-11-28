@@ -123,6 +123,8 @@ page import="java.util.TimeZone" %>
 <%
 String currentURL = PortalUtil.getCurrentURL(request);
 
+CalendarBooking calendarBooking = (CalendarBooking)request.getAttribute(WebKeys.CALENDAR_BOOKING);
+
 CalendarResource groupCalendarResource = CalendarResourceUtil.getGroupCalendarResource(liferayPortletRequest, scopeGroupId);
 CalendarResource userCalendarResource = CalendarResourceUtil.getUserCalendarResource(liferayPortletRequest, themeDisplay.getUserId());
 
@@ -158,15 +160,21 @@ long rssTimeInterval = GetterUtil.getLong(portletPreferences.getValue("rssTimeIn
 TimeZone userTimeZone = TimeZone.getTimeZone(timeZoneId);
 TimeZone utcTimeZone = TimeZone.getTimeZone(StringPool.UTC);
 
-Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale);
-Format dateFormatLongDate = FastDateFormatFactoryUtil.getDate(FastDateFormatConstants.LONG, locale, timeZone);
+boolean allDay = BeanParamUtil.getBoolean(calendarBooking, request, "allDay");
+
+if (allDay) {
+	userTimeZone = utcTimeZone;
+}
+
+Format dateFormatDate = FastDateFormatFactoryUtil.getDate(locale, userTimeZone);
+Format dateFormatLongDate = FastDateFormatFactoryUtil.getDate(FastDateFormatConstants.LONG, locale, userTimeZone);
 
 Format dateFormatTime = null;
 
 if (isoTimeFormat) {
-	dateFormatTime = FastDateFormatFactoryUtil.getSimpleDateFormat("HH:mm", locale, timeZone);
+	dateFormatTime = FastDateFormatFactoryUtil.getSimpleDateFormat("HH:mm", locale, userTimeZone);
 }
 else {
-	dateFormatTime = FastDateFormatFactoryUtil.getSimpleDateFormat("hh:mm a", locale, timeZone);
+	dateFormatTime = FastDateFormatFactoryUtil.getSimpleDateFormat("hh:mm a", locale, userTimeZone);
 }
 %>
