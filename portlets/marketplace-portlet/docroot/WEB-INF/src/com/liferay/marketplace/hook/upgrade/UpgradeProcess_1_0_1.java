@@ -12,28 +12,24 @@
  * details.
  */
 
-package com.liferay.marketplace.model.impl;
+package com.liferay.marketplace.hook.upgrade;
 
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.marketplace.hook.upgrade.v1_0_1.UpgradeModule;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
- * @author Ryan Park
  * @author Joan Kim
  */
-public class ModuleImpl extends ModuleBaseImpl {
+public class UpgradeProcess_1_0_1 extends UpgradeProcess {
 
-	public ModuleImpl() {
+	@Override
+	public int getThreshold() {
+		return 101;
 	}
 
 	@Override
-	public boolean isBundle() {
-		if (Validator.isNull(getBundleSymbolicName()) &&
-			Validator.isNull(getBundleVersion())) {
-
-			return false;
-		}
-
-		return true;
+	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeModule.class);
 	}
 
 }
