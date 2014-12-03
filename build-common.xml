@@ -2197,6 +2197,45 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="test-package">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<if>
+				<not>
+					<isset property="test.package" />
+				</not>
+				<then>
+					<fail>Use "ant test-package -Dtest.package=com.liferay.portlet.bookmarks.lar".</fail>
+				</then>
+			</if>
+
+			<propertyregex
+				global="true"
+				input="${test.package}"
+				property="test.package.dir"
+				regexp="\."
+				replace="/"
+				/>
+
+			<setup-arquillian module.dir="@{module.dir}" />
+
+			<test-cmd
+				junit.forkmode="once"
+				module.dir="@{module.dir}"
+				test.class="**/${test.package.dir}/*Test.class"
+				test.type="integration"
+				/>
+
+			<test-cmd
+				junit.forkmode="perTest"
+				module.dir="@{module.dir}"
+				test.class="**/${test.package.dir}/*Test.class"
+				test.type="unit"
+				/>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="test-unit">
 		<attribute name="module.dir" />
 
@@ -2735,6 +2774,13 @@ for (String path : paths) {
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
 			target.name="test-integration"
+		/>
+	</target>
+
+	<target name="test-package">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="test-package"
 		/>
 	</target>
 
