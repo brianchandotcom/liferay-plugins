@@ -268,6 +268,28 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		indexModel(baseModel);
 	}
 
+	protected void addOpenerSuccessMessage() {
+		Map<String, String> data = (Map<String, String>)SessionMessages.get(
+			request,
+			portlet.getPortletId() +
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA);
+
+		if ((data == null) ||
+			!GetterUtil.getBoolean(data.get("addSuccessMessage"))) {
+
+			return;
+		}
+
+		addSuccessMessage();
+
+		data.put("addSuccessMessage", StringPool.FALSE);
+
+		SessionMessages.add(
+			request,
+			portlet.getPortletId() +
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA, data);
+	}
+
 	protected void addSuccessMessage() {
 		String successMessage = ParamUtil.getString(
 			portletRequest, "successMessage");
@@ -361,6 +383,8 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 		if (!calledProcessAction) {
 			executeResource(method);
+
+			addOpenerSuccessMessage();
 		}
 
 		if (Validator.isNull(viewPath)) {
@@ -1158,6 +1182,22 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		GroupedModel groupedModel = (GroupedModel)baseModel;
 
 		groupedModel.setGroupId(themeDisplay.getScopeGroupId());
+	}
+
+	protected void setOpenerSuccessMessage() {
+		SessionMessages.add(
+			portletRequest,
+			portlet.getPortletId() + SessionMessages.KEY_SUFFIX_REFRESH_PORTLET,
+			portlet.getPortletId());
+
+		Map<String, String> data = new HashMap<String, String>();
+
+		data.put("addSuccessMessage", StringPool.TRUE);
+
+		SessionMessages.add(
+			request,
+			portlet.getPortletId() +
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA, data);
 	}
 
 	protected void setPermissioned(boolean permissioned) {
