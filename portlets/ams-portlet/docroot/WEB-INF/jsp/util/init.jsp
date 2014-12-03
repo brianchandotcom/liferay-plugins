@@ -15,7 +15,6 @@
 --%>
 
 <%@ page import="com.liferay.alloy.mvc.AlloyController" %><%@
-page import="com.liferay.alloy.mvc.AlloyException" %><%@
 page import="com.liferay.alloy.mvc.AlloySearchResult" %><%@
 page import="com.liferay.alloy.mvc.BaseAlloyIndexer" %><%@
 page import="com.liferay.ams.model.Asset" %><%@
@@ -31,6 +30,7 @@ page import="com.liferay.portal.kernel.search.Indexer" %><%@
 page import="com.liferay.portal.kernel.search.SearchContext" %><%@
 page import="com.liferay.portal.kernel.search.Summary" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %>
 
 <%@ page import="java.util.Locale" %><%@
