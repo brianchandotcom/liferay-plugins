@@ -180,6 +180,102 @@
 		<ant dir="webs" target="format-javadoc" inheritAll="false" />
 	</target>
 
+	<target name="record-test-class-file-names">
+		<script classpathref="portal.classpath" language="beanshell">
+			<![CDATA[
+				import java.nio.file.Files;
+				import java.nio.file.Paths;
+
+				import org.apache.tools.ant.DirectoryScanner;
+
+				List getClassGroups(List classFileNames, int groupsSize) {
+					List classFileNameGroups = new ArrayList(groupsSize);
+
+					for (int i = 0; i < groupsSize; i++) {
+						classFileNameGroups.add(new ArrayList());
+					}
+
+					int i = 0;
+
+					for (String classFileName : classFileNames) {
+						List classFileNameGroup = classFileNameGroups.get(i++ % groupsSize);
+
+						classFileNameGroup.add(classFileName);
+					}
+
+					return classFileNameGroups;
+				}
+
+				List getClassFileNames() {
+					DirectoryScanner directoryScanner = new DirectoryScanner();
+
+					directoryScanner.setBasedir(project.getBaseDir());
+					directoryScanner.setIncludes(new String[] {"**/test/integration/**/*Test.java", "**/test/unit/**/*Test.java"});
+
+					directoryScanner.scan();
+
+					String[] fileNames = directoryScanner.getIncludedFiles();
+
+					List classFileNames = new ArrayList();
+
+					for (String fileName : directoryScanner.getIncludedFiles()) {
+						String classFileName = fileName.substring(fileName.indexOf("com" + File.separator), fileName.length() - 4);
+
+						classFileName = classFileName.concat("class");
+
+						classFileNames.add(classFileName);
+					}
+
+					Collections.sort(classFileNames);
+
+					return classFileNames;
+				}
+
+				int allTestClassGroupsSize = Integer.parseInt(project.getProperty("test.class.groups.size"));
+
+				List classFileNames = getClassFileNames();
+
+				List testClassGroups = getClassGroups(classFileNames, allTestClassGroupsSize);
+
+				StringBuilder sb = new StringBuilder();
+
+				for (i = 0; i < allTestClassGroupsSize; i++) {
+					List testClassGroup = testClassGroups.get(i);
+
+					sb.append("TEST_CLASS_GROUP_");
+					sb.append(i);
+					sb.append("=");
+
+					for (String testClass : testClassGroup) {
+						sb.append(testClass);
+						sb.append(",");
+					}
+
+					if (!testClassGroup.isEmpty()) {
+						sb.setLength(sb.length() - 1);
+					}
+
+					sb.append("\n\n");
+				}
+
+				sb.append("TEST_CLASS_GROUPS=");
+
+				for (int i = 0; i < allTestClassGroupsSize; i++) {
+					sb.append(i);
+					sb.append(" ");
+				}
+
+				if (allTestClassGroupsSize > 0) {
+					sb.setLength(sb.length() - 1);
+				}
+
+				project.setProperty("test.class.file.names.properties.content", sb.toString());
+			]]>
+		</script>
+
+		<echo file="test.class.file.names.properties">${test.class.file.names.properties.content}</echo>
+	</target>
+
 	<target name="setup-eclipse">
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
