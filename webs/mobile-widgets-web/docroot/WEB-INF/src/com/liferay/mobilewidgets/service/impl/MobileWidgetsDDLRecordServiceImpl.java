@@ -69,13 +69,49 @@ public class MobileWidgetsDDLRecordServiceImpl
 
 	@Override
 	public JSONArray getDDLRecords(
+			long ddlRecordSetId, Locale locale, int start, int end)
+		throws PortalException, SystemException {
+
+		List<DDLRecord> ddlRecords = ddlRecordPersistence.findByRecordSetId(
+			ddlRecordSetId, start, end);
+
+		JSONArray ddlRecordsJSONArray = getDDLRecordsJSONArray(
+			ddlRecords, locale);
+
+		return ddlRecordsJSONArray;
+	}
+
+	@Override
+	public JSONArray getDDLRecords(
 			long ddlRecordSetId, long userId, Locale locale, int start, int end)
 		throws PortalException, SystemException {
 
-		JSONArray ddlRecordsJSONArray = JSONFactoryUtil.createJSONArray();
-
 		List<DDLRecord> ddlRecords = ddlRecordPersistence.findByR_U(
 			ddlRecordSetId, userId, start, end);
+
+		JSONArray ddlRecordsJSONArray = getDDLRecordsJSONArray(
+			ddlRecords, locale);
+
+		return ddlRecordsJSONArray;
+	}
+
+	@Override
+	public int getDDLRecordsCount(long ddlRecordSetId) throws SystemException {
+		return ddlRecordPersistence.countByRecordSetId(ddlRecordSetId);
+	}
+
+	@Override
+	public int getDDLRecordsCount(long ddlRecordSetId, long userId)
+		throws SystemException {
+
+		return ddlRecordPersistence.countByR_U(ddlRecordSetId, userId);
+	}
+
+	protected JSONArray getDDLRecordsJSONArray(
+			List<DDLRecord> ddlRecords, Locale locale)
+		throws PortalException, SystemException {
+
+		JSONArray ddlRecordsJSONArray = JSONFactoryUtil.createJSONArray();
 
 		for (DDLRecord ddlRecord : ddlRecords) {
 			JSONObject ddlRecordJSONObject = JSONFactoryUtil.createJSONObject();
@@ -93,13 +129,6 @@ public class MobileWidgetsDDLRecordServiceImpl
 		}
 
 		return ddlRecordsJSONArray;
-	}
-
-	@Override
-	public int getDDLRecordsCount(long ddlRecordSetId, long userId)
-		throws SystemException {
-
-		return ddlRecordPersistence.countByR_U(ddlRecordSetId, userId);
 	}
 
 	protected Object getFieldValue(Field field, Locale locale)
