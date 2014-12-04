@@ -19,12 +19,12 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.ratings.model.RatingsStats;
 import com.liferay.pushnotifications.model.PushNotificationsEntry;
 import com.liferay.pushnotifications.service.base.PushNotificationsEntryLocalServiceBaseImpl;
 import com.liferay.pushnotifications.util.PushNotificationsConstants;
+import com.liferay.pushnotifications.util.UserWrapper;
 
 import java.util.List;
 
@@ -74,11 +74,26 @@ public class PushNotificationsEntryLocalServiceImpl
 
 	@Override
 	public List<PushNotificationsEntry> getPushNotificationsEntries(
-		long parentPushNotificationsEntryId, long lastAccessTime, int start,
-		int end) {
+			long parentPushNotificationsEntryId, long lastAccessTime, int start,
+			int end)
+		throws PortalException {
 
-		return pushNotificationsEntryPersistence.findByC_P(
-			lastAccessTime, parentPushNotificationsEntryId, start, end);
+		List<PushNotificationsEntry> pushNotificationsEntries =
+			pushNotificationsEntryPersistence.findByC_P(
+				lastAccessTime, parentPushNotificationsEntryId, start, end);
+
+		for (PushNotificationsEntry pushNotificationsEntry :
+				pushNotificationsEntries) {
+
+			long userId = pushNotificationsEntry.getUserId();
+
+			UserWrapper user = new UserWrapper(
+				userLocalService.getUser(userId));
+
+			pushNotificationsEntry.setUser(user);
+		}
+
+		return pushNotificationsEntries;
 	}
 
 	@Override
@@ -96,21 +111,11 @@ public class PushNotificationsEntryLocalServiceImpl
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-		JSONObject fromUserJSONObject = JSONFactoryUtil.createJSONObject();
-
-		User user = userLocalService.getUser(fromUserId);
-
-		fromUserJSONObject.put(
-			PushNotificationsConstants.KEY_FULL_NAME, user.getFullName());
-		fromUserJSONObject.put(
-			PushNotificationsConstants.KEY_PORTRAIT_ID, user.getPortraitId());
-		fromUserJSONObject.put(
-			PushNotificationsConstants.KEY_USER_ID, fromUserId);
-		fromUserJSONObject.put(
-			PushNotificationsConstants.KEY_UUID, user.getUuid());
+		UserWrapper fromUser = new UserWrapper(
+			userLocalService.getUser(fromUserId));
 
 		jsonObject.put(
-			PushNotificationsConstants.KEY_FROM_USER, fromUserJSONObject);
+			PushNotificationsConstants.KEY_USER, fromUser.toJSONObject());
 
 		jsonObject.put(
 			PushNotificationsConstants.KEY_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID,

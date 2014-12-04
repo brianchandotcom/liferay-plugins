@@ -334,6 +334,43 @@ public class PushNotificationsEntryClp extends BaseModelImpl<PushNotificationsEn
 		}
 	}
 
+	@Override
+	public void setUser(com.liferay.pushnotifications.util.UserWrapper user) {
+		try {
+			String methodName = "setUser";
+
+			Class<?>[] parameterTypes = new Class<?>[] {
+					com.liferay.pushnotifications.util.UserWrapper.class
+				};
+
+			Object[] parameterValues = new Object[] { user };
+
+			invokeOnRemoteModel(methodName, parameterTypes, parameterValues);
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public com.liferay.pushnotifications.util.UserWrapper getUser() {
+		try {
+			String methodName = "getUser";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			com.liferay.pushnotifications.util.UserWrapper returnObj = (com.liferay.pushnotifications.util.UserWrapper)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
 	public BaseModel<?> getPushNotificationsEntryRemoteModel() {
 		return _pushNotificationsEntryRemoteModel;
 	}
