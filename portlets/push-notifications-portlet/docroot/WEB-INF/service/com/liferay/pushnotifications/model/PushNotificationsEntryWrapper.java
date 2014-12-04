@@ -205,6 +205,11 @@ public class PushNotificationsEntryWrapper implements PushNotificationsEntry,
 		return _pushNotificationsEntry.getRatingsTotalScore();
 	}
 
+	@Override
+	public com.liferay.pushnotifications.util.UserWrapper getUser() {
+		return _pushNotificationsEntry.getUser();
+	}
+
 	/**
 	* Returns the user ID of this push notifications entry.
 	*
@@ -353,6 +358,11 @@ public class PushNotificationsEntryWrapper implements PushNotificationsEntry,
 	@Override
 	public void setRatingsTotalScore(long ratingsTotalScore) {
 		_pushNotificationsEntry.setRatingsTotalScore(ratingsTotalScore);
+	}
+
+	@Override
+	public void setUser(com.liferay.pushnotifications.util.UserWrapper user) {
+		_pushNotificationsEntry.setUser(user);
 	}
 
 	/**
