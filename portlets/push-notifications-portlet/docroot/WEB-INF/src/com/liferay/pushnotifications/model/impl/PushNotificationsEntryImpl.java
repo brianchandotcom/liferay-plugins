@@ -16,13 +16,30 @@ package com.liferay.pushnotifications.model.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
+import com.liferay.portal.kernel.json.JSON;
+import com.liferay.pushnotifications.util.UserWrapper;
+
 /**
- * @author Silvio Santos
+ * @author Bruno Farache
  */
+@JSON(strict = true)
 @ProviderType
 public class PushNotificationsEntryImpl extends PushNotificationsEntryBaseImpl {
 
 	public PushNotificationsEntryImpl() {
 	}
+
+	@JSON
+	@Override
+	public UserWrapper getUser() {
+		return _user;
+	}
+
+	@Override
+	public void setUser(UserWrapper user) {
+		_user = user;
+	}
+
+	private UserWrapper _user;
 
 }
