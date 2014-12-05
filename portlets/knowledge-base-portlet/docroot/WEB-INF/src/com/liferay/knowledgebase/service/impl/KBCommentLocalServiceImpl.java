@@ -37,10 +37,12 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.ClassName;
 import com.liferay.portal.model.SystemEventConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.SubscriptionSender;
+import com.liferay.portlet.ratings.model.RatingsEntry;
 
 import java.util.Date;
 import java.util.List;
@@ -55,7 +57,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 	@Override
 	public KBComment addKBComment(
 			long userId, long classNameId, long classPK, String content,
-			boolean helpful, ServiceContext serviceContext)
+			int userRating, ServiceContext serviceContext)
 		throws PortalException {
 
 		// KB comment
@@ -80,7 +82,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setClassNameId(classNameId);
 		kbComment.setClassPK(classPK);
 		kbComment.setContent(content);
-		kbComment.setHelpful(helpful);
+		kbComment.setUserRating(userRating);
 		kbComment.setStatus(KBCommentConstants.STATUS_NEW);
 
 		kbCommentPersistence.update(kbComment);
@@ -101,6 +103,18 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		notifySubscribers(kbComment, serviceContext);
 
 		return kbComment;
+	}
+
+	@Override
+	public KBComment addKBComment(
+			long userId, long classNameId, long classPK, String content,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		int userRating = getUserRating(userId, classNameId, classPK);
+
+		return addKBComment(
+			userId, classNameId, classPK, content, userRating, serviceContext);
 	}
 
 	@Override
@@ -209,7 +223,6 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 	}
 
 	@Override
-
 	public int getKBCommentsCount(long userId, String className, long classPK) {
 		long classNameId = classNameLocalService.getClassNameId(className);
 
@@ -242,7 +255,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 	@Override
 	public KBComment updateKBComment(
 			long kbCommentId, long classNameId, long classPK, String content,
-			boolean helpful, int status, ServiceContext serviceContext)
+			int userRating, int status, ServiceContext serviceContext)
 		throws PortalException {
 
 		// KB comment
@@ -256,7 +269,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setClassNameId(classNameId);
 		kbComment.setClassPK(classPK);
 		kbComment.setContent(content);
-		kbComment.setHelpful(helpful);
+		kbComment.setUserRating(userRating);
 		kbComment.setStatus(status);
 
 		kbCommentPersistence.update(kbComment);
@@ -276,6 +289,20 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		return kbComment;
 	}
 
+	@Override
+	public KBComment updateKBComment(
+			long kbCommentId, long classNameId, long classPK, String content,
+			int status, ServiceContext serviceContext)
+		throws PortalException {
+
+		KBComment kbComment = kbCommentPersistence.findByPrimaryKey(
+			kbCommentId);
+
+		return updateKBComment(
+			kbCommentId, classNameId, classPK, content,
+			kbComment.getUserRating(), status, serviceContext);
+	}
+
 	public KBComment updateStatus(
 			long kbCommentId, int status, ServiceContext serviceContext)
 		throws PortalException {
@@ -290,6 +317,25 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		notifySubscribers(kbComment, serviceContext);
 
 		return kbComment;
+	}
+
+	protected int getUserRating(long userId, long classNameId, long classPK)
+		throws PortalException {
+
+		ClassName className = classNameLocalService.getClassName(classNameId);
+
+		RatingsEntry ratingsEntry = ratingsEntryLocalService.fetchEntry(
+			userId, className.getValue(), classPK);
+
+		if (ratingsEntry == null) {
+			return KBCommentConstants.RATING_NONE;
+		}
+
+		if (ratingsEntry.getScore() > 0) {
+			return KBCommentConstants.RATING_LIKE;
+		}
+
+		return KBCommentConstants.RATING_DISLIKE;
 	}
 
 	protected void notifySubscribers(

@@ -211,8 +211,8 @@
 		<column name="classNameId" type="long" />
 		<column name="classPK" type="long" />
 		<column name="content" type="String" />
-		<column name="helpful" type="boolean" />
 		<column name="status" type="int" />
+		<column name="userRating" type="int" />
 
 		<!-- Order -->
 
@@ -251,6 +251,7 @@
 		<!-- References -->
 
 		<reference package-path="com.liferay.portal" entity="PortletPreferences" />
+		<reference package-path="com.liferay.portlet.ratings" entity="RatingsEntry" />
 		<reference package-path="com.liferay.portlet.social" entity="SocialActivity" />
 	</entity>
 	<entity name="KBFolder" uuid="true" local-service="true" remote-service="true">
