@@ -124,9 +124,12 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 				updateModifiedLocales(
 					"fieldOptions" + i, fieldOptionsMap, preferences);
 
+				preferences.setValue(
+					"fieldLabel" + i, fieldLabelMap.get(defaultLocale));
 				preferences.setValue("fieldType" + i, fieldType);
 				preferences.setValue(
 					"fieldOptional" + i, String.valueOf(fieldOptional));
+				preferences.setValue("fieldOptions" + i, StringPool.BLANK);
 				preferences.setValue(
 					"fieldValidationScript" + i, fieldValidationScript);
 				preferences.setValue(
@@ -162,6 +165,7 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 						StringPool.BLANK);
 				}
 
+				preferences.setValue("fieldLabel" + i, StringPool.BLANK);
 				preferences.setValue("fieldType" + i, StringPool.BLANK);
 				preferences.setValue("fieldOptional" + i, StringPool.BLANK);
 				preferences.setValue(
