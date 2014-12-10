@@ -41,10 +41,10 @@ public class KBNavigationDisplayContext {
 		PortletRequest portletRequest, PortalPreferences portalPreferences,
 		PortletPreferences portletPreferences, KBArticle kbArticle) {
 
-		_kbArticle = kbArticle;
+		_portletRequest = portletRequest;
 		_portalPreferences = portalPreferences;
 		_portletPreferences = portletPreferences;
-		_portletRequest = portletRequest;
+		_kbArticle = kbArticle;
 	}
 
 	public List<Long> getAncestorResourcePrimaryKeys() throws PortalException {
@@ -133,9 +133,23 @@ public class KBNavigationDisplayContext {
 	}
 
 	public boolean isShowNavigation() throws PortalException {
-		boolean showNavigation = true;
-
 		long scopeGroupId = PortalUtil.getScopeGroupId(_portletRequest);
+
+		long kbFolderClassNameId = PortalUtil.getClassNameId(
+			KBFolderConstants.getClassName());
+
+		if (getResourceClassNameId() == kbFolderClassNameId) {
+			List<KBFolder> kbFolders =
+				KnowledgeBaseUtil.getAlternateRootKBFolders(
+					PortalUtil.getScopeGroupId(_portletRequest),
+					getResourcePrimKey());
+
+			if (kbFolders.size() > 1) {
+				return true;
+			}
+		}
+
+		boolean showNavigation = true;
 
 		long rootResourcePrimKey = getRootResourcePrimKey();
 
