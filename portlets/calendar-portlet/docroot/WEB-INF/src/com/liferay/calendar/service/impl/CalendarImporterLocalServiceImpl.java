@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
@@ -43,6 +44,7 @@ import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetCategoryConstants;
 import com.liferay.portlet.asset.model.AssetEntry;
@@ -165,6 +167,46 @@ public class CalendarImporterLocalServiceImpl
 			});
 
 		actionableDynamicQuery.performActions();
+	}
+
+	@Override
+	public void importRolePermissions() throws PortalException {
+		int[] scopes = new int[] {
+			ResourceConstants.SCOPE_COMPANY, ResourceConstants.SCOPE_GROUP,
+			ResourceConstants.SCOPE_GROUP_TEMPLATE
+		};
+
+		for (long companyId : PortalUtil.getCompanyIds()) {
+			for (int scope : scopes) {
+				importResourcePermissions(
+					companyId, _OLD_CALENDAR_MODEL_NAME, "ADD_EVENT",
+					_NEW_CALENDAR_MODEL_NAME, "MANAGE_BOOKINGS", scope);
+
+				importResourcePermissions(
+					companyId, _OLD_CALENDAR_MODEL_NAME, "ADD_EVENT",
+					_NEW_CALENDAR_MODEL_NAME, "VIEW_BOOKING_DETAILS", scope);
+
+				importResourcePermissions(
+					companyId, _OLD_CALENDAR_MODEL_NAME, "PERMISSIONS",
+					_NEW_CALENDAR_MODEL_NAME, "PERMISSIONS", scope);
+
+				importResourcePermissions(
+					companyId, _CAL_EVENT_MODEL_NAME, "ADD_DISCUSSION",
+					_CALENDAR_BOOKING_MODEL_NAME, "ADD_DISCUSSION", scope);
+
+				importResourcePermissions(
+					companyId, _CAL_EVENT_MODEL_NAME, "DELETE_DISCUSSION",
+					_CALENDAR_BOOKING_MODEL_NAME, "DELETE_DISCUSSION", scope);
+
+				importResourcePermissions(
+					companyId, _CAL_EVENT_MODEL_NAME, "PERMISSIONS",
+					_CALENDAR_BOOKING_MODEL_NAME, "PERMISSIONS", scope);
+
+				importResourcePermissions(
+					companyId, _CAL_EVENT_MODEL_NAME, "UPDATE_DISCUSSION",
+					_CALENDAR_BOOKING_MODEL_NAME, "UPDATE_DISCUSSION", scope);
+			}
+		}
 	}
 
 	protected void addAssetEntry(
@@ -449,6 +491,23 @@ public class CalendarImporterLocalServiceImpl
 		subscriptionPersistence.update(subscription);
 	}
 
+	protected long convertActionId(
+		ResourcePermission resourcePermission, String oldResourceModelName,
+		String oldActionId, String newResourceModelName, String newActionId) {
+
+		ResourceAction oldResourceAction = resourceActionPersistence.fetchByN_A(
+			oldResourceModelName, oldActionId);
+
+		boolean hasActionId = resourcePermissionLocalService.hasActionId(
+			resourcePermission, oldResourceAction);
+
+		if (!hasActionId) {
+			return 0;
+		}
+
+		return getActionId(newResourceModelName, newActionId);
+	}
+
 	protected CalendarBooking fetchCalendarBooking(CalEvent calEvent)
 		throws PortalException {
 
@@ -459,11 +518,9 @@ public class CalendarImporterLocalServiceImpl
 			calEvent.getUuid(), calendarResource.getGroupId());
 	}
 
-	protected long getActionId(
-		ResourceAction oldResourceAction, String newClassName) {
-
+	protected long getActionId(String resourceModelName, String actionId) {
 		ResourceAction newResourceAction = resourceActionPersistence.fetchByN_A(
-			newClassName, oldResourceAction.getActionId());
+			resourceModelName, actionId);
 
 		if (newResourceAction == null) {
 			return 0;
@@ -489,8 +546,10 @@ public class CalendarImporterLocalServiceImpl
 				continue;
 			}
 
-			actionIds = actionIds | getActionId(
-				oldResourceAction, newClassName);
+			String action = oldResourceAction.getActionId();
+
+			actionIds = actionIds | convertActionId(
+				resourcePermission, oldClassName, action, newClassName, action);
 		}
 
 		return actionIds;
@@ -940,6 +999,35 @@ public class CalendarImporterLocalServiceImpl
 			ratingsStats.getAverageScore());
 	}
 
+	protected void importResourcePermissions(
+			long companyId, String oldClassName, String oldAction,
+			String newClassName, String newAction, int scope)
+		throws PortalException {
+
+		List<ResourcePermission> resourcePermissions =
+			resourcePermissionPersistence.findByC_N_S(
+				companyId, oldClassName, scope);
+
+		for (ResourcePermission resourcePermission : resourcePermissions) {
+			long roleId = resourcePermission.getRoleId();
+
+			long actionIds = convertActionId(
+				resourcePermission, oldClassName, oldAction, newClassName,
+				newAction);
+
+			if (scope == ResourceConstants.SCOPE_GROUP) {
+				resourceBlockLocalService.addGroupScopePermissions(
+					companyId,
+					GetterUtil.getLong(resourcePermission.getPrimKey()),
+					newClassName, roleId, actionIds);
+			}
+			else {
+				resourceBlockLocalService.addCompanyScopePermissions(
+					companyId, newClassName, roleId, actionIds);
+			}
+		}
+	}
+
 	protected void importSocialActivities(
 		CalEvent calEvent, long calendarBookingId) {
 
@@ -1033,6 +1121,18 @@ public class CalendarImporterLocalServiceImpl
 	}
 
 	private static final String _ASSET_VOCABULARY_NAME = "Calendar Event Types";
+
+	private static final String _CAL_EVENT_MODEL_NAME =
+		"com.liferay.portlet.calendar.model.CalEvent";
+
+	private static final String _CALENDAR_BOOKING_MODEL_NAME =
+		"com.liferay.calendar.model.CalendarBooking";
+
+	private static final String _NEW_CALENDAR_MODEL_NAME =
+		"com.liferay.calendar.model.Calendar";
+
+	private static final String _OLD_CALENDAR_MODEL_NAME =
+		"com.liferay.portlet.calendar";
 
 	private static Map<Integer, Frequency> _frequencyMap =
 		new HashMap<Integer, Frequency>();

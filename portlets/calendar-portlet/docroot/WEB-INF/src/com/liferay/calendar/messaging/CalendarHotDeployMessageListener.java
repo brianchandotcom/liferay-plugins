@@ -44,6 +44,7 @@ public class CalendarHotDeployMessageListener extends HotDeployMessageListener {
 		stopWatch.start();
 
 		CalendarImporterLocalServiceUtil.importCalEvents();
+		CalendarImporterLocalServiceUtil.importRolePermissions();
 
 		if (_log.isInfoEnabled()) {
 			StringBundler sb = new StringBundler(6);
