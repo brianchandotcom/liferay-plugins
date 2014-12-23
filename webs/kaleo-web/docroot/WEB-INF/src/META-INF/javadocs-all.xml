@@ -1245,6 +1245,27 @@
 			</throws>
 		</method>
 		<method>
+			<name>fetchWorkflowTask</name>
+			<param>
+				<name>companyId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<param>
+				<name>workflowTaskInstanceId</name>
+				<type>long</type>
+				<comment><![CDATA[]]></comment>
+			</param>
+			<return>
+				<comment><![CDATA[]]></comment>
+			</return>
+			<throws>
+				<name>WorkflowException</name>
+				<type>com.liferay.portal.kernel.workflow.WorkflowException</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+		<method>
 			<name>getNextTransitionNames</name>
 			<param>
 				<name>companyId</name>
@@ -3658,6 +3679,32 @@
 		</method>
 	</javadoc>
 	<javadoc>
+		<name>UpgradeKaleoAction</name>
+		<type>com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoAction</type>
+		<author><![CDATA[David Zhang]]></author>
+		<method>
+			<name>doUpgrade</name>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+	</javadoc>
+	<javadoc>
+		<name>UpgradeKaleoCondition</name>
+		<type>com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoCondition</type>
+		<author><![CDATA[David Zhang]]></author>
+		<method>
+			<name>doUpgrade</name>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+	</javadoc>
+	<javadoc>
 		<name>UpgradeKaleoLog</name>
 		<type>com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoLog</type>
 		<author><![CDATA[Kenneth Chang]]></author>
@@ -3674,6 +3721,19 @@
 		<name>UpgradeKaleoNotificationRecipient</name>
 		<type>com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoNotificationRecipient</type>
 		<author><![CDATA[Michael C. Han]]></author>
+		<method>
+			<name>doUpgrade</name>
+			<throws>
+				<name>Exception</name>
+				<type>java.lang.Exception</type>
+				<comment><![CDATA[]]></comment>
+			</throws>
+		</method>
+	</javadoc>
+	<javadoc>
+		<name>UpgradeKaleoTaskAssignment</name>
+		<type>com.liferay.portal.workflow.kaleo.hook.upgrade.v1_2_0.UpgradeKaleoTaskAssignment</type>
+		<author><![CDATA[David Zhang]]></author>
 		<method>
 			<name>doUpgrade</name>
 			<throws>
