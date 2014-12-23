@@ -26,7 +26,7 @@ public class UpgradeKaleoAction extends UpgradeProcess {
 		if (!tableHasColumn("KaleoAction", "scriptRequiredContexts")) {
 			runSQL(
 				"alter table KaleoAction add column scriptRequiredContexts " +
-					"VARCHAR(75) null");
+					"STRING null");
 		}
 	}
 
