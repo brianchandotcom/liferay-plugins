@@ -65,11 +65,16 @@
 		<fileset dir="${sdk.dir}/lib" includes="activation.jar,javax.servlet-api.jar,jsp-api.jar,net.sf.jargs.jar,qdox.jar" />
 	</path>
 
-	<path id="test.classpath">
+	<path id="test.runtime.classpath">
 		<path refid="plugin.classpath" />
 		<path refid="plugin-test-type.classpath" />
 		<fileset dir="${app.server.lib.portal.dir}" excludes="ant.jar" includes="*.jar" />
 		<fileset dir="${module.framework.base.dir}/test" erroronmissingdir="false" includes="portal-test*.jar" />
+	</path>
+
+	<path id="test.compile.classpath">
+		<path refid="test.runtime.classpath" />
+		<pathelement location="${app.server.lib.portal.dir}/ant.jar" />
 	</path>
 
 	<path id="classpath.aQute.bnd">
@@ -985,7 +990,7 @@ Please find a solution that does not require portal-impl.jar.
 					</path>
 
 					<compile-java
-						javac.classpathref="test.classpath"
+						javac.classpathref="test.compile.classpath"
 						javac.destdir="@{module.dir}/test-classes/@{test.type}"
 						javac.srcdir="@{module.dir}/test/@{test.type}"
 						module.dir="@{module.dir}"
@@ -2166,7 +2171,7 @@ Please find a solution that does not require portal-impl.jar.
 								<jvmarg value="-Dsdk.dir=${sdk.dir}" />
 								<jvmarg value="-Duser.timezone=GMT" />
 								<classpath location="@{module.dir}/test-coverage" />
-								<classpath refid="test.classpath" />
+								<classpath refid="test.runtime.classpath" />
 								<formatter type="brief" usefile="false" />
 								<formatter type="xml" />
 								<batchtest todir="@{module.dir}/test-results/@{test.type}">
