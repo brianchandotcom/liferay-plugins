@@ -485,6 +485,7 @@
 		<field indexed="true" name="leftOrganizationId" stored="true" type="slong" />
 		<field indexed="true" name="mimeType" stored="true" type="string" />
 		<field indexed="true" name="modified" stored="true" type="string" />
+		<field indexed="true" name="modified_sortable" stored="true" type="long" />
 		<field indexed="true" name="nodeId" stored="true" type="string" />
 		<field indexed="true" name="organizationId" stored="true" type="string" />
 		<field indexed="true" multiValued="true" name="organizationIds" stored="true" type="string" />
@@ -522,6 +523,7 @@
 		<field indexed="true" name="version" stored="true" type="string" />
 		<field indexed="true" name="visible" stored="true" type="string" />
 		<field indexed="true" multiValued="false" name="_version_" stored="true" type="long" />
+		<dynamicField indexed="true" name="*Date_sortable" stored="true" type="long" />
 		<dynamicField indexed="true" multiValued="true" name="*_sortable" stored="true" type="string" />
 		<dynamicField indexed="true" multiValued="true" name="assetCategoryTitles*" stored="true" termPositions="true" termVectors="true" type="text" />
 		<dynamicField indexed="true" multiValued="true" name="expando__*" stored="true" type="text" />
