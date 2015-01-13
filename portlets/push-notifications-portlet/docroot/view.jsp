@@ -16,25 +16,30 @@
 
 <%@ include file="/init.jsp" %>
 
-<aui:form name="fm">
-	<aui:input label="message" name="message" rows="6" type="textarea" />
+<liferay-ui:tabs
+	names="test"
+	refresh="<%= false %>"
+>
+	<liferay-ui:section>
+		<aui:form name="fm">
+			<aui:input label="message" name="message" rows="6" type="textarea" />
 
-	<aui:input label="url" name="url" />
+			<aui:button type="submit" value="send" />
 
-	<aui:button type="submit" value="send" />
+			<aui:button type="reset" value="reset" />
+		</aui:form>
 
-	<aui:button type="reset" value="reset" />
-</aui:form>
+		<br />
 
-<br />
+		<div class="alert alert-success hide" id="<portlet:namespace />success">
+			<p><liferay-ui:message key="the-push-notification-was-sent-successfully" /></p>
+		</div>
 
-<div class="alert alert-success hide" id="<portlet:namespace />success">
-	<p><liferay-ui:message key="the-alert-was-sent-successfully" /></p>
-</div>
-
-<div class="alert alert-danger hide" id="<portlet:namespace />error">
-	<p></p>
-</div>
+		<div class="alert alert-danger hide" id="<portlet:namespace />error">
+			<p></p>
+		</div>
+	</liferay-ui:section>
+</liferay-ui:tabs>
 
 <aui:script use="aui-base">
 	var form = A.one('#<portlet:namespace />fm');
@@ -45,26 +50,14 @@
 			event.halt();
 
 			var message = form.one('textarea[name="<portlet:namespace />message"]').val();
-			var type = 'text';
-			var url = form.one('input[name="<portlet:namespace />url"]').val().trim();
-
-			if (url.length !== 0) {
-				if (<portlet:namespace />isImage(url)) {
-					type = 'image';
-				}
-				else {
-					type = 'link';
-				}
-			}
 
 			Liferay.Service(
-				'/push-notifications-portlet.pushnotificationsentry/add-push-notifications-entry',
+				'/push-notifications-portlet.pushnotificationsdevice/send-push-notification',
 				{
+					toUserId: 0,
 					payload: A.JSON.stringify(
 						{
-							message: message,
-							type: type,
-							url: url
+							message: message
 						}
 					)
 				},
@@ -72,17 +65,6 @@
 			);
 		}
 	);
-
-	function <portlet:namespace />isImage(url) {
-		var regex = /(.*\.(?:gif|jpeg|jpg|png))/i;
-
-		if (regex.test(url)) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 
 	function <portlet:namespace />onSendPushNotification(result) {
 		var success = A.one('#<portlet:namespace />success');
@@ -93,13 +75,13 @@
 
 		error.hide();
 
-		if (A.Object.hasKey(result, 'pushNotificationsEntryId')) {
-			success.show();
-		}
-		else {
+		if (A.Object.hasKey(result, 'exception')) {
 			error.one('p').text(result);
 
 			error.show();
+		}
+		else {
+			success.show();
 		}
 	}
 </aui:script>
