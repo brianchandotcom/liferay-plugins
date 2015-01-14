@@ -32,7 +32,6 @@ boolean saveToDatabase = GetterUtil.getBoolean(portletPreferences.getValue("save
 String databaseTableName = portletPreferences.getValue("databaseTableName", StringPool.BLANK);
 
 boolean saveToFile = GetterUtil.getBoolean(portletPreferences.getValue("saveToFile", StringPool.BLANK));
-String fileName = portletPreferences.getValue("fileName", StringPool.BLANK);
 
 boolean fieldsEditingDisabled = false;
 
@@ -72,7 +71,6 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			<aui:fieldset cssClass="handle-data" label="email">
 				<liferay-ui:error key="emailAddressInvalid" message="please-enter-a-valid-email-address" />
 				<liferay-ui:error key="emailAddressRequired" message="please-enter-an-email-address" />
-				<liferay-ui:error key="fileNameInvalid" message="please-enter-a-valid-path-and-file-name" />
 				<liferay-ui:error key="handlingRequired" message="please-select-an-action-for-the-handling-of-form-data" />
 				<liferay-ui:error key="subjectRequired" message="please-enter-a-subject" />
 
@@ -97,7 +95,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			<aui:fieldset cssClass="handle-data" label="file">
 				<aui:input name="preferences--saveToFile--" type="checkbox" value="<%= saveToFile %>" />
 
-				<aui:input label="path-and-file-name" name="preferences--fileName--" value="<%= fileName %>" wrapperCssClass="lfr-input-text-container" />
+				<liferay-ui:message arguments="<%= HtmlUtil.escape(WebFormUtil.getFileName(themeDisplay, portletResource)) %>" key="form-data-will-be-saved-to-x" />
 			</aui:fieldset>
 		</liferay-ui:panel>
 

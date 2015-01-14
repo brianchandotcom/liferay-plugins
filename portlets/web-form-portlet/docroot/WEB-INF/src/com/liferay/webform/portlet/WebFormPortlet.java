@@ -125,8 +125,6 @@ public class WebFormPortlet extends MVCPortlet {
 			preferences.getValue("databaseTableName", StringPool.BLANK));
 		boolean saveToFile = GetterUtil.getBoolean(
 			preferences.getValue("saveToFile", StringPool.BLANK));
-		String fileName = GetterUtil.getString(
-			preferences.getValue("fileName", StringPool.BLANK));
 
 		if (requireCaptcha) {
 			try {
@@ -199,6 +197,9 @@ public class WebFormPortlet extends MVCPortlet {
 			}
 
 			if (saveToFile) {
+				String fileName = WebFormUtil.getFileName(
+					themeDisplay, portletId);
+
 				fileSuccess = saveFile(fieldsMap, fileName);
 			}
 

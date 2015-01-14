@@ -27,9 +27,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.expando.DuplicateColumnNameException;
 import com.liferay.webform.util.WebFormUtil;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -261,25 +258,6 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 				if (!Validator.isEmailAddress(emailAdress)) {
 					SessionErrors.add(actionRequest, "emailAddressInvalid");
 				}
-			}
-		}
-
-		if (saveToFile) {
-			String fileName = getParameter(actionRequest, "fileName");
-
-			// Check if server can create a file as specified
-
-			try {
-				FileOutputStream fileOutputStream = new FileOutputStream(
-					fileName, true);
-
-				fileOutputStream.close();
-			}
-			catch (SecurityException se) {
-				SessionErrors.add(actionRequest, "fileNameInvalid");
-			}
-			catch (FileNotFoundException fnfe) {
-				SessionErrors.add(actionRequest, "fileNameInvalid");
 			}
 		}
 
