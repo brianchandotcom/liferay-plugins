@@ -18,6 +18,9 @@ import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.pushnotifications.PushNotificationsException;
 import com.liferay.pushnotifications.model.PushNotificationsDevice;
 import com.liferay.pushnotifications.sender.PushNotificationsSender;
 import com.liferay.pushnotifications.service.base.PushNotificationsDeviceLocalServiceBaseImpl;
@@ -67,6 +70,17 @@ public class PushNotificationsDeviceLocalServiceImpl
 	}
 
 	@Override
+	public void preferencesChanged() {
+		for (Map.Entry<String, PushNotificationsSender> entry :
+				_pushNotificationsSenders.entrySet()) {
+
+			PushNotificationsSender pushNotificationsSender = entry.getValue();
+
+			pushNotificationsSender.preferencesChanged();
+		}
+	}
+
+	@Override
 	public void sendPushNotification(long fromUserId, JSONObject jsonObject)
 		throws PortalException {
 
@@ -103,6 +117,11 @@ public class PushNotificationsDeviceLocalServiceImpl
 			try {
 				pushNotificationsSender.send(tokens, jsonObject);
 			}
+			catch (PushNotificationsException pne) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(pne.getMessage());
+				}
+			}
 			catch (PortalException pe) {
 				throw pe;
 			}
@@ -123,6 +142,9 @@ public class PushNotificationsDeviceLocalServiceImpl
 		return pushNotificationsDevicePersistence.findByU_P(
 			toUserId, platform, start, end);
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		PushNotificationsDeviceLocalServiceImpl.class);
 
 	@BeanReference(name = "pushNotificationsSenders")
 	private Map<String, PushNotificationsSender> _pushNotificationsSenders;

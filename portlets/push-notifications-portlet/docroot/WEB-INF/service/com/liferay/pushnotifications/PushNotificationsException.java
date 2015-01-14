@@ -12,20 +12,29 @@
  * details.
  */
 
-package com.liferay.pushnotifications.sender;
+package com.liferay.pushnotifications;
 
-import com.liferay.portal.kernel.json.JSONObject;
-
-import java.util.List;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
  * @author Bruno Farache
  */
-public interface PushNotificationsSender {
+public class PushNotificationsException extends PortalException {
 
-	public void preferencesChanged();
+	public PushNotificationsException() {
+		super();
+	}
 
-	public void send(List<String> tokens, JSONObject jsonObject)
-		throws Exception;
+	public PushNotificationsException(String msg) {
+		super(msg);
+	}
+
+	public PushNotificationsException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
+	public PushNotificationsException(Throwable cause) {
+		super(cause);
+	}
 
 }
