@@ -74,6 +74,12 @@ request.setAttribute("article_icons.jsp-kb_article", kbArticle);
 
 	<liferay-util:include page="/admin/article_child.jsp" servletContext="<%= application %>" />
 
+	<c:if test='<%= enableSocialBookmarks && socialBookmarksDisplayPosition.equals("bottom") %>'>
+		<liferay-util:include page="/admin/article_social_bookmarks.jsp" servletContext="<%= application %>" />
+	</c:if>
+
+	<liferay-util:include page="/admin/article_ratings.jsp" servletContext="<%= application %>" />
+
 	<c:if test="<%= !rootPortletId.equals(PortletKeys.KNOWLEDGE_BASE_ARTICLE) %>">
 		<liferay-util:include page="/admin/article_siblings.jsp" servletContext="<%= application %>" />
 	</c:if>
@@ -83,10 +89,4 @@ request.setAttribute("article_icons.jsp-kb_article", kbArticle);
 	<liferay-util:include page="/admin/article_asset_entries.jsp" servletContext="<%= application %>" />
 
 	<liferay-util:include page="/admin/article_asset_links.jsp" servletContext="<%= application %>" />
-
-	<liferay-util:include page="/admin/article_ratings.jsp" servletContext="<%= application %>" />
-
-	<c:if test='<%= enableSocialBookmarks && socialBookmarksDisplayPosition.equals("bottom") %>'>
-		<liferay-util:include page="/admin/article_social_bookmarks.jsp" servletContext="<%= application %>" />
-	</c:if>
 </div>
