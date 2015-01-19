@@ -49,15 +49,15 @@ else {
 }
 %>
 
-<div class="input-append kb-new-parent">
-	<aui:input label="" name="parentResource" type="resource" value="<%= parentTitle %>" />
+<aui:field-wrapper label="new-parent">
+	<div id="<portlet:namespace />newParent">
+		<aui:input label="" name="parentTitle" readonly="<%= true %>" value="<%= parentTitle %>" />
 
-	<aui:input cssClass="input-mini kb-priority" id="parentPriority" inlineField="<%= true %>" label="" name="priority" type="text" value="<%= BigDecimal.valueOf(priority).toPlainString() %>" />
-</div>
+		<aui:input cssClass="input-mini" id="parentPriority" label="priority" name="priority" type="text" value="<%= BigDecimal.valueOf(priority).toPlainString() %>" />
+	</div>
 
-<div class="kb-edit-link">
-	<aui:a href="javascript:;" id="selectKBObjectLink"><liferay-ui:message key="select-parent" /> &raquo;</aui:a>
-</div>
+	<aui:button name="selectKBObjectButton" value="select" />
+</aui:field-wrapper>
 
 <aui:script use="aui-base">
 	<liferay-portlet:renderURL var="selectKBObjectURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
@@ -69,7 +69,7 @@ else {
 		<portlet:param name="status" value="<%= String.valueOf(status) %>" />
 	</liferay-portlet:renderURL>
 
-	A.one('#<portlet:namespace />selectKBObjectLink').on(
+	A.one('#<portlet:namespace />selectKBObjectButton').on(
 		'click',
 		function(event) {
 			Liferay.Util.selectEntity(
@@ -87,7 +87,7 @@ else {
 					document.<portlet:namespace />fm.<portlet:namespace />parentPriority.value = event.priority;
 					document.<portlet:namespace />fm.<portlet:namespace />parentResourceClassNameId.value = event.resourceclassnameid;
 					document.<portlet:namespace />fm.<portlet:namespace />parentResourcePrimKey.value = event.resourceprimkey;
-					document.<portlet:namespace />fm.<portlet:namespace />parentResource.value = A.Lang.String.unescapeEntities(event.title);
+					document.<portlet:namespace />fm.<portlet:namespace />parentTitle.value = A.Lang.String.unescapeEntities(event.title);
 				}
 			);
 		}
