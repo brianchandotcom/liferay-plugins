@@ -1,4 +1,4 @@
-@import "compass";
+@import "bourbon";
 
 html body {
 	height: auto;
@@ -19,7 +19,7 @@ html body {
 	z-index: 1000;
 
 	.status-message, .trigger-name {
-		@include text-shadow(1px 1px #FFF);
+		text-shadow: 1px 1px #FFF;
 	}
 }
 
@@ -32,6 +32,7 @@ html body {
 }
 
 /* ---------- Bottom dock tabs ---------- */
+
 .chat-bar {
 	div ul {
 		&, li {
@@ -141,7 +142,7 @@ html body {
 
 	&.loading.selected {
 		.chat-panel .panel-window .panel-content {
-			@include opacity(0.3);
+			opacity: 0.3;
 
 			li:hover {
 				background: none;
@@ -260,8 +261,8 @@ html body {
 	background: #FFF;
 	border: 1px solid #262626;
 	font: 12px Tahoma, Geneva, sans-serif;
-	min-width: 226px;
 	max-width: 452px;
+	min-width: 226px;
 	position: relative;
 }
 
@@ -335,9 +336,9 @@ img.panel-icon {
 .panel-output {
 	border-bottom: 1px solid #000;
 	height: 192px;
+	overflow-x: auto;
 	overflow-y: scroll;
 	padding: 2px;
-	overflow-x: auto;
 	word-wrap: break-word;
 
 	.blurb {
@@ -516,9 +517,9 @@ pre.chat-height-monitor {
 /* ---------- Extras ---------- */
 
 .chat-bar div ul li.selected .panel-trigger {
-	@include border-radius(0 4px);
+	border-radius: 0 4px;
 }
 
 .panel-window {
-	@include border-radius(4px 4px 0 4px);
+	border-radius: 4px 4px 0 4px;
 }
