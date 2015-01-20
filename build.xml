@@ -154,11 +154,9 @@ ${nodejs.url[osx64]}.
 				<if>
 					<contains string="${nodejs.file}" substring=".tar.gz" />
 					<then>
-						<untar
-							compression="gzip"
-							dest="tools"
-							src="${nodejs.file}"
-						/>
+						<exec executable="tar">
+							<arg line="-C tools -zxf ${nodejs.file}"/>
+						</exec>
 
 						<antelope:stringutil string="${nodejs.file}" property="nodejs.dir.endindex">
 							<antelope:lastindexof string=".tar.gz" />
@@ -171,13 +169,15 @@ ${nodejs.url[osx64]}.
 						<delete dir="tools/node-v${nodejs.version}" />
 
 						<move file="tools/${nodejs.dir}" tofile="tools/node-v${nodejs.version}" />
+
+						<mkdir dir="tools/node-v${nodejs.version}/node_modules" />
+
+						<delete file="${nodejs.file}" />
 					</then>
 					<else>
-						<move file="${nodejs.file}" todir="tools/templates/node-v${nodejs.version}" />
+						<move file="${nodejs.file}" todir="tools/node-v${nodejs.version}" />
 					</else>
 				</if>
-
-				<delete file="${nodejs.file}" />
 
 				<if>
 					<os family="windows" />
@@ -188,7 +188,7 @@ ${nodejs.url[osx64]}.
 						/>
 
 						<unzip
-							dest="tools/templates/node-v${nodejs.version}"
+							dest="tools/node-v${nodejs.version}"
 							src="npm.zip"
 						/>
 
@@ -197,6 +197,27 @@ ${nodejs.url[osx64]}.
 				</if>
 			</then>
 		</if>
+	</target>
+
+	<macrodef name="exec-node-command">
+		<attribute name="command"/>
+		<attribute name="commandArgs" default="" />
+
+		<sequential>
+			<property name="working.dir" value="${user.dir}" />
+			<exec dir="${working.dir}" executable="${basedir}/tools/node-v${nodejs.version}/bin/@{command}">
+				<arg line="@{commandArgs} ${node.args}"/>
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="exec-node" depends="download-nodejs">
+		<exec-node-command command="node" />
+	</target>
+
+	<target name="exec-npm" depends="download-nodejs">
+		<property name="working.dir" value="tools/node-v${nodejs.version}" />
+		<exec-node-command command="npm" />
 	</target>
 
 	<target name="ear">
