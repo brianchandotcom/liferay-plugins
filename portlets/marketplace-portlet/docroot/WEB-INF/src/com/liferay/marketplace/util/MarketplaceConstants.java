@@ -16,33 +16,48 @@ package com.liferay.marketplace.util;
 
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
+
+import java.util.Locale;
 
 /**
  * @author Ryan Park
+ * @author Joan Kim
  */
 public class MarketplaceConstants {
 
 	public static final String MARKETPLACE_URL_LOGOUT =
 		PortletPropsValues.MARKETPLACE_URL + "/c/portal/logout";
 
-	public static String getPathPurchased() {
+	public static String getPathPurchased(Locale locale) {
 		if (_pathPurchased == null) {
 			_pathPurchased =
 				_MARKETPLACE_PATH_PURCHASED + _MARKETPLACE_CLIENT_BUILD +
 					StringPool.SLASH;
 		}
 
-		return _pathPurchased + ReleaseInfo.getBuildNumber();
+		return
+			getLanguageCode(locale) + _pathPurchased +
+				ReleaseInfo.getBuildNumber();
 	}
 
-	public static String getPathStore() {
+	public static String getPathStore(Locale locale) {
 		if (_pathStore == null) {
 			_pathStore =
 				_MARKETPLACE_PATH_STORE + _MARKETPLACE_CLIENT_BUILD +
 					StringPool.SLASH;
 		}
 
-		return _pathStore + ReleaseInfo.getBuildNumber();
+		return
+			getLanguageCode(locale) + _pathStore + ReleaseInfo.getBuildNumber();
+	}
+
+	protected static String getLanguageCode(Locale locale) {
+		if ((locale != null) && Validator.isNotNull(locale.getLanguage())) {
+			return StringPool.SLASH + locale.getLanguage();
+		}
+
+		return StringPool.BLANK;
 	}
 
 	private static final String _MARKETPLACE_CLIENT_BUILD = "3";

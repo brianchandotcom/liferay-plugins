@@ -78,12 +78,12 @@ String iFrameURL = MarketplaceConstants.MARKETPLACE_URL_LOGOUT;
 String referer = StringPool.BLANK;
 
 if (portletId.equals(PortletKeys.MY_MARKETPLACE)) {
-	referer = MarketplaceConstants.getPathPurchased();
+	referer = MarketplaceConstants.getPathPurchased(themeDisplay.getLocale());
 }
 else if (portletId.equals(PortletKeys.STORE) && (appId > 0)) {
-	referer = MarketplaceConstants.getPathStore() + "/application/" + appId;
+	referer = MarketplaceConstants.getPathStore(themeDisplay.getLocale()) + "/application/" + appId;
 }
 else {
-	referer = MarketplaceConstants.getPathStore();
+	referer = MarketplaceConstants.getPathStore(themeDisplay.getLocale());
 }
 %>
