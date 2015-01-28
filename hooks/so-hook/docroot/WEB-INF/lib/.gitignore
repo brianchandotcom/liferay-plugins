@@ -15,3 +15,6 @@
 /util-bridges.jar
 /util-java.jar
 /util-taglib.jar
+/com.liferay.bookmarks.api.jar
+/com.liferay.wiki.api.jar
+/org.osgi.core.jar

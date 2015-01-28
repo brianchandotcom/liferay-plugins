@@ -5,3 +5,8 @@
 /util-bridges.jar
 /util-java.jar
 /util-taglib.jar
+/com.liferay.portal.spring.extender.jar
+/com.liferay.wiki.api.jar
+/com.liferay.wiki.service.jar
+/org.osgi.compendium.jar
+/org.osgi.core.jar
