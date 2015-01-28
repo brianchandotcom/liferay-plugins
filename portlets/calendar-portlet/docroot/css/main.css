@@ -161,8 +161,16 @@
 	}
 
 	.scheduler-view-agenda-info-container {
+		font-size: 1em;
+
 		.scheduler-view-agenda-info {
-			line-height: 1.2;
+			.scheduler-view-agenda-info-biggie {
+				padding: 0 8px;
+			}
+
+			.scheduler-view-agenda-info-label {
+				padding: 10px 0 10px 8px;
+			}
 		}
 	}
 }
@@ -360,8 +368,22 @@
 	margin-top: -1em;
 }
 
-.scheduler-base-controls .calendar-add-event-btn {
-	margin-right: 3px;
+.scheduler-base-controls {
+	&, .scheduler-base-views {
+		width: 50%;
+	}
+
+	.btn-group .calendar-add-event-btn {
+		margin-right: 3px;
+
+		@include respond-to(phone) {
+			width: 100%;
+		}
+	}
+}
+
+.scheduler-base-icon-next span, .scheduler-base-icon-prev span {
+	font-size: 16px;
 }
 
 .scheduler-event-past {
@@ -388,6 +410,10 @@
 
 .scheduler-event-recorder-popover .popover-title .close {
 	margin-top: 5px;
+}
+
+.scheduler-view-agenda {
+	margin-top: -13px;
 }
 
 .scheduler-view-day .scheduler-view-table .scheduler-view-table-data-col {
@@ -588,5 +614,39 @@
 @include respond-to(phone, tablet) {
 	.scheduler-view-table-header-day div {
 		overflow: hidden
+	}
+}
+
+@include respond-to(phone) {
+	.scheduler-base-content .scheduler-base-view-date,
+	.scheduler-base-content .scheduler-base-controls,
+	.scheduler-base-content .scheduler-base-controls .btn-group,
+	.scheduler-base-content .scheduler-base-hd .scheduler-base-views {
+		text-align: center;
+		width: 100%;
+	}
+
+	.scheduler-base-content .scheduler-base-hd .scheduler-base-views {
+		margin-top: 5px;
+	}
+
+	.scheduler-base-controls .btn-group .scheduler-base-today {
+		width: 50%;
+	}
+
+	.scheduler-base-hd .btn-group button {
+		width: 25%;
+	}
+
+	.scheduler-base-views button {
+		float: none;
+	}
+
+	.scheduler-view-day-header-day-weekday {
+		font-size: 0;
+
+		&:first-letter {
+			font-size: 14px;
+		}
 	}
 }
