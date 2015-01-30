@@ -18,7 +18,6 @@ import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.permission.KBArticlePermission;
 import com.liferay.knowledgebase.util.KnowledgeBaseUtil;
-import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Property;
@@ -58,8 +57,6 @@ import javax.portlet.PortletURL;
 public class AdminIndexer extends BaseIndexer {
 
 	public static final String CLASS_NAME = KBArticle.class.getName();
-
-	public static final String PORTLET_ID = PortletKeys.KNOWLEDGE_BASE_ADMIN;
 
 	public AdminIndexer() {
 		setDefaultSelectedFieldNames(
@@ -124,7 +121,7 @@ public class AdminIndexer extends BaseIndexer {
 	protected Document doGetDocument(Object obj) throws Exception {
 		KBArticle kbArticle = (KBArticle)obj;
 
-		Document document = getBaseModelDocument(PORTLET_ID, kbArticle);
+		Document document = getBaseModelDocument(CLASS_NAME, kbArticle);
 
 		document.addText(
 			Field.CONTENT, HtmlUtil.extractText(kbArticle.getContent()));
@@ -183,11 +180,6 @@ public class AdminIndexer extends BaseIndexer {
 		long companyId = GetterUtil.getLong(ids[0]);
 
 		reindexKBArticles(companyId);
-	}
-
-	@Override
-	protected String getPortletId(SearchContext searchContext) {
-		return PORTLET_ID;
 	}
 
 	protected void reindexKBArticles(KBArticle kbArticle) throws Exception {

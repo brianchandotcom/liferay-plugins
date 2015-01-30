@@ -613,7 +613,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		BaseAlloyIndexer baseAlloyIndexer = (BaseAlloyIndexer)indexer;
 
 		baseAlloyIndexer.setAlloyServiceInvoker(alloyServiceInvoker);
-		baseAlloyIndexer.setPortletId(portlet.getRootPortletId());
+		baseAlloyIndexer.setClassName(portlet.getModelClassName());
 
 		PortletBag portletBag = PortletBagPool.get(portlet.getPortletId());
 
@@ -1041,7 +1041,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		alloySearchResult.setAlloyServiceInvoker(alloyServiceInvoker);
 
 		if (searchContainer == null) {
-			searchContainer = new SearchContainer<BaseModel<?>>(
+			searchContainer = new SearchContainer<>(
 				portletRequest, portletURL, null, null);
 		}
 
