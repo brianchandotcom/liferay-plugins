@@ -20,6 +20,9 @@
 
 		<!-- Finder methods -->
 
+		<finder name="FileEntryId" return-type="Collection">
+			<finder-column name="fileEntryId" />
+		</finder>
 		<finder name="ExpirationDate" return-type="Collection">
 			<finder-column name="expirationDate" comparator="&lt;" />
 		</finder>
@@ -31,6 +34,7 @@
 
 		<!-- References -->
 
+		<reference package-path="com.liferay.portal" entity="Company" />
 		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLApp" />
 	</entity>
 	<entity name="SyncDLObject" local-service="true" remote-service="true">
