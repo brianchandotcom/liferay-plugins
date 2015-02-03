@@ -1,11 +1,45 @@
 String userDir = System.getProperty("user.dir");
 
+gradle.ext.compileDeps = [];
+
+ext.includeTransitive = { String[] projectPaths ->
+	include projectPaths;
+
+	for (String projectPath : projectPaths) {
+		String projectSettings;
+
+		projectSettings = projectPath.replaceAll(":", "/");
+		projectSettings = projectSettings + "/dependency-settings.gradle";
+		projectSettings = projectSettings.replaceFirst("^/", "");
+		projectSettings = rootDir.toString() + "/" + projectSettings;
+
+		File projectSettingsFile = new File(projectSettings);
+
+		if (projectSettingsFile.exists() && projectSettingsFile.length() > 0) {
+			apply from: projectSettingsFile;
+
+			String projectCompileDeps = projectSettingsFile.text;
+			
+			projectCompileDeps =
+				projectCompileDeps.replaceAll("includeTransitive", "");
+			projectCompileDeps = projectCompileDeps.replaceAll(" ", "");
+			projectCompileDeps = projectCompileDeps.replaceAll('"', "");
+			projectCompileDeps = projectCompileDeps.replaceAll("\\s\$", "");
+			
+			String[] projectCompileDepsList = projectCompileDeps.split("\\n");
+
+			gradle.compileDeps <<
+				[projectPath: projectPath, compile: projectCompileDepsList];
+		}
+	}
+}
+
 FileTree fileTree = fileTree(userDir) {
 	if ((pluginsIncludes != "") && (pluginsIncludes != "*")) {
 		pluginsIncludes = pluginsIncludes.replaceAll(" ", "");
 		pluginsIncludes = pluginsIncludes.replaceAll(",+", ",");
 
-		String[] pluginsIncludesArray = pluginsIncludes.split(",");
+		def pluginsIncludesArray = pluginsIncludes.split(",");
 
 		pluginsIncludesArray = pluginsIncludesArray.collect(
 			{
@@ -15,12 +49,12 @@ FileTree fileTree = fileTree(userDir) {
  
 		pluginsIncludesArray.each(
 			{
-				include(it)
+				include(it);
 			}
 		);
 	}
 	else {
-		include("**/build.gradle")
+		include("**/build.gradle");
 	}
  
 	if ((pluginsExcludes != "") && (pluginsExcludes != "*")) {
@@ -37,12 +71,12 @@ FileTree fileTree = fileTree(userDir) {
  
 		pluginsExcludesArray.each(
 			{
-				exclude(it)
+				exclude(it);
 			}
 		);
 	}
 	else {
-		exclude("**/build.gradle")
+		exclude("**/build.gradle");
 	}
 }
 
@@ -58,6 +92,10 @@ fileTree.each(
 
 		pluginDir = pluginDir.replaceFirst("/build.gradle", "");
 
-		include(":" + pluginDir.replaceAll("[\\/]", ":"));
+		String newProject = ":" + pluginDir.replaceAll("[\\/]", ":");
+
+		includeTransitive(newProject);
 	}
 );
+
+include(":shared:portal-compat-shared");
