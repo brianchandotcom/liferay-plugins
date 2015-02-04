@@ -1,6 +1,367 @@
-subprojects {
+apply from: "$rootDir/versions.gradle"
 
-	task hello {
+allprojects {
+	apply plugin: "war"
+
+	ant.loadproperties(srcFile: "$rootDir/build.properties")
+
+	repositories {
+		maven {
+			url 'http://cdn.repository.liferay.com/nexus/content/groups/public'
+		}
 	}
 
+	libsDirName = "../../../dist"
+
+	configurations {
+		all {resolutionStrategy.cacheChangingModulesFor 0, 'seconds'}
+	}
+
+	dependencies {
+		archives "$rootDir/dist"
+
+		if (!(project.name == "portal-compat-shared" ||
+			project.name =~ "layouttpl" ||
+			project.name =~ "themes")) {
+
+			compile project(":shared:portal-compat-shared")
+		}
+
+		gradle.compileDeps.each {
+			if (project.path == it.projectPath) {
+				it.compile.value.each {
+					String dep = it.toString()
+
+					compile project(dep)
+				}
+			}
+		}
+
+		File pluginServiceJar =
+			file("$projectDir/docroot/WEB-INF/lib/$project.name-service.jar")
+
+		if (pluginServiceJar.exists()) {
+			compile(files(pluginServiceJar))
+		}
+
+		providedCompile(
+			[group: 'com.liferay',				name: 'aQute.bnd',				version: '2.3.0'],
+			[group: 'com.liferay.portal',		name: 'portal-service',			version: '7.0.0-SNAPSHOT'],
+			[group: 'com.liferay.portal',		name: 'util-bridges',			version: '7.0.0-SNAPSHOT'],
+			[group: 'com.liferay.portal',		name: 'util-java',				version: '7.0.0-SNAPSHOT'],
+			[group: 'com.liferay.portal',		name: 'util-taglib',			version: '7.0.0-SNAPSHOT'],
+			[group: 'commons-logging',			name: 'commons-logging',		version: '1.1.1'],
+			[group: 'hsqldb',					name: 'hsqldb',					version: '1.8.0.7'],
+			[group: 'javax.activation',			name: 'activation',				version: '1.1'],
+			[group: 'javax.ccpp',				name: 'ccpp',					version: '1.0'],
+			[group: 'javax.jms',				name: 'jms',					version: '1.1'],
+			[group: 'javax.mail',				name: 'mail',					version: '1.4'],
+			[group: 'javax.portlet',			name: 'portlet-api',			version: '2.0'],
+			[group: 'javax.servlet',			name: 'javax.servlet-api',		version: '3.0.1'],
+			[group: 'javax.servlet.jsp',		name: 'jsp-api',				version: '2.1'],
+			[group: 'log4j',					name: 'log4j',					version: '1.2.16'],
+			[group: 'mysql',					name: 'mysql-connector-java',	version: '5.1.23'],
+			[group: 'net.sf',					name: 'jargs',					version: '1.0'],
+			[group: 'net.sourceforge.jtds',		name: 'jtds',					version: '1.2.6'],
+			[group: 'org.eclipse.persistence',	name: 'javax.persistence',		version: '2.0.0'],
+			[group: 'postgresql',				name: 'postgresql',				version: '9.2-1002.jdbc4']
+		)
+	}
+
+	task compile(dependsOn: compileJava)
+
+	File pluginSrcDir
+
+	if (file("$projectDir/docroot").exists()) {
+		pluginSrcDir = file("$projectDir/docroot")
+	}
+
+	if (file("$projectDir/src").exists()) {
+		pluginSrcDir = file("$projectDir/src")
+	}
+
+	if (pluginSrcDir != null) {
+		apply from: projectDir.toString() + '/build.gradle'
+
+		sourceSets {
+			main {
+				java {
+					srcDir pluginSrcDir
+				}
+			}
+		}
+	}
+
+	task testdep << {
+		gradle.compileDeps.each {
+			if (project.path == it.projectPath) {
+				it.compile.each {
+					println it
+				}
+			}
+		}
+	}
+
+	if (pluginSrcDir != null) {
+		task hello << {
+			def parser = new XmlParser()
+
+			parser.setFeature(
+				"http://apache.org/xml/features/disallow-doctype-decl", false)
+
+			File buildXMLFile = new File("$projectDir/build.xml")
+
+			def buildXMLData = parser.parse(buildXMLFile)
+
+			def getBuildXMLProp = { propName, defaultValue ->
+				def propValue = defaultValue
+
+				buildXMLData.property.each {
+					if (it.@name == propName) {
+						propValue = it.@value
+					}
+				}
+
+				return propValue
+			}
+
+			File ivyXMLFile = new File("$projectDir/ivy.xml")
+
+			def ivyXMLFileData
+
+			if (ivyXMLFile.exists()) {
+				ivyXMLFileData = parser.parse(ivyXMLFile)
+			}
+
+			String importShared = getBuildXMLProp("import.shared", "")
+
+			String themeParent = getBuildXMLProp("theme.parent", "")
+
+			Boolean customTargets = false
+
+			buildXMLData.target.each {
+				customTargets = true
+			}
+
+			String moduleIncrementalVersion
+
+			String portalDependencyJars
+
+			String portalDependencyTlds
+
+			String requiredDeploymentContexts
+
+			def serviceJarText = []
+
+			File pluginPackageProperties =
+				new File("$projectDir/docroot/WEB-INF/liferay-plugin-package.properties")
+
+			if (pluginPackageProperties.exists()) {
+				Properties moduleProps = new Properties()
+
+				moduleProps.load(new FileInputStream(pluginPackageProperties))
+
+				moduleIncrementalVersion =
+					moduleProps["module-incremental-version"]
+
+				portalDependencyJars = moduleProps["portal-dependency-jars"]
+
+				if (portalDependencyJars != null) {
+					portalDependencyJars =
+						portalDependencyJars.replaceAll("\\.jar", "")
+
+					portalDependencyJars =
+						portalDependencyJars.replaceAll("-\\w") {
+							it[1].toUpperCase()
+						}
+				}
+
+				portalDependencyTlds = moduleProps["portal-dependency-tlds"]
+
+				requiredDeploymentContexts =
+					moduleProps["required-deployment-contexts"]
+
+				if (requiredDeploymentContexts) {
+					requiredDeploymentContexts.split(",").each {
+						String serviceJarType = it.replaceFirst(".+-", "")
+
+						serviceJarType = serviceJarType + "s"
+
+						File serviceJar = new File("$projectDir/../../$serviceJarType/$it/docroot/WEB-INF/lib/$it-service.jar")
+
+						if (serviceJar.exists()) {
+							serviceJarText << "\t\tfiles(\"../../$serviceJarType/$it/docroot/WEB-INF/lib/$it-service.jar\"),"
+						}
+					}
+				}
+
+			}
+			else {
+				moduleIncrementalVersion =
+					getBuildXMLProp("plugin.version", "1")
+
+			}
+
+			String pluginFullVersion = getBuildXMLProp("plugin.full.version",
+						ant.properties["lp.version"] + "." + moduleIncrementalVersion)
+
+			Boolean osgiPlugin = false
+
+			String ignoreOsgiPortalClasspath
+
+			String osgiIdeDependencies
+
+			String osgiRuntimeDependencies
+
+			if (file("bnd.bnd").exists()) {
+				osgiPlugin = true
+
+				ignoreOsgiPortalClasspath =
+					getBuildXMLProp("ignore.osgi.portal.classpath", "")
+
+				osgiIdeDependencies =
+					getBuildXMLProp("osgi.ide.dependencies", "")
+
+				osgiRuntimeDependencies =
+					getBuildXMLProp("osgi.runtime.dependencies", "")
+			}
+
+			String pluginPackaging
+
+			if (project.parent.name == "shared" || osgiPlugin == true) {
+
+				pluginPackaging = "jar"
+			}
+			else {
+				pluginPackaging = "war"
+			}
+
+			File pluginScript = new File("$projectDir/build.gradle")
+
+			def pluginScriptText = []
+
+			File pluginDependencySettings =
+				new File("$projectDir/dependency-settings.gradle")
+
+			def pluginDependencySettingsText = []
+
+			if (importShared || ivyXMLFileData || portalDependencyJars ||
+				serviceJarText != []) {
+
+				pluginScriptText << "dependencies {"
+
+				if (importShared || ivyXMLFileData || serviceJarText != []) {
+					pluginScriptText << "\tcompile("
+
+					if (ivyXMLFileData) {
+						ivyXMLFileData.dependencies.dependency.each {
+							pluginScriptText << "\t\t[group: \"${it.@org}\", name:\"${it.@name}\", version: \"${it.@rev}\"],"
+						}
+					}
+
+					if (importShared) {
+						importShared.split(",").each {
+							pluginDependencySettingsText << "includeTransitive \":shared:$it\""
+						}
+					}
+
+					if (requiredDeploymentContexts) {
+						requiredDeploymentContexts.split(",").each {
+							String serviceJarType = it.replaceFirst(".+-", "")
+
+							serviceJarType = serviceJarType + "s"
+
+							File serviceJar = new File("$projectDir/../../$serviceJarType/$it/docroot/WEB-INF/lib/$it-service.jar")
+
+							serviceJarText.each {
+								pluginScriptText << it
+							}
+						}
+					}
+
+					pluginScriptText << "\t)"
+				}
+
+				if (portalDependencyJars) {
+					pluginScriptText << "\tprovidedCompile("
+
+					portalDependencyJars.split(",").each { jarName ->
+						def jarMap = jars.findAll {
+							it.key == jarName
+						}
+
+						jarMap = jarMap[jarName]
+
+						if (jarMap == null) {
+							println("Missing dependency definition for: " +
+								jarName)
+						}
+						else {
+							pluginScriptText << "\t\t[group: \"${jarMap."group"}\", name: \"${jarMap."name"}\", version: \"${jarMap."version"}\"],"
+						}
+					}
+
+					pluginScriptText << "\t)"
+				}
+
+				pluginScriptText << "}"
+			}
+
+			pluginScriptText << "ext {"
+
+			if (ignoreOsgiPortalClasspath != null &&
+				ignoreOsgiPortalClasspath != "") {
+
+				pluginScriptText <<
+					"\tignoreOsgiPortalClasspath = $ignoreOsgiPortalClasspath"
+			}
+
+			pluginScriptText <<
+				"\tmoduleIncrementalVersion = $moduleIncrementalVersion"
+
+			if ((osgiIdeDependencies != null) && (osgiIdeDependencies != "")) {
+				pluginScriptText << 
+					"\tosgiIdeDependencies = $osgiIdeDependencies"
+			}
+
+			pluginScriptText << "\tosgiPlugin = \"$osgiPlugin\""
+
+			pluginScriptText << "\tpluginFullVersion = \"$pluginFullVersion\""
+
+			pluginScriptText << "\tpluginPackaging = \"$pluginPackaging\""
+
+			if ((portalDependencyTlds != null) &&
+				(portalDependencyTlds != "")) {
+
+				pluginScriptText <<
+					"\tportalDependencyTlds = \"$portalDependencyTlds\""
+			}
+
+			if ((themeParent != null) && (themeParent != "")) {
+				pluginScriptText << "\tthemeParent = $themeParent"
+			}
+
+			pluginScriptText << "}"
+
+			File buildExtScript = new File("$projectDir/build-ext.gradle")
+
+			if (customTargets && !buildExtScript.exists()) {
+				pluginScriptText << ""
+				pluginScriptText << "// Custom targets were detected in this project's Ant build.xml, but no "
+				pluginScriptText << "// build-ext.gradle is located in the same directory.  Please add a"
+				pluginScriptText << "// build-ext.gradle file that reproduces the same functionality, then uncomment"
+				pluginScriptText << "// the following line:"
+				pluginScriptText << ""
+				pluginScriptText << "// apply from: \"build-ext.gradle\""
+			}
+
+			pluginScriptText.each {
+				pluginScript << it + "\n"
+			}
+
+			pluginDependencySettingsText.each {
+				pluginDependencySettings << it + "\n"
+			}
+		}
+	}
 }
