@@ -3,6 +3,8 @@ apply from: "$rootDir/versions.gradle"
 allprojects {
 	apply plugin: "war"
 
+	ant.loadproperties(srcFile: "$rootDir/build.properties")
+
 	repositories {
 		maven {
 			url 'http://cdn.repository.liferay.com/nexus/content/groups/public'

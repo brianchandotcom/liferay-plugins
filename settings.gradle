@@ -1,5 +1,19 @@
 String userDir = System.getProperty("user.dir");
 
+def antProps = new Properties()
+
+antProps.load(new FileInputStream("build.properties"))
+
+if (!hasProperty("lfrPluginsExcludes"))
+{
+	ext.lfrPluginsExcludes = antProps["plugins.excludes"]
+}
+
+if (!hasProperty("lfrPluginsIncludes"))
+{
+	ext.lfrPluginsIncludes = antProps["plugins.includes"]
+}
+
 gradle.ext.compileDeps = [];
 
 ext.includeTransitive = { String[] projectPaths ->
@@ -35,19 +49,19 @@ ext.includeTransitive = { String[] projectPaths ->
 }
 
 FileTree fileTree = fileTree(userDir) {
-	if ((pluginsIncludes != "") && (pluginsIncludes != "*")) {
-		pluginsIncludes = pluginsIncludes.replaceAll(" ", "");
-		pluginsIncludes = pluginsIncludes.replaceAll(",+", ",");
+	if ((lfrPluginsIncludes != "") && (lfrPluginsIncludes != "*")) {
+		lfrPluginsIncludes = lfrPluginsIncludes.replaceAll(" ", "");
+		lfrPluginsIncludes = lfrPluginsIncludes.replaceAll(",+", ",");
 
-		def pluginsIncludesArray = pluginsIncludes.split(",");
+		def lfrPluginsIncludesArray = lfrPluginsIncludes.split(",");
 
-		pluginsIncludesArray = pluginsIncludesArray.collect(
+		lfrPluginsIncludesArray = lfrPluginsIncludesArray.collect(
 			{
 				"**/" + it + "/build.gradle"
 			}
 		);
  
-		pluginsIncludesArray.each(
+		lfrPluginsIncludesArray.each(
 			{
 				include(it);
 			}
@@ -57,19 +71,19 @@ FileTree fileTree = fileTree(userDir) {
 		include("**/build.gradle");
 	}
  
-	if ((pluginsExcludes != "") && (pluginsExcludes != "*")) {
-		pluginsExcludes = pluginsExcludes.replaceAll(" ", "");
-		pluginsExcludes = pluginsExcludes.replaceAll(",+", ",");
+	if ((lfrPluginsExcludes != "") && (lfrPluginsExcludes != "*")) {
+		lfrPluginsExcludes = lfrPluginsExcludes.replaceAll(" ", "");
+		lfrPluginsExcludes = lfrPluginsExcludes.replaceAll(",+", ",");
 
-		String[] pluginsExcludesArray = pluginsExcludes.split(",");
+		String[] lfrPluginsExcludesArray = lfrPluginsExcludes.split(",");
 
-		pluginsExcludesArray = pluginsExcludesArray.collect(
+		lfrPluginsExcludesArray = lfrPluginsExcludesArray.collect(
 			{
 				"**/" + it + "/build.gradle"
 			}
 		);
  
-		pluginsExcludesArray.each(
+		lfrPluginsExcludesArray.each(
 			{
 				exclude(it);
 			}
