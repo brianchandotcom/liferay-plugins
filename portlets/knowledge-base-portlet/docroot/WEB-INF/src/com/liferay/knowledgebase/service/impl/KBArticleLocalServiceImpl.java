@@ -253,13 +253,16 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	@Override
 	public int addKBArticlesMarkdown(
 			long userId, long groupId, long parentKbFolderId, String fileName,
-			InputStream inputStream, ServiceContext serviceContext)
+			boolean prioritizeUpdatedKBArticles,
+			boolean prioritizeByNumericalPrefix, InputStream inputStream,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		KBArticleImporter kbArticleImporter = new KBArticleImporter();
 
 		return kbArticleImporter.processZipFile(
-			userId, groupId, parentKbFolderId, inputStream, serviceContext);
+			userId, groupId, parentKbFolderId, prioritizeUpdatedKBArticles,
+			prioritizeByNumericalPrefix, inputStream, serviceContext);
 	}
 
 	@Override
