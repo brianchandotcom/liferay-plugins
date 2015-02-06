@@ -124,34 +124,35 @@ public class AdminPortlet extends BaseKBPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(actionRequest);
-
-		long parentKBFolderId = ParamUtil.getLong(
-			uploadPortletRequest, "parentKBFolderId",
-			KBFolderConstants.DEFAULT_PARENT_FOLDER_ID);
-
-		String fileName = uploadPortletRequest.getFileName("file");
-
-		if (Validator.isNull(fileName)) {
-			throw new KBArticleImportException("File name is null");
-		}
-
-		boolean prioritizeUpdatedKBArticles = ParamUtil.getBoolean(
-			uploadPortletRequest, "prioritizeUpdatedKBArticles");
-		boolean prioritizeByNumericalPrefix = ParamUtil.getBoolean(
-			uploadPortletRequest, "prioritizeByNumericalPrefix");
-
 		InputStream inputStream = null;
 
 		try {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+			UploadPortletRequest uploadPortletRequest =
+				PortalUtil.getUploadPortletRequest(actionRequest);
+
+			long parentKBFolderId = ParamUtil.getLong(
+				uploadPortletRequest, "parentKBFolderId",
+				KBFolderConstants.DEFAULT_PARENT_FOLDER_ID);
+
+			String fileName = uploadPortletRequest.getFileName("file");
+
+			if (Validator.isNull(fileName)) {
+				throw new KBArticleImportException("File name is null");
+			}
+
+			boolean prioritizeUpdatedKBArticles = ParamUtil.getBoolean(
+				uploadPortletRequest, "prioritizeUpdatedKBArticles");
+			boolean prioritizeByNumericalPrefix = ParamUtil.getBoolean(
+				uploadPortletRequest, "prioritizeByNumericalPrefix");
+
 			inputStream = uploadPortletRequest.getFileAsStream("file");
 
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(
-				AdminPortlet.class.getName(), actionRequest);
+			ServiceContext serviceContext =
+				ServiceContextFactory.getInstance(
+					AdminPortlet.class.getName(), actionRequest);
 
 			serviceContext.setGuestPermissions(new String[] {ActionKeys.VIEW});
 
@@ -399,7 +400,8 @@ public class AdminPortlet extends BaseKBPortlet {
 
 	@Override
 	protected boolean isSessionErrorException(Throwable cause) {
-		if (cause instanceof KBTemplateContentException ||
+		if (cause instanceof KBArticleImportException ||
+			cause instanceof KBTemplateContentException ||
 			cause instanceof KBTemplateTitleException ||
 			cause instanceof NoSuchTemplateException ||
 			super.isSessionErrorException(cause)) {
