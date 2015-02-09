@@ -616,8 +616,6 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		long socialRequestId = ParamUtil.getLong(
 			actionRequest, "socialRequestId");
 		int status = ParamUtil.getInteger(actionRequest, "status");
-		long userNotificationEventId = ParamUtil.getLong(
-			actionRequest, "userNotificationEventId");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
@@ -846,8 +844,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				params.put(
 					"userGroupRole",
 					new Long[] {
-						new Long(group.getGroupId()),
-						new Long(siteAdministratorRole.getRoleId())
+						group.getGroupId(), siteAdministratorRole.getRoleId()
 					});
 
 				Set<User> users = new HashSet<>();
@@ -865,8 +862,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				params.put(
 					"userGroupRole",
 					new Long[] {
-						new Long(group.getGroupId()),
-						new Long(siteOwnerRole.getRoleId())
+						group.getGroupId(), siteOwnerRole.getRoleId()
 					});
 
 				users.addAll(
@@ -1174,12 +1170,12 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			user.getPasswordUnencrypted(), user.getPasswordUnencrypted(),
 			user.getPasswordReset(), user.getReminderQueryQuestion(),
 			user.getReminderQueryAnswer(), screenName, emailAddress,
-			user.getFacebookId(), user.getOpenId(), user.getLanguageId(),
-			user.getTimeZoneId(), user.getGreeting(), comments, firstName,
-			middleName, lastName, contact.getPrefixId(), contact.getSuffixId(),
-			user.isMale(), birthdayMonth, birthdayDay, birthdayYear, smsSn,
-			aimSn, facebookSn, icqSn, jabberSn, msnSn, mySpaceSn, skypeSn,
-			twitterSn, ymSn, jobTitle, user.getGroupIds(),
+			user.getFacebookId(), user.getOpenId(), true, null,
+			user.getLanguageId(), user.getTimeZoneId(), user.getGreeting(),
+			comments, firstName, middleName, lastName, contact.getPrefixId(),
+			contact.getSuffixId(), user.isMale(), birthdayMonth, birthdayDay,
+			birthdayYear, smsSn, aimSn, facebookSn, icqSn, jabberSn, msnSn,
+			mySpaceSn, skypeSn, twitterSn, ymSn, jobTitle, user.getGroupIds(),
 			user.getOrganizationIds(), user.getRoleIds(), null,
 			user.getUserGroupIds(), user.getAddresses(), null, user.getPhones(),
 			user.getWebsites(), announcementsDeliveries, new ServiceContext());
