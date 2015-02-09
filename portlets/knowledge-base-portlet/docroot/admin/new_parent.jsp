@@ -17,34 +17,31 @@
 <%@ include file="/admin/init.jsp" %>
 
 <%
-KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
-
 int status = (Integer)request.getAttribute(WebKeys.KNOWLEDGE_BASE_STATUS);
 
 long kbArticleClassNameId = PortalUtil.getClassNameId(KBArticleConstants.getClassName());
 
 long resourceClassNameId = ParamUtil.getLong(request, "resourceClassNameId");
 long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
-double priority = KBArticleConstants.DEFAULT_PRIORITY;
+long parentResourceClassNameId = PortalUtil.getClassNameId(KBFolderConstants.getClassName());
+long parentResourcePrimKey = KBFolderConstants.DEFAULT_PARENT_FOLDER_ID;
 
-if (kbArticle != null) {
-	resourceClassNameId = kbArticle.getClassNameId();
-	resourcePrimKey = kbArticle.getResourcePrimKey();
-}
+double priority = KBArticleConstants.DEFAULT_PRIORITY;
 
 String parentTitle = null;
 
 if (resourceClassNameId == kbArticleClassNameId) {
-	if (kbArticle == null) {
-		kbArticle = KBArticleServiceUtil.getLatestKBArticle(resourcePrimKey, status);
-	}
+	KBArticle kbArticle = KBArticleServiceUtil.getLatestKBArticle(resourcePrimKey, status);
 
+	parentResourceClassNameId = kbArticle.getParentResourceClassNameId();
+	parentResourcePrimKey = kbArticle.getParentResourcePrimKey();
 	parentTitle = kbArticle.getParentTitle(locale, status);
 	priority = kbArticle.getPriority();
 }
 else {
 	KBFolder kbFolder = KBFolderServiceUtil.getKBFolder(resourcePrimKey);
 
+	parentResourcePrimKey = kbFolder.getParentKBFolderId();
 	parentTitle = kbFolder.getParentTitle(locale);
 }
 %>
@@ -64,6 +61,8 @@ else {
 		<portlet:param name="mvcPath" value='<%= templatePath + "select_parent.jsp" %>' />
 		<portlet:param name="resourceClassNameId" value="<%= String.valueOf(resourceClassNameId) %>" />
 		<portlet:param name="resourcePrimKey" value="<%= String.valueOf(resourcePrimKey) %>" />
+		<portlet:param name="originalParentResourceClassNameId" value="<%= String.valueOf(parentResourceClassNameId) %>" />
+		<portlet:param name="originalParentResourcePrimKey" value="<%= String.valueOf(parentResourcePrimKey) %>" />
 		<portlet:param name="parentResourceClassNameId" value="<%= String.valueOf(PortalUtil.getClassNameId(KBFolderConstants.getClassName())) %>" />
 		<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) %>" />
 		<portlet:param name="status" value="<%= String.valueOf(status) %>" />
@@ -81,7 +80,7 @@ else {
 					},
 					id: '<portlet:namespace />selectKBObject',
 					title: '<liferay-ui:message key="select-parent" />',
-					uri: getSelectKBObjectWindowURL()
+					uri: '<%= selectKBObjectURL %>'
 				},
 				function(event) {
 					document.<portlet:namespace />fm.<portlet:namespace />parentPriority.value = event.priority;
@@ -92,16 +91,4 @@ else {
 			);
 		}
 	);
-
-	var getSelectKBObjectWindowURL = function() {
-		var oldParentResourceClassNameId = document.<portlet:namespace />fm.<portlet:namespace />parentResourceClassNameId.value;
-		var oldParentResourcePrimKey = document.<portlet:namespace />fm.<portlet:namespace />parentResourcePrimKey.value;
-
-		var selectKBObjectWindowURL = '<%= selectKBObjectURL %>';
-
-		selectKBObjectWindowURL += '&<portlet:namespace />oldParentResourceClassNameId=' + oldParentResourceClassNameId;
-		selectKBObjectWindowURL += '&<portlet:namespace />oldParentResourcePrimKey=' + oldParentResourcePrimKey;
-
-		return selectKBObjectWindowURL;
-	}
 </aui:script>
