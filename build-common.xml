@@ -2692,6 +2692,35 @@ for (String path : paths) {
 		/>
 	</target>
 
+	<target name="reset-gradle-single">
+		<loop-macrodef-or-target
+			module.dirs="${basedir}"
+			target.name="reset-gradle"
+		/>
+	</target>
+
+	<target name="reset-gradle-subdirs">
+		<path id="reset.gradle.path">
+			<dirset dir="${basedir}" includes="*" />
+		</path>
+
+		<pathconvert
+			pathsep=","
+			property="reset.gradle.path"
+			refid="plugins.includes.path"
+			targetos="unix"
+		/>
+
+		<loop-macrodef-or-target
+			module.dirs="${reset.gradle.path}"
+			target.name="reset-gradle"
+		/>
+	</target>
+
+	<target name="rgs" depends="reset-gradle-single" />
+
+	<target name="rgsd" depends="reset-gradle-subdirs" />
+
 	<target name="run-pmd">
 		<path id="classpath.net.sourceforge.pmd">
 			<fileset dir="${sdk.dir}/dependencies/net.sourceforge.pmd/lib" includes="*.jar" />
