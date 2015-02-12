@@ -2276,7 +2276,7 @@ Please find a solution that does not require portal-impl.jar.
 
 							<junit dir="@{module.dir}" fork="on" forkmode="@{junit.forkmode}" jvm="${junit.jvm}" outputtoformatters="false" printsummary="on" showoutput="true">
 								<sysproperty key="app.server.tomcat.dir" value="${app.server.tomcat.dir}" />
-								<sysproperty key="net.sourceforge.cobertura.datafile" file="@{module.dir}/test-coverage/cobertura.ser" />
+								<sysproperty key="net.sourceforge.cobertura.datafile" file="@{module.dir}/test-coverage/@{test.type}/cobertura.ser" />
 								<jvmarg line="${junit.debug.jpda}" />
 								<jvmarg value="-Xmx${junit.java.mx}" />
 								<jvmarg value="-XX:MaxPermSize=${junit.java.maxpermsize}" />
@@ -2288,7 +2288,7 @@ Please find a solution that does not require portal-impl.jar.
 								<jvmarg value="-Dtest.class.group.index=${test.class.group.index}" />
 								<jvmarg value="-Dtest.class.groups=${TEST_CLASS_GROUPS}" />
 								<jvmarg value="-Duser.timezone=GMT" />
-								<classpath location="@{module.dir}/test-coverage" />
+								<classpath location="@{module.dir}/test-coverage/@{test.type}" />
 								<classpath refid="test.classpath" />
 								<formatter type="brief" usefile="false" />
 								<formatter type="xml" />
