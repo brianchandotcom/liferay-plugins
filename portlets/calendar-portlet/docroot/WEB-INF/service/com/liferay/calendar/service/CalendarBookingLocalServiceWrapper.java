@@ -66,6 +66,25 @@ public class CalendarBookingLocalServiceWrapper
 	}
 
 	@Override
+	public com.liferay.calendar.model.CalendarBooking addCalendarBooking(
+		long userId, long calendarId, long[] childCalendarIds,
+		long parentCalendarBookingId,
+		java.util.Map<java.util.Locale, java.lang.String> titleMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		java.lang.String location, long startTime, long endTime,
+		boolean allDay, java.lang.String recurrence, long firstReminder,
+		java.lang.String firstReminderType, long secondReminder,
+		java.lang.String secondReminderType, java.lang.String vEventUid,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _calendarBookingLocalService.addCalendarBooking(userId,
+			calendarId, childCalendarIds, parentCalendarBookingId, titleMap,
+			descriptionMap, location, startTime, endTime, allDay, recurrence,
+			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, vEventUid, serviceContext);
+	}
+
+	@Override
 	public void checkCalendarBookings()
 		throws com.liferay.portal.kernel.exception.PortalException {
 		_calendarBookingLocalService.checkCalendarBookings();
@@ -250,6 +269,13 @@ public class CalendarBookingLocalServiceWrapper
 	public com.liferay.calendar.model.CalendarBooking fetchCalendarBooking(
 		long calendarBookingId) {
 		return _calendarBookingLocalService.fetchCalendarBooking(calendarBookingId);
+	}
+
+	@Override
+	public com.liferay.calendar.model.CalendarBooking fetchCalendarBooking(
+		long calendarId, java.lang.String vEventUid) {
+		return _calendarBookingLocalService.fetchCalendarBooking(calendarId,
+			vEventUid);
 	}
 
 	@Override
