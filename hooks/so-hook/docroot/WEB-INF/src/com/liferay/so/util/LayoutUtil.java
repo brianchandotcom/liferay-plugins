@@ -156,7 +156,9 @@ public class LayoutUtil {
 				configureBlogsAggregator(layout);
 				updatePortletTitle(layout, portletId, "recent-blogs");
 			}
-			else if (portletId.startsWith(PortletKeys.BREADCRUMB)) {
+			else if (portletId.startsWith(
+				"com_liferay_breadcrumb_web_BreadcrumbPortlet")) {
+
 				removePortletBorder(layout, portletId);
 			}
 			else if (portletId.startsWith(PortletKeys.MESSAGE_BOARDS)) {
