@@ -392,48 +392,15 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			addOpenerSuccessMessage();
 		}
 
-		if (Validator.isNull(viewPath)) {
+		if (Validator.isNull(responseContent)) {
 			viewPath = actionPath;
+
+			String includePath = buildIncludePath(viewPath);
+
+			include(includePath);
 		}
 
-		String includePath = buildIncludePath(viewPath);
-
-		PortletRequestDispatcher portletRequestDispatcher =
-			portletContext.getRequestDispatcher(includePath);
-
-		if (portletRequestDispatcher == null) {
-			log.error(includePath + " is not a valid include");
-		}
-		else {
-			portletRequestDispatcher.include(portletRequest, portletResponse);
-		}
-
-		Boolean touch = (Boolean)portletContext.getAttribute(
-			TOUCH + portlet.getRootPortletId());
-
-		if (touch != null) {
-			return;
-		}
-
-		String touchPath =
-			"/WEB-INF/jsp/" + portlet.getFriendlyURLMapping() +
-				"/views/touch.jsp";
-
-		if (log.isDebugEnabled()) {
-			log.debug(
-				"Touch " + portlet.getRootPortletId() + " by including " +
-					touchPath);
-		}
-
-		portletContext.setAttribute(
-			TOUCH + portlet.getRootPortletId(), Boolean.FALSE);
-
-		portletRequestDispatcher = portletContext.getRequestDispatcher(
-			touchPath);
-
-		if (portletRequestDispatcher != null) {
-			portletRequestDispatcher.include(portletRequest, portletResponse);
-		}
+		touch();
 	}
 
 	protected void executeResource(Method method) throws Exception {
@@ -577,6 +544,18 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		}
 
 		return true;
+	}
+
+	protected void include(String path) throws Exception {
+		PortletRequestDispatcher portletRequestDispatcher =
+			portletContext.getRequestDispatcher(path);
+
+		if (portletRequestDispatcher != null) {
+			portletRequestDispatcher.include(portletRequest, portletResponse);
+		}
+		else {
+			log.error(path + " is not a valid include");
+		}
 	}
 
 	protected long increment(String name) throws Exception {
@@ -1259,6 +1238,30 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 		throw new AlloyException(
 			"Unable to convert " + object + " to a JSON object");
+	}
+
+	protected void touch() throws Exception {
+		Boolean touch = (Boolean)portletContext.getAttribute(
+			TOUCH + portlet.getRootPortletId());
+
+		if (touch != null) {
+			return;
+		}
+
+		String touchPath =
+			"/WEB-INF/jsp/" + portlet.getFriendlyURLMapping() +
+				"/views/touch.jsp";
+
+		if (log.isDebugEnabled()) {
+			log.debug(
+				"Touch " + portlet.getRootPortletId() + " by including " +
+					touchPath);
+		}
+
+		portletContext.setAttribute(
+			TOUCH + portlet.getRootPortletId(), Boolean.FALSE);
+
+		include(touchPath);
 	}
 
 	protected String translate(String pattern, Object... arguments) {
