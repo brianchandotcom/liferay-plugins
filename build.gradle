@@ -25,13 +25,13 @@ allprojects {
 		Closure getBuildGradleDependencies
 		Closure getBuildGradleDependenciesCompile
 		Closure getBuildGradleDependenciesProvidedCompile
+		Closure getBuildGradleDependenciesTestCompile
 		Closure getBuildGradleExt
 		Closure getBuildGradleExtPluginFullVersion
 		Closure getBuildXmlProperty
 		Closure getIndent
 		Closure wrapContents
-		Closure wrapDependency
-		Closure wrapProperty
+		Closure wrapLine
 		Closure writeBuildGradleFile
 		Closure writeDependencySettingsFile
 
@@ -51,6 +51,7 @@ allprojects {
 
 			contents.addAll(getBuildGradleDependenciesCompile())
 			contents.addAll(getBuildGradleDependenciesProvidedCompile())
+			contents.addAll(getBuildGradleDependenciesTestCompile())
 
 			return wrapContents(contents, 0, " {", "dependencies", "}")
 		}
@@ -60,7 +61,9 @@ allprojects {
 
 			if (ivyXmlNode) {
 				ivyXmlNode.dependencies.dependency.each {
-					contents << "\t\t[group: \"${it.@org}\", name:\"${it.@name}\", version: \"${it.@rev}\"],"
+					if ((it.@conf == null) || (it.@conf == "default")) {
+						contents.addAll(wrapLine(2, it.@org, it.@name, it.@rev))
+					}
 				}
 			}
 
@@ -75,12 +78,26 @@ allprojects {
 					File serviceJarFile = new File("${projectDir}", serviceJarFileName)
 
 					if (serviceJarFile.exists()) {
-						contents << "\t\tfiles(\"${serviceJarFileName}\"),"
+						wrapLine(2, serviceJarFileName)
 					}
 				}
 			}
 
 			return wrapContents(contents, 1, "(", "compile", ")")
+		}
+
+		getBuildGradleDependenciesTestCompile = {
+			List contents = []
+
+			if (ivyXmlNode) {
+				ivyXmlNode.dependencies.dependency.each {
+					if (it.@conf =~ "test") {
+						contents.addAll(wrapLine(2, it.@org, it.@name, it.@rev))
+					}
+				}
+			}
+
+			return wrapContents(contents, 1, "(", "testCompile", ")")
 		}
 
 		getBuildGradleDependenciesProvidedCompile = {
@@ -104,7 +121,7 @@ allprojects {
 					println("Portal dependency " + portalDependencyJar + " is not defined in versions.gradle")
 				}
 				else {
-					contents.addAll(wrapDependency(2, portalDependencyJarMap["group"], portalDependencyJarMap["name"], portalDependencyJarMap["version"]))
+					contents.addAll(wrapLine(2, portalDependencyJarMap["group"], portalDependencyJarMap["name"], portalDependencyJarMap["version"]))
 				}
 			}
 
@@ -114,9 +131,9 @@ allprojects {
 		getBuildGradleExt = {
 			List contents = []
 
-			contents.addAll(wrapProperty(1, "osgiIdeDependencies", getBuildXmlProperty("osgi.ide.dependencies")))
-			contents.addAll(wrapProperty(1, "osgiRuntimeDependencies", getBuildXmlProperty("osgi.runtime.dependencies")))
-			contents.addAll(wrapProperty(1, "pluginFullVersion", getBuildGradleExtPluginFullVersion()))
+			contents.addAll(wrapLine(1, "osgiIdeDependencies", getBuildXmlProperty("osgi.ide.dependencies")))
+			contents.addAll(wrapLine(1, "osgiRuntimeDependencies", getBuildXmlProperty("osgi.runtime.dependencies")))
+			contents.addAll(wrapLine(1, "pluginFullVersion", getBuildGradleExtPluginFullVersion()))
 
 			String pluginPackaging = "war"
 
@@ -124,10 +141,10 @@ allprojects {
 				pluginPackaging = "jar"
 			}
 
-			contents.addAll(wrapProperty(1, "pluginPackaging", pluginPackaging))
+			contents.addAll(wrapLine(1, "pluginPackaging", pluginPackaging))
 
-			contents.addAll(wrapProperty(1, "portalDependencyTlds", pluginPackageProperties["portal-dependency-tlds"]))
-			contents.addAll(wrapProperty(1, "themeParent", getBuildXmlProperty("theme.parent")))
+			contents.addAll(wrapLine(1, "portalDependencyTlds", pluginPackageProperties["portal-dependency-tlds"]))
+			contents.addAll(wrapLine(1, "themeParent", getBuildXmlProperty("theme.parent")))
 
 			return wrapContents(contents, 0, " {", "ext", "}")
 		}
@@ -206,25 +223,29 @@ allprojects {
 				contents << content.substring(0, content.length() - 1)
 			}
 
-			contents << indent + rightClose
+			contents << getIndent(indentCount) + rightClose
 
 			return contents
 		}
 
-		wrapDependency = {
-			int indentCount, String group, String name, String version ->
+		wrapLine = {
+			Object[] params ->
 
-			return "${getIndent(indentCount)}[group: \"${group}\", name: \"${name}\", version: \"${version}\"],"
-		}
+			params[0] = getIndent(params[0])
 
-		wrapProperty = {
-			int indentCount, String name, String value = "" ->
-
-			if (value) {
-				return "${getIndent(indentCount)}${name} = \"${value}\""
+			if (params.size() == 2) {
+				return "${params[0]}files(\"${params[1]}\"),"
 			}
+			else if (params.size() == 3) {
+				if (params[2]) {
+					return "${params[0]}${params[1]} = \"${params[2]}\""
+				}
 
-			return []
+				return []
+			}
+			else if (params.size() == 4) {
+				return "${params[0]}[group: \"${params[1]}\", name: \"${params[2]}\", version: \"${params[3]}\"],"
+			}
 		}
 
 		writeBuildGradleFile = {
