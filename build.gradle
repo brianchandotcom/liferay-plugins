@@ -25,6 +25,7 @@ allprojects {
 		Closure getBuildGradleDependencies
 		Closure getBuildGradleDependenciesCompile
 		Closure getBuildGradleDependenciesProvidedCompile
+		Closure getBuildGradleDependenciesTestCompile
 		Closure getBuildGradleExt
 		Closure getBuildGradleExtPluginFullVersion
 		Closure getBuildXmlProperty
@@ -50,6 +51,7 @@ allprojects {
 
 			contents.addAll(getBuildGradleDependenciesCompile())
 			contents.addAll(getBuildGradleDependenciesProvidedCompile())
+			contents.addAll(getBuildGradleDependenciesTestCompile())
 
 			return wrapContents(contents, 0, " {", "dependencies", "}")
 		}
@@ -59,7 +61,9 @@ allprojects {
 
 			if (ivyXmlNode) {
 				ivyXmlNode.dependencies.dependency.each {
-					contents.addAll(wrapLine(2, it.@org, it.@name, it.@rev))
+					if ((it.@conf == null) || (it.@conf == "default")) {
+						contents.addAll(wrapLine(2, it.@org, it.@name, it.@rev))
+					}
 				}
 			}
 
@@ -80,6 +84,20 @@ allprojects {
 			}
 
 			return wrapContents(contents, 1, "(", "compile", ")")
+		}
+
+		getBuildGradleDependenciesTestCompile = {
+			List contents = []
+
+			if (ivyXmlNode) {
+				ivyXmlNode.dependencies.dependency.each {
+					if (it.@conf =~ "test") {
+						contents.addAll(wrapLine(2, it.@org, it.@name, it.@rev))
+					}
+				}
+			}
+
+			return wrapContents(contents, 1, "(", "testCompile", ")")
 		}
 
 		getBuildGradleDependenciesProvidedCompile = {
