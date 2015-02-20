@@ -28,7 +28,9 @@ allprojects {
 		Closure getBuildGradleExt
 		Closure getBuildGradleExtPluginFullVersion
 		Closure getBuildXmlProperty
+		Closure getIndent
 		Closure wrapContents
+		Closure wrapDependency
 		Closure wrapProperty
 		Closure writeBuildGradleFile
 		Closure writeDependencySettingsFile
@@ -50,7 +52,7 @@ allprojects {
 			contents.addAll(getBuildGradleDependenciesCompile())
 			contents.addAll(getBuildGradleDependenciesProvidedCompile())
 
-			return wrapContents(contents, "", " {", "dependencies", "}")
+			return wrapContents(contents, 0, " {", "dependencies", "}")
 		}
 
 		getBuildGradleDependenciesCompile = {
@@ -78,7 +80,7 @@ allprojects {
 				}
 			}
 
-			return wrapContents(contents, "\t", "(", "compile", ")")
+			return wrapContents(contents, 1, "(", "compile", ")")
 		}
 
 		getBuildGradleDependenciesProvidedCompile = {
@@ -96,25 +98,25 @@ allprojects {
 			portalDependencyJarsArray.each {
 				String portalDependencyJar ->
 
-				Map portalDependencyJarsMap = portalDependencies.get(portalDependencyJar)
+				Map portalDependencyJarMap = portalDependencies.get(portalDependencyJar)
 
-				if (portalDependencyJarsMap == null) {
+				if (portalDependencyJarMap == null) {
 					println("Portal dependency " + portalDependencyJar + " is not defined in versions.gradle")
 				}
 				else {
-					contents << "\t\t[group: \"${portalDependencyJarsMap."group"}\", name: \"${portalDependencyJarsMap."name"}\", version: \"${portalDependencyJarsMap."version"}\"],"
+					contents.addAll(wrapDependency(2, portalDependencyJarMap["group"], portalDependencyJarMap["name"], portalDependencyJarMap["version"]))
 				}
 			}
 
-			return wrapContents(contents, "\t", "(", "providedCompile", ")")
+			return wrapContents(contents, 1, "(", "providedCompile", ")")
 		}
 
 		getBuildGradleExt = {
 			List contents = []
 
-			contents.addAll(wrapProperty("\t", "osgiIdeDependencies", getBuildXmlProperty("osgi.ide.dependencies")))
-			contents.addAll(wrapProperty("\t", "osgiRuntimeDependencies", getBuildXmlProperty("osgi.runtime.dependencies")))
-			contents.addAll(wrapProperty("\t", "pluginFullVersion", getBuildGradleExtPluginFullVersion()))
+			contents.addAll(wrapProperty(1, "osgiIdeDependencies", getBuildXmlProperty("osgi.ide.dependencies")))
+			contents.addAll(wrapProperty(1, "osgiRuntimeDependencies", getBuildXmlProperty("osgi.runtime.dependencies")))
+			contents.addAll(wrapProperty(1, "pluginFullVersion", getBuildGradleExtPluginFullVersion()))
 
 			String pluginPackaging = "war"
 
@@ -122,12 +124,12 @@ allprojects {
 				pluginPackaging = "jar"
 			}
 
-			contents.addAll(wrapProperty("\t", "pluginPackaging", pluginPackaging))
+			contents.addAll(wrapProperty(1, "pluginPackaging", pluginPackaging))
 
-			contents.addAll(wrapProperty("\t", "portalDependencyTlds", pluginPackageProperties["portal-dependency-tlds"]))
-			contents.addAll(wrapProperty("\t", "themeParent", getBuildXmlProperty("theme.parent")))
+			contents.addAll(wrapProperty(1, "portalDependencyTlds", pluginPackageProperties["portal-dependency-tlds"]))
+			contents.addAll(wrapProperty(1, "themeParent", getBuildXmlProperty("theme.parent")))
 
-			return wrapContents(contents, "", " {", "ext", "}")
+			return wrapContents(contents, 0, " {", "ext", "}")
 		}
 
 		getBuildGradleExtPluginFullVersion = {
@@ -174,12 +176,25 @@ allprojects {
 			return value
 		}
 
+		getIndent = {
+			String indent = ""
+
+			it.times(
+			{
+				indent = indent + "\t"
+			})
+
+			return indent
+		}
+
 		wrapContents = {
-			List contents, String indent, String leftClose, String name, String rightClose ->
+			List contents, int indentCount, String leftClose, String name, String rightClose ->
 
 			if (contents.isEmpty()) {
 				return contents;
 			}
+
+			String indent = getIndent(indentCount)
 
 			contents.add(0, indent + name + leftClose)
 
@@ -196,8 +211,18 @@ allprojects {
 			return contents
 		}
 
+		wrapDependency = {
+			int indentCount, String group, String name, String version ->
+
+			String indent = getIndent(indentCount)
+
+			return "${indent}[group: \"${group}\", name: \"${name}\", version: \"${version}\"],"
+		}
+
 		wrapProperty = {
-			String indent, String name, String value = "" ->
+			int indentCount, String name, String value = "" ->
+
+			String indent = getIndent(indentCount)
 
 			if (value) {
 				return "${indent}${name} = \"${value}\""
