@@ -3,6 +3,12 @@ apply from: "${gradle.lfrSdkDir}/versions.gradle"
 allprojects {
 	apply plugin: "war"
 
+	repositories {
+		maven {
+			url 'http://cdn.repository.liferay.com/nexus/content/groups/public'
+		}
+	}
+
 	ant.loadproperties(srcFile: "${gradle.lfrSdkDir}/build.properties")
 
 	File pluginSrcDir = file("${projectDir}/docroot")
@@ -19,7 +25,7 @@ allprojects {
 		return
 	}
 
-	task initGradle {
+	task initGradle << {
 		Boolean osgiPlugin
 
 		Closure getBuildGradleDependencies
@@ -88,6 +94,37 @@ allprojects {
 			return wrapContents(contents, 1, "(", "compile", ")")
 		}
 
+		getBuildGradleDependenciesProvidedCompile = {
+			List contents = []
+
+			String portalDependencyJars = pluginPackageProperties["portal-dependency-jars"]
+
+			if (portalDependencyJars) {
+				portalDependencyJars = portalDependencyJars.replaceAll("\\.jar", "")
+				portalDependencyJars = portalDependencyJars.replaceAll("-\\w") {
+					it[1].toUpperCase()
+				}
+
+				String[] portalDependencyJarsArray = portalDependencyJars.split(",");
+
+				portalDependencyJarsArray.each {
+					String portalDependencyJar ->
+
+					Map portalDependencyJarMap = portalDependencies.get(portalDependencyJar)
+
+					if (portalDependencyJarMap == null) {
+						println("Portal dependency " + portalDependencyJar + " is not defined in versions.gradle")
+					}
+					else {
+						contents.addAll(wrapDependency(2, portalDependencyJarMap["group"], portalDependencyJarMap["name"], portalDependencyJarMap["version"]))
+					}
+				}
+
+			}
+
+			return wrapContents(contents, 1, "(", "providedCompile", ")")
+		}
+
 		getBuildGradleDependenciesTestCompile = {
 			List contents = []
 
@@ -100,34 +137,6 @@ allprojects {
 			}
 
 			return wrapContents(contents, 1, "(", "testCompile", ")")
-		}
-
-		getBuildGradleDependenciesProvidedCompile = {
-			List contents = []
-
-			String portalDependencyJars = pluginPackageProperties["portal-dependency-jars"]
-
-			portalDependencyJars = portalDependencyJars.replaceAll("\\.jar", "")
-			portalDependencyJars = portalDependencyJars.replaceAll("-\\w") {
-				it[1].toUpperCase()
-			}
-
-			String[] portalDependencyJarsArray = portalDependencyJars.split(",");
-
-			portalDependencyJarsArray.each {
-				String portalDependencyJar ->
-
-				Map portalDependencyJarMap = portalDependencies.get(portalDependencyJar)
-
-				if (portalDependencyJarMap == null) {
-					println("Portal dependency " + portalDependencyJar + " is not defined in versions.gradle")
-				}
-				else {
-					contents.addAll(wrapDependency(2, portalDependencyJarMap["group"], portalDependencyJarMap["name"], portalDependencyJarMap["version"]))
-				}
-			}
-
-			return wrapContents(contents, 1, "(", "providedCompile", ")")
 		}
 
 		getBuildGradleExt = {
