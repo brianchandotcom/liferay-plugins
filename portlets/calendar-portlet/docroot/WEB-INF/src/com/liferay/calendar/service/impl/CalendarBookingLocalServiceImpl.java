@@ -60,6 +60,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.ResourceConstants;
@@ -141,7 +142,6 @@ public class CalendarBookingLocalServiceImpl
 		CalendarBooking calendarBooking = calendarBookingPersistence.create(
 			calendarBookingId);
 
-		calendarBooking.setUuid(serviceContext.getUuid());
 		calendarBooking.setGroupId(calendar.getGroupId());
 		calendarBooking.setCompanyId(user.getCompanyId());
 		calendarBooking.setUserId(user.getUserId());
@@ -158,6 +158,13 @@ public class CalendarBookingLocalServiceImpl
 			calendarBooking.setParentCalendarBookingId(calendarBookingId);
 		}
 
+		String vEventUid = (String)serviceContext.getAttribute("vEventUid");
+
+		if (vEventUid == null) {
+			vEventUid = PortalUUIDUtil.generate();
+		}
+
+		calendarBooking.setVEventUid(vEventUid);
 		calendarBooking.setTitleMap(titleMap);
 		calendarBooking.setDescriptionMap(descriptionMap);
 		calendarBooking.setLocation(location);
@@ -404,6 +411,13 @@ public class CalendarBookingLocalServiceImpl
 				calendarDataFormat);
 
 		return calendarDataHandler.exportCalendarBooking(calendarBookingId);
+	}
+
+	@Override
+	public CalendarBooking fetchCalendarBooking(
+		long calendarId, String vEventUid) {
+
+		return calendarBookingPersistence.fetchByC_V(calendarId, vEventUid);
 	}
 
 	@Override
