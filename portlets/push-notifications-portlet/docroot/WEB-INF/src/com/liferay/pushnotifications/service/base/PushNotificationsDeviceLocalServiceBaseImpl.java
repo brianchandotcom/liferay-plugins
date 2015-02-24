@@ -41,6 +41,7 @@ import com.liferay.portal.util.PortalUtil;
 
 import com.liferay.pushnotifications.model.PushNotificationsDevice;
 import com.liferay.pushnotifications.service.PushNotificationsDeviceLocalService;
+import com.liferay.pushnotifications.service.persistence.PushNotificationsDeviceFinder;
 import com.liferay.pushnotifications.service.persistence.PushNotificationsDevicePersistence;
 
 import java.io.Serializable;
@@ -364,6 +365,25 @@ public abstract class PushNotificationsDeviceLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the push notifications device finder.
+	 *
+	 * @return the push notifications device finder
+	 */
+	public PushNotificationsDeviceFinder getPushNotificationsDeviceFinder() {
+		return pushNotificationsDeviceFinder;
+	}
+
+	/**
+	 * Sets the push notifications device finder.
+	 *
+	 * @param pushNotificationsDeviceFinder the push notifications device finder
+	 */
+	public void setPushNotificationsDeviceFinder(
+		PushNotificationsDeviceFinder pushNotificationsDeviceFinder) {
+		this.pushNotificationsDeviceFinder = pushNotificationsDeviceFinder;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -607,6 +627,8 @@ public abstract class PushNotificationsDeviceLocalServiceBaseImpl
 	protected com.liferay.pushnotifications.service.PushNotificationsDeviceService pushNotificationsDeviceService;
 	@BeanReference(type = PushNotificationsDevicePersistence.class)
 	protected PushNotificationsDevicePersistence pushNotificationsDevicePersistence;
+	@BeanReference(type = PushNotificationsDeviceFinder.class)
+	protected PushNotificationsDeviceFinder pushNotificationsDeviceFinder;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ClassNameLocalService.class)
