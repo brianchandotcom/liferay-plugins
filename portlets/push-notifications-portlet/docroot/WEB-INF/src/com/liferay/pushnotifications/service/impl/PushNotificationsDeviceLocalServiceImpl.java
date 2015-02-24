@@ -81,14 +81,7 @@ public class PushNotificationsDeviceLocalServiceImpl
 	}
 
 	@Override
-	public void sendPushNotification(JSONObject jsonObject)
-		throws PortalException {
-
-		sendPushNotification(0, jsonObject);
-	}
-
-	@Override
-	public void sendPushNotification(long toUserId, JSONObject jsonObject)
+	public void sendPushNotification(long[] toUserIds, JSONObject jsonObject)
 		throws PortalException {
 
 		for (Map.Entry<String, PushNotificationsSender> entry :
@@ -98,7 +91,7 @@ public class PushNotificationsDeviceLocalServiceImpl
 
 			List<PushNotificationsDevice> pushNotificationsDevices =
 				getPushNotificationsDevices(
-					toUserId, entry.getKey(), QueryUtil.ALL_POS,
+					toUserIds, entry.getKey(), QueryUtil.ALL_POS,
 					QueryUtil.ALL_POS);
 
 			for (PushNotificationsDevice pushNotificationsDevice :
@@ -131,15 +124,15 @@ public class PushNotificationsDeviceLocalServiceImpl
 	}
 
 	protected List<PushNotificationsDevice> getPushNotificationsDevices(
-		long toUserId, String platform, int start, int end) {
+		long[] toUserIds, String platform, int start, int end) {
 
-		if (toUserId == 0) {
+		if (toUserIds.length == 0) {
 			return pushNotificationsDevicePersistence.findByPlatform(
 				platform, start, end);
 		}
 
-		return pushNotificationsDevicePersistence.findByU_P(
-			toUserId, platform, start, end);
+		return pushNotificationsDeviceFinder.findByU_P(
+			toUserIds, platform, start, end);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

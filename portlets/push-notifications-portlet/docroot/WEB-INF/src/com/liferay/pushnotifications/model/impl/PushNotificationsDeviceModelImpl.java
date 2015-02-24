@@ -94,8 +94,7 @@ public class PushNotificationsDeviceModelImpl extends BaseModelImpl<PushNotifica
 			true);
 	public static final long PLATFORM_COLUMN_BITMASK = 1L;
 	public static final long TOKEN_COLUMN_BITMASK = 2L;
-	public static final long USERID_COLUMN_BITMASK = 4L;
-	public static final long PUSHNOTIFICATIONSDEVICEID_COLUMN_BITMASK = 8L;
+	public static final long PUSHNOTIFICATIONSDEVICEID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -247,14 +246,6 @@ public class PushNotificationsDeviceModelImpl extends BaseModelImpl<PushNotifica
 
 	@Override
 	public void setUserId(long userId) {
-		_columnBitmask |= USERID_COLUMN_BITMASK;
-
-		if (!_setOriginalUserId) {
-			_setOriginalUserId = true;
-
-			_originalUserId = _userId;
-		}
-
 		_userId = userId;
 	}
 
@@ -272,10 +263,6 @@ public class PushNotificationsDeviceModelImpl extends BaseModelImpl<PushNotifica
 
 	@Override
 	public void setUserUuid(String userUuid) {
-	}
-
-	public long getOriginalUserId() {
-		return _originalUserId;
 	}
 
 	@JSON
@@ -439,10 +426,6 @@ public class PushNotificationsDeviceModelImpl extends BaseModelImpl<PushNotifica
 	public void resetOriginalValues() {
 		PushNotificationsDeviceModelImpl pushNotificationsDeviceModelImpl = this;
 
-		pushNotificationsDeviceModelImpl._originalUserId = pushNotificationsDeviceModelImpl._userId;
-
-		pushNotificationsDeviceModelImpl._setOriginalUserId = false;
-
 		pushNotificationsDeviceModelImpl._originalPlatform = pushNotificationsDeviceModelImpl._platform;
 
 		pushNotificationsDeviceModelImpl._originalToken = pushNotificationsDeviceModelImpl._token;
@@ -545,8 +528,6 @@ public class PushNotificationsDeviceModelImpl extends BaseModelImpl<PushNotifica
 		};
 	private long _pushNotificationsDeviceId;
 	private long _userId;
-	private long _originalUserId;
-	private boolean _setOriginalUserId;
 	private Date _createDate;
 	private String _platform;
 	private String _originalPlatform;
