@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<custom-sql>
+	<sql id="com.liferay.pushnotifications.service.persistence.PushNotificationsDeviceFinder.findByU_P">
+		<![CDATA[
+			SELECT
+				{PushNotificationsDevice.*}
+			FROM
+				PushNotificationsDevice
+			WHERE
+				[$USER_ID$]
+				(platform = ?)
+		]]>
+	</sql>
+</custom-sql>
