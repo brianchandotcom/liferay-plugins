@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Lock;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
@@ -328,6 +329,57 @@ public class SyncUtil {
 			StreamUtil.cleanUp(patchedFileOutputStream);
 			StreamUtil.cleanUp(patchedWritableByteChannel);
 			StreamUtil.cleanUp(deltaReadableByteChannel);
+		}
+	}
+
+	public static void setFilePermissions(
+		Group group, boolean folder, ServiceContext serviceContext) {
+
+		int syncSiteMemberFilePermissions = GetterUtil.getInteger(
+			group.getTypeSettingsProperty("syncSiteMemberFilePermissions"));
+
+		if (syncSiteMemberFilePermissions ==
+				SyncConstants.PERMISSIONS_DEFAULT) {
+
+			serviceContext.setDeriveDefaultPermissions(true);
+		}
+		else if (syncSiteMemberFilePermissions ==
+					SyncConstants.PERMISSIONS_NONE) {
+
+			serviceContext.setGroupPermissions(new String[0]);
+		}
+		else if (syncSiteMemberFilePermissions ==
+					SyncConstants.PERMISSIONS_VIEW_ONLY) {
+
+			serviceContext.setGroupPermissions(new String[] {"VIEW"});
+		}
+		else if (syncSiteMemberFilePermissions ==
+					SyncConstants.PERMISSIONS_VIEW_AND_ADD_DISCUSSION) {
+
+			if (folder) {
+				serviceContext.setGroupPermissions(new String[] {"VIEW"});
+			}
+			else {
+				serviceContext.setGroupPermissions(
+					new String[] {"ADD_DISCUSSION", "VIEW"});
+			}
+		}
+		else if (syncSiteMemberFilePermissions ==
+					SyncConstants.PERMISSIONS_FULL_ACCESS) {
+
+			if (folder) {
+				serviceContext.setGroupPermissions(
+					new String[] {
+						"ADD_DOCUMENT", "ADD_SHORTCUT", "ADD_SUBFOLDER",
+						"DELETE", "UPDATE","VIEW"
+					});
+			}
+			else {
+				serviceContext.setGroupPermissions(
+					new String[] {
+						"ADD_DISCUSSION" , "DELETE", "UPDATE", "VIEW"
+					});
+			}
 		}
 	}
 
