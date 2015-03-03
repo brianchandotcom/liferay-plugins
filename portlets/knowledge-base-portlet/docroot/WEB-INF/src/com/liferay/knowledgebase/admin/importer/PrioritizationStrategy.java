@@ -15,7 +15,6 @@
 package com.liferay.knowledgebase.admin.importer;
 
 import com.liferay.knowledgebase.model.KBArticle;
-import com.liferay.knowledgebase.model.KBArticleConstants;
 import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.KBArticleServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -28,7 +27,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +37,8 @@ import java.util.Map;
 public class PrioritizationStrategy {
 
 	public static PrioritizationStrategy create(
-		long groupId, long parentKBFolderId,
-		boolean prioritizeUpdatedKBArticles,
-		boolean prioritizeByNumericalPrefix) {
+			long groupId, long parentKBFolderId,
+			boolean prioritizeByNumericalPrefix) {
 
 		Map<String, List<KBArticle>> existingKBArticlesMap = new HashMap<>();
 
@@ -65,34 +62,24 @@ public class PrioritizationStrategy {
 		}
 
 		return new PrioritizationStrategy(
-			groupId, parentKBFolderId, prioritizeUpdatedKBArticles,
-			prioritizeByNumericalPrefix, existingKBArticlesMap);
+			groupId, parentKBFolderId, prioritizeByNumericalPrefix,
+			existingKBArticlesMap);
 	}
 
-	public void addKBArticle(KBArticle kbArticle, String fileName)
+	public void addKBArticle(KBArticle kbArticle, String filePath)
 		throws PortalException {
 
-		updateKBArticle(kbArticle, fileName);
-
-		if (!_prioritizeUpdatedKBArticles) {
-			String parentKBArticleUrlTitle = getParentKBArticleUrlTitle(
-				kbArticle);
-
-			List<KBArticle> newKBArticles = getList(
-				_newKBArticlesMap, parentKBArticleUrlTitle);
-
-			newKBArticles.add(kbArticle);
-		}
+		handleNumericalPrefix(kbArticle, filePath);
 	}
 
 	public void prioritizeKBArticles() throws PortalException {
-		if (_prioritizeUpdatedKBArticles) {
-			initializeNonImportedKBArticles();
-		}
-
 		if (_prioritizeByNumericalPrefix) {
 			for (Map.Entry<String, Double> entry :
 					_importedKBArticleUrlTitlesPrioritiesMap.entrySet()) {
+
+				if (entry.getValue() < 1.0) {
+					continue;
+				}
 
 				KBArticle kbArticle =
 					KBArticleLocalServiceUtil.getKBArticleByUrlTitle(
@@ -102,92 +89,26 @@ public class PrioritizationStrategy {
 					kbArticle.getResourcePrimKey(), entry.getValue());
 
 				remove(_importedKBArticlesMap, kbArticle);
-				remove(_importedKBArticleUrlTitlesMap, kbArticle.getUrlTitle());
-				remove(_newKBArticlesMap, kbArticle);
 			}
 		}
 
-		if (_prioritizeUpdatedKBArticles) {
-			Map<String, Double> maxKBArticlePriorityMap =
-				computeMaxKBArticlePriorityMap(_nonimportedKBArticlesMap);
-
-			prioritizeKBArticles(
-				_importedKBArticlesMap, maxKBArticlePriorityMap);
-		}
-		else {
-			Map<String, Double> maxKBArticlePriorityMap =
-				computeMaxKBArticlePriorityMap(_existingKBArticlesMap);
-
-			prioritizeKBArticles(_newKBArticlesMap, maxKBArticlePriorityMap);
-		}
+		prioritizeKBArticles(_importedKBArticlesMap);
 	}
 
-	public void updateKBArticle(KBArticle kbArticle, String fileName)
+	public void updateKBArticle(KBArticle kbArticle, String filePath)
 		throws PortalException {
 
-		String parentKBArticleUrlTitle = getParentKBArticleUrlTitle(kbArticle);
-
-		List<KBArticle> kbArticles = getList(
-			_importedKBArticlesMap, parentKBArticleUrlTitle);
-
-		kbArticles.add(kbArticle);
-
-		List<String> importedUrlTitles = getList(
-			_importedKBArticleUrlTitlesMap, parentKBArticleUrlTitle);
-
-		importedUrlTitles.add(kbArticle.getUrlTitle());
-
-		if (_prioritizeByNumericalPrefix) {
-			double sectionFileEntryNamePrefix = getNumericalPrefix(fileName);
-
-			if (sectionFileEntryNamePrefix > 0) {
-				_importedKBArticleUrlTitlesPrioritiesMap.put(
-					kbArticle.getUrlTitle(), sectionFileEntryNamePrefix);
-			}
-		}
+		handleNumericalPrefix(kbArticle, filePath);
 	}
 
 	protected PrioritizationStrategy(
 		long groupId, long parentKBFolderId,
-		boolean prioritizeUpdatedKBArticles,
 		boolean prioritizeByNumericalPrefix,
 		Map<String, List<KBArticle>> existingKBArticlesMap) {
 
 		_groupId = groupId;
 		_parentKBFolderId = parentKBFolderId;
-		_prioritizeUpdatedKBArticles = prioritizeUpdatedKBArticles;
 		_prioritizeByNumericalPrefix = prioritizeByNumericalPrefix;
-		_existingKBArticlesMap = existingKBArticlesMap;
-	}
-
-	protected Map<String, Double> computeMaxKBArticlePriorityMap(
-		Map<String, List<KBArticle>> kbArticlesMap) {
-
-		Map<String, Double> maxKBArticlePriorityMap = new HashMap<>();
-
-		for (Map.Entry<String, List<KBArticle>> entry :
-				kbArticlesMap.entrySet()) {
-
-			double maxKBArticlePriority = 0.0;
-
-			List<KBArticle> kbArticles = entry.getValue();
-
-			if (kbArticles == null) {
-				continue;
-			}
-
-			for (KBArticle kbArticle : kbArticles) {
-				double kbArticlePriority = kbArticle.getPriority();
-
-				if (kbArticlePriority > maxKBArticlePriority) {
-					maxKBArticlePriority = kbArticlePriority;
-				}
-			}
-
-			maxKBArticlePriorityMap.put(entry.getKey(), maxKBArticlePriority);
-		}
-
-		return maxKBArticlePriorityMap;
 	}
 
 	protected <S, T> List<T> getList(Map<S, List<T>> map, S key) {
@@ -201,22 +122,61 @@ public class PrioritizationStrategy {
 		return list;
 	}
 
-	protected double getNumericalPrefix(String path) {
-		int i = path.lastIndexOf(CharPool.SLASH);
+	protected double getNumericalPrefix(
+		String filePath, boolean isChildArticleFile) {
 
-		if (i == -1) {
-			return KBArticleConstants.DEFAULT_PRIORITY;
+		double numericalPrefix = -1.0;
+
+		if (isChildArticleFile) {
+			String fileName = filePath;
+
+			int i = filePath.lastIndexOf(CharPool.SLASH);
+
+			if (i != -1) {
+				fileName = filePath.substring(i + 1);
+			}
+
+			String digits = StringUtil.extractLeadingDigits(fileName);
+
+			if (Validator.isNull(digits)) {
+				return numericalPrefix;
+			}
+
+			return Double.parseDouble(digits);
+		}
+		else {
+			String[] pathEntries = filePath.split(StringPool.SLASH);
+
+			if (pathEntries == null) {
+				String digits = StringUtil.extractLeadingDigits(filePath);
+
+				if (Validator.isNull(digits)) {
+					return numericalPrefix;
+				}
+
+				return Double.parseDouble(digits);
+			}
+
+			int len = pathEntries.length;
+
+			for (int i = len - 1; i > -1; i--) {
+				String fileName = pathEntries[i];
+
+				String digits = StringUtil.extractLeadingDigits(fileName);
+
+				if (Validator.isNull(digits)) {
+					continue;
+				}
+
+				numericalPrefix = Double.parseDouble(digits);
+
+				if (numericalPrefix >= 1.0) {
+					return numericalPrefix;
+				}
+			}
 		}
 
-		String name = path.substring(i + 1);
-
-		String numericalPrefix = StringUtil.extractLeadingDigits(name);
-
-		if (Validator.isNull(numericalPrefix)) {
-			return KBArticleConstants.DEFAULT_PRIORITY;
-		}
-
-		return Double.parseDouble(numericalPrefix);
+		return numericalPrefix;
 	}
 
 	protected String getParentKBArticleUrlTitle(KBArticle kbArticle)
@@ -231,33 +191,47 @@ public class PrioritizationStrategy {
 		return parentKBArticle.getUrlTitle();
 	}
 
-	protected void initializeNonImportedKBArticles() {
-		_nonimportedKBArticlesMap = new HashMap<>();
+	protected void handleNumericalPrefix(KBArticle kbArticle, String filePath)
+			throws PortalException {
 
-		for (Map.Entry<String, List<KBArticle>> entry :
-				_existingKBArticlesMap.entrySet()) {
+		String parentKBArticleUrlTitle = getParentKBArticleUrlTitle(kbArticle);
 
-			List<String> importedKBArticleUrlTitles = getList(
-				_importedKBArticleUrlTitlesMap, entry.getKey());
+		List<KBArticle> kbArticles = getList(
+			_importedKBArticlesMap, parentKBArticleUrlTitle);
 
-			List<KBArticle> nonimportedKBArticles = new ArrayList<>();
+		kbArticles.add(kbArticle);
 
-			for (KBArticle kbArticle : entry.getValue()) {
-				String urlTitle = kbArticle.getUrlTitle();
+		if (_prioritizeByNumericalPrefix) {
+			boolean isChildArticle = true;
 
-				if (!importedKBArticleUrlTitles.contains(urlTitle)) {
-					nonimportedKBArticles.add(kbArticle);
-				}
+			if (kbArticle.getParentKBArticle() == null) {
+				isChildArticle = false;
 			}
 
-			_nonimportedKBArticlesMap.put(
-				entry.getKey(), nonimportedKBArticles);
+			double sectionFileEntryNamePrefix = getNumericalPrefix(
+				filePath, isChildArticle);
+
+			if (sectionFileEntryNamePrefix < 0.0) {
+
+				// do nothing
+
+			}
+			else if (sectionFileEntryNamePrefix < 1.0) {
+				kbArticle.setPriority(1.0);
+
+				_importedKBArticleUrlTitlesPrioritiesMap.put(
+					kbArticle.getUrlTitle(), sectionFileEntryNamePrefix);
+			}
+			else {
+				_importedKBArticleUrlTitlesPrioritiesMap.put(
+					kbArticle.getUrlTitle(), sectionFileEntryNamePrefix);
+			}
 		}
 	}
 
 	protected void prioritizeKBArticles(
-		Map<String, List<KBArticle>> kbArticlesMap,
-		Map<String, Double> maxKBArticlePriorityMap) {
+			Map<String, List<KBArticle>> kbArticlesMap)
+		throws PortalException {
 
 		for (Map.Entry<String, List<KBArticle>> entry :
 				kbArticlesMap.entrySet()) {
@@ -268,38 +242,52 @@ public class PrioritizationStrategy {
 				continue;
 			}
 
-			ListUtil.sort(kbArticles, new Comparator<KBArticle>() {
+			List<KBArticle> siblingKBArticles = null;
 
-				@Override
-				public int compare(KBArticle kbArticle1, KBArticle kbArticle2) {
-					String urlTitle1 = kbArticle1.getUrlTitle();
-					String urlTitle2 = kbArticle2.getUrlTitle();
+			if (Validator.isNull(entry.getKey())) {
 
-					return urlTitle1.compareTo(urlTitle2);
+				// Handle lead articles
+
+				siblingKBArticles = KBArticleLocalServiceUtil.getKBArticles(
+					_groupId, _parentKBFolderId, WorkflowConstants.STATUS_ANY,
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+			}
+			else {
+				KBArticle parentKBArticle =
+					KBArticleLocalServiceUtil.fetchKBArticleByUrlTitle(
+						_groupId, _parentKBFolderId, entry.getKey());
+
+				siblingKBArticles = KBArticleServiceUtil.getKBArticles(
+					_groupId, parentKBArticle.getResourcePrimKey(),
+					WorkflowConstants.STATUS_ANY, QueryUtil.ALL_POS,
+					QueryUtil.ALL_POS, null);
+			}
+
+			List<KBArticle> siblingKBArticlesCopy = ListUtil.copy(
+				siblingKBArticles);
+
+			siblingKBArticlesCopy.removeAll(kbArticles);
+
+			double maxPriority = 0.0;
+
+			for (KBArticle sibling : siblingKBArticlesCopy) {
+				double priority = sibling.getPriority();
+
+				if (priority > maxPriority) {
+					maxPriority = priority;
 				}
-
-			});
-
-			String parentKBArticleUrlTitle = entry.getKey();
+			}
 
 			int size = kbArticles.size();
 
 			for (int i = 0; i < size; i++) {
 				KBArticle kbArticle = kbArticles.get(i);
 
-				double maxPriority = 0.0;
-
-				if (maxKBArticlePriorityMap.containsKey(
-						parentKBArticleUrlTitle)) {
-
-					maxPriority = maxKBArticlePriorityMap.get(
-						parentKBArticleUrlTitle);
+				if (kbArticle.getPriority() >= 1.0) {
+					continue;
 				}
 
 				maxPriority++;
-
-				maxKBArticlePriorityMap.put(
-					parentKBArticleUrlTitle, maxPriority);
 
 				KBArticleLocalServiceUtil.updatePriority(
 					kbArticle.getResourcePrimKey(), maxPriority);
@@ -319,19 +307,12 @@ public class PrioritizationStrategy {
 		}
 	}
 
-	private final Map<String, List<KBArticle>> _existingKBArticlesMap;
 	private final long _groupId;
 	private final Map<String, List<KBArticle>> _importedKBArticlesMap =
 		new HashMap<>();
-	private final Map<String, List<String>> _importedKBArticleUrlTitlesMap =
-		new HashMap<>();
 	private final Map<String, Double> _importedKBArticleUrlTitlesPrioritiesMap =
 		new HashMap<>();
-	private final Map<String, List<KBArticle>> _newKBArticlesMap =
-		new HashMap<>();
-	private Map<String, List<KBArticle>> _nonimportedKBArticlesMap;
 	private final long _parentKBFolderId;
 	private final boolean _prioritizeByNumericalPrefix;
-	private final boolean _prioritizeUpdatedKBArticles;
 
 }
