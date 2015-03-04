@@ -3,15 +3,41 @@ import com.liferay.portal.kernel.util.ReleaseInfo
 apply from: "${gradle.lfrSdkDir}/versions.gradle"
 
 buildscript {
+	dependencies {
+		classpath([group: "com.liferay.portal", name: "portal-service", version: "7.0.0-SNAPSHOT"])
+	}
+
 	repositories {
 		maven {
-			url 'http://cdn.repository.liferay.com/nexus/content/groups/public'
+			url "http://cdn.repository.liferay.com/nexus/content/groups/public"
 		}
+	}
+}
+
+configure(allprojects) {
+	repositories {
+		maven {
+			url "http://cdn.repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+}
+
+task unzipCommonCss(type: Copy) {
+	configurations {
+		portalWeb
 	}
 
 	dependencies {
-		classpath([group: 'com.liferay.portal', name: 'portal-service', version: '7.0.0-SNAPSHOT'])
+		portalWeb([group: "com.liferay.portal", name: "portal-web", version: "7.0.0-SNAPSHOT"])
 	}
+
+	from(zipTree(configurations.portalWeb.singleFile)) {
+		include "WEB-INF/tld/**/*"
+		include "html/css/common/**/*"
+		include "html/themes/**/*"
+	}
+
+	into "$rootDir/dist"
 }
 
 configure(allprojects) {
@@ -364,16 +390,11 @@ configure(
 
 	apply plugin: "war"
 
+	task buildCss(type: JavaExec)
+	task compile
+
 	Map projectCompileDependencies = gradle.compileDependencies.find {
 		project.path == it.projectPath
-	}
-
-	clean {
-		if (projectCompileDependencies) {
-			projectCompileDependencies["compile"].each {
-				dependsOn "${it}:clean"
-			}
-		}
 	}
 
 	dependencies {
@@ -388,32 +409,80 @@ configure(
 		}
 
 		providedCompile(
-			[group: 'com.liferay', name: 'aQute.bnd', version: '2.3.0'],
-			[group: 'com.liferay.portal', name: 'portal-service', version: '7.0.0-SNAPSHOT'],
-			[group: 'com.liferay.portal', name: 'util-bridges', version: '7.0.0-SNAPSHOT'],
-			[group: 'com.liferay.portal', name: 'util-java', version: '7.0.0-SNAPSHOT'],
-			[group: 'com.liferay.portal', name: 'util-taglib', version: '7.0.0-SNAPSHOT'],
-			[group: 'commons-logging', name: 'commons-logging', version: '1.1.1'],
-			[group: 'hsqldb', name: 'hsqldb', version: '1.8.0.7'],
-			[group: 'javax.activation', name: 'activation', version: '1.1'],
-			[group: 'javax.ccpp', name: 'ccpp', version: '1.0'],
-			[group: 'javax.jms', name: 'jms', version: '1.1'],
-			[group: 'javax.mail', name: 'mail', version: '1.4'],
-			[group: 'javax.portlet', name: 'portlet-api', version: '2.0'],
-			[group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'],
-			[group: 'javax.servlet.jsp', name: 'jsp-api', version: '2.1'],
-			[group: 'log4j', name: 'log4j', version: '1.2.16'],
-			[group: 'mysql', name: 'mysql-connector-java', version: '5.1.23'],
-			[group: 'net.sf', name: 'jargs', version: '1.0'],
-			[group: 'net.sourceforge.jtds', name: 'jtds', version: '1.2.6'],
-			[group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.0.0'],
-			[group: 'postgresql', name: 'postgresql', version: '9.2-1002.jdbc4'])
+			[group: "com.liferay", name: "aQute.bnd", version: "2.3.0"],
+			[group: "com.liferay.portal", name: "portal-service", version: "7.0.0-SNAPSHOT"],
+			[group: "com.liferay.portal", name: "util-bridges", version: "7.0.0-SNAPSHOT"],
+			[group: "com.liferay.portal", name: "util-java", version: "7.0.0-SNAPSHOT"],
+			[group: "com.liferay.portal", name: "util-taglib", version: "7.0.0-SNAPSHOT"],
+			[group: "commons-logging", name: "commons-logging", version: "1.1.1"],
+			[group: "hsqldb", name: "hsqldb", version: "1.8.0.7"],
+			[group: "javax.activation", name: "activation", version: "1.1"],
+			[group: "javax.ccpp", name: "ccpp", version: "1.0"],
+			[group: "javax.jms", name: "jms", version: "1.1"],
+			[group: "javax.mail", name: "mail", version: "1.4"],
+			[group: "javax.portlet", name: "portlet-api", version: "2.0"],
+			[group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"],
+			[group: "javax.servlet.jsp", name: "jsp-api", version: "2.1"],
+			[group: "log4j", name: "log4j", version: "1.2.16"],
+			[group: "mysql", name: "mysql-connector-java", version: "5.1.23"],
+			[group: "net.sf", name: "jargs", version: "1.0"],
+			[group: "net.sourceforge.jtds", name: "jtds", version: "1.2.6"],
+			[group: "org.eclipse.persistence", name: "javax.persistence", version: "2.0.0"],
+			[group: "postgresql", name: "postgresql", version: "9.2-1002.jdbc4"])
 	}
 
-	repositories {
-		maven {
-			url "http://cdn.repository.liferay.com/nexus/content/groups/public"
+	buildCss {
+		configurations {
+			buildCssClasspath
 		}
+
+		dependencies {
+			buildCssClasspath(
+				[group: "com.liferay", name: "com.liferay.ruby.gems", version: "1.0.0-SNAPSHOT"],
+				[group: "com.liferay.portal", name: "portal-impl", version: "7.0.0-SNAPSHOT"],
+				[group: "com.liferay.portal", name: "portal-service", version: "7.0.0-SNAPSHOT"],
+				[group: "com.liferay.portal", name: "util-java", version: "7.0.0-SNAPSHOT"],
+				[group: "com.thoughtworks.xstream", name: "xstream", version: "1.4.3"],
+				[group: "commons-lang", name: "commons-lang", version: "2.6"],
+				[group: "commons-configuration", name: "commons-configuration", version: "1.6"],
+				[group: "javax.portlet", name: "portlet-api", version: "2.0"],
+				[group: "javax.servlet", name: "javax.servlet-api", version: "3.0.1"],
+				[group: "easyconf", name: "easyconf", version: "0.9.5", transitive: false],
+				[group: "org.apache.ant", name: "ant", version: "1.8.2"],
+				[group: "org.jruby", name: "jruby-complete", version: "1.6.5"],
+				[group: "org.mozilla", name: "rhino", version: "1.7R4"],
+				[group: "org.springframework", name: "spring-web", version: "3.2.10.RELEASE"],
+				[group: "struts", name: "struts", version: "1.2.9"]
+			)
+		}
+
+		args = [
+			"sass.dir=/",
+			"sass.docroot.dir=${projectDir}/docroot",
+			"sass.portal.common.dir=${rootDir}/dist/html/css/common"
+		]
+
+		classpath = configurations.buildCssClasspath
+
+		dependsOn compileJava,rootProject.unzipCommonCss
+
+		main = "com.liferay.portal.tools.SassToCssBuilder"
+
+		onlyIf {
+			pluginSrcDir.equals(file("${projectDir}/docroot"))
+		}
+	}
+
+	clean {
+		if (projectCompileDependencies) {
+			projectCompileDependencies["compile"].each {
+				dependsOn "${it}:clean"
+			}
+		}
+	}
+
+	compile {
+		dependsOn compileJava
 	}
 
 	sourceSets {
@@ -425,12 +494,10 @@ configure(
 	}
 
 	war {
+		dependsOn buildCss
+
 		doFirst {
 			destinationDir = file("${rootDir}/dist")
 		}
-	}
-
-	task compile {
-		dependsOn compileJava
 	}
 }
