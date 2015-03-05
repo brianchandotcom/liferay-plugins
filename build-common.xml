@@ -92,6 +92,7 @@
 	</path>
 
 	<taskdef classname="com.liferay.ant.bnd.BaselineJarTask" classpathref="classpath.com.liferay.ant.bnd" name="baseline-jar" />
+	<taskdef classname="com.liferay.ant.bnd.ReleaseToRepoTask" classpathref="classpath.com.liferay.ant.bnd" name="release-to-repo" />
 
 	<path id="classpath.net.sourceforge.pmd">
 		<fileset dir="${sdk.dir}/dependencies/net.sourceforge.pmd/lib" includes="*.jar" />
@@ -2001,6 +2002,33 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="release">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<if>
+				<available file="@{module.dir}/bnd.bnd" />
+				<then>
+					<set-module-properties
+						module.dir="@{module.dir}"
+					/>
+
+					<loop-macrodef-or-target
+						module.dirs="@{module.dir}"
+						target.name="jar"
+					/>
+
+					<bndexpand propertyfile="${sdk.dir}/common.bnd" />
+
+					<release-to-repo
+						bndRootFile="${sdk.dir}/common.bnd"
+						file="${plugin.file}"
+					/>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="remake-dir">
 		<attribute name="dir" />
 
@@ -2808,6 +2836,13 @@ for (String path : paths) {
 		</tstamp>
 
 		<echo message="${current.time}" />
+	</target>
+
+	<target name="release">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="release"
+		/>
 	</target>
 
 	<target name="reset-gradle">
