@@ -63,7 +63,7 @@
 		<path refid="plugin-lib.classpath" />
 		<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
 		<fileset dir="${app.server.lib.portal.dir}" includes="annotations.jar,commons-logging.jar,log4j.jar,util-bridges.jar,util-java.jar,util-taglib.jar" />
-		<fileset dir="${sdk.dir}/dependencies/aQute.bnd/lib" includes="*.jar" />
+		<fileset dir="${sdk.dir}/dependencies/biz.aQute.bnd/lib" includes="*.jar" />
 		<fileset dir="${sdk.dir}/lib" includes="activation.jar,javax.servlet-api.jar,jsp-api.jar,mail.jar" />
 	</path>
 
@@ -81,17 +81,18 @@
 		<fileset dir="${module.framework.base.dir}/test" erroronmissingdir="false" includes="portal-test*.jar" />
 	</path>
 
-	<path id="classpath.aQute.bnd">
-		<fileset dir="${sdk.dir}/dependencies/aQute.bnd/lib" includes="*.jar" />
+	<path id="classpath.biz.aQute.bnd">
+		<fileset dir="${sdk.dir}/dependencies/biz.aQute.bnd/lib" includes="*.jar" />
 	</path>
 
-	<taskdef classpathref="classpath.aQute.bnd" resource="aQute/bnd/ant/taskdef.properties" />
+	<taskdef classpathref="classpath.biz.aQute.bnd" resource="aQute/bnd/ant/taskdef.properties" />
 
 	<path id="classpath.com.liferay.ant.bnd">
 		<fileset dir="${sdk.dir}/dependencies/com.liferay.ant.bnd/lib" includes="*.jar" />
 	</path>
 
 	<taskdef classname="com.liferay.ant.bnd.BaselineJarTask" classpathref="classpath.com.liferay.ant.bnd" name="baseline-jar" />
+	<taskdef classname="com.liferay.ant.bnd.ReleaseToRepoTask" classpathref="classpath.com.liferay.ant.bnd" name="release-to-repo" />
 
 	<path id="classpath.net.sourceforge.pmd">
 		<fileset dir="${sdk.dir}/dependencies/net.sourceforge.pmd/lib" includes="*.jar" />
@@ -1796,6 +1797,12 @@ Please find a solution that does not require portal-impl.jar.
 								</classpath>
 								<property name="-sourcepath" value="@{module.dir}" />
 							</bnd>
+
+							<baseline-jar
+								bndFile="@{module.dir}/bnd.bnd"
+								bndRootFile="${sdk.dir}/common.bnd"
+								newerJar="${plugin.file}"
+							/>
 						</then>
 					</if>
 
@@ -1992,6 +1999,33 @@ Please find a solution that does not require portal-impl.jar.
 			/>
 
 			<var name="merge-unzip.original.war.file" unset="true" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="release">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<if>
+				<available file="@{module.dir}/bnd.bnd" />
+				<then>
+					<set-module-properties
+						module.dir="@{module.dir}"
+					/>
+
+					<loop-macrodef-or-target
+						module.dirs="@{module.dir}"
+						target.name="jar"
+					/>
+
+					<bndexpand propertyfile="${sdk.dir}/common.bnd" />
+
+					<release-to-repo
+						bndRootFile="${sdk.dir}/common.bnd"
+						file="${plugin.file}"
+					/>
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -2802,6 +2836,13 @@ for (String path : paths) {
 		</tstamp>
 
 		<echo message="${current.time}" />
+	</target>
+
+	<target name="release">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="release"
+		/>
 	</target>
 
 	<target name="reset-gradle">
