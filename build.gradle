@@ -60,6 +60,12 @@ configure(
 	task initGradle
 
 	buildCss {
+		Closure getSassDocroot
+
+		File sassDocrootDir
+
+		FileTree sassDocrootDirTree
+
 		configurations {
 			all {
 				resolutionStrategy.cacheChangingModulesFor 5, 'minutes'
@@ -69,12 +75,6 @@ configure(
 
 			portalWeb
 		}
-
-		args = [
-			"sass.dir=/",
-			"sass.docroot.dir=${projectDir}/docroot",
-			"sass.portal.common.dir=${rootDir}/tmp/portal-web/html/css/common"
-		]
 
 		classpath = configurations.buildCssClasspath
 
@@ -100,6 +100,12 @@ configure(
 		}
 
 		doFirst {
+			args = [
+				"sass.dir=/",
+				"sass.docroot.dir=${sassDocrootDir}",
+				"sass.portal.common.dir=${rootDir}/tmp/portal-web/html/css/common"
+			]
+
 			if (!exists("${rootDir}/tmp/portal-web")) {
 				copy {
 					from(zipTree(configurations.portalWeb.singleFile)) {
@@ -113,11 +119,24 @@ configure(
 			}
 		}
 
-		main = "com.liferay.portal.tools.SassToCssBuilder"
+		getSassDocroot = {
+			if (osgiPlugin) {
+				sassDocrootDir = file("${projectDir}/src/META-INF/resources")
+			}
+			else {
+				sassDocrootDir = file("${projectDir}/docroot")
+			}
+
+			sassDocrootDirTree = fileTree(dir: sassDocrootDir, include: "**/*.css")
+		}
 
 		onlyIf {
-			pluginSrcDir.equals(file("${projectDir}/docroot"))
+			sassDocrootDirTree.getFiles()
 		}
+
+		main = "com.liferay.portal.tools.SassToCssBuilder"
+
+		getSassDocroot()
 	}
 
 	clean {
