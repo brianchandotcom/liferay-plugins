@@ -348,7 +348,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			List<FileEntry> fileEntries = dlAppService.getFileEntries(
 				repositoryId, folderId);
 
-			List<SyncDLObject> syncDLObjects = new ArrayList<SyncDLObject>(
+			List<SyncDLObject> syncDLObjects = new ArrayList<>(
 				fileEntries.size());
 
 			for (FileEntry fileEntry : fileEntries) {
@@ -420,8 +420,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			List<Folder> folders = dlAppService.getFolders(
 				repositoryId, parentFolderId);
 
-			List<SyncDLObject> syncDLObjects = new ArrayList<SyncDLObject>(
-				folders.size());
+			List<SyncDLObject> syncDLObjects = new ArrayList<>(folders.size());
 
 			for (Folder folder : folders) {
 				if (!SyncUtil.isSupportedFolder(folder)) {
@@ -663,7 +662,13 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				}
 			}
 
-			groups.add(user.getGroup());
+			if (PrefsPropsUtil.getBoolean(
+					user.getCompanyId(),
+					PortletPropsKeys.SYNC_ALLOW_USER_PERSONAL_SITES,
+					PortletPropsValues.SYNC_ALLOW_USER_PERSONAL_SITES)) {
+
+				groups.add(user.getGroup());
+			}
 
 			Collections.sort(groups, new GroupNameComparator());
 
