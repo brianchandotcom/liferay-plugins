@@ -437,7 +437,21 @@ configure(
 				String[] importSharedArray = importShared.split(",")
 
 				importSharedArray.each {
-					contents << "includeTransitive \":shared:${it}\""
+					String includeTransitivePath
+
+					if (exists("${rootDir}/shared/${it}/src")) {
+						includeTransitivePath = ":shared:${it}"
+					}
+					else if (exists("${projectDir}/../${it}/src")) {
+						includeTransitivePath = project.path.replaceFirst(project.name, it)
+					}
+					else {
+						println("Project dependency ${it} could not be found in the shared directory or this project's parent directory.")
+
+						return
+					}
+
+					contents << "includeTransitive \"${includeTransitivePath}\""
 				}
 
 				contents.each {
@@ -554,6 +568,8 @@ configure(
 	}
 
 	war {
+		Closure getLanguageProperties
+
 		dependsOn buildCss
 
 		destinationDir = file("${rootDir}/dist")
@@ -561,6 +577,35 @@ configure(
 		duplicatesStrategy "exclude"
 
 		exclude "_diffs.*", "_diffs/**", "WEB-INF/lib/*"
+
+		filesMatching("WEB-INF/liferay-hook.xml") {
+			filter { line ->
+				line.contains("content/Language*.properties") ? getLanguageProperties() : line
+			}
+		}
+
+		getLanguageProperties = {
+			FileCollection fileCollection = files {
+				file("${pluginSrcDir}/content").listFiles()
+			}
+
+			List fileList = fileCollection as List
+
+			StringBuilder sb = new StringBuilder()
+
+			fileList.eachWithIndex { File file, int i ->
+				sb << "\t"
+				sb << "<language-properties>content/"
+				sb << file.name
+				sb << "</language-properties>"
+
+				if (fileList.size() > i + 1) {
+					sb << "\n"
+				}
+			}
+
+			return sb.toString()
+		}
 
 		outputs.file archivePath
 	}
