@@ -106,7 +106,7 @@ try {
 						</c:choose>
 					</c:when>
 					<c:otherwise>
-						<div class="alert alert-error">
+						<div class="alert alert-danger">
 							<liferay-ui:message key="you-do-not-have-the-required-permissions" />
 						</div>
 					</c:otherwise>
@@ -132,7 +132,7 @@ try {
 catch (NoSuchRecordSetException nsrse) {
 %>
 
-	<div class="alert alert-error">
+	<div class="alert alert-danger">
 		<%= LanguageUtil.get(request, "the-selected-list-no-longer-exists") %>
 	</div>
 
@@ -147,7 +147,7 @@ boolean showEditTemplateIcon = (ddmTemplate != null) && (permissionChecker.hasOw
 %>
 
 <c:if test="<%= themeDisplay.isSignedIn() && (hasConfigurationPermission || showEditTemplateIcon || showAddListIcon) %>">
-	<div class="lfr-meta-actions icons-container">
+	<div class="icons-container lfr-meta-actions">
 		<div class="lfr-icon-actions">
 			<c:if test="<%= showAddTemplateIcon %>">
 				<liferay-portlet:renderURL portletName="<%= PortletKeys.DYNAMIC_DATA_MAPPING %>" var="addTemplateURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
