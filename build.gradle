@@ -2,6 +2,8 @@ import com.liferay.portal.kernel.util.ReleaseInfo
 
 import org.apache.commons.codec.digest.DigestUtils
 
+import org.gradle.api.internal.file.copy.CopySpecResolver
+
 apply from: "${gradle.lfrSdkDir}/versions.gradle"
 
 buildscript {
@@ -573,6 +575,7 @@ configure(
 	war {
 		Closure getLanguageProperties
 		Closure getNewDependencyNames
+		Closure setManifest
 
 		dependsOn buildCss
 
@@ -618,15 +621,43 @@ configure(
 			}
 		}.memoize()
 
+		setManifest = {
+			File manifestFile
+
+			if (osgiPlugin) {
+				manifestFile = file("${projectDir}/src/META-INF/MANIFEST.MF")
+			}
+			else {
+				manifestFile = file("${projectDir}/docroot/META-INF/MANIFEST.MF")
+			}
+
+			if (manifestFile.exists()) {
+				manifest.from manifestFile
+			}
+			else {
+				CopySpec manifestCopySpec = rootSpec.children.find {
+					CopySpecResolver copySpecResolver = it.buildRootResolver()
+
+					copySpecResolver.destPath.pathString == "META-INF"
+				}
+
+				if (manifestCopySpec) {
+					manifestCopySpec.exclude "**"
+				}
+			}
+		}
+
 		outputs.file archivePath
 
-		rootSpec.childSpecs*.rename {
+		rootSpec.children*.rename {
 			String fileName ->
 
 			Map<String, String> newDependencyNames = getNewDependencyNames();
 
 			return newDependencyNames[fileName] ?: fileName
 		}
+
+		setManifest()
 	}
 
 	webAppDirName = "docroot"
