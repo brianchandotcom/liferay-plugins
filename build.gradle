@@ -63,7 +63,6 @@ configure(
 
 	Boolean osgiPlugin
 
-	Closure exists
 	Closure getBuildXmlProperty
 	Closure getPluginsSrcDir
 	Closure readConfigurations
@@ -82,6 +81,119 @@ configure(
 	task buildCss(type: JavaExec)
 	task compile
 	task initGradle
+
+	sourceSets {
+		main {
+			java {
+				srcDir pluginSrcDir
+			}
+			resources {
+				srcDir pluginSrcDir
+			}
+		}
+	}
+
+	getBuildXmlProperty = {
+		String key, String defaultValue = "" ->
+
+		String value = defaultValue
+
+		Node buildXmlPropertyNode = buildXmlNode.property.find {
+			it.@name == key
+		}
+
+		if (buildXmlPropertyNode) {
+			value = buildXmlPropertyNode.@value
+		}
+
+		return value
+	}
+
+	readConfigurations = {
+
+		// bnd.bnd
+
+		bndProperties = new Properties()
+
+		File bndPropertiesFile = new File("${projectDir}/bnd.bnd")
+
+		if (bndPropertiesFile.exists()) {
+			bndProperties.load(new FileInputStream(bndPropertiesFile))
+		}
+
+		// build.xml
+
+		XmlParser xmlParser = new XmlParser()
+
+		xmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+
+		File buildXmlFile = new File("${projectDir}/build.xml")
+
+		if (buildXmlFile.exists()) {
+			buildXmlNode = xmlParser.parse(buildXmlFile)
+		}
+
+		// ivy.xml
+
+		File ivyXmlFile = new File("${projectDir}/ivy.xml")
+
+		if (ivyXmlFile.exists()) {
+			ivyXmlNode = xmlParser.parse(ivyXmlFile)
+		}
+
+		// liferay-plugin-package.properties
+
+		pluginPackageProperties = new Properties()
+
+		pluginPackagePropertiesFile = new File("${projectDir}/docroot/WEB-INF/liferay-plugin-package.properties")
+
+		if (pluginPackagePropertiesFile.exists()) {
+			pluginPackageProperties.load(new FileInputStream(pluginPackagePropertiesFile))
+		}
+	}
+
+	setModuleProperties = {
+
+		// osgiPlugin
+
+		File bndPropertiesFile = new File("${projectDir}/bnd.bnd")
+
+		osgiPlugin = bndPropertiesFile.exists()
+
+		// pluginPackaging
+
+		pluginPackaging = "war"
+
+		if ((project.parent.name == "shared") || osgiPlugin) {
+			pluginPackaging = "jar"
+		}
+
+		// version
+
+		String moduleFullVersion = pluginPackageProperties["module-full-version"]
+
+		if (moduleFullVersion != null) {
+			version = moduleFullVersion
+		}
+		else {
+			String bundleVersion = bndProperties["Bundle-Version"]
+
+			if (bundleVersion != null) {
+				version = bundleVersion
+			}
+			else {
+				String moduleIncrementalVersion = pluginPackageProperties["module-incremental-version"]
+
+				if (moduleIncrementalVersion == null) {
+					moduleIncrementalVersion = getBuildXmlProperty("plugin.version")
+				}
+
+				version = getBuildXmlProperty("plugin.full.version", ReleaseInfo.version + "." + moduleIncrementalVersion)
+			}
+		}
+	}
+
+	webAppDirName = "docroot"
 
 	buildCss {
 		Closure setOutputs
@@ -171,6 +283,10 @@ configure(
 	}
 
 	clean {
+		tasks.each {
+			dependsOn "clean" + it.name.capitalize()
+		}
+
 		Map projectCompileDependencies = gradle.compileDependencies.find {
 			project.path == it.projectPath
 		}
@@ -178,12 +294,6 @@ configure(
 		if (projectCompileDependencies) {
 			projectCompileDependencies["compile"].each {
 				dependsOn "${it}:clean"
-			}
-		}
-
-		doLast {
-			tasks.each {
-				delete it.outputs
 			}
 		}
 	}
@@ -194,12 +304,10 @@ configure(
 
 	compileJava {
 		dependencies {
-			afterEvaluate {
-				String projectServiceJarFile = "${projectDir}/docroot/WEB-INF/lib/${project.name}-service.jar"
+			String projectServiceJarFile = "${projectDir}/docroot/WEB-INF/lib/${project.name}-service.jar"
 
-				if (exists(projectServiceJarFile)) {
-					compile(files(projectServiceJarFile))
-				}
+			if (exists(projectServiceJarFile)) {
+				compile(files(projectServiceJarFile))
 			}
 
 			Map projectCompileDependencies = gradle.compileDependencies.find {
@@ -238,30 +346,6 @@ configure(
 				[group: "org.eclipse.persistence", name: "javax.persistence", version: "2.0.0"],
 				[group: "postgresql", name: "postgresql", version: "9.2-1002.jdbc4"])
 		}
-	}
-
-	exists = {
-		String fileName ->
-
-		File file = file(fileName)
-
-		return file.exists()
-	}
-
-	getBuildXmlProperty = {
-		String key, String defaultValue = "" ->
-
-		String value = defaultValue
-
-		Node buildXmlPropertyNode = buildXmlNode.property.find {
-			it.@name == key
-		}
-
-		if (buildXmlPropertyNode) {
-			value = buildXmlPropertyNode.@value
-		}
-
-		return value
 	}
 
 	initGradle << {
@@ -477,101 +561,6 @@ configure(
 		writeDependencySettingsFile()
 	}
 
-	readConfigurations = {
-
-		// bnd.bnd
-
-		bndProperties = new Properties()
-
-		File bndPropertiesFile = new File("${projectDir}/bnd.bnd")
-
-		if (bndPropertiesFile.exists()) {
-			bndProperties.load(new FileInputStream(bndPropertiesFile))
-		}
-
-		// build.xml
-
-		XmlParser xmlParser = new XmlParser()
-
-		xmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-
-		File buildXmlFile = new File("${projectDir}/build.xml")
-
-		if (buildXmlFile.exists()) {
-			buildXmlNode = xmlParser.parse(buildXmlFile)
-		}
-
-		// ivy.xml
-
-		File ivyXmlFile = new File("${projectDir}/ivy.xml")
-
-		if (ivyXmlFile.exists()) {
-			ivyXmlNode = xmlParser.parse(ivyXmlFile)
-		}
-
-		// liferay-plugin-package.properties
-
-		pluginPackageProperties = new Properties()
-
-		pluginPackagePropertiesFile = new File("${projectDir}/docroot/WEB-INF/liferay-plugin-package.properties")
-
-		if (pluginPackagePropertiesFile.exists()) {
-			pluginPackageProperties.load(new FileInputStream(pluginPackagePropertiesFile))
-		}
-	}
-
-	setModuleProperties = {
-
-		// osgiPlugin
-
-		File bndPropertiesFile = new File("${projectDir}/bnd.bnd")
-
-		osgiPlugin = bndPropertiesFile.exists()
-
-		// pluginPackaging
-
-		pluginPackaging = "war"
-
-		if ((project.parent.name == "shared") || osgiPlugin) {
-			pluginPackaging = "jar"
-		}
-
-		// version
-
-		String moduleFullVersion = pluginPackageProperties["module-full-version"]
-
-		if (moduleFullVersion != null) {
-			version = moduleFullVersion
-		}
-		else {
-			String bundleVersion = bndProperties["Bundle-Version"]
-
-			if (bundleVersion != null) {
-				version = bundleVersion
-			}
-			else {
-				String moduleIncrementalVersion = pluginPackageProperties["module-incremental-version"]
-
-				if (moduleIncrementalVersion == null) {
-					moduleIncrementalVersion = getBuildXmlProperty("plugin.version")
-				}
-
-				version = getBuildXmlProperty("plugin.full.version", ReleaseInfo.version + "." + moduleIncrementalVersion)
-			}
-		}
-	}
-
-	sourceSets {
-		main {
-			java {
-				srcDir pluginSrcDir
-			}
-			resources {
-				srcDir pluginSrcDir
-			}
-		}
-	}
-
 	war {
 		Closure getLanguageProperties
 		Closure getNewDependencyNames
@@ -659,8 +648,6 @@ configure(
 
 		setManifest()
 	}
-
-	webAppDirName = "docroot"
 
 	readConfigurations()
 
@@ -810,4 +797,11 @@ compareDists << {
 	}
 
 	compareDists()
+}
+
+private boolean exists(String fileName) {
+
+	File file = file(fileName)
+
+	return file.exists()
 }
