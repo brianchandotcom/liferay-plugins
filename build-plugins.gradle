@@ -106,28 +106,31 @@ sourceSets {
 	}
 }
 
-String moduleFullVersion = pluginPackageProperties["module-full-version"]
+Closure getVersion
 
-if (moduleFullVersion != null) {
-	version = moduleFullVersion
-}
-else {
+getVersion = {
+	String moduleFullVersion = pluginPackageProperties["module-full-version"]
+
+	if (moduleFullVersion) {
+		return moduleFullVersion
+	}
+
 	String bundleVersion = bndProperties["Bundle-Version"]
 
-	if (bundleVersion != null) {
-		version = bundleVersion
+	if (bundleVersion) {
+		return bundleVersion
 	}
-	else {
-		String moduleIncrementalVersion = pluginPackageProperties["module-incremental-version"]
 
-		if (moduleIncrementalVersion == null) {
-			moduleIncrementalVersion = getBuildXmlProperty("plugin.version")
-		}
+	String moduleIncrementalVersion = pluginPackageProperties["module-incremental-version"]
 
-		version = getBuildXmlProperty("plugin.full.version", ReleaseInfo.version + "." + moduleIncrementalVersion)
+	if (!moduleIncrementalVersion) {
+		moduleIncrementalVersion = getBuildXmlProperty("plugin.version")
 	}
+
+	return getBuildXmlProperty("plugin.full.version", ReleaseInfo.version + "." + moduleIncrementalVersion)
 }
 
+version = getVersion()
 webAppDirName = "docroot"
 
 task buildCss(type: JavaExec)
