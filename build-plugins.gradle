@@ -43,7 +43,7 @@ dependencies {
 		}
 	}
 
-	if (!name.endsWith("-layouttpl") && !name.equals("portal-compat-shared")) {
+	if (!name.endsWith("-layouttpl") && !name.endsWith("-theme") && !name.equals("portal-compat-shared")) {
 		compile project(":shared:portal-compat-shared")
 	}
 
@@ -59,13 +59,9 @@ dependencies {
 	)
 
 	portalBuildCss(
-		[group: "com.liferay", name: "com.liferay.ruby.gems", version: "1.0.0-SNAPSHOT"],
-		[group: "javax.portlet", name: "portlet-api", version: "2.0"],
+		[group: "com.liferay", name: "com.liferay.sass.compiler", version: "1.0.0-SNAPSHOT"],
 		[group: "org.apache.ant", name: "ant", version: "1.8.2"],
-		[group: "org.jruby", name: "jruby-complete", version: "1.6.5"],
-		[group: "org.mozilla", name: "rhino", version: "1.7R4"],
-		[group: "org.springframework", name: "spring-web", version: "3.2.10.RELEASE"],
-		[group: "struts", name: "struts", version: "1.2.9"]
+		[group: "org.mozilla", name: "rhino", version: "1.7R4"]
 	)
 
 	portalWeb group: "com.liferay.portal", name: "portal-web", version: "7.0.0-SNAPSHOT"
@@ -200,6 +196,7 @@ initGradle << {
 	Closure getBuildGradleDependenciesCompile
 	Closure getBuildGradleDependenciesProvidedCompile
 	Closure getBuildGradleDependenciesTestCompile
+	Closure getBuildGradleExt
 	Closure getBuildXmlProperty
 	Closure getIndent
 	Closure readLegacyXmls
@@ -211,8 +208,11 @@ initGradle << {
 	Closure writeBuildGradleFile
 	Closure writeDependencySettingsFile
 
+	Node buildXmlNode
+	Node ivyXmlNode
+
 	getBuildGradleDependencies = {
-		List contents = []
+		List<String> contents = []
 
 		contents.addAll(getBuildGradleDependenciesCompile())
 		contents.addAll(getBuildGradleDependenciesProvidedCompile())
@@ -222,11 +222,11 @@ initGradle << {
 	}
 
 	getBuildGradleDependenciesCompile = {
-		List contents = []
+		List<String> contents = []
 
 		if (ivyXmlNode) {
 			ivyXmlNode.dependencies.dependency.each {
-				if ((it.@conf == null) || (it.@conf == "default")) {
+				if (!it.@conf || (it.@conf == "default")) {
 					contents.addAll(wrapDependency(2, it.@org, it.@name, it.@rev))
 				}
 			}
@@ -240,7 +240,7 @@ initGradle << {
 			requiredDeploymentContextsArray.each {
 				String serviceJarFileName = "../../" + it.replaceFirst(".+-", "") + "s/${it}/docroot/WEB-INF/lib/${it}-service.jar"
 
-				File serviceJarFile = new File("${projectDir}", serviceJarFileName)
+				File serviceJarFile = file(serviceJarFileName)
 
 				if (serviceJarFile.exists()) {
 					contents.addAll(wrapServiceJar(2, serviceJarFileName))
@@ -276,7 +276,7 @@ initGradle << {
 	}
 
 	getBuildGradleDependenciesProvidedCompile = {
-		List contents = []
+		List<String> contents = []
 
 		String portalDependencyJars = pluginPackageProperties["portal-dependency-jars"]
 
@@ -291,9 +291,9 @@ initGradle << {
 			portalDependencyJarsArray.each {
 				String portalDependencyJar ->
 
-				Map portalDependencyJarMap = portalDependencies[portalDependencyJar]
+				Map<String, String> portalDependencyJarMap = portalDependencies[portalDependencyJar]
 
-				if (portalDependencyJarMap == null) {
+				if (!portalDependencyJarMap) {
 					println("Portal dependency " + portalDependencyJar + " is not defined in versions.gradle")
 				}
 				else {
@@ -307,7 +307,7 @@ initGradle << {
 	}
 
 	getBuildGradleDependenciesTestCompile = {
-		List contents = []
+		List<String> contents = []
 
 		if (ivyXmlNode) {
 			ivyXmlNode.dependencies.dependency.each {
@@ -318,6 +318,27 @@ initGradle << {
 		}
 
 		return wrapContents(contents, 1, "(", "testCompile", ")")
+	}
+
+	getBuildGradleExt = {
+		List<String> contents = []
+
+		if (project.name.endsWith("-theme")) {
+			String themeParent = getBuildXmlProperty("theme.parent")
+			String themeType = getBuildXmlProperty("theme.type", "vm")
+
+			if (themeParent) {
+				contents.add(wrapProperty(1, "themeParent", themeParent))
+			}
+
+			contents.add(wrapProperty(1, "themeType", themeType))
+		}
+
+		if (contents) {
+			contents = wrapContents(contents, 0, " {", "ext", "}")
+		}
+
+		return contents
 	}
 
 	getBuildXmlProperty = {
@@ -355,26 +376,23 @@ initGradle << {
 
 		xmlParser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
 
-		File buildXmlFile = project.file("build.xml")
+		File buildXmlFile = file("build.xml")
 
 		if (buildXmlFile.exists()) {
-			project.ext.buildXmlNode = xmlParser.parse(buildXmlFile)
+			buildXmlNode = xmlParser.parse(buildXmlFile)
 		}
 
 		// ivy.xml
 
-		File ivyXmlFile = project.file("ivy.xml")
+		File ivyXmlFile = file("ivy.xml")
 
 		if (ivyXmlFile.exists()) {
-			project.ext.ivyXmlNode = xmlParser.parse(ivyXmlFile)
-		}
-		else {
-			project.ext.ivyXmlNode = null
+			ivyXmlNode = xmlParser.parse(ivyXmlFile)
 		}
 	}
 
 	wrapContents = {
-		List contents, int indentCount, String leftClose, String name, String rightClose ->
+		List<String> contents, int indentCount, String leftClose, String name, String rightClose ->
 
 		if (!contents) {
 			return contents
@@ -426,14 +444,19 @@ initGradle << {
 	}
 
 	writeBuildGradleFile = {
-		List contents = []
+		List<String> contents = []
 
 		contents.addAll(getBuildGradleDependencies())
+		contents.addAll(getBuildGradleExt())
 
-		File buildGradleFile = new File("${projectDir}/build.gradle")
+		File buildGradleFile = file("build.gradle")
 
-		contents.each {
-			buildGradleFile << it + "\n"
+		buildGradleFile.withWriter {
+			BufferedWriter bufferedWriter ->
+
+			contents.each {
+				bufferedWriter.writeLine it
+			}
 		}
 	}
 
