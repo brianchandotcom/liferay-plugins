@@ -163,12 +163,17 @@ compareDists << {
 }
 
 createLayouttpl << {
+	String layouttplDisplayName = project.properties["layouttplDisplayName"]
+	String layouttplName = project.properties["layouttplName"]
+
+	if (!layouttplDisplayName || !layouttplName) {
+		throw new GradleException("This task must be called by the create script.")
+	}
+
 	File layouttplDir = file("layouttpl/${layouttplName}-layouttpl")
 
 	if (layouttplDir.exists()) {
-		println "${layouttplName}-layouttpl already exists."
-
-		return
+		throw new GradleException("${layouttplName}-layouttpl already exists.")
 	}
 
 	String layouttplTemplateName = layouttplName.replaceAll("-", "_")
@@ -198,12 +203,17 @@ createLayouttpl << {
 }
 
 createTheme << {
+	String themeDisplayName = project.properties["themeDisplayName"]
+	String themeName = project.properties["themeName"]
+
+	if (!themeDisplayName || !themeName) {
+		throw new GradleException("This task must be called by the create script.")
+	}
+
 	File themeDir = file("themes/${themeName}-theme")
 
 	if (themeDir.exists()) {
-		println "${themeName}-theme already exists."
-
-		return
+		throw new GradleException("${themeName}-theme already exists.")
 	}
 
 	copy {
