@@ -31,5 +31,7 @@ create table SyncDLObject (
 	lockUserName VARCHAR(75) null,
 	type_ VARCHAR(75) null,
 	typePK LONG,
-	typeUuid VARCHAR(75) null
+	typeUuid VARCHAR(75) null,
+	userId LONG,
+	userName VARCHAR(75) null
 );

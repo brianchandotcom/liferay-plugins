@@ -66,7 +66,7 @@ public class SyncDLObjectCacheModel implements CacheModel<SyncDLObject>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(47);
+		StringBundler sb = new StringBundler(51);
 
 		sb.append("{syncDLObjectId=");
 		sb.append(syncDLObjectId);
@@ -114,6 +114,10 @@ public class SyncDLObjectCacheModel implements CacheModel<SyncDLObject>,
 		sb.append(typePK);
 		sb.append(", typeUuid=");
 		sb.append(typeUuid);
+		sb.append(", userId=");
+		sb.append(userId);
+		sb.append(", userName=");
+		sb.append(userName);
 		sb.append("}");
 
 		return sb.toString();
@@ -228,6 +232,15 @@ public class SyncDLObjectCacheModel implements CacheModel<SyncDLObject>,
 			syncDLObjectImpl.setTypeUuid(typeUuid);
 		}
 
+		syncDLObjectImpl.setUserId(userId);
+
+		if (userName == null) {
+			syncDLObjectImpl.setUserName(StringPool.BLANK);
+		}
+		else {
+			syncDLObjectImpl.setUserName(userName);
+		}
+
 		syncDLObjectImpl.resetOriginalValues();
 
 		return syncDLObjectImpl;
@@ -258,6 +271,8 @@ public class SyncDLObjectCacheModel implements CacheModel<SyncDLObject>,
 		type = objectInput.readUTF();
 		typePK = objectInput.readLong();
 		typeUuid = objectInput.readUTF();
+		userId = objectInput.readLong();
+		userName = objectInput.readUTF();
 	}
 
 	@Override
@@ -361,6 +376,15 @@ public class SyncDLObjectCacheModel implements CacheModel<SyncDLObject>,
 		else {
 			objectOutput.writeUTF(typeUuid);
 		}
+
+		objectOutput.writeLong(userId);
+
+		if (userName == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(userName);
+		}
 	}
 
 	public long syncDLObjectId;
@@ -386,4 +410,6 @@ public class SyncDLObjectCacheModel implements CacheModel<SyncDLObject>,
 	public String type;
 	public long typePK;
 	public String typeUuid;
+	public long userId;
+	public String userName;
 }

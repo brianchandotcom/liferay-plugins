@@ -1834,6 +1834,8 @@ public class SyncDLObjectPersistenceImpl extends BasePersistenceImpl<SyncDLObjec
 		syncDLObjectImpl.setType(syncDLObject.getType());
 		syncDLObjectImpl.setTypePK(syncDLObject.getTypePK());
 		syncDLObjectImpl.setTypeUuid(syncDLObject.getTypeUuid());
+		syncDLObjectImpl.setUserId(syncDLObject.getUserId());
+		syncDLObjectImpl.setUserName(syncDLObject.getUserName());
 
 		return syncDLObjectImpl;
 	}

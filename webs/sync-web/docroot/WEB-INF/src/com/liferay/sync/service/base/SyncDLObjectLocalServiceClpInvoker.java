@@ -135,7 +135,7 @@ public class SyncDLObjectLocalServiceClpInvoker {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"long", "long", "java.lang.String", "java.lang.String",
 				"java.util.Date", "long", "java.lang.String", "java.lang.String",
-				"long", "java.lang.String"
+				"long", "java.lang.String", "long", "java.lang.String"
 			};
 
 		_methodName90 = "deleteSyncDLObjects";
@@ -282,7 +282,9 @@ public class SyncDLObjectLocalServiceClpInvoker {
 				(java.lang.String)arguments[17],
 				(java.lang.String)arguments[18],
 				((Long)arguments[19]).longValue(),
-				(java.lang.String)arguments[20]);
+				(java.lang.String)arguments[20],
+				((Long)arguments[21]).longValue(),
+				(java.lang.String)arguments[22]);
 		}
 
 		if (_methodName90.equals(name) &&

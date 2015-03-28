@@ -40,5 +40,7 @@
 		<field name="type" type="String" />
 		<field name="typePK" type="long" />
 		<field name="typeUuid" type="String" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
 	</model>
 </model-hints>

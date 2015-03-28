@@ -36,7 +36,7 @@ public class SyncDLObjectLocalServiceClp implements SyncDLObjectLocalService {
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"long", "long", "java.lang.String", "java.lang.String",
 				"java.util.Date", "long", "java.lang.String", "java.lang.String",
-				"long", "java.lang.String"
+				"long", "java.lang.String", "long", "java.lang.String"
 			};
 
 		_methodName1 = "addSyncDLObject";
@@ -164,7 +164,7 @@ public class SyncDLObjectLocalServiceClp implements SyncDLObjectLocalService {
 		java.lang.String checksum, java.lang.String event,
 		java.util.Date lockExpirationDate, long lockUserId,
 		java.lang.String lockUserName, java.lang.String type, long typePK,
-		java.lang.String typeUuid)
+		java.lang.String typeUuid, long userId, java.lang.String userName)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
@@ -212,7 +212,11 @@ public class SyncDLObjectLocalServiceClp implements SyncDLObjectLocalService {
 						
 					typePK,
 						
-					ClpSerializer.translateInput(typeUuid)
+					ClpSerializer.translateInput(typeUuid),
+						
+					userId,
+						
+					ClpSerializer.translateInput(userName)
 					});
 		}
 		catch (Throwable t) {

@@ -92,9 +92,11 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 			{ "lockUserName", Types.VARCHAR },
 			{ "type_", Types.VARCHAR },
 			{ "typePK", Types.BIGINT },
-			{ "typeUuid", Types.VARCHAR }
+			{ "typeUuid", Types.VARCHAR },
+			{ "userId", Types.BIGINT },
+			{ "userName", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table SyncDLObject (syncDLObjectId LONG not null primary key,companyId LONG,createTime LONG,modifiedTime LONG,repositoryId LONG,parentFolderId LONG,name VARCHAR(255) null,extension VARCHAR(75) null,mimeType VARCHAR(75) null,description STRING null,changeLog VARCHAR(75) null,extraSettings TEXT null,version VARCHAR(75) null,versionId LONG,size_ LONG,checksum VARCHAR(75) null,event VARCHAR(75) null,lockExpirationDate DATE null,lockUserId LONG,lockUserName VARCHAR(75) null,type_ VARCHAR(75) null,typePK LONG,typeUuid VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table SyncDLObject (syncDLObjectId LONG not null primary key,companyId LONG,createTime LONG,modifiedTime LONG,repositoryId LONG,parentFolderId LONG,name VARCHAR(255) null,extension VARCHAR(75) null,mimeType VARCHAR(75) null,description STRING null,changeLog VARCHAR(75) null,extraSettings TEXT null,version VARCHAR(75) null,versionId LONG,size_ LONG,checksum VARCHAR(75) null,event VARCHAR(75) null,lockExpirationDate DATE null,lockUserId LONG,lockUserName VARCHAR(75) null,type_ VARCHAR(75) null,typePK LONG,typeUuid VARCHAR(75) null,userId LONG,userName VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table SyncDLObject";
 	public static final String ORDER_BY_JPQL = " ORDER BY syncDLObject.companyId ASC, syncDLObject.modifiedTime ASC, syncDLObject.repositoryId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY SyncDLObject.companyId ASC, SyncDLObject.modifiedTime ASC, SyncDLObject.repositoryId ASC";
@@ -153,6 +155,8 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 		model.setType(soapModel.getType());
 		model.setTypePK(soapModel.getTypePK());
 		model.setTypeUuid(soapModel.getTypeUuid());
+		model.setUserId(soapModel.getUserId());
+		model.setUserName(soapModel.getUserName());
 
 		return model;
 	}
@@ -240,6 +244,8 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 		attributes.put("type", getType());
 		attributes.put("typePK", getTypePK());
 		attributes.put("typeUuid", getTypeUuid());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -385,6 +391,18 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 
 		if (typeUuid != null) {
 			setTypeUuid(typeUuid);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
 		}
 	}
 
@@ -785,6 +803,49 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 		_typeUuid = typeUuid;
 	}
 
+	@JSON
+	@Override
+	public long getUserId() {
+		return _userId;
+	}
+
+	@Override
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	@Override
+	public String getUserUuid() {
+		try {
+			User user = UserLocalServiceUtil.getUserById(getUserId());
+
+			return user.getUuid();
+		}
+		catch (PortalException pe) {
+			return StringPool.BLANK;
+		}
+	}
+
+	@Override
+	public void setUserUuid(String userUuid) {
+	}
+
+	@JSON
+	@Override
+	public String getUserName() {
+		if (_userName == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _userName;
+		}
+	}
+
+	@Override
+	public void setUserName(String userName) {
+		_userName = userName;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -839,6 +900,8 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 		syncDLObjectImpl.setType(getType());
 		syncDLObjectImpl.setTypePK(getTypePK());
 		syncDLObjectImpl.setTypeUuid(getTypeUuid());
+		syncDLObjectImpl.setUserId(getUserId());
+		syncDLObjectImpl.setUserName(getUserName());
 
 		syncDLObjectImpl.resetOriginalValues();
 
@@ -1087,12 +1150,22 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 			syncDLObjectCacheModel.typeUuid = null;
 		}
 
+		syncDLObjectCacheModel.userId = getUserId();
+
+		syncDLObjectCacheModel.userName = getUserName();
+
+		String userName = syncDLObjectCacheModel.userName;
+
+		if ((userName != null) && (userName.length() == 0)) {
+			syncDLObjectCacheModel.userName = null;
+		}
+
 		return syncDLObjectCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(47);
+		StringBundler sb = new StringBundler(51);
 
 		sb.append("{syncDLObjectId=");
 		sb.append(getSyncDLObjectId());
@@ -1140,6 +1213,10 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 		sb.append(getTypePK());
 		sb.append(", typeUuid=");
 		sb.append(getTypeUuid());
+		sb.append(", userId=");
+		sb.append(getUserId());
+		sb.append(", userName=");
+		sb.append(getUserName());
 		sb.append("}");
 
 		return sb.toString();
@@ -1147,7 +1224,7 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(73);
+		StringBundler sb = new StringBundler(79);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.sync.model.SyncDLObject");
@@ -1245,6 +1322,14 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 			"<column><column-name>typeUuid</column-name><column-value><![CDATA[");
 		sb.append(getTypeUuid());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userId</column-name><column-value><![CDATA[");
+		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userName</column-name><column-value><![CDATA[");
+		sb.append(getUserName());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -1288,6 +1373,8 @@ public class SyncDLObjectModelImpl extends BaseModelImpl<SyncDLObject>
 	private long _originalTypePK;
 	private boolean _setOriginalTypePK;
 	private String _typeUuid;
+	private long _userId;
+	private String _userName;
 	private long _columnBitmask;
 	private SyncDLObject _escapedModel;
 }

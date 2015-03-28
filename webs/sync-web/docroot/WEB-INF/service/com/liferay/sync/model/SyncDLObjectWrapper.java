@@ -76,6 +76,8 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 		attributes.put("type", getType());
 		attributes.put("typePK", getTypePK());
 		attributes.put("typeUuid", getTypeUuid());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
 
 		return attributes;
 	}
@@ -218,6 +220,18 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 
 		if (typeUuid != null) {
 			setTypeUuid(typeUuid);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
 		}
 	}
 
@@ -469,6 +483,36 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 	@Override
 	public java.lang.String getTypeUuid() {
 		return _syncDLObject.getTypeUuid();
+	}
+
+	/**
+	* Returns the user ID of this sync d l object.
+	*
+	* @return the user ID of this sync d l object
+	*/
+	@Override
+	public long getUserId() {
+		return _syncDLObject.getUserId();
+	}
+
+	/**
+	* Returns the user name of this sync d l object.
+	*
+	* @return the user name of this sync d l object
+	*/
+	@Override
+	public java.lang.String getUserName() {
+		return _syncDLObject.getUserName();
+	}
+
+	/**
+	* Returns the user uuid of this sync d l object.
+	*
+	* @return the user uuid of this sync d l object
+	*/
+	@Override
+	public java.lang.String getUserUuid() {
+		return _syncDLObject.getUserUuid();
 	}
 
 	/**
@@ -787,6 +831,36 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 	@Override
 	public void setTypeUuid(java.lang.String typeUuid) {
 		_syncDLObject.setTypeUuid(typeUuid);
+	}
+
+	/**
+	* Sets the user ID of this sync d l object.
+	*
+	* @param userId the user ID of this sync d l object
+	*/
+	@Override
+	public void setUserId(long userId) {
+		_syncDLObject.setUserId(userId);
+	}
+
+	/**
+	* Sets the user name of this sync d l object.
+	*
+	* @param userName the user name of this sync d l object
+	*/
+	@Override
+	public void setUserName(java.lang.String userName) {
+		_syncDLObject.setUserName(userName);
+	}
+
+	/**
+	* Sets the user uuid of this sync d l object.
+	*
+	* @param userUuid the user uuid of this sync d l object
+	*/
+	@Override
+	public void setUserUuid(java.lang.String userUuid) {
+		_syncDLObject.setUserUuid(userUuid);
 	}
 
 	/**

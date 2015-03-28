@@ -104,6 +104,8 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 		attributes.put("type", getType());
 		attributes.put("typePK", getTypePK());
 		attributes.put("typeUuid", getTypeUuid());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -249,6 +251,18 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 
 		if (typeUuid != null) {
 			setTypeUuid(typeUuid);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
 		}
 
 		_entityCacheEnabled = GetterUtil.getBoolean("entityCacheEnabled");
@@ -802,6 +816,68 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 	}
 
 	@Override
+	public long getUserId() {
+		return _userId;
+	}
+
+	@Override
+	public void setUserId(long userId) {
+		_userId = userId;
+
+		if (_syncDLObjectRemoteModel != null) {
+			try {
+				Class<?> clazz = _syncDLObjectRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_syncDLObjectRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getUserUuid() {
+		try {
+			User user = UserLocalServiceUtil.getUserById(getUserId());
+
+			return user.getUuid();
+		}
+		catch (PortalException pe) {
+			return StringPool.BLANK;
+		}
+	}
+
+	@Override
+	public void setUserUuid(String userUuid) {
+	}
+
+	@Override
+	public String getUserName() {
+		return _userName;
+	}
+
+	@Override
+	public void setUserName(String userName) {
+		_userName = userName;
+
+		if (_syncDLObjectRemoteModel != null) {
+			try {
+				Class<?> clazz = _syncDLObjectRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserName", String.class);
+
+				method.invoke(_syncDLObjectRemoteModel, userName);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public void setCreateDate(java.util.Date createDate) {
 		try {
 			String methodName = "setCreateDate";
@@ -925,6 +1001,8 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 		clone.setType(getType());
 		clone.setTypePK(getTypePK());
 		clone.setTypeUuid(getTypeUuid());
+		clone.setUserId(getUserId());
+		clone.setUserName(getUserName());
 
 		return clone;
 	}
@@ -1021,7 +1099,7 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(47);
+		StringBundler sb = new StringBundler(51);
 
 		sb.append("{syncDLObjectId=");
 		sb.append(getSyncDLObjectId());
@@ -1069,6 +1147,10 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 		sb.append(getTypePK());
 		sb.append(", typeUuid=");
 		sb.append(getTypeUuid());
+		sb.append(", userId=");
+		sb.append(getUserId());
+		sb.append(", userName=");
+		sb.append(getUserName());
 		sb.append("}");
 
 		return sb.toString();
@@ -1076,7 +1158,7 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(73);
+		StringBundler sb = new StringBundler(79);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.sync.model.SyncDLObject");
@@ -1174,6 +1256,14 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 			"<column><column-name>typeUuid</column-name><column-value><![CDATA[");
 		sb.append(getTypeUuid());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userId</column-name><column-value><![CDATA[");
+		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userName</column-name><column-value><![CDATA[");
+		sb.append(getUserName());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -1203,6 +1293,8 @@ public class SyncDLObjectClp extends BaseModelImpl<SyncDLObject>
 	private String _type;
 	private long _typePK;
 	private String _typeUuid;
+	private long _userId;
+	private String _userName;
 	private BaseModel<?> _syncDLObjectRemoteModel;
 	private Class<?> _clpSerializerClass = com.liferay.sync.service.ClpSerializer.class;
 	private boolean _entityCacheEnabled;
