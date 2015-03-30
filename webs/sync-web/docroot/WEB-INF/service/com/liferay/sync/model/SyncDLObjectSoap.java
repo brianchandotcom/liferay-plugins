@@ -36,6 +36,8 @@ public class SyncDLObjectSoap implements Serializable {
 
 		soapModel.setSyncDLObjectId(model.getSyncDLObjectId());
 		soapModel.setCompanyId(model.getCompanyId());
+		soapModel.setUserId(model.getUserId());
+		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateTime(model.getCreateTime());
 		soapModel.setModifiedTime(model.getModifiedTime());
 		soapModel.setRepositoryId(model.getRepositoryId());
@@ -57,8 +59,6 @@ public class SyncDLObjectSoap implements Serializable {
 		soapModel.setType(model.getType());
 		soapModel.setTypePK(model.getTypePK());
 		soapModel.setTypeUuid(model.getTypeUuid());
-		soapModel.setUserId(model.getUserId());
-		soapModel.setUserName(model.getUserName());
 
 		return soapModel;
 	}
@@ -125,6 +125,22 @@ public class SyncDLObjectSoap implements Serializable {
 
 	public void setCompanyId(long companyId) {
 		_companyId = companyId;
+	}
+
+	public long getUserId() {
+		return _userId;
+	}
+
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	public String getUserName() {
+		return _userName;
+	}
+
+	public void setUserName(String userName) {
+		_userName = userName;
 	}
 
 	public long getCreateTime() {
@@ -295,24 +311,10 @@ public class SyncDLObjectSoap implements Serializable {
 		_typeUuid = typeUuid;
 	}
 
-	public long getUserId() {
-		return _userId;
-	}
-
-	public void setUserId(long userId) {
-		_userId = userId;
-	}
-
-	public String getUserName() {
-		return _userName;
-	}
-
-	public void setUserName(String userName) {
-		_userName = userName;
-	}
-
 	private long _syncDLObjectId;
 	private long _companyId;
+	private long _userId;
+	private String _userName;
 	private long _createTime;
 	private long _modifiedTime;
 	private long _repositoryId;
@@ -334,6 +336,4 @@ public class SyncDLObjectSoap implements Serializable {
 	private String _type;
 	private long _typePK;
 	private String _typeUuid;
-	private long _userId;
-	private String _userName;
 }

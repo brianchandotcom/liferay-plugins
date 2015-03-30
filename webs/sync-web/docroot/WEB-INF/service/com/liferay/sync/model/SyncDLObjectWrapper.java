@@ -55,6 +55,8 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 
 		attributes.put("syncDLObjectId", getSyncDLObjectId());
 		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
 		attributes.put("createTime", getCreateTime());
 		attributes.put("modifiedTime", getModifiedTime());
 		attributes.put("repositoryId", getRepositoryId());
@@ -76,8 +78,6 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 		attributes.put("type", getType());
 		attributes.put("typePK", getTypePK());
 		attributes.put("typeUuid", getTypeUuid());
-		attributes.put("userId", getUserId());
-		attributes.put("userName", getUserName());
 
 		return attributes;
 	}
@@ -94,6 +94,18 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 
 		if (companyId != null) {
 			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
 		}
 
 		Long createTime = (Long)attributes.get("createTime");
@@ -220,18 +232,6 @@ public class SyncDLObjectWrapper implements SyncDLObject,
 
 		if (typeUuid != null) {
 			setTypeUuid(typeUuid);
-		}
-
-		Long userId = (Long)attributes.get("userId");
-
-		if (userId != null) {
-			setUserId(userId);
-		}
-
-		String userName = (String)attributes.get("userName");
-
-		if (userName != null) {
-			setUserName(userName);
 		}
 	}
 
