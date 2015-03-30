@@ -45,12 +45,13 @@ public class SyncDLObjectLocalServiceImpl
 
 	@Override
 	public SyncDLObject addSyncDLObject(
-			long companyId, long modifiedTime, long repositoryId,
-			long parentFolderId, String name, String extension, String mimeType,
-			String description, String changeLog, String extraSettings,
-			String version, long versionId, long size, String checksum,
-			String event, Date lockExpirationDate, long lockUserId,
-			String lockUserName, String type, long typePK, String typeUuid)
+			long companyId, long userId, String userName, long modifiedTime,
+			long repositoryId, long parentFolderId, String name,
+			String extension, String mimeType, String description,
+			String changeLog, String extraSettings, String version,
+			long versionId, long size, String checksum, String event,
+			Date lockExpirationDate, long lockUserId, String lockUserName,
+			String type, long typePK, String typeUuid)
 		throws PortalException {
 
 		if (!isDefaultRepository(parentFolderId)) {
@@ -116,6 +117,8 @@ public class SyncDLObjectLocalServiceImpl
 		}
 
 		syncDLObject.setModifiedTime(modifiedTime);
+		syncDLObject.setUserId(userId);
+		syncDLObject.setUserName(userName);
 		syncDLObject.setParentFolderId(parentFolderId);
 		syncDLObject.setName(name);
 		syncDLObject.setExtension(extension);
@@ -148,7 +151,7 @@ public class SyncDLObjectLocalServiceImpl
 
 			if (ArrayUtil.contains(
 					PortletPropsValues.SYNC_MAC_PACKAGE_FOLDER_EXTENSIONS,
-				parentFolderExtension)) {
+					parentFolderExtension)) {
 
 				JSONObject extraSettingsJSONObject =
 					JSONFactoryUtil.createJSONObject(
