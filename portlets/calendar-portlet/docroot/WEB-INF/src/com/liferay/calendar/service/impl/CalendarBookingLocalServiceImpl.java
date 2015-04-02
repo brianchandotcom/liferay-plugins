@@ -62,6 +62,7 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.SystemEventConstants;
@@ -178,7 +179,7 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setSecondReminderType(secondReminderType);
 		calendarBooking.setExpandoBridgeAttributes(serviceContext);
 		calendarBooking.setStatus(
-			CalendarBookingWorkflowConstants.STATUS_PENDING);
+			CalendarBookingWorkflowConstants.STATUS_DRAFT);
 		calendarBooking.setStatusDate(serviceContext.getModifiedDate(now));
 
 		calendarBookingPersistence.update(calendarBooking);
@@ -212,8 +213,11 @@ public class CalendarBookingLocalServiceImpl
 
 		// Workflow
 
-		calendarBookingApprovalWorkflow.startWorkflow(
-			userId, calendarBooking, serviceContext);
+		WorkflowHandlerRegistryUtil.startWorkflowInstance(
+			calendarBooking.getCompanyId(), calendarBooking.getGroupId(),
+			userId, CalendarBooking.class.getName(),
+			calendarBooking.getCalendarBookingId(), calendarBooking,
+			serviceContext);
 
 		return calendarBooking;
 	}
@@ -310,6 +314,13 @@ public class CalendarBookingLocalServiceImpl
 		trashEntryLocalService.deleteEntry(
 			CalendarBooking.class.getName(),
 			calendarBooking.getCalendarBookingId());
+
+		// Workflow
+
+		workflowInstanceLinkLocalService.deleteWorkflowInstanceLinks(
+				calendarBooking.getCompanyId(), calendarBooking.getGroupId(),
+				CalendarBooking.class.getName(),
+				calendarBooking.getCalendarBookingId());
 
 		return calendarBooking;
 	}
@@ -815,15 +826,18 @@ public class CalendarBookingLocalServiceImpl
 			CalendarActivityKeys.UPDATE_CALENDAR_BOOKING,
 			getExtraDataJSON(calendarBooking), 0);
 
-		// Workflow
-
-		calendarBookingApprovalWorkflow.invokeTransition(
-			userId, calendarBooking, status, serviceContext);
-
 		// Notifications
 
 		sendNotification(
 			calendarBooking, NotificationTemplateType.UPDATE, serviceContext);
+
+		// Workflow
+
+		WorkflowHandlerRegistryUtil.startWorkflowInstance(
+			calendarBooking.getCompanyId(), calendarBooking.getGroupId(),
+			userId, CalendarBooking.class.getName(),
+			calendarBooking.getCalendarBookingId(), calendarBooking,
+			serviceContext);
 
 		return calendarBooking;
 	}
