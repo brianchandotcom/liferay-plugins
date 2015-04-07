@@ -1220,12 +1220,10 @@ AUI().use(
 				if (instance._initialRequest) {
 					instance._loadCache(entries);
 
-					if (instance._openPanelId.length) {
-						var openPanelId = parseInt(instance._openPanelId, 10);
+					var openPanelId = instance._openPanelId;
 
-						if (!isNaN(openPanelId)) {
-							instance._createChatFromUser(instance._openPanelId);
-						}
+					if (openPanelId && Lang.isNumber(Number(openPanelId))) {
+						instance._createChatFromUser(openPanelId);
 					}
 
 					instance._restoreMinimizedPanels();
