@@ -41,8 +41,8 @@ public abstract class BaseAlloyIndexer extends BaseIndexer {
 	}
 
 	@Override
-	public String getClassName() {
-		return className;
+	public String[] getClassNames() {
+		return new String[] {className};
 	}
 
 	@Override
