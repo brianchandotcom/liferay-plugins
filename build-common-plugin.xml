@@ -190,101 +190,83 @@
 
 	<macrodef name="compile-jsp">
 		<attribute name="compile.jsp.docroot.dir" />
+		<attribute name="compile.jsp.temp.dir" default="" />
 
 		<sequential>
 			<if>
+				<not>
+					<equals arg1="${app.server.type}" arg2="tomcat" />
+				</not>
+				<then>
+					<fail>Compiling JSPs with ${app.server.type} is not supported.</fail>
+				</then>
+			</if>
+
+			<if>
 				<available file="@{compile.jsp.docroot.dir}" />
 				<then>
-					<antcall target="compile">
-						<param name="plugins.includes.path" value="${basedir}" />
-					</antcall>
-
-					<if>
-						<not>
-							<equals arg1="${app.server.type}" arg2="tomcat" />
-						</not>
-						<then>
-							<fail>Compiling JSPs with ${app.server.type} is not supported.</fail>
-						</then>
-					</if>
-
-					<property name="jspc.classes.dir" value="classes/${app.server.type}" />
-
-					<if>
-						<and>
-							<equals arg1="${app.server.type}" arg2="tomcat" />
-							<equals arg1="${ant.java.version}" arg2="1.5" />
-						</and>
-						<then>
-							<var name="jspc.java.home" value="${jdk.windows.home}" />
-						</then>
-						<else>
-							<var name="jspc.java.home" value="${env.JAVA_HOME}" />
-						</else>
-					</if>
-
 					<path id="jspc.classpath.common">
-						<pathelement location="${jspc.java.home}/jre/lib/rt.jar" />
+						<pathelement location="${env.JAVA_HOME}/jre/lib/rt.jar" />
 						<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
 						<fileset dir="${sdk.dir}/dependencies/com.liferay.jasper.jspc/lib" includes="*.jar" />
 						<pathelement location="${app.server.lib.portal.dir}/ant.jar" />
+						<fileset dir="${basedir}" includes="lib/*.jar" />
+						<fileset dir="${basedir}" includes="docroot/WEB-INF/lib/*.jar" />
+						<fileset dir="@{compile.jsp.docroot.dir}" includes="WEB-INF/lib/*.jar" />
 					</path>
 
 					<local name="jspc.module.web" />
 
 					<if>
-						<available file="bnd.bnd" type="file" />
+						<equals arg1="@{compile.jsp.temp.dir}" arg2="" />
 						<then>
-							<property name="jspc.module.web" value="true" />
+							<path id="jspc.classpath">
+								<path refid="jspc.classpath.common" />
+								<pathelement location="@{compile.jsp.docroot.dir}/WEB-INF/classes" />
+							</path>
 
+							<property name="jspc.module.web" value="false" />
+						</then>
+						<else>
 							<path id="jspc.classpath.module.common">
 								<path refid="jspc.classpath.common" />
 								<fileset dir="${app.server.lib.portal.dir}" includes="*.jar" />
 								<fileset dir="${module.framework.base.dir}/modules" includes="*.jar" />
+								<pathelement location="@{compile.jsp.temp.dir}" />
 							</path>
 
 							<if>
-								<available file="docroot" type="dir" />
+								<available file="@{compile.jsp.docroot.dir}/WEB-INF" type="dir" />
 								<then>
 									<path id="jspc.classpath">
 										<path refid="jspc.classpath.module.common" />
 										<pathelement location="@{compile.jsp.docroot.dir}/WEB-INF/classes" />
-										<fileset dir="@{compile.jsp.docroot.dir}/WEB-INF/lib" includes="*.jar" />
 									</path>
 								</then>
 								<else>
 									<path id="jspc.classpath">
 										<path refid="jspc.classpath.module.common" />
-										<pathelement location="classes" />
-										<fileset dir="${basedir}" includes="lib/*.jar" />
 									</path>
 								</else>
 							</if>
-						</then>
-						<else>
-							<property name="jspc.module.web" value="false" />
 
-							<path id="jspc.classpath">
-								<path refid="jspc.classpath.common" />
-								<pathelement location="@{compile.jsp.docroot.dir}/WEB-INF/classes" />
-								<fileset dir="@{compile.jsp.docroot.dir}/WEB-INF/lib" includes="*.jar" />
-							</path>
+							<property name="jspc.module.web" value="true" />
 						</else>
 					</if>
 
-					<delete dir="${jspc.classes.dir}" quiet="true" />
+					<delete dir="classes/tomcat" quiet="true" />
 
 					<java
 						classname="com.liferay.jasper.jspc.JspC"
 						classpathref="jspc.classpath"
 						fork="true"
-						jvm="${jspc.java.home}/bin/java"
+						jvm="${env.JAVA_HOME}/bin/java"
 						newenvironment="true"
 						outputproperty="jspc.output"
 					>
 						<sysproperty key="jspc.module.web" value="${jspc.module.web}" />
 						<sysproperty key="jspc.portal.dir" value="${app.server.portal.dir}" />
-						<arg line="-d ${jspc.classes.dir} -webapp @{compile.jsp.docroot.dir}" />
+						<arg line="-d classes/tomcat -webapp @{compile.jsp.docroot.dir}" />
 					</java>
 
 					<echo>${jspc.output}</echo>
@@ -292,29 +274,29 @@
 					<if>
 						<contains string="${jspc.output}" substring="JasperException" />
 						<then>
-							<delete dir="${jspc.classes.dir}" quiet="true" />
+							<delete dir="classes/tomcat" quiet="true" />
 
 							<fail>JSPs failed to compile.</fail>
 						</then>
 					</if>
 
 					<if>
-						<available file="${jspc.classes.dir}" type="dir" />
+						<available file="classes/tomcat" type="dir" />
 						<then>
 							<javac
 								classpathref="jspc.classpath"
 								compiler="${javac.compiler}"
 								deprecation="${javac.deprecation}"
-								destdir="${jspc.classes.dir}"
+								destdir="classes/tomcat"
 								encoding="${javac.encoding}"
 								errorProperty="jspc.javac.fail"
 								failonerror="false"
 								includeAntRuntime="false"
 								nowarn="on"
-								srcdir="${jspc.classes.dir}"
+								srcdir="classes/tomcat"
 							/>
 
-							<delete dir="${jspc.classes.dir}" quiet="true" />
+							<delete dir="classes/tomcat" quiet="true" />
 						</then>
 					</if>
 
@@ -569,13 +551,56 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 	</target>
 
 	<target name="compile-jsp">
-		<compile-jsp
-			compile.jsp.docroot.dir="docroot"
+		<set-module-properties
+			module.dir="${basedir}"
 		/>
 
-		<compile-jsp
-			compile.jsp.docroot.dir="src/META-INF/resources"
-		/>
+		<if>
+			<and>
+				<resourcecount count="0" when="gt">
+					<fileset dir="${basedir}" includes="docroot/**/*.jsp,src/META-INF/resources/**/*.jsp" />
+				</resourcecount>
+				<available file="bnd.bnd" type="file" />
+			</and>
+			<then>
+				<antcall target="jar">
+					<param name="plugins.includes.path" value="${basedir}" />
+				</antcall>
+
+				<tstamp>
+					<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+				</tstamp>
+
+				<unzip dest="${tstamp.value}" src="${plugin.file}" />
+
+				<if>
+					<available file="${tstamp.value}/META-INF/resources" type="dir" />
+					<then>
+						<compile-jsp
+							compile.jsp.docroot.dir="${tstamp.value}/META-INF/resources"
+							compile.jsp.temp.dir="${tstamp.value}"
+						/>
+					</then>
+					<else>
+						<compile-jsp
+							compile.jsp.docroot.dir="${tstamp.value}"
+							compile.jsp.temp.dir="${tstamp.value}"
+						/>
+					</else>
+				</if>
+
+				<delete dir="${tstamp.value}" />
+			</then>
+			<else>
+				<compile
+					module.dir="${basedir}"
+				/>
+
+				<compile-jsp
+					compile.jsp.docroot.dir="docroot"
+				/>
+			</else>
+		</if>
 	</target>
 
 	<target name="compile-test">
@@ -829,16 +854,10 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 					test.type="integration"
 				/>
 			</then>
-			<elseif>
-				<equals arg1="${test.class.group.index}" arg2="0" />
-				<then>
-					<antcall target="compile" />
-				</then>
-			</elseif>
 		</if>
 
 		<if>
-			<equals arg1="${test.class.group.index}" arg2="1" />
+			<equals arg1="${test.class.group.index}" arg2="0" />
 			<then>
 				<antcall target="compile-jsp" />
 			</then>
