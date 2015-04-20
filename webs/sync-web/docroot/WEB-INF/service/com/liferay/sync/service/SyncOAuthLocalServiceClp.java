@@ -23,10 +23,8 @@ import com.liferay.portal.service.InvokableLocalService;
  * @generated
  */
 @ProviderType
-public class SyncPreferencesLocalServiceClp
-	implements SyncPreferencesLocalService {
-	public SyncPreferencesLocalServiceClp(
-		InvokableLocalService invokableLocalService) {
+public class SyncOAuthLocalServiceClp implements SyncOAuthLocalService {
+	public SyncOAuthLocalServiceClp(InvokableLocalService invokableLocalService) {
 		_invokableLocalService = invokableLocalService;
 
 		_methodName0 = "enableOAuth";

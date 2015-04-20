@@ -16,7 +16,7 @@ package com.liferay.sync.service.base;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.sync.service.SyncPreferencesLocalServiceUtil;
+import com.liferay.sync.service.SyncOAuthLocalServiceUtil;
 
 import java.util.Arrays;
 
@@ -25,8 +25,8 @@ import java.util.Arrays;
  * @generated
  */
 @ProviderType
-public class SyncPreferencesLocalServiceClpInvoker {
-	public SyncPreferencesLocalServiceClpInvoker() {
+public class SyncOAuthLocalServiceClpInvoker {
+	public SyncOAuthLocalServiceClpInvoker() {
 		_methodName32 = "getBeanIdentifier";
 
 		_methodParameterTypes32 = new String[] {  };
@@ -50,25 +50,25 @@ public class SyncPreferencesLocalServiceClpInvoker {
 		Object[] arguments) throws Throwable {
 		if (_methodName32.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
-			return SyncPreferencesLocalServiceUtil.getBeanIdentifier();
+			return SyncOAuthLocalServiceUtil.getBeanIdentifier();
 		}
 
 		if (_methodName33.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
-			SyncPreferencesLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+			SyncOAuthLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
 		if (_methodName36.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
-			return SyncPreferencesLocalServiceUtil.enableOAuth(((Long)arguments[0]).longValue(),
+			return SyncOAuthLocalServiceUtil.enableOAuth(((Long)arguments[0]).longValue(),
 				(com.liferay.portal.service.ServiceContext)arguments[1]);
 		}
 
 		if (_methodName37.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes37, parameterTypes)) {
-			return SyncPreferencesLocalServiceUtil.getPortletPreferences(((Long)arguments[0]).longValue());
+			return SyncOAuthLocalServiceUtil.getPortletPreferences(((Long)arguments[0]).longValue());
 		}
 
 		throw new UnsupportedOperationException();

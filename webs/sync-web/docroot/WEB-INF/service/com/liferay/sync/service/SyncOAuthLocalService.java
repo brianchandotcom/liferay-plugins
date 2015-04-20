@@ -25,26 +25,26 @@ import com.liferay.portal.service.BaseLocalService;
 import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * Provides the local service interface for SyncPreferences. Methods of this
+ * Provides the local service interface for SyncOAuth. Methods of this
  * service will not have security checks based on the propagated JAAS
  * credentials because this service can only be accessed from within the same
  * VM.
  *
  * @author Brian Wing Shun Chan
- * @see SyncPreferencesLocalServiceUtil
- * @see com.liferay.sync.service.base.SyncPreferencesLocalServiceBaseImpl
- * @see com.liferay.sync.service.impl.SyncPreferencesLocalServiceImpl
+ * @see SyncOAuthLocalServiceUtil
+ * @see com.liferay.sync.service.base.SyncOAuthLocalServiceBaseImpl
+ * @see com.liferay.sync.service.impl.SyncOAuthLocalServiceImpl
  * @generated
  */
 @ProviderType
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface SyncPreferencesLocalService extends BaseLocalService,
+public interface SyncOAuthLocalService extends BaseLocalService,
 	InvokableLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this interface directly. Always use {@link SyncPreferencesLocalServiceUtil} to access the sync preferences local service. Add custom service methods to {@link com.liferay.sync.service.impl.SyncPreferencesLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify or reference this interface directly. Always use {@link SyncOAuthLocalServiceUtil} to access the sync o auth local service. Add custom service methods to {@link com.liferay.sync.service.impl.SyncOAuthLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 	public com.liferay.oauth.model.OAuthApplication enableOAuth(
 		long companyId, com.liferay.portal.service.ServiceContext serviceContext)

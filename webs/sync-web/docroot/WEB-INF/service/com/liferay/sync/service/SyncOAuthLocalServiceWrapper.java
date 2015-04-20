@@ -19,27 +19,25 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * Provides a wrapper for {@link SyncPreferencesLocalService}.
+ * Provides a wrapper for {@link SyncOAuthLocalService}.
  *
  * @author Brian Wing Shun Chan
- * @see SyncPreferencesLocalService
+ * @see SyncOAuthLocalService
  * @generated
  */
 @ProviderType
-public class SyncPreferencesLocalServiceWrapper
-	implements SyncPreferencesLocalService,
-		ServiceWrapper<SyncPreferencesLocalService> {
-	public SyncPreferencesLocalServiceWrapper(
-		SyncPreferencesLocalService syncPreferencesLocalService) {
-		_syncPreferencesLocalService = syncPreferencesLocalService;
+public class SyncOAuthLocalServiceWrapper implements SyncOAuthLocalService,
+	ServiceWrapper<SyncOAuthLocalService> {
+	public SyncOAuthLocalServiceWrapper(
+		SyncOAuthLocalService syncOAuthLocalService) {
+		_syncOAuthLocalService = syncOAuthLocalService;
 	}
 
 	@Override
 	public com.liferay.oauth.model.OAuthApplication enableOAuth(
 		long companyId, com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _syncPreferencesLocalService.enableOAuth(companyId,
-			serviceContext);
+		return _syncOAuthLocalService.enableOAuth(companyId, serviceContext);
 	}
 
 	/**
@@ -49,21 +47,21 @@ public class SyncPreferencesLocalServiceWrapper
 	*/
 	@Override
 	public java.lang.String getBeanIdentifier() {
-		return _syncPreferencesLocalService.getBeanIdentifier();
+		return _syncOAuthLocalService.getBeanIdentifier();
 	}
 
 	@Override
 	public javax.portlet.PortletPreferences getPortletPreferences(
 		long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _syncPreferencesLocalService.getPortletPreferences(companyId);
+		return _syncOAuthLocalService.getPortletPreferences(companyId);
 	}
 
 	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
-		return _syncPreferencesLocalService.invokeMethod(name, parameterTypes,
+		return _syncOAuthLocalService.invokeMethod(name, parameterTypes,
 			arguments);
 	}
 
@@ -74,36 +72,35 @@ public class SyncPreferencesLocalServiceWrapper
 	*/
 	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_syncPreferencesLocalService.setBeanIdentifier(beanIdentifier);
+		_syncOAuthLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	@Deprecated
-	public SyncPreferencesLocalService getWrappedSyncPreferencesLocalService() {
-		return _syncPreferencesLocalService;
+	public SyncOAuthLocalService getWrappedSyncOAuthLocalService() {
+		return _syncOAuthLocalService;
 	}
 
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	@Deprecated
-	public void setWrappedSyncPreferencesLocalService(
-		SyncPreferencesLocalService syncPreferencesLocalService) {
-		_syncPreferencesLocalService = syncPreferencesLocalService;
+	public void setWrappedSyncOAuthLocalService(
+		SyncOAuthLocalService syncOAuthLocalService) {
+		_syncOAuthLocalService = syncOAuthLocalService;
 	}
 
 	@Override
-	public SyncPreferencesLocalService getWrappedService() {
-		return _syncPreferencesLocalService;
+	public SyncOAuthLocalService getWrappedService() {
+		return _syncOAuthLocalService;
 	}
 
 	@Override
-	public void setWrappedService(
-		SyncPreferencesLocalService syncPreferencesLocalService) {
-		_syncPreferencesLocalService = syncPreferencesLocalService;
+	public void setWrappedService(SyncOAuthLocalService syncOAuthLocalService) {
+		_syncOAuthLocalService = syncOAuthLocalService;
 	}
 
-	private SyncPreferencesLocalService _syncPreferencesLocalService;
+	private SyncOAuthLocalService _syncOAuthLocalService;
 }

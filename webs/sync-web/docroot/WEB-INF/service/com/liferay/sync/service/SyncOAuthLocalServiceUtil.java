@@ -21,25 +21,25 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
 import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * Provides the local service utility for SyncPreferences. This utility wraps
- * {@link com.liferay.sync.service.impl.SyncPreferencesLocalServiceImpl} and is the
+ * Provides the local service utility for SyncOAuth. This utility wraps
+ * {@link com.liferay.sync.service.impl.SyncOAuthLocalServiceImpl} and is the
  * primary access point for service operations in application layer code running
  * on the local server. Methods of this service will not have security checks
  * based on the propagated JAAS credentials because this service can only be
  * accessed from within the same VM.
  *
  * @author Brian Wing Shun Chan
- * @see SyncPreferencesLocalService
- * @see com.liferay.sync.service.base.SyncPreferencesLocalServiceBaseImpl
- * @see com.liferay.sync.service.impl.SyncPreferencesLocalServiceImpl
+ * @see SyncOAuthLocalService
+ * @see com.liferay.sync.service.base.SyncOAuthLocalServiceBaseImpl
+ * @see com.liferay.sync.service.impl.SyncOAuthLocalServiceImpl
  * @generated
  */
 @ProviderType
-public class SyncPreferencesLocalServiceUtil {
+public class SyncOAuthLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this class directly. Add custom service methods to {@link com.liferay.sync.service.impl.SyncPreferencesLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
+	 * Never modify this class directly. Add custom service methods to {@link com.liferay.sync.service.impl.SyncOAuthLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static com.liferay.oauth.model.OAuthApplication enableOAuth(
 		long companyId, com.liferay.portal.service.ServiceContext serviceContext)
@@ -81,19 +81,19 @@ public class SyncPreferencesLocalServiceUtil {
 		_service = null;
 	}
 
-	public static SyncPreferencesLocalService getService() {
+	public static SyncOAuthLocalService getService() {
 		if (_service == null) {
 			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					SyncPreferencesLocalService.class.getName());
+					SyncOAuthLocalService.class.getName());
 
-			if (invokableLocalService instanceof SyncPreferencesLocalService) {
-				_service = (SyncPreferencesLocalService)invokableLocalService;
+			if (invokableLocalService instanceof SyncOAuthLocalService) {
+				_service = (SyncOAuthLocalService)invokableLocalService;
 			}
 			else {
-				_service = new SyncPreferencesLocalServiceClp(invokableLocalService);
+				_service = new SyncOAuthLocalServiceClp(invokableLocalService);
 			}
 
-			ReferenceRegistry.registerReference(SyncPreferencesLocalServiceUtil.class,
+			ReferenceRegistry.registerReference(SyncOAuthLocalServiceUtil.class,
 				"_service");
 		}
 
@@ -104,8 +104,8 @@ public class SyncPreferencesLocalServiceUtil {
 	 * @deprecated As of 6.2.0
 	 */
 	@Deprecated
-	public void setService(SyncPreferencesLocalService service) {
+	public void setService(SyncOAuthLocalService service) {
 	}
 
-	private static SyncPreferencesLocalService _service;
+	private static SyncOAuthLocalService _service;
 }

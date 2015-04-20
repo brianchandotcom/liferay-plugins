@@ -424,22 +424,22 @@ public abstract class SyncDLFileVersionDiffLocalServiceBaseImpl
 	}
 
 	/**
-	 * Returns the sync preferences local service.
+	 * Returns the sync o auth local service.
 	 *
-	 * @return the sync preferences local service
+	 * @return the sync o auth local service
 	 */
-	public com.liferay.sync.service.SyncPreferencesLocalService getSyncPreferencesLocalService() {
-		return syncPreferencesLocalService;
+	public com.liferay.sync.service.SyncOAuthLocalService getSyncOAuthLocalService() {
+		return syncOAuthLocalService;
 	}
 
 	/**
-	 * Sets the sync preferences local service.
+	 * Sets the sync o auth local service.
 	 *
-	 * @param syncPreferencesLocalService the sync preferences local service
+	 * @param syncOAuthLocalService the sync o auth local service
 	 */
-	public void setSyncPreferencesLocalService(
-		com.liferay.sync.service.SyncPreferencesLocalService syncPreferencesLocalService) {
-		this.syncPreferencesLocalService = syncPreferencesLocalService;
+	public void setSyncOAuthLocalService(
+		com.liferay.sync.service.SyncOAuthLocalService syncOAuthLocalService) {
+		this.syncOAuthLocalService = syncOAuthLocalService;
 	}
 
 	/**
@@ -786,8 +786,8 @@ public abstract class SyncDLFileVersionDiffLocalServiceBaseImpl
 	protected SyncDLObjectPersistence syncDLObjectPersistence;
 	@BeanReference(type = SyncDLObjectFinder.class)
 	protected SyncDLObjectFinder syncDLObjectFinder;
-	@BeanReference(type = com.liferay.sync.service.SyncPreferencesLocalService.class)
-	protected com.liferay.sync.service.SyncPreferencesLocalService syncPreferencesLocalService;
+	@BeanReference(type = com.liferay.sync.service.SyncOAuthLocalService.class)
+	protected com.liferay.sync.service.SyncOAuthLocalService syncOAuthLocalService;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ClassNameLocalService.class)
