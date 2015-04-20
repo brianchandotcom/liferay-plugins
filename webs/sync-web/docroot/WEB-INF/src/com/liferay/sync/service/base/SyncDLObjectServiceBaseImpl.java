@@ -122,7 +122,7 @@ public abstract class SyncDLObjectServiceBaseImpl extends BaseServiceImpl
 	 *
 	 * @return the sync d l object remote service
 	 */
-	public com.liferay.sync.service.SyncDLObjectService getSyncDLObjectService() {
+	public SyncDLObjectService getSyncDLObjectService() {
 		return syncDLObjectService;
 	}
 
@@ -131,8 +131,7 @@ public abstract class SyncDLObjectServiceBaseImpl extends BaseServiceImpl
 	 *
 	 * @param syncDLObjectService the sync d l object remote service
 	 */
-	public void setSyncDLObjectService(
-		com.liferay.sync.service.SyncDLObjectService syncDLObjectService) {
+	public void setSyncDLObjectService(SyncDLObjectService syncDLObjectService) {
 		this.syncDLObjectService = syncDLObjectService;
 	}
 
@@ -171,6 +170,25 @@ public abstract class SyncDLObjectServiceBaseImpl extends BaseServiceImpl
 	 */
 	public void setSyncDLObjectFinder(SyncDLObjectFinder syncDLObjectFinder) {
 		this.syncDLObjectFinder = syncDLObjectFinder;
+	}
+
+	/**
+	 * Returns the sync o auth local service.
+	 *
+	 * @return the sync o auth local service
+	 */
+	public com.liferay.sync.service.SyncOAuthLocalService getSyncOAuthLocalService() {
+		return syncOAuthLocalService;
+	}
+
+	/**
+	 * Sets the sync o auth local service.
+	 *
+	 * @param syncOAuthLocalService the sync o auth local service
+	 */
+	public void setSyncOAuthLocalService(
+		com.liferay.sync.service.SyncOAuthLocalService syncOAuthLocalService) {
+		this.syncOAuthLocalService = syncOAuthLocalService;
 	}
 
 	/**
@@ -734,12 +752,14 @@ public abstract class SyncDLObjectServiceBaseImpl extends BaseServiceImpl
 	protected SyncDLFileVersionDiffPersistence syncDLFileVersionDiffPersistence;
 	@BeanReference(type = com.liferay.sync.service.SyncDLObjectLocalService.class)
 	protected com.liferay.sync.service.SyncDLObjectLocalService syncDLObjectLocalService;
-	@BeanReference(type = com.liferay.sync.service.SyncDLObjectService.class)
-	protected com.liferay.sync.service.SyncDLObjectService syncDLObjectService;
+	@BeanReference(type = SyncDLObjectService.class)
+	protected SyncDLObjectService syncDLObjectService;
 	@BeanReference(type = SyncDLObjectPersistence.class)
 	protected SyncDLObjectPersistence syncDLObjectPersistence;
 	@BeanReference(type = SyncDLObjectFinder.class)
 	protected SyncDLObjectFinder syncDLObjectFinder;
+	@BeanReference(type = com.liferay.sync.service.SyncOAuthLocalService.class)
+	protected com.liferay.sync.service.SyncOAuthLocalService syncOAuthLocalService;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ClassNameLocalService.class)
