@@ -12,19 +12,19 @@
  * details.
  */
 
-package com.liferay.google.mail.groups.util;
+package com.liferay.google.apps.connector.auth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
+import com.liferay.google.apps.connector.util.PortletPropsValues;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 
 import java.io.File;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Matthew Kong
@@ -49,7 +49,9 @@ public class GoogleCredentialUtil {
 
 		builder.setServiceAccountPrivateKeyFromP12File(file);
 
-		builder.setServiceAccountScopes(_SCOPES);
+		builder.setServiceAccountScopes(
+			Arrays.asList(
+				PortletPropsValues.GOOGLE_API_SERVICE_ACCOUNT_SCOPES));
 		builder.setServiceAccountUser(
 			PortletPropsValues.GOOGLE_API_SERVICE_ACCOUNT_USER);
 		builder.setTransport(new NetHttpTransport());
@@ -58,11 +60,6 @@ public class GoogleCredentialUtil {
 
 		return _googleCredential;
 	}
-
-	private static final List<String> _SCOPES = Arrays.asList(
-		"https://www.googleapis.com/auth/admin.directory.group",
-		"https://www.googleapis.com/auth/admin.directory.user",
-		"https://www.googleapis.com/auth/apps.groups.settings");
 
 	private static GoogleCredential _googleCredential;
 
