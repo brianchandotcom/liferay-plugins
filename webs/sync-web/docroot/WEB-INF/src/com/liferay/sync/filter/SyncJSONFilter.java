@@ -77,8 +77,8 @@ public class SyncJSONFilter implements Filter {
 				PortletPropsKeys.SYNC_CLIENT_MIN_BUILD,
 				PortletPropsValues.SYNC_CLIENT_MIN_BUILD);
 
-			if (syncClientMinBuild < _ABSOLUTE_MINIMUM_BUILD) {
-				syncClientMinBuild = _ABSOLUTE_MINIMUM_BUILD;
+			if (syncClientMinBuild < _ABSOLUTE_MIN_BUILD) {
+				syncClientMinBuild = _ABSOLUTE_MIN_BUILD;
 			}
 
 			if ((build == -1) || (build >= syncClientMinBuild)) {
@@ -116,6 +116,6 @@ public class SyncJSONFilter implements Filter {
 	public void init(FilterConfig filterConfig) {
 	}
 
-	private static final int _ABSOLUTE_MINIMUM_BUILD = 3000;
+	private static final int _ABSOLUTE_MIN_BUILD = 3000;
 
 }
