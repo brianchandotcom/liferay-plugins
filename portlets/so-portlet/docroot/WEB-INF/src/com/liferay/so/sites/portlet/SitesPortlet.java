@@ -310,12 +310,10 @@ public class SitesPortlet extends MVCPortlet {
 						MembershipRequestConstants.STATUS_PENDING)) {
 
 					PortletURL membershipRequestURL =
-						liferayPortletResponse.createActionURL(
-							PortletKeys.SITES_ADMIN);
+						liferayPortletResponse.createActionURL(_MY_SITES);
 
 					membershipRequestURL.setParameter(
-						"struts_action",
-						"/sites_admin/post_membership_request");
+						"javax.portlet.action", "postMembershipRequest");
 					membershipRequestURL.setParameter(
 						"redirect", themeDisplay.getURLCurrent());
 					membershipRequestURL.setParameter(
@@ -366,15 +364,12 @@ public class SitesPortlet extends MVCPortlet {
 				}
 				else {
 					PortletURL deletePortletURL =
-						liferayPortletResponse.createActionURL(
-							PortletKeys.SITES_ADMIN);
+						liferayPortletResponse.createActionURL(_SITES_ADMIN);
 
 					deletePortletURL.setWindowState(WindowState.NORMAL);
 
 					deletePortletURL.setParameter(
-						"struts_action", "/sites_admin/edit_site");
-					deletePortletURL.setParameter(
-						Constants.CMD, Constants.DELETE);
+						"javax.portlet.action", "deleteGroups");
 					deletePortletURL.setParameter(
 						"redirect", themeDisplay.getURLCurrent());
 					deletePortletURL.setParameter(
@@ -672,6 +667,12 @@ public class SitesPortlet extends MVCPortlet {
 
 	private static final String _CLASS_NAME =
 		"com.liferay.portlet.sites.util.SitesUtil";
+
+	private static final String _MY_SITES =
+		"com_liferay_site_my_sites_web_portlet_MySitesPortlet";
+
+	private static final String _SITES_ADMIN =
+		"com_liferay_site_admin_web_portlet_SitesAdminPortlet";
 
 	private static MethodKey _mergeLayoutSetPrototypeLayoutsMethodKey =
 		new MethodKey(
