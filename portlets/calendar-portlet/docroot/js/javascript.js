@@ -524,8 +524,16 @@ AUI.add(
 					'calendarBookings',
 					{
 						calendarIds: calendarIds.join(','),
-						endTime: endDate.getTime(),
-						startTime: startDate.getTime(),
+						endTimeDay: endDate.getDate(),
+						endTimeHour: endDate.getHours(),
+						endTimeMinute: endDate.getMinutes(),
+						endTimeMonth: endDate.getMonth(),
+						endTimeYear: endDate.getFullYear(),
+						startTimeDay: startDate.getDate(),
+						startTimeHour: startDate.getHours(),
+						startTimeMinute: startDate.getMinutes(),
+						startTimeMonth: startDate.getMonth(),
+						startTimeYear: startDate.getFullYear(),
 						statuses: status.join(',')
 					},
 					callback
@@ -1252,7 +1260,7 @@ AUI.add(
 						date = DateMath.add(date, DateMath.WEEK, 1);
 					}
 
-					return CalendarUtil.toUTC(date);
+					return date;
 				},
 
 				getLoadStartDate: function(activeView) {
@@ -1267,7 +1275,7 @@ AUI.add(
 						date = DateMath.subtract(date, DateMath.WEEK, 1);
 					}
 
-					return CalendarUtil.toUTC(date);
+					return date;
 				},
 
 				_doRead: function(options, callback) {
