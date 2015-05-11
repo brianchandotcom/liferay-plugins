@@ -1928,6 +1928,8 @@ Please find a solution that does not require portal-impl.jar.
 
 									<move file="${plugin.file}" tofile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" />
 
+									<delete dir="docroot/WEB-INF/classes" />
+
 									<direct-deploy-portlet-cmd
 										direct.deploy.dir="${tstamp.value}"
 									/>
