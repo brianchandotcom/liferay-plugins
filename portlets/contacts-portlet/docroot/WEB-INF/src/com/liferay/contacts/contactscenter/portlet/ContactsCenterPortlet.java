@@ -28,9 +28,7 @@ import com.liferay.contacts.util.SocialRelationConstants;
 import com.liferay.portal.AddressCityException;
 import com.liferay.portal.AddressStreetException;
 import com.liferay.portal.AddressZipException;
-import com.liferay.portal.ContactFirstNameException;
-import com.liferay.portal.ContactFullNameException;
-import com.liferay.portal.ContactLastNameException;
+import com.liferay.portal.ContactNameException;
 import com.liferay.portal.DuplicateUserEmailAddressException;
 import com.liferay.portal.EmailAddressException;
 import com.liferay.portal.NoSuchCountryException;
@@ -475,7 +473,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			jsonObject.put("success", Boolean.TRUE);
 		}
 		catch (Exception e) {
-			if (e instanceof ContactFullNameException) {
+			if (e instanceof ContactNameException.MustHaveValidFullName) {
 				message = "full-name-cannot-be-empty";
 			}
 			else if (e instanceof DuplicateEntryEmailAddressException) {
@@ -552,13 +550,13 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			else if (e instanceof AddressZipException) {
 				message = "please-enter-a-valid-postal-code";
 			}
-			else if (e instanceof ContactFirstNameException) {
+			else if (e instanceof ContactNameException.MustHaveFirstName) {
 				message = "please-enter-a-valid-first-name";
 			}
-			else if (e instanceof ContactFullNameException) {
+			else if (e instanceof ContactNameException.MustHaveValidFullName) {
 				message = "please-enter-a-valid-first-middle-and-last-name";
 			}
-			else if (e instanceof ContactLastNameException) {
+			else if (e instanceof ContactNameException.MustHaveLastName) {
 				message = "please-enter-a-valid-last-name";
 			}
 			else if (e instanceof DuplicateUserEmailAddressException) {
