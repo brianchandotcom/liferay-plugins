@@ -31,6 +31,30 @@ public class LiferayScreensDDLRecordServiceClpInvoker {
 		_methodName25 = "setBeanIdentifier";
 
 		_methodParameterTypes25 = new String[] { "java.lang.String" };
+
+		_methodName28 = "getDDLRecord";
+
+		_methodParameterTypes28 = new String[] { "long", "java.util.Locale" };
+
+		_methodName29 = "getDDLRecords";
+
+		_methodParameterTypes29 = new String[] {
+				"long", "java.util.Locale", "int", "int"
+			};
+
+		_methodName30 = "getDDLRecords";
+
+		_methodParameterTypes30 = new String[] {
+				"long", "long", "java.util.Locale", "int", "int"
+			};
+
+		_methodName31 = "getDDLRecordsCount";
+
+		_methodParameterTypes31 = new String[] { "long" };
+
+		_methodName32 = "getDDLRecordsCount";
+
+		_methodParameterTypes32 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -47,6 +71,40 @@ public class LiferayScreensDDLRecordServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName28.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes28, parameterTypes)) {
+			return LiferayScreensDDLRecordServiceUtil.getDDLRecord(((Long)arguments[0]).longValue(),
+				(java.util.Locale)arguments[1]);
+		}
+
+		if (_methodName29.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes29, parameterTypes)) {
+			return LiferayScreensDDLRecordServiceUtil.getDDLRecords(((Long)arguments[0]).longValue(),
+				(java.util.Locale)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName30.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes30, parameterTypes)) {
+			return LiferayScreensDDLRecordServiceUtil.getDDLRecords(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.util.Locale)arguments[2],
+				((Integer)arguments[3]).intValue(),
+				((Integer)arguments[4]).intValue());
+		}
+
+		if (_methodName31.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes31, parameterTypes)) {
+			return LiferayScreensDDLRecordServiceUtil.getDDLRecordsCount(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName32.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
+			return LiferayScreensDDLRecordServiceUtil.getDDLRecordsCount(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -54,4 +112,14 @@ public class LiferayScreensDDLRecordServiceClpInvoker {
 	private String[] _methodParameterTypes24;
 	private String _methodName25;
 	private String[] _methodParameterTypes25;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
+	private String _methodName29;
+	private String[] _methodParameterTypes29;
+	private String _methodName30;
+	private String[] _methodParameterTypes30;
+	private String _methodName31;
+	private String[] _methodParameterTypes31;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
 }

@@ -31,6 +31,13 @@ public class LiferayScreensAssetEntryServiceClpInvoker {
 		_methodName25 = "setBeanIdentifier";
 
 		_methodParameterTypes25 = new String[] { "java.lang.String" };
+
+		_methodName28 = "getAssetEntries";
+
+		_methodParameterTypes28 = new String[] {
+				"com.liferay.portlet.asset.service.persistence.AssetEntryQuery",
+				"java.util.Locale"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -47,6 +54,12 @@ public class LiferayScreensAssetEntryServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName28.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes28, parameterTypes)) {
+			return LiferayScreensAssetEntryServiceUtil.getAssetEntries((com.liferay.portlet.asset.service.persistence.AssetEntryQuery)arguments[0],
+				(java.util.Locale)arguments[1]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -54,4 +67,6 @@ public class LiferayScreensAssetEntryServiceClpInvoker {
 	private String[] _methodParameterTypes24;
 	private String _methodName25;
 	private String[] _methodParameterTypes25;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
 }

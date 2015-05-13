@@ -59,6 +59,16 @@ public class LiferayScreensAssetEntryServiceWrapper
 			parameterTypes, arguments);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.json.JSONArray getAssetEntries(
+		com.liferay.portlet.asset.service.persistence.AssetEntryQuery assetEntryQuery,
+		java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _liferayScreensAssetEntryService.getAssetEntries(assetEntryQuery,
+			locale);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

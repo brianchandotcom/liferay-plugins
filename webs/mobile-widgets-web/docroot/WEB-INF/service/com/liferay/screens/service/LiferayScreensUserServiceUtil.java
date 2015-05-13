@@ -63,6 +63,26 @@ public class LiferayScreensUserServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static boolean sendPasswordByEmailAddress(long companyId,
+		java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().sendPasswordByEmailAddress(companyId, emailAddress);
+	}
+
+	public static boolean sendPasswordByScreenName(long companyId,
+		java.lang.String screenName)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().sendPasswordByScreenName(companyId, screenName);
+	}
+
+	public static boolean sendPasswordByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().sendPasswordByUserId(userId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

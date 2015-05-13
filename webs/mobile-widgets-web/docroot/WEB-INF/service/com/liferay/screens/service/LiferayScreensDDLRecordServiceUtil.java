@@ -63,6 +63,39 @@ public class LiferayScreensDDLRecordServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.portal.kernel.json.JSONObject getDDLRecord(
+		long ddlRecordId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getDDLRecord(ddlRecordId, locale);
+	}
+
+	public static com.liferay.portal.kernel.json.JSONArray getDDLRecords(
+		long ddlRecordSetId, java.util.Locale locale, int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getDDLRecords(ddlRecordSetId, locale, start, end);
+	}
+
+	public static com.liferay.portal.kernel.json.JSONArray getDDLRecords(
+		long ddlRecordSetId, long userId, java.util.Locale locale, int start,
+		int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getDDLRecords(ddlRecordSetId, userId, locale, start, end);
+	}
+
+	public static int getDDLRecordsCount(long ddlRecordSetId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getDDLRecordsCount(ddlRecordSetId);
+	}
+
+	public static int getDDLRecordsCount(long ddlRecordSetId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getDDLRecordsCount(ddlRecordSetId, userId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

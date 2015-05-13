@@ -59,6 +59,46 @@ public class LiferayScreensDDLRecordServiceWrapper
 			parameterTypes, arguments);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.json.JSONObject getDDLRecord(
+		long ddlRecordId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _liferayScreensDDLRecordService.getDDLRecord(ddlRecordId, locale);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.json.JSONArray getDDLRecords(
+		long ddlRecordSetId, java.util.Locale locale, int start, int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _liferayScreensDDLRecordService.getDDLRecords(ddlRecordSetId,
+			locale, start, end);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.json.JSONArray getDDLRecords(
+		long ddlRecordSetId, long userId, java.util.Locale locale, int start,
+		int end)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _liferayScreensDDLRecordService.getDDLRecords(ddlRecordSetId,
+			userId, locale, start, end);
+	}
+
+	@Override
+	public int getDDLRecordsCount(long ddlRecordSetId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _liferayScreensDDLRecordService.getDDLRecordsCount(ddlRecordSetId);
+	}
+
+	@Override
+	public int getDDLRecordsCount(long ddlRecordSetId, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _liferayScreensDDLRecordService.getDDLRecordsCount(ddlRecordSetId,
+			userId);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
