@@ -15,26 +15,45 @@
 package com.liferay.screens.service.impl;
 
 import com.liferay.screens.service.base.LiferayScreensAssetEntryServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.service.persistence.AssetEntryQuery;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
- * The implementation of the liferay screens asset entry remote service.
- *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.screens.service.LiferayScreensAssetEntryService} interface.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
- *
  * @author José Manuel Navarro
- * @see com.liferay.screens.service.base.LiferayScreensAssetEntryServiceBaseImpl
- * @see com.liferay.screens.service.LiferayScreensAssetEntryServiceUtil
  */
 public class LiferayScreensAssetEntryServiceImpl
 	extends LiferayScreensAssetEntryServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link com.liferay.screens.service.LiferayScreensAssetEntryServiceUtil} to access the liferay screens asset entry remote service.
-	 */
+
+	@Override
+	public JSONArray getAssetEntries(
+			AssetEntryQuery assetEntryQuery, Locale locale)
+		throws PortalException, SystemException {
+
+		JSONArray assetEntriesJSONArray = JSONFactoryUtil.createJSONArray();
+
+		List<AssetEntry> assetEntries = assetEntryLocalService.getEntries(
+			assetEntryQuery);
+
+		for (AssetEntry assetEntry : assetEntries) {
+			JSONObject assetEntryJSONObject = JSONFactoryUtil.createJSONObject(
+				JSONFactoryUtil.looseSerialize(assetEntry));
+
+			assetEntryJSONObject.put(
+				"description", assetEntry.getDescription(locale));
+			assetEntryJSONObject.put("summary", assetEntry.getSummary(locale));
+			assetEntryJSONObject.put("title", assetEntry.getTitle(locale));
+
+			assetEntriesJSONArray.put(assetEntryJSONObject);
+		}
+
+		return assetEntriesJSONArray;
+	}
 }
