@@ -5,4 +5,7 @@
 	<import class="com.liferay.mobilewidgets.model.MobileWidgetsAssetEntry" />
 	<import class="com.liferay.mobilewidgets.model.MobileWidgetsDDLRecord" />
 	<import class="com.liferay.mobilewidgets.model.MobileWidgetsUser" />
+	<import class="com.liferay.screens.model.LiferayScreensAssetEntry" />
+	<import class="com.liferay.screens.model.LiferayScreensDDLRecord" />
+	<import class="com.liferay.screens.model.LiferayScreensUser" />
 </hibernate-mapping>

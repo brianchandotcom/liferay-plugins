@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="Plugin_LiferayScreens_LiferayScreensAssetEntryService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="com.liferay.screens.service.http.LiferayScreensAssetEntryServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="LiferayScreensAssetEntryServiceSoap" />
+		<parameter name="wsdlServiceElement" value="LiferayScreensAssetEntryServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_LiferayScreens_LiferayScreensAssetEntryService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.screens.liferay.com" />
+	</service>
+</deployment>

@@ -4,4 +4,7 @@
 	<bean id="com.liferay.mobilewidgets.service.MobileWidgetsAssetEntryService" class="com.liferay.mobilewidgets.service.impl.MobileWidgetsAssetEntryServiceImpl" />
 	<bean id="com.liferay.mobilewidgets.service.MobileWidgetsDDLRecordService" class="com.liferay.mobilewidgets.service.impl.MobileWidgetsDDLRecordServiceImpl" />
 	<bean id="com.liferay.mobilewidgets.service.MobileWidgetsUserService" class="com.liferay.mobilewidgets.service.impl.MobileWidgetsUserServiceImpl" />
+	<bean id="com.liferay.screens.service.LiferayScreensAssetEntryService" class="com.liferay.screens.service.impl.LiferayScreensAssetEntryServiceImpl" />
+	<bean id="com.liferay.screens.service.LiferayScreensDDLRecordService" class="com.liferay.screens.service.impl.LiferayScreensDDLRecordServiceImpl" />
+	<bean id="com.liferay.screens.service.LiferayScreensUserService" class="com.liferay.screens.service.impl.LiferayScreensUserServiceImpl" />
 </beans>

@@ -32,6 +32,33 @@
 			<handler type="LocalResponder" />
 		</responseFlow>
 	</transport>
+	<service name="Plugin_LiferayScreens_LiferayScreensAssetEntryService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="com.liferay.screens.service.http.LiferayScreensAssetEntryServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="LiferayScreensAssetEntryServiceSoap" />
+		<parameter name="wsdlServiceElement" value="LiferayScreensAssetEntryServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_LiferayScreens_LiferayScreensAssetEntryService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.screens.liferay.com" />
+	</service>
+	<service name="Plugin_LiferayScreens_LiferayScreensDDLRecordService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="com.liferay.screens.service.http.LiferayScreensDDLRecordServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="LiferayScreensDDLRecordServiceSoap" />
+		<parameter name="wsdlServiceElement" value="LiferayScreensDDLRecordServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_LiferayScreens_LiferayScreensDDLRecordService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.screens.liferay.com" />
+	</service>
+	<service name="Plugin_LiferayScreens_LiferayScreensUserService" provider="java:RPC" style="rpc" use="encoded">
+		<parameter name="allowedMethods" value="*" />
+		<parameter name="className" value="com.liferay.screens.service.http.LiferayScreensUserServiceSoap" />
+		<parameter name="typeMappingVersion" value="1.2" />
+		<parameter name="wsdlPortType" value="LiferayScreensUserServiceSoap" />
+		<parameter name="wsdlServiceElement" value="LiferayScreensUserServiceSoapService" />
+		<parameter name="wsdlServicePort" value="Plugin_LiferayScreens_LiferayScreensUserService" />
+		<parameter name="wsdlTargetNamespace" value="urn:http.service.screens.liferay.com" />
+	</service>
 	<service name="Plugin_MobileWidgets_MobileWidgetsAssetEntryService" provider="java:RPC" style="rpc" use="encoded">
 		<arrayMapping xmlns:ns="urn:http.service.mobilewidgets.liferay.com" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema" qname="ns:ArrayOfArrayOf_xsd_long" type="java:long[][]" innerType="cmp-ns:long" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></arrayMapping>
 		<arrayMapping xmlns:ns="urn:http.service.mobilewidgets.liferay.com" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema" qname="ns:ArrayOf_xsd_long" type="java:long[]" innerType="cmp-ns:long" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></arrayMapping>
