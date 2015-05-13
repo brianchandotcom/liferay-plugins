@@ -31,6 +31,18 @@ public class LiferayScreensUserServiceClpInvoker {
 		_methodName25 = "setBeanIdentifier";
 
 		_methodParameterTypes25 = new String[] { "java.lang.String" };
+
+		_methodName28 = "sendPasswordByEmailAddress";
+
+		_methodParameterTypes28 = new String[] { "long", "java.lang.String" };
+
+		_methodName29 = "sendPasswordByScreenName";
+
+		_methodParameterTypes29 = new String[] { "long", "java.lang.String" };
+
+		_methodName30 = "sendPasswordByUserId";
+
+		_methodParameterTypes30 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -47,6 +59,23 @@ public class LiferayScreensUserServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName28.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes28, parameterTypes)) {
+			return LiferayScreensUserServiceUtil.sendPasswordByEmailAddress(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName29.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes29, parameterTypes)) {
+			return LiferayScreensUserServiceUtil.sendPasswordByScreenName(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName30.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes30, parameterTypes)) {
+			return LiferayScreensUserServiceUtil.sendPasswordByUserId(((Long)arguments[0]).longValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -54,4 +83,10 @@ public class LiferayScreensUserServiceClpInvoker {
 	private String[] _methodParameterTypes24;
 	private String _methodName25;
 	private String[] _methodParameterTypes25;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
+	private String _methodName29;
+	private String[] _methodParameterTypes29;
+	private String _methodName30;
+	private String[] _methodParameterTypes30;
 }

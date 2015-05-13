@@ -14,6 +14,14 @@
 
 package com.liferay.screens.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.LocaleUtil;
+
+import com.liferay.screens.service.LiferayScreensAssetEntryServiceUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * Provides the SOAP utility for the
  * {@link com.liferay.screens.service.LiferayScreensAssetEntryServiceUtil} service utility. The
@@ -44,4 +52,21 @@ package com.liferay.screens.service.http;
  * @generated
  */
 public class LiferayScreensAssetEntryServiceSoap {
+	public static java.lang.String getAssetEntries(
+		com.liferay.portlet.asset.service.persistence.AssetEntryQuery assetEntryQuery,
+		String locale) throws RemoteException {
+		try {
+			com.liferay.portal.kernel.json.JSONArray returnValue = LiferayScreensAssetEntryServiceUtil.getAssetEntries(assetEntryQuery,
+					LocaleUtil.fromLanguageId(locale));
+
+			return returnValue.toString();
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(LiferayScreensAssetEntryServiceSoap.class);
 }

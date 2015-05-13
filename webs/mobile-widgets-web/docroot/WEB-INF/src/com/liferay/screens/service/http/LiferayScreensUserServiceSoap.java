@@ -14,6 +14,13 @@
 
 package com.liferay.screens.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import com.liferay.screens.service.LiferayScreensUserServiceUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * Provides the SOAP utility for the
  * {@link com.liferay.screens.service.LiferayScreensUserServiceUtil} service utility. The
@@ -44,4 +51,49 @@ package com.liferay.screens.service.http;
  * @generated
  */
 public class LiferayScreensUserServiceSoap {
+	public static boolean sendPasswordByEmailAddress(long companyId,
+		java.lang.String emailAddress) throws RemoteException {
+		try {
+			boolean returnValue = LiferayScreensUserServiceUtil.sendPasswordByEmailAddress(companyId,
+					emailAddress);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static boolean sendPasswordByScreenName(long companyId,
+		java.lang.String screenName) throws RemoteException {
+		try {
+			boolean returnValue = LiferayScreensUserServiceUtil.sendPasswordByScreenName(companyId,
+					screenName);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static boolean sendPasswordByUserId(long userId)
+		throws RemoteException {
+		try {
+			boolean returnValue = LiferayScreensUserServiceUtil.sendPasswordByUserId(userId);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(LiferayScreensUserServiceSoap.class);
 }
