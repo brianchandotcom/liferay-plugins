@@ -2228,14 +2228,9 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<if>
-				<available file="@{module.dir}/ivy.xml" />
-				<then>
-					<ant dir="@{module.dir}" target="publish">
-						<property name="ivy.publish.resolver" value="local-m2" />
-					</ant>
-				</then>
-			</if>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="local-m2" />
+			</ant>
 		</sequential>
 	</macrodef>
 
@@ -2243,15 +2238,10 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<if>
-				<available file="@{module.dir}/ivy.xml" />
-				<then>
-					<ant dir="@{module.dir}" target="publish">
-						<property name="ivy.publish.resolver" value="local-m2" />
-						<property name="plugin.release.qualifier" value="-SNAPSHOT" />
-					</ant>
-				</then>
-			</if>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="local-m2" />
+				<property name="plugin.release.qualifier" value="-SNAPSHOT" />
+			</ant>
 		</sequential>
 	</macrodef>
 
@@ -2259,14 +2249,9 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<if>
-				<available file="@{module.dir}/ivy.xml" />
-				<then>
-					<ant dir="@{module.dir}" target="publish">
-						<property name="ivy.publish.resolver" value="sonatype-m2-release" />
-					</ant>
-				</then>
-			</if>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="sonatype-m2-release" />
+			</ant>
 		</sequential>
 	</macrodef>
 
@@ -2274,15 +2259,10 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<if>
-				<available file="@{module.dir}/ivy.xml" />
-				<then>
-					<ant dir="@{module.dir}" target="publish">
-						<property name="ivy.publish.resolver" value="sonatype-m2-snapshot" />
-						<property name="plugin.release.qualifier" value="-SNAPSHOT" />
-					</ant>
-				</then>
-			</if>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="sonatype-m2-snapshot" />
+				<property name="plugin.release.qualifier" value="-SNAPSHOT" />
+			</ant>
 		</sequential>
 	</macrodef>
 
