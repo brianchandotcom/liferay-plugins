@@ -2059,11 +2059,13 @@ Please find a solution that does not require portal-impl.jar.
 				<then>
 					<javadoc
 						classpathref="plugin.classpath"
-						destdir="javadoc"
+						destdir="@{module.dir}/javadoc"
 						sourcepath="${plugin.source.dir}"
 					/>
 				</then>
 			</if>
+
+			<var name="module.java.count" unset="true" />
 		</sequential>
 	</macrodef>
 
@@ -3227,7 +3229,7 @@ for (String path : paths) {
 		/>
 	</target>
 
-	<target name="jar-javadoc">
+	<target name="jar-javadoc" depends="javadoc">
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
 			target.name="jar-javadoc"
@@ -3238,6 +3240,13 @@ for (String path : paths) {
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
 			target.name="jar-source"
+		/>
+	</target>
+
+	<target name="javadoc">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="javadoc"
 		/>
 	</target>
 
