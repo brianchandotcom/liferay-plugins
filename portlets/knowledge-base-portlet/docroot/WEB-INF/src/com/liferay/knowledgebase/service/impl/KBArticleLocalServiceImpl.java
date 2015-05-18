@@ -805,19 +805,16 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 
 		if (status == WorkflowConstants.STATUS_ANY) {
-			return kbArticlePersistence.findByG_P_S_L(
-				groupId, KBFolderConstants.DEFAULT_PARENT_FOLDER_ID, array,
-				true, start, end, orderByComparator);
+			return kbArticlePersistence.findByG_S_L(
+				groupId, array, true, start, end, orderByComparator);
 		}
 		else if (status == WorkflowConstants.STATUS_APPROVED) {
-			return kbArticlePersistence.findByG_P_S_M(
-				groupId, KBFolderConstants.DEFAULT_PARENT_FOLDER_ID, array,
-				true, start, end, orderByComparator);
+			return kbArticlePersistence.findByG_S_M(
+				groupId, array, true, start, end, orderByComparator);
 		}
 
-		return kbArticlePersistence.findByG_P_S_S(
-			groupId, KBFolderConstants.DEFAULT_PARENT_FOLDER_ID, array, status,
-			start, end, orderByComparator);
+		return kbArticlePersistence.findByG_S_S(
+			groupId, array, status, start, end, orderByComparator);
 	}
 
 	@Override
@@ -831,18 +828,13 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 
 		if (status == WorkflowConstants.STATUS_ANY) {
-			return kbArticlePersistence.countByG_P_S_L(
-				groupId, KBFolderConstants.DEFAULT_PARENT_FOLDER_ID, array,
-				true);
+			return kbArticlePersistence.countByG_S_L(groupId, array, true);
 		}
 		else if (status == WorkflowConstants.STATUS_APPROVED) {
-			return kbArticlePersistence.countByG_P_S_M(
-				groupId, KBFolderConstants.DEFAULT_PARENT_FOLDER_ID, array,
-				true);
+			return kbArticlePersistence.countByG_S_M(groupId, array, true);
 		}
 
-		return kbArticlePersistence.countByG_P_S_S(
-			groupId, KBFolderConstants.DEFAULT_PARENT_FOLDER_ID, array, status);
+		return kbArticlePersistence.countByG_S_S(groupId, array, status);
 	}
 
 	/**
@@ -1762,10 +1754,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			preferences, kbArticle.getCompanyId());
 
 		String kbArticleContent = StringUtil.replace(
-			kbArticle.getContent(),
-			new String[] {
-				"href=\"/", "src=\"/"
-			},
+			kbArticle.getContent(), new String[] {"href=\"/", "src=\"/"},
 			new String[] {
 				"href=\"" + serviceContext.getPortalURL() + "/",
 				"src=\"" + serviceContext.getPortalURL() + "/"
@@ -1775,10 +1764,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		for (String key : kbArticleDiffs.keySet()) {
 			String value = StringUtil.replace(
-				kbArticleDiffs.get(key),
-				new String[] {
-					"href=\"/", "src=\"/"
-				},
+				kbArticleDiffs.get(key), new String[] {"href=\"/", "src=\"/"},
 				new String[] {
 					"href=\"" + serviceContext.getPortalURL() + "/",
 					"src=\"" + serviceContext.getPortalURL() + "/"
