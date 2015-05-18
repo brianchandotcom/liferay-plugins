@@ -761,8 +761,8 @@ module.snapshot.url=${sonatype.snapshot.url}/com/liferay/${bnd.Bundle-SymbolicNa
 			</then>
 			<else>
 				<artifact:deploy file="${plugin.file}">
-					<attach file="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}-sources.jar" classifier="sources"/>
 					<attach file="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}-javadoc.zip" classifier="javadoc"/>
+					<attach file="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}-sources.jar" classifier="sources"/>
 					<pom refid="${plugin.name}"/>
 					<remoteRepository url="${sonatype.release.url}">
 						<authentication username="${sonatype.release.username}" password="${sonatype.release.password}"/>
