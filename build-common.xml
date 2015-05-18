@@ -95,6 +95,12 @@
 		<fileset dir="${sdk.dir}/dependencies/net.sourceforge.pmd/lib" includes="*.jar" />
 	</path>
 
+	<path id="classpath.org.apache.maven.maven.ant.tasks">
+		<fileset dir="${sdk.dir}/dependencies/org.apache.maven.maven.ant.tasks/lib" includes="*.jar"/>
+	</path>
+
+	<taskdef classpathref="classpath.org.apache.maven.maven.ant.tasks" resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant"/>
+
 	<path id="classpath.org.codehaus.groovy">
 		<fileset dir="${sdk.dir}/dependencies/org.codehaus.groovy/lib" includes="*.jar" />
 	</path>
@@ -1757,10 +1763,10 @@ Please find a solution that does not require portal-impl.jar.
 			/>
 
 			<if>
-				<available file="javadoc" />
+				<available file="@{module.dir}/javadoc" />
 				<then>
 					<jar
-						basedir="javadoc"
+						basedir="@{module.dir}/javadoc"
 						jarfile="${plugin.javadoc.file}"
 					/>
 				</then>
@@ -2007,28 +2013,28 @@ Please find a solution that does not require portal-impl.jar.
 			/>
 
 			<if>
-				<available file="patches" />
+				<available file="@{module.dir}/patches" />
 				<then>
 					<jar jarfile="${plugin.sources.file}">
-						<fileset dir="src" />
+						<fileset dir="@{module.dir}/src" />
 						<zipfileset
-							dir="patches"
+							dir="@{module.dir}/patches"
 							prefix="META-INF/patches"
 						/>
 					</jar>
 				</then>
 				<elseif>
-					<available file="docroot" />
+					<available file="@{module.dir}/docroot" />
 					<then>
 						<jar
-							basedir="docroot"
+							basedir="@{module.dir}/docroot"
 							jarfile="${plugin.sources.file}"
 						/>
 					</then>
 				</elseif>
 				<else>
 					<jar
-						basedir="src"
+						basedir="@{module.dir}/src"
 						jarfile="${plugin.sources.file}"
 					/>
 				</else>
@@ -2055,11 +2061,13 @@ Please find a solution that does not require portal-impl.jar.
 				<then>
 					<javadoc
 						classpathref="plugin.classpath"
-						destdir="javadoc"
+						destdir="@{module.dir}/javadoc"
 						sourcepath="${plugin.source.dir}"
 					/>
 				</then>
 			</if>
+
+			<var name="module.java.count" unset="true" />
 		</sequential>
 	</macrodef>
 
@@ -2215,6 +2223,48 @@ Please find a solution that does not require portal-impl.jar.
 					<include name="@{build.file}" />
 				</multirootfileset>
 			</subant>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="publish-local-m2-release">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="local-m2" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="publish-local-m2-snapshot">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="local-m2" />
+				<property name="plugin.release.qualifier" value="-SNAPSHOT" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="publish-remote-m2-release">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="sonatype-m2-release" />
+			</ant>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="publish-remote-m2-snapshot">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<ant dir="@{module.dir}" target="publish">
+				<property name="ivy.publish.resolver" value="sonatype-m2-snapshot" />
+				<property name="plugin.release.qualifier" value="-SNAPSHOT" />
+			</ant>
 		</sequential>
 	</macrodef>
 
@@ -3147,6 +3197,27 @@ for (String path : paths) {
 		/>
 	</target>
 
+	<target name="jar-javadoc" depends="javadoc">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="jar-javadoc"
+		/>
+	</target>
+
+	<target name="jar-source">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="jar-source"
+		/>
+	</target>
+
+	<target name="javadoc">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="javadoc"
+		/>
+	</target>
+
 	<target name="prepare-upgrade-table">
 		<for param="zip.file">
 			<path>
@@ -3213,6 +3284,34 @@ for (String path : paths) {
 		</tstamp>
 
 		<echo message="${current.time}" />
+	</target>
+
+	<target name="publish-local-m2-release" depends="jar-javadoc,jar-source,war">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="publish-local-m2-release"
+		/>
+	</target>
+
+	<target name="publish-local-m2-snapshot" depends="jar-javadoc,jar-source,war">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="publish-local-m2-snapshot"
+		/>
+	</target>
+
+	<target name="publish-remote-m2-release" depends="jar-javadoc,jar-source,war">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="publish-remote-m2-release"
+		/>
+	</target>
+
+	<target name="publish-remote-m2-snapshot" depends="jar-javadoc,jar-source,war">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="publish-remote-m2-snapshot"
+		/>
 	</target>
 
 	<target name="release">
