@@ -37,6 +37,11 @@ public class GadgetStagedModelDataHandler
 	public static final String[] CLASS_NAMES = {Gadget.class.getName()};
 
 	@Override
+	public void deleteStagedModel(Gadget gadget) throws PortalException {
+		GadgetLocalServiceUtil.deleteGadget(gadget);
+	}
+
+	@Override
 	public void deleteStagedModel(
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
@@ -47,7 +52,7 @@ public class GadgetStagedModelDataHandler
 			uuid, group.getCompanyId());
 
 		if (gadget != null) {
-			GadgetLocalServiceUtil.deleteGadget(gadget);
+			deleteStagedModel(gadget);
 		}
 	}
 

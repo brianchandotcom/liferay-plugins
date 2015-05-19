@@ -44,8 +44,15 @@ public class WSRPProducerStagedModelDataHandler
 			uuid, groupId);
 
 		if (wsrpProducer != null) {
-			WSRPProducerLocalServiceUtil.deleteWSRPProducer(wsrpProducer);
+			deleteStagedModel(wsrpProducer);
 		}
+	}
+
+	@Override
+	public void deleteStagedModel(WSRPProducer wsrpProducer)
+		throws PortalException {
+
+		WSRPProducerLocalServiceUtil.deleteWSRPProducer(wsrpProducer);
 	}
 
 	@Override

@@ -40,6 +40,11 @@ public class KBFolderStagedModelDataHandler
 	public static final String[] CLASS_NAMES = {KBFolder.class.getName()};
 
 	@Override
+	public void deleteStagedModel(KBFolder kbFolder) throws PortalException {
+		KBFolderLocalServiceUtil.deleteKBFolder(kbFolder);
+	}
+
+	@Override
 	public void deleteStagedModel(
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
@@ -49,7 +54,7 @@ public class KBFolderStagedModelDataHandler
 				uuid, groupId);
 
 		if (kbFolder != null) {
-			KBFolderLocalServiceUtil.deleteKBFolder(kbFolder.getKbFolderId());
+			deleteStagedModel(kbFolder);
 		}
 	}
 

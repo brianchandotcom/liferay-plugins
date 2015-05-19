@@ -49,6 +49,13 @@ public class CalendarBookingStagedModelDataHandler
 		{CalendarBooking.class.getName()};
 
 	@Override
+	public void deleteStagedModel(CalendarBooking calendarBooking)
+		throws PortalException {
+
+		CalendarBookingLocalServiceUtil.deleteCalendarBooking(calendarBooking);
+	}
+
+	@Override
 	public void deleteStagedModel(
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
@@ -57,8 +64,7 @@ public class CalendarBookingStagedModelDataHandler
 			uuid, groupId);
 
 		if (calendarBooking != null) {
-			CalendarBookingLocalServiceUtil.deleteCalendarBooking(
-				calendarBooking);
+			deleteStagedModel(calendarBooking);
 		}
 	}
 

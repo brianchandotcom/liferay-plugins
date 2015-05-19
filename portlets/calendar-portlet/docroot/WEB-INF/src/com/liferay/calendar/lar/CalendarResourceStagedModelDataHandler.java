@@ -52,6 +52,14 @@ public class CalendarResourceStagedModelDataHandler
 		{CalendarResource.class.getName()};
 
 	@Override
+	public void deleteStagedModel(CalendarResource calendarResource)
+		throws PortalException {
+
+		CalendarResourceLocalServiceUtil.deleteCalendarResource(
+			calendarResource);
+	}
+
+	@Override
 	public void deleteStagedModel(
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
@@ -60,8 +68,7 @@ public class CalendarResourceStagedModelDataHandler
 			uuid, groupId);
 
 		if (calendarResource != null) {
-			CalendarResourceLocalServiceUtil.deleteCalendarResource(
-				calendarResource);
+			deleteStagedModel(calendarResource);
 		}
 	}
 

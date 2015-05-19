@@ -38,6 +38,11 @@ public class KBCommentStagedModelDataHandler
 	public static final String[] CLASS_NAMES = {KBComment.class.getName()};
 
 	@Override
+	public void deleteStagedModel(KBComment kbComment) throws PortalException {
+		KBCommentLocalServiceUtil.deleteKBComment(kbComment);
+	}
+
+	@Override
 	public void deleteStagedModel(
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
@@ -45,7 +50,7 @@ public class KBCommentStagedModelDataHandler
 		KBComment kbComment = fetchStagedModelByUuidAndGroupId(uuid, groupId);
 
 		if (kbComment != null) {
-			KBCommentLocalServiceUtil.deleteKBComment(kbComment);
+			deleteStagedModel(kbComment);
 		}
 	}
 

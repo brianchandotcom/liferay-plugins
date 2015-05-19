@@ -55,9 +55,16 @@ public class WSRPConsumerPortletStagedModelDataHandler
 					uuid, group.getCompanyId());
 
 		if (wsrpConsumerPortlet != null) {
-			WSRPConsumerPortletLocalServiceUtil.deleteWSRPConsumerPortlet(
-				wsrpConsumerPortlet);
+			deleteStagedModel(wsrpConsumerPortlet);
 		}
+	}
+
+	@Override
+	public void deleteStagedModel(WSRPConsumerPortlet wsrpConsumerPortlet)
+		throws PortalException {
+
+		WSRPConsumerPortletLocalServiceUtil.deleteWSRPConsumerPortlet(
+			wsrpConsumerPortlet);
 	}
 
 	@Override
