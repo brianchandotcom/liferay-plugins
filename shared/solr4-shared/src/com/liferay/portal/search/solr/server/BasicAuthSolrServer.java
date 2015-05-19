@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 
 /**
@@ -35,7 +34,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 @Deprecated
 public class BasicAuthSolrServer extends BaseHttpSolrServer {
 
-	public void afterPropertiesSet() {
+	public void afterPropertiesSet() throws Exception {
 		if (_log.isWarnEnabled()) {
 			_log.warn(
 				ClassUtil.getClassName(this) + " is deprecated in favor of " +
@@ -43,12 +42,8 @@ public class BasicAuthSolrServer extends BaseHttpSolrServer {
 					getName());
 		}
 
-		PoolingClientConnectionManager poolingClientConnectionManager =
-			new PoolingClientConnectionManager();
-
 		BasicAuthPoolingHttpClientFactory basicAuthPoolingHttpClientFactory =
-			new BasicAuthPoolingHttpClientFactory(
-				poolingClientConnectionManager);
+			new BasicAuthPoolingHttpClientFactory();
 
 		basicAuthPoolingHttpClientFactory.setAuthScope(_authScope);
 		basicAuthPoolingHttpClientFactory.setDefaultMaxConnectionsPerRoute(

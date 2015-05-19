@@ -14,9 +14,6 @@
 
 package com.liferay.portal.search.solr.http;
 
-import java.util.List;
-
-import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.HttpClient;
 
 /**
@@ -25,15 +22,7 @@ import org.apache.http.client.HttpClient;
  */
 public interface HttpClientFactory {
 
-	public HttpClient createInstance();
-
-	public void setDefaultMaxConnectionsPerRoute(
-		Integer defaultMaxConnectionsPerRoute);
-
-	public void setHttpRequestInterceptors(
-		List<HttpRequestInterceptor> httpRequestInterceptors);
-
-	public void setMaxTotalConnections(Integer maxTotalConnections);
+	public HttpClient createInstance() throws Exception;
 
 	public void shutdown();
 

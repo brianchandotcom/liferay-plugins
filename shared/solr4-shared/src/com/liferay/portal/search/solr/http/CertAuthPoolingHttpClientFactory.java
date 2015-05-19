@@ -16,61 +16,38 @@ package com.liferay.portal.search.solr.http;
 
 import com.liferay.portal.kernel.util.Http;
 
-import java.util.List;
-
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.client.HttpClient;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 
 /**
  * @author László Csontos
  * @author André de Oliveira
  */
-public class CertAuthPoolingHttpClientFactory implements HttpClientFactory {
+public class CertAuthPoolingHttpClientFactory
+	extends BasePoolingHttpClientFactory {
 
-	public CertAuthPoolingHttpClientFactory(SSLSocketFactory sslSocketFactory) {
+	public void setSslSocketFactoryBuilder(
+		SSLSocketFactoryBuilder sslSocketFactoryBuilder) {
+
+		_sslSocketFactoryBuilder = sslSocketFactoryBuilder;
+	}
+
+	@Override
+	protected void configure(DefaultHttpClient defaultHttpClient) {
+	}
+
+	@Override
+	protected PoolingClientConnectionManager
+		createPoolingClientConnectionManager() throws Exception {
+
+		SSLSocketFactory sslSocketFactory = _sslSocketFactoryBuilder.build();
+
 		SchemeRegistry schemeRegistry = createSchemeRegistry(sslSocketFactory);
 
-		PoolingClientConnectionManager poolingClientConnectionManager =
-			new PoolingClientConnectionManager(schemeRegistry);
-
-		_basePoolingHttpClientFactory = new BasePoolingHttpClientFactory(
-			poolingClientConnectionManager);
-	}
-
-	@Override
-	public HttpClient createInstance() {
-		return _basePoolingHttpClientFactory.createInstance();
-	}
-
-	@Override
-	public void setDefaultMaxConnectionsPerRoute(
-		Integer defaultMaxConnectionsPerRoute) {
-
-		_basePoolingHttpClientFactory.setDefaultMaxConnectionsPerRoute(
-			defaultMaxConnectionsPerRoute);
-	}
-
-	@Override
-	public void setHttpRequestInterceptors(
-		List<HttpRequestInterceptor> httpRequestInterceptors) {
-
-		_basePoolingHttpClientFactory.setHttpRequestInterceptors(
-			httpRequestInterceptors);
-	}
-
-	@Override
-	public void setMaxTotalConnections(Integer maxTotalConnections) {
-		_basePoolingHttpClientFactory.setMaxTotalConnections(
-			maxTotalConnections);
-	}
-
-	@Override
-	public void shutdown() {
-		_basePoolingHttpClientFactory.shutdown();
+		return new PoolingClientConnectionManager(schemeRegistry);
 	}
 
 	protected SchemeRegistry createSchemeRegistry(
@@ -86,6 +63,6 @@ public class CertAuthPoolingHttpClientFactory implements HttpClientFactory {
 		return schemeRegistry;
 	}
 
-	private BasePoolingHttpClientFactory _basePoolingHttpClientFactory;
+	private SSLSocketFactoryBuilder _sslSocketFactoryBuilder;
 
 }
