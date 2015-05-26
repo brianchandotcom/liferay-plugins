@@ -110,7 +110,7 @@ AUI.add(
 				_addMemberEmail: function() {
 					var instance = this;
 
-					var emailAddress = A.Lang.trim(instance._emailInput.val());
+					var emailAddress = instance._emailInput.val().trim();
 
 					if (emailAddress) {
 						var html = '<div class="user" data-emailAddress="' + emailAddress + '"><span class="email">' + emailAddress + '</span></div>';
@@ -150,8 +150,8 @@ AUI.add(
 				_syncFields: function(form) {
 					var instance = this;
 
-					var userIds = [];
 					var emailAddresses = [];
+					var userIds = [];
 
 					instance._invitedMembersList.all('.user').each(
 						function(item, index) {
