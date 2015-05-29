@@ -37,22 +37,26 @@ public class BooleanQueryTranslatorImpl implements BooleanQueryTranslator {
 		org.apache.lucene.search.BooleanQuery luceneBooleanQuery =
 			new org.apache.lucene.search.BooleanQuery();
 
-		for (BooleanClause booleanClause : booleanQuery.clauses()) {
+		for (BooleanClause<Query> booleanClause : booleanQuery.clauses()) {
 			_addClause(booleanClause, luceneBooleanQuery, queryVisitor);
+		}
+
+		if (!booleanQuery.isDefaultBoost()) {
+			luceneBooleanQuery.setBoost(booleanQuery.getBoost());
 		}
 
 		return luceneBooleanQuery;
 	}
 
 	private void _addClause(
-		BooleanClause booleanClause,
+		BooleanClause<Query> booleanClause,
 		org.apache.lucene.search.BooleanQuery booleanQuery,
 		QueryVisitor<org.apache.lucene.search.Query> queryVisitor) {
 
 		BooleanClauseOccur booleanClauseOccur =
 			booleanClause.getBooleanClauseOccur();
 
-		Query query = booleanClause.getQuery();
+		Query query = booleanClause.getClause();
 
 		org.apache.lucene.search.Query luceneQuery = query.accept(queryVisitor);
 
