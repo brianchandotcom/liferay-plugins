@@ -14,6 +14,7 @@
 
 package com.liferay.alloy.mvc;
 
+import com.liferay.alloy.mvc.jsonwebservice.AlloyMockUtil;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.bean.ConstantsBeanFactoryUtil;
@@ -121,6 +122,9 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	public static final String TOUCH =
 		BaseAlloyControllerImpl.class.getName() + "#TOUCH#";
 
+	public static final String VIEW_PATH =
+		BaseAlloyControllerImpl.class.getName() + "#VIEW_PATH";
+
 	@Override
 	public void afterPropertiesSet() {
 		initClass();
@@ -179,6 +183,11 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	@Override
 	public HttpServletRequest getRequest() {
 		return request;
+	}
+
+	@Override
+	public String getResponseContent() {
+		return responseContent;
 	}
 
 	@Override
@@ -1358,29 +1367,19 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	protected void writeResponse(Object content, String contentType)
 		throws Exception {
 
-		if (actionResponse != null) {
-			HttpServletResponse response = PortalUtil.getHttpServletResponse(
-				actionResponse);
+		HttpServletResponse response = this.response;
 
-			response.setContentType(contentType);
-
-			ServletResponseUtil.write(response, content.toString());
+		if (!(response instanceof AlloyMockUtil.MockHttpServletResponse)) {
+			response = PortalUtil.getHttpServletResponse(portletResponse);
 		}
-		else if (renderResponse != null) {
-			renderResponse.setContentType(contentType);
 
-			HttpServletResponse response = PortalUtil.getHttpServletResponse(
-				renderResponse);
+		response.setContentType(contentType);
 
-			ServletResponseUtil.write(response, content.toString());
-		}
+		ServletResponseUtil.write(response, content.toString());
 	}
 
 	protected static final String CALLED_PROCESS_ACTION =
 		BaseAlloyControllerImpl.class.getName() + "#CALLED_PROCESS_ACTION";
-
-	protected static final String VIEW_PATH =
-		BaseAlloyControllerImpl.class.getName() + "#VIEW_PATH";
 
 	protected static Log log = LogFactoryUtil.getLog(
 		BaseAlloyControllerImpl.class);
