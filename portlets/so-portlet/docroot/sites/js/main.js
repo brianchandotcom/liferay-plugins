@@ -316,10 +316,10 @@ AUI().use(
 			_updateSiteList: function(event) {
 				var instance = this;
 
-				var data = A.JSON.parse(event.data.responseText);
+				var data = JSON.parse(event.data.responseText);
 
-				var results = data.sites;
 				var count = data.count;
+				var results = data.sites;
 
 				var buffer = [];
 
