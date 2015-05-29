@@ -762,6 +762,7 @@ AUI.add(
 
 						if (tab && tab.get(IS_DIRTY) && !event.noConfirm) {
 							var tabFileName = tab.get('fileName');
+
 							var message = Liferay.Language.get('has-not-been-saved-are-you-sure-you-want-to-close-the-tab', tabFileName);
 
 							instance._showConfirmationDialog(message, instance._closeFileEntry, entryId);
@@ -1057,8 +1058,7 @@ AUI.add(
 						var duplicateLabel = false;
 
 						do {
-							duplicateLabel = AArray.some(
-								children,
+							duplicateLabel = children.some(
 								function(item, index) {
 									if (item.isLeaf() == leafNode && item.get(LABEL).toLowerCase() == label.toLowerCase()) {
 										i++;
