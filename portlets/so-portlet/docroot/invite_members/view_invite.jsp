@@ -229,10 +229,9 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 		}
 		else {
 			buffer.push(
-				A.Array.map(
-					results,
+				results.map(
 					function(result) {
-						var userTemplate ='<div class="{cssClass}" data-userId="{userId}">' +
+						var userTemplate = '<div class="{cssClass}" data-userId="{userId}">' +
 								'<span class="name">{userFullName}</span>' +
 								'<span class="email">{userEmailAddress}</span>' +
 							'</div>';

@@ -246,9 +246,9 @@ if (comment) {
 			var countdown = form.one('.microblogs-countdown');
 			var submitButton = form.one('.microblogs-post');
 
-			var remaining = (150 - contentInput.val().length);
+			var remaining = 150 - contentInput.val().length;
 
-			var disabled = ((remaining == 150) || (contentInput.get('value') == '') || (remaining < 0));
+			var disabled = remaining == 150 || contentInput.get('value') == '' || remaining < 0;
 
 			countdown.html(remaining);
 
@@ -267,7 +267,7 @@ if (comment) {
 
 			var inputValue = '<%= ((microblogsEntry != null) && (edit)) ? StringUtil.replace(HtmlUtil.escapeJS(microblogsEntry.getContent()), "\'", "\\'") : StringPool.BLANK %>';
 
-			if ((autocomplete.height() < 45) || (highlighterContent.height() < 45)) {
+			if (autocomplete.height() < 45 || highlighterContent.height() < 45) {
 				autocomplete.height(45);
 
 				highlighterContent.height(45);
@@ -351,8 +351,7 @@ if (comment) {
 		};
 
 		var resultFormatter = function(query, results) {
-			return A.Array.map(
-				results,
+			return results.map(
 				function(result) {
 					var userData = result.raw;
 
