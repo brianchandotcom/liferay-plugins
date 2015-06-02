@@ -371,7 +371,7 @@ for (long otherCalendarId : otherCalendarIds) {
 				var calendarId = A.one('#<portlet:namespace />calendarId').val();
 				var childCalendarIds = A.Object.keys(Liferay.CalendarUtil.availableCalendars);
 
-				A.Array.remove(childCalendarIds, A.Array.indexOf(childCalendarIds, calendarId));
+				A.Array.remove(childCalendarIds, childCalendarIds.indexOf(calendarId));
 
 				A.one('#<portlet:namespace />childCalendarIds').val(childCalendarIds.join(','));
 			</c:if>
@@ -426,7 +426,7 @@ for (long otherCalendarId : otherCalendarIds) {
 				item.set('disabled', true);
 			}
 		);
-	}
+	};
 
 	var calendarsMenu = Liferay.CalendarUtil.getCalendarsMenu(
 		{

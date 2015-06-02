@@ -135,10 +135,10 @@ if (Validator.isNotNull(editorGadgetURL)) {
 	);
 
 	var onCheckedChange = function(event) {
-		var category = event.target.get('category')
+		var category = event.target.get('category');
 
 		if (event.newVal) {
-			if (A.Array.indexOf(selectedPortletCategoryNames, category) == -1) {
+			if (selectedPortletCategoryNames.indexOf(category) == -1) {
 				selectedPortletCategoryNames.push(category);
 
 				selectedPortletCategoryNamesNode.val(selectedPortletCategoryNames.join());
@@ -175,13 +175,13 @@ if (Validator.isNotNull(editorGadgetURL)) {
 
 		var category = '<%= treeNodeView.getObjId() %>';
 
-		var checked = ((<%= gadget == null %> && category == 'root//category.gadgets') || A.Array.indexOf(selectedPortletCategoryNames, category) > -1);
+		var checked = <%= gadget == null %> && category == 'root//category.gadgets' || selectedPortletCategoryNames.indexOf(category) > -1;
 
 		var categoryTreeNode = new CategoryTreeNode(
 			{
 				alwaysShowHitArea: false,
-				checked: checked,
 				category: category,
+				checked: checked,
 				id: '<%= treeNodeView.getId() %>',
 				label: '<%= UnicodeFormatter.toString(LanguageUtil.get(request, treeNodeView.getName())) %>',
 				leaf: false
