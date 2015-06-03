@@ -78,7 +78,6 @@ import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
-import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructureConstants;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
@@ -232,7 +231,7 @@ public class FileSystemImporter extends BaseImporter {
 		throws Exception {
 
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
-			groupId, PortalUtil.getClassNameId(DDLRecordSet.class),
+			groupId, PortalUtil.getClassNameId(DDL_RECORD_SET_CLASS_NAME),
 			ddmStructureKey);
 
 		File dir = new File(
@@ -263,7 +262,7 @@ public class FileSystemImporter extends BaseImporter {
 		throws Exception {
 
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
-			groupId, PortalUtil.getClassNameId(DDLRecordSet.class),
+			groupId, PortalUtil.getClassNameId(DDL_RECORD_SET_CLASS_NAME),
 			ddmStructureKey);
 
 		File dir = new File(
@@ -313,7 +312,7 @@ public class FileSystemImporter extends BaseImporter {
 		String name = getName(fileName);
 
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.fetchStructure(
-			groupId, PortalUtil.getClassNameId(DDLRecordSet.class),
+			groupId, PortalUtil.getClassNameId(DDL_RECORD_SET_CLASS_NAME),
 			getKey(fileName));
 
 		if (ddmStructure != null) {
@@ -337,7 +336,7 @@ public class FileSystemImporter extends BaseImporter {
 				ddmStructure = DDMStructureLocalServiceUtil.addStructure(
 					userId, groupId,
 					DDMStructureConstants.DEFAULT_PARENT_STRUCTURE_ID,
-					PortalUtil.getClassNameId(DDLRecordSet.class),
+					PortalUtil.getClassNameId(DDL_RECORD_SET_CLASS_NAME),
 					getKey(fileName), getMap(name), null,
 					StringUtil.read(inputStream),
 					PropsUtil.get(PropsKeys.DYNAMIC_DATA_LISTS_STORAGE_TYPE),
@@ -573,7 +572,7 @@ public class FileSystemImporter extends BaseImporter {
 
 	protected void addDDMTemplates(
 			String ddmStructureKey, String fileName, InputStream inputStream)
-		throws Exception {		
+		throws Exception {
 
 		fileName = FileUtil.stripExtension(fileName);
 
@@ -1749,6 +1748,9 @@ public class FileSystemImporter extends BaseImporter {
 				groupId, themeId, null, null, false);
 		}
 	}
+
+	protected static final String DDL_RECORD_SET_CLASS_NAME =
+		"com.liferay.dynamic.data.lists.model.DDLRecordSet";
 
 	protected ServiceContext serviceContext;
 

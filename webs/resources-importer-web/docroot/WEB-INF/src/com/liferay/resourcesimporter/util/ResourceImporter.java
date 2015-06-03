@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
-import com.liferay.portlet.dynamicdatalists.model.DDLRecordSet;
 import com.liferay.portlet.dynamicdatamapping.model.DDMStructure;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
@@ -89,7 +88,7 @@ public class ResourceImporter extends FileSystemImporter {
 		throws Exception {
 
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
-			groupId, PortalUtil.getClassNameId(DDLRecordSet.class),
+			groupId, PortalUtil.getClassNameId(DDL_RECORD_SET_CLASS_NAME),
 			ddmStructureKey);
 
 		StringBundler sb = new StringBundler(4);
@@ -130,7 +129,7 @@ public class ResourceImporter extends FileSystemImporter {
 		throws Exception {
 
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.getStructure(
-			groupId, PortalUtil.getClassNameId(DDLRecordSet.class),
+			groupId, PortalUtil.getClassNameId(DDL_RECORD_SET_CLASS_NAME),
 			ddmStructureKey);
 
 		StringBundler sb = new StringBundler(4);
