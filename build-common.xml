@@ -1291,19 +1291,53 @@ Please find a solution that does not require portal-impl.jar.
 				</then>
 			</if>
 
+			<pathconvert property="frontend.css.jar">
+				<path>
+					<fileset dir="${module.framework.base.dir}/portal" includes="com.liferay.frontend.css.web*jar" />
+				</path>
+			</pathconvert>
+
+			<condition property="frontend.css.jar.exists">
+				<resourcecount when="eq" count="1">
+					<fileset dir="${module.framework.base.dir}/portal" includes="com.liferay.frontend.css.web*jar" />
+				</resourcecount>
+			</condition>
+
+			<mkdir dir="${java.io.tmpdir}/theme" />
+
+			<if>
+				<istrue value="${frontend.css.jar.exists}" />
+				<then>
+					<unzip
+						src="${frontend.css.jar}"
+						dest="${java.io.tmpdir}/theme"
+					>
+						<patternset>
+							<include name="**/html/themes/**" />
+						</patternset>
+						<mapper>
+							<globmapper from="META-INF/resources/html/*" to="html/*" />
+						</mapper>
+					</unzip>
+				</then>
+				<else>
+					<echo>com.liferay.frotnend.css.web.jar does not exist.</echo>
+				</else>
+			</if>
+
 			<if>
 				<equals arg1="${theme.parent}" arg2="_unstyled" />
 				<then>
 					<copy todir="@{module.dir}/docroot" overwrite="true" preservelastmodified="true">
 						<fileset
-							dir="${app.server.portal.dir}/html/themes/_unstyled"
+							dir="${java.io.tmpdir}/theme/html/themes/_unstyled"
 							excludes="templates/**"
 						/>
 					</copy>
 
 					<copy todir="@{module.dir}/docroot/templates" overwrite="true" preservelastmodified="true">
 						<fileset
-							dir="${app.server.portal.dir}/html/themes/_unstyled/templates"
+							dir="${java.io.tmpdir}/theme/html/themes/_unstyled/templates"
 							excludes="init.${theme.type}"
 							includes="*.${theme.type}"
 						/>
@@ -1314,14 +1348,14 @@ Please find a solution that does not require portal-impl.jar.
 					<then>
 						<copy todir="@{module.dir}/docroot" overwrite="true" preservelastmodified="true">
 							<fileset
-								dir="${app.server.portal.dir}/html/themes/_unstyled"
+								dir="${java.io.tmpdir}/theme/html/themes/_unstyled"
 								excludes="templates/**"
 							/>
 						</copy>
 
 						<copy todir="@{module.dir}/docroot/templates" overwrite="true" preservelastmodified="true">
 							<fileset
-								dir="${app.server.portal.dir}/html/themes/_unstyled/templates"
+								dir="${java.io.tmpdir}/theme/html/themes/_unstyled/templates"
 								excludes="init.${theme.type}"
 								includes="*.${theme.type}"
 							/>
@@ -1329,7 +1363,7 @@ Please find a solution that does not require portal-impl.jar.
 
 						<copy todir="@{module.dir}/docroot" overwrite="true" preservelastmodified="true">
 							<fileset
-								dir="${app.server.portal.dir}/html/themes/_styled"
+								dir="${java.io.tmpdir}/theme/html/themes/_styled"
 							/>
 						</copy>
 					</then>
@@ -1339,14 +1373,14 @@ Please find a solution that does not require portal-impl.jar.
 					<then>
 						<copy todir="@{module.dir}/docroot" overwrite="true" preservelastmodified="true">
 							<fileset
-								dir="${app.server.portal.dir}/html/themes/classic"
+								dir="${java.io.tmpdir}/theme/html/themes/classic"
 								excludes="**/.sass-cache/**,_diffs/**,templates/**"
 							/>
 						</copy>
 
 						<copy todir="@{module.dir}/docroot/templates" overwrite="true" preservelastmodified="true">
 							<fileset
-								dir="${app.server.portal.dir}/html/themes/classic/templates"
+								dir="${java.io.tmpdir}/theme/html/themes/classic/templates"
 								includes="*.${theme.type}"
 							/>
 						</copy>
@@ -1357,14 +1391,14 @@ Please find a solution that does not require portal-impl.jar.
 					<then>
 						<copy todir="@{module.dir}/docroot" overwrite="true" preservelastmodified="true">
 							<fileset
-								dir="${app.server.portal.dir}/html/themes/control_panel"
+								dir="${java.io.tmpdir}/theme/html/themes/control_panel"
 								excludes="**/.sass-cache/**,_diffs/**,templates/**"
 							/>
 						</copy>
 
 						<copy todir="@{module.dir}/docroot/templates" overwrite="true" preservelastmodified="true">
 							<fileset
-								dir="${app.server.portal.dir}/html/themes/control_panel/templates"
+								dir="${java.io.tmpdir}/theme/html/themes/control_panel/templates"
 								includes="*.${theme.type}"
 							/>
 						</copy>
