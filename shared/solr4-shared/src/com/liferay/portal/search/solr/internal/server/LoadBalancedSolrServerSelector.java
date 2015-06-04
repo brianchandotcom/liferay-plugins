@@ -12,17 +12,31 @@
  * details.
  */
 
-package com.liferay.portal.search.solr.server;
+package com.liferay.portal.search.solr.internal.server;
 
-import com.liferay.portal.search.solr.internal.server.SolrServerWrapper;
+import com.liferay.portal.search.solr.server.SolrServerSelector;
 
 import java.util.List;
+import java.util.TreeSet;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Michael C. Han
  */
-public interface SolrServerSelector {
+@Component(immediate = true, service = SolrServerSelector.class)
+public class LoadBalancedSolrServerSelector implements SolrServerSelector {
 
-	public SolrServerWrapper select(List<SolrServerWrapper> solrServerWrappers);
+	@Override
+	public SolrServerWrapper select(
+		List<SolrServerWrapper> solrServerWrappers) {
+
+		TreeSet<SolrServerWrapper> sortedSolrServerWrappers = new TreeSet<>(
+			new SolrServerWrapperComparator());
+
+		sortedSolrServerWrappers.addAll(solrServerWrappers);
+
+		return sortedSolrServerWrappers.first();
+	}
 
 }

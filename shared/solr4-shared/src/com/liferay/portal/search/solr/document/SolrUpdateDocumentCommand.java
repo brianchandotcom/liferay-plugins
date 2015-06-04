@@ -12,17 +12,26 @@
  * details.
  */
 
-package com.liferay.portal.search.solr.server;
+package com.liferay.portal.search.solr.document;
 
-import com.liferay.portal.search.solr.internal.server.SolrServerWrapper;
+import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.SearchException;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author Michael C. Han
  */
-public interface SolrServerSelector {
+public interface SolrUpdateDocumentCommand {
 
-	public SolrServerWrapper select(List<SolrServerWrapper> solrServerWrappers);
+	public String updateDocument(
+			SearchContext searchContext, Document document, boolean deleteFirst)
+		throws SearchException;
+
+	public void updateDocuments(
+			SearchContext searchContext, Collection<Document> documents,
+			boolean deleteFirst)
+		throws SearchException;
 
 }

@@ -12,17 +12,21 @@
  * details.
  */
 
-package com.liferay.portal.search.solr.server;
+package com.liferay.portal.search.solr.internal.facet;
 
-import com.liferay.portal.search.solr.internal.server.SolrServerWrapper;
+import com.liferay.portal.search.solr.facet.FacetProcessor;
 
-import java.util.List;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Michael C. Han
  */
-public interface SolrServerSelector {
-
-	public SolrServerWrapper select(List<SolrServerWrapper> solrServerWrappers);
-
+@Component(
+	immediate = true,
+	property = {
+		"class.name=com.liferay.portal.kernel.search.facet.ModifiedFacet"
+	},
+	service = FacetProcessor.class
+)
+public class ModifiedFacetProcessor extends RangeFacetProcessor {
 }
