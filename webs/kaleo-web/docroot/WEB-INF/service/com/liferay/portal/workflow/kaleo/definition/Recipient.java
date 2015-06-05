@@ -23,10 +23,21 @@ public abstract class Recipient {
 		_recipientType = recipientType;
 	}
 
+	public NotificationReceptionType getNotificationReceptionType() {
+		return _notificationReceptionType;
+	}
+
 	public RecipientType getRecipientType() {
 		return _recipientType;
 	}
 
+	public void setNotificationReceptionType(
+		NotificationReceptionType notificationReceptionType) {
+
+		_notificationReceptionType = notificationReceptionType;
+	}
+
+	private NotificationReceptionType _notificationReceptionType;
 	private RecipientType _recipientType;
 
 }

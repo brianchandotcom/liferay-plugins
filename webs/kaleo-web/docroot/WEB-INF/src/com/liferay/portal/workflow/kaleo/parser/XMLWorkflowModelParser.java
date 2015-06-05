@@ -35,10 +35,12 @@ import com.liferay.portal.workflow.kaleo.definition.JoinXor;
 import com.liferay.portal.workflow.kaleo.definition.Node;
 import com.liferay.portal.workflow.kaleo.definition.Notification;
 import com.liferay.portal.workflow.kaleo.definition.NotificationAware;
+import com.liferay.portal.workflow.kaleo.definition.NotificationReceptionType;
 import com.liferay.portal.workflow.kaleo.definition.ResourceActionAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleRecipient;
 import com.liferay.portal.workflow.kaleo.definition.ScriptAssignment;
+import com.liferay.portal.workflow.kaleo.definition.ScriptRecipient;
 import com.liferay.portal.workflow.kaleo.definition.State;
 import com.liferay.portal.workflow.kaleo.definition.Task;
 import com.liferay.portal.workflow.kaleo.definition.Timer;
@@ -414,10 +416,15 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 					notificationTypeElement.getText());
 			}
 
-			Element recipientsElement = notificationElement.element(
+			List<Element> recipientsElements = notificationElement.elements(
 				"recipients");
 
-			parseRecipients(recipientsElement, notification);
+			for (Element recipientsElement : recipientsElements) {
+				parseRecipients(
+					recipientsElement, notification,
+					NotificationReceptionType.parse(
+						recipientsElement.attributeValue("receptionType")));
+			}
 
 			notifications.add(notification);
 		}
@@ -426,7 +433,8 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 	}
 
 	protected void parseRecipients(
-		Element recipientsElement, Notification notification) {
+		Element recipientsElement, Notification notification,
+		NotificationReceptionType notificationReceptionType) {
 
 		if (recipientsElement == null) {
 			return;
@@ -439,6 +447,9 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 			AddressRecipient addressRecipient = new AddressRecipient(
 				addressRecipientElement.getText());
 
+			addressRecipient.setNotificationReceptionType(
+				notificationReceptionType);
+
 			notification.addRecipients(addressRecipient);
 		}
 
@@ -447,6 +458,9 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 
 		if (assigneesRecipientElement != null) {
 			AssigneesRecipient assigneesRecipient = new AssigneesRecipient();
+
+			assigneesRecipient.setNotificationReceptionType(
+				notificationReceptionType);
 
 			notification.addRecipients(assigneesRecipient);
 		}
@@ -478,8 +492,31 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 					roleRecipient.setAutoCreate(autoCreate);
 				}
 
+				roleRecipient.setNotificationReceptionType(
+					notificationReceptionType);
+
 				notification.addRecipients(roleRecipient);
 			}
+		}
+
+		List<Element> scriptedRecipientElements = recipientsElement.elements(
+			"scripted-recipient");
+
+		for (Element scriptedRecipientElement : scriptedRecipientElements) {
+			String script = scriptedRecipientElement.elementText("script");
+			String scriptLanguage = scriptedRecipientElement.elementText(
+				"script-language");
+			String scriptRequiredContexts =
+				scriptedRecipientElement.elementText(
+					"script-required-contexts");
+
+			ScriptRecipient scriptRecipient = new ScriptRecipient(
+				script, scriptLanguage, scriptRequiredContexts);
+
+			scriptRecipient.setNotificationReceptionType(
+				notificationReceptionType);
+
+			notification.addRecipients(scriptRecipient);
 		}
 
 		List<Element> userRecipientElements = recipientsElement.elements(
@@ -494,6 +531,9 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 
 			UserRecipient userRecipient = new UserRecipient(
 				userId, screenName, emailAddress);
+
+			userRecipient.setNotificationReceptionType(
+				notificationReceptionType);
 
 			notification.addRecipients(userRecipient);
 		}

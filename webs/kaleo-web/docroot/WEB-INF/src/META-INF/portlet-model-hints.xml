@@ -265,8 +265,18 @@
 		</field>
 		<field name="recipientClassPK" type="long" />
 		<field name="recipientRoleType" type="int" />
+		<field name="recipientScript" type="String">
+			<hint-collection name="CLOB" />
+		</field>
+		<field name="recipientScriptLanguage" type="String" />
+		<field name="recipientScriptRequiredContexts" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
 		<field name="address" type="String">
 			<hint name="max-length">255</hint>
+		</field>
+		<field name="notificationReceptionType" type="String">
+			<hint name="max-length">3</hint>
 		</field>
 	</model>
 	<model name="com.liferay.portal.workflow.kaleo.model.KaleoTask">

@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.util.HashCode;
 import com.liferay.portal.kernel.util.HashCodeFactoryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
+import com.liferay.portal.workflow.kaleo.definition.NotificationReceptionType;
 
 import java.io.UnsupportedEncodingException;
 
@@ -29,16 +30,24 @@ import javax.mail.internet.InternetAddress;
  */
 public class NotificationRecipient {
 
-	public NotificationRecipient(String emailAddress) {
+	public NotificationRecipient(
+		String emailAddress,
+		NotificationReceptionType notificationReceptionType) {
+
 		_emailAddress = emailAddress;
+		_notificationReceptionType = notificationReceptionType;
 	}
 
-	public NotificationRecipient(User user) {
+	public NotificationRecipient(
+		User user, NotificationReceptionType notificationReceptionType) {
+
 		_companyId = user.getCompanyId();
 		_emailAddress = user.getEmailAddress();
 		_fullName = user.getFullName();
 		_screenName = user.getScreenName();
 		_userId = user.getUserId();
+
+		_notificationReceptionType = notificationReceptionType;
 	}
 
 	@Override
@@ -88,6 +97,10 @@ public class NotificationRecipient {
 		}
 	}
 
+	public NotificationReceptionType getNotificationReceptionType() {
+		return _notificationReceptionType;
+	}
+
 	public String getScreenName() {
 		return _screenName;
 	}
@@ -114,6 +127,7 @@ public class NotificationRecipient {
 	private long _companyId;
 	private String _emailAddress;
 	private String _fullName;
+	private NotificationReceptionType _notificationReceptionType;
 	private String _screenName;
 	private long _userId;
 

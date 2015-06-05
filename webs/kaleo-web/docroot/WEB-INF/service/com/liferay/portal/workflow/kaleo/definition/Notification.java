@@ -16,7 +16,9 @@ package com.liferay.portal.workflow.kaleo.definition;
 
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -47,7 +49,17 @@ public class Notification {
 	}
 
 	public void addRecipients(Recipient recipient) {
-		_recipients.add(recipient);
+		Set<Recipient> recipients = _recipientsMap.get(
+			recipient.getNotificationReceptionType());
+
+		if (recipients == null) {
+			recipients = new HashSet<>();
+		}
+
+		recipients.add(recipient);
+
+		_recipientsMap.put(
+			recipient.getNotificationReceptionType(), recipients);
 	}
 
 	@Override
@@ -85,8 +97,8 @@ public class Notification {
 		return _notificationTypes;
 	}
 
-	public Set<Recipient> getRecipients() {
-		return _recipients;
+	public Map<NotificationReceptionType, Set<Recipient>> getRecipientsMap() {
+		return _recipientsMap;
 	}
 
 	public String getTemplate() {
@@ -106,7 +118,8 @@ public class Notification {
 	private ExecutionType _executionType;
 	private String _name;
 	private Set<NotificationType> _notificationTypes = new HashSet<>();
-	private Set<Recipient> _recipients = new HashSet<>();
+	private Map<NotificationReceptionType, Set<Recipient>> _recipientsMap =
+		new HashMap<>();
 	private String _template;
 	private TemplateLanguage _templateLanguage;
 

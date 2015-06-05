@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.workflow.kaleo.definition.Notification;
+import com.liferay.portal.workflow.kaleo.definition.NotificationReceptionType;
 import com.liferay.portal.workflow.kaleo.definition.NotificationType;
 import com.liferay.portal.workflow.kaleo.definition.Recipient;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotification;
@@ -27,6 +28,7 @@ import com.liferay.portal.workflow.kaleo.service.base.KaleoNotificationLocalServ
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -90,13 +92,16 @@ public class KaleoNotificationLocalServiceImpl
 
 		// Kaleo notification recipients
 
-		Set<Recipient> recipients = notification.getRecipients();
+		Map<NotificationReceptionType, Set<Recipient>> recipientsMap =
+			notification.getRecipientsMap();
 
-		for (Recipient recipient : recipients) {
-			kaleoNotificationRecipientLocalService.
-				addKaleoNotificationRecipient(
-					kaleoDefinitionId, kaleoNotificationId, recipient,
-					serviceContext);
+		for (Set<Recipient> recipients : recipientsMap.values()) {
+			for (Recipient recipient : recipients) {
+				kaleoNotificationRecipientLocalService.
+					addKaleoNotificationRecipient(
+						kaleoDefinitionId, kaleoNotificationId, recipient,
+						serviceContext);
+			}
 		}
 
 		return kaleoNotification;

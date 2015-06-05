@@ -23,6 +23,7 @@ import com.liferay.portal.workflow.kaleo.definition.AssignmentType;
 import com.liferay.portal.workflow.kaleo.definition.DelayDuration;
 import com.liferay.portal.workflow.kaleo.definition.Node;
 import com.liferay.portal.workflow.kaleo.definition.Notification;
+import com.liferay.portal.workflow.kaleo.definition.NotificationReceptionType;
 import com.liferay.portal.workflow.kaleo.definition.NotificationType;
 import com.liferay.portal.workflow.kaleo.definition.Recipient;
 import com.liferay.portal.workflow.kaleo.definition.RecipientType;
@@ -30,12 +31,15 @@ import com.liferay.portal.workflow.kaleo.definition.ResourceActionAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleAssignment;
 import com.liferay.portal.workflow.kaleo.definition.RoleRecipient;
 import com.liferay.portal.workflow.kaleo.definition.ScriptAssignment;
+import com.liferay.portal.workflow.kaleo.definition.ScriptLanguage;
+import com.liferay.portal.workflow.kaleo.definition.ScriptRecipient;
 import com.liferay.portal.workflow.kaleo.definition.Timer;
 import com.liferay.portal.workflow.kaleo.definition.Transition;
 import com.liferay.portal.workflow.kaleo.definition.UserAssignment;
 import com.liferay.portal.workflow.kaleo.definition.UserRecipient;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -248,9 +252,20 @@ public abstract class BaseNodeExporter implements NodeExporter {
 				notificationType.getValue());
 		}
 
-		Set<Recipient> recipients = notification.getRecipients();
+		Map<NotificationReceptionType, Set<Recipient>> recipientsMap =
+			notification.getRecipientsMap();
 
-		exportRecipientsElement(notificationElement, recipients);
+		for (Map.Entry<NotificationReceptionType, Set<Recipient>>
+				recipientsEntry :
+				recipientsMap.entrySet()) {
+
+			Set<Recipient> recipients = recipientsEntry.getValue();
+			NotificationReceptionType notificationReceptionType =
+				recipientsEntry.getKey();
+
+			exportRecipientsElement(
+				notificationElement, recipients, notificationReceptionType);
+		}
 
 		addTextElement(
 			notificationElement, "execution-type",
@@ -258,7 +273,8 @@ public abstract class BaseNodeExporter implements NodeExporter {
 	}
 
 	protected void exportRecipientsElement(
-		Element notificationElement, Set<Recipient> recipients) {
+		Element notificationElement, Set<Recipient> recipients,
+		NotificationReceptionType notificationReceptionType) {
 
 		if (recipients.isEmpty()) {
 			return;
@@ -266,6 +282,9 @@ public abstract class BaseNodeExporter implements NodeExporter {
 
 		Element recipientsElement = notificationElement.addElement(
 			"recipients");
+
+		recipientsElement.addAttribute(
+			"receptionType", notificationReceptionType.getValue());
 
 		Element rolesElement = null;
 
@@ -295,6 +314,20 @@ public abstract class BaseNodeExporter implements NodeExporter {
 					roleElement, roleRecipient.getRoleId(),
 					roleRecipient.getRoleType(), roleRecipient.getRoleName(),
 					roleRecipient.isAutoCreate());
+			}
+			else if (recipientType.equals(RecipientType.SCRIPT)) {
+				Element scriptedRecipientElement = recipientsElement.addElement(
+					"scripted-recipient");
+
+				ScriptRecipient scriptRecipient = (ScriptRecipient)recipient;
+
+				ScriptLanguage scriptLanguage =
+					scriptRecipient.getScriptLanguage();
+
+				populateScriptingElement(
+					scriptedRecipientElement, scriptRecipient.getScript(),
+					scriptLanguage.getValue(),
+					scriptRecipient.getScriptRequiredContexts());
 			}
 			else if (recipientType.equals(RecipientType.USER)) {
 				Element userElement = recipientsElement.addElement("user");
