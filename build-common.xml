@@ -184,9 +184,13 @@ Error-Prone was automatically installed. Please rerun your task.
 		<sequential>
 			<local name="build-css.output" />
 
+			<path id="css.builder.classpath">
+				<fileset dir="${sdk.dir}/dependencies/com.liferay.css.builder/lib" includes="*.jar" />
+			</path>
+
 			<java
-				classname="com.liferay.portal.tools.SassToCssBuilder"
-				classpathref="portal.classpath"
+				classname="com.liferay.css.builder.CSSBuilder"
+				classpathref="css.builder.classpath"
 				fork="true"
 				newenvironment="true"
 				outputproperty="build-css.output"
@@ -197,7 +201,14 @@ Error-Prone was automatically installed. Please rerun your task.
 				<arg value="sass.portal.common.dir=${app.server.portal.dir}/html/css/common" />
 			</java>
 
-			<echo>${build-css.output}</echo>
+			<if>
+				<not>
+					<equals arg1="${build-css.output}" arg2="" />
+				</not>
+				<then>
+					<echo>${build-css.output}</echo>
+				</then>
+			</if>
 
 			<if>
 				<contains string="${build-css.output}" substring="Error" />
