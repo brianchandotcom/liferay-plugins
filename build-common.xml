@@ -83,6 +83,12 @@
 		<fileset dir="${module.framework.base.dir}/test" erroronmissingdir="false" includes="portal-test*.jar" />
 	</path>
 
+	<path id="classpath.cobertura">
+		<fileset dir="${sdk.dir}/dependencies/net.sourceforge.cobertura/lib" includes="*.jar" />
+	</path>
+
+	<taskdef classpathref="classpath.cobertura" resource="tasks.properties" />
+
 	<path id="classpath.com.liferay.ant.bnd">
 		<fileset dir="${sdk.dir}/dependencies/com.liferay.ant.bnd/lib" includes="*.jar" />
 	</path>
@@ -507,9 +513,11 @@ Error-Prone was automatically installed. Please rerun your task.
 				</then>
 			</if>
 
+			<delete dir="@{module.dir}/coverage-reports" />
 			<delete dir="@{module.dir}/javadoc" />
 			<delete dir="@{module.dir}/pmd-reports" />
 			<delete dir="@{module.dir}/test-classes" />
+			<delete dir="@{module.dir}/test-coverage" />
 			<delete dir="@{module.dir}/test-results" />
 			<delete dir="@{module.dir}/tmp" />
 
@@ -1182,7 +1190,9 @@ Please find a solution that does not require portal-impl.jar.
 			<if>
 				<available file="@{module.dir}/test/@{test.type}" type="dir" />
 				<then>
+					<mkdir dir="@{module.dir}/coverage-reports/@{test.type}" />
 					<mkdir dir="@{module.dir}/test-classes/@{test.type}" />
+					<mkdir dir="@{module.dir}/test-coverage/@{test.type}" />
 					<mkdir dir="@{module.dir}/test-results/@{test.type}" />
 
 					<copy todir="@{module.dir}/test-classes/@{test.type}">
@@ -2148,6 +2158,34 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="instrument-code">
+		<attribute name="module.dir" />
+		<attribute name="test.type" />
+
+		<sequential>
+			<if>
+				<equals arg1="${junit.code.coverage}" arg2="true" />
+				<then>
+					<delete file="@{module.dir}/test-coverage/cobertura.ser" />
+
+					<cobertura-instrument
+						datafile="@{module.dir}/test-coverage/@{test.type}/cobertura.ser"
+						todir="@{module.dir}/test-coverage/@{test.type}"
+					>
+						<ignore regex="org.apache.log4j.*" />
+
+						<fileset dir="@{module.dir}/classes" erroronmissingdir="false">
+							<include name="**/*.class" />
+						</fileset>
+						<fileset dir="@{module.dir}/docroot/WEB-INF/classes" erroronmissingdir="false">
+							<include name="**/*.class" />
+						</fileset>
+					</cobertura-instrument>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="javadoc-macro">
 		<attribute name="module.dir" />
 
@@ -2283,6 +2321,44 @@ Please find a solution that does not require portal-impl.jar.
 					</copy>
 
 					<var name="merge.original.war.file" unset="true" />
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="merge-coverage">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<if>
+				<equals arg1="${junit.code.coverage}" arg2="true" />
+				<then>
+					<if>
+						<or>
+							<available file="@{module.dir}/test-coverage/integration/cobertura.ser" />
+							<available file="@{module.dir}/test-coverage/unit/cobertura.ser" />
+						</or>
+						<then>
+							<cobertura-merge datafile="@{module.dir}/test-coverage/cobertura.ser">
+								<fileset dir="@{module.dir}/test-coverage/integration" erroronmissingdir="false">
+									<include name="cobertura.ser" />
+								</fileset>
+								<fileset dir="@{module.dir}/test-coverage/unit" erroronmissingdir="false">
+									<include name="cobertura.ser" />
+								</fileset>
+							</cobertura-merge>
+
+							<cobertura-report
+								datafile="@{module.dir}/test-coverage/cobertura.ser"
+								format="${junit.code.coverage.report.format}"
+								destdir="@{module.dir}/coverage-reports"
+							>
+								<fileset dir="@{module.dir}/docroot/WEB-INF/src" erroronmissingdir="false" />
+								<fileset dir="@{module.dir}/service" erroronmissingdir="false" />
+								<fileset dir="@{module.dir}/src" erroronmissingdir="false" />
+							</cobertura-report>
+						</then>
+					</if>
 				</then>
 			</if>
 		</sequential>
@@ -2426,6 +2502,28 @@ Please find a solution that does not require portal-impl.jar.
 			<delete dir="@{dir}" />
 
 			<mkdir dir="@{dir}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="report-coverage">
+		<attribute name="module.dir" />
+		<attribute name="test.type" />
+
+		<sequential>
+			<if>
+				<equals arg1="${junit.code.coverage}" arg2="true" />
+				<then>
+					<cobertura-report
+						datafile="@{module.dir}/test-coverage/@{test.type}/cobertura.ser"
+						destdir="@{module.dir}/coverage-reports/@{test.type}"
+						format="${junit.code.coverage.report.format}"
+					>
+						<fileset dir="@{module.dir}/docroot/WEB-INF/src" erroronmissingdir="false" />
+						<fileset dir="@{module.dir}/service" erroronmissingdir="false" />
+						<fileset dir="@{module.dir}/src" erroronmissingdir="false" />
+					</cobertura-report>
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -2603,6 +2701,10 @@ Please find a solution that does not require portal-impl.jar.
 			<test-unit
 				module.dir="@{module.dir}"
 			/>
+
+			<merge-coverage
+				module.dir="@{module.dir}"
+			/>
 		</sequential>
 	</macrodef>
 
@@ -2685,7 +2787,9 @@ Please find a solution that does not require portal-impl.jar.
 			<if>
 				<available file="@{module.dir}/test/@{test.type}" />
 				<then>
+					<delete dir="@{module.dir}/coverage-reports/@{test.type}" />
 					<delete dir="@{module.dir}/test-classes/@{test.type}" />
+					<delete dir="@{module.dir}/test-coverage/@{test.type}" />
 					<delete dir="@{module.dir}/test-results/@{test.type}" />
 
 					<compile
@@ -2734,11 +2838,17 @@ Please find a solution that does not require portal-impl.jar.
 								</else>
 							</if>
 
+							<instrument-code
+								module.dir="@{module.dir}"
+								test.type="@{test.type}"
+							/>
+
 							<junit dir="@{module.dir}" fork="on" forkmode="@{junit.forkmode}" jvm="${junit.jvm}" outputtoformatters="false" printsummary="on" showoutput="true">
 								<sysproperty key="app.server.tomcat.dir" value="${app.server.tomcat.dir}" />
 								<sysproperty key="whip.agent" file="${whip.agent}" />
 								<sysproperty key="whip.datafile" file="@{module.dir}/test-coverage/whip.dat" />
 								<sysproperty key="whip.instrument.dump" value="${whip.instrument.dump}" />
+								<sysproperty key="net.sourceforge.cobertura.datafile" file="@{module.dir}/test-coverage/@{test.type}/cobertura.ser" />
 								<jvmarg line="${junit.debug.jpda}" />
 								<jvmarg line="${junit.java.gc}" />
 								<jvmarg line="${whip.agent}" />
@@ -2750,8 +2860,9 @@ Please find a solution that does not require portal-impl.jar.
 								<jvmarg value="-Dtest.class.group.index=${test.class.group.index}" />
 								<jvmarg value="-Dtest.class.groups=${TEST_CLASS_GROUPS}" />
 								<jvmarg value="-Duser.timezone=GMT" />
-								<classpath location="@{module.dir}/test-coverage" />
+								<classpath location="@{module.dir}/test-coverage/@{test.type}" />
 								<classpath refid="test.classpath" />
+								<classpath location="${sdk.dir}/dependencies/net.sourceforge.cobertura/lib/cobertura.jar" />
 								<formatter type="brief" usefile="false" />
 								<formatter type="xml" />
 								<batchtest todir="@{module.dir}/test-results/@{test.type}">
@@ -2760,6 +2871,11 @@ Please find a solution that does not require portal-impl.jar.
 									</fileset>
 								</batchtest>
 							</junit>
+
+							<report-coverage
+								module.dir="@{module.dir}"
+								test.type="@{test.type}"
+							/>
 						</then>
 					</if>
 				</then>
