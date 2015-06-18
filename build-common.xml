@@ -177,6 +177,48 @@ Error-Prone was automatically installed. Please rerun your task.
 				<fileset dir="${sdk.dir}/dependencies/com.liferay.css.builder/lib" includes="*.jar" />
 			</path>
 
+			<if>
+				<resourcecount count="1" when="ne">
+					<fileset dir="${module.framework.base.dir}/portal" includes="com.liferay.frontend.common.css*.jar" />
+				</resourcecount>
+				<then>
+					<ant dir="${lp.portal.project.dir}/modules/frontend/frontend-common-css" target="deploy" inheritAll="false" />
+				</then>
+			</if>
+
+			<property name="frontend.common.css.tmp.dir" value="${sdk.dir}/tmp/com.liferay.frontend.common.css" />
+
+			<pathconvert property="frontend.common.css.jar.path">
+				<path>
+					<fileset dir="${module.framework.base.dir}/portal" includes="com.liferay.frontend.common.css*.jar" />
+				</path>
+			</pathconvert>
+
+			<basename file="${frontend.common.css.jar.path}" property="frontend.common.css.file" />
+
+			<if>
+				<not>
+					<uptodate
+						srcfile="${module.framework.base.dir}/portal/${frontend.common.css.file}"
+						targetfile="${frontend.common.css.tmp.dir}"
+					/>
+				</not>
+				<then>
+					<delete dir="${frontend.common.css.tmp.dir}" />
+
+					<mkdir dir="${frontend.common.css.tmp.dir}" />
+
+					<unzip
+						dest="${frontend.common.css.tmp.dir}"
+						src="${frontend.common.css.jar.path}"
+					>
+						<mapper>
+							<globmapper from="META-INF/resources/html/*" to="html/*" />
+						</mapper>
+					</unzip>
+				</then>
+			</if>
+
 			<java
 				classname="com.liferay.css.builder.CSSBuilder"
 				classpathref="css.builder.classpath"
@@ -188,7 +230,7 @@ Error-Prone was automatically installed. Please rerun your task.
 				<arg value="sass.compiler.class.name=${sass.compiler.class.name}" />
 				<arg value="sass.dir=/" />
 				<arg value="sass.docroot.dir=@{sass.docroot.dir}" />
-				<arg value="sass.portal.common.dir=${app.server.portal.dir}/html/css/common" />
+				<arg value="sass.portal.common.dir=${frontend.common.css.tmp.dir}/html/css/common" />
 			</java>
 
 			<if>
