@@ -7,18 +7,27 @@ AUI().use(
 	'aui-datatype',
 	'aui-live-search-deprecated',
 	'liferay-poller',
+	'node-focusmanager',
 	'stylesheet',
 	'swfobject',
 	function(A) {
+		var KeyMap = A.Event.KeyMap;
 		var Lang = A.Lang;
 		var LString = Lang.String;
-		var Notification = A.config.win.Notification;
+
+		var Config = A.config;
+
+		var Notification = Config.win.Notification;
 
 		var windowId = Liferay.Util.randomInt();
 
 		var now = Date.now;
 
-		var DOC = A.config.doc;
+		var DOC = Config.doc;
+
+		var ENTER = 'ENTER';
+
+		var ESC = 'ESC';
 
 		var NOTIFICATIONS_LIST = [];
 
@@ -266,6 +275,7 @@ AUI().use(
 				instance._textBox = panel.one('textarea');
 
 				instance._popupTrigger.on('click', instance.toggle, instance);
+				instance._popupTrigger.on('keyup', instance._keyup, instance);
 
 				panel.all('.panel-button').on(
 					'click',
@@ -286,12 +296,26 @@ AUI().use(
 				instance._tabsContainer.append(panel);
 			},
 
+			_keyup: function(event) {
+				var instance = this;
+
+				if (event.isKey(ENTER)) {
+					instance.toggle();
+				}
+
+				if (event.isKey(ESC)) {
+					instance.hide();
+
+					instance._popupTrigger.focus();
+				}
+			},
+
 			_setPanelHTML: function(html) {
 				var instance = this;
 
 				if (!html) {
 					html = '<li class="panel">' +
-						'<div class="panel-trigger"><span class="trigger-name"></span></div>' +
+						'<div class="panel-trigger" tabindex="0"><span class="trigger-name"></span></div>' +
 						'<div class="chat-panel">' +
 							'<div class="panel-window">' +
 								'<div class="minimize panel-button "></div>' +
@@ -589,10 +613,16 @@ AUI().use(
 						instance.set('typedTo', userId);
 					}
 
-					if (event.keyCode == 13 && !event.shiftKey && content.length) {
+					if (event.isKey(ENTER) && !event.shiftKey && content.length) {
 						instance._sendChat(chatInputVal);
 
 						chatInput.val('');
+					}
+
+					if (event.isKey(ESC)) {
+						instance.hide();
+
+						instance._popupTrigger.focus();
 					}
 
 					instance._autoSize();
@@ -632,7 +662,7 @@ AUI().use(
 					var userImagePath = Liferay.Chat.Util.getUserImagePath(instance._panelIcon);
 
 					var html = '<li class="user user_' + panelId + '" panelId="' + panelId + '">' +
-							'<div class="panel-trigger">' +
+							'<div class="panel-trigger" tabindex="0">' +
 								'<span class="trigger-name"></span>' +
 								'<div class="typing-status"></div>' +
 							'</div>' +
@@ -937,6 +967,21 @@ AUI().use(
 					}
 				);
 
+				buddyListNode.delegate(
+					'key',
+					function(event) {
+						buddyListPanel.hide();
+
+						var panelTrigger = buddyListNode.one('.panel-trigger');
+
+						if (panelTrigger) {
+							panelTrigger.focus();
+						}
+					},
+					'up:' + KeyMap.ESC,
+					'input, li.active.user'
+				);
+
 				if (buddyList) {
 					buddyList.delegate(
 						'click',
@@ -955,6 +1000,18 @@ AUI().use(
 							}
 						},
 						'li, .buddy-services div'
+					);
+
+					buddyList.plug(
+						A.Plugin.NodeFocusManager,
+						{
+							circular: true,
+							descendants: 'li',
+							keys: {
+								next: 'down:' + KeyMap.DOWN,
+								previous: 'down:' + KeyMap.UP
+							}
+						}
 					);
 				}
 
@@ -1107,6 +1164,21 @@ AUI().use(
 				}
 
 				saveSettings.on('click', instance._updateSettings, instance);
+
+				settingsPanel.delegate(
+					'key',
+					function(event) {
+						settings.hide();
+
+						var panelTrigger = settingsPanel.one('.panel-trigger');
+
+						if (panelTrigger) {
+							panelTrigger.focus();
+						}
+					},
+					'up:' + KeyMap.ESC,
+					'input'
+				);
 			},
 
 			_getNotifyPermission: function() {
@@ -1350,6 +1422,7 @@ AUI().use(
 
 				var currentBuddies = instance._buddies;
 				var currentChats = instance._chatSessions;
+				var onlineBuddies = instance._onlineBuddies;
 
 				instance._onlineBuddiesCount = numBuddies;
 
@@ -1392,7 +1465,17 @@ AUI().use(
 					);
 				}
 
-				instance._onlineBuddies.html(buffer.join(''));
+				onlineBuddies.html(buffer.join(''));
+
+				var focusManager = onlineBuddies.focusManager;
+
+				var buddyFocused = focusManager.get('focused');
+
+				focusManager.refresh();
+
+				if (buddyFocused) {
+					focusManager.focus();
+				}
 
 				var searchBuddiesField = instance._searchBuddiesField;
 

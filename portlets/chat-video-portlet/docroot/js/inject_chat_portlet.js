@@ -9,7 +9,7 @@ AUI().use(
 		Liferay.namespace('Chat');
 
 		var TPL_CHAT_PANEL = '<li class="user user_{panelId}" panelId="{panelId}">' +
-				'<div class="panel-trigger">' +
+				'<div class="panel-trigger" tabindex="0">' +
 					'<span class="trigger-name"></span>' +
 					'<div class="typing-status"></div>' +
 				'</div>' +
@@ -24,7 +24,7 @@ AUI().use(
 						'<div class="close panel-button"></div>' +
 						'<div class="panel-self-view">' +
 							'<img alt="{panelTitle}" src="{userImagePath}" />' +
-							'<video autoplay="autoplay" class="local hide" muted="muted"></video>' +
+							'<video autoplay="autoplay" class="hide local" muted="muted"></video>' +
 						'</div>' +
 						'<div class="panel-title">{panelTitle}</div>' +
 						'<div class="panel-profile">...</div>' +
