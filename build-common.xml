@@ -3761,4 +3761,23 @@ for (String path : paths) {
 			target.name="war"
 		/>
 	</target>
+
+	<target name="watch-css">
+		<watch>
+			<when>
+				<target name="deploy"/>
+				<fileset dir="${basedir}">
+					<include name="**/*.css" />
+					<include name="**/*.scss" />
+					<exclude name="**/_unstyled/css/aui/**" />
+					<exclude name="**/classes/**" />
+					<exclude name="**/.sass-cache/**" />
+				</fileset>
+			</when>
+		</watch>
+	</target>
+
+	<taskdef name="watch"
+			 classname="com.liferay.ant.watch.WatchTask"
+			 classpath="${sdk.dir}/dependencies/com.liferay.ant.watch/lib/com.liferay.ant.watch.jar" />
 </project>
