@@ -24,80 +24,80 @@ import java.util.Arrays;
  */
 public class ScreensUserServiceClpInvoker {
 	public ScreensUserServiceClpInvoker() {
-		_methodName24 = "getBeanIdentifier";
+		_methodName26 = "getBeanIdentifier";
 
-		_methodParameterTypes24 = new String[] {  };
+		_methodParameterTypes26 = new String[] {  };
 
-		_methodName25 = "setBeanIdentifier";
+		_methodName27 = "setBeanIdentifier";
 
-		_methodParameterTypes25 = new String[] { "java.lang.String" };
+		_methodParameterTypes27 = new String[] { "java.lang.String" };
 
-		_methodName28 = "getCurrentUser";
+		_methodName30 = "getCurrentUser";
 
-		_methodParameterTypes28 = new String[] {  };
+		_methodParameterTypes30 = new String[] {  };
 
-		_methodName29 = "sendPasswordByEmailAddress";
+		_methodName31 = "sendPasswordByEmailAddress";
 
-		_methodParameterTypes29 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes31 = new String[] { "long", "java.lang.String" };
 
-		_methodName30 = "sendPasswordByScreenName";
+		_methodName32 = "sendPasswordByScreenName";
 
-		_methodParameterTypes30 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes32 = new String[] { "long", "java.lang.String" };
 
-		_methodName31 = "sendPasswordByUserId";
+		_methodName33 = "sendPasswordByUserId";
 
-		_methodParameterTypes31 = new String[] { "long" };
+		_methodParameterTypes33 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		if (_methodName24.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes24, parameterTypes)) {
+		if (_methodName26.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes26, parameterTypes)) {
 			return ScreensUserServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName25.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes25, parameterTypes)) {
+		if (_methodName27.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes27, parameterTypes)) {
 			ScreensUserServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName28.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes28, parameterTypes)) {
-			return ScreensUserServiceUtil.getCurrentUser();
-		}
-
-		if (_methodName29.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes29, parameterTypes)) {
-			return ScreensUserServiceUtil.sendPasswordByEmailAddress(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
-		}
-
 		if (_methodName30.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes30, parameterTypes)) {
-			return ScreensUserServiceUtil.sendPasswordByScreenName(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1]);
+			return ScreensUserServiceUtil.getCurrentUser();
 		}
 
 		if (_methodName31.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes31, parameterTypes)) {
+			return ScreensUserServiceUtil.sendPasswordByEmailAddress(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName32.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes32, parameterTypes)) {
+			return ScreensUserServiceUtil.sendPasswordByScreenName(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName33.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
 			return ScreensUserServiceUtil.sendPasswordByUserId(((Long)arguments[0]).longValue());
 		}
 
 		throw new UnsupportedOperationException();
 	}
 
-	private String _methodName24;
-	private String[] _methodParameterTypes24;
-	private String _methodName25;
-	private String[] _methodParameterTypes25;
-	private String _methodName28;
-	private String[] _methodParameterTypes28;
-	private String _methodName29;
-	private String[] _methodParameterTypes29;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
+	private String _methodName27;
+	private String[] _methodParameterTypes27;
 	private String _methodName30;
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
+	private String _methodName33;
+	private String[] _methodParameterTypes33;
 }

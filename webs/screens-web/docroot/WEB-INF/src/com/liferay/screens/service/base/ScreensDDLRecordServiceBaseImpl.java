@@ -88,6 +88,25 @@ public abstract class ScreensDDLRecordServiceBaseImpl extends BaseServiceImpl
 	}
 
 	/**
+	 * Returns the screens journal article remote service.
+	 *
+	 * @return the screens journal article remote service
+	 */
+	public com.liferay.screens.service.ScreensJournalArticleService getScreensJournalArticleService() {
+		return screensJournalArticleService;
+	}
+
+	/**
+	 * Sets the screens journal article remote service.
+	 *
+	 * @param screensJournalArticleService the screens journal article remote service
+	 */
+	public void setScreensJournalArticleService(
+		com.liferay.screens.service.ScreensJournalArticleService screensJournalArticleService) {
+		this.screensJournalArticleService = screensJournalArticleService;
+	}
+
+	/**
 	 * Returns the screens user remote service.
 	 *
 	 * @return the screens user remote service
@@ -330,6 +349,8 @@ public abstract class ScreensDDLRecordServiceBaseImpl extends BaseServiceImpl
 	protected com.liferay.screens.service.ScreensAssetEntryService screensAssetEntryService;
 	@BeanReference(type = com.liferay.screens.service.ScreensDDLRecordService.class)
 	protected com.liferay.screens.service.ScreensDDLRecordService screensDDLRecordService;
+	@BeanReference(type = com.liferay.screens.service.ScreensJournalArticleService.class)
+	protected com.liferay.screens.service.ScreensJournalArticleService screensJournalArticleService;
 	@BeanReference(type = com.liferay.screens.service.ScreensUserService.class)
 	protected com.liferay.screens.service.ScreensUserService screensUserService;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
