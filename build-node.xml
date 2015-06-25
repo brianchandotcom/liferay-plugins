@@ -6,11 +6,13 @@
 
 	<macrodef name="node-execute">
 		<attribute name="command"/>
+		<attribute default="" name="commandArgs" />
 		<attribute default="${user.dir}" name="working.dir" />
 
 		<sequential>
-			<exec dir="@{working.dir}" executable="${basedir}/tools/node-v${nodejs.version}/bin/@{command}">
-				<arg line="${node.args}"/>
+			<property name="node.args" value="" />
+			<exec dir="@{working.dir}" executable="${sdk.tools.dir}/node-v${nodejs.version}/bin/@{command}">
+				<arg line="@{commandArgs} ${node.args}"/>
 			</exec>
 		</sequential>
 	</macrodef>
@@ -71,7 +73,7 @@ ${nodejs.url[osx64]}.
 
 		<if>
 			<not>
-				<available file="tools/node-v${nodejs.version}" />
+				<available file="${sdk.tools.dir}/node-v${nodejs.version}" />
 			</not>
 			<then>
 				<antelope:stringutil string="${nodejs.url}" property="nodejs.file.beginindex">
@@ -90,13 +92,20 @@ ${nodejs.url[osx64]}.
 					<antelope:substring beginindex="${nodejs.file.beginindex}" />
 				</antelope:stringutil>
 
-				<mirrors-get dest="${nodejs.file}" src="${nodejs.url}" />
+				<if>
+					<not>
+						<available file="${sdk.tools.dir}/${nodejs.file}" />
+					</not>
+					<then>
+						<mirrors-get dest="${sdk.tools.dir}/${nodejs.file}" src="${nodejs.url}" />
+					</then>
+				</if>
 
 				<if>
 					<contains string="${nodejs.file}" substring=".tar.gz" />
 					<then>
 						<exec executable="tar">
-							<arg line="xfz ${nodejs.file} -C tools"/>
+							<arg line="xfz ${sdk.tools.dir}/${nodejs.file} -C ${sdk.tools.dir}"/>
 						</exec>
 
 						<antelope:stringutil string="${nodejs.file}" property="nodejs.dir.endindex">
@@ -107,49 +116,135 @@ ${nodejs.url[osx64]}.
 							<antelope:substring endindex="${nodejs.dir.endindex}" />
 						</antelope:stringutil>
 
-						<delete dir="tools/node-v${nodejs.version}" />
+						<delete dir="${sdk.tools.dir}/node-v${nodejs.version}" />
 
-						<move file="tools/${nodejs.dir}" tofile="tools/node-v${nodejs.version}" />
+						<move file="${sdk.tools.dir}/${nodejs.dir}" tofile="${sdk.tools.dir}/node-v${nodejs.version}" />
 
-						<mkdir dir="tools/node-v${nodejs.version}/node_modules" />
-
-						<delete file="${nodejs.file}" />
+						<mkdir dir="${sdk.tools.dir}/node-v${nodejs.version}/node_modules" />
 					</then>
 					<else>
-						<move file="${nodejs.file}" todir="tools/node-v${nodejs.version}" />
+						<move file="${sdk.tools.dir}/${nodejs.file}" todir="${sdk.tools.dir}/node-v${nodejs.version}" />
 					</else>
 				</if>
 
 				<if>
 					<os family="windows" />
 					<then>
-						<mirrors-get
-							dest="npm.zip"
-							src="${nodejs.npm.url}"
-						/>
+						<if>
+							<not>
+								<available file="${sdk.tools.dir}/npm-${nodejs.npm.version}.zip" />
+							</not>
+							<then>
+								<mirrors-get dest="${sdk.tools.dir}/npm-${nodejs.npm.version}.zip" src="${nodejs.npm.url}" />
+							</then>
+						</if>
 
 						<unzip
-							dest="tools/node-v${nodejs.version}"
-							src="npm.zip"
+							dest="${sdk.tools.dir}/node-v${nodejs.version}"
+							src="${sdk.tools.dir}/npm-${nodejs.npm.version}.zip"
 						/>
-
-						<delete file="npm.zip" />
 					</then>
 				</if>
 			</then>
 		</if>
 	</target>
 
-	<target name="node-execute" depends="download-node">
+	<target name="transpile-js-files" depends="install-babel,install-config-generator,install-loader">
+		<property name="transpiler.force" value="false" />
+
+		<outofdate outputsourcespath="outdated-files" force="${transpiler.force}">
+			<sourcefiles>
+				<fileset dir="${transpiler.input.dir}">
+					<include name="**/*.js" />
+				</fileset>
+			</sourcefiles>
+			<mapper type="glob" dir="${transpiler.input.dir}" from="*.js" to="${transpiler.output.dir}/*.js" />
+			<sequential>
+				<if>
+					<istrue value="${transpiler.force}" />
+					<then>
+						<path id="outdated-files">
+							<fileset dir="${transpiler.input.dir}">
+								<include name="**/*.js" />
+							</fileset>
+						</path>
+					</then>
+				</if>
+				<pathconvert pathsep=" " property="outdated-files-param" setonempty="false" refid="outdated-files" >
+					<map from="${transpiler.input.dir}/" to="" />
+				</pathconvert>
+
+				<node-execute
+					command="node"
+					commandArgs="${sdk.tools.dir}/node-v${nodejs.version}/node_modules/babel/bin/babel/index.js --modules amd -d ${transpiler.output.dir} ${outdated-files-param}"
+					working.dir="${transpiler.input.dir}" />
+
+			</sequential>
+		</outofdate>
+	</target>
+
+	<target name="generate-modules-config" depends="install-config-generator">
+		<echo>
+			${sdk.tools.dir}/node-v${nodejs.version}/node_modules/lfr-module-config-generator/bin/index.js -l -e '${config.generator.file.extension}' -f ${config.generator.module.format} -i ${config.generator.path.ignore} -c '${config.generator.config.variable}' -o ${config.generator.output.file} -p ${config.generator.file.pattern} -m ${config.generator.module.config} -r ${config.generator.root.dir} ${config.generator.input.dir}"
+		</echo>
+
 		<node-execute
 			command="node"
+			commandArgs="${sdk.tools.dir}/node-v${nodejs.version}/node_modules/lfr-module-config-generator/bin/index.js -l -e '${config.generator.file.extension}' -f ${config.generator.module.format} -i ${config.generator.path.ignore} -c '${config.generator.config.variable}' -o ${config.generator.output.file} -p ${config.generator.file.pattern} -m ${config.generator.module.config} -r ${config.generator.root.dir} ${config.generator.input.dir}"
+			working.dir="${sdk.tools.dir}/node-v${nodejs.version}" />
+	</target>
+
+	<target name="install-babel" depends="download-node">
+		<if>
+			<not>
+				<available file="${sdk.tools.dir}/node-v${nodejs.version}/node_modules/babel" />
+			</not>
+			<then>
+				<antcall target="npm-execute">
+					<param name="node.args" value="install babel" />
+				</antcall>
+			</then>
+		</if>
+	</target>
+
+	<target name="install-config-generator" depends="download-node">
+		<if>
+			<not>
+				<available file="${sdk.tools.dir}/node-v${nodejs.version}/node_modules/lfr-module-config-generator" />
+			</not>
+			<then>
+				<antcall target="npm-execute">
+					<param name="node.args" value="install lfr-module-config-generator" />
+				</antcall>
+			</then>
+		</if>
+	</target>
+
+	<target name="install-loader" depends="download-node">
+		<if>
+			<not>
+				<available file="${sdk.tools.dir}/node-v${nodejs.version}/node_modules/lfr-amd-loader" />
+			</not>
+			<then>
+				<antcall target="npm-execute">
+					<param name="node.args" value="install lfr-amd-loader" />
+				</antcall>
+			</then>
+		</if>
+	</target>
+
+	<target name="node-execute" depends="download-node">
+		<property name="working.dir" value="${user.dir}" />
+		<node-execute
+			command="node"
+			working.dir="${working.dir}"
 		/>
 	</target>
 
 	<target name="npm-execute" depends="download-node">
 		<node-execute
 			command="npm"
-			working.dir="tools/node-v${nodejs.version}"
+			working.dir="${sdk.tools.dir}/node-v${nodejs.version}"
 		/>
 	</target>
 </project>
