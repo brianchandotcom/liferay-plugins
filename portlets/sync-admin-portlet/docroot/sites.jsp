@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String tabs1 = ParamUtil.getString(request, "tabs1", "sync-sites");
+String tabs1 = ParamUtil.getString(request, "tabs1", "sites");
 
 String keywords = ParamUtil.getString(request, "keywords");
 
@@ -50,7 +50,7 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 	<aui:nav-bar-search cssClass="pull-right">
 		<aui:form action="<%= portletURL %>" cssClass="form-search" method="post" name="fm1">
-			<liferay-ui:input-search placeholder='<%= LanguageUtil.get(locale, "keywords") %>' title='<%= LanguageUtil.get(locale, "keywords") %>' />
+			<liferay-ui:input-search placeholder='<%= LanguageUtil.get(request, "keywords") %>' title='<%= LanguageUtil.get(request, "keywords") %>' />
 		</aui:form>
 	</aui:nav-bar-search>
 </aui:nav-bar>
@@ -68,7 +68,29 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 	List<Group> groups = GroupLocalServiceUtil.search(themeDisplay.getCompanyId(), keywords, groupParams, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-	List<String> defaultResourceActions = ResourceActionsUtil.getModelResourceGroupDefaultActions(DLFileEntry.class.getName());
+	List<String> resourceActions = ListUtil.toList(SyncPermissionsConstants.getFileResourceActions(SyncPermissionsConstants.PERMISSIONS_FULL_ACCESS));
+
+	List<String> localizedResourceActions = new ArrayList<String>(resourceActions.size());
+
+	for (String resourceAction : resourceActions) {
+		localizedResourceActions.add(LanguageUtil.get(locale, ResourceActionsUtil.getActionNamePrefix() + resourceAction));
+	}
+
+	String fullAccessPermissionsDescription = LanguageUtil.format(request, "full-access-x", StringUtil.merge(localizedResourceActions, StringPool.COMMA_AND_SPACE));
+
+	resourceActions = ResourceActionsUtil.getModelResourceGroupDefaultActions(DLFileEntry.class.getName());
+
+	String defaultPermissionsDescription = null;
+
+	if (resourceActions != null) {
+		localizedResourceActions = new ArrayList<String>(resourceActions.size());
+
+		for (String resourceAction : resourceActions) {
+			localizedResourceActions.add(LanguageUtil.get(locale, ResourceActionsUtil.getActionNamePrefix() + resourceAction));
+		}
+
+		defaultPermissionsDescription = StringUtil.merge(localizedResourceActions, StringPool.COMMA_AND_SPACE);
+	}
 	%>
 
 	<liferay-ui:search-container
@@ -89,12 +111,41 @@ portletURL.setParameter("delta", String.valueOf(delta));
 		>
 			<liferay-ui:search-container-column-text
 				name="name"
-				value="<%= group.getDescriptiveName() %>"
+				property="descriptiveName"
+			/>
+
+			<liferay-ui:search-container-column-text
+				name="description"
+				property="description"
 			/>
 
 			<%
 			boolean syncSiteEnabled = GetterUtil.getBoolean(group.getTypeSettingsProperty("syncEnabled"), true);
+
+			String permissionsDescription = StringPool.BLANK;
+
+			if (syncSiteEnabled) {
+				int currentPermissions = GetterUtil.getInteger(group.getTypeSettingsProperty("syncSiteMemberFilePermissions"));
+
+				if (currentPermissions == SyncPermissionsConstants.PERMISSIONS_VIEW_ONLY) {
+					permissionsDescription = LanguageUtil.get(request, "view-only");
+				}
+				else if (currentPermissions == SyncPermissionsConstants.PERMISSIONS_VIEW_AND_ADD_DISCUSSION) {
+					permissionsDescription = LanguageUtil.get(request, "view-and-add-discussion");
+				}
+				else if (currentPermissions == SyncPermissionsConstants.PERMISSIONS_FULL_ACCESS) {
+					permissionsDescription = fullAccessPermissionsDescription;
+				}
+				else if (Validator.isNotNull(defaultPermissionsDescription)) {
+					permissionsDescription = defaultPermissionsDescription;
+				}
+			}
 			%>
+
+			<liferay-ui:search-container-column-text
+				name="default-file-permissions"
+				value="<%= permissionsDescription %>"
+			/>
 
 			<liferay-ui:search-container-column-text
 				name="enabled"
@@ -102,38 +153,10 @@ portletURL.setParameter("delta", String.valueOf(delta));
 				value='<%= syncSiteEnabled ? "yes" : "no" %>'
 			/>
 
-			<%
-			List<String> localizedResourceActions = null;
-
-			if (syncSiteEnabled) {
-				int permissions = GetterUtil.getInteger(group.getTypeSettingsProperty("syncSiteMemberFilePermissions"));
-
-				List<String> resourceActions = null;
-
-				if (permissions > 0) {
-					resourceActions = ListUtil.toList(SyncPermissionsConstants.getFileResourceActions(permissions));
-				}
-				else {
-					resourceActions = defaultResourceActions;
-				}
-
-				localizedResourceActions = new ArrayList<String>(resourceActions.size());
-
-				for (String resourceAction : resourceActions) {
-					localizedResourceActions.add(LanguageUtil.get(locale, ResourceActionsUtil.getActionNamePrefix() + resourceAction));
-				}
-			}
-			%>
-
-			<liferay-ui:search-container-column-text
-				name="default-file-permissions"
-				value="<%= ListUtil.isNotEmpty(localizedResourceActions) ? StringUtil.merge(localizedResourceActions, StringPool.COMMA_AND_SPACE) : StringPool.BLANK %>"
-			/>
-
 			<liferay-ui:search-container-column-jsp
 				align="right"
 				cssClass="entry-action"
-				path="/sync_sites_action.jsp"
+				path="/sites_action.jsp"
 			/>
 		</liferay-ui:search-container-row>
 
@@ -141,7 +164,7 @@ portletURL.setParameter("delta", String.valueOf(delta));
 	</liferay-ui:search-container>
 </aui:form>
 
-<aui:script use="aui-base">
+<aui:script use="aui-base,liferay-util-list-fields">
 	A.one('#<portlet:namespace /><%= searchContainerReference.getId() %>SearchContainer').delegate(
 		'click',
 		function() {
@@ -160,13 +183,14 @@ portletURL.setParameter("delta", String.valueOf(delta));
 		function() {
 			var groupIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
 
-			if (groupIds && confirm('<%= UnicodeLanguageUtil.get(locale, "disabling-a-sync-site-will-delete-all-associated-files-from-all-clients") %>')) {
+			if (groupIds && confirm('<%= UnicodeLanguageUtil.get(request, "disabling-a-sync-site-will-delete-all-associated-files-from-all-clients") %>')) {
 				document.<portlet:namespace />fm.<portlet:namespace />groupIds.value = groupIds;
 				document.<portlet:namespace />fm.<portlet:namespace />enabled.value = false;
 
 				submitForm(document.<portlet:namespace />fm, '<liferay-portlet:actionURL name="updateSites" />');
 			}
-		}
+		},
+		['liferay-util-list-fields']
 	);
 
 	Liferay.provide(
@@ -181,7 +205,8 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 				submitForm(document.<portlet:namespace />fm, '<liferay-portlet:actionURL name="updateSites" />');
 			}
-		}
+		},
+		['liferay-util-list-fields']
 	);
 
 	Liferay.provide(
@@ -196,7 +221,8 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 				submitForm(document.<portlet:namespace />fm, '<liferay-portlet:actionURL name="updateSites" />');
 			}
-		}
+		},
+		['liferay-util-list-fields']
 	);
 
 	Liferay.provide(
@@ -211,7 +237,8 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 				submitForm(document.<portlet:namespace />fm, '<liferay-portlet:actionURL name="updateSites" />');
 			}
-		}
+		},
+		['liferay-util-list-fields']
 	);
 
 	Liferay.provide(
@@ -226,6 +253,7 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 				submitForm(document.<portlet:namespace />fm, '<liferay-portlet:actionURL name="updateSites" />');
 			}
-		}
+		},
+		['liferay-util-list-fields']
 	);
 </aui:script>
