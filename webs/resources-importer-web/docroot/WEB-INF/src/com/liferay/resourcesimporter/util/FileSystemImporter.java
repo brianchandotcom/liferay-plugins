@@ -39,8 +39,6 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -90,6 +88,7 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
+import com.liferay.portlet.dynamicdatamapping.storage.StorageType;
 import com.liferay.portlet.journal.util.JournalConverterUtil;
 import com.liferay.wiki.model.WikiPage;
 
@@ -340,8 +339,7 @@ public class FileSystemImporter extends BaseImporter {
 					DDMStructureConstants.DEFAULT_PARENT_STRUCTURE_ID,
 					PortalUtil.getClassNameId(DDLRecordSet.class),
 					getKey(fileName), getMap(name), null,
-					StringUtil.read(inputStream),
-					PropsUtil.get(PropsKeys.DYNAMIC_DATA_LISTS_STORAGE_TYPE),
+					StringUtil.read(inputStream), StorageType.JSON.toString(),
 					DDMStructureConstants.TYPE_DEFAULT, serviceContext);
 			}
 			else {
