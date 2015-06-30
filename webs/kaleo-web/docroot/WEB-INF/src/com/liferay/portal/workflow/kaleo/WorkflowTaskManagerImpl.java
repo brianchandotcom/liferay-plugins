@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.lock.LockManagerUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.NaturalOrderStringComparator;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.kernel.workflow.WorkflowTask;
@@ -45,6 +46,8 @@ import com.liferay.portal.workflow.kaleo.model.KaleoTransition;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.KaleoSignaler;
 import com.liferay.portal.workflow.kaleo.runtime.TaskManager;
+import com.liferay.portal.workflow.kaleo.runtime.assignment.TaskAssignmentSelector;
+import com.liferay.portal.workflow.kaleo.runtime.util.ClassLoaderUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskAssignmentLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoTaskInstanceTokenLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.util.WorkflowContextUtil;
@@ -54,6 +57,7 @@ import com.liferay.portal.workflow.kaleo.util.comparators.KaleoTaskInstanceToken
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -236,20 +240,34 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			KaleoTaskInstanceToken kaleoTaskInstanceToken =
 				KaleoTaskInstanceTokenLocalServiceUtil.
 					getKaleoTaskInstanceToken(workflowTaskInstanceId);
-			KaleoTask kaleoTask = kaleoTaskInstanceToken.getKaleoTask();
 
-			List<KaleoTaskAssignment> kaleoTaskAssignments =
-				KaleoTaskAssignmentLocalServiceUtil.getKaleoTaskAssignments(
-					kaleoTask.getKaleoTaskId(), Role.class.getName());
+			List<KaleoTaskAssignment> calculatedKaleoTaskAssignments =
+				getCalculatedKaleoTaskAssignments(kaleoTaskInstanceToken);
 
 			Map<String, Long> pooledActors = new TreeMap<>(
 				new NaturalOrderStringComparator());
 
-			for (KaleoTaskAssignment kaleoTaskAssignment :
-					kaleoTaskAssignments) {
+			for (KaleoTaskAssignment calculatedKaleoTaskAssignment :
+					calculatedKaleoTaskAssignments) {
+
+				String assigneeClassName =
+					calculatedKaleoTaskAssignment.getAssigneeClassName();
+
+				long assigneeClassPK =
+					calculatedKaleoTaskAssignment.getAssigneeClassPK();
+
+				if (assigneeClassName.equals(User.class.getName())) {
+					User user = UserLocalServiceUtil.fetchUser(assigneeClassPK);
+
+					if (user != null) {
+						pooledActors.put(user.getFullName(), user.getUserId());
+					}
+
+					continue;
+				}
 
 				Role role = RoleLocalServiceUtil.getRole(
-					kaleoTaskAssignment.getAssigneeClassPK());
+					calculatedKaleoTaskAssignment.getAssigneeClassPK());
 
 				if ((role.getType() == RoleConstants.TYPE_SITE) ||
 					(role.getType() == RoleConstants.TYPE_ORGANIZATION)) {
@@ -258,7 +276,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 						UserGroupRoleLocalServiceUtil.
 							getUserGroupRolesByGroupAndRole(
 								kaleoTaskInstanceToken.getGroupId(),
-								kaleoTaskAssignment.getAssigneeClassPK());
+								assigneeClassPK);
 
 					for (UserGroupRole userGroupRole : userGroupRoles) {
 						User user = userGroupRole.getUser();
@@ -270,7 +288,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 						UserGroupGroupRoleLocalServiceUtil.
 							getUserGroupGroupRolesByGroupAndRole(
 								kaleoTaskInstanceToken.getGroupId(),
-								kaleoTaskAssignment.getAssigneeClassPK());
+								assigneeClassPK);
 
 					for (UserGroupGroupRole userGroupGroupRole :
 							userGroupGroupRoles) {
@@ -288,8 +306,8 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 				else {
 					List<User> inheritedRoleUsers =
 						UserLocalServiceUtil.getInheritedRoleUsers(
-							kaleoTaskAssignment.getAssigneeClassPK(),
-							QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+							assigneeClassPK, QueryUtil.ALL_POS,
+							QueryUtil.ALL_POS, null);
 
 					for (User user : inheritedRoleUsers) {
 						pooledActors.put(user.getFullName(), user.getUserId());
@@ -755,6 +773,12 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 		_kaleoSignaler = kaleoSignaler;
 	}
 
+	public void setTaskAssignmentSelector(
+		TaskAssignmentSelector taskAssignmentSelector) {
+
+		_taskAssignmentSelector = taskAssignmentSelector;
+	}
+
 	public void setTaskManager(TaskManager taskManager) {
 		_taskManager = taskManager;
 	}
@@ -772,6 +796,51 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 
 		return _taskManager.updateDueDate(
 			workflowTaskInstanceId, comment, dueDate, serviceContext);
+	}
+
+	protected List<KaleoTaskAssignment> getCalculatedKaleoTaskAssignments(
+			KaleoTaskInstanceToken kaleoTaskInstanceToken)
+		throws PortalException {
+
+		List<KaleoTaskAssignment> calculatedKaleoTaskAssignments =
+			new ArrayList<>();
+
+		List<KaleoTaskAssignment> configuredKaleoTaskAssignments =
+			KaleoTaskAssignmentLocalServiceUtil.getKaleoTaskAssignments(
+				kaleoTaskInstanceToken.getKaleoTaskId());
+
+		KaleoInstanceToken kaleoInstanceToken =
+			kaleoTaskInstanceToken.getKaleoInstanceToken();
+
+		Map<String, Serializable> workflowContext = WorkflowContextUtil.convert(
+			kaleoTaskInstanceToken.getWorkflowContext());
+
+		ServiceContext workflowContextServiceContext =
+			(ServiceContext)workflowContext.get(
+				WorkflowConstants.CONTEXT_SERVICE_CONTEXT);
+
+		ExecutionContext executionContext = new ExecutionContext(
+			kaleoInstanceToken, workflowContext, workflowContextServiceContext);
+
+		for (KaleoTaskAssignment configuredKaleoTaskAssignment :
+				configuredKaleoTaskAssignments) {
+
+			String[] assigneeScriptRequiredContexts = StringUtil.split(
+				configuredKaleoTaskAssignment.
+					getAssigneeScriptRequiredContexts());
+
+			ClassLoader[] classLoaders = ClassLoaderUtil.getClassLoaders(
+				assigneeScriptRequiredContexts);
+
+			Collection<KaleoTaskAssignment> kaleoTaskAssignments =
+				_taskAssignmentSelector.calculateTaskAssignments(
+					configuredKaleoTaskAssignment, executionContext,
+					classLoaders);
+
+			calculatedKaleoTaskAssignments.addAll(kaleoTaskAssignments);
+		}
+
+		return calculatedKaleoTaskAssignments;
 	}
 
 	protected List<WorkflowTask> toWorkflowTasks(
@@ -795,6 +864,7 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 	}
 
 	private KaleoSignaler _kaleoSignaler;
+	private TaskAssignmentSelector _taskAssignmentSelector;
 	private TaskManager _taskManager;
 
 }
