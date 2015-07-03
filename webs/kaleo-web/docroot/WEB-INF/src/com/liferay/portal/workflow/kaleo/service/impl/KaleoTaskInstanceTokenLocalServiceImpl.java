@@ -394,10 +394,10 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 
 	@Override
 	public List<KaleoTaskInstanceToken>
-			getSubmittingUserKaleoTaskInstanceTokens(
-				long userId, Boolean completed, int start, int end,
-				OrderByComparator<KaleoTaskInstanceToken> orderByComparator,
-				ServiceContext serviceContext) {
+		getSubmittingUserKaleoTaskInstanceTokens(
+			long userId, Boolean completed, int start, int end,
+			OrderByComparator<KaleoTaskInstanceToken> orderByComparator,
+			ServiceContext serviceContext) {
 
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 			KaleoTaskInstanceToken.class, getClassLoader());
@@ -409,7 +409,8 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		Property workflowContextProperty = PropertyFactoryUtil.forName(
 			"workflowContext");
 
-		dynamicQuery.add(workflowContextProperty.like("\"userId\":" + userId));
+		dynamicQuery.add(
+			workflowContextProperty.like("%\"userId\":\"" + userId + "\"%"));
 
 		addCompletedCriterion(dynamicQuery, completed);
 
@@ -430,7 +431,8 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		Property workflowContextProperty = PropertyFactoryUtil.forName(
 			"workflowContext");
 
-		dynamicQuery.add(workflowContextProperty.like("\"userId\":" + userId));
+		dynamicQuery.add(
+			workflowContextProperty.like("%\"userId\":\"" + userId + "\"%"));
 
 		addCompletedCriterion(dynamicQuery, completed);
 
