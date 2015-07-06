@@ -35,6 +35,8 @@ PortletURL portletURL = renderResponse.createRenderURL();
 portletURL.setParameter("tabs1", tabs1);
 %>
 
+<liferay-ui:success key="deviceDeleted" message="the-device-was-deleted-successfully" />
+
 <liferay-portlet:actionURL name="updatePortletPreferences" var="updatePortletPreferencesURL" />
 
 <liferay-ui:tabs
@@ -83,6 +85,7 @@ portletURL.setParameter("tabs1", tabs1);
 
 			<liferay-ui:search-container-row
 				className="com.liferay.pushnotifications.model.PushNotificationsDevice"
+				escapedModel="<%= true %>"
 				keyProperty="pushNotificationsDeviceId"
 				modelVar="device"
 			>
@@ -91,16 +94,16 @@ portletURL.setParameter("tabs1", tabs1);
 				User deviceUser = UserLocalServiceUtil.getUser(device.getUserId());
 				%>
 
-				<liferay-ui:search-container-column-text name="user-id" value="<%= String.valueOf(deviceUser.getUserId()) %>" />
-
 				<liferay-ui:search-container-column-text name="full-name" value="<%= deviceUser.getFullName() %>" />
 
 				<liferay-ui:search-container-column-text name="token" />
 
 				<liferay-ui:search-container-column-text name="platform" orderable="<%= true %>" value="<%= LanguageUtil.get(request, device.getPlatform()) %>" />
+
+				<liferay-ui:search-container-column-jsp align="right" path="/push_notifications_device_action.jsp" />
 			</liferay-ui:search-container-row>
 
-			<liferay-ui:search-iterator/>
+			<liferay-ui:search-iterator />
 		</liferay-ui:search-container>
 	</liferay-ui:section>
 	<liferay-ui:section>
