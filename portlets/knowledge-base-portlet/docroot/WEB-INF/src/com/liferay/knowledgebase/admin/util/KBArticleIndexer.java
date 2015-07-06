@@ -55,11 +55,11 @@ import javax.portlet.PortletResponse;
  * @author Peter Shin
  * @author Brian Wing Shun Chan
  */
-public class AdminIndexer extends BaseIndexer {
+public class KBArticleIndexer extends BaseIndexer<KBArticle> {
 
 	public static final String CLASS_NAME = KBArticle.class.getName();
 
-	public AdminIndexer() {
+	public KBArticleIndexer() {
 		setDefaultSelectedFieldNames(
 			Field.COMPANY_ID, Field.CONTENT, Field.CREATE_DATE,
 			Field.DESCRIPTION, Field.ENTRY_CLASS_NAME, Field.ENTRY_CLASS_PK,
@@ -111,17 +111,13 @@ public class AdminIndexer extends BaseIndexer {
 	}
 
 	@Override
-	protected void doDelete(Object obj) throws Exception {
-		KBArticle kbArticle = (KBArticle)obj;
-
+	protected void doDelete(KBArticle kbArticle) throws Exception {
 		deleteDocument(
 			kbArticle.getCompanyId(), kbArticle.getResourcePrimKey());
 	}
 
 	@Override
-	protected Document doGetDocument(Object obj) throws Exception {
-		KBArticle kbArticle = (KBArticle)obj;
-
+	protected Document doGetDocument(KBArticle kbArticle) throws Exception {
 		Document document = getBaseModelDocument(CLASS_NAME, kbArticle);
 
 		document.addText(
@@ -157,9 +153,7 @@ public class AdminIndexer extends BaseIndexer {
 	}
 
 	@Override
-	protected void doReindex(Object obj) throws Exception {
-		KBArticle kbArticle = (KBArticle)obj;
-
+	protected void doReindex(KBArticle kbArticle) throws Exception {
 		SearchEngineUtil.updateDocument(
 			getSearchEngineId(), kbArticle.getCompanyId(),
 			getDocument(kbArticle), isCommitImmediately());
@@ -245,6 +239,6 @@ public class AdminIndexer extends BaseIndexer {
 		actionableDynamicQuery.performActions();
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(AdminIndexer.class);
+	private static final Log _log = LogFactoryUtil.getLog(KBArticleIndexer.class);
 
 }

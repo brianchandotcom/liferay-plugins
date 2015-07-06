@@ -339,7 +339,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(KBArticle.class);
+		Indexer<KBArticle> indexer = IndexerRegistryUtil.getIndexer(
+			KBArticle.class);
 
 		indexer.delete(kbArticle);
 
@@ -576,10 +577,11 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	/**
-	 * @deprecated As of 7.0.0, replaced by
-	 *             {@link #getKBArticleAndAllDescendantKBArticles(long, int,
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             #getKBArticleAndAllDescendantKBArticles(long, int,
 	 *             com.liferay.portal.kernel.util.OrderByComparator)}
 	 */
+	@Deprecated
 	@Override
 	public List<KBArticle> getKBArticleAndAllDescendants(
 		long resourcePrimKey, int status,
@@ -842,6 +844,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	 *             int, int, int,
 	 *             com.liferay.portal.kernel.util.OrderByComparator)}
 	 */
+	@Deprecated
 	@Override
 	public List<KBArticle> getSiblingKBArticles(
 		long groupId, long parentResourcePrimKey, int status, int start,
@@ -856,6 +859,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	 * @deprecated As of 7.0.0, replaced by {@link #getKBArticlesCount(long,
 	 *             long, int)}
 	 */
+	@Deprecated
 	@Override
 	public int getSiblingKBArticlesCount(
 		long groupId, long parentResourcePrimKey, int status) {
@@ -1266,7 +1270,8 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		// Indexer
 
-		Indexer indexer = IndexerRegistryUtil.getIndexer(KBArticle.class);
+		Indexer<KBArticle> indexer = IndexerRegistryUtil.getIndexer(
+			KBArticle.class);
 
 		indexer.reindex(kbArticle);
 
