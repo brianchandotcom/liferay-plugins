@@ -42,6 +42,7 @@ import com.liferay.repository.external.ExtRepositoryFileEntry;
 import java.io.InputStream;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -187,6 +188,11 @@ public class ExtRepositoryFileEntryAdapter
 	@Override
 	public String getIconCssClass() {
 		return DLUtil.getFileIconCssClass(getExtension());
+	}
+
+	@Override
+	public Date getLastPublishDate() {
+		return null;
 	}
 
 	@Override
@@ -377,6 +383,10 @@ public class ExtRepositoryFileEntryAdapter
 	@Override
 	public boolean isSupportsLocking() {
 		return true;
+	}
+
+	@Override
+	public void setLastPublishDate(Date date) {
 	}
 
 	private List<ExtRepositoryFileVersionAdapter>

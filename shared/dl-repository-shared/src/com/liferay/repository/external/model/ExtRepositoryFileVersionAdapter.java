@@ -114,6 +114,11 @@ public class ExtRepositoryFileVersionAdapter
 	}
 
 	@Override
+	public Date getLastPublishDate() {
+		return null;
+	}
+
+	@Override
 	public String getMimeType() {
 		String mimeType = _extRepositoryFileVersion.getMimeType();
 
@@ -192,6 +197,10 @@ public class ExtRepositoryFileVersionAdapter
 	@Override
 	public boolean isPending() {
 		return false;
+	}
+
+	@Override
+	public void setLastPublishDate(Date date) {
 	}
 
 	private ExtRepositoryFileEntryAdapter _extRepositoryFileEntryAdapter;
