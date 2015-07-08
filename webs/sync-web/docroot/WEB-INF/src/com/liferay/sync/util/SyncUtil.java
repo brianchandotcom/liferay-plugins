@@ -289,6 +289,15 @@ public class SyncUtil {
 	}
 
 	public static boolean isSyncEnabled(Group group) {
+		if (group.isUser() &&
+			!PrefsPropsUtil.getBoolean(
+				group.getCompanyId(),
+				PortletPropsKeys.SYNC_ALLOW_USER_PERSONAL_SITES,
+				PortletPropsValues.SYNC_ALLOW_USER_PERSONAL_SITES)) {
+
+			return false;
+		}
+
 		return GetterUtil.getBoolean(
 			group.getTypeSettingsProperty("syncEnabled"), true);
 	}
