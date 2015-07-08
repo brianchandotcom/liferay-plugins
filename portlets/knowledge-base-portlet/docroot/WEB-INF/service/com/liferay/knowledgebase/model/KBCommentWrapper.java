@@ -67,6 +67,7 @@ public class KBCommentWrapper implements KBComment, ModelWrapper<KBComment> {
 		attributes.put("content", getContent());
 		attributes.put("userRating", getUserRating());
 		attributes.put("status", getStatus());
+		attributes.put("lastPublishDate", getLastPublishDate());
 
 		return attributes;
 	}
@@ -149,6 +150,12 @@ public class KBCommentWrapper implements KBComment, ModelWrapper<KBComment> {
 
 		if (status != null) {
 			setStatus(status);
+		}
+
+		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
+
+		if (lastPublishDate != null) {
+			setLastPublishDate(lastPublishDate);
 		}
 	}
 
@@ -245,6 +252,16 @@ public class KBCommentWrapper implements KBComment, ModelWrapper<KBComment> {
 	@Override
 	public long getKbCommentId() {
 		return _kbComment.getKbCommentId();
+	}
+
+	/**
+	* Returns the last publish date of this k b comment.
+	*
+	* @return the last publish date of this k b comment
+	*/
+	@Override
+	public Date getLastPublishDate() {
+		return _kbComment.getLastPublishDate();
 	}
 
 	/**
@@ -453,6 +470,16 @@ public class KBCommentWrapper implements KBComment, ModelWrapper<KBComment> {
 	@Override
 	public void setKbCommentId(long kbCommentId) {
 		_kbComment.setKbCommentId(kbCommentId);
+	}
+
+	/**
+	* Sets the last publish date of this k b comment.
+	*
+	* @param lastPublishDate the last publish date of this k b comment
+	*/
+	@Override
+	public void setLastPublishDate(Date lastPublishDate) {
+		_kbComment.setLastPublishDate(lastPublishDate);
 	}
 
 	/**

@@ -65,7 +65,7 @@ public class FooCacheModel implements CacheModel<Foo>, Externalizable {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -93,6 +93,8 @@ public class FooCacheModel implements CacheModel<Foo>, Externalizable {
 		sb.append(field4);
 		sb.append(", field5=");
 		sb.append(field5);
+		sb.append(", lastPublishDate=");
+		sb.append(lastPublishDate);
 		sb.append("}");
 
 		return sb.toString();
@@ -159,6 +161,13 @@ public class FooCacheModel implements CacheModel<Foo>, Externalizable {
 			fooImpl.setField5(field5);
 		}
 
+		if (lastPublishDate == Long.MIN_VALUE) {
+			fooImpl.setLastPublishDate(null);
+		}
+		else {
+			fooImpl.setLastPublishDate(new Date(lastPublishDate));
+		}
+
 		fooImpl.resetOriginalValues();
 
 		return fooImpl;
@@ -179,6 +188,7 @@ public class FooCacheModel implements CacheModel<Foo>, Externalizable {
 		field3 = objectInput.readInt();
 		field4 = objectInput.readLong();
 		field5 = objectInput.readUTF();
+		lastPublishDate = objectInput.readLong();
 	}
 
 	@Override
@@ -223,6 +233,8 @@ public class FooCacheModel implements CacheModel<Foo>, Externalizable {
 		else {
 			objectOutput.writeUTF(field5);
 		}
+
+		objectOutput.writeLong(lastPublishDate);
 	}
 
 	public String uuid;
@@ -238,4 +250,5 @@ public class FooCacheModel implements CacheModel<Foo>, Externalizable {
 	public int field3;
 	public long field4;
 	public String field5;
+	public long lastPublishDate;
 }

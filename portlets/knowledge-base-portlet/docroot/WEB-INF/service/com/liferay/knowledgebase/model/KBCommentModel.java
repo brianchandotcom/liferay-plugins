@@ -294,6 +294,20 @@ public interface KBCommentModel extends AttachedModel, BaseModel<KBComment>,
 	 */
 	public void setStatus(int status);
 
+	/**
+	 * Returns the last publish date of this k b comment.
+	 *
+	 * @return the last publish date of this k b comment
+	 */
+	public Date getLastPublishDate();
+
+	/**
+	 * Sets the last publish date of this k b comment.
+	 *
+	 * @param lastPublishDate the last publish date of this k b comment
+	 */
+	public void setLastPublishDate(Date lastPublishDate);
+
 	@Override
 	public boolean isNew();
 

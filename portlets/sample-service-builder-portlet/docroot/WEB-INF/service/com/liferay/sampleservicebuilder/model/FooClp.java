@@ -96,6 +96,7 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 		attributes.put("field3", getField3());
 		attributes.put("field4", getField4());
 		attributes.put("field5", getField5());
+		attributes.put("lastPublishDate", getLastPublishDate());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -181,6 +182,12 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 
 		if (field5 != null) {
 			setField5(field5);
+		}
+
+		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
+
+		if (lastPublishDate != null) {
+			setLastPublishDate(lastPublishDate);
 		}
 
 		_entityCacheEnabled = GetterUtil.getBoolean("entityCacheEnabled");
@@ -508,6 +515,29 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 	}
 
 	@Override
+	public Date getLastPublishDate() {
+		return _lastPublishDate;
+	}
+
+	@Override
+	public void setLastPublishDate(Date lastPublishDate) {
+		_lastPublishDate = lastPublishDate;
+
+		if (_fooRemoteModel != null) {
+			try {
+				Class<?> clazz = _fooRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setLastPublishDate", Date.class);
+
+				method.invoke(_fooRemoteModel, lastPublishDate);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(PortalUtil.getClassNameId(
 				Foo.class.getName()));
@@ -595,6 +625,7 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 		clone.setField3(getField3());
 		clone.setField4(getField4());
 		clone.setField5(getField5());
+		clone.setLastPublishDate(getLastPublishDate());
 
 		return clone;
 	}
@@ -655,7 +686,7 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -683,6 +714,8 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 		sb.append(getField4());
 		sb.append(", field5=");
 		sb.append(getField5());
+		sb.append(", lastPublishDate=");
+		sb.append(getLastPublishDate());
 		sb.append("}");
 
 		return sb.toString();
@@ -690,7 +723,7 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(46);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.sampleservicebuilder.model.Foo");
@@ -748,6 +781,10 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 			"<column><column-name>field5</column-name><column-value><![CDATA[");
 		sb.append(getField5());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>lastPublishDate</column-name><column-value><![CDATA[");
+		sb.append(getLastPublishDate());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -767,6 +804,7 @@ public class FooClp extends BaseModelImpl<Foo> implements Foo {
 	private int _field3;
 	private Date _field4;
 	private String _field5;
+	private Date _lastPublishDate;
 	private BaseModel<?> _fooRemoteModel;
 	private Class<?> _clpSerializerClass = ClpSerializer.class;
 	private boolean _entityCacheEnabled;

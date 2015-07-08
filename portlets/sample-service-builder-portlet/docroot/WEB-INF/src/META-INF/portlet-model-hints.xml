@@ -15,5 +15,6 @@
 		<field name="field3" type="int" />
 		<field name="field4" type="Date" />
 		<field name="field5" type="String" />
+		<field name="lastPublishDate" type="Date" />
 	</model>
 </model-hints>

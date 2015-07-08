@@ -67,6 +67,7 @@ public class FooWrapper implements Foo, ModelWrapper<Foo> {
 		attributes.put("field3", getField3());
 		attributes.put("field4", getField4());
 		attributes.put("field5", getField5());
+		attributes.put("lastPublishDate", getLastPublishDate());
 
 		return attributes;
 	}
@@ -149,6 +150,12 @@ public class FooWrapper implements Foo, ModelWrapper<Foo> {
 
 		if (field5 != null) {
 			setField5(field5);
+		}
+
+		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
+
+		if (lastPublishDate != null) {
+			setLastPublishDate(lastPublishDate);
 		}
 	}
 
@@ -255,6 +262,16 @@ public class FooWrapper implements Foo, ModelWrapper<Foo> {
 	@Override
 	public long getGroupId() {
 		return _foo.getGroupId();
+	}
+
+	/**
+	* Returns the last publish date of this foo.
+	*
+	* @return the last publish date of this foo
+	*/
+	@Override
+	public Date getLastPublishDate() {
+		return _foo.getLastPublishDate();
 	}
 
 	/**
@@ -468,6 +485,16 @@ public class FooWrapper implements Foo, ModelWrapper<Foo> {
 	@Override
 	public void setGroupId(long groupId) {
 		_foo.setGroupId(groupId);
+	}
+
+	/**
+	* Sets the last publish date of this foo.
+	*
+	* @param lastPublishDate the last publish date of this foo
+	*/
+	@Override
+	public void setLastPublishDate(Date lastPublishDate) {
+		_foo.setLastPublishDate(lastPublishDate);
 	}
 
 	/**
