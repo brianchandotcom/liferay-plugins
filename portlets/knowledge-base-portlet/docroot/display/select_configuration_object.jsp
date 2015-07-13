@@ -25,7 +25,9 @@ long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey",
 String orderByCol = ParamUtil.getString(request, "orderByCol", "modified-date");
 String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 
-String eventName = PortalUtil.getPortletNamespace(PortletKeys.PORTLET_CONFIGURATION) + "selectConfigurationKBObject";
+String portletId = PortletProviderUtil.getPortletId(PortletConfigurationApplicationType.PortletConfiguration.CLASS_NAME, PortletProvider.Action.VIEW);
+
+String eventName = PortalUtil.getPortletNamespace(portletId) + "selectConfigurationKBObject";
 %>
 
 <div class="kb-select-article-search-containers">
