@@ -314,7 +314,10 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				syncDLObjectPersistence.findByC_R_T(
 					companyId, repositoryId, SyncConstants.TYPE_FOLDER);
 
-			return checkSyncDLObjects(syncDLObjects);
+			SyncDLObjectUpdate syncDLObjectUpdate = checkSyncDLObjects(
+				syncDLObjects, repositoryId);
+
+			return syncDLObjectUpdate.getSyncDLObjects();
 		}
 		catch (PortalException pe) {
 			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
@@ -583,15 +586,20 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 			repositoryService.checkRepository(repositoryId);
 
-			String event = null;
+			String[] events = null;
 
 			if (lastAccessTime == -1) {
-				event = SyncConstants.EVENT_DELETE;
+				events = new String[] {
+					SyncConstants.EVENT_DELETE, SyncConstants.EVENT_TRASH
+				};
+			}
+			else {
+				events = new String[0];
 			}
 
 			List<SyncDLObject> syncDLObjects =
 				syncDLObjectPersistence.findByC_M_R_NotE(
-					companyId, lastAccessTime, repositoryId, event, 0,
+					companyId, lastAccessTime, repositoryId, events, 0,
 					PortletPropsValues.SYNC_PAGINATION_DELTA,
 					new SyncDLObjectTypeComparator());
 
@@ -599,13 +607,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				return new SyncDLObjectUpdate(syncDLObjects, lastAccessTime);
 			}
 
-			SyncDLObject syncDLObject = syncDLObjects.get(
-				syncDLObjects.size() - 1);
-
-			syncDLObjects = checkSyncDLObjects(syncDLObjects);
-
-			return new SyncDLObjectUpdate(
-				syncDLObjects, syncDLObject.getModifiedTime());
+			return checkSyncDLObjects(syncDLObjects, repositoryId);
 		}
 		catch (PortalException pe) {
 			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
@@ -1036,18 +1038,36 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 		return syncDLObject;
 	}
 
-	protected List<SyncDLObject> checkSyncDLObjects(
-			List<SyncDLObject> syncDLObjects)
+	protected SyncDLObjectUpdate checkSyncDLObjects(
+			List<SyncDLObject> syncDLObjects, long repositoryId)
 		throws PortalException {
 
 		PermissionChecker permissionChecker = getPermissionChecker();
 
+		boolean groupAdmin = permissionChecker.isGroupAdmin(repositoryId);
+
 		List<SyncDLObject> checkedSyncDLObjects = new ArrayList<>();
 
+		long lastAccessTime = 0;
+
 		for (SyncDLObject syncDLObject : syncDLObjects) {
+			if (syncDLObject.getModifiedTime() > lastAccessTime) {
+				lastAccessTime = syncDLObject.getModifiedTime();
+			}
+
+			if (groupAdmin) {
+				checkedSyncDLObjects.add(syncDLObject);
+
+				continue;
+			}
+
 			String event = syncDLObject.getEvent();
 
-			if (event.equals(SyncConstants.EVENT_DELETE)) {
+			if (event.equals(SyncConstants.EVENT_DELETE) ||
+				event.equals(SyncConstants.EVENT_TRASH)) {
+
+				checkedSyncDLObjects.add(syncDLObject);
+
 				continue;
 			}
 
@@ -1086,7 +1106,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			checkedSyncDLObjects.add(syncDLObject);
 		}
 
-		return checkedSyncDLObjects;
+		return new SyncDLObjectUpdate(checkedSyncDLObjects, lastAccessTime);
 	}
 
 	protected Map<String, String> getPortletPreferencesMap()
@@ -1124,7 +1144,10 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			syncDLObjectPersistence.findByC_M_R_P(
 				companyId, lastAccessTime, repositoryId, parentFolderId);
 
-		curSyncDLObjects = checkSyncDLObjects(curSyncDLObjects);
+		SyncDLObjectUpdate syncDLObjectUpdate = checkSyncDLObjects(
+			curSyncDLObjects, repositoryId);
+
+		curSyncDLObjects = syncDLObjectUpdate.getSyncDLObjects();
 
 		syncDLObjects.addAll(curSyncDLObjects);
 
