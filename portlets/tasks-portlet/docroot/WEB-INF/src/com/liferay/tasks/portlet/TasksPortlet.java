@@ -17,8 +17,8 @@
 
 package com.liferay.tasks.portlet;
 
-import com.liferay.portal.kernel.comment.CommentManagerUtil;
-import com.liferay.portal.kernel.comment.DiscussionPermission;
+import com.liferay.portal.kernel.comments.CommentManagerUtil;
+import com.liferay.portal.kernel.comments.DiscussionPermission;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
