@@ -1973,14 +1973,50 @@ Please find a solution that does not require portal-impl.jar.
 										</then>
 									</if>
 
-									<if>
-										<resourcecount count="0" when="gt">
-											<fileset dir="@{module.dir}/src/META-INF/resources" includes="**/${transpile.file.pattern},${transpile.file.pattern}" erroronmissingdir="false"/>
-										</resourcecount>
+<if>
+										<and>
+											<available file="@{module.dir}/src/META-INF/resources" />
+											<resourcecount count="0" when="gt">
+												<fileset dir="@{module.dir}/src/META-INF/resources" includes="**/${transpile.file.pattern},${transpile.file.pattern}" />
+											</resourcecount>
+										</and>
 										<then>
 											<transpile-js
 												module.dir="@{module.dir}"
 											/>
+										</then>
+									</if>
+
+									<if>
+										<available file="@{module.dir}/bower.json" />
+										<then>
+											<if>
+												<isset property="config.js.modules" />
+												<then>
+													<copy todir="@{module.dir}/.js-cache/META-INF/resources">
+														<resources refid="${config.js.modules}" />
+													</copy>
+												</then>
+											</if>
+
+											<copy
+												file="@{module.dir}/bower.json"
+												overwrite="true"
+												tofile="@{module.dir}/.js-cache/bower.json"
+											/>
+
+											<config-js-modules
+												module.dir="@{module.dir}"
+											/>
+										</then>
+									</if>
+
+									<if>
+										<available file="@{module.dir}/.js-cache" type="dir" />
+										<then>
+											<copy todir="@{module.dir}/classes" preservelastmodified="true">
+												<fileset dir="@{module.dir}/.js-cache" />
+											</copy>
 										</then>
 									</if>
 
