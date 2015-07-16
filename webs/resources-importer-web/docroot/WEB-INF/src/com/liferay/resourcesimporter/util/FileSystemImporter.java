@@ -1668,11 +1668,13 @@ public class FileSystemImporter extends BaseImporter {
 	}
 
 	protected void setUpSitemap(String fileName) throws Exception {
-		LayoutLocalServiceUtil.deleteLayouts(
-			groupId, true, new ServiceContext());
+		if (!updateModeEnabled) {
+			LayoutLocalServiceUtil.deleteLayouts(
+				groupId, true, new ServiceContext());
 
-		LayoutLocalServiceUtil.deleteLayouts(
-			groupId, false, new ServiceContext());
+			LayoutLocalServiceUtil.deleteLayouts(
+				groupId, false, new ServiceContext());
+		}
 
 		JSONObject jsonObject = getJSONObject(fileName);
 
