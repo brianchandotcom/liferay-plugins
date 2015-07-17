@@ -20,6 +20,7 @@ import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.model.JournalArticleConstants;
 import com.liferay.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.journal.service.JournalArticleServiceUtil;
+import com.liferay.journal.util.JournalConverter;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -39,6 +40,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -89,7 +91,6 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.storage.StorageType;
-import com.liferay.portlet.journal.util.JournalConverterUtil;
 import com.liferay.wiki.model.WikiPage;
 
 import java.io.BufferedInputStream;
@@ -429,7 +430,7 @@ public class FileSystemImporter extends BaseImporter {
 		String xsd = StringUtil.read(inputStream);
 
 		if (isJournalStructureXSD(xsd)) {
-			xsd = JournalConverterUtil.getDDMXSD(xsd);
+			xsd = _journalConverter.getDDMXSD(xsd);
 		}
 
 		setServiceContext(fileName);
@@ -1802,6 +1803,8 @@ public class FileSystemImporter extends BaseImporter {
 	private Map<String, FileEntry> _fileEntries = new HashMap<>();
 	private Pattern _fileEntryPattern = Pattern.compile(
 		"\\[\\$FILE=([^\\$]+)\\$\\]");
+	private final JournalConverter _journalConverter =
+		ProxyFactory.newServiceTrackedInstance(JournalConverter.class);
 	private Map<String, Set<Long>> _primaryKeys = new HashMap<>();
 	private File _resourcesDir;
 

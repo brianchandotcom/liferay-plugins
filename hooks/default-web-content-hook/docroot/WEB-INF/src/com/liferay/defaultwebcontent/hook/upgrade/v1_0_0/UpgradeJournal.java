@@ -15,11 +15,13 @@
 package com.liferay.defaultwebcontent.hook.upgrade.v1_0_0;
 
 import com.liferay.journal.model.JournalArticle;
+import com.liferay.journal.util.JournalConverter;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.upgrade.util.UpgradeProcessUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.ProxyFactory;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -31,7 +33,6 @@ import com.liferay.portlet.dynamicdatamapping.model.DDMStructureConstants;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplateConstants;
 import com.liferay.portlet.dynamicdatamapping.service.DDMStructureLocalServiceUtil;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateLocalServiceUtil;
-import com.liferay.portlet.journal.util.JournalConverterUtil;
 
 import java.io.InputStream;
 
@@ -71,7 +72,7 @@ public class UpgradeJournal extends UpgradeProcess {
 		DDMStructure ddmStructure = DDMStructureLocalServiceUtil.addStructure(
 			userId, groupId, 0, PortalUtil.getClassNameId(JournalArticle.class),
 			"ARTICLE", nameMap, descriptionMap,
-			JournalConverterUtil.getDDMXSD(xsd), "xml",
+			_journalConverter.getDDMXSD(xsd), "xml",
 			DDMStructureConstants.TYPE_DEFAULT, serviceContext);
 
 		_ddmStructureIds.put(
@@ -91,7 +92,7 @@ public class UpgradeJournal extends UpgradeProcess {
 		ddmStructure = DDMStructureLocalServiceUtil.addStructure(
 			userId, groupId, 0, PortalUtil.getClassNameId(JournalArticle.class),
 			"MULTIPLE-ITEM-CAROUSEL", nameMap, descriptionMap,
-			JournalConverterUtil.getDDMXSD(xsd), "xml",
+			_journalConverter.getDDMXSD(xsd), "xml",
 			DDMStructureConstants.TYPE_DEFAULT, serviceContext);
 
 		_ddmStructureIds.put(
@@ -113,7 +114,7 @@ public class UpgradeJournal extends UpgradeProcess {
 		ddmStructure = DDMStructureLocalServiceUtil.addStructure(
 			userId, groupId, 0, PortalUtil.getClassNameId(JournalArticle.class),
 			"MULTIPLE-ITEM", nameMap, descriptionMap,
-			JournalConverterUtil.getDDMXSD(xsd), "xml",
+			_journalConverter.getDDMXSD(xsd), "xml",
 			DDMStructureConstants.TYPE_DEFAULT, serviceContext);
 
 		_ddmStructureIds.put(
@@ -246,5 +247,7 @@ public class UpgradeJournal extends UpgradeProcess {
 	}
 
 	private Map<String, Long> _ddmStructureIds = new HashMap<>();
+	private final JournalConverter _journalConverter =
+		ProxyFactory.newServiceTrackedInstance(JournalConverter.class);
 
 }
