@@ -1984,6 +1984,36 @@ Please find a solution that does not require portal-impl.jar.
 										</then>
 									</if>
 
+									<if>
+										<available file="@{module.dir}/bower.json" />
+										<then>
+											<if>
+												<isset property="js.config.generator.fileset" />
+												<then>
+													<copy todir="@{module.dir}/.js-cache/META-INF/resources">
+														<resources refid="${js.config.generator.fileset}" />
+													</copy>
+
+													<var name="js.config.generator.fileset" unset="true" />
+												</then>
+											</if>
+
+											<copy
+												file="@{module.dir}/bower.json"
+												overwrite="true"
+												tofile="@{module.dir}/.js-cache/bower.json"
+											/>
+
+											<config-js-modules
+												module.dir="@{module.dir}"
+											/>
+										</then>
+									</if>
+
+									<copy todir="@{module.dir}/classes">
+										<fileset dir="@{module.dir}/.js-cache" erroronmissingdir="false" />
+									</copy>
+
 									<build-wsdl
 										module.dir="@{module.dir}"
 									/>
