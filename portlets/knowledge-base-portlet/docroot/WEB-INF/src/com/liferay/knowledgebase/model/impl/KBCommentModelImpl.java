@@ -86,7 +86,8 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 			{ "classPK", Types.BIGINT },
 			{ "content", Types.VARCHAR },
 			{ "userRating", Types.INTEGER },
-			{ "status", Types.INTEGER }
+			{ "status", Types.INTEGER },
+			{ "lastPublishDate", Types.TIMESTAMP }
 		};
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP = new HashMap<String, Integer>();
 
@@ -104,9 +105,10 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 		TABLE_COLUMNS_MAP.put("content", Types.VARCHAR);
 		TABLE_COLUMNS_MAP.put("userRating", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("status", Types.INTEGER);
+		TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table KBComment (uuid_ VARCHAR(75) null,kbCommentId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,content STRING null,userRating INTEGER,status INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table KBComment (uuid_ VARCHAR(75) null,kbCommentId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,classNameId LONG,classPK LONG,content STRING null,userRating INTEGER,status INTEGER,lastPublishDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table KBComment";
 	public static final String ORDER_BY_JPQL = " ORDER BY kbComment.modifiedDate DESC";
 	public static final String ORDER_BY_SQL = " ORDER BY KBComment.modifiedDate DESC";
@@ -157,6 +159,7 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 		model.setContent(soapModel.getContent());
 		model.setUserRating(soapModel.getUserRating());
 		model.setStatus(soapModel.getStatus());
+		model.setLastPublishDate(soapModel.getLastPublishDate());
 
 		return model;
 	}
@@ -234,6 +237,7 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 		attributes.put("content", getContent());
 		attributes.put("userRating", getUserRating());
 		attributes.put("status", getStatus());
+		attributes.put("lastPublishDate", getLastPublishDate());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -319,6 +323,12 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 
 		if (status != null) {
 			setStatus(status);
+		}
+
+		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
+
+		if (lastPublishDate != null) {
+			setLastPublishDate(lastPublishDate);
 		}
 	}
 
@@ -604,6 +614,17 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 		return _originalStatus;
 	}
 
+	@JSON
+	@Override
+	public Date getLastPublishDate() {
+		return _lastPublishDate;
+	}
+
+	@Override
+	public void setLastPublishDate(Date lastPublishDate) {
+		_lastPublishDate = lastPublishDate;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(PortalUtil.getClassNameId(
@@ -654,6 +675,7 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 		kbCommentImpl.setContent(getContent());
 		kbCommentImpl.setUserRating(getUserRating());
 		kbCommentImpl.setStatus(getStatus());
+		kbCommentImpl.setLastPublishDate(getLastPublishDate());
 
 		kbCommentImpl.resetOriginalValues();
 
@@ -810,12 +832,21 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 
 		kbCommentCacheModel.status = getStatus();
 
+		Date lastPublishDate = getLastPublishDate();
+
+		if (lastPublishDate != null) {
+			kbCommentCacheModel.lastPublishDate = lastPublishDate.getTime();
+		}
+		else {
+			kbCommentCacheModel.lastPublishDate = Long.MIN_VALUE;
+		}
+
 		return kbCommentCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -843,6 +874,8 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 		sb.append(getUserRating());
 		sb.append(", status=");
 		sb.append(getStatus());
+		sb.append(", lastPublishDate=");
+		sb.append(getLastPublishDate());
 		sb.append("}");
 
 		return sb.toString();
@@ -850,7 +883,7 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(46);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.knowledgebase.model.KBComment");
@@ -908,6 +941,10 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 			"<column><column-name>status</column-name><column-value><![CDATA[");
 		sb.append(getStatus());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>lastPublishDate</column-name><column-value><![CDATA[");
+		sb.append(getLastPublishDate());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -945,6 +982,7 @@ public class KBCommentModelImpl extends BaseModelImpl<KBComment>
 	private int _status;
 	private int _originalStatus;
 	private boolean _setOriginalStatus;
+	private Date _lastPublishDate;
 	private long _columnBitmask;
 	private KBComment _escapedModel;
 }

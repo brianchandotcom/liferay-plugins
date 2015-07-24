@@ -66,7 +66,7 @@ public class KBArticleCacheModel implements CacheModel<KBArticle>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(57);
+		StringBundler sb = new StringBundler(59);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -124,6 +124,8 @@ public class KBArticleCacheModel implements CacheModel<KBArticle>,
 		sb.append(statusByUserName);
 		sb.append(", statusDate=");
 		sb.append(statusDate);
+		sb.append(", lastPublishDate=");
+		sb.append(lastPublishDate);
 		sb.append("}");
 
 		return sb.toString();
@@ -238,6 +240,13 @@ public class KBArticleCacheModel implements CacheModel<KBArticle>,
 			kbArticleImpl.setStatusDate(new Date(statusDate));
 		}
 
+		if (lastPublishDate == Long.MIN_VALUE) {
+			kbArticleImpl.setLastPublishDate(null);
+		}
+		else {
+			kbArticleImpl.setLastPublishDate(new Date(lastPublishDate));
+		}
+
 		kbArticleImpl.resetOriginalValues();
 
 		return kbArticleImpl;
@@ -273,6 +282,7 @@ public class KBArticleCacheModel implements CacheModel<KBArticle>,
 		statusByUserId = objectInput.readLong();
 		statusByUserName = objectInput.readUTF();
 		statusDate = objectInput.readLong();
+		lastPublishDate = objectInput.readLong();
 	}
 
 	@Override
@@ -365,6 +375,7 @@ public class KBArticleCacheModel implements CacheModel<KBArticle>,
 		}
 
 		objectOutput.writeLong(statusDate);
+		objectOutput.writeLong(lastPublishDate);
 	}
 
 	public String uuid;
@@ -395,4 +406,5 @@ public class KBArticleCacheModel implements CacheModel<KBArticle>,
 	public long statusByUserId;
 	public String statusByUserName;
 	public long statusDate;
+	public long lastPublishDate;
 }

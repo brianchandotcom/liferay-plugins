@@ -47,6 +47,7 @@ public class FooSoap implements Serializable {
 		soapModel.setField3(model.getField3());
 		soapModel.setField4(model.getField4());
 		soapModel.setField5(model.getField5());
+		soapModel.setLastPublishDate(model.getLastPublishDate());
 
 		return soapModel;
 	}
@@ -207,6 +208,14 @@ public class FooSoap implements Serializable {
 		_field5 = field5;
 	}
 
+	public Date getLastPublishDate() {
+		return _lastPublishDate;
+	}
+
+	public void setLastPublishDate(Date lastPublishDate) {
+		_lastPublishDate = lastPublishDate;
+	}
+
 	private String _uuid;
 	private long _fooId;
 	private long _groupId;
@@ -220,4 +229,5 @@ public class FooSoap implements Serializable {
 	private int _field3;
 	private Date _field4;
 	private String _field5;
+	private Date _lastPublishDate;
 }

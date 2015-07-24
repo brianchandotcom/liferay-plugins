@@ -83,6 +83,7 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
 		attributes.put("statusDate", getStatusDate());
+		attributes.put("lastPublishDate", getLastPublishDate());
 
 		return attributes;
 	}
@@ -258,6 +259,12 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 		if (statusDate != null) {
 			setStatusDate(statusDate);
 		}
+
+		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
+
+		if (lastPublishDate != null) {
+			setLastPublishDate(lastPublishDate);
+		}
 	}
 
 	@Override
@@ -380,6 +387,16 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 	@Override
 	public long getKbFolderId() {
 		return _kbArticle.getKbFolderId();
+	}
+
+	/**
+	* Returns the last publish date of this k b article.
+	*
+	* @return the last publish date of this k b article
+	*/
+	@Override
+	public Date getLastPublishDate() {
+		return _kbArticle.getLastPublishDate();
 	}
 
 	/**
@@ -870,6 +887,16 @@ public class KBArticleWrapper implements KBArticle, ModelWrapper<KBArticle> {
 	@Override
 	public void setKbFolderId(long kbFolderId) {
 		_kbArticle.setKbFolderId(kbFolderId);
+	}
+
+	/**
+	* Sets the last publish date of this k b article.
+	*
+	* @param lastPublishDate the last publish date of this k b article
+	*/
+	@Override
+	public void setLastPublishDate(Date lastPublishDate) {
+		_kbArticle.setLastPublishDate(lastPublishDate);
 	}
 
 	/**

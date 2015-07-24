@@ -19,5 +19,6 @@
 		<property name="field3" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
 		<property name="field4" type="org.hibernate.type.TimestampType" />
 		<property name="field5" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="lastPublishDate" type="org.hibernate.type.TimestampType" />
 	</class>
 </hibernate-mapping>

@@ -68,6 +68,11 @@ public class ExtRepositoryFolderAdapter
 	}
 
 	@Override
+	public Date getLastPublishDate() {
+		return null;
+	}
+
+	@Override
 	public Class<?> getModelClass() {
 		return Folder.class;
 	}
@@ -153,6 +158,10 @@ public class ExtRepositoryFolderAdapter
 	@Override
 	public boolean isSupportsSubscribing() {
 		return false;
+	}
+
+	@Override
+	public void setLastPublishDate(Date date) {
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

@@ -40,6 +40,7 @@
 		<field name="statusByUserId" type="long" />
 		<field name="statusByUserName" type="String" />
 		<field name="statusDate" type="Date" />
+		<field name="lastPublishDate" type="Date" />
 	</model>
 	<model name="com.liferay.knowledgebase.model.KBComment">
 		<field name="uuid" type="String" />
@@ -57,6 +58,7 @@
 		</field>
 		<field name="userRating" type="int" />
 		<field name="status" type="int" />
+		<field name="lastPublishDate" type="Date" />
 	</model>
 	<model name="com.liferay.knowledgebase.model.KBFolder">
 		<field name="uuid" type="String" />
@@ -75,6 +77,7 @@
 		<field name="description" type="String">
 			<hint-collection name="TEXTAREA" />
 		</field>
+		<field name="lastPublishDate" type="Date" />
 	</model>
 	<model name="com.liferay.knowledgebase.model.KBTemplate">
 		<field name="uuid" type="String" />
@@ -91,5 +94,6 @@
 		<field name="content" type="String">
 			<hint-collection name="CLOB" />
 		</field>
+		<field name="lastPublishDate" type="Date" />
 	</model>
 </model-hints>

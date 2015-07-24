@@ -4915,8 +4915,8 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 		}
 	}
 
-	protected void cacheUniqueFindersCache(KBComment kbComment) {
-		if (kbComment.isNew()) {
+	protected void cacheUniqueFindersCache(KBComment kbComment, boolean isNew) {
+		if (isNew) {
 			Object[] args = new Object[] {
 					kbComment.getUuid(), kbComment.getGroupId()
 				};
@@ -5300,7 +5300,7 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 			KBCommentImpl.class, kbComment.getPrimaryKey(), kbComment, false);
 
 		clearUniqueFindersCache(kbComment);
-		cacheUniqueFindersCache(kbComment);
+		cacheUniqueFindersCache(kbComment, isNew);
 
 		kbComment.resetOriginalValues();
 
@@ -5330,6 +5330,7 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 		kbCommentImpl.setContent(kbComment.getContent());
 		kbCommentImpl.setUserRating(kbComment.getUserRating());
 		kbCommentImpl.setStatus(kbComment.getStatus());
+		kbCommentImpl.setLastPublishDate(kbComment.getLastPublishDate());
 
 		return kbCommentImpl;
 	}

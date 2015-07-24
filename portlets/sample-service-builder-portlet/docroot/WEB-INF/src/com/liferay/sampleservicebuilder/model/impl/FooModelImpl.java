@@ -83,7 +83,8 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 			{ "field2", Types.BOOLEAN },
 			{ "field3", Types.INTEGER },
 			{ "field4", Types.TIMESTAMP },
-			{ "field5", Types.VARCHAR }
+			{ "field5", Types.VARCHAR },
+			{ "lastPublishDate", Types.TIMESTAMP }
 		};
 	public static final Map<String, Integer> TABLE_COLUMNS_MAP = new HashMap<String, Integer>();
 
@@ -101,9 +102,10 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 		TABLE_COLUMNS_MAP.put("field3", Types.INTEGER);
 		TABLE_COLUMNS_MAP.put("field4", Types.TIMESTAMP);
 		TABLE_COLUMNS_MAP.put("field5", Types.VARCHAR);
+		TABLE_COLUMNS_MAP.put("lastPublishDate", Types.TIMESTAMP);
 	}
 
-	public static final String TABLE_SQL_CREATE = "create table SSB_Foo (uuid_ VARCHAR(75) null,fooId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,field1 VARCHAR(75) null,field2 BOOLEAN,field3 INTEGER,field4 DATE null,field5 VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table SSB_Foo (uuid_ VARCHAR(75) null,fooId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,field1 VARCHAR(75) null,field2 BOOLEAN,field3 INTEGER,field4 DATE null,field5 VARCHAR(75) null,lastPublishDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table SSB_Foo";
 	public static final String ORDER_BY_JPQL = " ORDER BY foo.field1 ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY SSB_Foo.field1 ASC";
@@ -151,6 +153,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 		model.setField3(soapModel.getField3());
 		model.setField4(soapModel.getField4());
 		model.setField5(soapModel.getField5());
+		model.setLastPublishDate(soapModel.getLastPublishDate());
 
 		return model;
 	}
@@ -228,6 +231,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 		attributes.put("field3", getField3());
 		attributes.put("field4", getField4());
 		attributes.put("field5", getField5());
+		attributes.put("lastPublishDate", getLastPublishDate());
 
 		attributes.put("entityCacheEnabled", isEntityCacheEnabled());
 		attributes.put("finderCacheEnabled", isFinderCacheEnabled());
@@ -313,6 +317,12 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 
 		if (field5 != null) {
 			setField5(field5);
+		}
+
+		Date lastPublishDate = (Date)attributes.get("lastPublishDate");
+
+		if (lastPublishDate != null) {
+			setLastPublishDate(lastPublishDate);
 		}
 	}
 
@@ -552,6 +562,17 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 		_field5 = field5;
 	}
 
+	@JSON
+	@Override
+	public Date getLastPublishDate() {
+		return _lastPublishDate;
+	}
+
+	@Override
+	public void setLastPublishDate(Date lastPublishDate) {
+		_lastPublishDate = lastPublishDate;
+	}
+
 	@Override
 	public StagedModelType getStagedModelType() {
 		return new StagedModelType(PortalUtil.getClassNameId(
@@ -602,6 +623,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 		fooImpl.setField3(getField3());
 		fooImpl.setField4(getField4());
 		fooImpl.setField5(getField5());
+		fooImpl.setLastPublishDate(getLastPublishDate());
 
 		fooImpl.resetOriginalValues();
 
@@ -756,12 +778,21 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 			fooCacheModel.field5 = null;
 		}
 
+		Date lastPublishDate = getLastPublishDate();
+
+		if (lastPublishDate != null) {
+			fooCacheModel.lastPublishDate = lastPublishDate.getTime();
+		}
+		else {
+			fooCacheModel.lastPublishDate = Long.MIN_VALUE;
+		}
+
 		return fooCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -789,6 +820,8 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 		sb.append(getField4());
 		sb.append(", field5=");
 		sb.append(getField5());
+		sb.append(", lastPublishDate=");
+		sb.append(getLastPublishDate());
 		sb.append("}");
 
 		return sb.toString();
@@ -796,7 +829,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(46);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.sampleservicebuilder.model.Foo");
@@ -854,6 +887,10 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 			"<column><column-name>field5</column-name><column-value><![CDATA[");
 		sb.append(getField5());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>lastPublishDate</column-name><column-value><![CDATA[");
+		sb.append(getLastPublishDate());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -885,6 +922,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 	private int _field3;
 	private Date _field4;
 	private String _field5;
+	private Date _lastPublishDate;
 	private long _columnBitmask;
 	private Foo _escapedModel;
 }

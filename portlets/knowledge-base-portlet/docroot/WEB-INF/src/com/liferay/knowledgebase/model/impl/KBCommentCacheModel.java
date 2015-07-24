@@ -66,7 +66,7 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(29);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -94,6 +94,8 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 		sb.append(userRating);
 		sb.append(", status=");
 		sb.append(status);
+		sb.append(", lastPublishDate=");
+		sb.append(lastPublishDate);
 		sb.append("}");
 
 		return sb.toString();
@@ -149,6 +151,13 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 		kbCommentImpl.setUserRating(userRating);
 		kbCommentImpl.setStatus(status);
 
+		if (lastPublishDate == Long.MIN_VALUE) {
+			kbCommentImpl.setLastPublishDate(null);
+		}
+		else {
+			kbCommentImpl.setLastPublishDate(new Date(lastPublishDate));
+		}
+
 		kbCommentImpl.resetOriginalValues();
 
 		return kbCommentImpl;
@@ -169,6 +178,7 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 		content = objectInput.readUTF();
 		userRating = objectInput.readInt();
 		status = objectInput.readInt();
+		lastPublishDate = objectInput.readLong();
 	}
 
 	@Override
@@ -207,6 +217,7 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 
 		objectOutput.writeInt(userRating);
 		objectOutput.writeInt(status);
+		objectOutput.writeLong(lastPublishDate);
 	}
 
 	public String uuid;
@@ -222,4 +233,5 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 	public String content;
 	public int userRating;
 	public int status;
+	public long lastPublishDate;
 }

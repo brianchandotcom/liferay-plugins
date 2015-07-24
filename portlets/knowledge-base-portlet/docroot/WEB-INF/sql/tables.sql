@@ -26,7 +26,8 @@ create table KBArticle (
 	status INTEGER,
 	statusByUserId LONG,
 	statusByUserName VARCHAR(75) null,
-	statusDate DATE null
+	statusDate DATE null,
+	lastPublishDate DATE null
 );
 
 create table KBComment (
@@ -42,7 +43,8 @@ create table KBComment (
 	classPK LONG,
 	content STRING null,
 	userRating INTEGER,
-	status INTEGER
+	status INTEGER,
+	lastPublishDate DATE null
 );
 
 create table KBFolder (
@@ -57,7 +59,8 @@ create table KBFolder (
 	parentKBFolderId LONG,
 	name VARCHAR(75) null,
 	urlTitle VARCHAR(75) null,
-	description STRING null
+	description STRING null,
+	lastPublishDate DATE null
 );
 
 create table KBTemplate (
@@ -70,5 +73,6 @@ create table KBTemplate (
 	createDate DATE null,
 	modifiedDate DATE null,
 	title STRING null,
-	content TEXT null
+	content TEXT null,
+	lastPublishDate DATE null
 );

@@ -286,6 +286,20 @@ public interface FooModel extends BaseModel<Foo>, StagedGroupedModel {
 	 */
 	public void setField5(String field5);
 
+	/**
+	 * Returns the last publish date of this foo.
+	 *
+	 * @return the last publish date of this foo
+	 */
+	public Date getLastPublishDate();
+
+	/**
+	 * Sets the last publish date of this foo.
+	 *
+	 * @param lastPublishDate the last publish date of this foo
+	 */
+	public void setLastPublishDate(Date lastPublishDate);
+
 	@Override
 	public boolean isNew();
 
