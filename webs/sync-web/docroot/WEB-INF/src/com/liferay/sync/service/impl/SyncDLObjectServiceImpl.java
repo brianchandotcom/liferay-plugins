@@ -46,7 +46,6 @@ import com.liferay.portal.kernel.zip.ZipReader;
 import com.liferay.portal.kernel.zip.ZipReaderFactoryUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
-import com.liferay.portal.model.Repository;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.security.permission.ActionKeys;
@@ -304,8 +303,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	@Override
-	public List<SyncDLObject> getAllFolderSyncDLObjects(
-			long companyId, long repositoryId)
+	public List<SyncDLObject> getAllFolderSyncDLObjects(long repositoryId)
 		throws PortalException {
 
 		try {
@@ -314,49 +312,10 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			repositoryService.checkRepository(repositoryId);
 
 			List<SyncDLObject> syncDLObjects =
-				syncDLObjectPersistence.findByC_R_T(
-					companyId, repositoryId, SyncConstants.TYPE_FOLDER);
+				syncDLObjectPersistence.findByR_T(
+					repositoryId, SyncConstants.TYPE_FOLDER);
 
-			return checkSyncDLObjects(syncDLObjects, companyId, repositoryId);
-		}
-		catch (PortalException pe) {
-			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
-		}
-	}
-
-	/**
-	 * @deprecated As of 7.0.0, with no direct replacement
-	 */
-	@Deprecated
-	@Override
-	public SyncDLObjectUpdate getAllSyncDLObjects(
-			long repositoryId, long folderId)
-		throws PortalException {
-
-		try {
-			SyncUtil.checkSyncEnabled(repositoryId);
-
-			long lastAccessTime = System.currentTimeMillis();
-
-			long companyId = 0;
-
-			Repository repository = repositoryLocalService.fetchRepository(
-				repositoryId);
-
-			if (repository != null) {
-				companyId = repository.getCompanyId();
-			}
-			else {
-				Group group = groupLocalService.getGroup(repositoryId);
-
-				companyId = group.getCompanyId();
-			}
-
-			List<SyncDLObject> syncDLObjects =
-				syncDLObjectPersistence.findByC_M_R(companyId, 0, repositoryId);
-
-			return new SyncDLObjectUpdate(
-				syncDLObjects, syncDLObjects.size(), lastAccessTime);
+			return checkSyncDLObjects(syncDLObjects, repositoryId);
 		}
 		catch (PortalException pe) {
 			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
@@ -365,14 +324,14 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 	@Override
 	public SyncDLObject getFileEntrySyncDLObject(
-			long groupId, long folderId, String title)
+			long repositoryId, long folderId, String title)
 		throws PortalException {
 
 		try {
-			SyncUtil.checkSyncEnabled(groupId);
+			SyncUtil.checkSyncEnabled(repositoryId);
 
 			FileEntry fileEntry = dlAppService.getFileEntry(
-				groupId, folderId, title);
+				repositoryId, folderId, title);
 
 			return toSyncDLObject(fileEntry, SyncConstants.EVENT_GET);
 		}
@@ -496,11 +455,6 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 		}
 	}
 
-	@Override
-	public long getLatestModifiedTime() {
-		return syncDLObjectLocalService.getLatestModifiedTime();
-	}
-
 	@AccessControlled(guestAccessEnabled = true)
 	@Override
 	public SyncContext getSyncContext() throws PortalException {
@@ -568,18 +522,9 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 		}
 	}
 
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link #getSyncContext()}
-	 */
-	@Deprecated
-	@Override
-	public SyncContext getSyncContext(String uuid) throws PortalException {
-		return getSyncContext();
-	}
-
 	@Override
 	public SyncDLObjectUpdate getSyncDLObjectUpdate(
-			long companyId, long repositoryId, long lastAccessTime)
+			long repositoryId, long lastAccessTime)
 		throws PortalException {
 
 		try {
@@ -599,8 +544,8 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			}
 
 			List<SyncDLObject> syncDLObjects =
-				syncDLObjectPersistence.findByC_M_R_NotE(
-					companyId, lastAccessTime, repositoryId, events, 0,
+				syncDLObjectPersistence.findByM_R_NotE(
+					lastAccessTime, repositoryId, events, 0,
 					PortletPropsValues.SYNC_PAGINATION_DELTA,
 					new SyncDLObjectModifiedTimeComparator());
 
@@ -608,15 +553,15 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				return new SyncDLObjectUpdate(syncDLObjects, 0, lastAccessTime);
 			}
 
-			int count = syncDLObjectPersistence.countByC_M_R_NotE(
-				companyId, lastAccessTime, repositoryId, events);
+			int count = syncDLObjectPersistence.countByM_R_NotE(
+				lastAccessTime, repositoryId, events);
 
 			SyncDLObject syncDLObject = syncDLObjects.get(
 				syncDLObjects.size() - 1);
 
 			return new SyncDLObjectUpdate(
-				checkSyncDLObjects(syncDLObjects, companyId, repositoryId),
-				count, syncDLObject.getModifiedTime());
+				checkSyncDLObjects(syncDLObjects, repositoryId), count,
+				syncDLObject.getModifiedTime());
 		}
 		catch (PortalException pe) {
 			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
@@ -625,8 +570,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 	@Override
 	public SyncDLObjectUpdate getSyncDLObjectUpdate(
-			long companyId, long repositoryId, long parentFolderId,
-			long lastAccessTime)
+			long repositoryId, long parentFolderId, long lastAccessTime)
 		throws PortalException {
 
 		try {
@@ -654,8 +598,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			}
 
 			syncDLObjects = getSyncDLObjects(
-				syncDLObjects, companyId, repositoryId, parentFolderId,
-				lastAccessTime);
+				syncDLObjects, repositoryId, parentFolderId, lastAccessTime);
 
 			return new SyncDLObjectUpdate(
 				syncDLObjects, syncDLObjects.size(), lastAccessTime);
@@ -1049,7 +992,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	protected List<SyncDLObject> checkSyncDLObjects(
-			List<SyncDLObject> syncDLObjects, long companyId, long repositoryId)
+			List<SyncDLObject> syncDLObjects, long repositoryId)
 		throws PortalException {
 
 		PermissionChecker permissionChecker = getPermissionChecker();
@@ -1065,9 +1008,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 		}
 
 		Set<Long> checkedTypePKs = SetUtil.fromList(
-			checkTypePKs(
-				companyId, repositoryId, permissionChecker.getUserId(),
-				typePKs));
+			checkTypePKs(repositoryId, permissionChecker.getUserId(), typePKs));
 
 		List<SyncDLObject> checkedSyncDLObjects = new ArrayList<>();
 
@@ -1091,25 +1032,22 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	protected List<Long> checkTypePKs(
-		long companyId, long repositoryId, long userId, List<Long> typePKs) {
+		long repositoryId, long userId, List<Long> typePKs) {
 
 		if (typePKs.size() <= _SQL_DATA_MAX_PARAMETERS) {
-			return syncDLObjectFinder.filterFindByC_R_U_T(
-				companyId, repositoryId, userId,
-				ArrayUtil.toLongArray(typePKs));
+			return syncDLObjectFinder.filterFindByR_U_T(
+				repositoryId, userId, ArrayUtil.toLongArray(typePKs));
 		}
 		else {
 			List<Long> subListTypePKs = typePKs.subList(
 				0, _SQL_DATA_MAX_PARAMETERS);
 
-			List<Long> checkedTypePKs = syncDLObjectFinder.filterFindByC_R_U_T(
-				companyId, repositoryId, userId,
-				ArrayUtil.toLongArray(subListTypePKs));
+			List<Long> checkedTypePKs = syncDLObjectFinder.filterFindByR_U_T(
+				repositoryId, userId, ArrayUtil.toLongArray(subListTypePKs));
 
 			subListTypePKs.clear();
 
-			checkedTypePKs.addAll(
-				checkTypePKs(companyId, repositoryId, userId, typePKs));
+			checkedTypePKs.addAll(checkTypePKs(repositoryId, userId, typePKs));
 
 			return checkedTypePKs;
 		}
@@ -1142,16 +1080,15 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	protected List<SyncDLObject> getSyncDLObjects(
-			List<SyncDLObject> syncDLObjects, long companyId, long repositoryId,
+			List<SyncDLObject> syncDLObjects, long repositoryId,
 			long parentFolderId, long lastAccessTime)
 		throws PortalException {
 
 		List<SyncDLObject> curSyncDLObjects =
-			syncDLObjectPersistence.findByC_M_R_P(
-				companyId, lastAccessTime, repositoryId, parentFolderId);
+			syncDLObjectPersistence.findByM_R_P(
+				lastAccessTime, repositoryId, parentFolderId);
 
-		curSyncDLObjects = checkSyncDLObjects(
-			curSyncDLObjects, companyId, repositoryId);
+		curSyncDLObjects = checkSyncDLObjects(curSyncDLObjects, repositoryId);
 
 		syncDLObjects.addAll(curSyncDLObjects);
 
@@ -1163,8 +1100,8 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			}
 
 			getSyncDLObjects(
-				syncDLObjects, companyId, repositoryId,
-				curSyncDLObject.getTypePK(), lastAccessTime);
+				syncDLObjects, repositoryId, curSyncDLObject.getTypePK(),
+				lastAccessTime);
 		}
 
 		return syncDLObjects;
