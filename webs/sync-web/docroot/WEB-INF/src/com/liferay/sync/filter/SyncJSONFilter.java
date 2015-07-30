@@ -56,14 +56,27 @@ public class SyncJSONFilter implements Filter {
 		String uri = (String)servletRequest.getAttribute(
 			WebKeys.INVOKER_FILTER_URI);
 
-		if (!uri.startsWith("/api/jsonws/sync-web.")) {
+		HttpServletRequest httpServletRequest =
+			(HttpServletRequest)servletRequest;
+
+		if (uri.equals("/api/jsonws/invoke")) {
+			SyncJSONHttpServletRequestWrapper
+				syncJSONhttpServletRequestWrapper =
+					new SyncJSONHttpServletRequestWrapper(httpServletRequest);
+
+			servletRequest = syncJSONhttpServletRequestWrapper;
+
+			if (!syncJSONhttpServletRequestWrapper.isSyncJSONRequest()) {
+				filterChain.doFilter(servletRequest, servletResponse);
+
+				return;
+			}
+		}
+		else if (!uri.startsWith("/api/jsonws/sync-web.")) {
 			filterChain.doFilter(servletRequest, servletResponse);
 
 			return;
 		}
-
-		HttpServletRequest httpServletRequest =
-			(HttpServletRequest)servletRequest;
 
 		if (ParamUtil.get(httpServletRequest, "debug", false)) {
 			filterChain.doFilter(servletRequest, servletResponse);
