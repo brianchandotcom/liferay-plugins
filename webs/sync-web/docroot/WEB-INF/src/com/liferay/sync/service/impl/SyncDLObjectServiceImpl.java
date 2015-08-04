@@ -528,8 +528,8 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	@Override
-	public SyncDLObjectUpdate getSyncDLObjectUpdate(
-			long repositoryId, long lastAccessTime)
+	public String getSyncDLObjectUpdate(
+			long repositoryId, long lastAccessTime, int max)
 		throws PortalException {
 
 		try {
@@ -548,14 +548,20 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				events = new String[0];
 			}
 
+			if (max == 0) {
+				max = PortletPropsValues.SYNC_PAGINATION_DELTA;
+			}
+
 			List<SyncDLObject> syncDLObjects =
 				syncDLObjectPersistence.findByM_R_NotE(
-					lastAccessTime, repositoryId, events, 0,
-					PortletPropsValues.SYNC_PAGINATION_DELTA,
+					lastAccessTime, repositoryId, events, 0, max,
 					new SyncDLObjectModifiedTimeComparator());
 
 			if (syncDLObjects.isEmpty()) {
-				return new SyncDLObjectUpdate(syncDLObjects, 0, lastAccessTime);
+				SyncDLObjectUpdate syncDLObjectUpdate = new SyncDLObjectUpdate(
+					syncDLObjects, 0, lastAccessTime);
+
+				return syncDLObjectUpdate.toString();
 			}
 
 			int count = syncDLObjectPersistence.countByM_R_NotE(
@@ -564,9 +570,11 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			SyncDLObject syncDLObject = syncDLObjects.get(
 				syncDLObjects.size() - 1);
 
-			return new SyncDLObjectUpdate(
+			SyncDLObjectUpdate syncDLObjectUpdate = new SyncDLObjectUpdate(
 				checkSyncDLObjects(syncDLObjects, repositoryId), count,
 				syncDLObject.getModifiedTime());
+
+			return syncDLObjectUpdate.toString();
 		}
 		catch (PortalException pe) {
 			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
