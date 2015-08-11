@@ -14,6 +14,7 @@
 _sass_cache_*.css
 
 **/.sonar
+**/findbugs-reports
 **/pmd-reports
 
 /.bnd
@@ -52,4 +53,5 @@ _sass_cache_*.css
 /tmp
 
 /tools/*/*/*/lib
+/tools/findbugs
 /tools/node*

@@ -522,6 +522,7 @@ Error-Prone was automatically installed. Please rerun your task.
 
 			<delete dir="@{module.dir}/.js-cache" />
 			<delete dir="@{module.dir}/coverage-reports" />
+			<delete dir="@{module.dir}/findbugs-reports" />
 			<delete dir="@{module.dir}/javadoc" />
 			<delete dir="@{module.dir}/pmd-reports" />
 			<delete dir="@{module.dir}/test-classes" />
@@ -2602,6 +2603,64 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="run-findbugs">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<if>
+				<isset property="findbugs.basedir" />
+				<then>
+					<var name="module.findbugs.basedir" value="${findbugs.basedir}" />
+				</then>
+				<else>
+					<var name="module.findbugs.basedir" value="@{module.dir}" />
+				</else>
+			</if>
+
+			<if>
+				<not>
+					<available file="${findbugs.home}" />
+				</not>
+				<then>
+					<mirrors-get
+						dest="${findbugs.download.parent.dir}/${findbugs.download.zip}"
+						src="${findbugs.download.url}"
+					/>
+					<unzip
+						dest="${findbugs.download.parent.dir}"
+						src="${findbugs.download.parent.dir}/${findbugs.download.zip}"
+					/>
+				</then>
+			</if>
+
+			<mkdir dir="${module.findbugs.basedir}/findbugs-reports" />
+
+			<path id="classpath.com.google.code.findbugs">
+				<fileset dir="${sdk.dir}/dependencies/com.google.code.findbugs/lib" includes="*.jar" />
+				<fileset dir="${findbugs.home}/lib" includes="findbugs-ant.jar" />
+			</path>
+
+			<taskdef classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="classpath.com.google.code.findbugs" name="findbugs" />
+
+			<findbugs
+				home="${findbugs.home}"
+				jvmargs="${findbugs.jvmargs}"
+				output="${findbugs.output.type}"
+				outputFile="${module.findbugs.basedir}/findbugs-reports/findbugs.${findbugs.output.type}">
+
+				<auxClasspath refid="plugin.classpath" />
+				<auxClasspath refid="portal.classpath" />
+
+				<fileset dir="${module.findbugs.basedir}" erroronmissingdir="false">
+					<include name="${module.findbugs.basedir}/src/**/*.java" />
+					<include name="${module.findbugs.basedir}/docroot/WEB-INF/service/**/*.java" />
+					<include name="${module.findbugs.basedir}/docroot/WEB-INF/src/**/*.java" />
+				</fileset>
+				<class location="${module.findbugs.basedir}" />
+			</findbugs>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="run-pmd">
 		<attribute name="module.dir" />
 
@@ -3654,6 +3713,22 @@ for (String path : paths) {
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
 			target.name="run-cpd"
+		/>
+	</target>
+
+	<target name="run-findbugs">
+		<if>
+			<not>
+				<isset property="plugins.includes.path" />
+			</not>
+			<then>
+				<property name="plugins.includes.path" value="${basedir}" />
+			</then>
+		</if>
+
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="run-findbugs"
 		/>
 	</target>
 
