@@ -175,6 +175,15 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		}
 	}
 
+	public BaseModel<?> fetchBaseModel(String className, long classPK)
+		throws Exception {
+
+		AlloyServiceInvoker alloyServiceInvoker = new AlloyServiceInvoker(
+			className);
+
+		return alloyServiceInvoker.fetchModel(classPK);
+	}
+
 	@Override
 	public Portlet getPortlet() {
 		return portlet;
@@ -313,7 +322,8 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		SessionMessages.add(
 			request,
 			portlet.getPortletId() +
-				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA, data);
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA,
+			data);
 	}
 
 	protected void addSuccessMessage() {
@@ -1261,7 +1271,8 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		SessionMessages.add(
 			request,
 			portlet.getPortletId() +
-				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA, data);
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA,
+			data);
 	}
 
 	protected void setPermissioned(boolean permissioned) {
