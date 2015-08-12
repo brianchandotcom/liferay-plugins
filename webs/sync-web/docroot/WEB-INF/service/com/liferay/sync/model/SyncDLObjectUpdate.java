@@ -14,11 +14,14 @@
 
 package com.liferay.sync.model;
 
+import com.liferay.portal.kernel.bean.BeanPropertiesUtil;
 import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.List;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * @author Michael Young
@@ -51,7 +54,7 @@ public class SyncDLObjectUpdate {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler((_syncDLObjects.size() * 52) + 5);
+		StringBundler sb = new StringBundler((_syncDLObjects.size() * 153) + 5);
 
 		sb.append("{\"lastAccessTime\":");
 		sb.append(_lastAccessTime);
@@ -60,58 +63,34 @@ public class SyncDLObjectUpdate {
 		sb.append(",\"syncDLObjects\":[");
 
 		for (int i = 0; i < _syncDLObjects.size(); i++) {
+			sb.append(StringPool.OPEN_CURLY_BRACE);
+
 			SyncDLObject syncDLObject = _syncDLObjects.get(i);
 
-			sb.append("{\"checksum\":\"");
-			sb.append(syncDLObject.getChecksum());
-			sb.append("\",\"changeLog\":\"");
-			sb.append(syncDLObject.getChangeLog());
-			sb.append("\",\"companyId\":");
-			sb.append(syncDLObject.getCompanyId());
-			sb.append(",\"createTime\":");
-			sb.append(syncDLObject.getCreateTime());
-			sb.append(",\"description\":\"");
-			sb.append(syncDLObject.getDescription());
-			sb.append("\",\"extension\":\"");
-			sb.append(syncDLObject.getExtension());
-			sb.append("\",\"extraSettings\":\"");
-			sb.append(syncDLObject.getExtraSettings());
-			sb.append("\",\"event\":\"");
-			sb.append(syncDLObject.getEvent());
-			sb.append("\",\"lockExpirationDate\":");
-			sb.append(syncDLObject.getLockExpirationDate());
-			sb.append(",\"lockUserId\":");
-			sb.append(syncDLObject.getLockUserId());
-			sb.append(",\"lockUserName\":\"");
-			sb.append(syncDLObject.getLockUserName());
-			sb.append("\",\"mimeType\":\"");
-			sb.append(syncDLObject.getMimeType());
-			sb.append("\",\"modifiedTime\":");
-			sb.append(syncDLObject.getModifiedTime());
-			sb.append(",\"name\":\"");
-			sb.append(syncDLObject.getName());
-			sb.append("\",\"parentFolderId\":");
-			sb.append(syncDLObject.getParentFolderId());
-			sb.append(",\"repositoryId\":");
-			sb.append(syncDLObject.getRepositoryId());
-			sb.append(",\"size\":");
-			sb.append(syncDLObject.getSize());
-			sb.append(",\"syncDLObjectId\":");
-			sb.append(syncDLObject.getSyncDLObjectId());
-			sb.append(",\"type\":\"");
-			sb.append(syncDLObject.getType());
-			sb.append("\",\"typePK\":");
-			sb.append(syncDLObject.getTypePK());
-			sb.append(",\"typeUuid\":\"");
-			sb.append(syncDLObject.getTypeUuid());
-			sb.append("\",\"userId\":");
-			sb.append(syncDLObject.getUserId());
-			sb.append(",\"userName\":\"");
-			sb.append(syncDLObject.getUserName());
-			sb.append("\",\"version\":\"");
-			sb.append(syncDLObject.getVersion());
-			sb.append("\",\"versionId\":");
-			sb.append(syncDLObject.getVersionId());
+			for (int j = 0; j < _FIELDS.length; j++) {
+				String field = _FIELDS[j];
+
+				sb.append(StringPool.QUOTE);
+				sb.append(field);
+				sb.append("\":");
+
+				Object value = BeanPropertiesUtil.getObject(
+					syncDLObject, field);
+
+				if (value instanceof String) {
+					sb.append(StringPool.QUOTE);
+					sb.append(StringEscapeUtils.escapeJava((String)value));
+					sb.append(StringPool.QUOTE);
+				}
+				else {
+					sb.append(value);
+				}
+
+				if (j != (_FIELDS.length - 1)) {
+					sb.append(StringPool.COMMA);
+				}
+			}
+
 			sb.append(StringPool.CLOSE_CURLY_BRACE);
 
 			if (i != (_syncDLObjects.size() - 1)) {
@@ -123,6 +102,14 @@ public class SyncDLObjectUpdate {
 
 		return sb.toString();
 	}
+
+	private static final String[] _FIELDS = {
+		"checksum", "changeLog", "companyId", "createTime", "description",
+		"extension", "extraSettings", "event", "lockExpirationDate",
+		"lockUserId", "lockUserName", "mimeType", "modifiedTime", "name",
+		"parentFolderId", "repositoryId", "size", "syncDLObjectId", "type",
+		"typePK", "typeUuid", "userId", "userName", "version", "versionId"
+	};
 
 	private long _lastAccessTime;
 	private int _resultsTotal;
