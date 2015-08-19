@@ -24,6 +24,7 @@
 /*/*/test-classes
 /*/*/test-coverage
 /*/*/test-results
+/*/*/test/integration/arquillian.xml
 /*/*/tmp
 /.bnd
 /.gradle
@@ -31,8 +32,6 @@
 /baseline-reports
 /build.*.properties
 /dist
-/hooks/*/test/integration/arquillian.xml
-/portlets/*/test/integration/arquillian.xml
 /themes/*/docroot/WEB-INF/lib
 /themes/*/docroot/css
 /themes/*/docroot/images
