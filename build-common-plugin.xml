@@ -287,6 +287,25 @@
 
 					<delete dir="classes/tomcat" quiet="true" />
 
+					<if>
+						<available file="@{compile.jsp.docroot.dir}/WEB-INF/liferay-hook.xml" />
+						<then>
+							<xmlproperty file="@{compile.jsp.docroot.dir}/WEB-INF/liferay-hook.xml" prefix="liferay" />
+
+							<property name="custom.portal.jsps" value="${liferay.hook.custom-jsp-dir}/**/*" />
+						</then>
+					</if>
+
+					<fileset dir="@{compile.jsp.docroot.dir}" id="compile.jsp.files">
+						<include name="**/*.jsp" />
+						<include name="**/*.jspx" />
+						<exclude name="${custom.portal.jsps}" />
+					</fileset>
+
+					<pathconvert pathsep=" " property="compile.jsp.files" refid="compile.jsp.files">
+						<map from="${basedir}/@{compile.jsp.docroot.dir}" to="" />
+					</pathconvert>
+
 					<java
 						classname="com.liferay.jasper.jspc.JspC"
 						classpathref="jspc.classpath"
@@ -297,7 +316,7 @@
 					>
 						<sysproperty key="jspc.module.web" value="${jspc.module.web}" />
 						<sysproperty key="jspc.portal.dir" value="${app.server.portal.dir}" />
-						<arg line="-d classes/tomcat -webapp @{compile.jsp.docroot.dir}" />
+						<arg line="-d classes/tomcat -uriroot @{compile.jsp.docroot.dir} ${compile.jsp.files}" />
 					</java>
 
 					<echo>${jspc.output}</echo>
