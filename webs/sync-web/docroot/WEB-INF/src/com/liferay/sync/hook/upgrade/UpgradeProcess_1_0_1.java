@@ -12,31 +12,24 @@
  * details.
  */
 
-package com.liferay.sync.model.impl;
+package com.liferay.sync.hook.upgrade;
 
-import java.util.Date;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.sync.hook.upgrade.v1_0_1.UpgradeSyncDLObject;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Shinn Lok
  */
-public class SyncDLObjectImpl extends SyncDLObjectBaseImpl {
+public class UpgradeProcess_1_0_1 extends UpgradeProcess {
 
-	public SyncDLObjectImpl() {
+	@Override
+	public int getThreshold() {
+		return 101;
 	}
 
 	@Override
-	public String buildTreePath() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void setCreateDate(Date createDate) {
-		setCreateTime(createDate.getTime());
-	}
-
-	@Override
-	public void setModifiedDate(Date modifiedDate) {
-		setModifiedTime(modifiedDate.getTime());
+	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeSyncDLObject.class);
 	}
 
 }

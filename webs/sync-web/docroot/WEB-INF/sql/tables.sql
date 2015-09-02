@@ -17,6 +17,7 @@ create table SyncDLObject (
 	modifiedTime LONG,
 	repositoryId LONG,
 	parentFolderId LONG,
+	treePath STRING null,
 	name VARCHAR(255) null,
 	extension VARCHAR(75) null,
 	mimeType VARCHAR(75) null,
