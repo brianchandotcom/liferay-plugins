@@ -101,6 +101,43 @@ public class ScreensDDLRecordServiceImpl
 		return ddlRecordPersistence.countByR_U(ddlRecordSetId, userId);
 	}
 
+	@Override
+	public JSONObject getDDLRecordWithAttributes(
+			long ddlRecordId, Locale locale)
+		throws PortalException, SystemException {
+
+		DDLRecord ddlRecord = ddlRecordPersistence.findByPrimaryKey(
+			ddlRecordId);
+
+		Fields fields = ddlRecord.getFields();
+
+		Set<Locale> availableLocales = fields.getAvailableLocales();
+
+		if ((locale == null) || !availableLocales.contains(locale)) {
+			locale = fields.getDefaultLocale();
+		}
+
+		return getDDLRecordJSONObject(ddlRecord, locale);
+	}
+
+	protected JSONObject getDDLRecordJSONObject(
+			DDLRecord ddlRecord, Locale locale)
+		throws PortalException, SystemException {
+
+		JSONObject ddlRecordJSONObject = JSONFactoryUtil.createJSONObject();
+
+		ddlRecordJSONObject.put(
+			"modelAttributes",
+			JSONFactoryUtil.createJSONObject(
+				JSONFactoryUtil.looseSerialize(
+					ddlRecord.getModelAttributes())));
+		ddlRecordJSONObject.put(
+			"modelValues",
+			getDDLRecord(ddlRecord.getRecordId(), locale));
+
+		return ddlRecordJSONObject;
+	}
+
 	protected JSONArray getDDLRecordsJSONArray(
 			List<DDLRecord> ddlRecords, Locale locale)
 		throws PortalException, SystemException {
@@ -108,16 +145,8 @@ public class ScreensDDLRecordServiceImpl
 		JSONArray ddlRecordsJSONArray = JSONFactoryUtil.createJSONArray();
 
 		for (DDLRecord ddlRecord : ddlRecords) {
-			JSONObject ddlRecordJSONObject = JSONFactoryUtil.createJSONObject();
-
-			ddlRecordJSONObject.put(
-				"modelAttributes",
-				JSONFactoryUtil.createJSONObject(
-					JSONFactoryUtil.looseSerialize(
-						ddlRecord.getModelAttributes())));
-			ddlRecordJSONObject.put(
-				"modelValues",
-				getDDLRecord(ddlRecord.getRecordId(), locale));
+			JSONObject ddlRecordJSONObject = getDDLRecordJSONObject(
+				ddlRecord, locale);
 
 			ddlRecordsJSONArray.put(ddlRecordJSONObject);
 		}
