@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.PortalSessionThreadLocal;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.CharPool;
@@ -227,7 +228,8 @@ public class DownloadServlet extends HttpServlet {
 	}
 
 	protected DownloadServletInputStream getFileDownloadServletInputStream(
-			long userId, long groupId, String uuid, String version)
+			long userId, long groupId, String uuid, String version,
+			long versionId)
 		throws Exception {
 
 		FileEntry fileEntry = DLAppServiceUtil.getFileEntryByUuidAndGroupId(
@@ -244,14 +246,27 @@ public class DownloadServlet extends HttpServlet {
 					false);
 
 			return new DownloadServletInputStream(
-				inputStream, fileEntry.getMimeType(), fileEntry.getSize());
+				inputStream, fileEntry.getFileName(), fileEntry.getMimeType(),
+				fileEntry.getSize());
 		}
 		else {
-			FileVersion fileVersion = fileEntry.getFileVersion(version);
+			if (versionId > 0) {
+				DLFileVersion dlFileVersion =
+					DLFileVersionLocalServiceUtil.fetchDLFileVersion(versionId);
 
-			return new DownloadServletInputStream(
-				fileVersion.getContentStream(false), fileVersion.getMimeType(),
-				fileVersion.getSize());
+				return new DownloadServletInputStream(
+					dlFileVersion.getContentStream(false),
+					dlFileVersion.getFileName(), dlFileVersion.getMimeType(),
+					dlFileVersion.getSize());
+			}
+			else {
+				FileVersion fileVersion = fileEntry.getFileVersion(version);
+
+				return new DownloadServletInputStream(
+					fileVersion.getContentStream(false),
+					fileVersion.getFileName(), fileVersion.getMimeType(),
+					fileVersion.getSize());
+			}
 		}
 	}
 
@@ -340,13 +355,24 @@ public class DownloadServlet extends HttpServlet {
 		throws Exception {
 
 		String version = ParamUtil.getString(request, "version");
+		long versionId = ParamUtil.getLong(request, "versionId");
 
 		DownloadServletInputStream downloadServletInputStream =
-			getFileDownloadServletInputStream(userId, groupId, uuid, version);
+			getFileDownloadServletInputStream(
+				userId, groupId, uuid, version, versionId);
 
-		ServletResponseUtil.write(
-			response, downloadServletInputStream.getInputStream(),
-			downloadServletInputStream.getSize());
+		if (request.getHeader(HttpHeaders.RANGE) != null) {
+			ServletResponseUtil.sendFileWithRangeHeader(
+				request, response, downloadServletInputStream.getFileName(),
+				downloadServletInputStream.getInputStream(),
+				downloadServletInputStream.getSize(),
+				downloadServletInputStream.getMimeType());
+		}
+		else {
+			ServletResponseUtil.write(
+				response, downloadServletInputStream.getInputStream(),
+				downloadServletInputStream.getSize());
+		}
 	}
 
 	protected void sendImage(HttpServletResponse response, long imageId)
@@ -435,7 +461,8 @@ public class DownloadServlet extends HttpServlet {
 					DownloadServletInputStream downloadServletInputStream =
 						getFileDownloadServletInputStream(
 							userId, groupId, uuid,
-							zipObjectJSONObject.getString("version"));
+							zipObjectJSONObject.getString("version"),
+							zipObjectJSONObject.getLong("versionId"));
 
 					zipWriter.addEntry(
 						zipFileId, downloadServletInputStream.getInputStream());
