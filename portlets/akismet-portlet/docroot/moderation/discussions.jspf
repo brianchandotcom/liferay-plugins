@@ -23,10 +23,10 @@
 		headerNames="subject,preview,posted-by"
 		iteratorURL="<%= portletURL %>"
 		rowChecker="<%= new RowChecker(renderResponse) %>"
-		total="<%= MBMessageLocalServiceUtil.getCategoryMessagesCount(scopeGroupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID, WorkflowConstants.STATUS_DENIED) %>"
+		total="<%= ModerationUtil.getDiscussionMBMessagesCount(scopeGroupId) %>"
 	>
 		<liferay-ui:search-container-results
-			results="<%= MBMessageLocalServiceUtil.getCategoryMessages(scopeGroupId, MBCategoryConstants.DISCUSSION_CATEGORY_ID, WorkflowConstants.STATUS_DENIED, searchContainer.getStart(), searchContainer.getEnd()) %>"
+			results="<%= ModerationUtil.getDiscussionMBMessages(scopeGroupId, searchContainer.getStart(), searchContainer.getEnd()) %>"
 		/>
 
 		<c:if test="<%= !results.isEmpty() %>">
@@ -45,21 +45,14 @@
 		>
 
 			<%
-			MBDiscussion mbDiscussion = MBDiscussionLocalServiceUtil.getThreadDiscussion(message.getThreadId());
+			String rowURL = null;
 
-			long blogsPlid = PortalUtil.getPlidFromPortletId(message.getGroupId(), PortletKeys.BLOGS);
-			%>
+			ExpandoBridge expandoBridge = message.getExpandoBridge();
 
-			<liferay-portlet:renderURL plid="<%= blogsPlid %>" portletName="<%= PortletKeys.BLOGS %>" varImpl="rowURL">
-				<portlet:param name="struts_action" value="/blogs/view_entry" />
-				<portlet:param name="entryId" value="<%= String.valueOf(mbDiscussion.getClassPK()) %>" />
-			</liferay-portlet:renderURL>
+			String contentURL = (String)expandoBridge.getAttribute("akismetContentURL", false);
 
-			<%
-			String className = PortalUtil.getClassName(mbDiscussion.getClassNameId());
-
-			if (!className.equals(BlogsEntry.class.getName())) {
-				rowURL = null;
+			if (Validator.isNotNull(contentURL)) {
+				rowURL = contentURL;
 			}
 			%>
 
