@@ -52,11 +52,26 @@ import java.rmi.RemoteException;
  * @generated
  */
 public class ScreensJournalArticleServiceSoap {
-	public static java.lang.String getJournalArticleContent(int groupId,
-		int classPK, String locale) throws RemoteException {
+	public static java.lang.String getJournalArticleContent(long groupId,
+		long classPK, String locale) throws RemoteException {
 		try {
 			java.lang.String returnValue = ScreensJournalArticleServiceUtil.getJournalArticleContent(groupId,
 					classPK, LocaleUtil.fromLanguageId(locale));
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static java.lang.String getJournalArticleContent(long groupId,
+		long classPK, long templateId, String locale) throws RemoteException {
+		try {
+			java.lang.String returnValue = ScreensJournalArticleServiceUtil.getJournalArticleContent(groupId,
+					classPK, templateId, LocaleUtil.fromLanguageId(locale));
 
 			return returnValue;
 		}

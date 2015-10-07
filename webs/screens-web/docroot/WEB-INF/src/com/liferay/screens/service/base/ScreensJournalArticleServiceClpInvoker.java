@@ -34,11 +34,19 @@ public class ScreensJournalArticleServiceClpInvoker {
 
 		_methodName34 = "getJournalArticleContent";
 
-		_methodParameterTypes34 = new String[] { "int", "int", "java.util.Locale" };
+		_methodParameterTypes34 = new String[] {
+				"long", "long", "java.util.Locale"
+			};
 
 		_methodName35 = "getJournalArticleContent";
 
 		_methodParameterTypes35 = new String[] {
+				"long", "long", "long", "java.util.Locale"
+			};
+
+		_methodName36 = "getJournalArticleContent";
+
+		_methodParameterTypes36 = new String[] {
 				"long", "java.lang.String", "long", "java.util.Locale"
 			};
 	}
@@ -59,13 +67,19 @@ public class ScreensJournalArticleServiceClpInvoker {
 
 		if (_methodName34.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
-			return ScreensJournalArticleServiceUtil.getJournalArticleContent(((Integer)arguments[0]).intValue(),
-				((Integer)arguments[1]).intValue(),
-				(java.util.Locale)arguments[2]);
+			return ScreensJournalArticleServiceUtil.getJournalArticleContent(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(), (java.util.Locale)arguments[2]);
 		}
 
 		if (_methodName35.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes35, parameterTypes)) {
+			return ScreensJournalArticleServiceUtil.getJournalArticleContent(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(), (java.util.Locale)arguments[3]);
+		}
+
+		if (_methodName36.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
 			return ScreensJournalArticleServiceUtil.getJournalArticleContent(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				((Long)arguments[2]).longValue(), (java.util.Locale)arguments[3]);
@@ -82,4 +96,6 @@ public class ScreensJournalArticleServiceClpInvoker {
 	private String[] _methodParameterTypes34;
 	private String _methodName35;
 	private String[] _methodParameterTypes35;
+	private String _methodName36;
+	private String[] _methodParameterTypes36;
 }
