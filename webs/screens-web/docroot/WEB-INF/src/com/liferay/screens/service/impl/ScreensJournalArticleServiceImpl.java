@@ -32,15 +32,33 @@ public class ScreensJournalArticleServiceImpl
 
 	@Override
 	public String getJournalArticleContent(
-			int groupId, int classPK, Locale locale)
+			long groupId, long classPK, Locale locale)
 		throws PortalException, SystemException {
 
 		JournalArticleResource journalArticleResource =
 			journalArticleResourceLocalService.getArticleResource(classPK);
 
+		String articleId = journalArticleResource.getArticleId();
+
 		return journalArticleLocalService.getArticleContent(
-			groupId, journalArticleResource.getArticleId(), null,
-			getLanguageId(locale), null);
+			groupId, articleId, null, getLanguageId(locale), null);
+	}
+
+	@Override
+	public String getJournalArticleContent(
+			long groupId, long classPK, long templateId, Locale locale)
+		throws PortalException, SystemException {
+
+		JournalArticleResource journalArticleResource =
+			journalArticleResourceLocalService.getArticleResource(classPK);
+
+		String articleId = journalArticleResource.getArticleId();
+
+		String ddmTemplateKey = getTemplateKey(templateId);
+
+		return journalArticleLocalService.getArticleContent(
+			groupId, articleId, null, ddmTemplateKey, getLanguageId(locale),
+			null);
 	}
 
 	@Override
@@ -48,14 +66,7 @@ public class ScreensJournalArticleServiceImpl
 			long groupId, String articleId, long templateId, Locale locale)
 		throws PortalException, SystemException {
 
-		DDMTemplate ddmTemplate = DDMTemplateServiceUtil.getTemplate(
-			templateId);
-
-		String ddmTemplateKey = null;
-
-		if (ddmTemplate != null) {
-			ddmTemplateKey = ddmTemplate.getTemplateKey();
-		}
+		String ddmTemplateKey = getTemplateKey(templateId);
 
 		return journalArticleLocalService.getArticleContent(
 			groupId, articleId, null, ddmTemplateKey, getLanguageId(locale),
@@ -68,6 +79,21 @@ public class ScreensJournalArticleServiceImpl
 		}
 
 		return LocaleUtil.toLanguageId(locale);
+	}
+
+	protected String getTemplateKey(long templateId) 
+			throws PortalException, SystemException {
+
+		DDMTemplate ddmTemplate = DDMTemplateServiceUtil.getTemplate(
+			templateId);
+
+		String ddmTemplateKey = null;
+
+		if (ddmTemplate != null) {
+			ddmTemplateKey = ddmTemplate.getTemplateKey();
+		}
+
+		return ddmTemplateKey;
 	}
 
 }
