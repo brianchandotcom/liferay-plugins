@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.search.filter.BooleanFilter;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -43,8 +44,8 @@ import java.util.List;
 public class UserIndexerPostProcessor extends BaseIndexerPostProcessor {
 
 	@Override
-	public void postProcessContextQuery(
-			BooleanQuery contextQuery, SearchContext searchContext)
+	public void postProcessContextBooleanFilter(
+			BooleanFilter booleanFilter, SearchContext searchContext)
 		throws Exception {
 
 		LinkedHashMap<String, Object> params =
@@ -54,8 +55,8 @@ public class UserIndexerPostProcessor extends BaseIndexerPostProcessor {
 			Object projectTitles = params.get("projectTitles");
 
 			if (Validator.isNotNull(projectTitles)) {
-				contextQuery.addRequiredTerm(
-					"projectTitles", String.valueOf(projectTitles), true);
+				booleanFilter.addRequiredTerm(
+					"projectTitles", String.valueOf(projectTitles));
 			}
 
 			Object socialRelationType = params.get("socialRelationType");
@@ -63,7 +64,7 @@ public class UserIndexerPostProcessor extends BaseIndexerPostProcessor {
 			if (Validator.isNotNull(socialRelationType)) {
 				Long[] socialRelationTypeValues = (Long[])socialRelationType;
 
-				contextQuery.addRequiredTerm(
+				booleanFilter.addRequiredTerm(
 					"socialRelationships", socialRelationTypeValues[0]);
 			}
 		}
@@ -121,7 +122,8 @@ public class UserIndexerPostProcessor extends BaseIndexerPostProcessor {
 
 	@Override
 	public void postProcessSearchQuery(
-			BooleanQuery searchQuery, SearchContext searchContext)
+			BooleanQuery searchQuery, BooleanFilter fullQueryBooleanFilter,
+			SearchContext searchContext)
 		throws Exception {
 
 		String keywords = searchContext.getKeywords();
