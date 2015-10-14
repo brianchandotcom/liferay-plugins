@@ -15,11 +15,14 @@
 package com.liferay.pushnotifications.sender.sms;
 
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.pushnotifications.PushNotificationsException;
+import com.liferay.pushnotifications.messaging.DestinationNames;
 import com.liferay.pushnotifications.sender.PushNotificationsSender;
+import com.liferay.pushnotifications.sender.Response;
 import com.liferay.pushnotifications.util.PortletPropsKeys;
 import com.liferay.pushnotifications.util.PortletPropsValues;
 import com.liferay.pushnotifications.util.PushNotificationsConstants;
@@ -40,10 +43,14 @@ public class TwilioSMSSender implements PushNotificationsSender {
 	public TwilioSMSSender() {
 	}
 
-	public TwilioSMSSender(String accountSID, String authToken, String number) {
+	public TwilioSMSSender(
+		String accountSID, String authToken, String number,
+		String statusCallback) {
+
 		_accountSID = accountSID;
 		_authToken = authToken;
 		_number = number;
+		_statusCallback = statusCallback;
 	}
 
 	@Override
@@ -54,8 +61,11 @@ public class TwilioSMSSender implements PushNotificationsSender {
 			configuration, PortletPropsKeys.SMS_TWILIO_AUTH_TOKEN, null);
 		String number = MapUtil.getString(
 			configuration, PortletPropsKeys.SMS_TWILIO_NUMBER, null);
+		String statusCallback = MapUtil.getString(
+			configuration, PortletPropsKeys.SMS_TWILIO_STATUS_CALLBACK, null);
 
-		return new TwilioSMSSender(accountSID, authToken, number);
+		return new TwilioSMSSender(
+			accountSID, authToken, number, statusCallback);
 	}
 
 	public String getAccountSID() {
@@ -88,11 +98,22 @@ public class TwilioSMSSender implements PushNotificationsSender {
 		return _number;
 	}
 
+	public String getStatusCallback() {
+		if (Validator.isNull(_statusCallback)) {
+			_statusCallback = PrefsPropsUtil.getString(
+				PortletPropsKeys.SMS_TWILIO_STATUS_CALLBACK,
+				PortletPropsValues.SMS_TWILIO_STATUS_CALLBACK);
+		}
+
+		return _statusCallback;
+	}
+
 	@Override
 	public synchronized void reset() {
 		_accountSID = null;
 		_authToken = null;
 		_number = null;
+		_statusCallback = null;
 		_twilioRestClient = null;
 	}
 
@@ -129,7 +150,16 @@ public class TwilioSMSSender implements PushNotificationsSender {
 			params.put("From", from);
 			params.put("Body", body);
 
-			smsFactory.create(params);
+			String statusCallback = getStatusCallback();
+
+			if (Validator.isNotNull(statusCallback)) {
+				params.put("StatusCallback", statusCallback);
+			}
+
+			Response response = new TwilioResponse(smsFactory.create(params));
+
+			MessageBusUtil.sendMessage(
+				DestinationNames.PUSH_NOTIFICATION_RESPONSE, response);
 		}
 	}
 
@@ -143,6 +173,10 @@ public class TwilioSMSSender implements PushNotificationsSender {
 
 	public void setNumber(String number) {
 		_number = number;
+	}
+
+	public void setStatusCallback(String statusCallback) {
+		_statusCallback = statusCallback;
 	}
 
 	protected synchronized TwilioRestClient getTwilioRestClient()
@@ -174,6 +208,7 @@ public class TwilioSMSSender implements PushNotificationsSender {
 	private String _accountSID;
 	private String _authToken;
 	private String _number;
+	private String _statusCallback;
 	private TwilioRestClient _twilioRestClient;
 
 }
