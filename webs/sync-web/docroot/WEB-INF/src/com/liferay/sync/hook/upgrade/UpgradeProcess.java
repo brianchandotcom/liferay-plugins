@@ -12,26 +12,31 @@
  * details.
  */
 
-package com.liferay.sync.hook.upgrade.v1_0_0;
+package com.liferay.sync.hook.upgrade;
 
-import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
-import com.liferay.sync.model.SyncConstants;
-import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
-import com.liferay.sync.util.VerifyUtil;
+import com.liferay.portal.kernel.upgrade.UpgradeException;
 
 /**
- * @author Dennis Ju
+ * @author Shinn Lok
  */
-public class UpgradeSyncDLObject extends UpgradeProcess {
+public abstract class UpgradeProcess
+	extends com.liferay.portal.kernel.upgrade.UpgradeProcess {
 
 	@Override
-	protected void doUpgrade() throws Exception {
-		SyncDLObjectLocalServiceUtil.deleteSyncDLObjects(
-			DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION,
-			SyncConstants.TYPE_FILE);
+	public void upgrade() throws UpgradeException {
+		try {
 
-		VerifyUtil.verify();
+			// SYNC-1453
+
+			if (!tableHasData("SyncDLObject")) {
+				return;
+			}
+
+			super.upgrade();
+		}
+		catch (Exception e) {
+			throw new UpgradeException(e);
+		}
 	}
 
 }

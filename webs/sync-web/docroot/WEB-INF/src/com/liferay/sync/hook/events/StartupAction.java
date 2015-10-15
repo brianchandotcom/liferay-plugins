@@ -12,26 +12,38 @@
  * details.
  */
 
-package com.liferay.sync.hook.upgrade.v1_0_0;
+package com.liferay.sync.hook.events;
 
+import com.liferay.portal.kernel.events.ActionException;
+import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
-import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
-import com.liferay.sync.model.SyncConstants;
-import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
+import com.liferay.sync.hook.upgrade.v1_0_0.UpgradeSyncDLObject;
 import com.liferay.sync.util.VerifyUtil;
 
 /**
- * @author Dennis Ju
+ * @author Shinn Lok
  */
-public class UpgradeSyncDLObject extends UpgradeProcess {
+public class StartupAction extends SimpleAction {
 
 	@Override
-	protected void doUpgrade() throws Exception {
-		SyncDLObjectLocalServiceUtil.deleteSyncDLObjects(
-			DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION,
-			SyncConstants.TYPE_FILE);
+	public void run(String[] ids) throws ActionException {
+		try {
+			doRun();
+		}
+		catch (Exception e) {
+			throw new ActionException(e);
+		}
+	}
 
-		VerifyUtil.verify();
+	protected void doRun() throws Exception {
+
+		// SYNC-1453
+
+		UpgradeProcess upgradeProcess = new UpgradeSyncDLObject();
+
+		if (!upgradeProcess.tableHasData("SyncDLObject")) {
+			VerifyUtil.verify();
+		}
 	}
 
 }
