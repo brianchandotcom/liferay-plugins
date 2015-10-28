@@ -16,7 +16,6 @@ package com.liferay.mail.util;
 
 import com.liferay.mail.model.Message;
 import com.liferay.mail.service.MessageLocalServiceUtil;
-import com.liferay.mail.service.persistence.MessageActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
@@ -116,28 +115,33 @@ public class MessageIndexer extends BaseIndexer<Message> {
 	}
 
 	protected void reindexMessages(long companyId) throws PortalException {
-		ActionableDynamicQuery actionableDynamicQuery =
-			new MessageActionableDynamicQuery() {
+		final ActionableDynamicQuery actionableDynamicQuery =
+			MessageLocalServiceUtil.getActionableDynamicQuery();
 
-			@Override
-			protected void performAction(Object object) {
-				Message message = (Message)object;
+		actionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod<Message>() {
 
-				try {
-					Document document = getDocument(message);
+				@Override
+				public void performAction(Message message)
+					throws PortalException {
 
-					addDocument(document);
-				}
-				catch (PortalException pe) {
-					if (_log.isWarnEnabled()) {
-						_log.warn(
-							"Unable to index message " + message.getMessageId(),
-							pe);
+					try {
+						Document document = getDocument(message);
+
+						actionableDynamicQuery.addDocument(document);
+					}
+					catch (PortalException pe) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Unable to index message " +
+									message.getMessageId(),
+								pe);
+						}
 					}
 				}
-			}
 
-		};
+			}
+		);
 
 		actionableDynamicQuery.setCompanyId(companyId);
 		actionableDynamicQuery.setSearchEngineId(getSearchEngineId());

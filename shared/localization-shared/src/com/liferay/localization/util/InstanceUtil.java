@@ -32,7 +32,6 @@ import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.service.persistence.UserActionableDynamicQuery;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.DuplicateColumnNameException;
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -198,28 +197,38 @@ public class InstanceUtil implements PortletPropsKeys {
 		CompanyLocalServiceUtil.updateCompany(company);
 
 		ActionableDynamicQuery actionableDynamicQuery =
-			new UserActionableDynamicQuery() {
+			UserLocalServiceUtil.getActionableDynamicQuery();
 
-			@Override
-			protected void addCriteria(DynamicQuery dynamicQuery) {
-				Property property = PropertyFactoryUtil.forName("createDate");
+		actionableDynamicQuery.setAddCriteriaMethod(
+			new ActionableDynamicQuery.AddCriteriaMethod() {
 
-				dynamicQuery.add(property.eqProperty("modifiedDate"));
+				@Override
+				public void addCriteria(DynamicQuery dynamicQuery) {
+					Property property = PropertyFactoryUtil.forName(
+						"createDate");
+
+					dynamicQuery.add(property.eqProperty("modifiedDate"));
+				}
+
 			}
+		);
 
-			@Override
-			protected void performAction(Object object) throws PortalException {
-				User user = (User)object;
+		actionableDynamicQuery.setPerformActionMethod(
+			new ActionableDynamicQuery.PerformActionMethod<User>() {
 
-				user.setModifiedDate(new Date());
-				user.setLanguageId(PortletPropsValues.COMPANY_DEFAULT_LOCALE);
-				user.setTimeZoneId(
-					PortletPropsValues.COMPANY_DEFAULT_TIME_ZONE);
+				@Override
+				public void performAction(User user) throws PortalException {
+					user.setModifiedDate(new Date());
+					user.setLanguageId(
+						PortletPropsValues.COMPANY_DEFAULT_LOCALE);
+					user.setTimeZoneId(
+						PortletPropsValues.COMPANY_DEFAULT_TIME_ZONE);
 
-				UserLocalServiceUtil.updateUser(user);
+					UserLocalServiceUtil.updateUser(user);
+				}
+
 			}
-
-		};
+		);
 
 		actionableDynamicQuery.setCompanyId(companyId);
 
