@@ -39,13 +39,11 @@ public class WordsServiceWrapper implements WordsService,
 	}
 
 	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
+	* Returns OSGI service identifier for this bean.
 	*/
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _wordsService.getBeanIdentifier();
+	public java.lang.String getOSGIServiceIdentifier() {
+		return _wordsService.getOSGIServiceIdentifier();
 	}
 
 	@Override
@@ -59,16 +57,6 @@ public class WordsServiceWrapper implements WordsService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _wordsService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_wordsService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**

@@ -45,13 +45,11 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 	}
 
 	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
+	* Returns OSGI service identifier for this bean.
 	*/
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _tasksEntryService.getBeanIdentifier();
+	public java.lang.String getOSGIServiceIdentifier() {
+		return _tasksEntryService.getOSGIServiceIdentifier();
 	}
 
 	@Override
@@ -65,16 +63,6 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _tasksEntryService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_tasksEntryService.setBeanIdentifier(beanIdentifier);
 	}
 
 	@Override

@@ -58,11 +58,9 @@ public interface PushNotificationsDeviceService extends BaseService,
 		java.lang.String token) throws PortalException;
 
 	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
+	* Returns OSGI service identifier for this bean.
 	*/
-	public java.lang.String getBeanIdentifier();
+	public java.lang.String getOSGIServiceIdentifier();
 
 	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
@@ -75,11 +73,4 @@ public interface PushNotificationsDeviceService extends BaseService,
 
 	public void sendPushNotification(long[] toUserIds, java.lang.String payload)
 		throws PortalException;
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public void setBeanIdentifier(java.lang.String beanIdentifier);
 }
