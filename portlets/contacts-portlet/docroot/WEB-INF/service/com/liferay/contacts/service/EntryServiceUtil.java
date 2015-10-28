@@ -43,12 +43,12 @@ public class EntryServiceUtil {
 	 */
 
 	/**
-	* Returns the Spring bean ID for this bean.
+	* Returns the OSGI service identifier.
 	*
-	* @return the Spring bean ID for this bean
+	* @return the OSGI service identifier
 	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
+	public static java.lang.String getOSGIServiceIdentifier() {
+		return getService().getOSGIServiceIdentifier();
 	}
 
 	public static java.lang.Object invokeMethod(java.lang.String name,
@@ -62,15 +62,6 @@ public class EntryServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .searchUsersAndContacts(companyId, keywords, start, end);
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	public static void clearService() {

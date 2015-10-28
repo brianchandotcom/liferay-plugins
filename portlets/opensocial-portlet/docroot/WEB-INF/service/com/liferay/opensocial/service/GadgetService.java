@@ -57,23 +57,16 @@ public interface GadgetService extends BaseService, InvokableService {
 		throws PortalException;
 
 	/**
-	* Returns the Spring bean ID for this bean.
+	* Returns the OSGI service identifier.
 	*
-	* @return the Spring bean ID for this bean
+	* @return the OSGI service identifier
 	*/
-	public java.lang.String getBeanIdentifier();
+	public java.lang.String getOSGIServiceIdentifier();
 
 	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
 	public void updateGadget(long gadgetId,
 		java.lang.String portletCategoryNames,

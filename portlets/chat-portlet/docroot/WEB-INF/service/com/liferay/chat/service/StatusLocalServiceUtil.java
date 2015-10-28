@@ -187,21 +187,21 @@ public class StatusLocalServiceUtil {
 				   .getAllStatuses(companyId, userId, modifiedDate, start, end);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
-
 	public static java.util.List<java.lang.Object[]> getGroupStatuses(
 		long userId, long modifiedDate, java.lang.String[] groupNames,
 		int start, int end) {
 		return getService()
 				   .getGroupStatuses(userId, modifiedDate, groupNames, start,
 			end);
+	}
+
+	/**
+	* Returns the OSGI service identifier.
+	*
+	* @return the OSGI service identifier
+	*/
+	public static java.lang.String getOSGIServiceIdentifier() {
+		return getService().getOSGIServiceIdentifier();
 	}
 
 	public static com.liferay.portal.model.PersistedModel getPersistedModel(
@@ -267,15 +267,6 @@ public class StatusLocalServiceUtil {
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	/**

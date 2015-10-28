@@ -184,13 +184,13 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	}
 
 	/**
-	* Returns the Spring bean ID for this bean.
+	* Returns the OSGI service identifier.
 	*
-	* @return the Spring bean ID for this bean
+	* @return the OSGI service identifier
 	*/
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _typeLocalService.getBeanIdentifier();
+	public java.lang.String getOSGIServiceIdentifier() {
+		return _typeLocalService.getOSGIServiceIdentifier();
 	}
 
 	@Override
@@ -245,16 +245,6 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _typeLocalService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_typeLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
