@@ -30,6 +30,8 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
@@ -229,6 +231,14 @@ public class KBArticleStagedModelDataHandler
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
 			kbArticle);
+
+		String urlTitle = kbArticle.getUrlTitle();
+
+		if (Validator.isNotNull(urlTitle) &&
+			!urlTitle.startsWith(StringPool.SLASH)) {
+
+			kbArticle.setUrlTitle(StringPool.SLASH + urlTitle);
+		}
 
 		KBArticle importedKBArticle = null;
 
