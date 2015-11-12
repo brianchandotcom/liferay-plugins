@@ -73,6 +73,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.SystemEventConstants;
@@ -1694,12 +1695,16 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		String uniqueUrlTitle = urlTitle;
 
+		int urlTitleMaxLength = ModelHintsUtil.getMaxLength(
+			KBArticle.class.getName(), "urlTitle");
+
 		if (kbFolderId == KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			int kbArticlesCount = kbArticlePersistence.countByG_KBFI_UT_ST(
 				groupId, kbFolderId, uniqueUrlTitle, _STATUSES);
 
 			for (int i = 1; kbArticlesCount > 0; i++) {
-				uniqueUrlTitle = urlTitle + StringPool.DASH + i;
+				uniqueUrlTitle = getUniqueUrlTitle(
+					urlTitle, urlTitleMaxLength, i);
 
 				kbArticlesCount = kbArticlePersistence.countByG_KBFI_UT_ST(
 					groupId, kbFolderId, uniqueUrlTitle, _STATUSES);
@@ -1714,7 +1719,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			groupId, kbFolder.getUrlTitle(), uniqueUrlTitle, _STATUSES);
 
 		for (int i = 1; kbArticlesCount > 0; i++) {
-			uniqueUrlTitle = urlTitle + StringPool.DASH + i;
+			uniqueUrlTitle = getUniqueUrlTitle(urlTitle, urlTitleMaxLength, i);
 
 			kbArticlesCount = kbArticleFinder.countByUrlTitle(
 				groupId, kbFolder.getUrlTitle(), uniqueUrlTitle, _STATUSES);
@@ -1733,6 +1738,15 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 
 		return urlTitle.substring(1);
+	}
+
+	protected String getUniqueUrlTitle(
+		String baseUrlTitle, int maxLength, int suffix) {
+
+		String uniqueUrlTitle = baseUrlTitle + StringPool.DASH + suffix;
+
+		return StringUtil.shorten(
+			uniqueUrlTitle, maxLength, StringPool.DASH + suffix);
 	}
 
 	protected boolean isValidFileName(String name) {
