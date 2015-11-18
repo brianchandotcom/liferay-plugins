@@ -17,7 +17,7 @@ package com.liferay.chat.service.persistence;
 import com.liferay.chat.model.Status;
 import com.liferay.chat.service.StatusLocalServiceUtil;
 
-import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 
 /**
  * @author Brian Wing Shun Chan
@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
  */
 @Deprecated
 public abstract class StatusActionableDynamicQuery
-	extends BaseActionableDynamicQuery {
+	extends DefaultActionableDynamicQuery {
 	public StatusActionableDynamicQuery() {
 		setBaseLocalService(StatusLocalServiceUtil.getService());
 		setClass(Status.class);

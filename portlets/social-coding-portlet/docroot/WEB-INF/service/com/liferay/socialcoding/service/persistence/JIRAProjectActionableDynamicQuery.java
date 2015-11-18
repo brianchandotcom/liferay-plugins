@@ -14,7 +14,7 @@
 
 package com.liferay.socialcoding.service.persistence;
 
-import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 
 import com.liferay.socialcoding.model.JIRAProject;
 import com.liferay.socialcoding.service.JIRAProjectLocalServiceUtil;
@@ -26,7 +26,7 @@ import com.liferay.socialcoding.service.JIRAProjectLocalServiceUtil;
  */
 @Deprecated
 public abstract class JIRAProjectActionableDynamicQuery
-	extends BaseActionableDynamicQuery {
+	extends DefaultActionableDynamicQuery {
 	public JIRAProjectActionableDynamicQuery() {
 		setBaseLocalService(JIRAProjectLocalServiceUtil.getService());
 		setClass(JIRAProject.class);

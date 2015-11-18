@@ -14,7 +14,7 @@
 
 package com.liferay.testtransaction.service.persistence;
 
-import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 
 import com.liferay.testtransaction.model.Bar;
 import com.liferay.testtransaction.service.BarLocalServiceUtil;
@@ -26,7 +26,7 @@ import com.liferay.testtransaction.service.BarLocalServiceUtil;
  */
 @Deprecated
 public abstract class BarActionableDynamicQuery
-	extends BaseActionableDynamicQuery {
+	extends DefaultActionableDynamicQuery {
 	public BarActionableDynamicQuery() {
 		setBaseLocalService(BarLocalServiceUtil.getService());
 		setClass(Bar.class);

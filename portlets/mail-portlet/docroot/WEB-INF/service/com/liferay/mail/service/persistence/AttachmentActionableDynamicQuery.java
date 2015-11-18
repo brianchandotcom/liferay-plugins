@@ -17,7 +17,7 @@ package com.liferay.mail.service.persistence;
 import com.liferay.mail.model.Attachment;
 import com.liferay.mail.service.AttachmentLocalServiceUtil;
 
-import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 
 /**
  * @author Brian Wing Shun Chan
@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
  */
 @Deprecated
 public abstract class AttachmentActionableDynamicQuery
-	extends BaseActionableDynamicQuery {
+	extends DefaultActionableDynamicQuery {
 	public AttachmentActionableDynamicQuery() {
 		setBaseLocalService(AttachmentLocalServiceUtil.getService());
 		setClass(Attachment.class);

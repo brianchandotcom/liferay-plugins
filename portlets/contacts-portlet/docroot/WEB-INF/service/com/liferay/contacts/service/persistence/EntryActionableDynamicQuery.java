@@ -17,7 +17,7 @@ package com.liferay.contacts.service.persistence;
 import com.liferay.contacts.model.Entry;
 import com.liferay.contacts.service.EntryLocalServiceUtil;
 
-import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 
 /**
  * @author Brian Wing Shun Chan
@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
  */
 @Deprecated
 public abstract class EntryActionableDynamicQuery
-	extends BaseActionableDynamicQuery {
+	extends DefaultActionableDynamicQuery {
 	public EntryActionableDynamicQuery() {
 		setBaseLocalService(EntryLocalServiceUtil.getService());
 		setClass(Entry.class);

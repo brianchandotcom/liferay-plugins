@@ -17,7 +17,7 @@ package com.liferay.mail.service.persistence;
 import com.liferay.mail.model.Message;
 import com.liferay.mail.service.MessageLocalServiceUtil;
 
-import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 
 /**
  * @author Brian Wing Shun Chan
@@ -26,7 +26,7 @@ import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
  */
 @Deprecated
 public abstract class MessageActionableDynamicQuery
-	extends BaseActionableDynamicQuery {
+	extends DefaultActionableDynamicQuery {
 	public MessageActionableDynamicQuery() {
 		setBaseLocalService(MessageLocalServiceUtil.getService());
 		setClass(Message.class);

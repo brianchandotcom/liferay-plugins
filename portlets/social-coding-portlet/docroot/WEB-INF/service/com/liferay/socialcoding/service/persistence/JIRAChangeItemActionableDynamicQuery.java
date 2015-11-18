@@ -14,7 +14,7 @@
 
 package com.liferay.socialcoding.service.persistence;
 
-import com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 
 import com.liferay.socialcoding.model.JIRAChangeItem;
 import com.liferay.socialcoding.service.JIRAChangeItemLocalServiceUtil;
@@ -26,7 +26,7 @@ import com.liferay.socialcoding.service.JIRAChangeItemLocalServiceUtil;
  */
 @Deprecated
 public abstract class JIRAChangeItemActionableDynamicQuery
-	extends BaseActionableDynamicQuery {
+	extends DefaultActionableDynamicQuery {
 	public JIRAChangeItemActionableDynamicQuery() {
 		setBaseLocalService(JIRAChangeItemLocalServiceUtil.getService());
 		setClass(JIRAChangeItem.class);
