@@ -19,6 +19,7 @@ import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.captcha.CaptchaTextException;
 import com.liferay.portal.kernel.captcha.CaptchaUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
@@ -251,6 +252,34 @@ public class WebFormPortlet extends MVCPortlet {
 		}
 	}
 
+	protected void appendFieldLabels(
+		Map<String, String> fieldsMap, StringBundler sb) {
+
+		for (String fieldLabel : fieldsMap.keySet()) {
+			sb.append(getCSVFormattedValue(fieldLabel));
+			sb.append(PortletPropsValues.CSV_SEPARATOR);
+		}
+
+		sb.setIndex(sb.index() - 1);
+
+		sb.append(CharPool.NEW_LINE);
+	}
+
+	protected void appendFieldValues(
+		Map<String, String> fieldsMap, StringBundler sb) {
+
+		for (String fieldLabel : fieldsMap.keySet()) {
+			String fieldValue = fieldsMap.get(fieldLabel);
+
+			sb.append(getCSVFormattedValue(fieldValue));
+			sb.append(PortletPropsValues.CSV_SEPARATOR);
+		}
+
+		sb.setIndex(sb.index() - 1);
+
+		sb.append(CharPool.NEW_LINE);
+	}
+
 	protected void exportData(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
@@ -381,19 +410,16 @@ public class WebFormPortlet extends MVCPortlet {
 		}
 	}
 
-	protected boolean saveFile(Map<String, String> fieldsMap, String fileName) {
+	protected boolean saveFile(Map<String, String> fieldsMap, String fileName)
+		throws PortalException {
+
 		StringBundler sb = new StringBundler();
 
-		for (String fieldLabel : fieldsMap.keySet()) {
-			String fieldValue = fieldsMap.get(fieldLabel);
-
-			sb.append(getCSVFormattedValue(fieldValue));
-			sb.append(PortletPropsValues.CSV_SEPARATOR);
+		if (!FileUtil.exists(fileName)) {
+			appendFieldLabels(fieldsMap, sb);
 		}
 
-		sb.setIndex(sb.index() - 1);
-
-		sb.append(CharPool.NEW_LINE);
+		appendFieldValues(fieldsMap, sb);
 
 		try {
 			FileUtil.write(fileName, sb.toString(), false, true);
