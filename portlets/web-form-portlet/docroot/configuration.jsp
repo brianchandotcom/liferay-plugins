@@ -54,12 +54,14 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 	<liferay-ui:panel-container extended="<%= Boolean.TRUE %>" id="webFormConfiguration" persistState="<%= true %>">
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="webFormGeneral" persistState="<%= true %>" title="form-information">
 			<aui:fieldset>
+				<liferay-ui:error key="successURLInvalid" message="please-enter-a-valid-url" />
+
 				<aui:field-wrapper cssClass="lfr-input-text-container" label="title">
-					<liferay-ui:input-localized name="title" xml="<%= titleXml %>" />
+					<liferay-ui:input-localized cssClass="form-control lfr-input-text" name="title" xml="<%= titleXml %>" />
 				</aui:field-wrapper>
 
 				<aui:field-wrapper cssClass="lfr-textarea-container" label="description">
-					<liferay-ui:input-localized name="description" type="textarea" xml="<%= descriptionXml %>" />
+					<liferay-ui:input-localized cssClass="form-control lfr-input-text" name="description" type="textarea" xml="<%= descriptionXml %>" />
 				</aui:field-wrapper>
 
 				<aui:input name="preferences--requireCaptcha--" type="checkbox" value="<%= requireCaptcha %>" />
