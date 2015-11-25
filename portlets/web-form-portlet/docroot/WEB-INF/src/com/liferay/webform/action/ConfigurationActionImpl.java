@@ -24,6 +24,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portlet.expando.ColumnNameException;
 import com.liferay.portlet.expando.DuplicateColumnNameException;
 import com.liferay.webform.util.WebFormUtil;
 
@@ -224,88 +225,93 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		}
 	}
 
-	protected void validateFields(ActionRequest actionRequest)
-		throws Exception {
-
-		Locale defaultLocale = LocaleUtil.getSiteDefault();
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		boolean sendAsEmail = GetterUtil.getBoolean(
-			getParameter(actionRequest, "sendAsEmail"));
+	protected void validateEmailFields(ActionRequest actionRequest) {
 		String subject = getParameter(actionRequest, "subject");
+
+		if (Validator.isNull(subject)) {
+			SessionErrors.add(actionRequest, "subjectRequired");
+		}
+
+		String[] emailAdresses = WebFormUtil.split(
+			getParameter(actionRequest, "emailAddress"));
+		String emailFromAddress = GetterUtil.getString(
+			getParameter(actionRequest, "emailFromAddress"));
+
+		if ((emailAdresses.length == 0) || Validator.isNull(emailFromAddress)) {
+			SessionErrors.add(actionRequest, "emailAddressRequired");
+		}
+
+		if (Validator.isNotNull(emailFromAddress) &&
+			!Validator.isEmailAddress(emailFromAddress)) {
+
+			SessionErrors.add(actionRequest, "emailAddressInvalid");
+		}
+		else {
+			for (String emailAdress : emailAdresses) {
+				emailAdress = emailAdress.trim();
+
+				if (!Validator.isEmailAddress(emailAdress)) {
+					SessionErrors.add(actionRequest, "emailAddressInvalid");
+
+					break;
+				}
+			}
+		}
+	}
+
+	protected void validateFieldNameLength(ActionRequest actionRequest) {
+		int[] formFieldsIndexes = StringUtil.split(
+			ParamUtil.getString(actionRequest, "formFieldsIndexes"), 0);
+
+		String languageId = LocaleUtil.toLanguageId(actionRequest.getLocale());
 
 		boolean saveToDatabase = GetterUtil.getBoolean(
 			getParameter(actionRequest, "saveToDatabase"));
 
+		for (int formFieldsIndex : formFieldsIndexes) {
+			String fieldLabel = ParamUtil.getString(
+				actionRequest,
+				"fieldLabel" + formFieldsIndex + "_" + languageId);
+
+			if (Validator.isNull(fieldLabel)) {
+				SessionErrors.add(
+					actionRequest, ColumnNameException.class.getName());
+
+				return;
+			}
+
+			if (saveToDatabase && (fieldLabel.length() > 75)) {
+				SessionErrors.add(
+					actionRequest, "fieldSizeInvalid" + formFieldsIndex);
+
+				return;
+			}
+		}
+	}
+
+	protected void validateFields(ActionRequest actionRequest)
+		throws Exception {
+
+		boolean saveToDatabase = GetterUtil.getBoolean(
+			getParameter(actionRequest, "saveToDatabase"));
 		boolean saveToFile = GetterUtil.getBoolean(
 			getParameter(actionRequest, "saveToFile"));
+		boolean sendAsEmail = GetterUtil.getBoolean(
+			getParameter(actionRequest, "sendAsEmail"));
 
-		if (!sendAsEmail && !saveToDatabase && !saveToFile) {
+		if (!saveToDatabase && !saveToFile && !sendAsEmail) {
 			SessionErrors.add(actionRequest, "handlingRequired");
 		}
 
 		if (sendAsEmail) {
-			if (Validator.isNull(subject)) {
-				SessionErrors.add(actionRequest, "subjectRequired");
-			}
-
-			String[] emailAdresses = WebFormUtil.split(
-				getParameter(actionRequest, "emailAddress"));
-			String emailFromAddress = GetterUtil.getString(
-				getParameter(actionRequest, "emailFromAddress"));
-
-			if ((emailAdresses.length == 0) ||
-				Validator.isNull(emailFromAddress)) {
-
-				SessionErrors.add(actionRequest, "emailAddressRequired");
-			}
-
-			if (Validator.isNotNull(emailFromAddress) &&
-				!Validator.isEmailAddress(emailFromAddress)) {
-
-				SessionErrors.add(actionRequest, "emailAddressInvalid");
-			}
-			else {
-				for (String emailAdress : emailAdresses) {
-					emailAdress = emailAdress.trim();
-
-					if (!Validator.isEmailAddress(emailAdress)) {
-						SessionErrors.add(actionRequest, "emailAddressInvalid");
-
-						break;
-					}
-				}
-			}
+			validateEmailFields(actionRequest);
 		}
 
-		if (saveToDatabase) {
-			int i = 1;
-
-			String languageId = LocaleUtil.toLanguageId(
-				actionRequest.getLocale());
-
-			String fieldLabel = ParamUtil.getString(
-				actionRequest, "fieldLabel" + i + "_" + languageId);
-
-			while ((i == 1) || Validator.isNotNull(fieldLabel)) {
-				if (fieldLabel.length() > 75 ) {
-					SessionErrors.add(actionRequest, "fieldSizeInvalid" + i);
-				}
-
-				i++;
-
-				fieldLabel = ParamUtil.getString(
-					actionRequest, "fieldLabel" + i + "_" + languageId);
-			}
-		}
-
-		if (!validateUniqueFieldNames(actionRequest)) {
-			SessionErrors.add(
-				actionRequest, DuplicateColumnNameException.class.getName());
-		}
+		validateFieldNameLength(actionRequest);
+		validateUniqueFieldNames(actionRequest);
 	}
 
-	protected boolean validateUniqueFieldNames(ActionRequest actionRequest) {
+	protected void validateUniqueFieldNames(ActionRequest actionRequest) {
 		Locale defaultLocale = LocaleUtil.getSiteDefault();
 
 		Set<String> localizedUniqueFieldNames = new HashSet<>();
@@ -334,12 +340,14 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 				if (!localizedUniqueFieldNames.add(
 						languageId + "_" + fieldLabelValue)) {
 
-					return false;
+					SessionErrors.add(
+						actionRequest,
+						DuplicateColumnNameException.class.getName());
+
+					return;
 				}
 			}
 		}
-
-		return true;
 	}
 
 }
