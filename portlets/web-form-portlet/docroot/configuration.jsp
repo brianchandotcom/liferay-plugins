@@ -213,26 +213,23 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			var optionalControl = formRow.one('.optional-control').ancestor();
 			var paragraphDiv = formRow.one('.paragraph');
 
-			if (value === 'paragraph') {
+			var paragraph = value === 'paragraph'
+
+			if (paragraph) {
 				var inputName = labelName.one('input.field');
 
 				var formFieldsIndex = instance.attr('id').match(/\d+$/);
 
 				inputName.val('<liferay-ui:message key="paragraph" />' + formFieldsIndex);
 				inputName.fire('change');
-
-				labelName.hide();
-				optionalControl.hide();
-				paragraphDiv.show();
-
-				optionalControl.all('input[type="checkbox"]').attr('checked', 'true');
-				optionalControl.all('input[type="hidden"]').attr('value', 'true');
 			}
-			else {
-				labelName.show();
-				optionalControl.show();
-				paragraphDiv.hide();
-			}
+
+			labelName.toggle(!paragraph);
+			optionalControl.toggle(!paragraph);
+			paragraphDiv.toggle(paragraph);
+
+			optionalControl.all('input[type="checkbox"]').attr('checked', paragraph);
+			optionalControl.all('input[type="hidden"]').attr('value', paragraph);
 		};
 
 		var webFields = A.one('.webFields');
