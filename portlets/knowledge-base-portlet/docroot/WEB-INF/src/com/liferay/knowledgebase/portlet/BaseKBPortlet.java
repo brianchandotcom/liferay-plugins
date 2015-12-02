@@ -37,8 +37,10 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.servlet.SessionMessages;
+import com.liferay.portal.kernel.upload.LiferayFileItemException;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.upload.UploadRequestSizeException;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -67,10 +69,9 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Adolfo Pérez
@@ -83,6 +84,8 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
+
+		checkExceededSizeLimit(actionRequest);
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -438,18 +441,29 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 		return editURL;
 	}
 
-	protected void checkExceededSizeLimit(HttpServletRequest request)
+	protected void checkExceededSizeLimit(PortletRequest portletRequest)
 		throws PortalException {
 
-		UploadException uploadException = (UploadException)request.getAttribute(
-			WebKeys.UPLOAD_EXCEPTION);
+		UploadException uploadException =
+			(UploadException)portletRequest.getAttribute(
+				WebKeys.UPLOAD_EXCEPTION);
 
 		if (uploadException != null) {
-			if (uploadException.isExceededSizeLimit()) {
-				throw new FileSizeException(uploadException.getCause());
+			Throwable cause = uploadException.getCause();
+
+			if (uploadException.isExceededFileSizeLimit()) {
+				throw new FileSizeException(cause);
 			}
 
-			throw new PortalException(uploadException.getCause());
+			if (uploadException.isExceededLiferayFileItemSizeLimit()) {
+				throw new LiferayFileItemException(cause);
+			}
+
+			if (uploadException.isExceededUploadRequestSizeLimit()) {
+				throw new UploadRequestSizeException(cause);
+			}
+
+			throw new PortalException(cause);
 		}
 	}
 
