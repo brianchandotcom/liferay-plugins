@@ -58,6 +58,10 @@
 
 	<import file="build-common-node.xml" />
 
+	<path id="osgi.classpath">
+		<fileset dir="${module.framework.base.dir}" includes="**/*.jar" />
+	</path>
+
 	<path id="plugin.classpath">
 		<path refid="plugin-lib.classpath" />
 		<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
@@ -3133,6 +3137,7 @@ for (String path : paths) {
 
 	<macrodef name="war-web">
 		<attribute name="module.dir" />
+		<attribute name="exclude.osgi.classpath" default="true" />
 
 		<sequential>
 			<set-module-properties
@@ -3173,12 +3178,25 @@ for (String path : paths) {
 			</if>
 
 			<if>
+				<istrue value="@{exclude.osgi.classpath}"/>
+				<then>
+					<pathconvert pathsep="," property="osgi.classpath" refid="osgi.classpath" targetos="unix">
+						<mapper type="flatten"/>
+						<map from="" to="**/"/>
+					</pathconvert>
+				</then>
+				<else>
+					<var name="osgi.classpath" value="" />
+				</else>
+			</if>
+
+			<if>
 				<contains string="${app.server.dir}" substring="glassfish" />
 				<then>
 					<zip
 						basedir="${docroot.dir}"
 						destfile="${plugin.file}"
-						excludes="**/.sass-cache/**,**/*.scss,**/META-INF/context.xml,${liferay-hook.xml.excludes},${plugins.war.excludes}"
+						excludes="**/.sass-cache/**,**/*.scss,**/META-INF/context.xml,${liferay-hook.xml.excludes},${plugins.war.excludes},${osgi.classpath}"
 					>
 						<zipfileset
 							dir="${docroot.dir}"
@@ -3200,7 +3218,7 @@ for (String path : paths) {
 					<zip
 						basedir="${docroot.dir}"
 						destfile="${plugin.file}"
-						excludes="**/.sass-cache/**,**/*.scss,${liferay-hook.xml.excludes},${plugins.war.excludes}"
+						excludes="**/.sass-cache/**,**/*.scss,${liferay-hook.xml.excludes},${plugins.war.excludes},${osgi.classpath}"
 					>
 						<zipfileset
 							dir="${docroot.dir}"
