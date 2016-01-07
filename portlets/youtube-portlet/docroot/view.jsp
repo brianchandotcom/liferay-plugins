@@ -22,6 +22,8 @@
 		<%
 		StringBundler sb = new StringBundler();
 
+		sb.append("?wmode=transparent");
+
 		if (autoplay) {
 			sb.append("&amp;autoplay=1");
 		}
@@ -52,19 +54,13 @@
 		}
 		%>
 
-		<liferay-ui:flash
-			allowScriptAccess="true"
-			height="<%= height %>"
-			movie="<%= swfURL + id + sb.toString() %>"
-			width="<%= width %>"
-			wmode="opaque"
-		>
-			<c:if test="<%= showThumbnail %>">
-				<aui:a href="<%= watchURL + id %>" rel="external" title='<%= HtmlUtil.escapeAttribute(LanguageUtil.get(request, "watch-this-video-at-youtube")) %>'>
-					<img alt="<liferay-ui:message escapeAttribute="<%= true %>" key="youtube-video" />" height="<%= height %>" src="<%= imageURL %>" width="<%= width %>" />
-				</aui:a>
-			</c:if>
-		</liferay-ui:flash>
+		<c:if test="<%= showThumbnail %>">
+			<aui:a href="<%= watchURL + id %>" rel="external" title='<%= HtmlUtil.escapeAttribute(LanguageUtil.get(request, "watch-this-video-at-youtube")) %>'>
+				<img alt="<liferay-ui:message escapeAttribute="<%= true %>" key="youtube-video" />" height="<%= height %>" src="<%= imageURL %>" width="<%= width %>" />
+			</aui:a>
+		</c:if>
+
+		<iframe allowfullscreen frameborder="0" height="<%= height %>" src="<%= embedURL + id + sb.toString() %>" width="<%= width %>" wmode="Opaque" /></iframe>
 	</c:when>
 	<c:otherwise>
 		<liferay-util:include page="/html/portal/portlet_not_setup.jsp" />
