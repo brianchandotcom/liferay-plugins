@@ -258,7 +258,8 @@ public class SitesPortlet extends MVCPortlet {
 			groupJSONObject.put(
 				"description", HtmlUtil.escape(group.getDescription()));
 			groupJSONObject.put(
-				"name", HtmlUtil.escape(
+				"name",
+				HtmlUtil.escape(
 					group.getDescriptiveName(themeDisplay.getLocale())));
 
 			boolean member = GroupLocalServiceUtil.hasUserGroup(
@@ -327,7 +328,8 @@ public class SitesPortlet extends MVCPortlet {
 						themeDisplay.getLocale(), "x-wishes-to-join-x",
 						new Object[] {
 							user.getFullName(), group.getDescriptiveName()
-						}, false);
+						},
+						false);
 
 					membershipRequestURL.setParameter("comments", comments);
 					membershipRequestURL.setWindowState(WindowState.NORMAL);
