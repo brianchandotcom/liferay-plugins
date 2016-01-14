@@ -139,7 +139,7 @@ public class UpgradeUser extends UpgradeProcess {
 	private static MethodKey _mergeLayoutSetPrototypeLayoutsMethodKey =
 		new MethodKey(
 			ClassResolverUtil.resolveByPortalClassLoader(
-				"com.liferay.portlet.sites.util.SitesUtil"),
+				"com.liferay.portal.kernel.portlet.sites.util.SitesUtil"),
 			"mergeLayoutSetPrototypeLayouts", Group.class, LayoutSet.class);
 
 }

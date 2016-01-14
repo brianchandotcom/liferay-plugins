@@ -41,6 +41,7 @@ page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayPortletResponse" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.servlet.ServletContextPool" %><%@
+page import="com.liferay.portal.kernel.portlet.usersadmin.util.UsersAdminUtil" %><%@
 page import="com.liferay.portal.kernel.util.CharPool" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
@@ -84,7 +85,6 @@ page import="com.liferay.portlet.social.model.SocialRequestConstants" %><%@
 page import="com.liferay.portlet.social.service.SocialActivityLocalServiceUtil" %><%@
 page import="com.liferay.portlet.social.service.SocialRelationLocalServiceUtil" %><%@
 page import="com.liferay.portlet.social.service.SocialRequestLocalServiceUtil" %><%@
-page import="com.liferay.portlet.usersadmin.util.UsersAdminUtil" %><%@
 page import="com.liferay.so.service.SocialOfficeServiceUtil" %>
 
 <%@ page import="java.util.ArrayList" %><%@
