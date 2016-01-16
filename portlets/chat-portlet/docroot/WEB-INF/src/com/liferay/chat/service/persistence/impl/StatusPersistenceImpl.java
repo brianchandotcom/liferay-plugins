@@ -16,7 +16,7 @@ package com.liferay.chat.service.persistence.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.chat.NoSuchStatusException;
+import com.liferay.chat.exception.NoSuchStatusException;
 import com.liferay.chat.model.Status;
 import com.liferay.chat.model.impl.StatusImpl;
 import com.liferay.chat.model.impl.StatusModelImpl;
@@ -2174,7 +2174,7 @@ public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 	}
 
 	/**
-	 * Returns the status with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the status with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the status
 	 * @return the status

@@ -16,7 +16,7 @@ package com.liferay.ams.service.persistence.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.ams.NoSuchTypeException;
+import com.liferay.ams.exception.NoSuchTypeException;
 import com.liferay.ams.model.Type;
 import com.liferay.ams.model.impl.TypeImpl;
 import com.liferay.ams.model.impl.TypeModelImpl;
@@ -317,7 +317,7 @@ public class TypePersistenceImpl extends BasePersistenceImpl<Type>
 	}
 
 	/**
-	 * Returns the type with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the type with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the type
 	 * @return the type

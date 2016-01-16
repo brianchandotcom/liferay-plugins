@@ -16,7 +16,7 @@ package com.liferay.akismet.service.persistence.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.akismet.NoSuchDataException;
+import com.liferay.akismet.exception.NoSuchDataException;
 import com.liferay.akismet.model.AkismetData;
 import com.liferay.akismet.model.impl.AkismetDataImpl;
 import com.liferay.akismet.model.impl.AkismetDataModelImpl;
@@ -1157,7 +1157,7 @@ public class AkismetDataPersistenceImpl extends BasePersistenceImpl<AkismetData>
 	}
 
 	/**
-	 * Returns the akismet data with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the akismet data with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the akismet data
 	 * @return the akismet data

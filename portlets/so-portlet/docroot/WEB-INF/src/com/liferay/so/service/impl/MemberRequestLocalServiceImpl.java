@@ -18,7 +18,7 @@
 package com.liferay.so.service.impl;
 
 import com.liferay.mail.service.MailServiceUtil;
-import com.liferay.portal.NoSuchUserException;
+import com.liferay.portal.exception.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -41,8 +41,8 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.so.MemberRequestAlreadyUsedException;
-import com.liferay.so.MemberRequestInvalidUserException;
+import com.liferay.so.exception.MemberRequestAlreadyUsedException;
+import com.liferay.so.exception.MemberRequestInvalidUserException;
 import com.liferay.so.invitemembers.util.InviteMembersConstants;
 import com.liferay.so.model.MemberRequest;
 import com.liferay.so.service.base.MemberRequestLocalServiceBaseImpl;

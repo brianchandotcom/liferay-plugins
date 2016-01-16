@@ -36,7 +36,7 @@ import com.liferay.portal.service.persistence.CompanyProvider;
 import com.liferay.portal.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
-import com.liferay.so.NoSuchFavoriteSiteException;
+import com.liferay.so.exception.NoSuchFavoriteSiteException;
 import com.liferay.so.model.FavoriteSite;
 import com.liferay.so.model.impl.FavoriteSiteImpl;
 import com.liferay.so.model.impl.FavoriteSiteModelImpl;
@@ -1136,7 +1136,7 @@ public class FavoriteSitePersistenceImpl extends BasePersistenceImpl<FavoriteSit
 	}
 
 	/**
-	 * Returns the favorite site with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the favorite site with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the favorite site
 	 * @return the favorite site

@@ -38,7 +38,7 @@ import com.liferay.portal.service.persistence.CompanyProvider;
 import com.liferay.portal.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
-import com.liferay.testpacl.NoSuchFooException;
+import com.liferay.testpacl.exception.NoSuchFooException;
 import com.liferay.testpacl.model.Foo;
 import com.liferay.testpacl.model.impl.FooImpl;
 import com.liferay.testpacl.model.impl.FooModelImpl;
@@ -870,7 +870,7 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 	}
 
 	/**
-	 * Returns the foo with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the foo with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the foo
 	 * @return the foo

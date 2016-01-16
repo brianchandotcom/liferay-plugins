@@ -36,7 +36,7 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
-import com.liferay.testblob.NoSuchEntryException;
+import com.liferay.testblob.exception.NoSuchEntryException;
 import com.liferay.testblob.model.TestBlobEntry;
 import com.liferay.testblob.model.impl.TestBlobEntryImpl;
 import com.liferay.testblob.model.impl.TestBlobEntryModelImpl;
@@ -908,7 +908,7 @@ public class TestBlobEntryPersistenceImpl extends BasePersistenceImpl<TestBlobEn
 	}
 
 	/**
-	 * Returns the test blob entry with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the test blob entry with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the test blob entry
 	 * @return the test blob entry

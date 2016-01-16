@@ -39,7 +39,7 @@ import com.liferay.portal.service.persistence.CompanyProvider;
 import com.liferay.portal.service.persistence.CompanyProviderWrapper;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
-import com.liferay.so.NoSuchProjectsEntryException;
+import com.liferay.so.exception.NoSuchProjectsEntryException;
 import com.liferay.so.model.ProjectsEntry;
 import com.liferay.so.model.impl.ProjectsEntryImpl;
 import com.liferay.so.model.impl.ProjectsEntryModelImpl;
@@ -891,7 +891,7 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 	}
 
 	/**
-	 * Returns the projects entry with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the projects entry with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the projects entry
 	 * @return the projects entry

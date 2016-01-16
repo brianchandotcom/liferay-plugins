@@ -16,7 +16,7 @@ package com.liferay.opensocial.service.persistence.impl;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.opensocial.NoSuchGadgetException;
+import com.liferay.opensocial.exception.NoSuchGadgetException;
 import com.liferay.opensocial.model.Gadget;
 import com.liferay.opensocial.model.impl.GadgetImpl;
 import com.liferay.opensocial.model.impl.GadgetModelImpl;
@@ -3528,7 +3528,7 @@ public class GadgetPersistenceImpl extends BasePersistenceImpl<Gadget>
 	}
 
 	/**
-	 * Returns the gadget with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 * Returns the gadget with the primary key or throws a {@link com.liferay.portal.exception.NoSuchModelException} if it could not be found.
 	 *
 	 * @param primaryKey the primary key of the gadget
 	 * @return the gadget
