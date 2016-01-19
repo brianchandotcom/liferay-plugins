@@ -71,6 +71,10 @@ public class LayoutUtil {
 
 		ServiceContext serviceContext = new ServiceContext();
 
+		Map<Locale, String> friendlyURLMap = new HashMap<>();
+
+		friendlyURLMap.put(LocaleUtil.getDefault(), friendlyURL);
+
 		Layout layout = LayoutLocalServiceUtil.addLayout(
 			group.getCreatorUserId(), group.getGroupId(), privateLayout,
 			parentLayoutId, nameMap, null, null, null, null,
