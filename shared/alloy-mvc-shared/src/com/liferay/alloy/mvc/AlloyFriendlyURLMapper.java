@@ -118,15 +118,15 @@ public class AlloyFriendlyURLMapper extends DefaultFriendlyURLMapper {
 			return;
 		}
 
-		String portletId = getPortletId(routeParameters);
+		String portletInstanceKey = getPortletInstanceKey(routeParameters);
 
-		if (portletId == null) {
+		if (portletInstanceKey == null) {
 			return;
 		}
 
-		String namespace = PortalUtil.getPortletNamespace(portletId);
+		String namespace = PortalUtil.getPortletNamespace(portletInstanceKey);
 
-		addParameter(namespace, parameterMap, "p_p_id", portletId);
+		addParameter(namespace, parameterMap, "p_p_id", portletInstanceKey);
 		addParameter(parameterMap, "p_p_lifecycle", getLifecycle(request));
 
 		String format = routeParameters.get("format");
