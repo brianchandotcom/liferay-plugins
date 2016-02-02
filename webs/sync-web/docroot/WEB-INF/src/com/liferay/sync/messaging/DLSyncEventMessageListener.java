@@ -182,16 +182,17 @@ public class DLSyncEventMessageListener extends BaseMessageListener {
 		dynamicQuery.add(
 			RestrictionsFactoryUtil.like("treePath", treePath + "%"));
 
-		List<SyncDLObject> syncDLObjects =
+		List<SyncDLObject> childSyncDLObjects =
 			SyncDLObjectLocalServiceUtil.dynamicQuery(dynamicQuery);
 
-		for (SyncDLObject syncDLObject : syncDLObjects) {
-			syncDLObject.setUserId(parentSyncDLObject.getUserId());
-			syncDLObject.setUserName(parentSyncDLObject.getUserName());
-			syncDLObject.setModifiedTime(parentSyncDLObject.getModifiedTime());
-			syncDLObject.setEvent(parentSyncDLObject.getEvent());
+		for (SyncDLObject childSyncDLObject : childSyncDLObjects) {
+			childSyncDLObject.setUserId(parentSyncDLObject.getUserId());
+			childSyncDLObject.setUserName(parentSyncDLObject.getUserName());
+			childSyncDLObject.setModifiedTime(
+				parentSyncDLObject.getModifiedTime());
+			childSyncDLObject.setEvent(parentSyncDLObject.getEvent());
 
-			addSyncDLObject(syncDLObject);
+			addSyncDLObject(childSyncDLObject);
 		}
 	}
 
