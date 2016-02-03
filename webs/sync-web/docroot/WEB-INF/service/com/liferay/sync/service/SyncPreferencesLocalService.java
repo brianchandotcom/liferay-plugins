@@ -16,8 +16,6 @@ package com.liferay.sync.service;
 
 import aQute.bnd.annotation.ProviderType;
 
-import com.liferay.oauth.model.OAuthApplication;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.transaction.Isolation;
@@ -25,9 +23,6 @@ import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.service.BaseLocalService;
 import com.liferay.portal.service.InvokableLocalService;
-import com.liferay.portal.service.ServiceContext;
-
-import javax.portlet.PortletPreferences;
 
 /**
  * Provides the local service interface for SyncPreferences. Methods of this
@@ -51,8 +46,9 @@ public interface SyncPreferencesLocalService extends BaseLocalService,
 	 *
 	 * Never modify or reference this interface directly. Always use {@link SyncPreferencesLocalServiceUtil} to access the sync preferences local service. Add custom service methods to {@link com.liferay.sync.service.impl.SyncPreferencesLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
-	public OAuthApplication enableOAuth(long companyId,
-		ServiceContext serviceContext) throws PortalException;
+	public com.liferay.oauth.model.OAuthApplication enableOAuth(
+		long companyId, com.liferay.portal.service.ServiceContext serviceContext)
+		throws PortalException;
 
 	/**
 	* Returns the OSGi service identifier.
@@ -62,8 +58,8 @@ public interface SyncPreferencesLocalService extends BaseLocalService,
 	public java.lang.String getOSGiServiceIdentifier();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public PortletPreferences getPortletPreferences(long companyId)
-		throws PortalException;
+	public javax.portlet.PortletPreferences getPortletPreferences(
+		long companyId) throws PortalException;
 
 	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,

@@ -12,15 +12,17 @@
  * details.
  */
 
-package com.liferay.sync.model;
-
-import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
+package com.liferay.sync.shared.util;
 
 /**
- * @author Dennis Ju
+ * @author Shinn Lok
  */
-public class SyncConstants extends DLSyncConstants {
+public class SyncDeviceConstants {
 
-	public static final String TYPE_PRIVATE_WORKING_COPY = "privateWorkingCopy";
+	public static final int STATUS_ACTIVE = 0;
+
+	public static final int STATUS_INACTIVE = 1;
+
+	public static final int STATUS_WIPED = 2;
 
 }
