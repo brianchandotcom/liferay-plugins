@@ -3203,7 +3203,7 @@ for (String path : paths) {
 					<zip
 						basedir="${docroot.dir}"
 						destfile="${plugin.file}"
-						excludes="**/.sass-cache/**,**/*.scss,${liferay-hook.xml.excludes},${plugins.war.excludes}"
+						excludes="**/.sass-cache/**,**/*.scss,${liferay-hook.xml.excludes},${plugins.war.excludes},${wab.runtime.dependencies}"
 					>
 						<zipfileset
 							dir="${docroot.dir}"
