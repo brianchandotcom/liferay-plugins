@@ -3,6 +3,7 @@
 
 <project name="knowledge-base-portlet" basedir="." default="deploy">
 	<property name="import.shared" value="knowledge-base-shared" />
+	<property name="wab.runtime.dependencies" value="WEB-INF/lib/com.liferay.journal.api.jar,WEB-INF/lib/com.liferay.markdown.converter.jar,WEB-INF/lib/com.liferay.wiki.api.jar" />
 
 	<import file="../build-common-portlet.xml" />
 </project>
