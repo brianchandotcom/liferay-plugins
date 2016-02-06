@@ -274,28 +274,36 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
 		int[] formFieldsIndexes = StringUtil.split(
 			ParamUtil.getString(actionRequest, "formFieldsIndexes"), 0);
 
-		String languageId = LocaleUtil.toLanguageId(actionRequest.getLocale());
-
 		boolean saveToDatabase = GetterUtil.getBoolean(
 			getParameter(actionRequest, "saveToDatabase"));
 
+		Locale defaultLocale = LocaleUtil.getSiteDefault();
+
 		for (int formFieldsIndex : formFieldsIndexes) {
-			String fieldLabel = ParamUtil.getString(
-				actionRequest,
-				"fieldLabel" + formFieldsIndex + "_" + languageId);
+			Map<Locale, String> fieldLabelMap =
+				LocalizationUtil.getLocalizationMap(
+					actionRequest, "fieldLabel" + formFieldsIndex);
 
-			if (Validator.isNull(fieldLabel)) {
-				SessionErrors.add(
-					actionRequest, ColumnNameException.class.getName());
+			for (Locale locale : fieldLabelMap.keySet()) {
+				String fieldLabelValue = fieldLabelMap.get(locale);
 
-				return;
-			}
+				if (locale.equals(defaultLocale) &&
+					Validator.isNull(fieldLabelValue)) {
 
-			if (saveToDatabase && (fieldLabel.length() > 75)) {
-				SessionErrors.add(
-					actionRequest, "fieldSizeInvalid" + formFieldsIndex);
+					SessionErrors.add(
+						actionRequest, ColumnNameException.class.getName());
 
-				return;
+					return;
+				}
+
+				if (Validator.isNotNull(fieldLabelValue) &&
+					saveToDatabase && (fieldLabelValue.length() > 75)) {
+
+					SessionErrors.add(
+						actionRequest, "fieldSizeInvalid" + formFieldsIndex);
+
+					return;
+				}
 			}
 		}
 	}
