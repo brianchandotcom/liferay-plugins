@@ -17,8 +17,8 @@ package com.liferay.sampleservicebuilder.service;
 import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
+import com.liferay.portal.kernel.service.InvokableService;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
-import com.liferay.portal.service.InvokableService;
 
 /**
  * Provides the remote service utility for Foo. This utility wraps
@@ -51,12 +51,12 @@ public class FooServiceUtil {
 		return getService().getOSGiServiceIdentifier();
 	}
 
-	public static com.liferay.portal.model.User getUser(long userId)
+	public static com.liferay.portal.kernel.model.User getUser(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getUser(userId);
 	}
 
-	public static java.util.List<com.liferay.portal.model.Group> getUserSitesGroups()
+	public static java.util.List<com.liferay.portal.kernel.model.Group> getUserSitesGroups()
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getUserSitesGroups();
 	}
