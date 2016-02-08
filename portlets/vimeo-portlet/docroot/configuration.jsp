@@ -21,7 +21,7 @@
 <aui:form action="<%= configurationActionURL %>" method="post">
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 
-	<aui:layout>
+	<aui:row>
 		<aui:col id="controls" width="<%= 50 %>">
 			<div class="field-row">
 				<aui:input cssClass="url" inlineField="true" label="url" name="preferences--url--" value="<%= url %>" />
@@ -75,7 +75,7 @@
 				<i class="icon-youtube-play preview-play"></i>
 			</div>
 		</aui:col>
-	</aui:layout>
+	</aui:row>
 
 	<aui:button-row>
 		<aui:button type="submit" />
@@ -84,7 +84,6 @@
 
 <aui:script use="aui-color-picker-popover,aui-datatype,aui-swf-deprecated">
 	var swfURL = '<%= HttpUtil.getProtocol(request) + _SWF_URL %>';
-	var watchURL = '<%= HttpUtil.getProtocol(request) + _WATCH_URL %>';
 
 	var allInputsNode = A.all('#<portlet:namespace />fm input');
 
@@ -135,8 +134,8 @@
 	}
 
 	function createPlayer() {
-		var id = urlToVideoId(urlNode.val());
 		var height = parseInt(heightNode.val(), 10) || 0;
+		var id = urlToVideoId(urlNode.val());
 		var maxWidth = (formNode.get('clientWidth') || formNode.get('scrollWidth')) - (controlsNode.get('clientWidth') || controlsNode.get('scrollWidth'));
 		var playerOptions = {
 			autoplay: encodeBinary(autoplayNode.val()),
