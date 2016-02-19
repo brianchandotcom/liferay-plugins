@@ -14,24 +14,23 @@
 
 package com.liferay.sync.messaging;
 
-import com.liferay.document.library.kernel.exception.NoSuchFileEntryException;
-import com.liferay.document.library.kernel.exception.NoSuchFolderException;
+import com.liferay.document.library.kernel.model.DLFileEntry;
+import com.liferay.document.library.kernel.model.DLFolder;
 import com.liferay.document.library.kernel.model.DLSyncEvent;
-import com.liferay.document.library.kernel.service.DLAppLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLFileEntryLocalServiceUtil;
+import com.liferay.document.library.kernel.service.DLFolderLocalServiceUtil;
 import com.liferay.document.library.kernel.service.DLSyncEventLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.model.User;
-import com.liferay.portal.kernel.repository.model.FileEntry;
-import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.sync.model.SyncDLObject;
 import com.liferay.sync.model.SyncDLObjectConstants;
-import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
+import com.liferay.sync.model.impl.SyncDLObjectImpl;
 import com.liferay.sync.util.SyncUtil;
 
 import java.util.List;
@@ -40,22 +39,6 @@ import java.util.List;
  * @author Dennis Ju
  */
 public class DLSyncEventMessageListener extends BaseMessageListener {
-
-	protected void addSyncDLObject(SyncDLObject syncDLObject) throws Exception {
-		SyncDLObjectLocalServiceUtil.addSyncDLObject(
-			syncDLObject.getCompanyId(), syncDLObject.getUserId(),
-			syncDLObject.getUserName(), syncDLObject.getModifiedTime(),
-			syncDLObject.getRepositoryId(), syncDLObject.getParentFolderId(),
-			syncDLObject.getTreePath(), syncDLObject.getName(),
-			syncDLObject.getExtension(), syncDLObject.getMimeType(),
-			syncDLObject.getDescription(), syncDLObject.getChangeLog(),
-			syncDLObject.getExtraSettings(), syncDLObject.getVersion(),
-			syncDLObject.getVersionId(), syncDLObject.getSize(),
-			syncDLObject.getChecksum(), syncDLObject.getEvent(),
-			syncDLObject.getLockExpirationDate(), syncDLObject.getLockUserId(),
-			syncDLObject.getLockUserName(), syncDLObject.getType(),
-			syncDLObject.getTypePK(), syncDLObject.getTypeUuid());
-	}
 
 	protected void deleteDLSyncEvent(
 			long modifiedTime, long syncEventId, long typePK)
@@ -102,6 +85,8 @@ public class DLSyncEventMessageListener extends BaseMessageListener {
 			long modifiedTime, String event, String type, long typePK)
 		throws Exception {
 
+		SyncDLObject syncDLObject = null;
+
 		if (event.equals(SyncDLObjectConstants.EVENT_DELETE)) {
 			long userId = 0;
 			String userName = StringPool.BLANK;
@@ -116,50 +101,37 @@ public class DLSyncEventMessageListener extends BaseMessageListener {
 				userName = user.getFullName();
 			}
 
-			SyncDLObjectLocalServiceUtil.addSyncDLObject(
-				0, userId, userName, modifiedTime, 0, 0, StringPool.BLANK,
-				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
-				StringPool.BLANK, StringPool.BLANK, StringPool.BLANK,
-				StringPool.BLANK, 0, 0, StringPool.BLANK, event, null, 0,
-				StringPool.BLANK, type, typePK, StringPool.BLANK);
+			syncDLObject = new SyncDLObjectImpl();
 
-			return;
+			syncDLObject.setUserId(userId);
+			syncDLObject.setUserName(userName);
+			syncDLObject.setEvent(event);
+			syncDLObject.setType(type);
+			syncDLObject.setTypePK(typePK);
 		}
+		else if (type.equals(SyncDLObjectConstants.TYPE_FILE)) {
+			DLFileEntry dlFileEntry =
+				DLFileEntryLocalServiceUtil.fetchDLFileEntry(typePK);
 
-		SyncDLObject syncDLObject = null;
-
-		if (type.equals(SyncDLObjectConstants.TYPE_FILE)) {
-			FileEntry fileEntry = null;
-
-			try {
-				fileEntry = DLAppLocalServiceUtil.getFileEntry(typePK);
-			}
-			catch (NoSuchFileEntryException nsfee) {
+			if (dlFileEntry == null) {
 				return;
 			}
 
-			syncDLObject = SyncUtil.toSyncDLObject(fileEntry, event, true);
+			syncDLObject = SyncUtil.toSyncDLObject(dlFileEntry, event, true);
 		}
 		else {
-			Folder folder = null;
+			DLFolder dlFolder = DLFolderLocalServiceUtil.fetchDLFolder(typePK);
 
-			try {
-				folder = DLAppLocalServiceUtil.getFolder(typePK);
-			}
-			catch (NoSuchFolderException nsfe) {
+			if ((dlFolder == null) || !SyncUtil.isSupportedFolder(dlFolder)) {
 				return;
 			}
 
-			if (!SyncUtil.isSupportedFolder(folder)) {
-				return;
-			}
-
-			syncDLObject = SyncUtil.toSyncDLObject(folder, event);
+			syncDLObject = SyncUtil.toSyncDLObject(dlFolder, event);
 		}
 
 		syncDLObject.setModifiedTime(modifiedTime);
 
-		addSyncDLObject(syncDLObject);
+		SyncUtil.addSyncDLObject(syncDLObject);
 	}
 
 }
