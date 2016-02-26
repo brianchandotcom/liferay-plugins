@@ -29,8 +29,10 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.PortletItem;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.service.persistence.LayoutUtil;
@@ -45,7 +47,9 @@ import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.service.JournalArticleResourceLocalServiceUtil;
 import com.liferay.screens.service.base.ScreensAssetEntryServiceBaseImpl;
+import com.liferay.screens.service.permission.AssetEntryPermission;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,7 +66,7 @@ public class ScreensAssetEntryServiceImpl
 			AssetEntryQuery assetEntryQuery, Locale locale)
 		throws PortalException, SystemException {
 
-		List<AssetEntry> assetEntries = assetEntryLocalService.getEntries(
+		List<AssetEntry> assetEntries = assetEntryService.getEntries(
 			assetEntryQuery);
 
 		return toJSONArray(assetEntries, locale);
@@ -115,6 +119,8 @@ public class ScreensAssetEntryServiceImpl
 					AssetPublisherUtil.getAssetEntries(
 						portletPreferences, layout, groupId, max, false);
 
+				assetEntries = filterAssetEntries(assetEntries);
+
 				return toJSONArray(assetEntries, locale);
 			}
 			else {
@@ -134,6 +140,8 @@ public class ScreensAssetEntryServiceImpl
 							"assetEntryXml", new String[0]),
 						false, false);
 
+				assetEntries = filterAssetEntries(assetEntries);
+
 				return toJSONArray(assetEntries, locale);
 			}
 			catch (PortalException pe) {
@@ -148,8 +156,28 @@ public class ScreensAssetEntryServiceImpl
 		}
 	}
 
+	protected List<AssetEntry> filterAssetEntries(List<AssetEntry> assetEntries)
+		throws PortalException {
+
+		List<AssetEntry> filteredAssetEntries = new ArrayList<AssetEntry>(
+			assetEntries.size());
+
+		for (AssetEntry assetEntry : assetEntries) {
+			if (AssetEntryPermission.contains(
+					getPermissionChecker(), assetEntry, ActionKeys.VIEW)) {
+
+				filteredAssetEntries.add(assetEntry);
+			}
+		}
+
+		return filteredAssetEntries;
+	}
+
 	protected JSONObject getAssetObjectJSONObject(AssetEntry assetEntry)
 		throws PortalException, SystemException {
+
+		AssetEntryPermission.check(
+			getPermissionChecker(), assetEntry, ActionKeys.VIEW);
 
 		String className = assetEntry.getClassName();
 
@@ -203,7 +231,7 @@ public class ScreensAssetEntryServiceImpl
 		JournalArticle journalArticle = null;
 
 		try {
-			journalArticle = journalArticleLocalService.getArticle(
+			journalArticle = journalArticleService.getArticle(
 				assetEntry.getClassPK());
 		}
 		catch (NoSuchArticleException nsae) {
@@ -211,9 +239,10 @@ public class ScreensAssetEntryServiceImpl
 				JournalArticleResourceLocalServiceUtil.getArticleResource(
 					assetEntry.getClassPK());
 
-			journalArticle = journalArticleLocalService.getLatestArticle(
+			journalArticleService.getLatestArticle(
 				journalArticleResource.getGroupId(),
-				journalArticleResource.getArticleId());
+				journalArticleResource.getArticleId(),
+				WorkflowConstants.STATUS_APPROVED);
 		}
 
 		JSONObject journalArticleJSONObject = JSONFactoryUtil.createJSONObject(
