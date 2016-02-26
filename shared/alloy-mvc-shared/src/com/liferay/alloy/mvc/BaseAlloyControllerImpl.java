@@ -57,6 +57,7 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.search.SearchContextFactory;
 import com.liferay.portal.kernel.search.Sort;
+import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -125,6 +126,59 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 	public static final String VIEW_PATH =
 		BaseAlloyControllerImpl.class.getName() + "#VIEW_PATH";
+
+	public static void setAuditedModel(
+			BaseModel<?> baseModel, Company company, User user)
+		throws Exception {
+
+		if (!(baseModel instanceof AuditedModel) || (company == null) ||
+			(user == null)) {
+
+			return;
+		}
+
+		AuditedModel auditedModel = (AuditedModel)baseModel;
+
+		if (baseModel.isNew()) {
+			auditedModel.setCompanyId(company.getCompanyId());
+			auditedModel.setUserId(user.getUserId());
+			auditedModel.setUserName(user.getFullName());
+			auditedModel.setCreateDate(new Date());
+			auditedModel.setModifiedDate(auditedModel.getCreateDate());
+		}
+		else {
+			auditedModel.setModifiedDate(new Date());
+		}
+	}
+
+	public static void setAuditedModel(
+			BaseModel<?> baseModel, HttpServletRequest request)
+		throws Exception {
+
+		if (!(baseModel instanceof AuditedModel) || (request == null)) {
+			return;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		setAuditedModel(
+			baseModel, themeDisplay.getCompany(), themeDisplay.getUser());
+	}
+
+	public static void setAuditedModel(BaseModel<?> baseModel, User user)
+		throws Exception {
+
+		if (!(baseModel instanceof AuditedModel) || (user == null)) {
+			return;
+		}
+
+		long companyId = CompanyLocalServiceUtil.getCompanyIdByUserId(
+			user.getUserId());
+
+		setAuditedModel(
+			baseModel, CompanyLocalServiceUtil.getCompany(companyId), user);
+	}
 
 	@Override
 	public void afterPropertiesSet() {
@@ -1230,22 +1284,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	}
 
 	protected void setAuditedModel(BaseModel<?> baseModel) throws Exception {
-		if (!(baseModel instanceof AuditedModel)) {
-			return;
-		}
-
-		AuditedModel auditedModel = (AuditedModel)baseModel;
-
-		if (baseModel.isNew()) {
-			auditedModel.setCompanyId(company.getCompanyId());
-			auditedModel.setUserId(user.getUserId());
-			auditedModel.setUserName(user.getFullName());
-			auditedModel.setCreateDate(new Date());
-			auditedModel.setModifiedDate(auditedModel.getCreateDate());
-		}
-		else {
-			auditedModel.setModifiedDate(new Date());
-		}
+		setAuditedModel(baseModel, company, user);
 	}
 
 	protected void setGroupedModel(BaseModel<?> baseModel) throws Exception {
