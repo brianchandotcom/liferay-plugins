@@ -23,14 +23,21 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.MethodKey;
+import com.liferay.portal.kernel.util.PortalClassInvoker;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.PortletItem;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.service.persistence.LayoutUtil;
@@ -46,6 +53,7 @@ import com.liferay.portlet.journal.model.JournalArticleResource;
 import com.liferay.portlet.journal.service.JournalArticleResourceLocalServiceUtil;
 import com.liferay.screens.service.base.ScreensAssetEntryServiceBaseImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,8 +70,10 @@ public class ScreensAssetEntryServiceImpl
 			AssetEntryQuery assetEntryQuery, Locale locale)
 		throws PortalException, SystemException {
 
-		List<AssetEntry> assetEntries = assetEntryLocalService.getEntries(
+		List<AssetEntry> assetEntries = assetEntryService.getEntries(
 			assetEntryQuery);
+
+		assetEntries = filterAssetEntries(assetEntries);
 
 		return toJSONArray(assetEntries, locale);
 	}
@@ -115,6 +125,8 @@ public class ScreensAssetEntryServiceImpl
 					AssetPublisherUtil.getAssetEntries(
 						portletPreferences, layout, groupId, max, false);
 
+				assetEntries = filterAssetEntries(assetEntries);
+
 				return toJSONArray(assetEntries, locale);
 			}
 			else {
@@ -134,6 +146,8 @@ public class ScreensAssetEntryServiceImpl
 							"assetEntryXml", new String[0]),
 						false, false);
 
+				assetEntries = filterAssetEntries(assetEntries);
+
 				return toJSONArray(assetEntries, locale);
 			}
 			catch (PortalException pe) {
@@ -146,6 +160,43 @@ public class ScreensAssetEntryServiceImpl
 				throw new PortalException(e);
 			}
 		}
+	}
+
+	protected boolean containsPermission(
+			PermissionChecker permissionChecker, AssetEntry assetEntry,
+			String actionId)
+		throws PortalException {
+
+		try {
+			return (Boolean)PortalClassInvoker.invoke(
+				false, _containsPermissionMethodKey, permissionChecker,
+				assetEntry, actionId);
+		}
+		catch (PortalException pe) {
+			throw pe;
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+
+		return false;
+	}
+
+	protected List<AssetEntry> filterAssetEntries(List<AssetEntry> assetEntries)
+		throws PortalException {
+
+		List<AssetEntry> filteredAssetEntries = new ArrayList<AssetEntry>(
+			assetEntries.size());
+
+		for (AssetEntry assetEntry : assetEntries) {
+			if (containsPermission(
+					getPermissionChecker(), assetEntry, ActionKeys.VIEW)) {
+
+				filteredAssetEntries.add(assetEntry);
+			}
+		}
+
+		return filteredAssetEntries;
 	}
 
 	protected JSONObject getAssetObjectJSONObject(AssetEntry assetEntry)
@@ -203,7 +254,7 @@ public class ScreensAssetEntryServiceImpl
 		JournalArticle journalArticle = null;
 
 		try {
-			journalArticle = journalArticleLocalService.getArticle(
+			journalArticle = journalArticleService.getArticle(
 				assetEntry.getClassPK());
 		}
 		catch (NoSuchArticleException nsae) {
@@ -211,9 +262,10 @@ public class ScreensAssetEntryServiceImpl
 				JournalArticleResourceLocalServiceUtil.getArticleResource(
 					assetEntry.getClassPK());
 
-			journalArticle = journalArticleLocalService.getLatestArticle(
+			journalArticleService.getLatestArticle(
 				journalArticleResource.getGroupId(),
-				journalArticleResource.getArticleId());
+				journalArticleResource.getArticleId(),
+				WorkflowConstants.STATUS_APPROVED);
 		}
 
 		JSONObject journalArticleJSONObject = JSONFactoryUtil.createJSONObject(
@@ -244,5 +296,18 @@ public class ScreensAssetEntryServiceImpl
 
 		return jsonArray;
 	}
+
+	private static final String ASSET_ENTRY_PERMISSION_CLASSNAME =
+		"com.liferay.portlet.asset.service.permission.AssetEntryPermission";
+
+	private static final MethodKey _containsPermissionMethodKey =
+		new MethodKey(
+			ClassResolverUtil.resolveByPortalClassLoader(
+				ASSET_ENTRY_PERMISSION_CLASSNAME),
+			"contains", PermissionChecker.class, AssetEntry.class,
+			String.class);
+
+	private static Log _log = LogFactoryUtil.getLog(
+		ScreensAssetEntryServiceImpl.class);
 
 }

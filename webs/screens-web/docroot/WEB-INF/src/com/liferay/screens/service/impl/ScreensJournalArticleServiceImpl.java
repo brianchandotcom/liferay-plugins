@@ -16,7 +16,14 @@ package com.liferay.screens.service.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.MethodKey;
+import com.liferay.portal.kernel.util.PortalClassInvoker;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portlet.dynamicdatamapping.model.DDMTemplate;
 import com.liferay.portlet.dynamicdatamapping.service.DDMTemplateServiceUtil;
 import com.liferay.portlet.journal.model.JournalArticleResource;
@@ -34,6 +41,8 @@ public class ScreensJournalArticleServiceImpl
 	public String getJournalArticleContent(long classPK, Locale locale)
 		throws PortalException, SystemException {
 
+		checkPermission(getPermissionChecker(), classPK, ActionKeys.VIEW);
+
 		JournalArticleResource journalArticleResource =
 			journalArticleResourceLocalService.getArticleResource(classPK);
 
@@ -47,6 +56,8 @@ public class ScreensJournalArticleServiceImpl
 	public String getJournalArticleContent(
 			long classPK, long ddmTemplateId, Locale locale)
 		throws PortalException, SystemException {
+
+		checkPermission(getPermissionChecker(), classPK, ActionKeys.VIEW);
 
 		JournalArticleResource journalArticleResource =
 			journalArticleResourceLocalService.getArticleResource(classPK);
@@ -62,9 +73,54 @@ public class ScreensJournalArticleServiceImpl
 			long groupId, String articleId, long ddmTemplateId, Locale locale)
 		throws PortalException, SystemException {
 
+		checkPermission(
+			getPermissionChecker(), groupId, articleId, ActionKeys.VIEW);
+
 		return journalArticleLocalService.getArticleContent(
 			groupId, articleId, null, getDDMTemplateKey(ddmTemplateId),
 			getLanguageId(locale), null);
+	}
+
+	protected void checkPermission(
+			PermissionChecker permissionChecker, long resourcePrimKey,
+			String actionId)
+		throws PortalException, SystemException {
+
+		try {
+			PortalClassInvoker.invoke(
+				false, _checkPermissionByResourcePrimKeyMethodKey,
+				permissionChecker, resourcePrimKey, actionId);
+		}
+		catch (PortalException pe) {
+			throw pe;
+		}
+		catch (SystemException se) {
+			throw se;
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
+	}
+
+	protected void checkPermission(
+			PermissionChecker permissionChecker, long groupId, String articleId,
+			String actionId)
+		throws PortalException, SystemException {
+
+		try {
+			PortalClassInvoker.invoke(
+				false, _checkPermissionByArticleIdMethodKey, permissionChecker,
+				groupId, articleId, actionId);
+		}
+		catch (PortalException pe) {
+			throw pe;
+		}
+		catch (SystemException se) {
+			throw se;
+		}
+		catch (Exception e) {
+			_log.error(e);
+		}
 	}
 
 	protected String getDDMTemplateKey(long ddmTemplateId)
@@ -89,5 +145,24 @@ public class ScreensJournalArticleServiceImpl
 
 		return LocaleUtil.toLanguageId(locale);
 	}
+
+	private static final String JOURNAL_ARTICLE_PERMISSION_CLASSNAME =
+		"com.liferay.portlet.journal.service.permission." +
+			"JournalArticlePermission";
+
+	private static final MethodKey _checkPermissionByArticleIdMethodKey =
+		new MethodKey(
+			ClassResolverUtil.resolveByPortalClassLoader(
+				JOURNAL_ARTICLE_PERMISSION_CLASSNAME),
+			"check", PermissionChecker.class, long.class, String.class,
+			String.class);
+	private static final MethodKey _checkPermissionByResourcePrimKeyMethodKey =
+		new MethodKey(
+			ClassResolverUtil.resolveByPortalClassLoader(
+				JOURNAL_ARTICLE_PERMISSION_CLASSNAME),
+			"check", PermissionChecker.class, long.class, String.class);
+
+	private static Log _log = LogFactoryUtil.getLog(
+		ScreensJournalArticleServiceImpl.class);
 
 }
