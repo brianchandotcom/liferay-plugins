@@ -23,7 +23,7 @@
 	%>
 
 	<liferay-util:html-top>
-		<link href="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/css/main.css", portlet.getTimestamp()) %>" rel="stylesheet" type="text/css" />
+		<link data-senna-track="permanent" href="<%= PortalUtil.getStaticResourceURL(request, PortalUtil.getPathContext(request) + "/css/main.css", portlet.getTimestamp()) %>" rel="stylesheet" type="text/css" />
 	</liferay-util:html-top>
 
 	<liferay-util:html-bottom>
@@ -74,7 +74,7 @@
 
 						<div class="chat-panel">
 							<div class="chat-panel-window">
-								<div class="minimize chat-panel-button"></div>
+								<div class="chat-panel-button minimize"></div>
 
 								<div class="chat-panel-title">
 									<%= LanguageUtil.format(request, "online-friends-x", "(" + buddiesCount + ")", false) %>
@@ -126,7 +126,7 @@
 
 						<div class="chat-panel">
 							<div class="chat-panel-window">
-								<div class="minimize chat-panel-button"></div>
+								<div class="chat-panel-button minimize"></div>
 
 								<div class="chat-panel-title"><liferay-ui:message key="settings" /></div>
 
