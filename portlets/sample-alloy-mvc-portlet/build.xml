@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="sample-alloy-mvc-portlet" basedir="." default="deploy">
+	<property name="import.shared" value="alloy-mvc-shared" />
+
+	<import file="../build-common-alloy-portlet.xml" />
+</project>
