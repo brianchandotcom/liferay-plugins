@@ -26,9 +26,6 @@ public class PortletKeys extends com.liferay.portal.kernel.util.PortletKeys {
 
 	public static final String MEMBERS = "4_WAR_contactsportlet";
 
-	public static final String PRIVATE_MESSAGING =
-		com.liferay.privatemessaging.util.PortletKeys.PRIVATE_MESSAGING;
-
 	public static final String PROFILE = "2_WAR_contactsportlet";
 
 }
