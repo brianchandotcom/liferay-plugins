@@ -25,7 +25,7 @@
 	<classpathentry kind="lib" path="/portal-master/lib/portal/commons-lang.jar" />
 	<classpathentry kind="lib" path="/portal-master/lib/portal/commons-logging.jar" />
 	<classpathentry kind="lib" path="/portal-master/lib/portal/log4j.jar" />
-	<classpathentry kind="lib" path="/portal-master/portal-service/portal-service.jar" />
+	<classpathentry kind="lib" path="/portal-master/portal-kernel/portal-kernel.jar" />
 	<classpathentry kind="lib" path="/portal-master/util-bridges/util-bridges.jar" />
 	<classpathentry kind="lib" path="/portal-master/util-java/util-java.jar" />
 	<classpathentry kind="lib" path="/portal-master/util-taglib/util-taglib.jar" />
@@ -39,7 +39,6 @@
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/jodd-bean.jar" />
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/jodd-core.jar" />
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/jsontoken.jar" />
-	<classpathentry kind="lib" path="docroot/WEB-INF/lib/oauth-portlet-service.jar" />
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/portal-compat-shared.jar" />
 	<classpathentry kind="lib" path="docroot/WEB-INF/lib/sync-shared.jar" />
 	<classpathentry kind="output" path="bin" />

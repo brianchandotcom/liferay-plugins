@@ -14,20 +14,12 @@
 
 package com.liferay.sync.service.impl;
 
-import com.liferay.oauth.model.OAuthApplication;
-import com.liferay.oauth.model.OAuthApplicationConstants;
-import com.liferay.oauth.service.OAuthApplicationLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.sync.service.base.SyncPreferencesLocalServiceBaseImpl;
-import com.liferay.sync.shared.util.PortletPropsKeys;
 import com.liferay.util.portlet.PortletProps;
-
-import java.io.InputStream;
 
 import java.util.Map;
 import java.util.Properties;
@@ -39,38 +31,6 @@ import javax.portlet.PortletPreferences;
  */
 public class SyncPreferencesLocalServiceImpl
 	extends SyncPreferencesLocalServiceBaseImpl {
-
-	@Override
-	public OAuthApplication enableOAuth(
-			long companyId, ServiceContext serviceContext)
-		throws PortalException {
-
-		long oAuthApplicationId = PrefsPropsUtil.getLong(
-			companyId, PortletPropsKeys.SYNC_OAUTH_APPLICATION_ID, 0);
-
-		OAuthApplication oAuthApplication =
-			OAuthApplicationLocalServiceUtil.fetchOAuthApplication(
-				oAuthApplicationId);
-
-		if (oAuthApplication != null) {
-			return oAuthApplication;
-		}
-
-		oAuthApplication = OAuthApplicationLocalServiceUtil.addOAuthApplication(
-			serviceContext.getUserId(), "Liferay Sync", StringPool.BLANK,
-			OAuthApplicationConstants.ACCESS_WRITE, true, "http://liferay-sync",
-			"http://liferay-sync", serviceContext);
-
-		ClassLoader classLoader = getClassLoader();
-
-		InputStream inputStream = classLoader.getResourceAsStream(
-			"/resources/images/logo.png");
-
-		OAuthApplicationLocalServiceUtil.updateLogo(
-			oAuthApplication.getOAuthApplicationId(), inputStream);
-
-		return oAuthApplication;
-	}
 
 	@Override
 	public PortletPreferences getPortletPreferences(long companyId)

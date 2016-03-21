@@ -31,15 +31,9 @@ public class SyncPreferencesLocalServiceClpInvoker {
 
 		_methodParameterTypes30 = new String[] {  };
 
-		_methodName33 = "enableOAuth";
+		_methodName33 = "getPortletPreferences";
 
-		_methodParameterTypes33 = new String[] {
-				"long", "com.liferay.portal.kernel.service.ServiceContext"
-			};
-
-		_methodName34 = "getPortletPreferences";
-
-		_methodParameterTypes34 = new String[] { "long" };
+		_methodParameterTypes33 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -51,12 +45,6 @@ public class SyncPreferencesLocalServiceClpInvoker {
 
 		if (_methodName33.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes33, parameterTypes)) {
-			return SyncPreferencesLocalServiceUtil.enableOAuth(((Long)arguments[0]).longValue(),
-				(com.liferay.portal.kernel.service.ServiceContext)arguments[1]);
-		}
-
-		if (_methodName34.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes34, parameterTypes)) {
 			return SyncPreferencesLocalServiceUtil.getPortletPreferences(((Long)arguments[0]).longValue());
 		}
 
@@ -67,6 +55,4 @@ public class SyncPreferencesLocalServiceClpInvoker {
 	private String[] _methodParameterTypes30;
 	private String _methodName33;
 	private String[] _methodParameterTypes33;
-	private String _methodName34;
-	private String[] _methodParameterTypes34;
 }

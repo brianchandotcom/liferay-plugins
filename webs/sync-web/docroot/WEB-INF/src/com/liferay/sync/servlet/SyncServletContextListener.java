@@ -16,7 +16,6 @@ package com.liferay.sync.servlet;
 
 import com.liferay.document.library.kernel.model.DLSyncEvent;
 import com.liferay.document.library.kernel.service.DLSyncEventLocalServiceUtil;
-import com.liferay.oauth.model.OAuthApplication;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
@@ -24,30 +23,20 @@ import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.SerialDestination;
-import com.liferay.portal.kernel.model.Company;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.scheduler.SchedulerEngineHelperUtil;
 import com.liferay.portal.kernel.scheduler.StorageType;
 import com.liferay.portal.kernel.scheduler.TimeUnit;
 import com.liferay.portal.kernel.scheduler.TriggerFactoryUtil;
-import com.liferay.portal.kernel.service.CompanyLocalServiceUtil;
-import com.liferay.portal.kernel.service.ServiceContext;
-import com.liferay.portal.kernel.service.UserLocalServiceUtil;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
-import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.sync.messaging.DLSyncEventMessageListener;
 import com.liferay.sync.messaging.SyncDLFileVersionDiffMessageListener;
 import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
-import com.liferay.sync.service.SyncPreferencesLocalServiceUtil;
-import com.liferay.sync.util.PortletPropsKeys;
 import com.liferay.sync.util.PortletPropsValues;
 import com.liferay.sync.util.VerifyUtil;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.portlet.PortletPreferences;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -130,44 +119,6 @@ public class SyncServletContextListener
 		try {
 			if (PortletPropsValues.SYNC_VERIFY) {
 				VerifyUtil.verify();
-			}
-
-			List<Company> companies = CompanyLocalServiceUtil.getCompanies();
-
-			for (Company company : companies) {
-				boolean oAuthEnabled = PrefsPropsUtil.getBoolean(
-					company.getCompanyId(), PortletPropsKeys.SYNC_OAUTH_ENABLED,
-					PortletPropsValues.SYNC_OAUTH_ENABLED);
-
-				if (!oAuthEnabled) {
-					continue;
-				}
-
-				ServiceContext serviceContext = new ServiceContext();
-
-				User user = UserLocalServiceUtil.getDefaultUser(
-					company.getCompanyId());
-
-				serviceContext.setUserId(user.getUserId());
-
-				OAuthApplication oAuthApplication =
-					SyncPreferencesLocalServiceUtil.enableOAuth(
-						company.getCompanyId(), serviceContext);
-
-				PortletPreferences portletPreferences =
-					PrefsPropsUtil.getPreferences(company.getCompanyId());
-
-				portletPreferences.setValue(
-					PortletPropsKeys.SYNC_OAUTH_APPLICATION_ID,
-					String.valueOf(oAuthApplication.getOAuthApplicationId()));
-				portletPreferences.setValue(
-					PortletPropsKeys.SYNC_OAUTH_CONSUMER_KEY,
-					oAuthApplication.getConsumerKey());
-				portletPreferences.setValue(
-					PortletPropsKeys.SYNC_OAUTH_CONSUMER_SECRET,
-					oAuthApplication.getConsumerSecret());
-
-				portletPreferences.store();
 			}
 		}
 		catch (Exception e) {

@@ -34,15 +34,6 @@ public class SyncPreferencesLocalServiceWrapper
 		_syncPreferencesLocalService = syncPreferencesLocalService;
 	}
 
-	@Override
-	public com.liferay.oauth.model.OAuthApplication enableOAuth(
-		long companyId,
-		com.liferay.portal.kernel.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _syncPreferencesLocalService.enableOAuth(companyId,
-			serviceContext);
-	}
-
 	/**
 	* Returns the OSGi service identifier.
 	*
