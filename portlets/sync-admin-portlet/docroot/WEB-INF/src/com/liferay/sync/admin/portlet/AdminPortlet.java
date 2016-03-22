@@ -14,7 +14,6 @@
 
 package com.liferay.sync.admin.portlet;
 
-import com.liferay.oauth.model.OAuthApplication;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.plugin.PluginPackage;
@@ -28,7 +27,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.sync.OAuthPortletUndeployedException;
+import com.liferay.sync.admin.OAuthPortletUndeployedException;
 import com.liferay.sync.service.SyncPreferencesLocalServiceUtil;
 import com.liferay.sync.shared.util.PortletPropsKeys;
 
@@ -129,19 +128,8 @@ public class AdminPortlet extends MVCPortlet {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
 				actionRequest);
 
-			OAuthApplication oAuthApplication =
-				SyncPreferencesLocalServiceUtil.enableOAuth(
-					CompanyThreadLocal.getCompanyId(), serviceContext);
-
-			portletPreferences.setValue(
-				PortletPropsKeys.SYNC_OAUTH_APPLICATION_ID,
-				String.valueOf(oAuthApplication.getOAuthApplicationId()));
-			portletPreferences.setValue(
-				PortletPropsKeys.SYNC_OAUTH_CONSUMER_KEY,
-				oAuthApplication.getConsumerKey());
-			portletPreferences.setValue(
-				PortletPropsKeys.SYNC_OAUTH_CONSUMER_SECRET,
-				oAuthApplication.getConsumerSecret());
+			SyncPreferencesLocalServiceUtil.enableOAuth(
+				CompanyThreadLocal.getCompanyId(), serviceContext);
 		}
 
 		portletPreferences.setValue(
