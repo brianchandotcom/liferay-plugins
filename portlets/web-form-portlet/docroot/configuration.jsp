@@ -213,7 +213,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			var optionalControl = formRow.one('.optional-control').ancestor();
 			var paragraphDiv = formRow.one('.paragraph');
 
-			var paragraph = value === 'paragraph'
+			var paragraph = value === 'paragraph';
 
 			if (paragraph) {
 				var inputName = labelName.one('input.field');
@@ -250,7 +250,9 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			'change',
 			function(event) {
 				var input = event.currentTarget;
+
 				var row = input.ancestor('.field-row');
+
 				var label = row.one('.field-title');
 
 				if (label) {
@@ -266,7 +268,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 				fieldIndexes: '<portlet:namespace />formFieldsIndexes',
 				namespace: '<portlet:namespace />',
 				sortable: true,
-				sortableHandle: '.field-label',
+				sortableHandle: '.lfr-form-row',
 
 				<liferay-portlet:renderURL portletConfiguration="true" var="editFieldURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 					<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD %>" />

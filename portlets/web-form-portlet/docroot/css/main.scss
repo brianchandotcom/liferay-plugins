@@ -16,6 +16,10 @@
 	}
 
 	.lfr-form-row {
+		&:hover {
+			cursor: move;
+		}
+
 		.field {
 			margin-left: 2em;
 		}
