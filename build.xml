@@ -24,6 +24,42 @@
 
 	<pathconvert pathsep="," property="plugins.includes.path" refid="plugins.includes.path" targetos="unix" />
 
+	<macrodef name="extract-plugins-sdk">
+		<attribute default="false" name="plugins.sdk.with.dependencies" />
+
+		<sequential>
+			<var name="plugins.sdk.name" value="liferay-plugins-sdk-${lp.version}" />
+			<var name="plugins.sdk.zip.excludes" value="*.iml,.bnd/**,.git/**,.ivy/**,build.*.properties,dist/**,ext/*-ext/**,hooks/*-hook/**,layouttpl/*-layouttpl/**,portlets/*-portlet/**,private-plugins.txt,shared/*-shared/**,source_formatter_*,suites/**,summary.*,themes/*-theme/**,tmp/**,tools/node-*/**,webs/*-web/**" />
+
+			<if>
+				<istrue value="@{plugins.sdk.with.dependencies}" />
+				<then>
+					<var name="plugins.sdk.name" value="${plugins.sdk.name}-with-dependencies" />
+				</then>
+				<else>
+					<var name="plugins.sdk.zip.excludes" value="${plugins.sdk.zip.excludes},dependencies/**/ivy.xml.MD5,dependencies/**/lib/**,lib/**,ivy.xml.MD5" />
+				</else>
+			</if>
+
+			<mkdir dir="dist" />
+
+			<delete file="dist/${plugins.sdk.name}.zip" />
+
+			<zip destfile="dist/${plugins.sdk.name}.zip" duplicate="preserve">
+				<zipfileset
+					dir="."
+					excludes="${plugins.sdk.zip.excludes}"
+					prefix="${plugins.sdk.name}"
+				/>
+				<zipfileset
+					dir="."
+					includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar"
+					prefix="${plugins.sdk.name}"
+				/>
+			</zip>
+		</sequential>
+	</macrodef>
+
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="deploy" />
@@ -179,30 +215,11 @@
 	</target>
 
 	<target name="extract-plugins-sdk">
-		<mkdir dir="dist" />
+		<extract-plugins-sdk />
+	</target>
 
-		<delete file="dist/liferay-plugins-sdk-${lp.version}.zip" />
-
-		<ant dir="webs/resources-importer-web" target="clean" inheritAll="false" />
-
-		<zip destfile="dist/liferay-plugins-sdk-${lp.version}.zip">
-			<zipfileset
-				dir="."
-				excludes="*.iml,.bnd/**,.git/**,.ivy/**,build.*.properties,dependencies/**/ivy.xml.MD5,dependencies/**/lib/**,dist/**,ext/*-ext/**,hooks/*-hook/**,lib/**,ivy.xml.MD5,layouttpl/*-layouttpl/**,portlets/*-portlet/**,private-plugins.txt,shared/*-shared/**,source_formatter_*,suites/**,summary.*,themes/*-theme/**,tmp/**,tools/node-*/**,webs/*-web/**"
-				prefix="liferay-plugins-sdk-${lp.version}"
-			/>
-			<zipfileset
-				dir="."
-				excludes="**/releng/**"
-				includes="webs/resources-importer-web/**"
-				prefix="liferay-plugins-sdk-${lp.version}"
-			/>
-			<zipfileset
-				dir="."
-				includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar"
-				prefix="liferay-plugins-sdk-${lp.version}"
-			/>
-		</zip>
+	<target name="extract-plugins-sdk-with-dependencies">
+		<extract-plugins-sdk plugins.sdk.with.dependencies="true" />
 	</target>
 
 	<target name="format-javadoc">
