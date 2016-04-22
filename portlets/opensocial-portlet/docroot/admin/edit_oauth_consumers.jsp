@@ -99,13 +99,13 @@ int oAuthServiceCount = 0;
 
 			<aui:input name="consumerKey" />
 
-			<div id='<%= "consumerSecretField" + oAuthServiceCount %>'>
+			<div id="<%= "consumerSecretField" + oAuthServiceCount %>">
 				<aui:input name="consumerSecret" />
 			</div>
 		</aui:fieldset>
 
 	<%
-	oAuthServiceCount++;
+		oAuthServiceCount++;
 	}
 	%>
 
@@ -123,7 +123,7 @@ int oAuthServiceCount = 0;
 		submitForm(document.<portlet:namespace />fm);
 	}
 
-	Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />name);
+	Liferay.Util.focusFormField(document.<portlet:namespace />fm.<portlet:namespace />keyType);
 </aui:script>
 
 <aui:script use="aui-base">
