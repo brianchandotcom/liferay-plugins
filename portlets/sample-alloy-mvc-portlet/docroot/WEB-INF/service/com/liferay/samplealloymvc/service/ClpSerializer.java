@@ -25,10 +25,8 @@ import com.liferay.portal.kernel.util.ClassLoaderObjectInputStream;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 
-import com.liferay.samplealloymvc.model.AssetClp;
-import com.liferay.samplealloymvc.model.CheckoutClp;
-import com.liferay.samplealloymvc.model.DefinitionClp;
-import com.liferay.samplealloymvc.model.TypeClp;
+import com.liferay.samplealloymvc.model.SAMTodoItemClp;
+import com.liferay.samplealloymvc.model.SAMTodoListClp;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -106,20 +104,12 @@ public class ClpSerializer {
 
 		String oldModelClassName = oldModelClass.getName();
 
-		if (oldModelClassName.equals(AssetClp.class.getName())) {
-			return translateInputAsset(oldModel);
+		if (oldModelClassName.equals(SAMTodoItemClp.class.getName())) {
+			return translateInputSAMTodoItem(oldModel);
 		}
 
-		if (oldModelClassName.equals(CheckoutClp.class.getName())) {
-			return translateInputCheckout(oldModel);
-		}
-
-		if (oldModelClassName.equals(DefinitionClp.class.getName())) {
-			return translateInputDefinition(oldModel);
-		}
-
-		if (oldModelClassName.equals(TypeClp.class.getName())) {
-			return translateInputType(oldModel);
+		if (oldModelClassName.equals(SAMTodoListClp.class.getName())) {
+			return translateInputSAMTodoList(oldModel);
 		}
 
 		return oldModel;
@@ -137,40 +127,20 @@ public class ClpSerializer {
 		return newList;
 	}
 
-	public static Object translateInputAsset(BaseModel<?> oldModel) {
-		AssetClp oldClpModel = (AssetClp)oldModel;
+	public static Object translateInputSAMTodoItem(BaseModel<?> oldModel) {
+		SAMTodoItemClp oldClpModel = (SAMTodoItemClp)oldModel;
 
-		BaseModel<?> newModel = oldClpModel.getAssetRemoteModel();
-
-		newModel.setModelAttributes(oldClpModel.getModelAttributes());
-
-		return newModel;
-	}
-
-	public static Object translateInputCheckout(BaseModel<?> oldModel) {
-		CheckoutClp oldClpModel = (CheckoutClp)oldModel;
-
-		BaseModel<?> newModel = oldClpModel.getCheckoutRemoteModel();
+		BaseModel<?> newModel = oldClpModel.getSAMTodoItemRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
 		return newModel;
 	}
 
-	public static Object translateInputDefinition(BaseModel<?> oldModel) {
-		DefinitionClp oldClpModel = (DefinitionClp)oldModel;
+	public static Object translateInputSAMTodoList(BaseModel<?> oldModel) {
+		SAMTodoListClp oldClpModel = (SAMTodoListClp)oldModel;
 
-		BaseModel<?> newModel = oldClpModel.getDefinitionRemoteModel();
-
-		newModel.setModelAttributes(oldClpModel.getModelAttributes());
-
-		return newModel;
-	}
-
-	public static Object translateInputType(BaseModel<?> oldModel) {
-		TypeClp oldClpModel = (TypeClp)oldModel;
-
-		BaseModel<?> newModel = oldClpModel.getTypeRemoteModel();
+		BaseModel<?> newModel = oldClpModel.getSAMTodoListRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
@@ -195,8 +165,8 @@ public class ClpSerializer {
 		String oldModelClassName = oldModelClass.getName();
 
 		if (oldModelClassName.equals(
-					"com.liferay.samplealloymvc.model.impl.AssetImpl")) {
-			return translateOutputAsset(oldModel);
+					"com.liferay.samplealloymvc.model.impl.SAMTodoItemImpl")) {
+			return translateOutputSAMTodoItem(oldModel);
 		}
 		else if (oldModelClassName.endsWith("Clp")) {
 			try {
@@ -232,82 +202,8 @@ public class ClpSerializer {
 		}
 
 		if (oldModelClassName.equals(
-					"com.liferay.samplealloymvc.model.impl.CheckoutImpl")) {
-			return translateOutputCheckout(oldModel);
-		}
-		else if (oldModelClassName.endsWith("Clp")) {
-			try {
-				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
-
-				Method getClpSerializerClassMethod = oldModelClass.getMethod(
-						"getClpSerializerClass");
-
-				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
-
-				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
-
-				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
-						BaseModel.class);
-
-				Class<?> oldModelModelClass = oldModel.getModelClass();
-
-				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
-						oldModelModelClass.getSimpleName() + "RemoteModel");
-
-				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
-
-				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
-						oldRemoteModel);
-
-				return newModel;
-			}
-			catch (Throwable t) {
-				if (_log.isInfoEnabled()) {
-					_log.info("Unable to translate " + oldModelClassName, t);
-				}
-			}
-		}
-
-		if (oldModelClassName.equals(
-					"com.liferay.samplealloymvc.model.impl.DefinitionImpl")) {
-			return translateOutputDefinition(oldModel);
-		}
-		else if (oldModelClassName.endsWith("Clp")) {
-			try {
-				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
-
-				Method getClpSerializerClassMethod = oldModelClass.getMethod(
-						"getClpSerializerClass");
-
-				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
-
-				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
-
-				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
-						BaseModel.class);
-
-				Class<?> oldModelModelClass = oldModel.getModelClass();
-
-				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
-						oldModelModelClass.getSimpleName() + "RemoteModel");
-
-				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
-
-				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
-						oldRemoteModel);
-
-				return newModel;
-			}
-			catch (Throwable t) {
-				if (_log.isInfoEnabled()) {
-					_log.info("Unable to translate " + oldModelClassName, t);
-				}
-			}
-		}
-
-		if (oldModelClassName.equals(
-					"com.liferay.samplealloymvc.model.impl.TypeImpl")) {
-			return translateOutputType(oldModel);
+					"com.liferay.samplealloymvc.model.impl.SAMTodoListImpl")) {
+			return translateOutputSAMTodoList(oldModel);
 		}
 		else if (oldModelClassName.endsWith("Clp")) {
 			try {
@@ -422,68 +318,36 @@ public class ClpSerializer {
 		String className = clazz.getName();
 
 		if (className.equals(
-					"com.liferay.samplealloymvc.exception.NoSuchAssetException")) {
-			return new com.liferay.samplealloymvc.exception.NoSuchAssetException(throwable.getMessage(),
+					"com.liferay.samplealloymvc.exception.NoSuchTodoItemException")) {
+			return new com.liferay.samplealloymvc.exception.NoSuchTodoItemException(throwable.getMessage(),
 				throwable.getCause());
 		}
 
 		if (className.equals(
-					"com.liferay.samplealloymvc.exception.NoSuchCheckoutException")) {
-			return new com.liferay.samplealloymvc.exception.NoSuchCheckoutException(throwable.getMessage(),
-				throwable.getCause());
-		}
-
-		if (className.equals(
-					"com.liferay.samplealloymvc.exception.NoSuchDefinitionException")) {
-			return new com.liferay.samplealloymvc.exception.NoSuchDefinitionException(throwable.getMessage(),
-				throwable.getCause());
-		}
-
-		if (className.equals(
-					"com.liferay.samplealloymvc.exception.NoSuchTypeException")) {
-			return new com.liferay.samplealloymvc.exception.NoSuchTypeException(throwable.getMessage(),
+					"com.liferay.samplealloymvc.exception.NoSuchTodoListException")) {
+			return new com.liferay.samplealloymvc.exception.NoSuchTodoListException(throwable.getMessage(),
 				throwable.getCause());
 		}
 
 		return throwable;
 	}
 
-	public static Object translateOutputAsset(BaseModel<?> oldModel) {
-		AssetClp newModel = new AssetClp();
+	public static Object translateOutputSAMTodoItem(BaseModel<?> oldModel) {
+		SAMTodoItemClp newModel = new SAMTodoItemClp();
 
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
-		newModel.setAssetRemoteModel(oldModel);
+		newModel.setSAMTodoItemRemoteModel(oldModel);
 
 		return newModel;
 	}
 
-	public static Object translateOutputCheckout(BaseModel<?> oldModel) {
-		CheckoutClp newModel = new CheckoutClp();
+	public static Object translateOutputSAMTodoList(BaseModel<?> oldModel) {
+		SAMTodoListClp newModel = new SAMTodoListClp();
 
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
-		newModel.setCheckoutRemoteModel(oldModel);
-
-		return newModel;
-	}
-
-	public static Object translateOutputDefinition(BaseModel<?> oldModel) {
-		DefinitionClp newModel = new DefinitionClp();
-
-		newModel.setModelAttributes(oldModel.getModelAttributes());
-
-		newModel.setDefinitionRemoteModel(oldModel);
-
-		return newModel;
-	}
-
-	public static Object translateOutputType(BaseModel<?> oldModel) {
-		TypeClp newModel = new TypeClp();
-
-		newModel.setModelAttributes(oldModel.getModelAttributes());
-
-		newModel.setTypeRemoteModel(oldModel);
+		newModel.setSAMTodoListRemoteModel(oldModel);
 
 		return newModel;
 	}

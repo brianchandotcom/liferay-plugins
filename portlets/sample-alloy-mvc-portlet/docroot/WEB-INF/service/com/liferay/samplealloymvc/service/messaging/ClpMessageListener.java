@@ -19,11 +19,9 @@ import aQute.bnd.annotation.ProviderType;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
-import com.liferay.samplealloymvc.service.AssetLocalServiceUtil;
-import com.liferay.samplealloymvc.service.CheckoutLocalServiceUtil;
 import com.liferay.samplealloymvc.service.ClpSerializer;
-import com.liferay.samplealloymvc.service.DefinitionLocalServiceUtil;
-import com.liferay.samplealloymvc.service.TypeLocalServiceUtil;
+import com.liferay.samplealloymvc.service.SAMTodoItemLocalServiceUtil;
+import com.liferay.samplealloymvc.service.SAMTodoListLocalServiceUtil;
 
 /**
  * @author Brian Wing Shun Chan
@@ -41,13 +39,9 @@ public class ClpMessageListener extends BaseMessageListener {
 
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
-			AssetLocalServiceUtil.clearService();
+			SAMTodoItemLocalServiceUtil.clearService();
 
-			CheckoutLocalServiceUtil.clearService();
-
-			DefinitionLocalServiceUtil.clearService();
-
-			TypeLocalServiceUtil.clearService();
+			SAMTodoListLocalServiceUtil.clearService();
 		}
 	}
 }
