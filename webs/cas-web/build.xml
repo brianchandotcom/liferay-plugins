@@ -7,6 +7,18 @@
 
 	<import file="../build-common-web.xml" />
 
+	<macrodef name="deploy">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-module-properties module.dir="@{module.dir}" />
+
+			<loop-macrodef-or-target module.dirs="@{module.dir}" target.name="war"/>
+
+			<copy file="${plugin.file}" todir="${app.server.deploy.dir}" />
+		</sequential>
+	</macrodef>
+
 	<target name="merge">
 
 		<!-- Merge -->
