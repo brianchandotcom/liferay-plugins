@@ -74,6 +74,7 @@ import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.ThemeLocalServiceUtil;
 import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -965,8 +966,7 @@ public class FileSystemImporter extends BaseImporter {
 
 			if (Validator.isNotNull(layoutPrototypeUuid)) {
 				boolean layoutPrototypeLinkEnabled = GetterUtil.getBoolean(
-					layoutJSONObject.getString("layoutPrototypeLinkEnabled"),
-					false);
+					layoutJSONObject.getString("layoutPrototypeLinkEnabled"));
 
 				serviceContext.setAttribute(
 					"layoutPrototypeLinkEnabled", layoutPrototypeLinkEnabled);
@@ -1339,7 +1339,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		id = StringUtil.toUpperCase(id);
 
-		return StringUtil.replace(id, StringPool.SPACE, StringPool.DASH);
+		return StringUtil.replace(id, CharPool.SPACE, CharPool.DASH);
 	}
 
 	protected String[] getJSONArrayAsStringArray(
@@ -1381,7 +1381,7 @@ public class FileSystemImporter extends BaseImporter {
 	}
 
 	protected String getKey(String name) {
-		name = StringUtil.replace(name, StringPool.SPACE, StringPool.DASH);
+		name = StringUtil.replace(name, CharPool.SPACE, CharPool.DASH);
 
 		name = StringUtil.toUpperCase(name);
 
@@ -1764,8 +1764,7 @@ public class FileSystemImporter extends BaseImporter {
 			{"asset_entry", AssetEntry.class}, {"asset_tag", AssetTag.class},
 			{"blogs_entry", BlogsEntry.class},
 			{"document_library", FileEntry.class},
-			{"site_map", LayoutSet.class},
-			{"wiki_page", WikiPage.class}
+			{"site_map", LayoutSet.class}, {"wiki_page", WikiPage.class}
 		};
 
 	private static final String _DDL_STRUCTURE_DIR_NAME =

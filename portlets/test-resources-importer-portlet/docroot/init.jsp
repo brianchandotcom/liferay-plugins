@@ -86,8 +86,9 @@ page import="com.liferay.wiki.model.WikiPage" %>
 <%@ page import="java.util.HashMap" %><%@
 page import="java.util.List" %><%@
 page import="java.util.Locale" %><%@
-page import="java.util.Map" %>
-
-<portlet:defineObjects />
+page import="java.util.Map" %><%@
+page import="java.util.Objects" %>
 
 <liferay-theme:defineObjects />
+
+<portlet:defineObjects />
