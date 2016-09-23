@@ -20,6 +20,7 @@
 
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
+<%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.HttpUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ReleaseInfo" %>
@@ -64,30 +65,28 @@ An example URL is: <em>http://sourceforge.net/project/showfiles.php?group_id=492
 <br /><br />
 
 <form action="<portlet:renderURL />" method="post" name="<portlet:namespace />fm">
+	<table class="lfr-table">
+		<tr>
+			<td>
+				<liferay-ui:message key="url" />:
+			</td>
+			<td>
+				<input name="<portlet:namespace />url" size="120" type="text" value="<%= HtmlUtil.escape(url) %>" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<liferay-ui:message key="project" />:
+			</td>
+			<td>
+				<%= projectName %>
+			</td>
+		</tr>
+	</table>
 
-<table class="lfr-table">
-<tr>
-	<td>
-		<liferay-ui:message key="url" />:
-	</td>
-	<td>
-		<input name="<portlet:namespace />url" size="120" type="text" value="<%= url %>" />
-	</td>
-</tr>
-<tr>
-	<td>
-		<liferay-ui:message key="project" />:
-	</td>
-	<td>
-		<%= projectName %>
-	</td>
-</tr>
-</table>
+	<br />
 
-<br />
-
-<input type="submit" value="<liferay-ui:message key="refresh" />" />
-
+	<input type="submit" value="<liferay-ui:message key="refresh" />" />
 </form>
 
 <c:if test="<%= Validator.isNotNull(url) %>">

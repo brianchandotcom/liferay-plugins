@@ -51,12 +51,17 @@
 <h3>service</h3>
 
 <p>
-	com.liferay.portal.kernel.service.UserLocalService=<%= _assertEquals(TestHookUserImpl.class.getName(), UserLocalServiceUtil.getUserByEmailAddress(themeDisplay.getCompanyId(), "test@liferay.com").getClass().getName()) %>
+
+	<%
+	Class<?> clazz = UserLocalServiceUtil.getUserByEmailAddress(themeDisplay.getCompanyId(), "test@liferay.com").getClass();
+	%>
+
+	com.liferay.portal.kernel.service.UserLocalService=<%= _assertEquals(TestHookUserImpl.class.getName(), clazz.getName()) %>
 </p>
 
 <%!
 private static String _assertEquals(Object expected, Object actual) {
-	return _assertTrue(Validator.equals(expected, actual));
+	return _assertTrue(Objects.equals(expected, actual));
 }
 
 private static String _assertFalse(boolean value) {
