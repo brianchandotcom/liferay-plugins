@@ -22,7 +22,7 @@
 		<portlet:param name="action" value="create" />
 	</portlet:renderURL>
 
-	<aui:button href="${createSAMTodoListURL}" icon="icon-plus" value="create" />
+	<aui:button href="${createSAMTodoListURL}" icon="icon-plus" value="create-todo-list" />
 </aui:button-row>
 
 <liferay-ui:search-container emptyResultsMessage="there-are-no-todo-lists" iteratorURL="${portletURL}" orderByCol="${orderByCol}" orderByType="${orderByType}">
