@@ -27,43 +27,54 @@ import java.util.Arrays;
 @ProviderType
 public class FooServiceClpInvoker {
 	public FooServiceClpInvoker() {
-		_methodName36 = "getOSGiServiceIdentifier";
+		_methodName38 = "getOSGiServiceIdentifier";
 
-		_methodParameterTypes36 = new String[] {  };
+		_methodParameterTypes38 = new String[] {  };
 
-		_methodName41 = "getUser";
+		_methodName43 = "getUser";
 
-		_methodParameterTypes41 = new String[] { "long" };
+		_methodParameterTypes43 = new String[] { "long" };
 
-		_methodName42 = "getUserSitesGroups";
+		_methodName44 = "getUserSitesGroups";
 
-		_methodParameterTypes42 = new String[] {  };
+		_methodParameterTypes44 = new String[] {  };
+
+		_methodName45 = "findAll";
+
+		_methodParameterTypes45 = new String[] {  };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		if (_methodName36.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
+		if (_methodName38.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes38, parameterTypes)) {
 			return FooServiceUtil.getOSGiServiceIdentifier();
 		}
 
-		if (_methodName41.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes41, parameterTypes)) {
+		if (_methodName43.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
 			return FooServiceUtil.getUser(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName42.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
+		if (_methodName44.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
 			return FooServiceUtil.getUserSitesGroups();
+		}
+
+		if (_methodName45.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+			return FooServiceUtil.findAll();
 		}
 
 		throw new UnsupportedOperationException();
 	}
 
-	private String _methodName36;
-	private String[] _methodParameterTypes36;
-	private String _methodName41;
-	private String[] _methodParameterTypes41;
-	private String _methodName42;
-	private String[] _methodParameterTypes42;
+	private String _methodName38;
+	private String[] _methodParameterTypes38;
+	private String _methodName43;
+	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
+	private String _methodName45;
+	private String[] _methodParameterTypes45;
 }

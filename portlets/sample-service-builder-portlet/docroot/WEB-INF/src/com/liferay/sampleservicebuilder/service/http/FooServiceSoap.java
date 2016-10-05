@@ -93,5 +93,20 @@ public class FooServiceSoap {
 		}
 	}
 
+	public static com.liferay.sampleservicebuilder.model.FooSoap[] findAll()
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.sampleservicebuilder.model.Foo> returnValue =
+				FooServiceUtil.findAll();
+
+			return com.liferay.sampleservicebuilder.model.FooSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(FooServiceSoap.class);
 }

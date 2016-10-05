@@ -56,6 +56,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -198,7 +199,7 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 
 			if ((list != null) && !list.isEmpty()) {
 				for (Foo foo : list) {
-					if (!Validator.equals(uuid, foo.getUuid())) {
+					if (!Objects.equals(uuid, foo.getUuid())) {
 						list = null;
 
 						break;
@@ -710,7 +711,7 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 		if (result instanceof Foo) {
 			Foo foo = (Foo)result;
 
-			if (!Validator.equals(uuid, foo.getUuid()) ||
+			if (!Objects.equals(uuid, foo.getUuid()) ||
 					(groupId != foo.getGroupId())) {
 				result = null;
 			}
@@ -1000,7 +1001,7 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 
 			if ((list != null) && !list.isEmpty()) {
 				for (Foo foo : list) {
-					if (!Validator.equals(uuid, foo.getUuid()) ||
+					if (!Objects.equals(uuid, foo.getUuid()) ||
 							(companyId != foo.getCompanyId())) {
 						list = null;
 

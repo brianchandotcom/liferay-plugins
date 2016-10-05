@@ -71,6 +71,11 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 	}
 
 	@Override
+	public int countByFooIds(String[] fooIds) {
+		return fooFinder.countByFooIds(fooIds);
+	}
+
+	@Override
 	public Foo deleteFoo(Foo foo) {
 		try {
 			assetEntryLocalService.deleteEntry(
@@ -93,6 +98,16 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		return deleteFoo(foo);
 	}
 
+	@Override
+	public List<Foo> findAll() {
+		return fooPersistence.findAll();
+	}
+
+	@Override
+	public List<Foo> findByFooIds(String[] fooIds, int start, int end) {
+		return fooFinder.findByFooIds(fooIds, start, end);
+	}
+
 	public List<Foo> getFoos(int start, int end, OrderByComparator<Foo> obc) {
 		return fooPersistence.findAll(start, end, obc);
 	}
@@ -110,6 +125,11 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 			contextClassLoader, LocalObject.class.getName());
 	}
 
+	@Override
+	public void removeAll() {
+		fooPersistence.removeAll();
+	}
+
 	public void updateAsset(
 			long userId, Foo foo, long[] assetCategoryIds,
 			String[] assetTagNames)
@@ -118,9 +138,8 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		assetEntryLocalService.updateEntry(
 			userId, foo.getGroupId(), null, null, Foo.class.getName(),
 			foo.getFooId(), foo.getUuid(), 0, assetCategoryIds, assetTagNames,
-			true, null, null, null, ContentTypes.TEXT_PLAIN_UTF8,
-			foo.getField1(), null, foo.getField1(), null, null, 0, 0, null,
-			false);
+			true, true, null, null, null, null, ContentTypes.TEXT_PLAIN_UTF8,
+			foo.getField1(), null, foo.getField1(), null, null, 0, 0, null);
 	}
 
 	public void updateFoo(

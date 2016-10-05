@@ -52,6 +52,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 
 import com.liferay.sampleservicebuilder.model.Foo;
 import com.liferay.sampleservicebuilder.service.FooLocalService;
+import com.liferay.sampleservicebuilder.service.persistence.FooFinder;
 import com.liferay.sampleservicebuilder.service.persistence.FooPersistence;
 
 import java.io.Serializable;
@@ -459,6 +460,24 @@ public abstract class FooLocalServiceBaseImpl extends BaseLocalServiceImpl
 	}
 
 	/**
+	 * Returns the foo finder.
+	 *
+	 * @return the foo finder
+	 */
+	public FooFinder getFooFinder() {
+		return fooFinder;
+	}
+
+	/**
+	 * Sets the foo finder.
+	 *
+	 * @param fooFinder the foo finder
+	 */
+	public void setFooFinder(FooFinder fooFinder) {
+		this.fooFinder = fooFinder;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -723,10 +742,12 @@ public abstract class FooLocalServiceBaseImpl extends BaseLocalServiceImpl
 		}
 	}
 
-	@BeanReference(type = com.liferay.sampleservicebuilder.service.FooLocalService.class)
+	@BeanReference(type = FooLocalService.class)
 	protected FooLocalService fooLocalService;
 	@BeanReference(type = FooPersistence.class)
 	protected FooPersistence fooPersistence;
+	@BeanReference(type = FooFinder.class)
+	protected FooFinder fooFinder;
 	@BeanReference(type = com.liferay.counter.kernel.service.CounterLocalService.class)
 	protected com.liferay.counter.kernel.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.kernel.service.ClassNameLocalService.class)

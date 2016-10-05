@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.util.PortalUtil;
 
 import com.liferay.sampleservicebuilder.model.Foo;
 import com.liferay.sampleservicebuilder.service.FooService;
+import com.liferay.sampleservicebuilder.service.persistence.FooFinder;
 import com.liferay.sampleservicebuilder.service.persistence.FooPersistence;
 
 import javax.sql.DataSource;
@@ -108,6 +109,24 @@ public abstract class FooServiceBaseImpl extends BaseServiceImpl
 	 */
 	public void setFooPersistence(FooPersistence fooPersistence) {
 		this.fooPersistence = fooPersistence;
+	}
+
+	/**
+	 * Returns the foo finder.
+	 *
+	 * @return the foo finder
+	 */
+	public FooFinder getFooFinder() {
+		return fooFinder;
+	}
+
+	/**
+	 * Sets the foo finder.
+	 *
+	 * @param fooFinder the foo finder
+	 */
+	public void setFooFinder(FooFinder fooFinder) {
+		this.fooFinder = fooFinder;
 	}
 
 	/**
@@ -448,10 +467,12 @@ public abstract class FooServiceBaseImpl extends BaseServiceImpl
 
 	@BeanReference(type = com.liferay.sampleservicebuilder.service.FooLocalService.class)
 	protected com.liferay.sampleservicebuilder.service.FooLocalService fooLocalService;
-	@BeanReference(type = com.liferay.sampleservicebuilder.service.FooService.class)
+	@BeanReference(type = FooService.class)
 	protected FooService fooService;
 	@BeanReference(type = FooPersistence.class)
 	protected FooPersistence fooPersistence;
+	@BeanReference(type = FooFinder.class)
+	protected FooFinder fooFinder;
 	@BeanReference(type = com.liferay.counter.kernel.service.CounterLocalService.class)
 	protected com.liferay.counter.kernel.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.kernel.service.ClassNameLocalService.class)

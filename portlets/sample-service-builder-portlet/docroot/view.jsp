@@ -16,6 +16,14 @@
 
 <%@ include file="/init.jsp" %>
 
+<%
+PortletURL iteratorURL = renderResponse.createRenderURL();
+
+FooSearch fooSearch = new FooSearch(renderRequest, iteratorURL);
+
+FooDisplayTerms fooDisplayTerms = (FooDisplayTerms)fooSearch.getDisplayTerms();
+%>
+
 <strong><liferay-ui:message key="welcome-to-the-sample-service-builder-portlet" /></strong>
 
 <aui:button-row>
@@ -28,11 +36,43 @@
 </aui:button-row>
 
 <liferay-ui:search-container
-	total="<%= FooLocalServiceUtil.getFoosCount() %>"
+	searchContainer="<%= fooSearch %>"
 >
-	<liferay-ui:search-container-results
-		results="<%= FooLocalServiceUtil.getFoos(searchContainer.getStart(), searchContainer.getEnd(), new FooField4Comparator()) %>"
-	/>
+	<portlet:renderURL var="refreshURL" windowState="normal">
+		<portlet:param name="mvcPath" value="/view.jsp" />
+	</portlet:renderURL>
+
+	<aui:form action="<%= refreshURL %>" method="post" name="fm">
+		<section>
+			<article>
+				<aui:select label="Select" multiple="true" name="fooIds" />
+
+				<aui:script use="liferay-dynamic-select">
+					var data = function(callback) {
+						Liferay.Service(
+							'/sample-service-builder-portlet.foo/find-all',
+							callback
+						);
+					};
+
+					new Liferay.DynamicSelect(
+						[
+							{
+								select: '<portlet:namespace />fooIds',
+								selectData: data,
+								selectDesc: 'field1',
+								selectId: 'fooId',
+								selectSort: '',
+								selectVal: [<%= StringUtil.merge(fooDisplayTerms.getFooIds()) %>]
+							}
+						]
+					);
+				</aui:script>
+
+				<aui:button type="submit" value="search" />
+			</article>
+		</section>
+	</aui:form>
 
 	<liferay-ui:search-container-row
 		className="com.liferay.sampleservicebuilder.model.Foo"

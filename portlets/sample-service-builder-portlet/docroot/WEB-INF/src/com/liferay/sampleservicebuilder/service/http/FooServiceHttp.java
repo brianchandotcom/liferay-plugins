@@ -117,6 +117,32 @@ public class FooServiceHttp {
 		}
 	}
 
+	public static java.util.List<com.liferay.sampleservicebuilder.model.Foo> findAll(
+		HttpPrincipal httpPrincipal) {
+		try {
+			MethodKey methodKey = new MethodKey(FooServiceUtil.class,
+					"findAll", _findAllParameterTypes2);
+
+			MethodHandler methodHandler = new MethodHandler(methodKey);
+
+			Object returnObj = null;
+
+			try {
+				returnObj = TunnelUtil.invoke(httpPrincipal, methodHandler);
+			}
+			catch (Exception e) {
+				throw new com.liferay.portal.kernel.exception.SystemException(e);
+			}
+
+			return (java.util.List<com.liferay.sampleservicebuilder.model.Foo>)returnObj;
+		}
+		catch (com.liferay.portal.kernel.exception.SystemException se) {
+			_log.error(se, se);
+
+			throw se;
+		}
+	}
+
 	private static Log _log = LogFactoryUtil.getLog(FooServiceHttp.class);
 	private static final Class<?>[] _getUserParameterTypes0 = new Class[] {
 			long.class
@@ -124,4 +150,5 @@ public class FooServiceHttp {
 	private static final Class<?>[] _getUserSitesGroupsParameterTypes1 = new Class[] {
 			
 		};
+	private static final Class<?>[] _findAllParameterTypes2 = new Class[] {  };
 }

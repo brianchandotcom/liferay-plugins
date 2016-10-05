@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<custom-sql>
+	<sql id="com.liferay.sampleservicebuilder.service.persistence.FooFinder.countByFooId">
+		<![CDATA[
+			SELECT
+				COUNT(SSB_Foo.fooId) AS COUNT_VALUE
+			FROM
+				SSB_Foo
+			{WHERE_CLAUSE}
+		]]>
+	</sql>
+	<sql id="com.liferay.sampleservicebuilder.service.persistence.FooFinder.findByFooId">
+		<![CDATA[
+			SELECT
+				SSB_Foo.*
+			FROM
+				SSB_Foo
+			{WHERE_CLAUSE}
+		]]>
+	</sql>
+</custom-sql>

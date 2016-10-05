@@ -61,6 +61,10 @@ public class FooServiceUtil {
 		return getService().getOSGiServiceIdentifier();
 	}
 
+	public static java.util.List<com.liferay.sampleservicebuilder.model.Foo> findAll() {
+		return getService().findAll();
+	}
+
 	public static java.util.List<com.liferay.portal.kernel.model.Group> getUserSitesGroups()
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getUserSitesGroups();
