@@ -61,7 +61,8 @@ public class SVNRevisionLocalServiceImpl
 
 			long userId = user.getUserId();
 
-			/*List<SocialActivity> socialActivities =
+			/*
+			List<SocialActivity> socialActivities =
 				SocialActivityLocalServiceUtil.getActivities(
 					SVNRevision.class.getName(), 0, 1);
 
@@ -72,7 +73,8 @@ public class SVNRevisionLocalServiceImpl
 					SocialActivityLocalServiceUtil.deleteActivity(
 						socialActivity.getActivityId());
 				}
-			}*/
+			}
+			*/
 
 			SocialActivityLocalServiceUtil.addActivity(
 				userId, 0, createDate, SVNRevision.class.getName(),

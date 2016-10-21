@@ -164,12 +164,14 @@ public class AlloyPortlet extends GenericPortlet {
 	}
 
 	protected Map<String, String> getDefaultRouteParameters() {
-		/*Map<String, String> defaultRouteParameters = new HashMap<>();
+		/*
+		Map<String, String> defaultRouteParameters = new HashMap<>();
 
 		defaultRouteParameters.put("controller", new String[] {"assets"});
 		defaultRouteParameters.put("action", new String[] {"index"});
 
-		return defaultRouteParameters;*/
+		return defaultRouteParameters;
+		*/
 
 		return _defaultRouteParameters;
 	}
