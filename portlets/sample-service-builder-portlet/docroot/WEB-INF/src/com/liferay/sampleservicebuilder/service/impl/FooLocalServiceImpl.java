@@ -93,6 +93,28 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		return deleteFoo(foo);
 	}
 
+	@Override
+	public void deleteFoos() {
+		fooPersistence.removeAll();
+	}
+
+	@Override
+	public List<Foo> getField1Foos(
+		String[] field1s, int start, int end, OrderByComparator<Foo> obc) {
+
+		return fooPersistence.findByField1(field1s, start, end, obc);
+	}
+
+	@Override
+	public int getField1FoosCount(String[] field1s) {
+		return fooPersistence.countByField1(field1s);
+	}
+
+	@Override
+	public List<Foo> getFoos() {
+		return fooPersistence.findAll();
+	}
+
 	public List<Foo> getFoos(int start, int end, OrderByComparator<Foo> obc) {
 		return fooPersistence.findAll(start, end, obc);
 	}
@@ -118,9 +140,8 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		assetEntryLocalService.updateEntry(
 			userId, foo.getGroupId(), null, null, Foo.class.getName(),
 			foo.getFooId(), foo.getUuid(), 0, assetCategoryIds, assetTagNames,
-			true, null, null, null, ContentTypes.TEXT_PLAIN_UTF8,
-			foo.getField1(), null, foo.getField1(), null, null, 0, 0, null,
-			false);
+			true, true, null, null, null, null, ContentTypes.TEXT_PLAIN_UTF8,
+			foo.getField1(), null, foo.getField1(), null, null, 0, 0, null);
 	}
 
 	public void updateFoo(
