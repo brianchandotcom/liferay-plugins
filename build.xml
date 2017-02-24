@@ -24,44 +24,6 @@
 
 	<pathconvert pathsep="," property="plugins.includes.path" refid="plugins.includes.path" targetos="unix" />
 
-	<macrodef name="extract-plugins-sdk">
-		<attribute default="false" name="plugins.sdk.with.dependencies" />
-
-		<sequential>
-			<var name="plugins.sdk.name" value="com.liferay.portal.plugins.sdk" />
-			<var name="plugins.sdk.zip.excludes" value="**/.gradle/**,**/build/**,**/gradle.properties,**/test.*.properties,*.iml,.git/**,.ivy/**,build.*.properties,build.gradle,dist/**,ext/*-ext/**,gradle/**,gradlew*,hooks/*-hook/**,layouttpl/*-layouttpl/**,portlets/*-portlet/**,private-plugins.txt,settings.gradle,shared/*-shared/**,source_formatter_*,suites/**,summary.*,themes/*-theme/**,tmp/**,tools/node-*/**,webs/*-web/**" />
-
-			<if>
-				<istrue value="@{plugins.sdk.with.dependencies}" />
-				<then>
-					<var name="plugins.sdk.name" value="${plugins.sdk.name}.with.dependencies" />
-				</then>
-				<else>
-					<var name="plugins.sdk.zip.excludes" value="${plugins.sdk.zip.excludes},dependencies/**/ivy.xml.MD5,dependencies/**/lib/**,lib/**,ivy.xml.MD5" />
-				</else>
-			</if>
-
-			<var name="plugins.sdk.name" value="${plugins.sdk.name}-${lp.version}" />
-
-			<mkdir dir="dist" />
-
-			<delete file="dist/${plugins.sdk.name}.zip" />
-
-			<zip destfile="dist/${plugins.sdk.name}.zip" duplicate="preserve">
-				<zipfileset
-					dir="."
-					excludes="${plugins.sdk.zip.excludes}"
-					prefix="${plugins.sdk.name}"
-				/>
-				<zipfileset
-					dir="."
-					includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar"
-					prefix="${plugins.sdk.name}"
-				/>
-			</zip>
-		</sequential>
-	</macrodef>
-
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="deploy" />
@@ -122,11 +84,24 @@
 	</target>
 
 	<target name="extract-plugins-sdk">
-		<extract-plugins-sdk />
-	</target>
+		<property name="plugins.sdk.name" value="com.liferay.portal.plugins.sdk-${lp.version}" />
 
-	<target name="extract-plugins-sdk-with-dependencies">
-		<extract-plugins-sdk plugins.sdk.with.dependencies="true" />
+		<mkdir dir="dist" />
+
+		<delete file="dist/${plugins.sdk.name}.zip" />
+
+		<zip destfile="dist/${plugins.sdk.name}.zip" duplicate="preserve">
+			<zipfileset
+				dir="."
+				excludes="**/.gradle/**,**/build/**,**/gradle.properties,**/test.*.properties,*.iml,.git/**,.ivy/**,build.*.properties,build.gradle,dependencies/**/ivy.xml.MD5,dependencies/**/lib/**,dist/**,ext/*-ext/**,gradle/**,gradlew*,hooks/*-hook/**,ivy.xml.MD5,layouttpl/*-layouttpl/**,lib/**,portlets/*-portlet/**,private-plugins.txt,settings.gradle,shared/*-shared/**,source_formatter_*,suites/**,summary.*,themes/*-theme/**,tmp/**,tools/node-*/**,webs/*-web/**"
+				prefix="${plugins.sdk.name}"
+			/>
+			<zipfileset
+				dir="."
+				includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar"
+				prefix="${plugins.sdk.name}"
+			/>
+		</zip>
 	</target>
 
 	<target name="format-javadoc">
@@ -137,7 +112,7 @@
 		<ant dir="webs" inheritAll="false" target="format-javadoc" />
 	</target>
 
-	<target depends="extract-plugins-sdk-with-dependencies" name="publish-sdk">
+	<target depends="extract-plugins-sdk" name="publish-sdk">
 		<fail message="Please run either publish-sdk-release or publish-sdk-snapshot instead of this target.">
 			<condition>
 				<not>
@@ -162,13 +137,13 @@
 			<istrue value="${snapshot}" />
 		</condition>
 
-		<move file="dist/com.liferay.portal.plugins.sdk.with.dependencies-${lp.version}.zip" tofile="dist/com.liferay.portal.plugins.sdk.with.dependencies-${lp.version}${snapshot.version.suffix}.zip" />
+		<move file="dist/com.liferay.portal.plugins.sdk-${lp.version}.zip" tofile="dist/com.liferay.portal.plugins.sdk-${lp.version}${snapshot.version.suffix}.zip" />
 
-		<artifact:pom artifactId="com.liferay.portal.plugins.sdk.with.dependencies" groupId="com.liferay.portal" id="plugins.sdk.pom" packaging="zip" version="${lp.version}${snapshot.version.suffix}" />
+		<artifact:pom artifactId="com.liferay.portal.plugins.sdk" groupId="com.liferay.portal" id="plugins.sdk.pom" packaging="zip" version="${lp.version}${snapshot.version.suffix}" />
 
 		<artifact:writepom file="dist/plugins.sdk.pom" pomRefId="plugins.sdk.pom" />
 
-		<artifact:deploy file="dist/com.liferay.portal.plugins.sdk.with.dependencies-${lp.version}${snapshot.version.suffix}.zip">
+		<artifact:deploy file="dist/com.liferay.portal.plugins.sdk-${lp.version}${snapshot.version.suffix}.zip">
 			<pom file="dist/plugins.sdk.pom" />
 			<remoteRepository url="${remote.repository.url}">
 				<authentication password="${remote.repository.password}" username="${remote.repository.username}" />
