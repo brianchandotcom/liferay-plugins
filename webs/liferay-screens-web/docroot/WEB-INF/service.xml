@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
+<service-builder package-path="com.liferay.screens">
+	<author>José Manuel Navarro</author>
+	<namespace>LiferayScreens</namespace>
+	<entity name="LiferayScreensAssetEntry" local-service="false" remote-service="true">
+		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+	</entity>
+	<entity name="LiferayScreensDDLRecord" local-service="false" remote-service="true">
+		<reference package-path="com.liferay.portlet.dynamicdatalists" entity="DDLRecord" />
+	</entity>
+	<entity name="LiferayScreensUser" local-service="false" remote-service="true">
+		<reference package-path="com.liferay.portal" entity="Company" />
+	</entity>
+</service-builder>
