@@ -1,0 +1,24 @@
+Bundle-Name: screens-web
+Bundle-SymbolicName: com.liferay.screens
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.screens.service
+Import-Package:\
+	*;resolution:="optional"
+Include-Resource:\
+	classes,\
+	META-INF/sql=sql,\
+	WEB-INF/classes/META-INF=classes/META-INF/,\
+	WEB-INF/sql=sql,\
+	WEB-INF/liferay-hook.xml=META-INF/liferay-hook.xml,\
+	@${app.server.portal.dir}/WEB-INF/lib/util-java.jar!/com/liferay/util/portlet/PortletProps.class,\
+	@lib/com.liferay.screens-service.jar
+Liferay-Service: true
+Require-Capability:\
+	liferay.extender;\
+	filter:="(&(liferay.extender=spring.extender)(version>=1.0)(!(version>=2.0)))"
+Spring-Context: META-INF/spring
+-spring-dependency: com.liferay.portal.spring.extender.service.ServiceReference
+Service-Component: com.liferay.screens.*
+Web-ContextPath: /screens-web
+-baseline: *;version="1.0.0"
