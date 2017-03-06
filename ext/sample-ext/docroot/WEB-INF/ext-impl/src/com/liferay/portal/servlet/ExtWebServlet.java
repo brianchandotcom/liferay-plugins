@@ -12,22 +12,29 @@
  * details.
  */
 
-package com.liferay.portal.servlet.context;
+package com.liferay.portal.servlet;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 
 /**
  * @author Lawrence Lee
  */
-public class ExtAddEntryWebXmlPortalContextLoaderListener
-	implements ServletContextListener {
+public class ExtWebServlet extends HttpServlet {
 
-	public void contextDestroyed(ServletContextEvent servletContextEvent) {
+	@Override
+	public void init(ServletConfig servletConfig) throws ServletException {
+		super.init(servletConfig);
+
+		if (_log.isInfoEnabled()) {
+			_log.info("EXT_WEB_SERVLET_INSTALLED");
+		}
 	}
 
-	public void contextInitialized(ServletContextEvent servletContextEvent) {
-		System.out.println("EXT_ADD_ENTRY_WEB_XML_INSTALLED");
-	}
+	private static final Log _log = LogFactoryUtil.getLog(ExtWebServlet.class);
 
 }
