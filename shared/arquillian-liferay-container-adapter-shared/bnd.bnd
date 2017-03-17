@@ -1,0 +1,3 @@
+Bundle-Name: Arquillian Liferay Container Adapter
+Private-Package: *
+Include-Resource: classes
