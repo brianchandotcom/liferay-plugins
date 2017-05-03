@@ -1,0 +1,1 @@
+create index IX_2B67BF73 on TestSearchPagination_Foo (uuid_[$COLUMN_LENGTH:75$]);

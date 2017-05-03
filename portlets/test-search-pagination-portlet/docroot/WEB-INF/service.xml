@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
+<service-builder package-path="com.liferay.testsearchpagination">
+	<author>Inácio Nery</author>
+	<namespace>TestSearchPagination</namespace>
+	<entity local-service="true" name="Foo" remote-service="true" uuid="true">
+
+		<!-- PK fields -->
+
+		<column name="fooId" primary="true" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="fieldId" type="int" />
+		<column name="fieldName" type="String" />
+	</entity>
+</service-builder>

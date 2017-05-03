@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.testsearchpagination.model.Foo">
+		<field name="uuid" type="String" />
+		<field name="fooId" type="long" />
+		<field name="fieldId" type="int" />
+		<field name="fieldName" type="String" />
+	</model>
+</model-hints>

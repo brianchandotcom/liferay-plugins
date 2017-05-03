@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<custom-sql>
+	<sql id="com.liferay.testsearchpagination.service.persistence.FooFinder.countByFooId">
+		<![CDATA[
+			SELECT
+				COUNT(TestSearchPagination_Foo.fooId) AS COUNT_VALUE
+			FROM
+				TestSearchPagination_Foo
+			[$WHERE$]
+		]]>
+	</sql>
+	<sql id="com.liferay.testsearchpagination.service.persistence.FooFinder.findByFooId">
+		<![CDATA[
+			SELECT
+				TestSearchPagination_Foo.*
+			FROM
+				TestSearchPagination_Foo
+			[$WHERE$]
+		]]>
+	</sql>
+</custom-sql>

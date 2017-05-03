@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<bean class="com.liferay.testsearchpagination.service.impl.FooLocalServiceImpl" id="com.liferay.testsearchpagination.service.FooLocalService" />
+	<bean class="com.liferay.testsearchpagination.service.impl.FooServiceImpl" id="com.liferay.testsearchpagination.service.FooService" />
+	<bean class="com.liferay.testsearchpagination.service.persistence.impl.FooPersistenceImpl" id="com.liferay.testsearchpagination.service.persistence.FooPersistence" parent="basePersistence" />
+	<bean class="com.liferay.testsearchpagination.service.persistence.impl.FooFinderImpl" id="com.liferay.testsearchpagination.service.persistence.FooFinder" parent="basePersistence" />
+</beans>
