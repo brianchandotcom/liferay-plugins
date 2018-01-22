@@ -1,5 +1,6 @@
 **/.sonar
 **/pmd-reports
+**/test.*.properties
 *-ext.properties
 *.bak
 *.iml
@@ -11,6 +12,7 @@
 .ant-targets-build.xml
 .ant_targets
 .gh.json
+.idea
 .sass-cache
 .sass_cache_*.css
 /*/*/.web_bundle_build
