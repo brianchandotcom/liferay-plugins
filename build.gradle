@@ -1,52 +1,31 @@
 buildscript {
-	repositories {
-		if (System.getenv("JENKINS_HOME")) {
-			ivy {
-				layout "gradle"
-				url ".ivy"
-			}
+	if (System.properties["http.proxyHost"] == "squid.lax.liferay.com") {
+		logger.lifecycle "Using proxy {}:{}.", System.properties["http.proxyHost"], System.properties["http.proxyPort"]
+
+		ext {
+			repositoryUrl = "http://repository.liferay.com/nexus/content/groups/public"
 		}
-		else {
-			maven {
-				url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
-			}
+	}
+	else {
+		ext {
+			repositoryUrl = "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+		}
+	}
+
+	repositories {
+		maven {
+			url repositoryUrl
 		}
 	}
 
 	dependencies {
+		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.node", version: "2.0.0"
 		classpath group: "com.liferay", name: "com.liferay.gradle.plugins.poshi.runner", version: "1.0.12"
-		classpath group: "org.ysb33r.gradle", name: "ivypot", version: "0.4"
-	}
-}
-
-allprojects {
-	apply plugin: "org.ysb33r.ivypot"
-
-	syncRemoteRepositories {
-		doFirst {
-			configurations*.resolve()
-		}
-
-		includeBuildScriptDependencies = true
-
-		outputs.upToDateWhen {
-			false
-		}
-
-		repoRoot = rootProject.file(".ivy")
-
-		repositories {
-			maven {
-				url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
-			}
-		}
 	}
 }
 
 configure(subprojects.findAll {!it.childProjects}) {
 	apply plugin: "com.liferay.poshi.runner"
-
-	task syncSikuliComplete(type: Copy)
 
 	configurations {
 		poshiRunner {
@@ -55,63 +34,111 @@ configure(subprojects.findAll {!it.childProjects}) {
 				force group: "commons-codec", name: "commons-codec", version: "1.10"
 			}
 		}
-
-		sikuliComplete
 	}
 
 	poshiRunner {
 		baseDir = "test/functional"
-
-		String[] testPropertiesFileNames = [
-			"test.properties",
-			"test.${System.env.HOSTNAME}.properties",
-			"test.${System.env.HOST}.properties",
-			"test.${System.env.COMPUTERNAME}.properties",
-			"test.${System.env.USER}.properties"
-		]
-
-		for (String testPropertiesFileName in testPropertiesFileNames) {
-			File testPropertiesFile = file("test/functional/${testPropertiesFileName}")
-
-			if (testPropertiesFile.exists()) {
-				poshiProperties << GUtil.loadProperties(testPropertiesFile)
-			}
-		}
-
-		poshiPropertiesFile = rootProject.file("${baseDir}/test.properties")
 		openCVVersion = "2.4.10-0.10"
+		poshiProperties << _getTestProperties(project)
+		poshiPropertiesFile = rootProject.file("${baseDir}/test.properties")
 		version = "1.0.78"
 	}
 
-	dependencies {
-		["x86", "x86_64"].each {
-			sikuliComplete classifier: "linux-${it}", group: "org.bytedeco.javacpp-presets", name: "opencv", version: poshiRunner.openCVVersion
-			sikuliComplete classifier: "windows-${it}", group: "org.bytedeco.javacpp-presets", name: "opencv", version: poshiRunner.openCVVersion
-		}
-
-		sikuliComplete classifier: "macosx-x86_64", group: "org.bytedeco.javacpp-presets", name: "opencv", version: poshiRunner.openCVVersion
-	}
-
 	repositories {
-		if (System.getenv("JENKINS_HOME")) {
-			ivy {
-				layout "gradle"
-				url rootProject.file(".ivy")
-			}
+		maven {
+			url repositoryUrl
 		}
-		else {
-			maven {
-				url "https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public"
+	}
+}
+
+private static Properties _expandProperties(Properties properties) {
+	boolean propertyExpanded = true
+
+	while (propertyExpanded) {
+		propertyExpanded = false
+
+		Set<String> propertyNames = properties.stringPropertyNames()
+
+		for (String propertyName : propertyNames) {
+			String propertyValue = properties.getProperty(propertyName)
+
+			Map<String, String> replacements = new HashMap<>()
+
+			propertyValue.eachMatch(/\$\{.+?\}/) {
+				String group ->
+
+				String name = group.replace('${', '')
+
+				name = name.replace('}', '')
+
+				if (propertyNames.contains(name) && (group != properties.getProperty(name))) {
+					replacements.put group, properties.getProperty(name)
+
+					propertyExpanded = true
+				}
 			}
+
+			for (String group : replacements.keySet()) {
+				propertyValue = propertyValue.replace(group, replacements.get(group))
+			}
+
+			properties.setProperty propertyName, propertyValue
 		}
 	}
 
-	syncRemoteRepositories {
-		finalizedBy syncSikuliComplete
+	properties
+}
+
+private static Properties _getCustomProperties(String prefix, File dir) {
+	Properties properties = new Properties()
+
+	for (File propertiesFile in _getCustomPropertiesFiles(prefix, dir)) {
+		properties << GUtil.loadProperties(propertiesFile)
 	}
 
-	syncSikuliComplete {
-		from configurations.sikuliComplete
-		into rootProject.file(".ivy/org.bytedeco.javacpp-presets/opencv/${poshiRunner.openCVVersion}")
+	properties
+}
+
+private static List<File> _getCustomPropertiesFiles(String prefix, File dir) {
+	List<String> propertiesFileNames = ["${prefix}.properties"]
+
+	if (System.env.HOSTNAME) {
+		propertiesFileNames << "${prefix}.${System.env.HOSTNAME}.properties"
 	}
+
+	if (System.env.HOST) {
+		propertiesFileNames << "${prefix}.${System.env.HOST}.properties"
+	}
+
+	if (System.env.COMPUTERNAME) {
+		propertiesFileNames << "${prefix}.${System.env.COMPUTERNAME}.properties"
+	}
+
+	if (System.env.USER) {
+		propertiesFileNames << "${prefix}.${System.env.USER}.properties"
+	}
+
+	List<File> propertiesFiles = new ArrayList<>()
+
+	for (String propertiesFileName in propertiesFileNames) {
+		File propertiesFile = new File(dir, propertiesFileName)
+
+		if (propertiesFile.exists()) {
+			propertiesFiles.add(propertiesFile)
+		}
+	}
+
+	propertiesFiles
+}
+
+private static Properties _getTestProperties(Project project) {
+	Properties properties = new Properties()
+
+	properties << _getCustomProperties("test", project.rootProject.projectDir)
+
+	if (project != project.rootProject) {
+		properties << _getCustomProperties("test", new File(project.projectDir, "test/functional"))
+	}
+
+	_expandProperties properties
 }
